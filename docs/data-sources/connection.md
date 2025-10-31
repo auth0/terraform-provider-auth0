@@ -32,6 +32,8 @@ data "auth0_connection" "some-connection-by-id" {
 
 ### Read-Only
 
+- `authentication` (List of Object) Configure the purpose of a connection to be used for authentication during login. (see [below for nested schema](#nestedatt--authentication))
+- `connected_accounts` (List of Object) Configure the purpose of a connection to be used for connected accounts and Token Vault. (see [below for nested schema](#nestedatt--connected_accounts))
 - `display_name` (String) Name used in login screen.
 - `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
 - `id` (String) The ID of this resource.
@@ -42,11 +44,28 @@ data "auth0_connection" "some-connection-by-id" {
 - `show_as_button` (Boolean) Display connection as a button. Only available on enterprise connections.
 - `strategy` (String) Type of the connection, which indicates the identity provider.
 
+<a id="nestedatt--authentication"></a>
+### Nested Schema for `authentication`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+<a id="nestedatt--connected_accounts"></a>
+### Nested Schema for `connected_accounts`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
 <a id="nestedatt--options"></a>
 ### Nested Schema for `options`
 
 Read-Only:
 
+- `access_token_url` (String)
 - `adfs_server` (String)
 - `allowed_audiences` (Set of String)
 - `api_enable_users` (Boolean)
@@ -62,6 +81,8 @@ Read-Only:
 - `community_base_url` (String)
 - `configuration` (Map of String)
 - `connection_settings` (List of Object) (see [below for nested schema](#nestedobjatt--options--connection_settings))
+- `consumer_key` (String)
+- `consumer_secret` (String)
 - `custom_headers` (Set of Object) (see [below for nested schema](#nestedobjatt--options--custom_headers))
 - `custom_scripts` (Map of String)
 - `debug` (Boolean)
@@ -114,15 +135,18 @@ Read-Only:
 - `provider` (String)
 - `realm_fallback` (Boolean)
 - `request_template` (String)
+- `request_token_url` (String)
 - `requires_username` (Boolean)
 - `scopes` (Set of String)
 - `scripts` (Map of String)
+- `session_key` (String)
 - `set_user_root_attributes` (String)
 - `should_trust_email_verified_connection` (String)
 - `sign_in_endpoint` (String)
 - `sign_out_endpoint` (String)
 - `sign_saml_request` (Boolean)
 - `signature_algorithm` (String)
+- `signature_method` (String)
 - `signing_cert` (String)
 - `signing_key` (List of Object) (see [below for nested schema](#nestedobjatt--options--signing_key))
 - `strategy_version` (Number)
@@ -142,6 +166,7 @@ Read-Only:
 - `use_cert_auth` (Boolean)
 - `use_kerberos` (Boolean)
 - `use_wsfed` (Boolean)
+- `user_authorization_url` (String)
 - `user_id_attribute` (String)
 - `userinfo_endpoint` (String)
 - `validation` (List of Object) (see [below for nested schema](#nestedobjatt--options--validation))

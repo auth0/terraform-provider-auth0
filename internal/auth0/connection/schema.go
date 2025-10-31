@@ -72,7 +72,9 @@ var resourceSchema = map[string]*schema.Schema{
 		Optional:    true,
 		Description: "Display connection as a button. Only available on enterprise connections.",
 	},
-	"options": optionsSchema,
+	"options":            optionsSchema,
+	"authentication":     authenticationSchema,
+	"connected_accounts": connectedAccountsSchema,
 }
 
 var optionsSchema = &schema.Schema{
@@ -1236,6 +1238,73 @@ var optionsSchema = &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)",
+			},
+			"consumer_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Identifies the client to the service provider",
+			},
+			"consumer_secret": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Secret used to establish ownership of the consumer key.",
+			},
+			"request_token_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "URL used to obtain an unauthorized request token.",
+			},
+			"access_token_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "URL used to exchange a user-authorized request token for an access token.",
+			},
+			"user_authorization_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "URL used to obtain user authorization.",
+			},
+			"session_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Session Key for storing the request token.",
+			},
+			"signature_method": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Signature method used to sign the request",
+			},
+		},
+	},
+}
+
+var authenticationSchema = &schema.Schema{
+	Type:        schema.TypeList,
+	Optional:    true,
+	Computed:    true,
+	MaxItems:    1,
+	Description: "Configure the purpose of a connection to be used for authentication during login.",
+	Elem: &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"active": {
+				Type:     schema.TypeBool,
+				Required: true,
+			},
+		},
+	},
+}
+
+var connectedAccountsSchema = &schema.Schema{
+	Type:        schema.TypeList,
+	Optional:    true,
+	Computed:    true,
+	MaxItems:    1,
+	Description: "Configure the purpose of a connection to be used for connected accounts and Token Vault.",
+	Elem: &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"active": {
+				Type:     schema.TypeBool,
+				Required: true,
 			},
 		},
 	},

@@ -53,6 +53,8 @@ var expandConnectionOptionsMap = map[string]expandConnectionOptionsFunc{
 	management.ConnectionStrategySAML:         expandConnectionOptionsSAML,
 	management.ConnectionStrategyADFS:         expandConnectionOptionsADFS,
 	management.ConnectionStrategyPingFederate: expandConnectionOptionsPingFederate,
+
+	management.ConnectionStrategyOAuth1: expandConnectionOptionsOAuth1,
 }
 
 type expandConnectionOptionsFunc func(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics)
@@ -73,6 +75,8 @@ func expandConnection(
 		DisplayName:        value.String(config.GetAttr("display_name")),
 		IsDomainConnection: value.Bool(config.GetAttr("is_domain_connection")),
 		Metadata:           value.MapOfStrings(config.GetAttr("metadata")),
+		Authentication:     expandConnectionAuthentication(data),
+		ConnectedAccounts:  expandConnectionConnectedAccounts(data),
 	}
 
 	strategy := data.Get("strategy").(string)
@@ -117,6 +121,37 @@ func expandConnection(
 	}
 
 	return connection, diagnostics
+}
+
+func expandConnectionAuthentication(data *schema.ResourceData) *management.Authentication {
+	if !data.HasChange("authentication") {
+		return nil
+	}
+
+	var authentication management.Authentication
+
+	data.GetRawConfig().GetAttr("authentication").ForEachElement(func(_, config cty.Value) (stop bool) {
+		authentication.Active = value.Bool(config.GetAttr("active"))
+		return stop
+	})
+
+	return &authentication
+}
+
+func expandConnectionConnectedAccounts(data *schema.ResourceData) *management.ConnectedAccounts {
+	if !data.HasChange("connected_accounts") {
+		return nil
+	}
+
+	var connectedAccounts management.ConnectedAccounts
+
+	data.GetRawConfig().GetAttr("connected_accounts").ForEachElement(func(_, config cty.Value) (stop bool) {
+		connectedAccounts.Active = value.Bool(config.GetAttr("active"))
+
+		return stop
+	})
+
+	return &connectedAccounts
 }
 
 func connectionIsEnterprise(strategy string) bool {
@@ -1056,6 +1091,34 @@ func expandConnectionOptionsPingFederate(_ *schema.ResourceData, config cty.Valu
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsOAuth1(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
+	options := &management.ConnectionOptionsOAuth1{
+		ConsumerKey:          value.String(config.GetAttr("consumer_key")),
+		ConsumerSecret:       value.String(config.GetAttr("consumer_secret")),
+		RequestTokenURL:      value.String(config.GetAttr("request_token_url")),
+		AccessTokenURL:       value.String(config.GetAttr("access_token_url")),
+		UserAuthorizationURL: value.String(config.GetAttr("user_authorization_url")),
+		SessionKey:           value.String(config.GetAttr("session_key")),
+		SignatureMethod:      value.String(config.GetAttr("signature_method")),
+		Scripts:              value.MapOfStrings(config.GetAttr("scripts")),
+	}
+
+	customHeadersConfig := config.GetAttr("custom_headers")
+
+	if !customHeadersConfig.IsNull() {
+		customHeaders := make(map[string]string)
+
+		customHeadersConfig.ForEachElement(func(_ cty.Value, httpHeader cty.Value) (stop bool) {
+			m := httpHeader.AsValueMap()
+			customHeaders[m["header"].AsString()] = m["value"].AsString()
+			return false
+		})
+
+		options.CustomHeaders = &customHeaders
+	}
+	return options, nil
 }
 
 func expandConnectionOptionsScopes(data *schema.ResourceData, options scoper) {

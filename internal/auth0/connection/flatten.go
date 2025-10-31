@@ -54,6 +54,8 @@ var flattenConnectionOptionsMap = map[string]flattenConnectionOptionsFunc{
 	management.ConnectionStrategySAML:         flattenConnectionOptionsSAML,
 	management.ConnectionStrategyADFS:         flattenConnectionOptionsADFS,
 	management.ConnectionStrategyPingFederate: flattenConnectionOptionsPingFederate,
+
+	management.ConnectionStrategyOAuth1: flattenConnectionOptionsOAuth1,
 }
 
 type flattenConnectionOptionsFunc func(data *schema.ResourceData, options interface{}) (interface{}, diag.Diagnostics)
@@ -72,6 +74,8 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		data.Set("options", connectionOptions),
 		data.Set("realms", connection.GetRealms()),
 		data.Set("metadata", connection.GetMetadata()),
+		data.Set("authentication", flattenConnectionAuthentication(connection.GetAuthentication())),
+		data.Set("connected_accounts", flattenConnectionConnectedAccounts(connection.GetConnectedAccounts())),
 	)
 
 	if connectionIsEnterprise(connection.GetStrategy()) {
@@ -93,6 +97,34 @@ func flattenConnectionForDataSource(data *schema.ResourceData, connection *manag
 	diags = append(diags, diag.FromErr(err)...)
 
 	return diags
+}
+
+func flattenConnectionAuthentication(authentication *management.Authentication) []interface{} {
+	if authentication == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"active": authentication.GetActive(),
+	}
+
+	return []interface{}{
+		flattened,
+	}
+}
+
+func flattenConnectionConnectedAccounts(connectedAccounts *management.ConnectedAccounts) []interface{} {
+	if connectedAccounts == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"active": connectedAccounts.GetActive(),
+	}
+
+	return []interface{}{
+		flattened,
+	}
 }
 
 func flattenConnectionOptions(data *schema.ResourceData, connection *management.Connection) ([]interface{}, diag.Diagnostics) {
@@ -1112,6 +1144,30 @@ func flattenConnectionOptionsPingFederate(
 
 	if options.GetSetUserAttributes() == "" {
 		optionsMap["set_user_root_attributes"] = "on_each_login"
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsOAuth1(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsOAuth1)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
+	}
+
+	optionsMap := map[string]interface{}{
+		"consumer_key":           options.GetConsumerKey(),
+		"consumer_secret":        options.GetConsumerSecret(),
+		"request_token_url":      options.GetRequestTokenURL(),
+		"access_token_url":       options.GetAccessTokenURL(),
+		"user_authorization_url": options.GetUserAuthorizationURL(),
+		"session_key":            options.GetSessionKey(),
+		"signature_method":       options.GetSignatureMethod(),
+		"custom_headers":         flattenCustomHeaders(options.GetCustomHeaders()),
+		"scripts":                options.GetScripts(),
 	}
 
 	return optionsMap, nil

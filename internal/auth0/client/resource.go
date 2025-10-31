@@ -150,6 +150,21 @@ func NewResource() *schema.Resource {
 				Description: "Defines how to proceed during an authentication transaction when " +
 					"`organization_usage = \"require\"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.",
 			},
+			"organization_discovery_methods": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"email", "organization_name",
+					}, false),
+				},
+				Optional: true,
+				Description: "Methods for discovering organizations during the pre_login_prompt. " +
+					"Can include `email` (allows users to find their organization by entering their email address) " +
+					"and/or `organization_name` (requires users to enter the organization name directly). " +
+					"These methods can be combined. Setting this property requires that " +
+					"`organization_require_behavior` is set to `pre_login_prompt`.",
+			},
 			"allowed_origins": {
 				Type:     schema.TypeList,
 				Elem:     &schema.Schema{Type: schema.TypeString},
@@ -1493,9 +1508,13 @@ func NewResource() *schema.Resource {
 			},
 			"token_quota": commons.TokenQuotaSchema(),
 			"skip_non_verifiable_callback_uri_confirmation_prompt": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: "Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs.",
+				Type:         schema.TypeString,
+				Optional:     true,
+				Description:  "Indicates whether the confirmation prompt appears when using non-verifiable callback URIs. Set to true to skip the prompt, false to show it, or null to unset. Accepts (true/false/null) or (\"true\"/\"false\"/\"null\") ",
+				ValidateFunc: validation.StringInSlice([]string{"true", "false", "null"}, false),
+				DiffSuppressFunc: func(_, o, n string, _ *schema.ResourceData) bool {
+					return (o == "null" && n == "") || o == n
+				},
 			},
 			"resource_server_identifier": {
 				Type:     schema.TypeString,

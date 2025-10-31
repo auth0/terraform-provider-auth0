@@ -29,6 +29,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		AllowedOrigins:                     value.Strings(config.GetAttr("allowed_origins")),
 		AllowedClients:                     value.Strings(config.GetAttr("allowed_clients")),
 		GrantTypes:                         value.Strings(config.GetAttr("grant_types")),
+		AsyncApprovalNotificationChannels:  value.Strings(config.GetAttr("async_approval_notification_channels")),
 		OrganizationUsage:                  value.String(config.GetAttr("organization_usage")),
 		OrganizationRequireBehavior:        value.String(config.GetAttr("organization_require_behavior")),
 		OrganizationDiscoveryMethods:       value.Strings(config.GetAttr("organization_discovery_methods")),

@@ -132,6 +132,22 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Description: "Types of grants that this client is authorized to use.",
 			},
+			"async_approval_notification_channels": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"guardian-push",
+						"sms",
+						"email",
+					}, false),
+				},
+				Optional: true,
+				Computed: true,
+				Description: "List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. " +
+					"Valid values are `guardian-push`, `sms`, and `email`. The order is significant as this is the order in which notification channels will be evaluated. " +
+					"Defaults to `[\"guardian-push\"]` if not specified.",
+			},
 			"organization_usage": {
 				Type:     schema.TypeString,
 				Optional: true,

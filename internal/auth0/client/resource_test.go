@@ -2895,3 +2895,56 @@ func TestAccClientSkipPrompt(t *testing.T) {
 		},
 	})
 }
+
+const testAccClientWithAsyncApprovalChannels = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
+	app_type = "non_interactive"
+
+	async_approval_notification_channels = [
+		"guardian-push",
+		"sms",
+		"email"
+	]
+}
+`
+
+const testAccClientWithAsyncApprovalChannelsUpdate = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
+	app_type = "non_interactive"
+
+	async_approval_notification_channels = [
+		"email",
+		"guardian-push"
+	]
+}
+`
+
+func TestAccClientAsyncApprovalNotificationChannels(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientWithAsyncApprovalChannels, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "3"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "guardian-push"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.1", "sms"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.2", "email"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientWithAsyncApprovalChannelsUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "email"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.1", "guardian-push"),
+				),
+			},
+		},
+	})
+}

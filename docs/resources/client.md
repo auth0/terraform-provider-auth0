@@ -33,6 +33,13 @@ resource "auth0_client" "my_client" {
     "password",
     "refresh_token"
   ]
+
+  async_approval_notification_channels = [
+    "guardian-push",
+    "sms",
+    "email"
+  ]
+
   client_metadata = {
     foo = "zoo"
   }
@@ -126,6 +133,7 @@ resource "auth0_client" "my_client" {
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
 - `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`.
+- `async_approval_notification_channels` (List of String) List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. Valid values are `guardian-push`, `sms`, and `email`. The order is significant as this is the order in which notification channels will be evaluated. Defaults to `["guardian-push"]` if not specified.
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.

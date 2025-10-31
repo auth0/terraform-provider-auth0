@@ -53,6 +53,8 @@ var expandConnectionOptionsMap = map[string]expandConnectionOptionsFunc{
 	management.ConnectionStrategySAML:         expandConnectionOptionsSAML,
 	management.ConnectionStrategyADFS:         expandConnectionOptionsADFS,
 	management.ConnectionStrategyPingFederate: expandConnectionOptionsPingFederate,
+
+	management.ConnectionStrategyOAuth1: expandConnectionOptionsOAuth1,
 }
 
 type expandConnectionOptionsFunc func(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics)
@@ -1056,6 +1058,35 @@ func expandConnectionOptionsPingFederate(_ *schema.ResourceData, config cty.Valu
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsOAuth1(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
+	options := &management.ConnectionOptionsOAuth1{
+		ConsumerKey:          value.String(config.GetAttr("consumer_key")),
+		ConsumerSecret:       value.String(config.GetAttr("consumer_secret")),
+		RequestTokenURL:      value.String(config.GetAttr("requestTokenURL")),
+		AccessTokenURL:       value.String(config.GetAttr("accessTokenURL")),
+		UserAuthorizationURL: value.String(config.GetAttr("userAuthorizationURL")),
+		SessionKey:           value.String(config.GetAttr("sessionKey")),
+		SignatureMethod:      value.String(config.GetAttr("signatureMethod")),
+		CustomHeaders:        value.MapOfStrings(config.GetAttr("customHeaders")),
+		Scripts:              value.MapOfStrings(config.GetAttr("scripts")),
+	}
+
+	customHeadersConfig := config.GetAttr("custom_headers")
+
+	if !customHeadersConfig.IsNull() {
+		customHeaders := make(map[string]string)
+
+		customHeadersConfig.ForEachElement(func(_ cty.Value, httpHeader cty.Value) (stop bool) {
+			m := httpHeader.AsValueMap()
+			customHeaders[m["header"].AsString()] = m["value"].AsString()
+			return false
+		})
+
+		options.CustomHeaders = &customHeaders
+	}
+	return options, nil
 }
 
 func expandConnectionOptionsScopes(data *schema.ResourceData, options scoper) {

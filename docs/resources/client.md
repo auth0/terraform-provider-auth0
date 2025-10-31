@@ -12,20 +12,19 @@ With this resource, you can set up applications that use Auth0 for authenticatio
 
 ```terraform
 resource "auth0_client" "my_client" {
-  name                                                 = "Application - Acceptance Test"
-  description                                          = "Test Applications Long Description"
-  app_type                                             = "non_interactive"
-  compliance_level                                     = "none"
-  custom_login_page_on                                 = true
-  is_first_party                                       = true
-  is_token_endpoint_ip_header_trusted                  = true
-  oidc_conformant                                      = false
-  callbacks                                            = ["https://example.com/callback"]
-  allowed_origins                                      = ["https://example.com"]
-  allowed_logout_urls                                  = ["https://example.com"]
-  web_origins                                          = ["https://example.com"]
-  require_proof_of_possession                          = false
-  skip_non_verifiable_callback_uri_confirmation_prompt = true
+  name                                = "Application - Acceptance Test"
+  description                         = "Test Applications Long Description"
+  app_type                            = "non_interactive"
+  compliance_level                    = "none"
+  custom_login_page_on                = true
+  is_first_party                      = true
+  is_token_endpoint_ip_header_trusted = true
+  oidc_conformant                     = false
+  callbacks                           = ["https://example.com/callback"]
+  allowed_origins                     = ["https://example.com"]
+  allowed_logout_urls                 = ["https://example.com"]
+  web_origins                         = ["https://example.com"]
+  require_proof_of_possession         = false
 
   grant_types = [
     "authorization_code",
@@ -150,6 +149,7 @@ resource "auth0_client" "my_client" {
 - `oidc_backchannel_logout_urls` (Set of String, Deprecated) Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
 - `oidc_conformant` (Boolean) Indicates whether this client will conform to strict OIDC specifications.
 - `oidc_logout` (Block List, Max: 1) Configure OIDC logout for the Client (see [below for nested schema](#nestedblock--oidc_logout))
+- `organization_discovery_methods` (List of String) Methods for discovering organizations during the pre_login_prompt. Can include `email` (allows users to find their organization by entering their email address) and/or `organization_name` (requires users to enter the organization name directly). These methods can be combined. Setting this property requires that `organization_require_behavior` is set to `pre_login_prompt`.
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
 - `refresh_token` (Block List, Max: 1) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedblock--refresh_token))
@@ -157,7 +157,7 @@ resource "auth0_client" "my_client" {
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
 - `resource_server_identifier` (String) The identifier of a resource server that client is associated withThis property can be sent only when app_type=resource_server.This property can not be changed, once the client is created.
 - `session_transfer` (Block List, Max: 1) (see [below for nested schema](#nestedblock--session_transfer))
-- `skip_non_verifiable_callback_uri_confirmation_prompt` (Boolean) Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs.
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (String) Indicates whether the confirmation prompt appears when using non-verifiable callback URIs. Set to true to skip the prompt, false to show it, or null to unset. Accepts (true/false/null) or ("true"/"false"/"null")
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_exchange` (Block List, Max: 1) Allows configuration for token exchange (see [below for nested schema](#nestedblock--token_exchange))

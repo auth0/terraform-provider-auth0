@@ -75,6 +75,8 @@ func expandConnection(
 		DisplayName:        value.String(config.GetAttr("display_name")),
 		IsDomainConnection: value.Bool(config.GetAttr("is_domain_connection")),
 		Metadata:           value.MapOfStrings(config.GetAttr("metadata")),
+		Authentication:     expandConnectionAuthentication(data),
+		ConnectedAccounts:  expandConnectionConnectedAccounts(data),
 	}
 
 	strategy := data.Get("strategy").(string)
@@ -119,6 +121,37 @@ func expandConnection(
 	}
 
 	return connection, diagnostics
+}
+
+func expandConnectionAuthentication(data *schema.ResourceData) *management.Authentication {
+	if !data.HasChange("authentication") {
+		return nil
+	}
+
+	var authentication management.Authentication
+
+	data.GetRawConfig().GetAttr("authentication").ForEachElement(func(_, config cty.Value) (stop bool) {
+		authentication.Active = value.Bool(config.GetAttr("active"))
+		return stop
+	})
+
+	return &authentication
+}
+
+func expandConnectionConnectedAccounts(data *schema.ResourceData) *management.ConnectedAccounts {
+	if !data.HasChange("connected_accounts") {
+		return nil
+	}
+
+	var connectedAccounts management.ConnectedAccounts
+
+	data.GetRawConfig().GetAttr("connected_accounts").ForEachElement(func(_, config cty.Value) (stop bool) {
+		connectedAccounts.Active = value.Bool(config.GetAttr("active"))
+
+		return stop
+	})
+
+	return &connectedAccounts
 }
 
 func connectionIsEnterprise(strategy string) bool {

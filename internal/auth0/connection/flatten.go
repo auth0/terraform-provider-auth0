@@ -1129,15 +1129,15 @@ func flattenConnectionOptionsOAuth1(
 	}
 
 	optionsMap := map[string]interface{}{
-		"consumer_key":         options.GetConsumerKey(),
-		"consumer_secret":      options.GetConsumerSecret(),
-		"requestTokenURL":      options.GetRequestTokenURL(),
-		"accessTokenURL":       options.GetAccessTokenURL(),
-		"userAuthorizationURL": options.GetUserAuthorizationURL(),
-		"sessionKey":           options.GetSessionKey(),
-		"signatureMethod":      options.GetSignatureMethod(),
-		"customHeaders":        options.GetCustomHeaders(),
-		"scripts":              options.GetScripts(),
+		"consumer_key":           options.GetConsumerKey(),
+		"consumer_secret":        options.GetConsumerSecret(),
+		"request_token_url":      options.GetRequestTokenURL(),
+		"access_token_url":       options.GetAccessTokenURL(),
+		"user_authorization_url": options.GetUserAuthorizationURL(),
+		"session_key":            options.GetSessionKey(),
+		"signature_method":       options.GetSignatureMethod(),
+		"custom_headers":         flattenCustomHeaders(options.GetCustomHeaders()),
+		"scripts":                options.GetScripts(),
 	}
 
 	return optionsMap, nil

@@ -1064,12 +1064,11 @@ func expandConnectionOptionsOAuth1(_ *schema.ResourceData, config cty.Value) (in
 	options := &management.ConnectionOptionsOAuth1{
 		ConsumerKey:          value.String(config.GetAttr("consumer_key")),
 		ConsumerSecret:       value.String(config.GetAttr("consumer_secret")),
-		RequestTokenURL:      value.String(config.GetAttr("requestTokenURL")),
-		AccessTokenURL:       value.String(config.GetAttr("accessTokenURL")),
-		UserAuthorizationURL: value.String(config.GetAttr("userAuthorizationURL")),
-		SessionKey:           value.String(config.GetAttr("sessionKey")),
-		SignatureMethod:      value.String(config.GetAttr("signatureMethod")),
-		CustomHeaders:        value.MapOfStrings(config.GetAttr("customHeaders")),
+		RequestTokenURL:      value.String(config.GetAttr("request_token_url")),
+		AccessTokenURL:       value.String(config.GetAttr("access_token_url")),
+		UserAuthorizationURL: value.String(config.GetAttr("user_authorization_url")),
+		SessionKey:           value.String(config.GetAttr("session_key")),
+		SignatureMethod:      value.String(config.GetAttr("signature_method")),
 		Scripts:              value.MapOfStrings(config.GetAttr("scripts")),
 	}
 

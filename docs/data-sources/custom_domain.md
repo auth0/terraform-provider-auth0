@@ -45,7 +45,7 @@ data "auth0_custom_domain" "test" {
 - `status` (String) Configuration status for the custom domain. Options include `disabled`, `pending`, `pending_verification`, and `ready`.
 - `tls_policy` (String) TLS policy for the custom domain. Available options are: `compatible` or `recommended`. Compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2. Cannot be set on self_managed domains.
 - `type` (String) Provisioning type for the custom domain. Options include `auth0_managed_certs` and `self_managed_certs`.
-- `verification` (List of Object) Configuration settings for verification. (see [below for nested schema](#nestedatt--verification))
+- `verification` (List of Object) Configuration settings for domain verification. (see [below for nested schema](#nestedatt--verification))
 
 <a id="nestedatt--certificate"></a>
 ### Nested Schema for `certificate`
@@ -65,7 +65,16 @@ Read-Only:
 
 - `error_msg` (String)
 - `last_verified_at` (String)
-- `methods` (List of Map of String)
+- `methods` (List of Object) (see [below for nested schema](#nestedobjatt--verification--methods))
 - `status` (String)
+
+<a id="nestedobjatt--verification--methods"></a>
+### Nested Schema for `verification.methods`
+
+Read-Only:
+
+- `domain` (String)
+- `name` (String)
+- `record` (String)
 
 

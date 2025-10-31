@@ -44,20 +44,22 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		InitiateLoginURI:                   value.String(config.GetAttr("initiate_login_uri")),
 		EncryptionKey:                      value.MapOfStrings(config.GetAttr("encryption_key")),
 		IsTokenEndpointIPHeaderTrusted:     value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
-		OIDCBackchannelLogout:              expandOIDCBackchannelLogout(data),
-		OIDCLogout:                         expandOIDCLogout(data),
-		ClientMetadata:                     expandClientMetadata(data),
-		RefreshToken:                       expandClientRefreshToken(data),
-		JWTConfiguration:                   expandClientJWTConfiguration(data),
-		Addons:                             expandClientAddons(data),
-		NativeSocialLogin:                  expandClientNativeSocialLogin(data),
-		Mobile:                             expandClientMobile(data),
-		DefaultOrganization:                expandDefaultOrganization(data),
-		TokenExchange:                      expandTokenExchange(data),
-		RequireProofOfPossession:           value.Bool(config.GetAttr("require_proof_of_possession")),
-		SessionTransfer:                    expandSessionTransfer(data),
-		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
-		TokenQuota:                         commons.ExpandTokenQuota(config.GetAttr("token_quota")),
+		// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
+		//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
+		OIDCBackchannelLogout:    expandOIDCBackchannelLogout(data),
+		OIDCLogout:               expandOIDCLogout(data),
+		ClientMetadata:           expandClientMetadata(data),
+		RefreshToken:             expandClientRefreshToken(data),
+		JWTConfiguration:         expandClientJWTConfiguration(data),
+		Addons:                   expandClientAddons(data),
+		NativeSocialLogin:        expandClientNativeSocialLogin(data),
+		Mobile:                   expandClientMobile(data),
+		DefaultOrganization:      expandDefaultOrganization(data),
+		TokenExchange:            expandTokenExchange(data),
+		RequireProofOfPossession: value.Bool(config.GetAttr("require_proof_of_possession")),
+		SessionTransfer:          expandSessionTransfer(data),
+		ComplianceLevel:          value.String(config.GetAttr("compliance_level")),
+		TokenQuota:               commons.ExpandTokenQuota(config.GetAttr("token_quota")),
 		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 	}
 
@@ -142,6 +144,9 @@ func expandTokenExchange(data *schema.ResourceData) *management.ClientTokenExcha
 	return &tokenExchange
 }
 
+// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
+//
+//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
 func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBackchannelLogout {
 	raw := data.GetRawConfig().GetAttr("oidc_backchannel_logout_urls")
 
@@ -151,6 +156,8 @@ func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBack
 		return nil
 	}
 
+	// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
+	//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
 	return &management.OIDCBackchannelLogout{
 		BackChannelLogoutURLs: logoutUrls,
 	}

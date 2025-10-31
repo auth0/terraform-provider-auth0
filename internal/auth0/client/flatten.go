@@ -87,6 +87,9 @@ func flattenRefreshTokenPolicies(policies []management.ClientRefreshTokenPolicy)
 	return result
 }
 
+// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
+//
+//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
 func flattenOIDCBackchannelURLs(backchannelLogout *management.OIDCBackchannelLogout, logout *management.OIDCLogout) []string {
 	if logout != nil {
 		return nil

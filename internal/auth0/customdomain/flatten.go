@@ -44,12 +44,36 @@ func flattenCustomDomainVerificationMethods(verification *management.CustomDomai
 
 	return []map[string]interface{}{
 		{
-			"methods":          verification.Methods,
+			"methods":          flattenVerificationMethods(verification.Methods),
 			"status":           verification.GetStatus(),
 			"error_msg":        verification.GetErrorMsg(),
 			"last_verified_at": verification.GetLastVerifiedAt(),
 		},
 	}
+}
+
+func flattenVerificationMethods(methods []map[string]interface{}) []interface{} {
+	if methods == nil {
+		return nil
+	}
+
+	var result []interface{}
+	for _, method := range methods {
+		m := make(map[string]interface{})
+
+		if name, ok := method["name"].(string); ok {
+			m["name"] = name
+		}
+		if record, ok := method["record"].(string); ok {
+			m["record"] = record
+		}
+		if domain, ok := method["domain"].(string); ok {
+			m["domain"] = domain
+		}
+
+		result = append(result, m)
+	}
+	return result
 }
 
 func flattenCustomDomainVerification(data *schema.ResourceData, customDomain *management.CustomDomain) error {

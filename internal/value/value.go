@@ -25,6 +25,21 @@ func Bool(rawValue cty.Value) *bool {
 	return &value
 }
 
+// BoolPtr converts an interface value (expected to be a string) to a pointer to bool.
+func BoolPtr(v interface{}) *bool {
+	str, _ := v.(string)
+	switch str {
+	case "true":
+		b := true
+		return &b
+	case "false":
+		b := false
+		return &b
+	default:
+		return nil
+	}
+}
+
 // String evaluates the typed value of the value
 // and coerces to a pointer of a string.
 func String(rawValue cty.Value) *string {
@@ -34,6 +49,19 @@ func String(rawValue cty.Value) *string {
 
 	value := rawValue.AsString()
 	return &value
+}
+
+// BoolPtrToString converts a *bool to its string representation: "true", "false", or "null" if nil.
+func BoolPtrToString(v *bool) string {
+	if v == nil {
+		return "null"
+	}
+
+	if *v {
+		return "true"
+	}
+
+	return "false"
 }
 
 // Int evaluates the typed value of the value

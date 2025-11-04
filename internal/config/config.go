@@ -18,6 +18,8 @@ import (
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	managementv2 "github.com/auth0/go-auth0/v2/management/client"
+	"github.com/auth0/go-auth0/v2/management/option"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
@@ -39,6 +41,7 @@ var version = "dev"
 // *schema.Provider meta parameter.
 type Config struct {
 	api   *management.Management
+	apiv2 *managementv2.Management
 	mutex *mutex.KeyValue
 }
 
@@ -50,9 +53,23 @@ func New(apiClient *management.Management) *Config {
 	}
 }
 
+// NewWithV2 instantiates a new Config with both v1 and v2 clients.
+func NewWithV2(apiClient *management.Management, apiClientV2 *managementv2.Management) *Config {
+	return &Config{
+		api:   apiClient,
+		apiv2: apiClientV2,
+		mutex: mutex.New(),
+	}
+}
+
 // GetAPI fetches an instance of the *management.Management client.
 func (c *Config) GetAPI() *management.Management {
 	return c.api
+}
+
+// GetAPIV2 fetches an instance of the v2 *managementv2.Management client.
+func (c *Config) GetAPIV2() *managementv2.Management {
+	return c.apiv2
 }
 
 // GetMutex fetches an instance of the *mutex.KeyValue.
@@ -167,7 +184,19 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			return nil, diag.FromErr(err)
 		}
 
-		return New(apiClient), nil
+		apiClientV2, err := managementv2.New(domain,
+			authenticationOptionV2(config),
+			option.WithDebug(debug),
+			option.WithUserAgent(userAgent(terraformVersion)),
+			option.WithAuth0ClientEnvEntry(providerName, version),
+			option.WithHTTPClient(customClientWithRetries()),
+			option.WithCustomDomainHeader(config.customDomainHeader))
+
+		if err != nil {
+			return nil, diag.FromErr(err)
+		}
+
+		return NewWithV2(apiClient, apiClientV2), nil
 	}
 }
 
@@ -302,6 +331,42 @@ func authenticationOption(cfg authConfig) management.Option {
 
 	default:
 		return management.WithClientCredentials(ctx, cfg.clientID, cfg.clientSecret)
+	}
+}
+
+// authenticationOptionV2 computes the desired authentication option for the v2 management client.
+func authenticationOptionV2(cfg authConfig) option.RequestOption {
+	ctx := context.Background()
+
+	switch {
+	case cfg.apiToken != "":
+		return option.WithToken(cfg.apiToken)
+	case cfg.audience != "":
+		if cfg.clientAssertionPrivateKey != "" {
+			return option.WithClientCredentialsPrivateKeyJwtAndAudience(
+				ctx,
+				cfg.clientID,
+				cfg.clientAssertionPrivateKey,
+				cfg.clientAssertionSigningAlg,
+				cfg.audience,
+			)
+		}
+		return option.WithClientCredentialsAndAudience(
+			ctx,
+			cfg.clientID,
+			cfg.clientSecret,
+			cfg.audience,
+		)
+	case cfg.clientAssertionPrivateKey != "":
+		return option.WithClientCredentialsPrivateKeyJwt(
+			ctx,
+			cfg.clientID,
+			cfg.clientAssertionPrivateKey,
+			cfg.clientAssertionSigningAlg,
+		)
+
+	default:
+		return option.WithClientCredentials(ctx, cfg.clientID, cfg.clientSecret)
 	}
 }
 

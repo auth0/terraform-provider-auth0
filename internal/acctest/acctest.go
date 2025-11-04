@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
+	managementv2 "github.com/auth0/go-auth0/v2/management/client"
+	"github.com/auth0/go-auth0/v2/management/option"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -96,6 +98,41 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 			return nil, diag.FromErr(err)
 		}
 
-		return config.New(apiClient), nil
+		// Initialize v2 API client for new endpoints
+		clientID := data.Get("client_id").(string)
+		clientSecret := data.Get("client_secret").(string)
+		apiToken := data.Get("api_token").(string)
+		audience := data.Get("audience").(string)
+
+		ctx := context.Background()
+
+		// Build v2 client options similar to config.go
+		clientOptionsV2 := []option.RequestOption{
+			option.WithDebug(debug),
+			option.WithHTTPClient(httpRecorder.GetDefaultClient()),
+		}
+
+		// Add authentication option
+		if domain != RecordingsDomain {
+			if apiToken != "" {
+				clientOptionsV2 = append(clientOptionsV2, option.WithToken(apiToken))
+			} else {
+				if audience != "" {
+					clientOptionsV2 = append(clientOptionsV2, option.WithClientCredentialsAndAudience(ctx, clientID, clientSecret, audience))
+				} else {
+					clientOptionsV2 = append(clientOptionsV2, option.WithClientCredentials(ctx, clientID, clientSecret))
+				}
+			}
+		} else {
+			clientOptionsV2 = append(clientOptionsV2, option.WithToken("insecure"))
+		}
+
+		apiClientV2, err := managementv2.New(domain, clientOptionsV2...)
+
+		if err != nil {
+			return nil, diag.FromErr(err)
+		}
+
+		return config.NewWithV2(apiClient, apiClientV2), nil
 	}
 }

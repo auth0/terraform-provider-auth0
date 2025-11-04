@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
@@ -636,7 +635,6 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 
 func deleteAttackProtection(ctx context.Context, _ *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	enabled := false
 
@@ -661,20 +659,6 @@ func deleteAttackProtection(ctx context.Context, _ *schema.ResourceData, meta in
 			},
 		),
 	)
-
-	// Disable bot detection by setting level to nil
-	if _, err := apiv2.AttackProtection.BotDetection.Update(ctx, &managementv2.UpdateBotDetectionSettingsRequestContent{
-		BotDetectionLevel: nil,
-	}); err != nil {
-		result = multierror.Append(result, err)
-	}
-
-	// Disable captcha by clearing active provider
-	if _, err := apiv2.AttackProtection.Captcha.Update(ctx, &managementv2.UpdateAttackProtectionCaptchaRequestContent{
-		ActiveProviderID: nil,
-	}); err != nil {
-		result = multierror.Append(result, err)
-	}
 
 	return diag.FromErr(result.ErrorOrNil())
 }

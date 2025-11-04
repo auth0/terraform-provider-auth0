@@ -324,9 +324,7 @@ func TestAccAttackProtectionSuspiciousIPThrottling(t *testing.T) {
 	})
 }
 
-// ============================================================================
-// BOT DETECTION TESTS
-// ============================================================================
+// ============================================================================.
 
 const testAccBotDetectionEnable = `
 resource "auth0_attack_protection" "my_protection" {
@@ -386,13 +384,11 @@ func TestAccAttackProtectionBotDetection(t *testing.T) {
 	})
 }
 
-// ============================================================================
-// CAPTCHA TESTS - ALL PROVIDERS IN A SINGLE COMPREHENSIVE FUNCTION
-// ============================================================================
+// ============================================================================.
 
-// Terraform configurations for all CAPTCHA providers
+// Terraform configurations for all CAPTCHA providers.
 
-// --- reCAPTCHA v2 Configurations ---
+// --- reCAPTCHA v2 Configurations ---.
 const testAccCaptchaRecaptchaV2 = `
 resource "auth0_attack_protection" "my_protection" {
 	captcha {
@@ -417,7 +413,7 @@ resource "auth0_attack_protection" "my_protection" {
 }
 `
 
-// --- reCAPTCHA Enterprise Configurations ---
+// --- reCAPTCHA Enterprise Configurations ---.
 const testAccCaptchaRecaptchaEnterprise = `
 resource "auth0_attack_protection" "my_protection" {
 	captcha {
@@ -444,7 +440,7 @@ resource "auth0_attack_protection" "my_protection" {
 }
 `
 
-// --- hCaptcha Configurations ---
+// --- hCaptcha Configurations ---.
 const testAccCaptchaHcaptcha = `
 resource "auth0_attack_protection" "my_protection" {
 	captcha {
@@ -469,7 +465,7 @@ resource "auth0_attack_protection" "my_protection" {
 }
 `
 
-// --- Friendly Captcha Configurations ---
+// --- Friendly Captcha Configurations ---.
 const testAccCaptchaFriendlyCaptcha = `
 resource "auth0_attack_protection" "my_protection" {
 	captcha {
@@ -494,7 +490,7 @@ resource "auth0_attack_protection" "my_protection" {
 }
 `
 
-// --- Arkose Labs Configurations ---
+// --- Arkose Labs Configurations ---.
 const testAccCaptchaArkose = `
 resource "auth0_attack_protection" "my_protection" {
 	captcha {
@@ -525,7 +521,7 @@ resource "auth0_attack_protection" "my_protection" {
 }
 `
 
-// --- Auth Challenge Configurations ---
+// --- Auth Challenge Configurations ---.
 const testAccCaptchaAuthChallenge = `
 resource "auth0_attack_protection" "my_protection" {
 	captcha {
@@ -548,7 +544,7 @@ resource "auth0_attack_protection" "my_protection" {
 }
 `
 
-// --- Simple Captcha (Auth0 v1) Configurations ---
+// --- Simple Captcha (Auth0 v1) Configurations ---.
 const testAccCaptchaSimpleCaptcha = `
 resource "auth0_attack_protection" "my_protection" {
 	captcha {
@@ -562,9 +558,7 @@ resource "auth0_attack_protection" "my_protection" {
 func TestAccAttackProtectionCaptcha(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
-			// =================================================================
-			// STEP 1: Test reCAPTCHA v2 - Basic Setup
-			// =================================================================
+			// =================================================================.
 			{
 				Config: testAccCaptchaRecaptchaV2,
 				Check: resource.ComposeTestCheckFunc(
@@ -573,7 +567,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.recaptcha_v2.0.site_key", "test-site-key-v2"),
 				),
 			},
-			// STEP 2: Test reCAPTCHA v2 - Update Credentials
+			// STEP 2: Test reCAPTCHA v2 - Update Credentials.
 			{
 				Config: testAccCaptchaRecaptchaV2Update,
 				Check: resource.ComposeTestCheckFunc(
@@ -583,9 +577,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 				),
 			},
 
-			// =================================================================
-			// STEP 3: Test reCAPTCHA Enterprise - Basic Setup
-			// =================================================================
+			// =================================================================.
 			{
 				Config: testAccCaptchaRecaptchaEnterprise,
 				Check: resource.ComposeTestCheckFunc(
@@ -595,7 +587,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.recaptcha_enterprise.0.project_id", "test-project-id-enterprise"),
 				),
 			},
-			// STEP 4: Test reCAPTCHA Enterprise - Update All Credentials
+			// STEP 4: Test reCAPTCHA Enterprise - Update All Credentials.
 			{
 				Config: testAccCaptchaRecaptchaEnterpriseUpdate,
 				Check: resource.ComposeTestCheckFunc(
@@ -606,9 +598,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 				),
 			},
 
-			// =================================================================
-			// STEP 5: Test hCaptcha - Basic Setup
-			// =================================================================
+			// =================================================================.
 			{
 				Config: testAccCaptchaHcaptcha,
 				Check: resource.ComposeTestCheckFunc(
@@ -617,7 +607,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.hcaptcha.0.site_key", "test-site-key-hcaptcha"),
 				),
 			},
-			// STEP 6: Test hCaptcha - Update Credentials
+			// STEP 6: Test hCaptcha - Update Credentials.
 			{
 				Config: testAccCaptchaHcaptchaUpdate,
 				Check: resource.ComposeTestCheckFunc(
@@ -627,9 +617,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 				),
 			},
 
-			// =================================================================
-			// STEP 7: Test Friendly Captcha - Basic Setup
-			// =================================================================
+			// =================================================================.
 			{
 				Config: testAccCaptchaFriendlyCaptcha,
 				Check: resource.ComposeTestCheckFunc(
@@ -638,7 +626,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.friendly_captcha.0.site_key", "test-site-key-friendly"),
 				),
 			},
-			// STEP 8: Test Friendly Captcha - Update Credentials
+			// STEP 8: Test Friendly Captcha - Update Credentials.
 			{
 				Config: testAccCaptchaFriendlyCaptchaUpdate,
 				Check: resource.ComposeTestCheckFunc(
@@ -648,9 +636,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 				),
 			},
 
-			// =================================================================
-			// STEP 9: Test Arkose Labs - Basic Setup with All Fields
-			// =================================================================
+			// =================================================================.
 			{
 				Config: testAccCaptchaArkose,
 				Check: resource.ComposeTestCheckFunc(
@@ -662,7 +648,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.arkose.0.fail_open", "false"),
 				),
 			},
-			// STEP 10: Test Arkose Labs - Update All Fields Including Boolean
+			// STEP 10: Test Arkose Labs - Update All Fields Including Boolean.
 			{
 				Config: testAccCaptchaArkoseUpdate,
 				Check: resource.ComposeTestCheckFunc(
@@ -675,9 +661,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 				),
 			},
 
-			// =================================================================
-			// STEP 11: Test Auth Challenge - Basic Setup
-			// =================================================================
+			// =================================================================.
 			{
 				Config: testAccCaptchaAuthChallenge,
 				Check: resource.ComposeTestCheckFunc(
@@ -686,7 +670,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.auth_challenge.0.fail_open", "false"),
 				),
 			},
-			// STEP 12: Test Auth Challenge - Update Boolean Flag
+			// STEP 12: Test Auth Challenge - Update Boolean Flag.
 			{
 				Config: testAccCaptchaAuthChallengeUpdate,
 				Check: resource.ComposeTestCheckFunc(
@@ -696,9 +680,7 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 				),
 			},
 
-			// =================================================================
-			// STEP 13: Test Simple Captcha (Auth0 v1) - No Configuration Needed
-			// =================================================================
+			// =================================================================.
 			{
 				Config: testAccCaptchaSimpleCaptcha,
 				Check: resource.ComposeTestCheckFunc(

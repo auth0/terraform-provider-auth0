@@ -139,36 +139,36 @@ func expandBotDetection(data *schema.ResourceData) *managementv2.UpdateBotDetect
 		func(_ cty.Value, cfg cty.Value) (stop bool) {
 			request = &managementv2.UpdateBotDetectionSettingsRequestContent{}
 
-			// BotDetectionLevel
+			// BotDetectionLevel.
 			if levelStr := value.String(cfg.GetAttr("bot_detection_level")); levelStr != nil && *levelStr != "" {
 				level := managementv2.BotDetectionLevelEnum(*levelStr)
 				request.BotDetectionLevel = &level
 			}
 
-			// ChallengePasswordPolicy
+			// ChallengePasswordPolicy.
 			if policyStr := value.String(cfg.GetAttr("challenge_password_policy")); policyStr != nil && *policyStr != "" {
 				policy := managementv2.BotDetectionChallengePolicyPasswordFlowEnum(*policyStr)
 				request.ChallengePasswordPolicy = &policy
 			}
 
-			// ChallengePasswordlessPolicy
+			// ChallengePasswordlessPolicy.
 			if policyStr := value.String(cfg.GetAttr("challenge_passwordless_policy")); policyStr != nil && *policyStr != "" {
 				policy := managementv2.BotDetectionChallengePolicyPasswordlessFlowEnum(*policyStr)
 				request.ChallengePasswordlessPolicy = &policy
 			}
 
-			// ChallengePasswordResetPolicy
+			// ChallengePasswordResetPolicy.
 			if policyStr := value.String(cfg.GetAttr("challenge_password_reset_policy")); policyStr != nil && *policyStr != "" {
 				policy := managementv2.BotDetectionChallengePolicyPasswordResetFlowEnum(*policyStr)
 				request.ChallengePasswordResetPolicy = &policy
 			}
 
-			// Allowlist
+			// Allowlist.
 			if allowlist := value.Strings(cfg.GetAttr("allowlist")); allowlist != nil {
 				request.Allowlist = allowlist
 			}
 
-			// MonitoringModeEnabled
+			// MonitoringModeEnabled.
 			if monitoringMode := value.Bool(cfg.GetAttr("monitoring_mode_enabled")); monitoringMode != nil {
 				request.MonitoringModeEnabled = monitoringMode
 			}
@@ -191,7 +191,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 		func(_ cty.Value, cfg cty.Value) (stop bool) {
 			request = &managementv2.UpdateAttackProtectionCaptchaRequestContent{}
 
-			// ActiveProviderID
+			// ActiveProviderID.
 			if providerID := value.String(cfg.GetAttr("active_provider_id")); providerID != nil {
 				if *providerID != "" {
 					pid := managementv2.AttackProtectionCaptchaProviderID(*providerID)
@@ -199,7 +199,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				}
 			}
 
-			// RecaptchaV2
+			// RecaptchaV2.
 			cfg.GetAttr("recaptcha_v2").ForEachElement(func(_ cty.Value, v2cfg cty.Value) (stop bool) {
 				siteKey := value.String(v2cfg.GetAttr("site_key"))
 				secret := value.String(v2cfg.GetAttr("secret"))
@@ -212,7 +212,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				return stop
 			})
 
-			// RecaptchaEnterprise
+			// RecaptchaEnterprise.
 			cfg.GetAttr("recaptcha_enterprise").ForEachElement(func(_ cty.Value, entcfg cty.Value) (stop bool) {
 				siteKey := value.String(entcfg.GetAttr("site_key"))
 				apiKey := value.String(entcfg.GetAttr("api_key"))
@@ -227,7 +227,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				return stop
 			})
 
-			// Hcaptcha
+			// Hcaptcha.
 			cfg.GetAttr("hcaptcha").ForEachElement(func(_ cty.Value, hcfg cty.Value) (stop bool) {
 				siteKey := value.String(hcfg.GetAttr("site_key"))
 				secret := value.String(hcfg.GetAttr("secret"))
@@ -240,7 +240,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				return stop
 			})
 
-			// FriendlyCaptcha
+			// FriendlyCaptcha.
 			cfg.GetAttr("friendly_captcha").ForEachElement(func(_ cty.Value, fcfg cty.Value) (stop bool) {
 				siteKey := value.String(fcfg.GetAttr("site_key"))
 				secret := value.String(fcfg.GetAttr("secret"))
@@ -253,7 +253,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				return stop
 			})
 
-			// Arkose
+			// Arkose.
 			cfg.GetAttr("arkose").ForEachElement(func(_ cty.Value, acfg cty.Value) (stop bool) {
 				siteKey := value.String(acfg.GetAttr("site_key"))
 				secret := value.String(acfg.GetAttr("secret"))
@@ -262,7 +262,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 						SiteKey: *siteKey,
 						Secret:  *secret,
 					}
-					// Optional fields
+					// Optional fields.
 					if clientSubdomain := value.String(acfg.GetAttr("client_subdomain")); clientSubdomain != nil {
 						arkose.ClientSubdomain = clientSubdomain
 					}
@@ -277,7 +277,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				return stop
 			})
 
-			// AuthChallenge
+			// AuthChallenge.
 			cfg.GetAttr("auth_challenge").ForEachElement(func(_ cty.Value, ac cty.Value) (stop bool) {
 				failOpen := value.Bool(ac.GetAttr("fail_open"))
 				if failOpen != nil {

@@ -98,7 +98,7 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 			return nil, diag.FromErr(err)
 		}
 
-		// Initialize v2 API client for new endpoints
+		// Initialize v2 API client for new endpoints.
 		clientID := data.Get("client_id").(string)
 		clientSecret := data.Get("client_secret").(string)
 		apiToken := data.Get("api_token").(string)
@@ -106,13 +106,13 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 
 		ctx := context.Background()
 
-		// Build v2 client options similar to config.go
+		// Build v2 client options similar to config.go.
 		clientOptionsV2 := []option.RequestOption{
 			option.WithDebug(debug),
 			option.WithHTTPClient(httpRecorder.GetDefaultClient()),
 		}
 
-		// Add authentication option
+		// Add authentication option.
 		if domain != RecordingsDomain {
 			if apiToken != "" {
 				clientOptionsV2 = append(clientOptionsV2, option.WithToken(apiToken))

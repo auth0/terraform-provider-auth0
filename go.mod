@@ -7,6 +7,7 @@ toolchain go1.24.7
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
 	github.com/auth0/go-auth0 v1.31.0
+	github.com/auth0/go-auth0/v2 v2.1.0
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/go-cty v1.5.0
 	github.com/hashicorp/go-multierror v1.1.1
@@ -101,7 +102,7 @@ require (
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250707201910-8d1bb00bc6a7 // indirect
 	google.golang.org/grpc v1.75.1 // indirect
-	google.golang.org/protobuf v1.36.9 // indirect
+	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

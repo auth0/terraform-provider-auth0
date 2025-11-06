@@ -136,7 +136,6 @@ func flattenSCIMToken(data *schema.ResourceData, scimToken *management.SCIMToken
 		data.Set("token_id", scimToken.GetTokenID()),
 		data.Set("scopes", scimToken.GetScopes()),
 		data.Set("created_at", scimToken.GetCreatedAt()),
-		data.Set("valid_until", scimToken.GetValidUntil()),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

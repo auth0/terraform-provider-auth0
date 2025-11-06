@@ -1,12 +1,12 @@
 ---
 page_title: "Resource: auth0_connection_scim_token"
 description: |-
-  With this resource, you can create and manage SCIM bearer tokens for a connection. These tokens are used to authenticate requests to the SCIM endpoint and configure applications like Azure AD. This resource only works with enterprise connections (SAML and OpenID Connect).
+  With this resource, you can create and manage SCIM bearer tokens for a connection. This resource only works with enterprise connections
 ---
 
 # Resource: auth0_connection_scim_token
 
-With this resource, you can create and manage SCIM bearer tokens for a connection. These tokens are used to authenticate requests to the SCIM endpoint and configure applications like Azure AD. This resource only works with enterprise connections (SAML and OpenID Connect).
+With this resource, you can create and manage SCIM bearer tokens for a connection. This resource only works with enterprise connections
 
 ## Example Usage
 
@@ -70,13 +70,13 @@ resource "auth0_connection_scim_token" "my_scim_token" {
 
 ### Optional
 
-- `scopes` (Set of String) The scopes associated with the SCIM token. If not specified, Auth0 will assign default scopes.
+- `scopes` (Set of String) The scopes associated with the SCIM token.
 
 ### Read-Only
 
 - `created_at` (String) The date and time when the token was created (ISO8601 format).
 - `id` (String) The ID of this resource.
-- `token` (String, Sensitive) The SCIM bearer token value. This is sensitive and will not be returned in subsequent reads.
+- `token` (String, Sensitive) The SCIM bearer token value.
 - `token_id` (String) The ID of the SCIM token.
 
 

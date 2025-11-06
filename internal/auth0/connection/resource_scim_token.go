@@ -25,8 +25,7 @@ func NewSCIMTokenResource() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Description: "With this resource, you can create and manage SCIM bearer tokens for a connection. " +
-			"These tokens are used to authenticate requests to the SCIM endpoint and configure applications like Azure AD. " +
-			"This resource only works with enterprise connections (SAML and OpenID Connect).",
+			"This resource only works with enterprise connections",
 		Schema: map[string]*schema.Schema{
 			"connection_id": {
 				Type:        schema.TypeString,
@@ -39,13 +38,13 @@ func NewSCIMTokenResource() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "The scopes associated with the SCIM token. If not specified, Auth0 will assign default scopes.",
+				Description: "The scopes associated with the SCIM token.",
 			},
 			"token": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Sensitive:   true,
-				Description: "The SCIM bearer token value. This is sensitive and will not be returned in subsequent reads.",
+				Description: "The SCIM bearer token value.",
 			},
 			"token_id": {
 				Type:        schema.TypeString,

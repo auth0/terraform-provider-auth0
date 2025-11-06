@@ -167,6 +167,7 @@ func New() *schema.Provider {
 			"auth0_connection_clients":               connection.NewClientsResource(),
 			"auth0_connection_keys":                  connection.NewKeysResource(),
 			"auth0_connection_scim_configuration":    connection.NewSCIMConfigurationResource(),
+			"auth0_connection_scim_token":            connection.NewSCIMTokenResource(),
 			"auth0_custom_domain":                    customdomain.NewResource(),
 			"auth0_custom_domain_verification":       customdomain.NewVerificationResource(),
 			"auth0_email_provider":                   email.NewResource(),

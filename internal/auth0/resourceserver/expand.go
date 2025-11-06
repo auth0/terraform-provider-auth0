@@ -25,7 +25,7 @@ func expandResourceServer(ctx context.Context, data *schema.ResourceData) *manag
 		resourceServer.Identifier = value.String(cfg.GetAttr("identifier"))
 	}
 
-	// Allow updating SubjectTypeAuthorization for Auth0 Management API as well as non-management API
+	// Allow updating SubjectTypeAuthorization for Auth0 Management API as well as non-management API.
 	resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(ctx, data)
 
 	if !resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
@@ -59,8 +59,8 @@ func expandSubjectTypeAuthorization(ctx context.Context, data *schema.ResourceDa
 		if !isManagementAPI {
 			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
 		} else if data.HasChange("subject_type_authorization.0.client") {
-			// When attempting to change subject_type_authorization.client for Management API, log a warning
-			// Client update is not supported for Auth0 Management API
+			// When attempting to change subject_type_authorization.client for Management API, log a warning.
+			// Client update is not supported for Auth0 Management API.
 			tflog.Error(ctx, "Modification of 'subject_type_authorization.client' is not allowed for"+
 				" Auth0 Management APIs")
 		}

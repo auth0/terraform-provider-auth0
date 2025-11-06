@@ -72,9 +72,8 @@ func createSCIMToken(ctx context.Context, data *schema.ResourceData, meta interf
 		return diag.FromErr(err)
 	}
 
-	// Set the token_id as the resource ID (combination of connection_id and token_id).
 	if scimToken.TokenID != nil {
-		data.SetId(*scimToken.TokenID)
+		data.SetId(scimToken.GetTokenID())
 	} else {
 		return diag.Diagnostics{{
 			Severity: diag.Error,
@@ -137,6 +136,7 @@ func flattenSCIMToken(data *schema.ResourceData, scimToken *management.SCIMToken
 		data.Set("token_id", scimToken.GetTokenID()),
 		data.Set("scopes", scimToken.GetScopes()),
 		data.Set("created_at", scimToken.GetCreatedAt()),
+		data.Set("valid_until", scimToken.GetValidUntil()),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

@@ -1,17 +1,14 @@
 package resourceserver
 
 import (
-	"context"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandResourceServer(ctx context.Context, data *schema.ResourceData) *management.ResourceServer {
+func expandResourceServer(data *schema.ResourceData) *management.ResourceServer {
 	cfg := data.GetRawConfig()
 
 	resourceServer := &management.ResourceServer{
@@ -26,7 +23,7 @@ func expandResourceServer(ctx context.Context, data *schema.ResourceData) *manag
 	}
 
 	// Allow updating SubjectTypeAuthorization for Auth0 Management API as well as non-management API.
-	resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(ctx, data)
+	resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(data)
 
 	if !resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
 		resourceServer.Name = value.String(cfg.GetAttr("name"))
@@ -45,7 +42,7 @@ func expandResourceServer(ctx context.Context, data *schema.ResourceData) *manag
 	return resourceServer
 }
 
-func expandSubjectTypeAuthorization(ctx context.Context, data *schema.ResourceData) *management.ResourceServerSubjectTypeAuthorization {
+func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.ResourceServerSubjectTypeAuthorization {
 	config := data.GetRawConfig().GetAttr("subject_type_authorization")
 	if config.IsNull() {
 		return nil
@@ -59,10 +56,9 @@ func expandSubjectTypeAuthorization(ctx context.Context, data *schema.ResourceDa
 		if !isManagementAPI {
 			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
 		} else if data.HasChange("subject_type_authorization.0.client") {
-			// When attempting to change subject_type_authorization.client for Management API, log a warning.
-			// Client update is not supported for Auth0 Management API.
-			tflog.Error(ctx, "Modification of 'subject_type_authorization.client' is not allowed for"+
-				" Auth0 Management APIs")
+			// Changes to the client block in subject_type_authorization are not allowed for the management API.
+			// This check prevents silently ignoring such errors.
+			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
 		}
 
 		return stop

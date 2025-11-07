@@ -2817,3 +2817,130 @@ func TestAccClientResourceServer(t *testing.T) {
 		},
 	})
 }
+
+const testAccClientSkipPromptNullConfig = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
+	app_type = "spa"
+	# skip_non_verifiable_callback_uri_confirmation_prompt not specified (null)
+}
+`
+
+const testAccClientSkipPromptTrueConfig = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
+	app_type = "spa"
+	skip_non_verifiable_callback_uri_confirmation_prompt = true
+}
+`
+
+const testAccClientSkipPromptFalseConfig = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
+	app_type = "spa"
+	skip_non_verifiable_callback_uri_confirmation_prompt = false
+}`
+
+const testAccClientSkipPromptNullConfig1 = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
+	app_type = "spa"
+	skip_non_verifiable_callback_uri_confirmation_prompt = null
+}
+`
+
+func TestAccClientSkipPrompt(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientSkipPromptNullConfig1, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "null"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSkipPromptTrueConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSkipPromptNullConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "null"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSkipPromptFalseConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSkipPromptNullConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "null"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientWithAsyncApprovalChannels = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
+	app_type = "non_interactive"
+
+	async_approval_notification_channels = [
+		"email"
+	]
+}
+`
+
+const testAccClientWithAsyncApprovalChannelsUpdate = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
+	app_type = "non_interactive"
+
+	async_approval_notification_channels = [
+		"email",
+		"guardian-push"
+	]
+}
+`
+
+func TestAccClientAsyncApprovalNotificationChannels(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientWithAsyncApprovalChannels, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "email"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientWithAsyncApprovalChannelsUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "email"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.1", "guardian-push"),
+				),
+			},
+		},
+	})
+}

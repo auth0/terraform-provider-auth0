@@ -264,6 +264,7 @@ func NewResource() *schema.Resource {
 						"user": {
 							Type:        schema.TypeList,
 							Optional:    true,
+							Computed:    true,
 							MaxItems:    1,
 							Description: "User authorization policies for the resource server.",
 							Elem: &schema.Resource{
@@ -284,6 +285,7 @@ func NewResource() *schema.Resource {
 						"client": {
 							Type:        schema.TypeList,
 							Optional:    true,
+							Computed:    true,
 							MaxItems:    1,
 							Description: "Client authorization policies for the resource server.",
 							Elem: &schema.Resource{

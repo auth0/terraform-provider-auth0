@@ -1,3 +1,13 @@
+## v1.34.0
+
+FEATURES:
+- `resource/auth0_connection_scim_token` - Add support for creating and managing SCIM bearer tokens for enterprise connections ([#1399](https://github.com/auth0/terraform-provider-auth0/pull/1399))
+- `resource/auth0_attack_protection` - Add support for configuring `bot_detection` and `captcha` settings ([#1398](https://github.com/auth0/terraform-provider-auth0/pull/1398))
+- `resource/auth0_client` - Add support for configuring `async_approval_notification_channels` to manage CIBA notification channels ([#1397](https://github.com/auth0/terraform-provider-auth0/pull/1397))
+
+BUG FIXES:
+- `resource/auth0_resource_server` -  Add support for configuring `subject_type_authorization.user` for Management API resource server ([#1404](https://github.com/auth0/terraform-provider-auth0/pull/1404))
+
 ## v1.33.0
 
 FEATURES:

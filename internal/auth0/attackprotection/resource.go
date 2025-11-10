@@ -2,6 +2,7 @@ package attackprotection
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -12,6 +13,33 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
+
+// validateBotDetectionLevel allows empty strings or validates against allowed values.
+func validateBotDetectionLevel(i interface{}, k string) ([]string, []error) {
+	v, ok := i.(string)
+	if !ok {
+		return nil, []error{
+			fmt.Errorf("expected type of %q to be string", k),
+		}
+	}
+
+	// Allow empty strings
+	if v == "" {
+		return nil, nil
+	}
+
+	// Validate against allowed values
+	allowedValues := []string{"low", "medium", "high"}
+	for _, allowed := range allowedValues {
+		if v == allowed {
+			return nil, nil
+		}
+	}
+
+	return nil, []error{
+		fmt.Errorf("expected %q to be one of %v, got %q", k, allowedValues, v),
+	}
+}
 
 // NewResource will return a new auth0_attack_protection resource.
 func NewResource() *schema.Resource {
@@ -212,14 +240,10 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"bot_detection_level": {
-							Type:     schema.TypeString,
-							Optional: true,
-							Computed: true,
-							ValidateFunc: validation.StringInSlice([]string{
-								"low",
-								"medium",
-								"high",
-							}, false),
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							ValidateFunc: validateBotDetectionLevel,
 							Description: "Bot detection level. Possible values: `low`, `medium`, `high`. Set to empty string to disable.",
 						},
 						"challenge_password_policy": {

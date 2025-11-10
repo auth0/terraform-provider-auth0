@@ -384,6 +384,44 @@ func TestAccAttackProtectionBotDetection(t *testing.T) {
 	})
 }
 
+// Test that attack_protection resource works without bot_detection block
+// This verifies the fix for the issue where the provider was attempting to
+// update bot_detection even when the block was not present in the config.
+const testAccAttackProtectionWithoutBotDetection = `
+resource "auth0_attack_protection" "my_protection" {
+	breached_password_detection {
+		enabled = false
+	}
+	brute_force_protection {
+		enabled = false
+	}
+	suspicious_ip_throttling {
+		enabled = false
+	}
+	# bot_detection block is intentionally omitted
+}
+`
+
+func TestAccAttackProtectionWithoutBotDetection(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccAttackProtectionWithoutBotDetection,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.0.enabled", "false"),
+					// bot_detection should be computed/read from API but not set in config
+					// The exact value depends on what's in Auth0, but it should not error
+				),
+			},
+		},
+	})
+}
+
 // ============================================================================.
 
 // Terraform configurations for all CAPTCHA providers.

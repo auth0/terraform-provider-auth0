@@ -133,9 +133,16 @@ func expandBotDetection(data *schema.ResourceData) *managementv2.UpdateBotDetect
 		return nil
 	}
 
+	// Check if the bot_detection block is present in the configuration
+	botDetectionAttr := data.GetRawConfig().GetAttr("bot_detection")
+	if botDetectionAttr.IsNull() {
+		// Block is not present in configuration, skip update
+		return nil
+	}
+
 	var request *managementv2.UpdateBotDetectionSettingsRequestContent
 
-	data.GetRawConfig().GetAttr("bot_detection").ForEachElement(
+	botDetectionAttr.ForEachElement(
 		func(_ cty.Value, cfg cty.Value) (stop bool) {
 			request = &managementv2.UpdateBotDetectionSettingsRequestContent{}
 
@@ -176,6 +183,21 @@ func expandBotDetection(data *schema.ResourceData) *managementv2.UpdateBotDetect
 			return stop
 		},
 	)
+
+	// Only return request if it has at least one field set
+	// This prevents sending empty requests when the block exists but has no content
+	if request != nil {
+		hasContent := request.BotDetectionLevel != nil ||
+			request.ChallengePasswordPolicy != nil ||
+			request.ChallengePasswordlessPolicy != nil ||
+			request.ChallengePasswordResetPolicy != nil ||
+			request.Allowlist != nil ||
+			request.MonitoringModeEnabled != nil
+
+		if !hasContent {
+			return nil
+		}
+	}
 
 	return request
 }

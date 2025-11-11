@@ -24,6 +24,9 @@ import (
 const (
 	idleSessionLifetimeDefault = 72.00
 	sessionLifetimeDefault     = 168.00
+	ephemeralSessionLifetimeDefault     = 1.00 // 1 hour
+	idleEphemeralSessionLifetimeDefault = 1.00 // 1 hour
+
 )
 
 // NewResource will return a new auth0_tenant resource.
@@ -108,6 +111,21 @@ func NewResource() *schema.Resource {
 				ValidateFunc: validation.FloatAtLeast(0.01),
 				Description:  "Number of hours during which a session can be inactive before the user must log in again.",
 			},
+			"ephemeral_session_lifetime": {
+				Type:         schema.TypeFloat,
+				Optional:     true,
+				Default:      ephemeralSessionLifetimeDefault,
+				ValidateFunc: validation.FloatAtLeast(0.0167),
+				Description:  "Number of hours an ephemeral (non-persistent) session will stay valid.",
+			},
+			"idle_ephemeral_session_lifetime": {
+				Type:         schema.TypeFloat,
+				Optional:     true,
+				Default:      idleEphemeralSessionLifetimeDefault,
+				ValidateFunc: validation.FloatAtLeast(0.0167),
+				Description:  "Number of hours for which an ephemeral (non-persistent) session can be inactive before the user must log in again.",
+			},
+
 			"enabled_locales": {
 				Type:     schema.TypeList,
 				Elem:     &schema.Schema{Type: schema.TypeString},

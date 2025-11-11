@@ -39,8 +39,10 @@ resource "auth0_tenant" "my_tenant" {
 	default_redirection_uri                       = "https://example.com/login"
 	allowed_logout_urls                           = [ "https://mycompany.org/logoutCallback" ]
 	session_lifetime                              = 720
-	sandbox_version                               = "16"
+	sandbox_version                               = "18"
 	idle_session_lifetime                         = 72
+	ephemeral_session_lifetime      			  = 48
+	idle_ephemeral_session_lifetime 			  = 36
 	enabled_locales                               = ["en", "de", "fr"]
 	disable_acr_values_supported                  = true
 
@@ -175,7 +177,7 @@ resource "auth0_tenant" "my_tenant" {
 	support_url                                   = "https://mycompany.org/support"
 	allowed_logout_urls                           = []
 	session_lifetime                              = 720
-	sandbox_version                               = "16"
+	sandbox_version                               = "18"
 	idle_session_lifetime                         = 72
 	enabled_locales                               = ["de", "fr"]
 
@@ -229,7 +231,7 @@ resource "auth0_tenant" "my_tenant" {
 	support_url                                   = "https://mycompany.org/support"
 	allowed_logout_urls                           = []
 	session_lifetime                              = 720
-	sandbox_version                               = "16"
+	sandbox_version                               = "18"
 	idle_session_lifetime                         = 72
 
 	allow_organization_name_in_authentication_api = true
@@ -334,8 +336,10 @@ func TestAccTenant_Main(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "support_url", "https://mycompany.org/support"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allowed_logout_urls.0", "https://mycompany.org/logoutCallback"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_lifetime", "720"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sandbox_version", "16"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sandbox_version", "18"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "idle_session_lifetime", "72"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "ephemeral_session_lifetime", "48"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "idle_ephemeral_session_lifetime", "36"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "enabled_locales.#", "3"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "enabled_locales.0", "en"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "enabled_locales.1", "de"),

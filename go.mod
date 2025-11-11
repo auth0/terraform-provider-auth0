@@ -1,6 +1,8 @@
 module github.com/auth0/terraform-provider-auth0
 
-go 1.23.7
+go 1.24.0
+
+toolchain go1.24.5
 
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
@@ -11,7 +13,7 @@ require (
 	github.com/hashicorp/terraform-plugin-docs v0.22.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.36.1
 	github.com/hashicorp/terraform-plugin-testing v1.12.0
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	github.com/zalando/go-keyring v0.2.6
 	gopkg.in/dnaeon/go-vcr.v3 v3.2.0
 )
@@ -91,7 +93,7 @@ require (
 	golang.org/x/exp v0.0.0-20240525044651-4c93da0ed11d // indirect
 	golang.org/x/mod v0.25.0 // indirect
 	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/oauth2 v0.30.0 // indirect
+	golang.org/x/oauth2 v0.31.0 // indirect
 	golang.org/x/sync v0.15.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.26.0 // indirect
@@ -103,3 +105,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/auth0/go-auth0 => ../go-auth0

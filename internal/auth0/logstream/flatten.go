@@ -14,9 +14,25 @@ func flattenLogStream(data *schema.ResourceData, logStream *management.LogStream
 		data.Set("type", logStream.GetType()),
 		data.Set("filters", logStream.GetFilters()),
 		data.Set("sink", flattenLogStreamSink(data, logStream.Sink)),
+		data.Set("pii_config", flattenLogStreamPIIConfig(logStream.PIIConfig)),
+		data.Set("start_from", logStream.GetStartFrom()),
 	)
 
 	return result.ErrorOrNil()
+}
+
+func flattenLogStreamPIIConfig(piiConfig *management.LogStreamPiiConfig) interface{} {
+	if piiConfig == nil {
+		return nil
+	}
+
+	c := map[string]interface{}{
+		"log_fields": piiConfig.GetLogFields(),
+		"method":     piiConfig.GetMethod(),
+		"algorithm":  piiConfig.GetAlgorithm(),
+	}
+
+	return []interface{}{c}
 }
 
 func flattenLogStreamSink(data *schema.ResourceData, sink interface{}) []interface{} {

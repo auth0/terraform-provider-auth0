@@ -3,7 +3,11 @@ package provider
 import (
 	"os"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/eventstream"
+	userattributeprofile "github.com/auth0/terraform-provider-auth0/internal/auth0/user_attribute_profile"
+
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkacl"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/outboundips"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tokenexchangeprofile"
 
@@ -30,6 +34,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/page"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/riskassessment"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/rule"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/signingkey"
@@ -162,10 +167,12 @@ func New() *schema.Provider {
 			"auth0_connection_clients":               connection.NewClientsResource(),
 			"auth0_connection_keys":                  connection.NewKeysResource(),
 			"auth0_connection_scim_configuration":    connection.NewSCIMConfigurationResource(),
+			"auth0_connection_scim_token":            connection.NewSCIMTokenResource(),
 			"auth0_custom_domain":                    customdomain.NewResource(),
 			"auth0_custom_domain_verification":       customdomain.NewVerificationResource(),
 			"auth0_email_provider":                   email.NewResource(),
 			"auth0_email_template":                   email.NewTemplateResource(),
+			"auth0_event_stream":                     eventstream.NewResource(),
 			"auth0_encryption_key_manager":           encryptionkeymanager.NewEncryptionKeyManagerResource(),
 			"auth0_flow":                             flow.NewResource(),
 			"auth0_flow_vault_connection":            flow.NewVaultConnectionResource(),
@@ -177,6 +184,8 @@ func New() *schema.Provider {
 			"auth0_organization_client_grant":        organization.NewOrganizationClientGrantResource(),
 			"auth0_organization_connection":          organization.NewConnectionResource(),
 			"auth0_organization_connections":         organization.NewConnectionsResource(),
+			"auth0_organization_discovery_domain":    organization.NewDiscoveryDomainResource(),
+			"auth0_organization_discovery_domains":   organization.NewDiscoveryDomainsResource(),
 			"auth0_organization_member":              organization.NewMemberResource(),
 			"auth0_organization_member_role":         organization.NewMemberRoleResource(),
 			"auth0_organization_member_roles":        organization.NewMemberRolesResource(),
@@ -193,6 +202,8 @@ func New() *schema.Provider {
 			"auth0_resource_server":                  resourceserver.NewResource(),
 			"auth0_resource_server_scope":            resourceserver.NewScopeResource(),
 			"auth0_resource_server_scopes":           resourceserver.NewScopesResource(),
+			"auth0_risk_assessments":                 riskassessment.NewResource(),
+			"auth0_risk_assessments_new_device":      riskassessment.NewDeviceSettingResource(),
 			"auth0_role":                             role.NewResource(),
 			"auth0_role_permission":                  role.NewPermissionResource(),
 			"auth0_role_permissions":                 role.NewPermissionsResource(),
@@ -203,6 +214,7 @@ func New() *schema.Provider {
 			"auth0_tenant":                           tenant.NewResource(),
 			"auth0_token_exchange_profile":           tokenexchangeprofile.NewResource(),
 			"auth0_user":                             user.NewResource(),
+			"auth0_user_attribute_profile":           userattributeprofile.NewResource(),
 			"auth0_user_permission":                  user.NewPermissionResource(),
 			"auth0_user_permissions":                 user.NewPermissionsResource(),
 			"auth0_user_role":                        user.NewRoleResource(),
@@ -215,15 +227,18 @@ func New() *schema.Provider {
 			"auth0_branding_theme":                branding.NewThemeDataSource(),
 			"auth0_client":                        client.NewDataSource(),
 			"auth0_clients":                       client.NewClientsDataSource(),
+			"auth0_client_grants":                 client.NewClientGrantsDataSource(),
 			"auth0_connection":                    connection.NewDataSource(),
 			"auth0_connection_keys":               connection.NewKeysDataSource(),
 			"auth0_connection_scim_configuration": connection.NewSCIMConfigurationDataSource(),
 			"auth0_custom_domain":                 customdomain.NewDataSource(),
+			"auth0_event_stream":                  eventstream.NewDataSource(),
 			"auth0_flow":                          flow.NewDataSource(),
 			"auth0_flow_vault_connection":         flow.NewVaultConnectionDataSource(),
 			"auth0_form":                          form.NewDataSource(),
 			"auth0_organization":                  organization.NewDataSource(),
 			"auth0_network_acl":                   networkacl.NewDataSource(),
+			"auth0_outbound_ips":                  outboundips.NewDataSource(),
 			"auth0_pages":                         page.NewDataSource(),
 			"auth0_phone_provider":                branding.NewPhoneProviderDataSource(),
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
@@ -235,6 +250,7 @@ func New() *schema.Provider {
 			"auth0_tenant":                        tenant.NewDataSource(),
 			"auth0_token_exchange_profile":        tokenexchangeprofile.NewDataSource(),
 			"auth0_user":                          user.NewDataSource(),
+			"auth0_user_attribute_profile":        userattributeprofile.NewDataSource(),
 		},
 	}
 

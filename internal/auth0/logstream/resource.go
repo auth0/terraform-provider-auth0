@@ -332,6 +332,44 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"pii_config": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Description: "Configuration for PII (Personally Identifiable Information) handling. ",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"log_fields": {
+							Type:     schema.TypeList,
+							Required: true,
+							MinItems: 1,
+							Elem: &schema.Schema{
+								Type:         schema.TypeString,
+								ValidateFunc: validation.StringInSlice([]string{"first_name", "last_name", "username", "email", "phone", "address"}, false),
+							},
+						},
+						"method": {
+							Type:         schema.TypeString,
+							Default:      "hash",
+							Optional:     true,
+							ValidateFunc: validation.StringInSlice([]string{"hash", "mask"}, false),
+							Description:  "The method to use for PII handling. Options are `hash` or `mask`. ",
+						},
+						"algorithm": {
+							Type:         schema.TypeString,
+							Default:      "xxhash",
+							Optional:     true,
+							ValidateFunc: validation.StringInSlice([]string{"xxhash"}, false),
+							Description:  "The algorithm to use for PII handling. Currently, only `xxhash` is supported.",
+						},
+					},
+				},
+			},
+			"start_from": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The optional datetime (ISO 8601) to start streaming logs from.",
+			},
 		},
 	}
 }

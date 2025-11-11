@@ -21,7 +21,7 @@ resource "auth0_tenant" "my_tenant" {
   support_url             = "http://example.com/support"
   allowed_logout_urls     = ["http://example.com/logout"]
   session_lifetime        = 8760
-  sandbox_version         = "12"
+  sandbox_version         = "22"
   enabled_locales         = ["en"]
   default_redirection_uri = "https://example.com/login"
 
@@ -77,6 +77,7 @@ resource "auth0_tenant" "my_tenant" {
 - `session_cookie` (Block List, Max: 1) Alters behavior of tenant's session cookie. Contains a single `mode` property. (see [below for nested schema](#nestedblock--session_cookie))
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
 - `sessions` (Block List, Max: 1) Sessions related settings for the tenant. (see [below for nested schema](#nestedblock--sessions))
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (String) Indicates whether the confirmation prompt appears when using non-verifiable callback URIs. Set to true to skip the prompt, false to show it, or null to unset. Accepts (true/false/null) or ("true"/"false"/"null")
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
 

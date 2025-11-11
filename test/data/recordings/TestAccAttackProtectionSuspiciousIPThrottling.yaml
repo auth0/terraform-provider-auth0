@@ -1,1443 +1,2070 @@
 ---
 version: 2
 interactions:
-  - id: 0
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 17
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"enabled":true}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 126.132419ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 110.654798ms
-  - id: 2
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 131.789984ms
-  - id: 3
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 116.622628ms
-  - id: 4
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 139.423839ms
-  - id: 5
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 136.719391ms
-  - id: 6
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 119.954122ms
-  - id: 7
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 202.926645ms
-  - id: 8
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 120.264087ms
-  - id: 9
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 141.764175ms
-  - id: 10
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 104
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"enabled":true,"shields":["block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5}}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 121.707841ms
-  - id: 11
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 85.136586ms
-  - id: 12
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 100.890869ms
-  - id: 13
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 106.685617ms
-  - id: 14
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 117.986644ms
-  - id: 15
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 126.75431ms
-  - id: 16
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 118.055844ms
-  - id: 17
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 116.874145ms
-  - id: 18
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 109.102035ms
-  - id: 19
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 105.441702ms
-  - id: 20
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 194
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"enabled":true,"shields":["admin_notification","block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["admin_notification","block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 141.261506ms
-  - id: 21
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 108.691359ms
-  - id: 22
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 114.726543ms
-  - id: 23
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 115.707494ms
-  - id: 24
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 103.390551ms
-  - id: 25
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 107.724846ms
-  - id: 26
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 105.439033ms
-  - id: 27
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 121.544942ms
-  - id: 28
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 105.577146ms
-  - id: 29
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 98.163386ms
-  - id: 30
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 18
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"enabled":false}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 156.402481ms
-  - id: 31
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 110.838137ms
-  - id: 32
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 114.339909ms
-  - id: 33
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 90.063344ms
-  - id: 34
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 106.134731ms
-  - id: 35
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 124.102075ms
-  - id: 36
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 124.389215ms
-  - id: 37
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 18
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"enabled":false}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["weekly","monthly","daily","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":[]}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 133.430186ms
-  - id: 38
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 18
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"enabled":false}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 152.358086ms
-  - id: 39
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 18
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"enabled":false}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.12.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 102.155415ms
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 17
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"enabled":true}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 378.58275ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 359.924291ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 360.348625ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 340.159541ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 355.864166ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 330.836792ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 344.076292ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 352.009959ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 384.260125ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 340.476375ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 318.6375ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 342.207625ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 360.1345ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 388.969958ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 347.013542ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 347.269125ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 104
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"enabled":true,"shields":["block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 367.605667ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 350.8335ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 322.011584ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 352.210792ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 358.435333ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 353.546667ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 355.736875ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 356.9945ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 338.862791ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 343.298792ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 348.627292ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 364.549542ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 352.72175ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 340.791792ms
+    - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 366.004ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 328.81875ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 194
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"enabled":true,"shields":["admin_notification","block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["admin_notification","block"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 415.416375ms
+    - id: 33
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 360.6295ms
+    - id: 34
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 589.965125ms
+    - id: 35
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 346.105292ms
+    - id: 36
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 357.570959ms
+    - id: 37
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 337.689916ms
+    - id: 38
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 316.513417ms
+    - id: 39
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 331.368ms
+    - id: 40
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 336.415917ms
+    - id: 41
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 397.650041ms
+    - id: 42
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 952.801875ms
+    - id: 43
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 348.227417ms
+    - id: 44
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 339.922542ms
+    - id: 45
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":true,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 378.293958ms
+    - id: 46
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 375.242458ms
+    - id: 47
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 356.8105ms
+    - id: 48
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 18
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"enabled":false}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 340.386417ms
+    - id: 49
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 324.565375ms
+    - id: 50
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 922.596666ms
+    - id: 51
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 350.7355ms
+    - id: 52
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 405.203792ms
+    - id: 53
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.094133417s
+    - id: 54
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 370.141333ms
+    - id: 55
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 332.630084ms
+    - id: 56
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 333.192584ms
+    - id: 57
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/bot-detection
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.130101417s
+    - id: 58
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/captcha
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 528.06375ms
+    - id: 59
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 18
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"enabled":false}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 401.35ms
+    - id: 60
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 18
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"enabled":false}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 355.434334ms
+    - id: 61
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 18
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"enabled":false}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 329.239459ms

@@ -8,19 +8,43 @@ resource "auth0_resource_server" "my_resource_server" {
   name       = "Example Resource Server - Client Grant (Managed by Terraform)"
   identifier = "https://api.example.com/client-grant"
 
+  authorization_details {
+    type = "payment"
+  }
+  authorization_details {
+    type = "shipping"
+  }
+  subject_type_authorization {
+    user {
+      policy = "allow_all"
+    }
+    client {
+      policy = "require_client_grant"
+    }
+  }
+}
+
+
+resource "auth0_resource_server_scopes" "my_scopes" {
+  depends_on = [auth0_resource_server.my_resource_server]
+
+  resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+
   scopes {
-    value       = "create:foo"
-    description = "Create foos"
+    name        = "read:foo"
+    description = "Can read Foo"
   }
 
   scopes {
-    value       = "create:bar"
-    description = "Create bars"
+    name        = "create:foo"
+    description = "Can create Foo"
   }
 }
 
 resource "auth0_client_grant" "my_client_grant" {
-  client_id = auth0_client.my_client.id
-  audience  = auth0_resource_server.my_resource_server.identifier
-  scopes    = ["create:foo", "create:bar"]
+  client_id                   = auth0_client.my_client.id
+  audience                    = auth0_resource_server.my_resource_server.identifier
+  scopes                      = ["create:foo", "read:foo"]
+  subject_type                = "user"
+  authorization_details_types = ["payment", "shipping"]
 }

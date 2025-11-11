@@ -81,13 +81,13 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 	connectionID := data.Get("connection_id").(string)
 	clientID := data.Get("client_id").(string)
 
-	enabledClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
+	allClients, err := GetAllEnabledClients(ctx, api, connectionID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(err)
 	}
 
 	found := false
-	for _, c := range enabledClientsResp.GetClients() {
+	for _, c := range allClients.GetClients() {
 		if c.GetClientID() == clientID {
 			found = true
 			break

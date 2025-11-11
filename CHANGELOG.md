@@ -1,3 +1,90 @@
+## v1.34.0
+
+FEATURES:
+- `resource/auth0_connection_scim_token` - Add support for creating and managing SCIM bearer tokens for enterprise connections ([#1399](https://github.com/auth0/terraform-provider-auth0/pull/1399))
+- `resource/auth0_attack_protection` - Add support for configuring `bot_detection` and `captcha` settings ([#1398](https://github.com/auth0/terraform-provider-auth0/pull/1398))
+- `resource/auth0_client` - Add support for configuring `async_approval_notification_channels` to manage CIBA notification channels ([#1397](https://github.com/auth0/terraform-provider-auth0/pull/1397))
+
+BUG FIXES:
+- `resource/auth0_resource_server` -  Add support for configuring `subject_type_authorization.user` for Management API resource server ([#1404](https://github.com/auth0/terraform-provider-auth0/pull/1404))
+
+## v1.33.0
+
+FEATURES:
+
+- `resource/auth0_connection` - Add support for managing OAuth1 Connections ([#1394](https://github.com/auth0/terraform-provider-auth0/pull/1394))
+- `data-source/auth0_client_grants` - Add support for retrieving Auth0 Client Grants ([#1393](https://github.com/auth0/terraform-provider-auth0/pull/1393))
+- `resource/auth0_organization_discovery_domain` - Add support for managing a single Organization Discovery Domain ([#1375](https://github.com/auth0/terraform-provider-auth0/pull/1375))
+- `resource/auth0_organization_discovery_domains` - Add support for managing multiple Organization Discovery Domains ([#1375](https://github.com/auth0/terraform-provider-auth0/pull/1375))
+- `resource/auth0_client` - Add support for configuring `organization_discovery_methods` ([#1375](https://github.com/auth0/terraform-provider-auth0/pull/1375))
+
+BUG FIXES:
+- `resource/auth0_client` - Allow setting `skip_non_verifiable_callback_uri_confirmation_prompt` attribute as null ([#1379](https://github.com/auth0/terraform-provider-auth0/pull/1379))
+
+## v1.32.0
+
+FEATURES:
+- `resource/auth0_connection`: Add support for configuring `authentication` and `connected_accounts` settings ([#1360](https://github.com/auth0/terraform-provider-auth0/pull/1360))
+
+## v1.31.0
+
+FEATURES:
+- `resource/auth0_user_attribute_profile` - Add support for managing User Attribute Profiles ([#1373](https://github.com/auth0/terraform-provider-auth0/pull/1373))
+- `data-source/auth0_user_attribute_profile`: Add support for retrieving a specific Auth0 User Attribute Profile ([#1373](https://github.com/auth0/terraform-provider-auth0/pull/1373))
+- `resource/auth0_self_service_profile` - Add support for configuring `user_attribute_profile_id` ([#1373](https://github.com/auth0/terraform-provider-auth0/pull/1373))
+- `data-source/auth0_outbound_ips`: Add support for retrieving Auth0 Outbound IP ranges ([#1349](https://github.com/auth0/terraform-provider-auth0/pull/1349))
+- `resource/auth0_client` - Add support for configuring `skip_non_verifiable_callback_uri_confirmation_prompt`  ([#1371](https://github.com/auth0/terraform-provider-auth0/pull/1371))
+- `resource/auth0_tenant` - Add support for configuring `skip_non_verifiable_callback_uri_confirmation_prompt` ([#1371](https://github.com/auth0/terraform-provider-auth0/pull/1371))
+- `resource/auth0_connection` - Add support for configuring `unique` field to support multiple accounts with the same email ([#1359](https://github.com/auth0/terraform-provider-auth0/pull/1359))
+
+BUG FIXES:
+- `resource/auth0_self_service_profile`: Fixed issue with resource import ([#1363](https://github.com/auth0/terraform-provider-auth0/pull/1363/files))
+
+## v1.30.0
+
+FEATURES:
+- `resource/auth0_resource_server` - Add support for managing token vault ([#1355](https://github.com/auth0/terraform-provider-auth0/pull/1355))
+- `resource/auth0_client` - Add support for managing token vault ([#1355](https://github.com/auth0/terraform-provider-auth0/pull/1355))
+
+BUG FIXES:
+- `resource/auth0_client` - Added missing fields in schema `enforce_online_refresh_tokens` and `enforce_cascade_revocation` ([#1358](https://github.com/auth0/terraform-provider-auth0/pull/1358))
+
+## v1.29.0
+
+FEATURES:
+- `resource/auth0_event_stream` - Add support for managing Event Streams ([#1314](https://github.com/auth0/terraform-provider-auth0/pull/1314))
+- `data-source/auth0_event_stream` - Add support for retrieving Event Streams ([#1314](https://github.com/auth0/terraform-provider-auth0/pull/1314))
+- `resource/auth0_email_template` - Add new template option `async_approval` ([#1334](https://github.com/auth0/terraform-provider-auth0/pull/1334))
+
+ENHANCEMENTS:
+- `resource/auth0_log_stream` : Add support for configuring `startFrom` ([#1348](https://github.com/auth0/terraform-provider-auth0/pull/1348))
+
+BUG FIXES:
+- `data-source/auth0_connection` - Add support for pagination to retrieve all clients associated with a connection ([#1344](https://github.com/auth0/terraform-provider-auth0/pull/1344))
+- `resource/auth0_connection_client` - Add support for pagination to retrieve all clients associated with a connection ([#1344](https://github.com/auth0/terraform-provider-auth0/pull/1344))
+- `resource/auth0_connection_clients` - Add support for pagination to retrieve all clients associated with a connection ([#1344](https://github.com/auth0/terraform-provider-auth0/pull/1344))
+- `resource/auth0_client_grant` - Mark `subject_type` as Computed ([#1346](https://github.com/auth0/terraform-provider-auth0/pull/1346))
+
+## v1.28.0
+
+FEATURES:
+
+- `resource/auth0_resource_server` - Add support for configuring `subject_type_authorization` settings ([#1342](https://github.com/auth0/terraform-provider-auth0/pull/1342))
+- `resource/auth0_client_grant` - Add support for configuring `subject_type` and `authorization_details_types` settings ([#1342](https://github.com/auth0/terraform-provider-auth0/pull/1342))
+
+## v1.27.0
+
+FEATURES:
+
+- `resource/auth0_risk_assessments` - Add support for configuring risk-assessments settings ([#1331](https://github.com/auth0/terraform-provider-auth0/pull/1331))
+- `resource/auth0_risk_assessments_new_device` - Add support for configuring risk-assessments new-device settings ([#1331](https://github.com/auth0/terraform-provider-auth0/pull/1331))
+
+## v1.26.0
+
+FEATURES:
+
+- `resource/auth0_log_stream` - Add support for `pii_config` field ([#1315](https://github.com/auth0/terraform-provider-auth0/pull/1315))
+
 ## v1.25.0
 
 FEATURES:

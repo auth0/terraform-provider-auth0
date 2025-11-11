@@ -22,6 +22,9 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.Identifier = value.String(cfg.GetAttr("identifier"))
 	}
 
+	// Allow updating SubjectTypeAuthorization for Auth0 Management API as well as non-management API.
+	resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(data)
+
 	if !resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
 		resourceServer.Name = value.String(cfg.GetAttr("name"))
 		resourceServer.SigningAlgorithm = value.String(cfg.GetAttr("signing_alg"))
@@ -37,6 +40,73 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.ProofOfPossession = expandProofOfPossession(data)
 	}
 	return resourceServer
+}
+
+func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.ResourceServerSubjectTypeAuthorization {
+	config := data.GetRawConfig().GetAttr("subject_type_authorization")
+	if config.IsNull() {
+		return nil
+	}
+
+	var sta management.ResourceServerSubjectTypeAuthorization
+
+	isManagementAPI := resourceServerIsAuth0ManagementAPI(data.GetRawState())
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		sta.User = expandSubjectTypeAuthorizationUser(cfg.GetAttr("user"))
+		if !isManagementAPI {
+			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
+		} else if data.HasChange("subject_type_authorization.0.client") {
+			// Changes to the client block in subject_type_authorization are not allowed for the management API.
+			// This check prevents silently ignoring such errors.
+			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
+		}
+
+		return stop
+	})
+
+	if sta == (management.ResourceServerSubjectTypeAuthorization{}) {
+		return nil
+	}
+
+	return &sta
+}
+
+func expandSubjectTypeAuthorizationUser(userConfig cty.Value) *management.ResourceServerSubjectTypeAuthorizationUser {
+	if userConfig.IsNull() {
+		return nil
+	}
+
+	var user management.ResourceServerSubjectTypeAuthorizationUser
+
+	userConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		user.Policy = value.String(cfg.GetAttr("policy"))
+		return stop
+	})
+
+	if user == (management.ResourceServerSubjectTypeAuthorizationUser{}) {
+		return nil
+	}
+
+	return &user
+}
+
+func expandSubjectTypeAuthorizationClient(clientConfig cty.Value) *management.ResourceServerSubjectTypeAuthorizationClient {
+	if clientConfig.IsNull() {
+		return nil
+	}
+
+	var client management.ResourceServerSubjectTypeAuthorizationClient
+
+	clientConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		client.Policy = value.String(cfg.GetAttr("policy"))
+		return stop
+	})
+
+	if client == (management.ResourceServerSubjectTypeAuthorizationClient{}) {
+		return nil
+	}
+
+	return &client
 }
 
 func expandResourceServerScopes(scopes cty.Value) *[]management.ResourceServerScope {

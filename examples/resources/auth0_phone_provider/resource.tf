@@ -20,7 +20,7 @@ resource "auth0_phone_provider" "twilio_phone_provider" {
 # Make sure a corresponding action exists with custom-phone-provider as supported triggers
 resource "auth0_action" "send_custom_phone" {
   name    = "Custom Phone Provider"
-  runtime = "node18"
+  runtime = "node22"
   deploy  = true
   code    = <<-EOT
     /**

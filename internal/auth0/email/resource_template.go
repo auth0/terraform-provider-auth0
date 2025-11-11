@@ -41,14 +41,15 @@ func NewTemplateResource() *schema.Resource {
 					"blocked_account",
 					"stolen_credentials",
 					"enrollment_email",
-					"change_password",
-					"password_reset",
 					"mfa_oob_code",
 					"user_invitation",
+					"change_password",
+					"password_reset",
+					"async_approval",
 				}, true),
 				Description: "Template name. Options include `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, " +
 					"`welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, " +
-					"`user_invitation`, `change_password` (legacy), or `password_reset` (legacy).",
+					"`user_invitation`, `change_password` (legacy), `password_reset` (legacy), or `async_approval`.",
 			},
 			"body": {
 				Type:     schema.TypeString,

@@ -14,7 +14,9 @@ func expandLogStream(data *schema.ResourceData) *management.LogStream {
 	config := data.GetRawConfig()
 
 	logStream := &management.LogStream{
-		Name: value.String(config.GetAttr("name")),
+		Name:      value.String(config.GetAttr("name")),
+		PIIConfig: expandLogStreamPIIConfig(data),
+		StartFrom: value.String(config.GetAttr("start_from")),
 	}
 
 	logStreamType := value.String(config.GetAttr("type"))
@@ -145,4 +147,32 @@ func expandLogStreamSinkMixpanel(config cty.Value) *management.LogStreamSinkMixp
 		ServiceAccountUsername: value.String(config.GetAttr("mixpanel_service_account_username")),
 		ServiceAccountPassword: value.String(config.GetAttr("mixpanel_service_account_password")),
 	}
+}
+
+func expandLogStreamPIIConfig(data *schema.ResourceData) *management.LogStreamPiiConfig {
+	if !data.IsNewResource() && !data.HasChange("pii_config") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("pii_config")
+	if config.IsNull() {
+		return nil
+	}
+
+	_, ok := data.GetOk("pii_config")
+	if !ok {
+		return nil
+	}
+
+	var piiConfig management.LogStreamPiiConfig
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		piiConfig.LogFields = value.Strings(config.GetAttr("log_fields"))
+		piiConfig.Method = value.String(config.GetAttr("method"))
+		piiConfig.Algorithm = value.String(config.GetAttr("algorithm"))
+
+		return stop
+	})
+
+	return &piiConfig
 }

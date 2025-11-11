@@ -1,0 +1,273 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 243
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - CIBA Async Approval - TestAccClientAsyncApprovalNotificationChannels","app_type":"non_interactive","token_endpoint_auth_method":"client_secret_post","oidc_logout":{},"async_approval_notification_channels":["email"]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"name":"Acceptance Test - CIBA Async Approval - TestAccClientAsyncApprovalNotificationChannels","client_id":"XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"async_approval_notification_channels":["email"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 622.217083ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - CIBA Async Approval - TestAccClientAsyncApprovalNotificationChannels","client_id":"XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"async_approval_notification_channels":["email"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 490.298291ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - CIBA Async Approval - TestAccClientAsyncApprovalNotificationChannels","client_id":"XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"async_approval_notification_channels":["email"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 458.824625ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - CIBA Async Approval - TestAccClientAsyncApprovalNotificationChannels","client_id":"XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"async_approval_notification_channels":["email"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 453.195708ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 209
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - CIBA Async Approval - TestAccClientAsyncApprovalNotificationChannels","app_type":"non_interactive","oidc_logout":{},"async_approval_notification_channels":["email","guardian-push"]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - CIBA Async Approval - TestAccClientAsyncApprovalNotificationChannels","client_id":"XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"async_approval_notification_channels":["email","guardian-push"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 479.967459ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - CIBA Async Approval - TestAccClientAsyncApprovalNotificationChannels","client_id":"XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"async_approval_notification_channels":["email","guardian-push"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 453.855208ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - CIBA Async Approval - TestAccClientAsyncApprovalNotificationChannels","client_id":"XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"async_approval_notification_channels":["email","guardian-push"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 577.003583ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/XxXRNiG6NJGr3KGk4rRDEn5d66vX6M51
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 500.135458ms

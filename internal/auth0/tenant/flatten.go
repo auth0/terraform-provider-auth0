@@ -5,6 +5,8 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/value"
+
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 )
 
@@ -34,6 +36,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("mtls", flattenMTLSConfiguration(tenant.GetMTLS())),
 		data.Set("error_page", flattenErrorPageConfiguration(tenant.GetErrorPage())),
 		data.Set("default_token_quota", flattenDefaultTokenQuota(tenant.GetDefaultTokenQuota())),
+		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt", value.BoolPtrToString(tenant.SkipNonVerifiableCallbackURIConfirmationPrompt)),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {

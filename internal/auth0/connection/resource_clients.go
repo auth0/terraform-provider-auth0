@@ -61,13 +61,13 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	rawEnabledClients := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
 
 	// Fetch existing enabled clients from the new API.
-	existingClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
+	existingClients, err := GetAllEnabledClients(ctx, api, connectionID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(err)
 	}
 
 	var existingEnabledClientIDs []string
-	for _, c := range existingClientsResp.GetClients() {
+	for _, c := range existingClients.GetClients() {
 		existingEnabledClientIDs = append(existingEnabledClientIDs, c.GetClientID())
 	}
 
@@ -101,9 +101,9 @@ func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta 
 	api := meta.(*config.Config).GetAPI()
 	connectionID := data.Id()
 
-	enabledClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
+	allClients, err := GetAllEnabledClients(ctx, api, connectionID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(err)
 	}
 
 	requestOption := management.IncludeFields("strategy", "name")
@@ -112,7 +112,7 @@ func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta 
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenConnectionClients(data, connection, enabledClientsResp))
+	return diag.FromErr(flattenConnectionClients(data, connection, allClients))
 }
 
 func updateConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

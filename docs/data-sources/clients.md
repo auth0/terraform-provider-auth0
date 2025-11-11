@@ -50,6 +50,7 @@ Read-Only:
 - `allowed_logout_urls` (List of String)
 - `allowed_origins` (List of String)
 - `app_type` (String)
+- `async_approval_notification_channels` (List of String)
 - `callbacks` (List of String)
 - `client_id` (String)
 - `client_metadata` (Map of String)
@@ -60,7 +61,10 @@ Read-Only:
 - `is_token_endpoint_ip_header_trusted` (Boolean)
 - `name` (String)
 - `oidc_logout` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout))
+- `organization_discovery_methods` (List of String)
+- `resource_server_identifier` (String)
 - `session_transfer` (List of Object) (see [below for nested schema](#nestedobjatt--clients--session_transfer))
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (String)
 - `token_exchange` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_exchange))
 - `token_quota` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_quota))
 - `web_origins` (List of String)
@@ -91,7 +95,9 @@ Read-Only:
 - `allow_refresh_token` (Boolean)
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean)
+- `enforce_cascade_revocation` (Boolean)
 - `enforce_device_binding` (String)
+- `enforce_online_refresh_tokens` (Boolean)
 
 
 <a id="nestedobjatt--clients--token_exchange"></a>

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
@@ -86,6 +87,9 @@ func flattenRefreshTokenPolicies(policies []management.ClientRefreshTokenPolicy)
 	return result
 }
 
+// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
+//
+//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
 func flattenOIDCBackchannelURLs(backchannelLogout *management.OIDCBackchannelLogout, logout *management.OIDCLogout) []string {
 	if logout != nil {
 		return nil
@@ -614,8 +618,10 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("allowed_origins", client.GetAllowedOrigins()),
 		data.Set("allowed_clients", client.GetAllowedClients()),
 		data.Set("grant_types", client.GetGrantTypes()),
+		data.Set("async_approval_notification_channels", client.GetAsyncApprovalNotificationChannels()),
 		data.Set("organization_usage", client.GetOrganizationUsage()),
 		data.Set("organization_require_behavior", client.GetOrganizationRequireBehavior()),
+		data.Set("organization_discovery_methods", client.GetOrganizationDiscoveryMethods()),
 		data.Set("web_origins", client.GetWebOrigins()),
 		data.Set("sso", client.GetSSO()),
 		data.Set("sso_disabled", client.GetSSODisabled()),
@@ -641,10 +647,13 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("compliance_level", client.GetComplianceLevel()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
+		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
+		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
+			value.BoolPtrToString(client.SkipNonVerifiableCallbackURIConfirmationPrompt)),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
-		result = multierror.Append(data.Set("encryption_key", client.GetEncryptionKey()))
+		result = multierror.Append(result, data.Set("encryption_key", client.GetEncryptionKey()))
 	}
 
 	return result.ErrorOrNil()
@@ -660,6 +669,8 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 		"allowed_authentication_methods":    sessionTransfer.GetAllowedAuthenticationMethods(),
 		"enforce_device_binding":            sessionTransfer.GetEnforceDeviceBinding(),
 		"allow_refresh_token":               sessionTransfer.GetAllowRefreshToken(),
+		"enforce_online_refresh_tokens":     sessionTransfer.GetEnforceOnlineRefreshTokens(),
+		"enforce_cascade_revocation":        sessionTransfer.GetEnforceCascadeRevocation(),
 	}
 
 	return []interface{}{
@@ -674,6 +685,8 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 		data.Set("scopes", clientGrant.GetScope()),
 		data.Set("allow_any_organization", clientGrant.GetAllowAnyOrganization()),
 		data.Set("organization_usage", clientGrant.GetOrganizationUsage()),
+		data.Set("subject_type", clientGrant.GetSubjectType()),
+		data.Set("authorization_details_types", clientGrant.GetAuthorizationDetailsTypes()),
 	)
 
 	return result.ErrorOrNil()

@@ -1,3 +1,16 @@
+## v1.35.0
+
+FEATURES:
+- `data-source/auth0_custom_domains` – Add support for retrieving multiple Auth0 Custom Domains and support lucene query ([#1389](https://github.com/auth0/terraform-provider-auth0/pull/1389))
+
+ENHANCEMENTS:
+- Fallback to access token from config.json when Keyring is not supported ([#1381](https://github.com/auth0/terraform-provider-auth0/pull/1381))
+
+BUG FIXES:
+- `resource/auth0_email_provider` – Prevent credentials reset when updating other independent fields ([#1411](https://github.com/auth0/terraform-provider-auth0/pull/1411))
+- `resource/auth0_attack_protection` - Temporarily handle 403 errors for tenants where the Bot Detection API rollout is pending ([#1410](https://github.com/auth0/terraform-provider-auth0/pull/1410))
+
+
 ## v1.34.0
 
 FEATURES:

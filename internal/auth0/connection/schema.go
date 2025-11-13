@@ -1239,6 +1239,41 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)",
 			},
+			"consumer_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Identifies the client to the service provider",
+			},
+			"consumer_secret": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Secret used to establish ownership of the consumer key.",
+			},
+			"request_token_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "URL used to obtain an unauthorized request token.",
+			},
+			"access_token_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "URL used to exchange a user-authorized request token for an access token.",
+			},
+			"user_authorization_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "URL used to obtain user authorization.",
+			},
+			"session_key": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Session Key for storing the request token.",
+			},
+			"signature_method": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Signature method used to sign the request",
+			},
 		},
 	},
 }

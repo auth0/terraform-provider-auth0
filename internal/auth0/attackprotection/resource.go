@@ -2,6 +2,8 @@ package attackprotection
 
 import (
 	"context"
+	"log"
+	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -578,12 +580,18 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 
 	botDetection, err := apiv2.AttackProtection.BotDetection.Get(ctx)
 	if err != nil {
-		return diag.FromErr(err)
+		if !strings.Contains(err.Error(), "insufficient_scope") {
+			return diag.FromErr(err)
+		}
+		log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
 	}
 
 	captcha, err := apiv2.AttackProtection.Captcha.Get(ctx)
 	if err != nil {
-		return diag.FromErr(err)
+		if !strings.Contains(err.Error(), "insufficient_scope") {
+			return diag.FromErr(err)
+		}
+		log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
 	}
 
 	result := multierror.Append(
@@ -616,13 +624,21 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 
 	if botDetection := expandBotDetection(data); botDetection != nil {
 		if _, err := apiv2.AttackProtection.BotDetection.Update(ctx, botDetection); err != nil {
-			result = multierror.Append(result, err)
+			if !strings.Contains(err.Error(), "insufficient_scope") {
+				result = multierror.Append(result, err)
+			} else {
+				log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
+			}
 		}
 	}
 
 	if captcha := expandCaptcha(data); captcha != nil {
 		if _, err := apiv2.AttackProtection.Captcha.Update(ctx, captcha); err != nil {
-			result = multierror.Append(result, err)
+			if !strings.Contains(err.Error(), "insufficient_scope") {
+				result = multierror.Append(result, err)
+			} else {
+				log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
+			}
 		}
 	}
 

@@ -33,7 +33,7 @@ resource "auth0_custom_domain" "my_custom_domain" {
 ### Optional
 
 - `custom_client_ip_header` (String) The HTTP header to fetch the client's IP address. Cannot be set on auth0_managed domains.
-- `domain_metadata` (Map of String) Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed.
+- `domain_metadata` (Map of String) Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed. (EA only).
 - `tls_policy` (String) TLS policy for the custom domain. Available options are: `compatible` or `recommended`. Compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2. Cannot be set on self_managed domains.
 
 ### Read-Only
@@ -42,7 +42,7 @@ resource "auth0_custom_domain" "my_custom_domain" {
 - `id` (String) The ID of this resource.
 - `origin_domain_name` (String) Once the configuration status is `ready`, the DNS name of the Auth0 origin server that handles traffic for the custom domain.
 - `primary` (Boolean, Deprecated) Indicates whether this is a primary domain.
-- `status` (String) Configuration status for the custom domain. Options include `disabled`, `pending`, `pending_verification`, and `ready`.
+- `status` (String) Configuration status for the custom domain. Options include `disabled`, `pending`, `pending_verification`, `ready` and `failed`.
 - `verification` (List of Object) Configuration settings for verification. (see [below for nested schema](#nestedatt--verification))
 
 <a id="nestedatt--certificate"></a>

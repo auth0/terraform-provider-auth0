@@ -30,11 +30,11 @@ resource "auth0_attack_protection" "my_protection" {
     shields                      = ["admin_notification", "block"]
 
     pre_user_registration {
-      shields = ["block"]
+      shields = ["admin_notification", "block"]
     }
 
     pre_change_password {
-      shields = ["block", "admin_notification"]
+      shields = ["admin_notification", "block"]
     }
   }
 

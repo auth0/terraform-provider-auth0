@@ -3,11 +3,12 @@ package email
 import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandEmailProvider(config cty.Value) *management.EmailProvider {
+func expandEmailProvider(data *schema.ResourceData, config cty.Value) *management.EmailProvider {
 	emailProvider := &management.EmailProvider{
 		Name:               value.String(config.GetAttr("name")),
 		Enabled:            value.Bool(config.GetAttr("enabled")),
@@ -16,21 +17,21 @@ func expandEmailProvider(config cty.Value) *management.EmailProvider {
 
 	switch emailProvider.GetName() {
 	case management.EmailProviderMandrill:
-		expandEmailProviderMandrill(config, emailProvider)
+		expandEmailProviderMandrill(config, data, emailProvider)
 	case management.EmailProviderSES:
-		expandEmailProviderSES(config, emailProvider)
+		expandEmailProviderSES(config, data, emailProvider)
 	case management.EmailProviderSendGrid:
-		expandEmailProviderSendGrid(config, emailProvider)
+		expandEmailProviderSendGrid(config, data, emailProvider)
 	case management.EmailProviderSparkPost:
-		expandEmailProviderSparkPost(config, emailProvider)
+		expandEmailProviderSparkPost(config, data, emailProvider)
 	case management.EmailProviderMailgun:
-		expandEmailProviderMailgun(config, emailProvider)
+		expandEmailProviderMailgun(config, data, emailProvider)
 	case management.EmailProviderSMTP:
-		expandEmailProviderSMTP(config, emailProvider)
+		expandEmailProviderSMTP(config, data, emailProvider)
 	case management.EmailProviderAzureCS:
-		expandEmailProviderAzureCS(config, emailProvider)
+		expandEmailProviderAzureCS(config, data, emailProvider)
 	case management.EmailProviderMS365:
-		expandEmailProviderMS365(config, emailProvider)
+		expandEmailProviderMS365(config, data, emailProvider)
 	case management.EmailProviderCustom:
 		emailProvider.Credentials = &management.EmailProviderCredentialsCustom{}
 	}
@@ -38,13 +39,15 @@ func expandEmailProvider(config cty.Value) *management.EmailProvider {
 	return emailProvider
 }
 
-func expandEmailProviderMandrill(config cty.Value, emailProvider *management.EmailProvider) {
-	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
-		emailProvider.Credentials = &management.EmailProviderCredentialsMandrill{
-			APIKey: value.String(credentials.GetAttr("api_key")),
-		}
-		return stop
-	})
+func expandEmailProviderMandrill(config cty.Value, data *schema.ResourceData, emailProvider *management.EmailProvider) {
+	if data.HasChange("credentials") {
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+			emailProvider.Credentials = &management.EmailProviderCredentialsMandrill{
+				APIKey: value.String(credentials.GetAttr("api_key")),
+			}
+			return stop
+		})
+	}
 
 	config.GetAttr("settings").ForEachElement(func(_ cty.Value, settings cty.Value) (stop bool) {
 		settings.GetAttr("message").ForEachElement(func(_ cty.Value, message cty.Value) (stop bool) {
@@ -59,15 +62,17 @@ func expandEmailProviderMandrill(config cty.Value, emailProvider *management.Ema
 	})
 }
 
-func expandEmailProviderSES(config cty.Value, emailProvider *management.EmailProvider) {
-	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
-		emailProvider.Credentials = &management.EmailProviderCredentialsSES{
-			AccessKeyID:     value.String(credentials.GetAttr("access_key_id")),
-			SecretAccessKey: value.String(credentials.GetAttr("secret_access_key")),
-			Region:          value.String(credentials.GetAttr("region")),
-		}
-		return stop
-	})
+func expandEmailProviderSES(config cty.Value, data *schema.ResourceData, emailProvider *management.EmailProvider) {
+	if data.HasChange("credentials") {
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+			emailProvider.Credentials = &management.EmailProviderCredentialsSES{
+				AccessKeyID:     value.String(credentials.GetAttr("access_key_id")),
+				SecretAccessKey: value.String(credentials.GetAttr("secret_access_key")),
+				Region:          value.String(credentials.GetAttr("region")),
+			}
+			return stop
+		})
+	}
 
 	config.GetAttr("settings").ForEachElement(func(_ cty.Value, settings cty.Value) (stop bool) {
 		settings.GetAttr("message").ForEachElement(func(_ cty.Value, message cty.Value) (stop bool) {
@@ -82,46 +87,54 @@ func expandEmailProviderSES(config cty.Value, emailProvider *management.EmailPro
 	})
 }
 
-func expandEmailProviderSendGrid(config cty.Value, emailProvider *management.EmailProvider) {
-	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
-		emailProvider.Credentials = &management.EmailProviderCredentialsSendGrid{
-			APIKey: value.String(credentials.GetAttr("api_key")),
-		}
-		return stop
-	})
+func expandEmailProviderSendGrid(config cty.Value, data *schema.ResourceData, emailProvider *management.EmailProvider) {
+	if data.HasChange("credentials") {
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+			emailProvider.Credentials = &management.EmailProviderCredentialsSendGrid{
+				APIKey: value.String(credentials.GetAttr("api_key")),
+			}
+			return stop
+		})
+	}
 }
 
-func expandEmailProviderSparkPost(config cty.Value, emailProvider *management.EmailProvider) {
-	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
-		emailProvider.Credentials = &management.EmailProviderCredentialsSparkPost{
-			APIKey: value.String(credentials.GetAttr("api_key")),
-			Region: value.String(credentials.GetAttr("region")),
-		}
-		return stop
-	})
+func expandEmailProviderSparkPost(config cty.Value, data *schema.ResourceData, emailProvider *management.EmailProvider) {
+	if data.HasChange("credentials") {
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+			emailProvider.Credentials = &management.EmailProviderCredentialsSparkPost{
+				APIKey: value.String(credentials.GetAttr("api_key")),
+				Region: value.String(credentials.GetAttr("region")),
+			}
+			return stop
+		})
+	}
 }
 
-func expandEmailProviderMailgun(config cty.Value, emailProvider *management.EmailProvider) {
-	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
-		emailProvider.Credentials = &management.EmailProviderCredentialsMailgun{
-			APIKey: value.String(credentials.GetAttr("api_key")),
-			Domain: value.String(credentials.GetAttr("domain")),
-			Region: value.String(credentials.GetAttr("region")),
-		}
-		return stop
-	})
+func expandEmailProviderMailgun(config cty.Value, data *schema.ResourceData, emailProvider *management.EmailProvider) {
+	if data.HasChange("credentials") {
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+			emailProvider.Credentials = &management.EmailProviderCredentialsMailgun{
+				APIKey: value.String(credentials.GetAttr("api_key")),
+				Domain: value.String(credentials.GetAttr("domain")),
+				Region: value.String(credentials.GetAttr("region")),
+			}
+			return stop
+		})
+	}
 }
 
-func expandEmailProviderSMTP(config cty.Value, emailProvider *management.EmailProvider) {
-	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
-		emailProvider.Credentials = &management.EmailProviderCredentialsSMTP{
-			SMTPHost: value.String(credentials.GetAttr("smtp_host")),
-			SMTPPort: value.Int(credentials.GetAttr("smtp_port")),
-			SMTPUser: value.String(credentials.GetAttr("smtp_user")),
-			SMTPPass: value.String(credentials.GetAttr("smtp_pass")),
-		}
-		return stop
-	})
+func expandEmailProviderSMTP(config cty.Value, data *schema.ResourceData, emailProvider *management.EmailProvider) {
+	if data.HasChange("credentials") {
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+			emailProvider.Credentials = &management.EmailProviderCredentialsSMTP{
+				SMTPHost: value.String(credentials.GetAttr("smtp_host")),
+				SMTPPort: value.Int(credentials.GetAttr("smtp_port")),
+				SMTPUser: value.String(credentials.GetAttr("smtp_user")),
+				SMTPPass: value.String(credentials.GetAttr("smtp_pass")),
+			}
+			return stop
+		})
+	}
 
 	config.GetAttr("settings").ForEachElement(func(_ cty.Value, settings cty.Value) (stop bool) {
 		settings.GetAttr("headers").ForEachElement(func(_ cty.Value, headers cty.Value) (stop bool) {
@@ -137,24 +150,28 @@ func expandEmailProviderSMTP(config cty.Value, emailProvider *management.EmailPr
 	})
 }
 
-func expandEmailProviderAzureCS(config cty.Value, emailProvider *management.EmailProvider) {
-	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
-		emailProvider.Credentials = &management.EmailProviderCredentialsAzureCS{
-			ConnectionString: value.String(credentials.GetAttr("azure_cs_connection_string")),
-		}
-		return stop
-	})
+func expandEmailProviderAzureCS(config cty.Value, data *schema.ResourceData, emailProvider *management.EmailProvider) {
+	if data.HasChange("credentials") {
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+			emailProvider.Credentials = &management.EmailProviderCredentialsAzureCS{
+				ConnectionString: value.String(credentials.GetAttr("azure_cs_connection_string")),
+			}
+			return stop
+		})
+	}
 }
 
-func expandEmailProviderMS365(config cty.Value, emailProvider *management.EmailProvider) {
-	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
-		emailProvider.Credentials = &management.EmailProviderCredentialsMS365{
-			TenantID:     value.String(credentials.GetAttr("ms365_tenant_id")),
-			ClientID:     value.String(credentials.GetAttr("ms365_client_id")),
-			ClientSecret: value.String(credentials.GetAttr("ms365_client_secret")),
-		}
-		return stop
-	})
+func expandEmailProviderMS365(config cty.Value, data *schema.ResourceData, emailProvider *management.EmailProvider) {
+	if data.HasChange("credentials") {
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+			emailProvider.Credentials = &management.EmailProviderCredentialsMS365{
+				TenantID:     value.String(credentials.GetAttr("ms365_tenant_id")),
+				ClientID:     value.String(credentials.GetAttr("ms365_client_id")),
+				ClientSecret: value.String(credentials.GetAttr("ms365_client_secret")),
+			}
+			return stop
+		})
+	}
 }
 
 func expandEmailTemplate(config cty.Value) *management.EmailTemplate {

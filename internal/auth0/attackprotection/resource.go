@@ -584,7 +584,6 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 			return diag.FromErr(err)
 		}
 		log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
-
 	}
 
 	captcha, err := apiv2.AttackProtection.Captcha.Get(ctx)

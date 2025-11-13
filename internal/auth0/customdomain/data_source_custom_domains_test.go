@@ -31,13 +31,13 @@ resource "auth0_custom_domain" "my_custom_domain3" {
 
 const testAccDataSourceCustomDomainsFilter1 = `
 data "auth0_custom_domains" "filtered" {
-  q = "domain:authninja*"
+  query = "domain:authninja*"
 }
 `
 
 const testAccDataSourceCustomDomainsFilter2 = `
 data "auth0_custom_domains" "filtered" {
-  q = "domain:beacon*"
+  query = "domain:beacon*"
 }
 `
 
@@ -56,7 +56,7 @@ func TestAccDataSourceCustomDomains(t *testing.T) {
 			{
 				Config: testAccCustomDomainThird + testAccDataSourceCustomDomainsFilter1,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "q", "domain:authninja*"),
+					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "query", "domain:authninja*"),
 					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "custom_domains.#", "2"),
 
 					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_custom_domains.filtered", "custom_domains.*", map[string]string{
@@ -68,7 +68,7 @@ func TestAccDataSourceCustomDomains(t *testing.T) {
 			{
 				Config: testAccCustomDomainThird + testAccDataSourceCustomDomainsFilter2,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "q", "domain:beacon*"),
+					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "query", "domain:beacon*"),
 					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "custom_domains.#", "1"),
 
 					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_custom_domains.filtered", "custom_domains.*", map[string]string{

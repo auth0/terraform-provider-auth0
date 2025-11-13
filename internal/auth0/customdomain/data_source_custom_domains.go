@@ -17,9 +17,9 @@ import (
 func NewCustomDomainsDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readCustomDomainsForDataSource,
-		Description: "Data source to retrieve multiple custom domains based on a search query.",
+		Description: "Data source to retrieve multiple custom domains based on a search query. EA Only.",
 		Schema: map[string]*schema.Schema{
-			"q": {
+			"query": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Search query string to filter custom domains.",
@@ -38,7 +38,7 @@ func NewCustomDomainsDataSource() *schema.Resource {
 
 func readCustomDomainsForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	q := data.Get("q").(string)
+	query := data.Get("query").(string)
 
 	var customDomains []*management.CustomDomain
 	var from string
@@ -46,8 +46,8 @@ func readCustomDomainsForDataSource(ctx context.Context, data *schema.ResourceDa
 		management.Take(100),
 	}
 
-	if q != "" {
-		options = append(options, management.Parameter("q", q))
+	if query != "" {
+		options = append(options, management.Parameter("q", query))
 	}
 
 	for {

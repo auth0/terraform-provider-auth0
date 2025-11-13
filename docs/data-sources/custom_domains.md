@@ -1,12 +1,12 @@
 ---
 page_title: "Data Source: auth0_custom_domains"
 description: |-
-  Data source to retrieve multiple custom domains based on a search query.
+  Data source to retrieve multiple custom domains based on a search query. EA Only.
 ---
 
 # Data Source: auth0_custom_domains
 
-Data source to retrieve multiple custom domains based on a search query.
+Data source to retrieve multiple custom domains based on a search query. EA Only.
 
 ## Example Usage
 
@@ -41,7 +41,7 @@ data "auth0_custom_domains" "test" {
 
 ### Optional
 
-- `q` (String) Search query string to filter custom domains.
+- `query` (String) Search query string to filter custom domains.
 
 ### Read-Only
 

@@ -1,3 +1,26 @@
+## v1.34.0
+
+FEATURES:
+- `resource/auth0_connection_scim_token` - Add support for creating and managing SCIM bearer tokens for enterprise connections ([#1399](https://github.com/auth0/terraform-provider-auth0/pull/1399))
+- `resource/auth0_attack_protection` - Add support for configuring `bot_detection` and `captcha` settings ([#1398](https://github.com/auth0/terraform-provider-auth0/pull/1398))
+- `resource/auth0_client` - Add support for configuring `async_approval_notification_channels` to manage CIBA notification channels ([#1397](https://github.com/auth0/terraform-provider-auth0/pull/1397))
+
+BUG FIXES:
+- `resource/auth0_resource_server` -  Add support for configuring `subject_type_authorization.user` for Management API resource server ([#1404](https://github.com/auth0/terraform-provider-auth0/pull/1404))
+
+## v1.33.0
+
+FEATURES:
+
+- `resource/auth0_connection` - Add support for managing OAuth1 Connections ([#1394](https://github.com/auth0/terraform-provider-auth0/pull/1394))
+- `data-source/auth0_client_grants` - Add support for retrieving Auth0 Client Grants ([#1393](https://github.com/auth0/terraform-provider-auth0/pull/1393))
+- `resource/auth0_organization_discovery_domain` - Add support for managing a single Organization Discovery Domain ([#1375](https://github.com/auth0/terraform-provider-auth0/pull/1375))
+- `resource/auth0_organization_discovery_domains` - Add support for managing multiple Organization Discovery Domains ([#1375](https://github.com/auth0/terraform-provider-auth0/pull/1375))
+- `resource/auth0_client` - Add support for configuring `organization_discovery_methods` ([#1375](https://github.com/auth0/terraform-provider-auth0/pull/1375))
+
+BUG FIXES:
+- `resource/auth0_client` - Allow setting `skip_non_verifiable_callback_uri_confirmation_prompt` attribute as null ([#1379](https://github.com/auth0/terraform-provider-auth0/pull/1379))
+
 ## v1.32.0
 
 FEATURES:

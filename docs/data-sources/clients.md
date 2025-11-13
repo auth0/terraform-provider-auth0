@@ -50,6 +50,7 @@ Read-Only:
 - `allowed_logout_urls` (List of String)
 - `allowed_origins` (List of String)
 - `app_type` (String)
+- `async_approval_notification_channels` (List of String)
 - `callbacks` (List of String)
 - `client_id` (String)
 - `client_metadata` (Map of String)

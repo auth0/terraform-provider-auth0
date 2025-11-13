@@ -22,6 +22,9 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.Identifier = value.String(cfg.GetAttr("identifier"))
 	}
 
+	// Allow updating SubjectTypeAuthorization for Auth0 Management API as well as non-management API.
+	resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(data)
+
 	if !resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
 		resourceServer.Name = value.String(cfg.GetAttr("name"))
 		resourceServer.SigningAlgorithm = value.String(cfg.GetAttr("signing_alg"))
@@ -35,7 +38,6 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.TokenEncryption = expandTokenEncryption(data)
 		resourceServer.ConsentPolicy = expandConsentPolicy(data)
 		resourceServer.ProofOfPossession = expandProofOfPossession(data)
-		resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(data)
 	}
 	return resourceServer
 }
@@ -48,9 +50,17 @@ func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.Resou
 
 	var sta management.ResourceServerSubjectTypeAuthorization
 
+	isManagementAPI := resourceServerIsAuth0ManagementAPI(data.GetRawState())
 	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		sta.User = expandSubjectTypeAuthorizationUser(cfg.GetAttr("user"))
-		sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
+		if !isManagementAPI {
+			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
+		} else if data.HasChange("subject_type_authorization.0.client") {
+			// Changes to the client block in subject_type_authorization are not allowed for the management API.
+			// This check prevents silently ignoring such errors.
+			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
+		}
+
 		return stop
 	})
 

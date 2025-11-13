@@ -50,6 +50,152 @@ resource "auth0_attack_protection" "my_protection" {
       shields = ["block", "admin_notification"]
     }
   }
+
+  bot_detection {
+    bot_detection_level             = "medium"
+    challenge_password_policy       = "when_risky"
+    challenge_passwordless_policy   = "when_risky"
+    challenge_password_reset_policy = "always"
+    allowlist                       = ["192.168.1.0", "10.0.0.0"]
+    monitoring_mode_enabled         = true
+  }
+}
+
+# ============================================================================
+# CAPTCHA PROVIDER EXAMPLES - One per Provider
+# ============================================================================
+
+# Example 1: reCAPTCHA v2
+resource "auth0_attack_protection" "captcha_recaptcha_v2" {
+  captcha {
+    active_provider_id = "recaptcha_v2"
+    recaptcha_v2 {
+      site_key = var.recaptcha_v2_site_key
+      secret   = var.recaptcha_v2_secret
+    }
+  }
+}
+
+# Example 2: reCAPTCHA Enterprise
+resource "auth0_attack_protection" "captcha_recaptcha_enterprise" {
+  captcha {
+    active_provider_id = "recaptcha_enterprise"
+    recaptcha_enterprise {
+      site_key   = var.recaptcha_enterprise_site_key
+      api_key    = var.recaptcha_enterprise_api_key
+      project_id = var.recaptcha_enterprise_project_id
+    }
+  }
+}
+
+# Example 3: hCaptcha
+resource "auth0_attack_protection" "captcha_hcaptcha" {
+  captcha {
+    active_provider_id = "hcaptcha"
+    hcaptcha {
+      site_key = var.hcaptcha_site_key
+      secret   = var.hcaptcha_secret
+    }
+  }
+}
+
+# Example 4: Friendly Captcha
+resource "auth0_attack_protection" "captcha_friendly_captcha" {
+  captcha {
+    active_provider_id = "friendly_captcha"
+    friendly_captcha {
+      site_key = var.friendly_captcha_site_key
+      secret   = var.friendly_captcha_secret
+    }
+  }
+}
+
+# Example 5: Arkose Labs
+resource "auth0_attack_protection" "captcha_arkose" {
+  captcha {
+    active_provider_id = "arkose"
+    arkose {
+      site_key         = var.arkose_site_key
+      secret           = var.arkose_secret
+      client_subdomain = "client.example.com"
+      verify_subdomain = "verify.example.com"
+      fail_open        = false
+    }
+  }
+}
+
+# ============================================================================
+# VARIABLES FOR SENSITIVE DATA
+# ============================================================================
+
+# reCAPTCHA v2
+variable "recaptcha_v2_site_key" {
+  type        = string
+  description = "Google reCAPTCHA v2 site key"
+  sensitive   = true
+}
+
+variable "recaptcha_v2_secret" {
+  type        = string
+  description = "Google reCAPTCHA v2 secret key"
+  sensitive   = true
+}
+
+# reCAPTCHA Enterprise
+variable "recaptcha_enterprise_site_key" {
+  type        = string
+  description = "Google reCAPTCHA Enterprise site key"
+  sensitive   = true
+}
+
+variable "recaptcha_enterprise_api_key" {
+  type        = string
+  description = "Google reCAPTCHA Enterprise API key"
+  sensitive   = true
+}
+
+variable "recaptcha_enterprise_project_id" {
+  type        = string
+  description = "Google reCAPTCHA Enterprise project ID"
+}
+
+# hCaptcha
+variable "hcaptcha_site_key" {
+  type        = string
+  description = "hCaptcha site key"
+  sensitive   = true
+}
+
+variable "hcaptcha_secret" {
+  type        = string
+  description = "hCaptcha secret key"
+  sensitive   = true
+}
+
+# Friendly Captcha
+variable "friendly_captcha_site_key" {
+  type        = string
+  description = "Friendly Captcha site key"
+  sensitive   = true
+}
+
+variable "friendly_captcha_secret" {
+  type        = string
+  description = "Friendly Captcha secret key"
+  sensitive   = true
+}
+
+# Arkose Labs
+variable "arkose_site_key" {
+  type        = string
+  description = "Arkose Labs site key"
+  sensitive   = true
+}
+
+variable "arkose_secret" {
+  type        = string
+  description = "Arkose Labs secret key"
+  sensitive   = true
 }
 ```
 
@@ -58,13 +204,28 @@ resource "auth0_attack_protection" "my_protection" {
 
 ### Optional
 
+- `bot_detection` (Block List, Max: 1) Bot detection configuration to identify and prevent automated threats. (see [below for nested schema](#nestedblock--bot_detection))
 - `breached_password_detection` (Block List, Max: 1) Breached password detection protects your applications from bad actors logging in with stolen credentials. (see [below for nested schema](#nestedblock--breached_password_detection))
 - `brute_force_protection` (Block List, Max: 1) Brute-force protection safeguards against a single IP address attacking a single user account. (see [below for nested schema](#nestedblock--brute_force_protection))
+- `captcha` (Block List, Max: 1) CAPTCHA configuration for attack protection. (see [below for nested schema](#nestedblock--captcha))
 - `suspicious_ip_throttling` (Block List, Max: 1) Suspicious IP throttling blocks traffic from any IP address that rapidly attempts too many logins or signups. (see [below for nested schema](#nestedblock--suspicious_ip_throttling))
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+
+<a id="nestedblock--bot_detection"></a>
+### Nested Schema for `bot_detection`
+
+Optional:
+
+- `allowlist` (Set of String) List of IP addresses or ranges that will not trigger bot detection.
+- `bot_detection_level` (String) Bot detection level. Possible values: `low`, `medium`, `high`. Set to empty string to disable.
+- `challenge_password_policy` (String) Challenge policy for password flow. Possible values: `never`, `when_risky`, `always`.
+- `challenge_password_reset_policy` (String) Challenge policy for password reset flow. Possible values: `never`, `when_risky`, `always`.
+- `challenge_passwordless_policy` (String) Challenge policy for passwordless flow. Possible values: `never`, `when_risky`, `always`.
+- `monitoring_mode_enabled` (Boolean) Whether monitoring mode is enabled for bot detection.
+
 
 <a id="nestedblock--breached_password_detection"></a>
 ### Nested Schema for `breached_password_detection`
@@ -111,6 +272,80 @@ Optional:
 - `max_attempts` (Number) Maximum number of consecutive failed login attempts from a single user before blocking is triggered. Only available on public tenants.
 - `mode` (String) Determines whether the IP address is used when counting failed attempts. Possible values: `count_per_identifier_and_ip` (lockout an account from a given IP Address) or `count_per_identifier` (lockout an account regardless of IP Address).
 - `shields` (Set of String) Action to take when a brute force protection threshold is violated. Possible values: `block` (block login attempts for a flagged user account), `user_notification` (send an email to user when their account has been blocked).
+
+
+<a id="nestedblock--captcha"></a>
+### Nested Schema for `captcha`
+
+Optional:
+
+- `active_provider_id` (String) Active CAPTCHA provider ID. Set to empty string to disable CAPTCHA. Possible values: `recaptcha_v2`, `recaptcha_enterprise`, `hcaptcha`, `friendly_captcha`, `arkose`, `auth_challenge`, `simple_captcha`.
+- `arkose` (Block List, Max: 1) Configuration for Arkose Labs. (see [below for nested schema](#nestedblock--captcha--arkose))
+- `auth_challenge` (Block List, Max: 1) Configuration for Auth0's Auth Challenge. (see [below for nested schema](#nestedblock--captcha--auth_challenge))
+- `friendly_captcha` (Block List, Max: 1) Configuration for Friendly Captcha. (see [below for nested schema](#nestedblock--captcha--friendly_captcha))
+- `hcaptcha` (Block List, Max: 1) Configuration for hCaptcha. (see [below for nested schema](#nestedblock--captcha--hcaptcha))
+- `recaptcha_enterprise` (Block List, Max: 1) Configuration for Google reCAPTCHA Enterprise. (see [below for nested schema](#nestedblock--captcha--recaptcha_enterprise))
+- `recaptcha_v2` (Block List, Max: 1) Configuration for Google reCAPTCHA v2. (see [below for nested schema](#nestedblock--captcha--recaptcha_v2))
+
+<a id="nestedblock--captcha--arkose"></a>
+### Nested Schema for `captcha.arkose`
+
+Required:
+
+- `secret` (String, Sensitive) Secret for Arkose Labs.
+- `site_key` (String) Site key for Arkose Labs.
+
+Optional:
+
+- `client_subdomain` (String) Client subdomain for Arkose Labs.
+- `fail_open` (Boolean) Whether the captcha should fail open.
+- `verify_subdomain` (String) Verify subdomain for Arkose Labs.
+
+
+<a id="nestedblock--captcha--auth_challenge"></a>
+### Nested Schema for `captcha.auth_challenge`
+
+Optional:
+
+- `fail_open` (Boolean) Whether the auth challenge should fail open.
+
+
+<a id="nestedblock--captcha--friendly_captcha"></a>
+### Nested Schema for `captcha.friendly_captcha`
+
+Required:
+
+- `secret` (String, Sensitive) Secret for Friendly Captcha.
+- `site_key` (String) Site key for Friendly Captcha.
+
+
+<a id="nestedblock--captcha--hcaptcha"></a>
+### Nested Schema for `captcha.hcaptcha`
+
+Required:
+
+- `secret` (String, Sensitive) Secret for hCaptcha.
+- `site_key` (String) Site key for hCaptcha.
+
+
+<a id="nestedblock--captcha--recaptcha_enterprise"></a>
+### Nested Schema for `captcha.recaptcha_enterprise`
+
+Required:
+
+- `api_key` (String, Sensitive) API key for reCAPTCHA Enterprise.
+- `project_id` (String) Project ID for reCAPTCHA Enterprise.
+- `site_key` (String) Site key for reCAPTCHA Enterprise.
+
+
+<a id="nestedblock--captcha--recaptcha_v2"></a>
+### Nested Schema for `captcha.recaptcha_v2`
+
+Required:
+
+- `secret` (String, Sensitive) Secret for reCAPTCHA v2.
+- `site_key` (String) Site key for reCAPTCHA v2.
+
 
 
 <a id="nestedblock--suspicious_ip_throttling"></a>

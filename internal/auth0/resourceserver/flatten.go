@@ -25,6 +25,7 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 		data.Set("proof_of_possession", flattenProofOfPossession(resourceServer.GetProofOfPossession())),
 		data.Set("subject_type_authorization", flattenSubjectTypeAuthorization(resourceServer.GetSubjectTypeAuthorization())),
 		data.Set("client_id", resourceServer.GetClientID()),
+		data.Set("is_system", resourceServer.GetIsSystem()),
 	)
 	if resourceServer.GetName() != auth0ManagementAPIName {
 		result = multierror.Append(

@@ -62,6 +62,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		ComplianceLevel:          value.String(config.GetAttr("compliance_level")),
 		TokenQuota:               commons.ExpandTokenQuota(config.GetAttr("token_quota")),
 		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
+		ExpressConfiguration:                           expandExpressConfiguration(data),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
@@ -1194,4 +1195,42 @@ func isSkipNonVerifiableCallbackURIConfirmationPromptNull(data *schema.ResourceD
 	}
 
 	return rawConfig.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
+}
+
+func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressConfiguration {
+	config := data.GetRawConfig()
+	expressConfig := config.GetAttr("express_configuration")
+
+	if expressConfig.IsNull() || expressConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var result *management.ExpressConfiguration
+
+	expressConfig.ForEachElement(func(_ cty.Value, elem cty.Value) (stop bool) {
+		result = &management.ExpressConfiguration{
+			InitiateLoginURITemplate: value.String(elem.GetAttr("initiate_login_uri_template")),
+			UserAttributeProfileID:   value.String(elem.GetAttr("user_attribute_profile_id")),
+			ConnectionProfileID:      value.String(elem.GetAttr("connection_profile_id")),
+			EnableClient:             value.Bool(elem.GetAttr("enable_client")),
+			EnableOrganization:       value.Bool(elem.GetAttr("enable_organization")),
+			AdminLoginDomain:         value.String(elem.GetAttr("admin_login_domain")),
+		}
+
+		linkedClientsAttr := elem.GetAttr("linked_clients")
+		if !linkedClientsAttr.IsNull() && linkedClientsAttr.LengthInt() > 0 {
+			linkedClients := make([]management.LinkedClient, 0)
+			linkedClientsAttr.ForEachElement(func(_ cty.Value, lc cty.Value) (stop bool) {
+				linkedClients = append(linkedClients, management.LinkedClient{
+					ClientID: value.String(lc.GetAttr("client_id")),
+				})
+				return stop
+			})
+			result.LinkedClients = &linkedClients
+		}
+
+		return stop
+	})
+
+	return result
 }

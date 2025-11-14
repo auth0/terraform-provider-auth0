@@ -51,6 +51,7 @@ data "auth0_client" "some-client-by-id" {
 - `default_organization` (List of Object) Configure and associate an organization with the Client (see [below for nested schema](#nestedatt--default_organization))
 - `description` (String) Description of the purpose of the client.
 - `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
+- `express_configuration` (List of Object) Express Configuration settings for the client. Used with OIN Express Configuration. (see [below for nested schema](#nestedatt--express_configuration))
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `id` (String) The ID of this resource.
@@ -498,6 +499,30 @@ Read-Only:
 - `disable` (Boolean)
 - `flows` (List of String)
 - `organization_id` (String)
+
+
+<a id="nestedatt--express_configuration"></a>
+### Nested Schema for `express_configuration`
+
+Read-Only:
+
+- `admin_login_domain` (String)
+- `connection_profile_id` (String)
+- `enable_client` (Boolean)
+- `enable_organization` (Boolean)
+- `initiate_login_uri_template` (String)
+- `linked_clients` (List of Object) (see [below for nested schema](#nestedobjatt--express_configuration--linked_clients))
+- `oin_submission_id` (String)
+- `okta_oin_client_id` (String)
+- `user_attribute_profile_id` (String)
+
+<a id="nestedobjatt--express_configuration--linked_clients"></a>
+### Nested Schema for `express_configuration.linked_clients`
+
+Read-Only:
+
+- `client_id` (String)
+
 
 
 <a id="nestedatt--jwt_configuration"></a>

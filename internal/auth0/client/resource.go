@@ -22,7 +22,7 @@ var ValidAppTypes = []string{
 	"native", "spa", "regular_web", "non_interactive", "resource_server", "rms",
 	"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
 	"egnyte", "newrelic", "office365", "salesforce", "sentry",
-	"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
+	"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom", "express_configuration",
 }
 
 // NewResource will return a new auth0_client resource.
@@ -1537,6 +1537,72 @@ func NewResource() *schema.Resource {
 				Description: "The identifier of a resource server that client is associated with" +
 					"This property can be sent only when app_type=resource_server." +
 					"This property can not be changed, once the client is created.",
+			},
+			"express_configuration": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Express Configuration settings for the client. Used with OIN Express Configuration.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"initiate_login_uri_template": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The URI users should bookmark to log in to this application. Variable substitution is permitted for: organization_name, organization_id, and connection_name.",
+						},
+						"user_attribute_profile_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The ID of the user attribute profile to use for this application.",
+						},
+						"connection_profile_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The ID of the connection profile to use for this application.",
+						},
+						"enable_client": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "When true, all connections made via express configuration will be enabled for this application.",
+						},
+						"enable_organization": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "When true, all connections made via express configuration will have the associated organization enabled.",
+						},
+						"okta_oin_client_id": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The unique identifier for the Okta OIN Express Configuration Client.",
+						},
+						"admin_login_domain": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The domain that admins are expected to log in via for authenticating for express configuration.",
+						},
+						"oin_submission_id": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The identifier of the published application in the OKTA OIN.",
+						},
+						"linked_clients": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							Description: "List of client IDs that are linked to this express configuration (e.g. web or mobile clients).",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"client_id": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "The ID of the linked client.",
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}

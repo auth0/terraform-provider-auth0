@@ -650,6 +650,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
 			value.BoolPtrToString(client.SkipNonVerifiableCallbackURIConfirmationPrompt)),
+		data.Set("express_configuration", flattenExpressConfiguration(client.GetExpressConfiguration())),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
@@ -687,6 +688,7 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 		data.Set("organization_usage", clientGrant.GetOrganizationUsage()),
 		data.Set("subject_type", clientGrant.GetSubjectType()),
 		data.Set("authorization_details_types", clientGrant.GetAuthorizationDetailsTypes()),
+		data.Set("is_system", clientGrant.GetIsSystem()),
 	)
 
 	return result.ErrorOrNil()
@@ -943,4 +945,34 @@ func flattenClientList(data *schema.ResourceData, clients []*management.Client) 
 	}
 
 	return data.Set("clients", clientList)
+}
+
+func flattenExpressConfiguration(ec *management.ExpressConfiguration) []interface{} {
+	if ec == nil {
+		return nil
+	}
+
+	result := map[string]interface{}{
+		"initiate_login_uri_template": ec.GetInitiateLoginURITemplate(),
+		"user_attribute_profile_id":   ec.GetUserAttributeProfileID(),
+		"connection_profile_id":       ec.GetConnectionProfileID(),
+		"enable_client":               ec.GetEnableClient(),
+		"enable_organization":         ec.GetEnableOrganization(),
+		"okta_oin_client_id":          ec.GetOktaOINClientID(),
+		"admin_login_domain":          ec.GetAdminLoginDomain(),
+		"oin_submission_id":           ec.GetOINSubmissionID(),
+	}
+
+	// Flatten linked_clients.
+	if linkedClients := ec.GetLinkedClients(); len(linkedClients) > 0 {
+		linkedClientsList := make([]interface{}, len(linkedClients))
+		for i, lc := range linkedClients {
+			linkedClientsList[i] = map[string]interface{}{
+				"client_id": lc.GetClientID(),
+			}
+		}
+		result["linked_clients"] = linkedClientsList
+	}
+
+	return []interface{}{result}
 }

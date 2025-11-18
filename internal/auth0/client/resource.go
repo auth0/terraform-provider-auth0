@@ -70,7 +70,7 @@ func NewResource() *schema.Resource {
 					"`regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted " +
 					"as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, " +
 					"`newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, " +
-					"`zoom`.",
+					"`zoom`, `express_configuration`",
 			},
 			"logo_uri": {
 				Type:     schema.TypeString,
@@ -104,6 +104,7 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeList,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
+				Computed: true,
 				Description: "URLs that Auth0 may call back to after a user authenticates for the client. " +
 					"Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. " +
 					"With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.",
@@ -150,6 +151,7 @@ func NewResource() *schema.Resource {
 			"organization_usage": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"deny", "allow", "require",
 				}, false),
@@ -159,6 +161,7 @@ func NewResource() *schema.Resource {
 			"organization_require_behavior": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"no_prompt", "pre_login_prompt", "post_login_prompt",
 				}, false),
@@ -1573,6 +1576,7 @@ func NewResource() *schema.Resource {
 						},
 						"okta_oin_client_id": {
 							Type:        schema.TypeString,
+							Optional:    true,
 							Computed:    true,
 							Description: "The unique identifier for the Okta OIN Express Configuration Client.",
 						},

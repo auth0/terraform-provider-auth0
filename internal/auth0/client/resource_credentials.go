@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"time"
 
+	"encoding/json"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -740,7 +742,29 @@ func detachClientCredentials(ctx context.Context, api *management.Management, cl
 }
 
 func updateClientInternal(ctx context.Context, api *management.Management, clientID string, client interface{}) error {
-	request, err := api.NewRequest(ctx, http.MethodPatch, api.URI("clients", clientID), client)
+	c, err := api.Client.Read(ctx, clientID, management.IncludeFields("client_id", "app_type"))
+	if err != nil {
+		return err
+	}
+
+	var payloadMap map[string]interface{}
+	jsonBytes, _ := json.Marshal(client)
+	_ = json.Unmarshal(jsonBytes, &payloadMap)
+
+	if c.GetAppType() == "express_configuration" {
+		// Go's delete is safe even if the key doesn't exist.
+		delete(payloadMap, "signed_request_object")
+		delete(payloadMap, "token_endpoint_auth_method")
+		if payloadMap["client_authentication_methods"] == nil {
+			payloadMap["client_authentication_methods"] = management.ClientAuthenticationMethods{
+				PrivateKeyJWT: &management.PrivateKeyJWT{
+					Credentials: &[]management.Credential{},
+				},
+			}
+		}
+	}
+
+	request, err := api.NewRequest(ctx, http.MethodPatch, api.URI("clients", clientID), payloadMap)
 	if err != nil {
 		return err
 	}

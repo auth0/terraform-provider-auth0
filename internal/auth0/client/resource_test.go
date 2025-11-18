@@ -2944,3 +2944,273 @@ func TestAccClientAsyncApprovalNotificationChannels(t *testing.T) {
 		},
 	})
 }
+
+const testAccClientExpressAppConfig = `
+resource "auth0_client" "my_client" {
+  name                          = "Acceptance Test - Express App - {{.testName}}"
+  app_type                      = "express_configuration"
+  organization_require_behavior = "post_login_prompt"
+}
+resource "auth0_client_credentials" "client_creds" {
+  client_id             = auth0_client.my_client.id
+  authentication_method = "private_key_jwt"
+
+  private_key_jwt {
+    credentials {
+      name            = "Test Credential - {{.testName}}"
+      credential_type = "public_key"
+      pem             = <<-EOT
+        -----BEGIN PUBLIC KEY-----
+        MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAua6LXMfgDE/tDdkOL1Oe
+        3oWUwg1r4dSTg9L7RCcI5hItUzmkVofHtWN0H4CH2lm2ANmaJUsnhzctYowYW2+R
+        tHvU9afTmtbdhpy993972hUqZSYLsE3iGziphYkOKVsqq38+VRH3TNg93zSLoRao
+        JnTTkMXseVqiyqYRmFN8+gQQoEclHSGPUWQG5XMZ+hhuXeFyo+Yw/qbZWca/6/2I
+        3rsca9jXR1alhxhHrXrg8N4Dm3gBgGbmiht6YYYT2Tyl1OqB9+iOI/9D7dfoCF6X
+        AWJXRE454cmC8k8oucpjZVpflA+ocKshwPDR6YTLQYbXYiaWxEoaz0QGUErNQBnG
+        I+sr9jDY3ua/s6HF6h0qyi/HVZH4wx+m4CtOfJoYTjrGBbaRszzUxhtSN2/MhXDu
+        +a35q9/2zcu/3fjkkfVvGUt+NyyiYOKQ9vsJC1g/xxdUWtowjNwjfZE2zcG4usi8
+        r38Bp0lmiipAsMLduZM/D5dFXkRdWCBNDfULmmg/4nv2wwjbjQuLemAMh7mmrztW
+        i/85WMnjKQZT8NqS43pmgyIzg1gK1neMqdS90YmQ/PvJ36qALxCs245w1JpN9BAL
+        JbwxCg/dbmKT7PalfWrksx9hGcJxtGqebldaOpw+5GVIPxxtC1C0gVr9BKeiDS3f
+        aibASY5pIRiKENmbZELDtucCAwEAAQ==
+        -----END PUBLIC KEY-----
+      EOT
+    }
+  }
+}
+`
+
+func TestAccClientExpressApp(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientExpressAppConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Express App - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "express_configuration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "post_login_prompt"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.0.pem"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientExpressConfigurationConfig = `
+resource "auth0_client" "oin_source" {
+  name     = "OIN Express Config Client - {{.testName}}"
+  app_type = "express_configuration"
+}
+
+resource "auth0_user_attribute_profile" "profile" {
+
+  name = "Acceptance Test - User Attribute Profile - {{.testName}}"
+
+  user_id {
+    oidc_mapping = "sub"
+    saml_mapping = ["urn:oid:0.9.2342.19200300.100.1.1"]
+    scim_mapping = "userName"
+  }
+
+  user_attributes {
+    name             = "email"
+    description      = "User's email address"
+    label            = "Email"
+    profile_required = true
+    auth0_mapping    = "email"
+
+    oidc_mapping {
+      mapping      = "email"
+      display_name = "Email Address"
+    }
+
+    saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+    scim_mapping = "emails[primary eq true].value"
+  }
+}
+
+resource "auth0_client" "my_client" {
+  depends_on = [auth0_client.oin_source,auth0_user_attribute_profile.profile]
+  name     = "Acceptance Test - Main Client - {{.testName}}"
+  app_type = "regular_web"
+
+  express_configuration {
+    okta_oin_client_id          = auth0_client.oin_source.id
+    connection_profile_id       = "cop_1cu7hYRotxr9BYXXwLH14g"
+    initiate_login_uri_template = "https://example.com/login?org={organization_name}"
+    admin_login_domain          = "admin.example.com"
+    enable_client               = true
+    enable_organization         = true
+    user_attribute_profile_id   = auth0_user_attribute_profile.profile.id
+  }
+}
+`
+
+func TestAccClientExpressAppConfiguration(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientExpressConfigurationConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					// OIN source client.
+					resource.TestCheckResourceAttrSet("auth0_client.oin_source", "client_id"),
+					resource.TestCheckResourceAttr("auth0_client.oin_source", "app_type", "express_configuration"),
+
+					// User attribute profile.
+					resource.TestCheckResourceAttrSet("auth0_user_attribute_profile.profile", "id"),
+					resource.TestCheckResourceAttr("auth0_user_attribute_profile.profile", "user_attributes.0.name", "email"),
+
+					// Main app.
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "regular_web"),
+
+					// Express Configuration.
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.connection_profile_id", "cop_1cu7hYRotxr9BYXXwLH14g"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.initiate_login_uri_template", "https://example.com/login?org={organization_name}"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.admin_login_domain", "admin.example.com"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.enable_client", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.enable_organization", "true"),
+
+					// The OIN client should match.
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"express_configuration.0.okta_oin_client_id",
+						"auth0_client.oin_source",
+						"client_id",
+					),
+
+					// The user attribute profile should match.
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"express_configuration.0.user_attribute_profile_id",
+						"auth0_user_attribute_profile.profile",
+						"id",
+					),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientExpressConfigurationLinkedClientsConfig = `
+resource "auth0_client" "oin_source" {
+  name     = "OIN Express Config Client - {{.testName}}"
+  app_type = "express_configuration"
+}
+
+resource "auth0_user_attribute_profile" "profile" {
+  name = "Acceptance Test - User Attribute Profile - {{.testName}}"
+
+  user_id {
+    oidc_mapping = "sub"
+    saml_mapping = ["urn:oid:0.9.2342.19200300.100.1.1"]
+    scim_mapping = "userName"
+  }
+
+  user_attributes {
+    name             = "email"
+    description      = "User's email address"
+    label            = "Email"
+    profile_required = true
+    auth0_mapping    = "email"
+
+    oidc_mapping {
+      mapping      = "email"
+      display_name = "Email Address"
+    }
+
+    saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+    scim_mapping = "emails[primary eq true].value"
+  }
+}
+
+resource "auth0_client" "linked_client" {
+  name     = "Linked Client - {{.testName}}"
+  app_type = "regular_web"
+}
+
+resource "auth0_client" "main_client" {
+  depends_on = [
+    auth0_client.oin_source,
+    auth0_client.linked_client,
+    auth0_user_attribute_profile.profile
+  ]
+
+  name     = "Acceptance Test - Main Client With Links - {{.testName}}"
+  app_type = "regular_web"
+
+  express_configuration {
+    okta_oin_client_id          = auth0_client.oin_source.id
+    connection_profile_id       = "cop_1cu7hYRotxr9BYXXwLH14g"
+    initiate_login_uri_template = "https://example.com/login?org={organization_name}"
+    admin_login_domain          = "admin.example.com"
+    enable_client               = true
+    enable_organization         = true
+    user_attribute_profile_id   = auth0_user_attribute_profile.profile.id
+
+    linked_clients {
+      client_id = auth0_client.linked_client.id
+    }
+  }
+}
+`
+
+func TestAccClientExpressAppConfiguration_WithLinkedClients(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientExpressConfigurationLinkedClientsConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					// OIN Source Client.
+					resource.TestCheckResourceAttrSet("auth0_client.oin_source", "client_id"),
+					resource.TestCheckResourceAttr("auth0_client.oin_source", "app_type", "express_configuration"),
+
+					// User Attribute Profile.
+					resource.TestCheckResourceAttrSet("auth0_user_attribute_profile.profile", "id"),
+
+					// Linked Client.
+					resource.TestCheckResourceAttrSet("auth0_client.linked_client", "client_id"),
+					resource.TestCheckResourceAttr("auth0_client.linked_client", "app_type", "regular_web"),
+
+					// Main Client.
+					resource.TestCheckResourceAttrSet("auth0_client.main_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client.main_client", "app_type", "regular_web"),
+
+					// Express Configuration Base Fields.
+					resource.TestCheckResourceAttr("auth0_client.main_client", "express_configuration.0.connection_profile_id", "cop_1cu7hYRotxr9BYXXwLH14g"),
+					resource.TestCheckResourceAttr("auth0_client.main_client", "express_configuration.0.initiate_login_uri_template", "https://example.com/login?org={organization_name}"),
+					resource.TestCheckResourceAttr("auth0_client.main_client", "express_configuration.0.admin_login_domain", "admin.example.com"),
+					resource.TestCheckResourceAttr("auth0_client.main_client", "express_configuration.0.enable_client", "true"),
+					resource.TestCheckResourceAttr("auth0_client.main_client", "express_configuration.0.enable_organization", "true"),
+
+					// Match OIN source client.
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.main_client",
+						"express_configuration.0.okta_oin_client_id",
+						"auth0_client.oin_source",
+						"client_id",
+					),
+
+					// Match User Attribute Profile.
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.main_client",
+						"express_configuration.0.user_attribute_profile_id",
+						"auth0_user_attribute_profile.profile",
+						"id",
+					),
+
+					// Linked Clients.
+					resource.TestCheckResourceAttr("auth0_client.main_client", "express_configuration.0.linked_clients.#", "1"),
+
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.main_client",
+						"express_configuration.0.linked_clients.0.client_id",
+						"auth0_client.linked_client",
+						"client_id",
+					),
+				),
+			},
+		},
+	})
+}

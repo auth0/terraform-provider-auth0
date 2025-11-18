@@ -179,6 +179,10 @@ func expandOIDCLogout(data *schema.ResourceData) *management.OIDCLogout {
 		return stop
 	})
 
+	if oidcLogout == (management.OIDCLogout{}) {
+		return nil
+	}
+
 	return &oidcLogout
 }
 
@@ -1215,6 +1219,8 @@ func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressCo
 			EnableClient:             value.Bool(elem.GetAttr("enable_client")),
 			EnableOrganization:       value.Bool(elem.GetAttr("enable_organization")),
 			AdminLoginDomain:         value.String(elem.GetAttr("admin_login_domain")),
+			OktaOINClientID:          value.String(elem.GetAttr("okta_oin_client_id")),
+			OINSubmissionID:          value.String(elem.GetAttr("okta_oin_client_id")),
 		}
 
 		linkedClientsAttr := elem.GetAttr("linked_clients")

@@ -38,6 +38,7 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 - `consent_policy` (String) Consent policy for this resource server. Options include `transactional-authorization-with-mfa`, or `null` to disable.
 - `enforce_policies` (Boolean) If this setting is enabled, RBAC authorization policies will be enforced for this API. Role and permission assignments will be evaluated during the login transaction.
 - `id` (String) The ID of this resource.
+- `is_system` (Boolean) Indicates whether this resource server is a special resource server created by Auth0. It cannot be modified or deleted directly.
 - `name` (String) Friendly name for the resource server. Cannot include `<` or `>` characters.
 - `proof_of_possession` (List of Object) Configuration settings for proof-of-possession for this resource server. (see [below for nested schema](#nestedatt--proof_of_possession))
 - `scopes` (Set of Object) List of permissions (scopes) used by this resource server. (see [below for nested schema](#nestedatt--scopes))

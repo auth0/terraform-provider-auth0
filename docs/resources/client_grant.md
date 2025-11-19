@@ -82,6 +82,7 @@ resource "auth0_client_grant" "my_client_grant" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `is_system` (Boolean) Indicates whether this grant is a special grant created by Auth0. It cannot be modified or deleted directly.
 
 ## Import
 

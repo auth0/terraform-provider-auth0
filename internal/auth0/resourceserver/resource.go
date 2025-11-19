@@ -311,6 +311,11 @@ func NewResource() *schema.Resource {
 				Description: "The ID of the client associated with this resource server. If a client has been created " +
 					"and linked to this resource server, this field will be populated with that client's ID.",
 			},
+			"is_system": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Indicates whether this resource server is a special resource server created by Auth0. It cannot be modified or deleted directly.",
+			},
 		},
 	}
 }

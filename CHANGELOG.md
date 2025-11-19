@@ -1,3 +1,15 @@
+## v1.36.0
+
+FEATURES:
+- `resource/auth0_connection_profile` – Add support for creating and managing Auth0 Connection Profiles ([#1414](https://github.com/auth0/terraform-provider-auth0/pull/1414))
+- `data-source/auth0_connection_profile` – Add support for retrieving Auth0 Connection Profiles ([#1414](https://github.com/auth0/terraform-provider-auth0/pull/1414))
+- `resource/auth0_client` – Add support for configuring Express Configuration Client ([#1414](https://github.com/auth0/terraform-provider-auth0/pull/1414))
+- `resource/auth0_client_grant` – Add support for the new is_system property ([#1414](https://github.com/auth0/terraform-provider-auth0/pull/1414))
+- `resource/auth0_resource_server` – Add support for the new is_system property ([#1414](https://github.com/auth0/terraform-provider-auth0/pull/1414))
+
+ENHANCEMENTS:
+- `resource/auth0_network_acl` – Add support for new `dynamic_client_registration` scope ([#1413](https://github.com/auth0/terraform-provider-auth0/pull/1413))
+
 ## v1.35.0
 
 FEATURES:

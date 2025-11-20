@@ -1122,15 +1122,26 @@ func expandConnectionOptionsOAuth1(_ *schema.ResourceData, config cty.Value) (in
 }
 
 func expandConnectionOptionsScopes(data *schema.ResourceData, options scoper) {
-	_, scopesToDisable := value.Difference(data, "options.0.scopes")
-	for _, scope := range scopesToDisable {
-		options.SetScopes(false, scope.(string))
+	_, rawScopesToDisable := value.Difference(data, "options.0.scopes")
+	scopesToDisable := make([]string, 0, len(rawScopesToDisable))
+	for _, v := range rawScopesToDisable {
+		if s, ok := v.(string); ok {
+			scopesToDisable = append(scopesToDisable, s)
+		}
+	}
+	if len(scopesToDisable) > 0 {
+		options.SetScopes(false, scopesToDisable...)
 	}
 
-	scopesList := data.Get("options.0.scopes").(*schema.Set).List()
-	for _, scope := range scopesList {
-		options.SetScopes(true, scope.(string))
+	rawScopes := data.Get("options.0.scopes").(*schema.Set).List()
+	scopes := make([]string, 0, len(rawScopes))
+	for _, v := range rawScopes {
+		if s, ok := v.(string); ok {
+			scopes = append(scopes, s)
+		}
 	}
+
+	options.SetScopes(true, scopes...)
 }
 
 // passThroughUnconfigurableConnectionOptions ensures that read-only connection options

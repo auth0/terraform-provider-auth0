@@ -82,6 +82,11 @@ func NewGrantResource() *schema.Resource {
 				},
 				Description: "Defines the types of authorization details allowed for this client grant.",
 			},
+			"is_system": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Indicates whether this grant is a special grant created by Auth0. It cannot be modified or deleted directly.",
+			},
 		},
 	}
 }

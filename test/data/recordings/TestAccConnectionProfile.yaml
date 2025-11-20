@@ -1,0 +1,265 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 249
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Test-Profile-TestAccConnectionProfile","organization":{"show_as_button":"required","assign_membership_on_login":"optional"},"connection_name_prefix_template":"template1","enabled_features":["scim","universal_logout"],"connection_config":{}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 309
+        uncompressed: false
+        body: '{"id":"cop_1cu7Zs1Dfru5Qc9mZea7nm","name":"Test-Profile-TestAccConnectionProfile","organization":{"show_as_button":"required","assign_membership_on_login":"optional"},"connection_name_prefix_template":"template1","enabled_features":["scim","universal_logout"],"connection_config":{},"strategy_overrides":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 1.328637125s
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cu7Zs1Dfru5Qc9mZea7nm
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"cop_1cu7Zs1Dfru5Qc9mZea7nm","name":"Test-Profile-TestAccConnectionProfile","organization":{"show_as_button":"required","assign_membership_on_login":"optional"},"connection_name_prefix_template":"template1","enabled_features":["scim","universal_logout"],"connection_config":{},"strategy_overrides":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 354.27175ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cu7Zs1Dfru5Qc9mZea7nm
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"cop_1cu7Zs1Dfru5Qc9mZea7nm","name":"Test-Profile-TestAccConnectionProfile","organization":{"show_as_button":"required","assign_membership_on_login":"optional"},"connection_name_prefix_template":"template1","enabled_features":["scim","universal_logout"],"connection_config":{},"strategy_overrides":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 392.432916ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cu7Zs1Dfru5Qc9mZea7nm
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"cop_1cu7Zs1Dfru5Qc9mZea7nm","name":"Test-Profile-TestAccConnectionProfile","organization":{"show_as_button":"required","assign_membership_on_login":"optional"},"connection_name_prefix_template":"template1","enabled_features":["scim","universal_logout"],"connection_config":{},"strategy_overrides":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 367.388083ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 238
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Test-Profile-Updated-TestAccConnectionProfile","organization":{"show_as_button":"optional","assign_membership_on_login":"required"},"connection_name_prefix_template":"template2","enabled_features":["scim"],"connection_config":{}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cu7Zs1Dfru5Qc9mZea7nm
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"cop_1cu7Zs1Dfru5Qc9mZea7nm","name":"Test-Profile-Updated-TestAccConnectionProfile","organization":{"show_as_button":"optional","assign_membership_on_login":"required"},"connection_name_prefix_template":"template2","enabled_features":["scim"],"connection_config":{},"strategy_overrides":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 463.384166ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cu7Zs1Dfru5Qc9mZea7nm
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"cop_1cu7Zs1Dfru5Qc9mZea7nm","name":"Test-Profile-Updated-TestAccConnectionProfile","organization":{"show_as_button":"optional","assign_membership_on_login":"required"},"connection_name_prefix_template":"template2","enabled_features":["scim"],"connection_config":{},"strategy_overrides":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 488.699833ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cu7Zs1Dfru5Qc9mZea7nm
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"cop_1cu7Zs1Dfru5Qc9mZea7nm","name":"Test-Profile-Updated-TestAccConnectionProfile","organization":{"show_as_button":"optional","assign_membership_on_login":"required"},"connection_name_prefix_template":"template2","enabled_features":["scim"],"connection_config":{},"strategy_overrides":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 380.169042ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cu7Zs1Dfru5Qc9mZea7nm
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 513.710416ms

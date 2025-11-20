@@ -56,6 +56,7 @@ Read-Only:
 - `client_metadata` (Map of String)
 - `client_secret` (String)
 - `description` (String)
+- `express_configuration` (List of Object) (see [below for nested schema](#nestedobjatt--clients--express_configuration))
 - `grant_types` (List of String)
 - `is_first_party` (Boolean)
 - `is_token_endpoint_ip_header_trusted` (Boolean)
@@ -68,6 +69,30 @@ Read-Only:
 - `token_exchange` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_exchange))
 - `token_quota` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_quota))
 - `web_origins` (List of String)
+
+<a id="nestedobjatt--clients--express_configuration"></a>
+### Nested Schema for `clients.express_configuration`
+
+Read-Only:
+
+- `admin_login_domain` (String)
+- `connection_profile_id` (String)
+- `enable_client` (Boolean)
+- `enable_organization` (Boolean)
+- `initiate_login_uri_template` (String)
+- `linked_clients` (List of Object) (see [below for nested schema](#nestedobjatt--clients--express_configuration--linked_clients))
+- `oin_submission_id` (String)
+- `okta_oin_client_id` (String)
+- `user_attribute_profile_id` (String)
+
+<a id="nestedobjatt--clients--express_configuration--linked_clients"></a>
+### Nested Schema for `clients.express_configuration.linked_clients`
+
+Read-Only:
+
+- `client_id` (String)
+
+
 
 <a id="nestedobjatt--clients--oidc_logout"></a>
 ### Nested Schema for `clients.oidc_logout`

@@ -82,6 +82,7 @@ EOF
 
 - `client_id` (String) The ID of the client associated with this resource server. If a client has been created and linked to this resource server, this field will be populated with that client's ID.
 - `id` (String) The ID of this resource.
+- `is_system` (Boolean) Indicates whether this resource server is a special resource server created by Auth0. It cannot be modified or deleted directly.
 
 <a id="nestedblock--authorization_details"></a>
 ### Nested Schema for `authorization_details`

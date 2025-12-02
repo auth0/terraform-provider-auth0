@@ -132,3 +132,75 @@ func TestAccEventStream(t *testing.T) {
 		},
 	})
 }
+
+const testEventStreamCreateWebhookWithWriteOnlyToken = `
+resource "auth0_event_stream" "my_event_stream_webhook_wo" {
+  name              = "{{.testName}}-my-webhook-wo"
+  destination_type  = "webhook"
+  subscriptions     = ["user.created", "user.updated"]
+
+  webhook_configuration {
+    webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
+    webhook_authorization {
+      method          = "bearer"
+      token_wo        = "initial-write-only-token"
+      token_wo_version = 1
+    }
+  }
+}
+`
+
+const testEventStreamUpdateWebhookWithWriteOnlyToken = `
+resource "auth0_event_stream" "my_event_stream_webhook_wo" {
+  name              = "{{.testName}}-my-webhook-wo"
+  destination_type  = "webhook"
+  subscriptions     = ["user.updated"]
+
+  webhook_configuration {
+    webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
+    webhook_authorization {
+      method          = "bearer"
+      token_wo        = "updated-write-only-token"
+      token_wo_version = 2
+    }
+  }
+}
+`
+
+func TestAccEventStreamWithWriteOnlyToken(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testEventStreamCreateWebhookWithWriteOnlyToken, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "name", fmt.Sprintf("%s-my-webhook-wo", t.Name())),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "destination_type", "webhook"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "webhook_configuration.0.webhook_endpoint", "https://eof28wtn4v4506o.m.pipedream.net"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "webhook_configuration.0.webhook_authorization.0.method", "bearer"),
+					// Verify token_wo is NOT in state (write-only)
+					resource.TestCheckNoResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "webhook_configuration.0.webhook_authorization.0.token_wo"),
+					// Verify token_wo_version IS in state
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "webhook_configuration.0.webhook_authorization.0.token_wo_version", "1"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "subscriptions.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_event_stream.my_event_stream_webhook_wo", "subscriptions.*", "user.created"),
+					resource.TestCheckTypeSetElemAttr("auth0_event_stream.my_event_stream_webhook_wo", "subscriptions.*", "user.updated"),
+				),
+			},
+			// Update with new token and incremented version
+			{
+				Config: acctest.ParseTestName(testEventStreamUpdateWebhookWithWriteOnlyToken, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "name", fmt.Sprintf("%s-my-webhook-wo", t.Name())),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "destination_type", "webhook"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "webhook_configuration.0.webhook_authorization.0.method", "bearer"),
+					// Verify token_wo is still NOT in state
+					resource.TestCheckNoResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "webhook_configuration.0.webhook_authorization.0.token_wo"),
+					// Verify token_wo_version was updated
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "webhook_configuration.0.webhook_authorization.0.token_wo_version", "2"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook_wo", "subscriptions.#", "1"),
+					resource.TestCheckTypeSetElemAttr("auth0_event_stream.my_event_stream_webhook_wo", "subscriptions.*", "user.updated"),
+				),
+			},
+		},
+	})
+}

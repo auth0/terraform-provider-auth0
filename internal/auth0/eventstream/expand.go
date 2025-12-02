@@ -68,8 +68,26 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 						authMap["password"] = v
 					}
 				} else if method == "bearer" {
-					if v, ok := auth["token"].(string); ok {
-						authMap["token"] = v
+					// For write-only token, read from raw config to ensure we get the value
+					// even if it's not in state (since write-only fields are not stored)
+					cfg := data.GetRawConfig()
+					webhookCfgRaw := cfg.GetAttr("webhook_configuration")
+					if !webhookCfgRaw.IsNull() && webhookCfgRaw.LengthInt() > 0 {
+						authRaw := webhookCfgRaw.Index(cty.NumberIntVal(0)).GetAttr("webhook_authorization")
+						if !authRaw.IsNull() && authRaw.LengthInt() > 0 {
+							tokenWORaw := authRaw.Index(cty.NumberIntVal(0)).GetAttr("token_wo")
+							if !tokenWORaw.IsNull() {
+								if tokenWO := value.String(tokenWORaw); tokenWO != nil && *tokenWO != "" {
+									authMap["token"] = *tokenWO
+								}
+							}
+						}
+					}
+					// Fallback to regular token if write-only token is not provided
+					if _, hasToken := authMap["token"]; !hasToken {
+						if v, ok := auth["token"].(string); ok && v != "" {
+							authMap["token"] = v
+						}
 					}
 				}
 

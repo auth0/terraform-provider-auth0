@@ -2,13 +2,16 @@ package eventstream
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 var webhookConfig = &schema.Resource{
@@ -47,10 +50,31 @@ var webhookConfig = &schema.Resource{
 						Description: "The password for `basic` authentication. Required when `method` is set to `basic`.",
 					},
 					"token": {
-						Type:        schema.TypeString,
-						Optional:    true,
-						Sensitive:   true,
-						Description: "The token used for `bearer` authentication. Required when `method` is set to `bearer`.",
+						Type:      schema.TypeString,
+						Optional:  true,
+						Sensitive: true,
+						Description: "The token used for `bearer` authentication. Required when `method` is set to `bearer`. " +
+							"**Note**: This value is stored in Terraform state. For enhanced security, consider using `token_wo` instead.",
+						ConflictsWith: []string{"webhook_configuration.0.webhook_authorization.0.token_wo"},
+					},
+					"token_wo": {
+						Type:      schema.TypeString,
+						Optional:  true,
+						Sensitive: true,
+						WriteOnly: true,
+						Description: "The token used for `bearer` authentication (write-only). " +
+							"This value is not stored in Terraform state and provides enhanced security. " +
+							"Required when `method` is set to `bearer` and `token` is not provided. " +
+							"Must be used together with `token_wo_version`.",
+						ConflictsWith: []string{"webhook_configuration.0.webhook_authorization.0.token"},
+					},
+					"token_wo_version": {
+						Type:     schema.TypeInt,
+						Optional: true,
+						Description: "Version number for the write-only token. " +
+							"Increment this value when the token changes to trigger an update. " +
+							"Required when `token_wo` is provided.",
+						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.token_wo"},
 					},
 				},
 			},
@@ -84,6 +108,7 @@ func NewResource() *schema.Resource {
 		ReadContext:   readEventStream,
 		UpdateContext: updateEventStream,
 		DeleteContext: deleteEventStream,
+		CustomizeDiff: validateWebhookAuthorization,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -188,6 +213,57 @@ func deleteEventStream(ctx context.Context, data *schema.ResourceData, m interfa
 
 	if err := api.EventStream.Delete(ctx, data.Id()); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	return nil
+}
+
+// validateWebhookAuthorization validates webhook authorization configuration.
+// Ensures that when method is "bearer", either token or token_wo is provided (but not both).
+func validateWebhookAuthorization(ctx context.Context, diff *schema.ResourceDiff, m interface{}) error {
+	webhookCfgList, ok := diff.Get("webhook_configuration").([]interface{})
+	if !ok || len(webhookCfgList) == 0 {
+		return nil
+	}
+
+	webhookCfg := webhookCfgList[0].(map[string]interface{})
+	authList, ok := webhookCfg["webhook_authorization"].([]interface{})
+	if !ok || len(authList) == 0 {
+		return nil
+	}
+
+	auth := authList[0].(map[string]interface{})
+	method, ok := auth["method"].(string)
+	if !ok || method != "bearer" {
+		return nil
+	}
+
+	// Check if both token and token_wo are provided
+	hasToken := false
+	hasTokenWO := false
+
+	if token, ok := auth["token"].(string); ok && token != "" {
+		hasToken = true
+	}
+
+	// For write-only fields, we need to check the raw config since they're not in state
+	cfg := diff.GetRawConfig()
+	webhookCfgRaw := cfg.GetAttr("webhook_configuration")
+	if !webhookCfgRaw.IsNull() && webhookCfgRaw.LengthInt() > 0 {
+		authRaw := webhookCfgRaw.Index(cty.NumberIntVal(0)).GetAttr("webhook_authorization")
+		if !authRaw.IsNull() && authRaw.LengthInt() > 0 {
+			tokenWORaw := authRaw.Index(cty.NumberIntVal(0)).GetAttr("token_wo")
+			if !tokenWORaw.IsNull() {
+				if tokenWO := value.String(tokenWORaw); tokenWO != nil && *tokenWO != "" {
+					hasTokenWO = true
+				}
+			}
+		}
+	}
+
+	// Ensure at least one token is provided
+	if !hasToken && !hasTokenWO {
+		return fmt.Errorf("when `method` is `bearer`, either `token` or `token_wo` must be provided")
 	}
 
 	return nil

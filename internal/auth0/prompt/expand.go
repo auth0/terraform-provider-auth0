@@ -213,3 +213,90 @@ func isFiltersNull(data *schema.ResourceData) bool {
 
 	return empty
 }
+
+func expandPromptRenderingsForBulkUpdate(renderings []interface{}) []map[string]interface{} {
+	var bulkUpdates []map[string]interface{}
+
+	for _, renderingRaw := range renderings {
+		renderingMap := renderingRaw.(map[string]interface{})
+
+		update := map[string]interface{}{
+			"prompt": renderingMap["prompt"],
+			"screen": renderingMap["screen"],
+		}
+
+		if renderingMode, ok := renderingMap["rendering_mode"]; ok && renderingMode != "" {
+			update["rendering_mode"] = renderingMode
+		}
+
+		if contextConfig, ok := renderingMap["context_configuration"]; ok {
+			if contextSet, ok := contextConfig.(*schema.Set); ok && contextSet.Len() > 0 {
+				var contexts []string
+				for _, ctx := range contextSet.List() {
+					contexts = append(contexts, ctx.(string))
+				}
+				update["context_configuration"] = contexts
+			}
+		}
+
+		if defaultHeadTagsDisabled, ok := renderingMap["default_head_tags_disabled"]; ok {
+			update["default_head_tags_disabled"] = defaultHeadTagsDisabled
+		}
+
+		if usePageTemplate, ok := renderingMap["use_page_template"]; ok {
+			update["use_page_template"] = usePageTemplate
+		}
+
+		if filters, ok := renderingMap["filters"]; ok {
+			if filtersList, ok := filters.([]interface{}); ok && len(filtersList) > 0 && filtersList[0] != nil {
+				update["filters"] = expandFiltersForBulk(filtersList[0].(map[string]interface{}))
+			}
+		}
+
+		if headTags, ok := renderingMap["head_tags"]; ok && headTags != "" {
+			update["head_tags"] = expandInterfaceArrayFromString(headTags.(string))
+		}
+
+		bulkUpdates = append(bulkUpdates, update)
+	}
+
+	return bulkUpdates
+}
+
+func expandFiltersForBulk(filterMap map[string]interface{}) map[string]interface{} {
+	result := make(map[string]interface{})
+
+	if matchType, ok := filterMap["match_type"].(string); ok && matchType != "" {
+		result["match_type"] = matchType
+	}
+
+	if clients, ok := filterMap["clients"].(string); ok && clients != "" {
+		result["clients"] = expandJSONArray(clients)
+	}
+
+	if organizations, ok := filterMap["organizations"].(string); ok && organizations != "" {
+		result["organizations"] = expandJSONArray(organizations)
+	}
+
+	if domains, ok := filterMap["domains"].(string); ok && domains != "" {
+		result["domains"] = expandJSONArray(domains)
+	}
+
+	return result
+}
+
+func expandJSONArray(jsonStr string) []interface{} {
+	var result []interface{}
+	if err := json.Unmarshal([]byte(jsonStr), &result); err != nil {
+		return nil
+	}
+	return result
+}
+
+func expandInterfaceArrayFromString(jsonStr string) []interface{} {
+	var result []interface{}
+	if err := json.Unmarshal([]byte(jsonStr), &result); err != nil {
+		return nil
+	}
+	return result
+}

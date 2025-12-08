@@ -169,36 +169,21 @@ func flattenPromptScreenSettings(data *schema.ResourceData, promptSetting *manag
 	return result.ErrorOrNil()
 }
 
-func flattenPromptScreenRenderers(data *schema.ResourceData, renderingList *management.PromptRenderingList) error {
-	result := multierror.Append(
-		data.Set("prompt_type", data.Id()),
-		data.Set("screen_renderers", flattenPromptRenderingList(renderingList)),
-	)
-	return result.ErrorOrNil()
-}
-
-func flattenPromptRenderingList(renderingList *management.PromptRenderingList) []map[string]interface{} {
-	if renderingList == nil || len(renderingList.PromptRenderings) == 0 {
-		return nil
+// flattenPromptRenderingToMap converts a PromptRendering to a map for use in lists.
+func flattenPromptRenderingToMap(rendering *management.PromptRendering) map[string]interface{} {
+	result := map[string]interface{}{
+		"prompt":                     rendering.GetPrompt(),
+		"screen":                     rendering.GetScreen(),
+		"rendering_mode":             rendering.GetRenderingMode(),
+		"context_configuration":      rendering.GetContextConfiguration(),
+		"default_head_tags_disabled": rendering.GetDefaultHeadTagsDisabled(),
+		"use_page_template":          rendering.GetUsePageTemplate(),
+		"head_tags":                  flattenHeadTags(rendering),
+		"tenant":                     rendering.GetTenant(),
+		"filters":                    flattenPromptRenderingFilters(rendering.GetFilters()),
 	}
 
-	var renderings []map[string]interface{}
-	for _, rendering := range renderingList.PromptRenderings {
-		renderingMap := map[string]interface{}{
-			"screen_name":                rendering.GetScreen(),
-			"rendering_mode":             rendering.GetRenderingMode(),
-			"context_configuration":      rendering.GetContextConfiguration(),
-			"default_head_tags_disabled": rendering.GetDefaultHeadTagsDisabled(),
-			"use_page_template":          rendering.GetUsePageTemplate(),
-			"head_tags":                  flattenHeadTags(rendering),
-			"filters":                    flattenPromptRenderingFilters(rendering.GetFilters()),
-			"tenant":                     rendering.GetTenant(),
-		}
-
-		renderings = append(renderings, renderingMap)
-	}
-
-	return renderings
+	return result
 }
 
 func flattenHeadTags(promptSetting *management.PromptRendering) string {
@@ -248,4 +233,71 @@ func flattenFilter(f *management.PromptRenderingFilters) map[string]interface{} 
 	}
 
 	return result
+}
+
+func flattenPromptRenderingsList(data *schema.ResourceData, renderingList *management.PromptRenderingList) error {
+	renderings := flattenPromptRenderingListHelper(renderingList)
+
+	if renderings == nil {
+		return data.Set("renderings", []interface{}{})
+	}
+	return data.Set("renderings", renderings)
+}
+
+// flattenPromptRenderingsFromList extracts specific renderings from a PromptRenderingList
+// based on the configured renderings in Terraform state.
+func flattenPromptRenderingsFromList(data *schema.ResourceData, renderingList *management.PromptRenderingList, configuredRenderings []interface{}) error {
+	if renderingList == nil || len(renderingList.PromptRenderings) == 0 {
+		return data.Set("renderings", []interface{}{})
+	}
+
+	// Build a map for quick lookup: "prompt|screen" -> PromptRendering.
+	promptRenderingMap := make(map[string]*management.PromptRendering, len(renderingList.PromptRenderings))
+	for _, r := range renderingList.PromptRenderings {
+		if r.Prompt != nil && r.Screen != nil {
+			key := string(*r.Prompt) + "|" + string(*r.Screen)
+			promptRenderingMap[key] = r
+		}
+	}
+
+	// Extract only the renderings we care about.
+	var updatedRenderings []map[string]interface{}
+	for _, renderingRaw := range configuredRenderings {
+		renderingConfig := renderingRaw.(map[string]interface{})
+		prompt := renderingConfig["prompt"].(string)
+		screen := renderingConfig["screen"].(string)
+		key := prompt + "|" + screen
+
+		promptRendering := promptRenderingMap[key]
+		updatedRendering := flattenPromptRenderingToMap(promptRendering)
+		updatedRenderings = append(updatedRenderings, updatedRendering)
+	}
+
+	return data.Set("renderings", updatedRenderings)
+}
+
+// flattenPromptRenderingListHelper is a shared helper that flattens PromptRenderingList.
+func flattenPromptRenderingListHelper(renderingList *management.PromptRenderingList) []map[string]interface{} {
+	if renderingList == nil || len(renderingList.PromptRenderings) == 0 {
+		return nil
+	}
+
+	var renderings []map[string]interface{}
+	for _, rendering := range renderingList.PromptRenderings {
+		renderingMap := map[string]interface{}{
+			"rendering_mode":             rendering.GetRenderingMode(),
+			"context_configuration":      rendering.GetContextConfiguration(),
+			"default_head_tags_disabled": rendering.GetDefaultHeadTagsDisabled(),
+			"use_page_template":          rendering.GetUsePageTemplate(),
+			"head_tags":                  flattenHeadTags(rendering),
+			"filters":                    flattenPromptRenderingFilters(rendering.GetFilters()),
+			"tenant":                     rendering.GetTenant(),
+			"prompt":                     rendering.GetPrompt(),
+			"screen":                     rendering.GetScreen(),
+		}
+
+		renderings = append(renderings, renderingMap)
+	}
+
+	return renderings
 }

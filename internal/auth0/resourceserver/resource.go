@@ -331,11 +331,6 @@ func createResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 
 	data.SetId(resourceServer.GetID())
 
-	if err := fixNullableAttributes(ctx, data, api); err != nil {
-		return diag.FromErr(err)
-	}
-	time.Sleep(200 * time.Millisecond)
-
 	return readResourceServer(ctx, data, meta)
 }
 

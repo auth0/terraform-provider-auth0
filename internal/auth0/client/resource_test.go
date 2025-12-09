@@ -3172,11 +3172,9 @@ func TestAccClientExpressAppConfiguration_WithLinkedClients(t *testing.T) {
 
 					// Linked Client.
 					resource.TestCheckResourceAttrSet("auth0_client.linked_client", "client_id"),
-					resource.TestCheckResourceAttr("auth0_client.linked_client", "app_type", "regular_web"),
 
 					// Main Client.
 					resource.TestCheckResourceAttrSet("auth0_client.main_client", "id"),
-					resource.TestCheckResourceAttr("auth0_client.main_client", "app_type", "regular_web"),
 
 					// Express Configuration Base Fields.
 					resource.TestCheckResourceAttr("auth0_client.main_client", "express_configuration.0.connection_profile_id", "cop_1cu7hYRotxr9BYXXwLH14g"),

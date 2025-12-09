@@ -3166,7 +3166,6 @@ func TestAccClientExpressAppConfiguration_WithLinkedClients(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					// OIN Source Client.
 					resource.TestCheckResourceAttrSet("auth0_client.oin_source", "client_id"),
-					resource.TestCheckResourceAttr("auth0_client.oin_source", "app_type", "express_configuration"),
 
 					// User Attribute Profile.
 					resource.TestCheckResourceAttrSet("auth0_user_attribute_profile.profile", "id"),

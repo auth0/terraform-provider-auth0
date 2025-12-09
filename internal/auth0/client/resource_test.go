@@ -3093,12 +3093,14 @@ func TestAccClientExpressAppConfiguration(t *testing.T) {
 	})
 }
 
-const testAccClientExpressConfigurationLinkedClientsConfig = `
+const initialClient = `
 resource "auth0_client" "oin_source" {
   name     = "OIN Express Config Client - {{.testName}}"
   app_type = "express_configuration"
 }
+`
 
+const testAccClientExpressConfigurationLinkedClientsConfig = `
 resource "auth0_user_attribute_profile" "profile" {
   name = "Acceptance Test - User Attribute Profile - {{.testName}}"
 
@@ -3160,7 +3162,7 @@ func TestAccClientExpressAppConfiguration_WithLinkedClients(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccClientExpressConfigurationLinkedClientsConfig, t.Name()),
+				Config: acctest.ParseTestName(initialClient+testAccClientExpressConfigurationLinkedClientsConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					// OIN Source Client.
 					resource.TestCheckResourceAttrSet("auth0_client.oin_source", "client_id"),

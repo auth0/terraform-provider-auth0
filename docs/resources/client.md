@@ -131,7 +131,7 @@ resource "auth0_client" "my_client" {
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
-- `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`.
+- `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`, `express_configuration`
 - `async_approval_notification_channels` (List of String) List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated. Defaults to `["guardian-push"]` if not specified.
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
@@ -144,6 +144,7 @@ resource "auth0_client" "my_client" {
 - `default_organization` (Block List, Max: 1) Configure and associate an organization with the Client (see [below for nested schema](#nestedblock--default_organization))
 - `description` (String) Description of the purpose of the client.
 - `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
+- `express_configuration` (Block List, Max: 1) Express Configuration settings for the client. Used with OIN Express Configuration. (see [below for nested schema](#nestedblock--express_configuration))
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
@@ -507,6 +508,33 @@ Optional:
 - `disable` (Boolean) If set, the `default_organization` will be removed.
 - `flows` (List of String) Definition of the flow that needs to be configured. Eg. client_credentials
 - `organization_id` (String) The unique identifier of the organization
+
+
+<a id="nestedblock--express_configuration"></a>
+### Nested Schema for `express_configuration`
+
+Optional:
+
+- `admin_login_domain` (String) The domain that admins are expected to log in via for authenticating for express configuration.
+- `connection_profile_id` (String) The ID of the connection profile to use for this application.
+- `enable_client` (Boolean) When true, all connections made via express configuration will be enabled for this application.
+- `enable_organization` (Boolean) When true, all connections made via express configuration will have the associated organization enabled.
+- `initiate_login_uri_template` (String) The URI users should bookmark to log in to this application. Variable substitution is permitted for: organization_name, organization_id, and connection_name.
+- `linked_clients` (Block List) List of client IDs that are linked to this express configuration (e.g. web or mobile clients). (see [below for nested schema](#nestedblock--express_configuration--linked_clients))
+- `okta_oin_client_id` (String) The unique identifier for the Okta OIN Express Configuration Client.
+- `user_attribute_profile_id` (String) The ID of the user attribute profile to use for this application.
+
+Read-Only:
+
+- `oin_submission_id` (String) The identifier of the published application in the OKTA OIN.
+
+<a id="nestedblock--express_configuration--linked_clients"></a>
+### Nested Schema for `express_configuration.linked_clients`
+
+Optional:
+
+- `client_id` (String) The ID of the linked client.
+
 
 
 <a id="nestedblock--jwt_configuration"></a>

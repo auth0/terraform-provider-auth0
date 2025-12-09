@@ -36,7 +36,7 @@ data "auth0_client" "some-client-by-id" {
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
-- `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`.
+- `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`, `express_configuration`
 - `async_approval_notification_channels` (List of String) List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated. Defaults to `["guardian-push"]` if not specified.
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
@@ -51,6 +51,7 @@ data "auth0_client" "some-client-by-id" {
 - `default_organization` (List of Object) Configure and associate an organization with the Client (see [below for nested schema](#nestedatt--default_organization))
 - `description` (String) Description of the purpose of the client.
 - `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
+- `express_configuration` (List of Object) Express Configuration settings for the client. Used with OIN Express Configuration. (see [below for nested schema](#nestedatt--express_configuration))
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `id` (String) The ID of this resource.
@@ -498,6 +499,30 @@ Read-Only:
 - `disable` (Boolean)
 - `flows` (List of String)
 - `organization_id` (String)
+
+
+<a id="nestedatt--express_configuration"></a>
+### Nested Schema for `express_configuration`
+
+Read-Only:
+
+- `admin_login_domain` (String)
+- `connection_profile_id` (String)
+- `enable_client` (Boolean)
+- `enable_organization` (Boolean)
+- `initiate_login_uri_template` (String)
+- `linked_clients` (List of Object) (see [below for nested schema](#nestedobjatt--express_configuration--linked_clients))
+- `oin_submission_id` (String)
+- `okta_oin_client_id` (String)
+- `user_attribute_profile_id` (String)
+
+<a id="nestedobjatt--express_configuration--linked_clients"></a>
+### Nested Schema for `express_configuration.linked_clients`
+
+Read-Only:
+
+- `client_id` (String)
+
 
 
 <a id="nestedatt--jwt_configuration"></a>

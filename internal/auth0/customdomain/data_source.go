@@ -58,6 +58,6 @@ func readCustomDomainForDataSource(ctx context.Context, data *schema.ResourceDat
 		data.SetId(customDomain.GetID())
 		return diag.FromErr(flattenCustomDomain(data, customDomain))
 	default:
-		return diag.FromErr(errors.New("multiple custom domains found, please specify custom_domain_id"))
+		return diag.FromErr(errors.New("multiple custom domains found, please specify custom_domain_id or use auth0_custom_domains data-source"))
 	}
 }

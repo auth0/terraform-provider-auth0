@@ -82,6 +82,7 @@ func createSCIMToken(ctx context.Context, data *schema.ResourceData, meta interf
 		}}
 	}
 
+	_ = data.Set("token", scimToken.GetToken())
 	_ = data.Set("connection_id", connectionID)
 
 	return readSCIMToken(ctx, data, meta)
@@ -131,8 +132,10 @@ func deleteSCIMToken(ctx context.Context, data *schema.ResourceData, meta interf
 }
 
 func flattenSCIMToken(data *schema.ResourceData, scimToken *management.SCIMToken) diag.Diagnostics {
+	existingToken, _ := data.Get("token").(string)
+
 	result := multierror.Append(
-		data.Set("token", scimToken.GetToken()),
+		data.Set("token", existingToken),
 		data.Set("token_id", scimToken.GetTokenID()),
 		data.Set("scopes", scimToken.GetScopes()),
 		data.Set("created_at", scimToken.GetCreatedAt()),

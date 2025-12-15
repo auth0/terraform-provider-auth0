@@ -68,7 +68,17 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 						authMap["password"] = v
 					}
 				} else if method == "bearer" {
-					if v, ok := auth["token"].(string); ok {
+					// Prefer token_wo (write-only) over token for better security.
+					if tokenWO := getTokenWO(data); tokenWO != "" {
+						// For new resources, always use token_wo if provided.
+						// For updates, only use token_wo if version changed (to trigger update).
+						if data.IsNewResource() || hasTokenWOVersionChanged(data) {
+							authMap["token"] = tokenWO
+						}
+						// If version didn't change, and it's an update, don't include token.
+						// To avoid accidentally clearing it (since we can't read it back).
+					} else if v, ok := auth["token"].(string); ok && v != "" {
+						// Fall back to regular token for backward compatibility.
 						authMap["token"] = v
 					}
 				}
@@ -94,4 +104,44 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 
 	destination.EventStreamDestinationConfiguration = configMap
 	return destination
+}
+
+// hasTokenWOVersionChanged checks if the token_wo_version attribute has changed.
+// This is used to determine if we need to update the token during resource updates.
+func hasTokenWOVersionChanged(data *schema.ResourceData) bool {
+	return data.HasChange("webhook_configuration.0.webhook_authorization.0.token_wo_version")
+}
+
+// getTokenWO retrieves the token_wo value from the resource data's raw config.
+// Returns an empty string if not set.
+// This is necessary because token_wo is write-only and not stored in state,
+// and can only be retrieved from the raw config.
+func getTokenWO(data *schema.ResourceData) string {
+	rawConfig := data.GetRawConfig()
+	if rawConfig.IsNull() {
+		return ""
+	}
+
+	webhookConfigRaw := rawConfig.GetAttr("webhook_configuration")
+	if webhookConfigRaw.IsNull() || webhookConfigRaw.LengthInt() == 0 {
+		return ""
+	}
+
+	var tokenWOStr string
+	webhookConfigRaw.ForEachElement(func(_ cty.Value, webHookCfgRaw cty.Value) (stop bool) {
+		authRaw := webHookCfgRaw.GetAttr("webhook_authorization")
+		if !authRaw.IsNull() && authRaw.LengthInt() > 0 {
+			authRaw.ForEachElement(func(_ cty.Value, authCfgRaw cty.Value) (stop bool) {
+				tokenWO := authCfgRaw.GetAttr("token_wo")
+				if !tokenWO.IsNull() {
+					tokenWOStr = tokenWO.AsString()
+				}
+				return true // Stop after first.
+			})
+			return true // Stop after first.
+		}
+		return false
+	})
+
+	return tokenWOStr
 }

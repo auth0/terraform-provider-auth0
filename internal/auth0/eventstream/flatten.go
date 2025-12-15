@@ -80,14 +80,20 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 			if auth["method"] == "basic" {
 				authMap["username"] = auth["username"]
 
-				// Token is not returned from the API, so we get it from config if available.
+				// Password is not returned from the API, so we get it from config if available.
 				if p := data.Get("webhook_configuration.0.webhook_authorization.0.password"); p != nil {
 					authMap["password"] = p
 				}
 			} else if auth["method"] == "bearer" {
-				// Token is not returned from the API, so we get it from config if available.
+				// Token is not returned from the API.
+				// For backward compatibility, preserve regular token from config if available.
 				if t := data.Get("webhook_configuration.0.webhook_authorization.0.token"); t != nil {
 					authMap["token"] = t
+				}
+				// token_wo is write-only and should NOT be read from API or stored in state.
+				// token_wo_version is stored in state to track changes.
+				if version := data.Get("webhook_configuration.0.webhook_authorization.0.token_wo_version"); version != nil {
+					authMap["token_wo_version"] = version
 				}
 			}
 

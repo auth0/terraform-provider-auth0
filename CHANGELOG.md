@@ -7,7 +7,7 @@ FEATURES:
 - `resource/auth0_branding_phone_notification_template` – Add support for creating and managing Branding Phone Notification Templates ([#1430](https://github.com/auth0/terraform-provider-auth0/pull/1430))
 - `data-source/auth0_branding_phone_notification_template` – Add support for retrieving Branding Phone Notification Templates ([#1430](https://github.com/auth0/terraform-provider-auth0/pull/1430))
 
-## BUG FIXES:
+BUG FIXES:
 - `resource/auth0_connection_scim_token` – Read SCIM token from schema and correctly persist it in state  ([#1425](https://github.com/auth0/terraform-provider-auth0/pull/1425))
 - Remove unnecessary nullable attribute patch during Create ([#1434](https://github.com/auth0/terraform-provider-auth0/pull/1434))
 

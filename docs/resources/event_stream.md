@@ -46,6 +46,7 @@ resource "auth0_event_stream" "my_event_stream_webhook" {
 }
 
 # Creates an event stream with write-only token (recommended for security)
+# The token can be passed via variable or ephemeral resource
 variable "webhook_token" {
   description = "The webhook token"
   type        = string
@@ -64,29 +65,9 @@ resource "auth0_event_stream" "my_event_stream_webhook_secure" {
     webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
 
     webhook_authorization {
-      method          = "bearer"
-      token_wo        = var.webhook_token
+      method           = "bearer"
+      token_wo         = var.webhook_token
       token_wo_version = 1
-    }
-  }
-}
-
-# To update the token, increment the version:
-resource "auth0_event_stream" "my_event_stream_webhook_secure" {
-  name             = "my-webhook-secure"
-  destination_type = "webhook"
-  subscriptions = [
-    "user.created",
-    "user.updated"
-  ]
-
-  webhook_configuration {
-    webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
-
-    webhook_authorization {
-      method          = "bearer"
-      token_wo        = var.webhook_token  # New token value
-      token_wo_version = 2  # Incremented to trigger update
     }
   }
 }
@@ -102,6 +83,8 @@ resource "auth0_event_stream" "my_event_stream_webhook_secure" {
 - `subscriptions` (List of String) List of event types this stream is subscribed to.
 
 ### Optional
+
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
 - `eventbridge_configuration` (Block List, Max: 1) Configuration for the EventBridge destination. This block is only applicable when `destination_type` is set to `eventbridge`. EventBridge configurations **cannot** be updated after creation. Any change to this block will force the resource to be recreated. (see [below for nested schema](#nestedblock--eventbridge_configuration))
 - `webhook_configuration` (Block List, Max: 1) Configuration for the Webhook destination. This block is only applicable when `destination_type` is set to `webhook`. Webhook configurations **can** be updated after creation, including the endpoint and authorization fields. (see [below for nested schema](#nestedblock--webhook_configuration))
@@ -131,6 +114,8 @@ Read-Only:
 
 Required:
 
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
 - `webhook_authorization` (Block List, Min: 1, Max: 1) Authorization details for the webhook endpoint. Supports `basic` authentication using `username` and `password`, or `bearer` authentication using a `token`. The appropriate fields must be set based on the chosen method. (see [below for nested schema](#nestedblock--webhook_configuration--webhook_authorization))
 - `webhook_endpoint` (String) The HTTPS endpoint that will receive the webhook events. Must be a valid, publicly accessible URL.
 
@@ -143,10 +128,12 @@ Required:
 
 Optional:
 
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
 - `password` (String, Sensitive) The password for `basic` authentication. Required when `method` is set to `basic`.
 - `token` (String, Sensitive) The token used for `bearer` authentication. Required when `method` is set to `bearer`. **Note:** For better security, consider using `token_wo` instead to prevent storing the token in Terraform state.
-- `token_wo` (String, Sensitive, Write-Only) The token used for `bearer` authentication (write-only). This value is only available during resource creation and update, and is **not** stored in Terraform state. To update the token, increment the `token_wo_version` attribute. Required when `method` is set to `bearer` and `token` is not provided.
-- `token_wo_version` (Number) Version number for token changes. Increment this value to trigger a token update when using `token_wo`. Defaults to `1`.
+- `token_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The token used for `bearer` authentication (write-only). This value is only available during resource creation and update, and is **not** stored in Terraform state. To update the token, increment the `token_wo_version` attribute. Required when `method` is set to `bearer` and `token` is not provided.
+- `token_wo_version` (Number) Version number for token changes. Increment this value to trigger a token update when using `token_wo`.
 - `username` (String) The username for `basic` authentication. Required when `method` is set to `basic`.
 
 ## Import

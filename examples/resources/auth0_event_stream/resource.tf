@@ -52,8 +52,8 @@ resource "auth0_event_stream" "my_event_stream_webhook_secure" {
     webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
 
     webhook_authorization {
-      method          = "bearer"
-      token_wo        = var.webhook_token
+      method           = "bearer"
+      token_wo         = var.webhook_token
       token_wo_version = 1
     }
   }

@@ -37,7 +37,7 @@ resource "auth0_connection_directory" "custom" {
 
   mapping {
     auth0 = "email"
-    idp   = "emailAddress"
+    idp   = "primaryEmail"
   }
 
   mapping {
@@ -51,8 +51,8 @@ resource "auth0_connection_directory" "custom" {
   }
 
   mapping {
-    auth0 = "name"
-    idp   = "name.fullName"
+    auth0 = "external_id"
+    idp   = "id"
   }
 }
 ```

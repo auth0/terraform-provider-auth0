@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: 584
         uncompressed: false
-        body: '{"id":"uap_1cvmoTVvRmFpAEeXJKFX38","name":"Acceptance Test - User Attribute Profile - TestAccClientExpressAppConfiguration_WithLinkedClients","user_id":{"oidc_mapping":"sub","saml_mapping":["urn:oid:0.9.2342.19200300.100.1.1"],"scim_mapping":"userName"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","oidc_mapping":{"mapping":"email","display_name":"Email Address"},"saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"],"scim_mapping":"emails[primary eq true].value","auth0_mapping":"email","profile_required":true}}}'
+        body: '{"id":"uap_1cvmQLtXMFjDdC5dDHfwpn","name":"Acceptance Test - User Attribute Profile - TestAccClientExpressAppConfiguration_WithLinkedClients","user_id":{"oidc_mapping":"sub","saml_mapping":["urn:oid:0.9.2342.19200300.100.1.1"],"scim_mapping":"userName"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","oidc_mapping":{"mapping":"email","display_name":"Email Address"},"saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"],"scim_mapping":"emails[primary eq true].value","auth0_mapping":"email","profile_required":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 430.295125ms
+        duration: 513.631ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -66,13 +66,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"Linked Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"WqJlxgrQ1JPTVvsIt5Nwc14R5WXLCQsd","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Linked Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"LUlPW3WpWAJOdUUxfcoaHQXOkJloMjPD","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 534.14025ms
+        duration: 577.645084ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -102,13 +102,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"OIN Express Config Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7","app_type":"express_configuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
+        body: '{"name":"OIN Express Config Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G","app_type":"express_configuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 561.204833ms
+        duration: 609.871709ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -125,7 +125,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cvmoTVvRmFpAEeXJKFX38
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cvmQLtXMFjDdC5dDHfwpn
         method: GET
       response:
         proto: HTTP/2.0
@@ -135,13 +135,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cvmoTVvRmFpAEeXJKFX38","name":"Acceptance Test - User Attribute Profile - TestAccClientExpressAppConfiguration_WithLinkedClients","user_id":{"oidc_mapping":"sub","saml_mapping":["urn:oid:0.9.2342.19200300.100.1.1"],"scim_mapping":"userName"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","oidc_mapping":{"mapping":"email","display_name":"Email Address"},"saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"],"scim_mapping":"emails[primary eq true].value","auth0_mapping":"email","profile_required":true}}}'
+        body: '{"id":"uap_1cvmQLtXMFjDdC5dDHfwpn","name":"Acceptance Test - User Attribute Profile - TestAccClientExpressAppConfiguration_WithLinkedClients","user_id":{"oidc_mapping":"sub","saml_mapping":["urn:oid:0.9.2342.19200300.100.1.1"],"scim_mapping":"userName"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","oidc_mapping":{"mapping":"email","display_name":"Email Address"},"saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"],"scim_mapping":"emails[primary eq true].value","auth0_mapping":"email","profile_required":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 371.121ms
+        duration: 404.409542ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -158,7 +158,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/WqJlxgrQ1JPTVvsIt5Nwc14R5WXLCQsd
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/LUlPW3WpWAJOdUUxfcoaHQXOkJloMjPD
         method: GET
       response:
         proto: HTTP/2.0
@@ -168,13 +168,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Linked Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"WqJlxgrQ1JPTVvsIt5Nwc14R5WXLCQsd","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Linked Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"LUlPW3WpWAJOdUUxfcoaHQXOkJloMjPD","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 351.195167ms
+        duration: 386.59475ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -191,7 +191,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G
         method: GET
       response:
         proto: HTTP/2.0
@@ -201,13 +201,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"OIN Express Config Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7","app_type":"express_configuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
+        body: '{"name":"OIN Express Config Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G","app_type":"express_configuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 380.962292ms
+        duration: 363.597416ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -220,7 +220,7 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - Main Client With Links - TestAccClientExpressAppConfiguration_WithLinkedClients","app_type":"regular_web","token_endpoint_auth_method":"client_secret_post","express_configuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cvmoTVvRmFpAEeXJKFX38","connection_profile_id":"cop_1cu7hYRotxr9BYXXwLH14g","enable_client":true,"enable_organization":true,"linked_clients":[{"client_id":"WqJlxgrQ1JPTVvsIt5Nwc14R5WXLCQsd"}],"okta_oin_client_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7","admin_login_domain":"admin.example.com","oin_submission_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7"}}
+            {"name":"Acceptance Test - Main Client With Links - TestAccClientExpressAppConfiguration_WithLinkedClients","app_type":"regular_web","token_endpoint_auth_method":"client_secret_post","express_configuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cvmQLtXMFjDdC5dDHfwpn","connection_profile_id":"cop_1cu7hYRotxr9BYXXwLH14g","enable_client":true,"enable_organization":true,"linked_clients":[{"client_id":"LUlPW3WpWAJOdUUxfcoaHQXOkJloMjPD"}],"okta_oin_client_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G","admin_login_domain":"admin.example.com","oin_submission_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G"}}
         form: {}
         headers:
             Content-Type:
@@ -237,13 +237,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"Acceptance Test - Main Client With Links - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"95cZLOW5PtlYWy1HzWji8U79vmGVcKWU","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_configuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cvmoTVvRmFpAEeXJKFX38","connection_profile_id":"cop_1cu7hYRotxr9BYXXwLH14g","enable_client":true,"enable_organization":true,"linked_clients":[{"client_id":"WqJlxgrQ1JPTVvsIt5Nwc14R5WXLCQsd"}],"okta_oin_client_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7","admin_login_domain":"admin.example.com","oin_submission_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7"}}'
+        body: '{"name":"Acceptance Test - Main Client With Links - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"yiglaRkNZIuw3eQMqHiSfKNKxUyFpC9y","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_configuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cvmQLtXMFjDdC5dDHfwpn","connection_profile_id":"cop_1cu7hYRotxr9BYXXwLH14g","enable_client":true,"enable_organization":true,"linked_clients":[{"client_id":"LUlPW3WpWAJOdUUxfcoaHQXOkJloMjPD"}],"okta_oin_client_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G","admin_login_domain":"admin.example.com","oin_submission_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 612.445875ms
+        duration: 569.426583ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -260,7 +260,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/95cZLOW5PtlYWy1HzWji8U79vmGVcKWU
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/yiglaRkNZIuw3eQMqHiSfKNKxUyFpC9y
         method: GET
       response:
         proto: HTTP/2.0
@@ -270,13 +270,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Main Client With Links - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"95cZLOW5PtlYWy1HzWji8U79vmGVcKWU","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_configuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cvmoTVvRmFpAEeXJKFX38","connection_profile_id":"cop_1cu7hYRotxr9BYXXwLH14g","enable_client":true,"enable_organization":true,"linked_clients":[{"client_id":"WqJlxgrQ1JPTVvsIt5Nwc14R5WXLCQsd"}],"okta_oin_client_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7","admin_login_domain":"admin.example.com","oin_submission_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7"}}'
+        body: '{"name":"Acceptance Test - Main Client With Links - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"yiglaRkNZIuw3eQMqHiSfKNKxUyFpC9y","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_configuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cvmQLtXMFjDdC5dDHfwpn","connection_profile_id":"cop_1cu7hYRotxr9BYXXwLH14g","enable_client":true,"enable_organization":true,"linked_clients":[{"client_id":"LUlPW3WpWAJOdUUxfcoaHQXOkJloMjPD"}],"okta_oin_client_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G","admin_login_domain":"admin.example.com","oin_submission_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 399.531334ms
+        duration: 380.044458ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -293,7 +293,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/LUlPW3WpWAJOdUUxfcoaHQXOkJloMjPD
         method: GET
       response:
         proto: HTTP/2.0
@@ -303,13 +303,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"OIN Express Config Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7","app_type":"express_configuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
+        body: '{"name":"Linked Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"LUlPW3WpWAJOdUUxfcoaHQXOkJloMjPD","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 358.824167ms
+        duration: 360.571542ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -326,7 +326,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cvmoTVvRmFpAEeXJKFX38
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G
         method: GET
       response:
         proto: HTTP/2.0
@@ -336,13 +336,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cvmoTVvRmFpAEeXJKFX38","name":"Acceptance Test - User Attribute Profile - TestAccClientExpressAppConfiguration_WithLinkedClients","user_id":{"oidc_mapping":"sub","saml_mapping":["urn:oid:0.9.2342.19200300.100.1.1"],"scim_mapping":"userName"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","oidc_mapping":{"mapping":"email","display_name":"Email Address"},"saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"],"scim_mapping":"emails[primary eq true].value","auth0_mapping":"email","profile_required":true}}}'
+        body: '{"name":"OIN Express Config Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G","app_type":"express_configuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 374.762625ms
+        duration: 373.561792ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -359,7 +359,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/WqJlxgrQ1JPTVvsIt5Nwc14R5WXLCQsd
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cvmQLtXMFjDdC5dDHfwpn
         method: GET
       response:
         proto: HTTP/2.0
@@ -369,13 +369,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Linked Client - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"WqJlxgrQ1JPTVvsIt5Nwc14R5WXLCQsd","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"id":"uap_1cvmQLtXMFjDdC5dDHfwpn","name":"Acceptance Test - User Attribute Profile - TestAccClientExpressAppConfiguration_WithLinkedClients","user_id":{"oidc_mapping":"sub","saml_mapping":["urn:oid:0.9.2342.19200300.100.1.1"],"scim_mapping":"userName"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","oidc_mapping":{"mapping":"email","display_name":"Email Address"},"saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"],"scim_mapping":"emails[primary eq true].value","auth0_mapping":"email","profile_required":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 376.177625ms
+        duration: 386.797958ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -392,7 +392,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/95cZLOW5PtlYWy1HzWji8U79vmGVcKWU
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/yiglaRkNZIuw3eQMqHiSfKNKxUyFpC9y
         method: GET
       response:
         proto: HTTP/2.0
@@ -402,13 +402,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Main Client With Links - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"95cZLOW5PtlYWy1HzWji8U79vmGVcKWU","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_configuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cvmoTVvRmFpAEeXJKFX38","connection_profile_id":"cop_1cu7hYRotxr9BYXXwLH14g","enable_client":true,"enable_organization":true,"linked_clients":[{"client_id":"WqJlxgrQ1JPTVvsIt5Nwc14R5WXLCQsd"}],"okta_oin_client_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7","admin_login_domain":"admin.example.com","oin_submission_id":"qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7"}}'
+        body: '{"name":"Acceptance Test - Main Client With Links - TestAccClientExpressAppConfiguration_WithLinkedClients","client_id":"yiglaRkNZIuw3eQMqHiSfKNKxUyFpC9y","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_configuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cvmQLtXMFjDdC5dDHfwpn","connection_profile_id":"cop_1cu7hYRotxr9BYXXwLH14g","enable_client":true,"enable_organization":true,"linked_clients":[{"client_id":"LUlPW3WpWAJOdUUxfcoaHQXOkJloMjPD"}],"okta_oin_client_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G","admin_login_domain":"admin.example.com","oin_submission_id":"UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 472.6685ms
+        duration: 379.668333ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -425,7 +425,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/95cZLOW5PtlYWy1HzWji8U79vmGVcKWU
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/yiglaRkNZIuw3eQMqHiSfKNKxUyFpC9y
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -441,7 +441,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 1.226570042s
+        duration: 2.088959416s
     - id: 13
       request:
         proto: HTTP/1.1
@@ -458,7 +458,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cvmoTVvRmFpAEeXJKFX38
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cvmQLtXMFjDdC5dDHfwpn
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -474,7 +474,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 1.276609667s
+        duration: 359.604458ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -491,7 +491,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/WqJlxgrQ1JPTVvsIt5Nwc14R5WXLCQsd
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/LUlPW3WpWAJOdUUxfcoaHQXOkJloMjPD
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -507,7 +507,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 1.273575916s
+        duration: 452.409458ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -524,7 +524,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/qgJUmDSBU2cmsIGTYr0DSaZ1qUQxCRC7
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/UkRYbh7FC90kxsa3LLHjheAdFPIwnT9G
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -540,4 +540,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 1.273366708s
+        duration: 458.625125ms

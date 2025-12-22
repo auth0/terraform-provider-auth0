@@ -3183,7 +3183,6 @@ func TestAccClientExpressAppConfiguration_WithLinkedClients(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.main_client", "express_configuration.0.enable_client", "true"),
 					resource.TestCheckResourceAttr("auth0_client.main_client", "express_configuration.0.enable_organization", "true"),
 
-
 					// Match User Attribute Profile.
 					resource.TestCheckResourceAttrPair(
 						"auth0_client.main_client",
@@ -3194,7 +3193,6 @@ func TestAccClientExpressAppConfiguration_WithLinkedClients(t *testing.T) {
 
 					// Linked Clients.
 					resource.TestCheckResourceAttr("auth0_client.main_client", "express_configuration.0.linked_clients.#", "1"),
-
 				),
 			},
 		},

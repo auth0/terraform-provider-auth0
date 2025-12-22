@@ -6,6 +6,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	managementv2 "github.com/auth0/go-auth0/v2/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -1410,4 +1411,52 @@ func expandSCIMConfiguration(data *schema.ResourceData) *management.SCIMConfigur
 	}
 
 	return nil
+}
+
+func expandDirectoryMapping(data *schema.ResourceData) []*managementv2.DirectoryProvisioningMappingItem {
+	srcMapping := data.Get("mapping").(*schema.Set)
+	mapping := make([]*managementv2.DirectoryProvisioningMappingItem, 0, srcMapping.Len())
+	for _, item := range srcMapping.List() {
+		srcMap := item.(map[string]interface{})
+		mappingItem := &managementv2.DirectoryProvisioningMappingItem{}
+		mappingItem.SetAuth0(srcMap["auth0"].(string))
+		mappingItem.SetIdp(srcMap["idp"].(string))
+		mapping = append(mapping, mappingItem)
+	}
+
+	return mapping
+}
+
+func expandDirectory(data *schema.ResourceData) *managementv2.CreateDirectoryProvisioningRequestContent {
+	cfg := data.GetRawConfig()
+	directoryConfig := &managementv2.CreateDirectoryProvisioningRequestContent{}
+
+	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
+		mapping := expandDirectoryMapping(data)
+		directoryConfig.SetMapping(mapping)
+	}
+
+	if !cfg.GetAttr("synchronize_automatically").IsNull() {
+		syncAuto := data.Get("synchronize_automatically").(bool)
+		directoryConfig.SetSynchronizeAutomatically(&syncAuto)
+	}
+
+	return directoryConfig
+}
+
+func expandDirectoryUpdate(data *schema.ResourceData) *managementv2.UpdateDirectoryProvisioningRequestContent {
+	cfg := data.GetRawConfig()
+	directoryConfig := &managementv2.UpdateDirectoryProvisioningRequestContent{}
+
+	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
+		mapping := expandDirectoryMapping(data)
+		directoryConfig.SetMapping(mapping)
+	}
+
+	if !cfg.GetAttr("synchronize_automatically").IsNull() {
+		syncAuto := data.Get("synchronize_automatically").(bool)
+		directoryConfig.SetSynchronizeAutomatically(&syncAuto)
+	}
+
+	return directoryConfig
 }

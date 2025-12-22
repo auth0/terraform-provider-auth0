@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/auth0/go-auth0/management"
+	managementv2 "github.com/auth0/go-auth0/v2/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -1250,5 +1251,47 @@ func flattenConnectionKey(data *schema.ResourceData, connectionID string, key *m
 	for k, v := range m {
 		result = multierror.Append(result, data.Set(k, v))
 	}
+	return diag.FromErr(result.ErrorOrNil())
+}
+
+func flattenDirectoryMappings(mappings []*managementv2.DirectoryProvisioningMappingItem) []interface{} {
+	if mappings == nil {
+		return nil
+	}
+
+	flattenedMappings := make([]interface{}, 0, len(mappings))
+	for _, mapping := range mappings {
+		flattenedMappings = append(flattenedMappings, map[string]interface{}{
+			"auth0": mapping.GetAuth0(),
+			"idp":   mapping.GetIdp(),
+		})
+	}
+
+	return flattenedMappings
+}
+
+func flattenDirectory(data *schema.ResourceData, directoryConfig *managementv2.GetDirectoryProvisioningResponseContent) diag.Diagnostics {
+	result := multierror.Append(
+		data.Set("connection_id", directoryConfig.GetConnectionID()),
+		data.Set("connection_name", directoryConfig.GetConnectionName()),
+		data.Set("strategy", directoryConfig.GetStrategy()),
+		data.Set("mapping", flattenDirectoryMappings(directoryConfig.GetMapping())),
+		data.Set("synchronize_automatically", directoryConfig.GetSynchronizeAutomatically()),
+		data.Set("created_at", directoryConfig.GetCreatedAt().String()),
+		data.Set("updated_at", directoryConfig.GetUpdatedAt().String()),
+	)
+
+	if directoryConfig.LastSynchronizationAt != nil {
+		result = multierror.Append(result, data.Set("last_synchronization_at", directoryConfig.GetLastSynchronizationAt().String()))
+	}
+
+	if directoryConfig.LastSynchronizationStatus != nil {
+		result = multierror.Append(result, data.Set("last_synchronization_status", directoryConfig.GetLastSynchronizationStatus()))
+	}
+
+	if directoryConfig.LastSynchronizationError != nil {
+		result = multierror.Append(result, data.Set("last_synchronization_error", directoryConfig.GetLastSynchronizationError()))
+	}
+
 	return diag.FromErr(result.ErrorOrNil())
 }

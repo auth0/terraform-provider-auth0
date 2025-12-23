@@ -38,3 +38,26 @@ EOF
     }
   }
 }
+
+
+
+# Sample OIN resource server configuration
+resource "auth0_resource_server" "okta_oin_express_configuration_api" {
+  identifier                                      = "urn:auth0:express-configure"
+  name                                            = "Okta OIN Express Configuration API"
+  signing_alg                                     = "RS256"
+  signing_secret                                  = null
+  skip_consent_for_verifiable_first_party_clients = false
+  token_dialect                                   = null
+  token_lifetime                                  = 86400
+  verification_location                           = null
+  proof_of_possession {
+    disable   = true
+    mechanism = null
+    required  = false
+  }
+  token_encryption {
+    disable = true
+    format  = null
+  }
+}

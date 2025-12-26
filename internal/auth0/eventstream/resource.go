@@ -47,10 +47,27 @@ var webhookConfig = &schema.Resource{
 						Description: "The password for `basic` authentication. Required when `method` is set to `basic`.",
 					},
 					"token": {
-						Type:        schema.TypeString,
+						Type:      schema.TypeString,
+						Optional:  true,
+						Sensitive: true,
+						Description: "The token used for `bearer` authentication. Required when `method` is set to `bearer`. " +
+							"**Note:** For better security, consider using `token_wo` instead to prevent storing the token in Terraform state.",
+					},
+					"token_wo": {
+						Type:      schema.TypeString,
+						Optional:  true,
+						Sensitive: true,
+						WriteOnly: true,
+						Description: "The token used for `bearer` authentication (write-only). " +
+							"This value is only available during resource creation and update, and is **not** stored in Terraform state. " +
+							"To update the token, increment the `token_wo_version` attribute. " +
+							"Required when `method` is set to `bearer` and `token` is not provided.",
+					},
+					"token_wo_version": {
+						Type:        schema.TypeInt,
 						Optional:    true,
-						Sensitive:   true,
-						Description: "The token used for `bearer` authentication. Required when `method` is set to `bearer`.",
+						Default:     1,
+						Description: "Version number for token changes. Increment this value to trigger a token update when using `token_wo`.",
 					},
 				},
 			},

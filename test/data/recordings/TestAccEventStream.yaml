@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.25.0
+                - Go-Auth0/1.32.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams
         method: POST
       response:
@@ -28,15 +28,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 478
+        content_length: 512
         uncompressed: false
-        body: '{"id":"est_qNHnmDeNTVjKTEoBM4qQvw","status":"enabled","name":"TestAccEventStream-my-eventbridge","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:31.882Z","updated_at":"2025-07-23T08:59:31.882Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-b8928c78-1db0-4e70-9c06-c84a3eb1ed37/auth0.events"}}}'
+        body: '{"id":"est_2WY5jfL2LmN8c1jWSpP3vA","status":"enabled","name":"TestAccEventStream-my-eventbridge","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:20.554Z","updated_at":"2025-12-20T20:00:20.554Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-e930e253-311c-43e3-bf87-bd08e9d42d48/auth0.events"}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 1.311427125s
+        duration: 1.132717167s
     - id: 1
       request:
         proto: HTTP/1.1
@@ -52,8 +52,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_qNHnmDeNTVjKTEoBM4qQvw
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_2WY5jfL2LmN8c1jWSpP3vA
         method: GET
       response:
         proto: HTTP/2.0
@@ -63,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_qNHnmDeNTVjKTEoBM4qQvw","status":"enabled","name":"TestAccEventStream-my-eventbridge","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:31.882Z","updated_at":"2025-07-23T08:59:31.882Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-b8928c78-1db0-4e70-9c06-c84a3eb1ed37/auth0.events"}}}'
+        body: '{"id":"est_2WY5jfL2LmN8c1jWSpP3vA","status":"enabled","name":"TestAccEventStream-my-eventbridge","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:20.554Z","updated_at":"2025-12-20T20:00:20.554Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-e930e253-311c-43e3-bf87-bd08e9d42d48/auth0.events"}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 360.771958ms
+        duration: 434.21575ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -85,8 +85,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_qNHnmDeNTVjKTEoBM4qQvw
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_2WY5jfL2LmN8c1jWSpP3vA
         method: GET
       response:
         proto: HTTP/2.0
@@ -96,13 +96,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_qNHnmDeNTVjKTEoBM4qQvw","status":"enabled","name":"TestAccEventStream-my-eventbridge","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:31.882Z","updated_at":"2025-07-23T08:59:31.882Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-b8928c78-1db0-4e70-9c06-c84a3eb1ed37/auth0.events"}}}'
+        body: '{"id":"est_2WY5jfL2LmN8c1jWSpP3vA","status":"enabled","name":"TestAccEventStream-my-eventbridge","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:20.554Z","updated_at":"2025-12-20T20:00:20.554Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-e930e253-311c-43e3-bf87-bd08e9d42d48/auth0.events"}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 370.305834ms
+        duration: 327.039833ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -118,8 +118,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_qNHnmDeNTVjKTEoBM4qQvw
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_2WY5jfL2LmN8c1jWSpP3vA
         method: GET
       response:
         proto: HTTP/2.0
@@ -129,13 +129,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_qNHnmDeNTVjKTEoBM4qQvw","status":"enabled","name":"TestAccEventStream-my-eventbridge","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:31.882Z","updated_at":"2025-07-23T08:59:31.882Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-b8928c78-1db0-4e70-9c06-c84a3eb1ed37/auth0.events"}}}'
+        body: '{"id":"est_2WY5jfL2LmN8c1jWSpP3vA","status":"enabled","name":"TestAccEventStream-my-eventbridge","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:20.554Z","updated_at":"2025-12-20T20:00:20.554Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-e930e253-311c-43e3-bf87-bd08e9d42d48/auth0.events"}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 346.575833ms
+        duration: 349.349125ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -154,8 +154,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_qNHnmDeNTVjKTEoBM4qQvw
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_2WY5jfL2LmN8c1jWSpP3vA
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -165,13 +165,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_qNHnmDeNTVjKTEoBM4qQvw","status":"enabled","name":"TestAccEventStream-my-eventbridge-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:31.882Z","updated_at":"2025-07-23T08:59:35.317Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-b8928c78-1db0-4e70-9c06-c84a3eb1ed37/auth0.events"}}}'
+        body: '{"id":"est_2WY5jfL2LmN8c1jWSpP3vA","status":"enabled","name":"TestAccEventStream-my-eventbridge-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:20.554Z","updated_at":"2025-12-20T20:00:24.424Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-e930e253-311c-43e3-bf87-bd08e9d42d48/auth0.events"}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 380.718416ms
+        duration: 468.17475ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -187,8 +187,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_qNHnmDeNTVjKTEoBM4qQvw
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_2WY5jfL2LmN8c1jWSpP3vA
         method: GET
       response:
         proto: HTTP/2.0
@@ -198,13 +198,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_qNHnmDeNTVjKTEoBM4qQvw","status":"enabled","name":"TestAccEventStream-my-eventbridge-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:31.882Z","updated_at":"2025-07-23T08:59:35.317Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-b8928c78-1db0-4e70-9c06-c84a3eb1ed37/auth0.events"}}}'
+        body: '{"id":"est_2WY5jfL2LmN8c1jWSpP3vA","status":"enabled","name":"TestAccEventStream-my-eventbridge-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:20.554Z","updated_at":"2025-12-20T20:00:24.424Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-e930e253-311c-43e3-bf87-bd08e9d42d48/auth0.events"}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 356.900042ms
+        duration: 350.07175ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -220,8 +220,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_qNHnmDeNTVjKTEoBM4qQvw
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_2WY5jfL2LmN8c1jWSpP3vA
         method: GET
       response:
         proto: HTTP/2.0
@@ -231,13 +231,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_qNHnmDeNTVjKTEoBM4qQvw","status":"enabled","name":"TestAccEventStream-my-eventbridge-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:31.882Z","updated_at":"2025-07-23T08:59:35.317Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-b8928c78-1db0-4e70-9c06-c84a3eb1ed37/auth0.events"}}}'
+        body: '{"id":"est_2WY5jfL2LmN8c1jWSpP3vA","status":"enabled","name":"TestAccEventStream-my-eventbridge-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:20.554Z","updated_at":"2025-12-20T20:00:24.424Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-e930e253-311c-43e3-bf87-bd08e9d42d48/auth0.events"}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 402.092291ms
+        duration: 346.289375ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -253,8 +253,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_qNHnmDeNTVjKTEoBM4qQvw
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_2WY5jfL2LmN8c1jWSpP3vA
         method: GET
       response:
         proto: HTTP/2.0
@@ -264,14 +264,47 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_qNHnmDeNTVjKTEoBM4qQvw","status":"enabled","name":"TestAccEventStream-my-eventbridge-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:31.882Z","updated_at":"2025-07-23T08:59:35.317Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-b8928c78-1db0-4e70-9c06-c84a3eb1ed37/auth0.events"}}}'
+        body: '{"id":"est_2WY5jfL2LmN8c1jWSpP3vA","status":"enabled","name":"TestAccEventStream-my-eventbridge-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:20.554Z","updated_at":"2025-12-20T20:00:24.424Z","destination":{"type":"eventbridge","configuration":{"aws_region":"us-east-1","aws_account_id":"242849305777","aws_partner_event_source":"aws.partner/auth0.com/terraform-provider-auth0-dev-e930e253-311c-43e3-bf87-bd08e9d42d48/auth0.events"}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 349.422958ms
+        duration: 435.551291ms
     - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_2WY5jfL2LmN8c1jWSpP3vA
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 372.86975ms
+    - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -289,7 +322,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.25.0
+                - Go-Auth0/1.32.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams
         method: POST
       response:
@@ -300,46 +333,13 @@ interactions:
         trailer: {}
         content_length: 407
         uncompressed: false
-        body: '{"id":"est_gEZtx6H1tvFEsw84Mba6eF","status":"enabled","name":"TestAccEventStream-my-webhook","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:38.969Z","updated_at":"2025-07-23T08:59:38.969Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://eof28wtn4v4506o.m.pipedream.net","webhook_authorization":{"method":"bearer"}}}}'
+        body: '{"id":"est_oSaBTLwLXxvTK5o2xw4TZR","status":"enabled","name":"TestAccEventStream-my-webhook","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:27.634Z","updated_at":"2025-12-20T20:00:27.634Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://eof28wtn4v4506o.m.pipedream.net","webhook_authorization":{"method":"bearer"}}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 339.0405ms
-    - id: 9
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_qNHnmDeNTVjKTEoBM4qQvw
-        method: DELETE
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 369.74ms
+        duration: 411.566667ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -355,8 +355,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_gEZtx6H1tvFEsw84Mba6eF
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_oSaBTLwLXxvTK5o2xw4TZR
         method: GET
       response:
         proto: HTTP/2.0
@@ -366,13 +366,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_gEZtx6H1tvFEsw84Mba6eF","status":"enabled","name":"TestAccEventStream-my-webhook","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:38.969Z","updated_at":"2025-07-23T08:59:38.969Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://eof28wtn4v4506o.m.pipedream.net","webhook_authorization":{"method":"bearer"}}}}'
+        body: '{"id":"est_oSaBTLwLXxvTK5o2xw4TZR","status":"enabled","name":"TestAccEventStream-my-webhook","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:27.634Z","updated_at":"2025-12-20T20:00:27.634Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://eof28wtn4v4506o.m.pipedream.net","webhook_authorization":{"method":"bearer"}}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 394.809542ms
+        duration: 361.104834ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -388,8 +388,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_gEZtx6H1tvFEsw84Mba6eF
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_oSaBTLwLXxvTK5o2xw4TZR
         method: GET
       response:
         proto: HTTP/2.0
@@ -399,13 +399,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_gEZtx6H1tvFEsw84Mba6eF","status":"enabled","name":"TestAccEventStream-my-webhook","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:38.969Z","updated_at":"2025-07-23T08:59:38.969Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://eof28wtn4v4506o.m.pipedream.net","webhook_authorization":{"method":"bearer"}}}}'
+        body: '{"id":"est_oSaBTLwLXxvTK5o2xw4TZR","status":"enabled","name":"TestAccEventStream-my-webhook","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:27.634Z","updated_at":"2025-12-20T20:00:27.634Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://eof28wtn4v4506o.m.pipedream.net","webhook_authorization":{"method":"bearer"}}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 357.283666ms
+        duration: 370.025459ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -421,8 +421,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_gEZtx6H1tvFEsw84Mba6eF
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_oSaBTLwLXxvTK5o2xw4TZR
         method: GET
       response:
         proto: HTTP/2.0
@@ -432,13 +432,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_gEZtx6H1tvFEsw84Mba6eF","status":"enabled","name":"TestAccEventStream-my-webhook","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:38.969Z","updated_at":"2025-07-23T08:59:38.969Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://eof28wtn4v4506o.m.pipedream.net","webhook_authorization":{"method":"bearer"}}}}'
+        body: '{"id":"est_oSaBTLwLXxvTK5o2xw4TZR","status":"enabled","name":"TestAccEventStream-my-webhook","subscriptions":[{"event_type":"user.created"},{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:27.634Z","updated_at":"2025-12-20T20:00:27.634Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://eof28wtn4v4506o.m.pipedream.net","webhook_authorization":{"method":"bearer"}}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 397.447083ms
+        duration: 336.462375ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -457,8 +457,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_gEZtx6H1tvFEsw84Mba6eF
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_oSaBTLwLXxvTK5o2xw4TZR
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -468,13 +468,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_gEZtx6H1tvFEsw84Mba6eF","status":"enabled","name":"TestAccEventStream-my-webhook-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:38.969Z","updated_at":"2025-07-23T08:59:42.422Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://webhook.site/updated-endpoint","webhook_authorization":{"method":"basic","username":"admin"}}}}'
+        body: '{"id":"est_oSaBTLwLXxvTK5o2xw4TZR","status":"enabled","name":"TestAccEventStream-my-webhook-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:27.634Z","updated_at":"2025-12-20T20:00:31.111Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://webhook.site/updated-endpoint","webhook_authorization":{"method":"basic","username":"admin"}}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 331.995292ms
+        duration: 406.345416ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -490,8 +490,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_gEZtx6H1tvFEsw84Mba6eF
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_oSaBTLwLXxvTK5o2xw4TZR
         method: GET
       response:
         proto: HTTP/2.0
@@ -501,13 +501,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_gEZtx6H1tvFEsw84Mba6eF","status":"enabled","name":"TestAccEventStream-my-webhook-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:38.969Z","updated_at":"2025-07-23T08:59:42.422Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://webhook.site/updated-endpoint","webhook_authorization":{"method":"basic","username":"admin"}}}}'
+        body: '{"id":"est_oSaBTLwLXxvTK5o2xw4TZR","status":"enabled","name":"TestAccEventStream-my-webhook-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:27.634Z","updated_at":"2025-12-20T20:00:31.111Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://webhook.site/updated-endpoint","webhook_authorization":{"method":"basic","username":"admin"}}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 352.56675ms
+        duration: 408.846083ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -523,8 +523,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_gEZtx6H1tvFEsw84Mba6eF
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_oSaBTLwLXxvTK5o2xw4TZR
         method: GET
       response:
         proto: HTTP/2.0
@@ -534,13 +534,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"est_gEZtx6H1tvFEsw84Mba6eF","status":"enabled","name":"TestAccEventStream-my-webhook-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-07-23T08:59:38.969Z","updated_at":"2025-07-23T08:59:42.422Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://webhook.site/updated-endpoint","webhook_authorization":{"method":"basic","username":"admin"}}}}'
+        body: '{"id":"est_oSaBTLwLXxvTK5o2xw4TZR","status":"enabled","name":"TestAccEventStream-my-webhook-updated","subscriptions":[{"event_type":"user.updated"}],"created_at":"2025-12-20T20:00:27.634Z","updated_at":"2025-12-20T20:00:31.111Z","destination":{"type":"webhook","configuration":{"webhook_endpoint":"https://webhook.site/updated-endpoint","webhook_authorization":{"method":"basic","username":"admin"}}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 343.148833ms
+        duration: 346.461125ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -556,8 +556,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.25.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_gEZtx6H1tvFEsw84Mba6eF
+                - Go-Auth0/1.32.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/event-streams/est_oSaBTLwLXxvTK5o2xw4TZR
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -573,4 +573,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 387.282334ms
+        duration: 354.410833ms

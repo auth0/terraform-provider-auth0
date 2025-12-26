@@ -31,3 +31,30 @@ resource "auth0_event_stream" "my_event_stream_webhook" {
     }
   }
 }
+
+# Creates an event stream with write-only token (recommended for security)
+# The token can be passed via variable or ephemeral resource
+variable "webhook_token" {
+  description = "The webhook token"
+  type        = string
+  sensitive   = true
+}
+
+resource "auth0_event_stream" "my_event_stream_webhook_secure" {
+  name             = "my-webhook-secure"
+  destination_type = "webhook"
+  subscriptions = [
+    "user.created",
+    "user.updated"
+  ]
+
+  webhook_configuration {
+    webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
+
+    webhook_authorization {
+      method           = "bearer"
+      token_wo         = var.webhook_token
+      token_wo_version = 1
+    }
+  }
+}

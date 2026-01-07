@@ -1062,8 +1062,13 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		sessionTransfer.AllowedAuthenticationMethods = value.Strings(config.GetAttr("allowed_authentication_methods"))
 		sessionTransfer.EnforceDeviceBinding = value.String(config.GetAttr("enforce_device_binding"))
 		sessionTransfer.AllowRefreshToken = value.Bool(config.GetAttr("allow_refresh_token"))
-		sessionTransfer.EnforceOnlineRefreshTokens = value.Bool(config.GetAttr("enforce_online_refresh_tokens"))
-		sessionTransfer.EnforceCascadeRevocation = value.Bool(config.GetAttr("enforce_cascade_revocation"))
+
+		enforceOnlineRefreshTokens := data.Get("session_transfer.0.enforce_online_refresh_tokens").(bool)
+		sessionTransfer.EnforceOnlineRefreshTokens = auth0.Bool(enforceOnlineRefreshTokens)
+
+		enforceCascadeRevocation := data.Get("session_transfer.0.enforce_cascade_revocation").(bool)
+		sessionTransfer.EnforceCascadeRevocation = auth0.Bool(enforceCascadeRevocation)
+
 		return stop
 	})
 

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
@@ -61,8 +62,7 @@ func getRenderingItemSchema() map[string]*schema.Schema {
 }
 
 func createPromptRenderings(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	id := generateBulkRenderingsID(data)
-	data.SetId(id)
+	data.SetId("prompt-renderings-bulk-" + id.UniqueId())
 	return updatePromptRenderings(ctx, data, meta)
 }
 
@@ -150,11 +150,4 @@ func deletePromptRenderings(ctx context.Context, data *schema.ResourceData, meta
 	}
 
 	return nil
-}
-
-func generateBulkRenderingsID(_ *schema.ResourceData) string {
-	// Use a static ID for bulk renderings resource since the ID should remain
-	// consistent regardless of which prompt/screen combinations are included.
-	// This allows users to add/remove renderings without forcing resource recreation.
-	return "prompt-renderings-bulk"
 }

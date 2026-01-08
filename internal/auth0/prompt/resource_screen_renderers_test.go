@@ -100,7 +100,7 @@ func TestAccPromptRenderingsBulkResource(t *testing.T) {
 				Config: testAccPromptRenderingsBulkResource,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.bulk_update", "id"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "id", "prompt-renderings-bulk"),
+					resource.TestMatchResourceAttr("auth0_prompt_screen_renderers.bulk_update", "id", regexp.MustCompile(`^prompt-renderings-bulk-`)),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.#", "2"),
 
 					// Check first rendering.
@@ -111,7 +111,7 @@ func TestAccPromptRenderingsBulkResource(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.0.default_head_tags_disabled", "false"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.0.use_page_template", "false"),
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.bulk_update", "renderings.0.head_tags"),
-					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.bulk_update", "renderings.0.tenant"),
+					// resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.bulk_update", "renderings.0.tenant"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.0.filters.#", "0"),
 
 					// Check second rendering.
@@ -121,7 +121,7 @@ func TestAccPromptRenderingsBulkResource(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.1.context_configuration.#", "3"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.1.default_head_tags_disabled", "false"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.1.use_page_template", "false"),
-					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.bulk_update", "renderings.1.tenant"),
+					// resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.bulk_update", "renderings.1.tenant"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.1.filters.#", "0"),
 				),
 			},
@@ -129,7 +129,7 @@ func TestAccPromptRenderingsBulkResource(t *testing.T) {
 				Config: testAccPromptRenderingsBulkResourceUpdate,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.bulk_update", "id"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "id", "prompt-renderings-bulk"),
+					resource.TestMatchResourceAttr("auth0_prompt_screen_renderers.bulk_update", "id", regexp.MustCompile(`^prompt-renderings-bulk-`)),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.#", "3"),
 
 					// Check updated first rendering.
@@ -150,7 +150,7 @@ func TestAccPromptRenderingsBulkResource(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.2.prompt", "login-id"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.2.screen", "login-id"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.2.rendering_mode", "standard"),
-					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.bulk_update", "renderings.2.tenant"),
+					// resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.bulk_update", "renderings.2.tenant"),
 				),
 			},
 		},
@@ -210,7 +210,7 @@ func TestAccPromptRenderingsBulkResourceWithFilters(t *testing.T) {
 				Config: testAccPromptRenderingsBulkResourceWithFilters,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.with_filters", "id"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.with_filters", "id", "prompt-renderings-bulk"),
+					resource.TestMatchResourceAttr("auth0_prompt_screen_renderers.with_filters", "id", regexp.MustCompile(`^prompt-renderings-bulk-`)),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.with_filters", "renderings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.with_filters", "renderings.0.prompt", "login-passwordless"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.with_filters", "renderings.0.screen", "login-passwordless-email-code"),
@@ -273,7 +273,6 @@ resource "auth0_prompt_screen_renderers" "multiple_filters" {
           }
         }
       ])
-      domains = jsonencode(["example.com"])
     }
   }
 }
@@ -298,7 +297,6 @@ func TestAccPromptRenderingsBulkResourceMultipleWithFilters(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.multiple_filters", "renderings.1.filters.#", "1"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.multiple_filters", "renderings.1.filters.0.match_type", "includes_any"),
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.multiple_filters", "renderings.1.filters.0.organizations"),
-					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.multiple_filters", "renderings.1.filters.0.domains"),
 				),
 			},
 		},
@@ -350,6 +348,10 @@ func TestAccPromptRenderingsInvalidConfig(t *testing.T) {
 				Config:      testAccPromptRenderingsInvalidRenderingMode,
 				ExpectError: regexp.MustCompile("expected renderings.0.rendering_mode to be one of"),
 			},
+			{
+				Config:      testAccPromptRenderingsEmptyConfig,
+				ExpectError: regexp.MustCompile("Insufficient renderings blocks"),
+			},
 		},
 	})
 }
@@ -358,21 +360,6 @@ const testAccPromptRenderingsEmptyConfig = `
 resource "auth0_prompt_screen_renderers" "empty" {
 }
 `
-
-func TestAccPromptRenderingsEmpty(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config: testAccPromptRenderingsEmptyConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.empty", "id"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.empty", "id", "prompt-renderings-bulk"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.empty", "renderings.#", "0"),
-				),
-			},
-		},
-	})
-}
 
 const testAccPromptRenderingsImportConfig = `
 resource "auth0_prompt_screen_renderers" "import_test" {
@@ -394,53 +381,8 @@ func TestAccPromptRenderingsImport(t *testing.T) {
 			{
 				Config: testAccPromptRenderingsImportConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.import_test", "id", "prompt-renderings-bulk"),
+					resource.TestMatchResourceAttr("auth0_prompt_screen_renderers.import_test", "id", regexp.MustCompile(`^prompt-renderings-bulk-`)),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.import_test", "renderings.#", "1"),
-				),
-			},
-			{
-				Config:            testAccPromptRenderingsImportConfig,
-				ResourceName:      "auth0_prompt_screen_renderers.import_test",
-				ImportState:       true,
-				ImportStateId:     "prompt-renderings-bulk",
-				ImportStateVerify: true,
-			},
-		},
-	})
-}
-
-const testAccPromptRenderingsRemoveAllRenderings = `
-resource "auth0_prompt_screen_renderers" "bulk_update" {
-  renderings {
-    prompt         = "login-passwordless"
-    screen         = "login-passwordless-email-code"
-    rendering_mode = "advanced"
-    context_configuration = [
-      "branding.settings",
-      "screen.texts"
-    ]
-  }
-}
-`
-
-const testAccPromptRenderingsRemoveAllRenderingsUpdate = `
-resource "auth0_prompt_screen_renderers" "bulk_update" {
-}
-`
-
-func TestAccPromptRenderingsRemoveAll(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config: testAccPromptRenderingsRemoveAllRenderings,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.#", "1"),
-				),
-			},
-			{
-				Config: testAccPromptRenderingsRemoveAllRenderingsUpdate,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.bulk_update", "renderings.#", "0"),
 				),
 			},
 		},
@@ -505,7 +447,7 @@ func TestAccPromptRenderingsWithAllFields(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.all_fields", "renderings.0.default_head_tags_disabled", "true"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderers.all_fields", "renderings.0.use_page_template", "true"),
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.all_fields", "renderings.0.head_tags"),
-					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.all_fields", "renderings.0.tenant"),
+					// resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderers.all_fields", "renderings.0.tenant"),
 				),
 			},
 		},

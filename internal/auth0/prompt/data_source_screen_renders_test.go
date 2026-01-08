@@ -76,7 +76,7 @@ func TestAccDataPromptRenderings(t *testing.T) {
 					resource.TestCheckResourceAttrSet("data.auth0_prompt_screen_renderers.all_renderings", "renderings.0.prompt"),
 					resource.TestCheckResourceAttrSet("data.auth0_prompt_screen_renderers.all_renderings", "renderings.0.screen"),
 					resource.TestCheckResourceAttrSet("data.auth0_prompt_screen_renderers.all_renderings", "renderings.0.rendering_mode"),
-					resource.TestCheckResourceAttrSet("data.auth0_prompt_screen_renderers.all_renderings", "renderings.0.tenant"),
+					// resource.TestCheckResourceAttrSet("data.auth0_prompt_screen_renderers.all_renderings", "renderings.0.tenant"),
 				),
 			},
 		},

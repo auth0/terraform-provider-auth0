@@ -59,7 +59,7 @@ resource "auth0_prompt_renderings" "bulk_config" {
 }
 
 # Bulk configuration with filters for specific clients and organizations
-resource "auth0_prompt_renderings\" \"filtered_bulk\" {
+resource "auth0_prompt_renderings" "filtered_bulk" {
   renderings {
     prompt         = "login-passwordless"
     screen         = "login-passwordless-email-code"
@@ -93,7 +93,7 @@ resource "auth0_prompt_renderings\" \"filtered_bulk\" {
 }
 
 # Minimal configuration with defaults
-resource "auth0_prompt_renderings\" \"minimal\" {
+resource "auth0_prompt_renderings" "minimal" {
   renderings {
     prompt = "login-id"
     screen = "login-id"

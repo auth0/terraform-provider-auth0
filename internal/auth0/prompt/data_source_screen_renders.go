@@ -5,6 +5,7 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
@@ -74,8 +75,8 @@ func readPromptRenderingsDataSource(ctx context.Context, data *schema.ResourceDa
 		return diag.FromErr(err)
 	}
 
-	// Use a constant ID for data source - the actual data is in the renderings attribute.
-	data.SetId("prompt-renderings")
+	// Generate a unique ID for the data source.
+	data.SetId("prompt-renderings-bulk-" + id.UniqueId())
 
 	if err := flattenPromptRenderingsList(data, renderingList); err != nil {
 		return diag.FromErr(err)

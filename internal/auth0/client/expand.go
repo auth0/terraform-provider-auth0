@@ -1090,7 +1090,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		},
 		"token_quota": commons.IsTokenQuotaNull,
 		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
-		"organization_discovery_methods": isOrganizationDiscoveryMethodsNull,
+		"organization_discovery_methods":                       isOrganizationDiscoveryMethodsNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1198,27 +1198,14 @@ func isSkipNonVerifiableCallbackURIConfirmationPromptNull(data *schema.ResourceD
 	if !data.IsNewResource() && !data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") {
 		return false
 	}
-
-	rawConfig := data.GetRawConfig()
-	if rawConfig.IsNull() {
-		return true
-	}
-
-	return rawConfig.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
 }
 
 func isOrganizationDiscoveryMethodsNull(data *schema.ResourceData) bool {
 	if !data.IsNewResource() && !data.HasChange("organization_discovery_methods") {
 		return false
 	}
-
-	rawConfig := data.GetRawConfig()
-	if rawConfig.IsNull() {
-		return true
-	}
-
-	attr := rawConfig.GetAttr("organization_discovery_methods")
-	return attr.IsNull()
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("organization_discovery_methods").IsNull()
 }
 
 func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressConfiguration {

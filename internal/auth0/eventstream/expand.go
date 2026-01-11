@@ -44,46 +44,52 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 
 	switch destType {
 	case "webhook":
-		webhookCfgList, ok := data.Get("webhook_configuration").([]interface{})
-		if ok && len(webhookCfgList) > 0 {
-			webhookCfg := webhookCfgList[0].(map[string]interface{})
-
-			if endpoint, ok := webhookCfg["webhook_endpoint"].(string); ok && endpoint != "" {
-				configMap["webhook_endpoint"] = endpoint
-			}
-
-			if authList, ok := webhookCfg["webhook_authorization"].([]interface{}); ok && len(authList) > 0 {
-				auth := authList[0].(map[string]interface{})
-				method := auth["method"].(string)
-
-				authMap := map[string]interface{}{
-					"method": method,
-				}
-
-				if method == "basic" {
-					if v, ok := auth["username"].(string); ok {
-						authMap["username"] = v
+		rawConfig := data.GetRawConfig()
+		if !rawConfig.IsNull() {
+			webhookConfigRaw := rawConfig.GetAttr("webhook_configuration")
+			if !webhookConfigRaw.IsNull() && webhookConfigRaw.LengthInt() > 0 {
+				webhookConfigRaw.ForEachElement(func(_ cty.Value, webhookCfgRaw cty.Value) (stop bool) {
+					// Webhook_endpoint.
+					endpointRaw := webhookCfgRaw.GetAttr("webhook_endpoint")
+					if !endpointRaw.IsNull() && endpointRaw.AsString() != "" {
+						configMap["webhook_endpoint"] = endpointRaw.AsString()
 					}
-					if v, ok := auth["password"].(string); ok {
-						authMap["password"] = v
-					}
-				} else if method == "bearer" {
-					// Prefer token_wo (write-only) over token for better security.
-					if tokenWO := getTokenWO(data); tokenWO != "" {
-						// For new resources, always use token_wo if provided.
-						// For updates, only use token_wo if version changed (to trigger update).
-						if data.IsNewResource() || hasTokenWOVersionChanged(data) {
-							authMap["token"] = tokenWO
-						}
-						// If version didn't change, and it's an update, don't include token.
-						// To avoid accidentally clearing it (since we can't read it back).
-					} else if v, ok := auth["token"].(string); ok && v != "" {
-						// Fall back to regular token for backward compatibility.
-						authMap["token"] = v
-					}
-				}
 
-				configMap["webhook_authorization"] = authMap
+					// Webhook_authorization.
+					authRaw := webhookCfgRaw.GetAttr("webhook_authorization")
+					if !authRaw.IsNull() && authRaw.LengthInt() > 0 {
+						authRaw.ForEachElement(func(_ cty.Value, authCfgRaw cty.Value) (stop bool) {
+							methodRaw := authCfgRaw.GetAttr("method")
+							method := methodRaw.AsString()
+							authMap := map[string]interface{}{
+								"method": method,
+							}
+
+							if method == "basic" {
+								if username := getString(authCfgRaw.GetAttr("username")); username != "" {
+									authMap["username"] = username
+								}
+								passwordWO := getString(authCfgRaw.GetAttr("password_wo"))
+								if passwordWO != "" && (data.IsNewResource() || hasPasswordWOVersionChanged(data)) {
+									authMap["password"] = passwordWO
+								} else if password := getString(authCfgRaw.GetAttr("password")); password != "" {
+									authMap["password"] = password
+								}
+							} else if method == "bearer" {
+								// Prefer token_wo if set.
+								tokenWO := getString(authCfgRaw.GetAttr("token_wo"))
+								if tokenWO != "" && (data.IsNewResource() || hasTokenWOVersionChanged(data)) {
+									authMap["token"] = tokenWO
+								} else if token := getString(authCfgRaw.GetAttr("token")); token != "" {
+									authMap["token"] = token
+								}
+							}
+							configMap["webhook_authorization"] = authMap
+							return true // Only process the first auth element.
+						})
+					}
+					return true // Only process the first webhook config element.
+				})
 			}
 		}
 
@@ -112,36 +118,16 @@ func hasTokenWOVersionChanged(data *schema.ResourceData) bool {
 	return data.HasChange("webhook_configuration.0.webhook_authorization.0.token_wo_version")
 }
 
-// getTokenWO retrieves the token_wo value from the resource data's raw config.
-// Returns an empty string if not set.
-// This is necessary because token_wo is write-only and not stored in state,
-// and can only be retrieved from the raw config.
-func getTokenWO(data *schema.ResourceData) string {
-	rawConfig := data.GetRawConfig()
-	if rawConfig.IsNull() {
-		return ""
+// hasPasswordWOVersionChanged checks if the password_wo_version attribute has changed.
+// This is used to determine if we need to update the password during resource updates.
+func hasPasswordWOVersionChanged(data *schema.ResourceData) bool {
+	return data.HasChange("webhook_configuration.0.webhook_authorization.0.password_wo_version")
+}
+
+// getStringIfNotNull returns the string value of a cty.Value if it is not null, otherwise returns an empty string.
+func getString(val cty.Value) string {
+	if !val.IsNull() {
+		return val.AsString()
 	}
-
-	webhookConfigRaw := rawConfig.GetAttr("webhook_configuration")
-	if webhookConfigRaw.IsNull() || webhookConfigRaw.LengthInt() == 0 {
-		return ""
-	}
-
-	var tokenWOStr string
-	webhookConfigRaw.ForEachElement(func(_ cty.Value, webHookCfgRaw cty.Value) (stop bool) {
-		authRaw := webHookCfgRaw.GetAttr("webhook_authorization")
-		if !authRaw.IsNull() && authRaw.LengthInt() > 0 {
-			authRaw.ForEachElement(func(_ cty.Value, authCfgRaw cty.Value) (stop bool) {
-				tokenWO := authCfgRaw.GetAttr("token_wo")
-				if !tokenWO.IsNull() {
-					tokenWOStr = tokenWO.AsString()
-				}
-				return true // Stop after first.
-			})
-			return true // Stop after first.
-		}
-		return false
-	})
-
-	return tokenWOStr
+	return ""
 }

@@ -86,6 +86,11 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 				if p := data.Get("webhook_configuration.0.webhook_authorization.0.password"); p != nil {
 					authMap["password"] = p
 				}
+				// The password_wo is write-only and should NOT be read from API or stored in state.
+				// Instead, we only preserve the version from config.
+				if version := data.Get("webhook_configuration.0.webhook_authorization.0.password_wo_version"); version != nil {
+					authMap["password_wo_version"] = version
+				}
 				// Explicitly set token_wo_version to 0 for basic auth to avoid state drift.
 				authMap["token_wo_version"] = 0
 			} else if auth["method"] == "bearer" {

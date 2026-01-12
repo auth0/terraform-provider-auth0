@@ -1062,8 +1062,13 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		sessionTransfer.AllowedAuthenticationMethods = value.Strings(config.GetAttr("allowed_authentication_methods"))
 		sessionTransfer.EnforceDeviceBinding = value.String(config.GetAttr("enforce_device_binding"))
 		sessionTransfer.AllowRefreshToken = value.Bool(config.GetAttr("allow_refresh_token"))
-		sessionTransfer.EnforceOnlineRefreshTokens = value.Bool(config.GetAttr("enforce_online_refresh_tokens"))
-		sessionTransfer.EnforceCascadeRevocation = value.Bool(config.GetAttr("enforce_cascade_revocation"))
+
+		enforceOnlineRefreshTokens := data.Get("session_transfer.0.enforce_online_refresh_tokens").(bool)
+		sessionTransfer.EnforceOnlineRefreshTokens = auth0.Bool(enforceOnlineRefreshTokens)
+
+		enforceCascadeRevocation := data.Get("session_transfer.0.enforce_cascade_revocation").(bool)
+		sessionTransfer.EnforceCascadeRevocation = auth0.Bool(enforceCascadeRevocation)
+
 		return stop
 	})
 
@@ -1085,6 +1090,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		},
 		"token_quota": commons.IsTokenQuotaNull,
 		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
+		"organization_discovery_methods":                       isOrganizationDiscoveryMethodsNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1192,13 +1198,14 @@ func isSkipNonVerifiableCallbackURIConfirmationPromptNull(data *schema.ResourceD
 	if !data.IsNewResource() && !data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") {
 		return false
 	}
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
+}
 
-	rawConfig := data.GetRawConfig()
-	if rawConfig.IsNull() {
-		return true
+func isOrganizationDiscoveryMethodsNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("organization_discovery_methods") {
+		return false
 	}
-
-	return rawConfig.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("organization_discovery_methods").IsNull()
 }
 
 func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressConfiguration {

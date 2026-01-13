@@ -46,6 +46,24 @@ var webhookConfig = &schema.Resource{
 						Sensitive:   true,
 						Description: "The password for `basic` authentication. Required when `method` is set to `basic`.",
 					},
+					"password_wo": {
+						Type:          schema.TypeString,
+						Optional:      true,
+						WriteOnly:     true,
+						Sensitive:     true,
+						ConflictsWith: []string{"webhook_configuration.0.webhook_authorization.0.password"},
+						RequiredWith:  []string{"webhook_configuration.0.webhook_authorization.0.password_wo_version"},
+						Description: "The password for `basic` authentication (write-only). " +
+							"This value is only available during resource creation and update, and is **not** stored in Terraform state. " +
+							"To update the password, increment the `password_wo_version` attribute. " +
+							"Required when `method` is set to `basic` and `password` is not provided.",
+					},
+					"password_wo_version": {
+						Type:         schema.TypeInt,
+						Optional:     true,
+						Description:  "Version number for password changes. Increment this value to trigger a password update when using `password_wo`.",
+						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.password_wo"},
+					},
 					"token": {
 						Type:          schema.TypeString,
 						Optional:      true,
@@ -70,24 +88,6 @@ var webhookConfig = &schema.Resource{
 						Optional:     true,
 						Description:  "Version number for token changes. Increment this value to trigger a token update when using `token_wo`.",
 						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.token_wo"},
-					},
-					"password_wo": {
-						Type:          schema.TypeString,
-						Optional:      true,
-						WriteOnly:     true,
-						Sensitive:     true,
-						ConflictsWith: []string{"webhook_configuration.0.webhook_authorization.0.password"},
-						RequiredWith:  []string{"webhook_configuration.0.webhook_authorization.0.password_wo_version"},
-						Description: "The password for `basic` authentication (write-only). " +
-							"This value is only available during resource creation and update, and is **not** stored in Terraform state. " +
-							"To update the password, increment the `password_wo_version` attribute. " +
-							"Required when `method` is set to `basic` and `password` is not provided.",
-					},
-					"password_wo_version": {
-						Type:         schema.TypeInt,
-						Optional:     true,
-						Description:  "Version number for password changes. Increment this value to trigger a password update when using `password_wo`.",
-						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.password_wo"},
 					},
 				},
 			},

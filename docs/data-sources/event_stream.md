@@ -60,6 +60,8 @@ Read-Only:
 
 - `method` (String)
 - `password` (String)
+- `password_wo` (String)
+- `password_wo_version` (Number)
 - `token` (String)
 - `token_wo` (String)
 - `token_wo_version` (Number)

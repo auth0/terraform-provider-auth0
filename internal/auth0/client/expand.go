@@ -176,6 +176,7 @@ func expandOIDCLogout(data *schema.ResourceData) *management.OIDCLogout {
 	oidcLogoutConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		oidcLogout.BackChannelLogoutURLs = value.Strings(config.GetAttr("backchannel_logout_urls"))
 		oidcLogout.BackChannelLogoutInitiators = expandBackChannelLogoutInitiators(config.GetAttr("backchannel_logout_initiators"))
+		oidcLogout.BackChannelLogoutSessionMetadata = expandBackChannelLogoutSessionMetadata(config.GetAttr("backchannel_logout_session_metadata"))
 		return stop
 	})
 
@@ -204,6 +205,25 @@ func expandBackChannelLogoutInitiators(config cty.Value) *management.BackChannel
 	}
 
 	return &initiators
+}
+
+func expandBackChannelLogoutSessionMetadata(config cty.Value) *management.BackChannelLogoutSessionMetadata {
+	if config.IsNull() {
+		return nil
+	}
+
+	var metadata management.BackChannelLogoutSessionMetadata
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		metadata.Include = value.Bool(config.GetAttr("include"))
+		return stop
+	})
+
+	if metadata == (management.BackChannelLogoutSessionMetadata{}) {
+		return nil
+	}
+
+	return &metadata
 }
 
 func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefreshToken {
@@ -1079,9 +1099,10 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 	type nullCheckFunc func(*schema.ResourceData) bool
 
 	checks := map[string]nullCheckFunc{
-		"default_organization": isDefaultOrgNull,
-		"session_transfer":     isSessionTransferNull,
-		"cross_origin_loc":     isCrossOriginLocNull,
+		"default_organization":    isDefaultOrgNull,
+		"session_transfer":        isSessionTransferNull,
+		"oidc_backchannel_logout": isOIDCLogoutNull,
+		"cross_origin_loc":        isCrossOriginLocNull,
 		"encryption_key": func(d *schema.ResourceData) bool {
 			return isEncryptionKeyNull(d) && !d.IsNewResource()
 		},
@@ -1185,6 +1206,65 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 			(!enforceBinding.IsNull() && enforceBinding.AsString() != "") ||
 			(!allowedMethods.IsNull() && allowedMethods.LengthInt() > 0) {
 			empty = false
+		}
+
+		return stop
+	})
+
+	return empty
+}
+
+func isOIDCLogoutNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("oidc_logout") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("oidc_logout")
+
+	// If the oidc_logout block is explicitly set to null.
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	// If the oidc_logout block exists, but all fields inside it are null or not set.
+	empty := true
+	rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		logoutURLs := cfg.GetAttr("backchannel_logout_urls")
+		if !logoutURLs.IsNull() && logoutURLs.LengthInt() > 0 {
+			empty = false
+			return stop
+		}
+
+		// Check backchannel_logout_initiators nested fields
+		initiators := cfg.GetAttr("backchannel_logout_initiators")
+		if !initiators.IsNull() {
+			initiators.ForEachElement(func(_ cty.Value, init cty.Value) (stop bool) {
+				mode := init.GetAttr("mode")
+				selectedInitiators := init.GetAttr("selected_initiators")
+
+				if (!mode.IsNull() && mode.AsString() != "") || (!selectedInitiators.IsNull() && selectedInitiators.LengthInt() > 0) {
+					empty = false
+					return true
+				}
+				return stop
+			})
+		}
+
+		if !empty {
+			return true
+		}
+
+		sessionMetadata := cfg.GetAttr("backchannel_logout_session_metadata")
+		if !sessionMetadata.IsNull() {
+			sessionMetadata.ForEachElement(func(_ cty.Value, meta cty.Value) (stop bool) {
+				include := meta.GetAttr("include")
+
+				if !include.IsNull() {
+					empty = false
+					return true
+				}
+				return stop
+			})
 		}
 
 		return stop

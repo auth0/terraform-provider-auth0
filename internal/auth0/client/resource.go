@@ -1470,6 +1470,21 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"backchannel_logout_session_metadata": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Controls whether session metadata is included in the logout token. Default value is null.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"include": {
+										Type:        schema.TypeBool,
+										Required:    true,
+										Description: "The `include` property determines whether session metadata is included in the logout token.",
+									},
+								},
+							},
+						},
 					},
 				},
 			},

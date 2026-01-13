@@ -45,53 +45,57 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 	switch destType {
 	case "webhook":
 		rawConfig := data.GetRawConfig()
-		if !rawConfig.IsNull() {
-			webhookConfigRaw := rawConfig.GetAttr("webhook_configuration")
-			if !webhookConfigRaw.IsNull() && webhookConfigRaw.LengthInt() > 0 {
-				webhookConfigRaw.ForEachElement(func(_ cty.Value, webhookCfgRaw cty.Value) (stop bool) {
-					// Webhook_endpoint.
-					endpointRaw := webhookCfgRaw.GetAttr("webhook_endpoint")
-					if !endpointRaw.IsNull() && endpointRaw.AsString() != "" {
-						configMap["webhook_endpoint"] = endpointRaw.AsString()
+		if rawConfig.IsNull() {
+			break
+		}
+
+		webhookConfigRaw := rawConfig.GetAttr("webhook_configuration")
+		if webhookConfigRaw.IsNull() || webhookConfigRaw.LengthInt() == 0 {
+			break
+		}
+
+		webhookConfigRaw.ForEachElement(func(_ cty.Value, webhookCfgRaw cty.Value) (stop bool) {
+			// Webhook_endpoint.
+			endpointRaw := webhookCfgRaw.GetAttr("webhook_endpoint")
+			if !endpointRaw.IsNull() && endpointRaw.AsString() != "" {
+				configMap["webhook_endpoint"] = endpointRaw.AsString()
+			}
+
+			// Webhook_authorization.
+			authRaw := webhookCfgRaw.GetAttr("webhook_authorization")
+			if !authRaw.IsNull() && authRaw.LengthInt() > 0 {
+				authRaw.ForEachElement(func(_ cty.Value, authCfgRaw cty.Value) (stop bool) {
+					methodRaw := authCfgRaw.GetAttr("method")
+					method := methodRaw.AsString()
+					authMap := map[string]interface{}{
+						"method": method,
 					}
 
-					// Webhook_authorization.
-					authRaw := webhookCfgRaw.GetAttr("webhook_authorization")
-					if !authRaw.IsNull() && authRaw.LengthInt() > 0 {
-						authRaw.ForEachElement(func(_ cty.Value, authCfgRaw cty.Value) (stop bool) {
-							methodRaw := authCfgRaw.GetAttr("method")
-							method := methodRaw.AsString()
-							authMap := map[string]interface{}{
-								"method": method,
-							}
-
-							if method == "basic" {
-								if username := getString(authCfgRaw.GetAttr("username")); username != "" {
-									authMap["username"] = username
-								}
-								passwordWO := getString(authCfgRaw.GetAttr("password_wo"))
-								if passwordWO != "" && (data.IsNewResource() || hasPasswordWOVersionChanged(data)) {
-									authMap["password"] = passwordWO
-								} else if password := getString(authCfgRaw.GetAttr("password")); password != "" {
-									authMap["password"] = password
-								}
-							} else if method == "bearer" {
-								// Prefer token_wo if set.
-								tokenWO := getString(authCfgRaw.GetAttr("token_wo"))
-								if tokenWO != "" && (data.IsNewResource() || hasTokenWOVersionChanged(data)) {
-									authMap["token"] = tokenWO
-								} else if token := getString(authCfgRaw.GetAttr("token")); token != "" {
-									authMap["token"] = token
-								}
-							}
-							configMap["webhook_authorization"] = authMap
-							return true // Only process the first auth element.
-						})
+					if method == "basic" {
+						if username := getString(authCfgRaw.GetAttr("username")); username != "" {
+							authMap["username"] = username
+						}
+						passwordWO := getString(authCfgRaw.GetAttr("password_wo"))
+						if passwordWO != "" && (data.IsNewResource() || hasPasswordWOVersionChanged(data)) {
+							authMap["password"] = passwordWO
+						} else if password := getString(authCfgRaw.GetAttr("password")); password != "" {
+							authMap["password"] = password
+						}
+					} else if method == "bearer" {
+						// Prefer token_wo if set.
+						tokenWO := getString(authCfgRaw.GetAttr("token_wo"))
+						if tokenWO != "" && (data.IsNewResource() || hasTokenWOVersionChanged(data)) {
+							authMap["token"] = tokenWO
+						} else if token := getString(authCfgRaw.GetAttr("token")); token != "" {
+							authMap["token"] = token
+						}
 					}
-					return true // Only process the first webhook config element.
+					configMap["webhook_authorization"] = authMap
+					return true // Only process the first auth element.
 				})
 			}
-		}
+			return true // Only process the first webhook config element.
+		})
 
 	case "eventbridge":
 		// Skip returning destination configuration for existing EventBridge resources during updates

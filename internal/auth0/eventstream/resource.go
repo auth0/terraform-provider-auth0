@@ -76,6 +76,7 @@ var webhookConfig = &schema.Resource{
 						Type:          schema.TypeString,
 						Optional:      true,
 						WriteOnly:     true,
+						Sensitive:     true,
 						ConflictsWith: []string{"webhook_configuration.0.webhook_authorization.0.token"},
 						RequiredWith:  []string{"webhook_configuration.0.webhook_authorization.0.token_wo_version"},
 						Description: "The token used for `bearer` authentication (write-only). " +

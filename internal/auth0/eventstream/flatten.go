@@ -88,7 +88,7 @@ func flattenWebhookAuthorization(auth map[string]interface{}, data *schema.Resou
 		if password, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.password"); ok && password != "" {
 			authMap["password"] = password
 		}
-		if version, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.password_wo_version"); ok && version != "" {
+		if version, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.password_wo_version"); ok {
 			authMap["password_wo_version"] = version
 		}
 
@@ -97,7 +97,7 @@ func flattenWebhookAuthorization(auth map[string]interface{}, data *schema.Resou
 		if token, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.token"); ok && token != "" {
 			authMap["token"] = token
 		}
-		if version, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.token_wo_version"); ok && version != "" {
+		if version, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.token_wo_version"); ok {
 			authMap["token_wo_version"] = version
 		}
 	}

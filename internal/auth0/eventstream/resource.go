@@ -38,13 +38,21 @@ var webhookConfig = &schema.Resource{
 					"username": {
 						Type:        schema.TypeString,
 						Optional:    true,
-						Description: "The username for `basic` authentication. Required when `method` is set to `basic`.",
+						Description: "The username for `basic` authentication. Required only when `method` is set to `basic`.",
+						ExactlyOneOf: []string{
+							"webhook_configuration.0.webhook_authorization.0.username",
+							"webhook_configuration.0.webhook_authorization.0.token",
+							"webhook_configuration.0.webhook_authorization.0.token_wo",
+						},
 					},
 					"password": {
-						Type:        schema.TypeString,
-						Optional:    true,
-						Sensitive:   true,
-						Description: "The password for `basic` authentication. Required when `method` is set to `basic`.",
+						Type:      schema.TypeString,
+						Optional:  true,
+						Sensitive: true,
+						Description: "The password for `basic` authentication. Required only when `method` is set to `basic`. " +
+							"**Note:** For better security, consider using `password_wo` instead to prevent storing the password in Terraform state.",
+						ConflictsWith: []string{"webhook_configuration.0.webhook_authorization.0.password_wo"},
+						RequiredWith:  []string{"webhook_configuration.0.webhook_authorization.0.username"},
 					},
 					"password_wo": {
 						Type:          schema.TypeString,
@@ -52,16 +60,16 @@ var webhookConfig = &schema.Resource{
 						WriteOnly:     true,
 						Sensitive:     true,
 						ConflictsWith: []string{"webhook_configuration.0.webhook_authorization.0.password"},
-						RequiredWith:  []string{"webhook_configuration.0.webhook_authorization.0.password_wo_version"},
+						RequiredWith:  []string{"webhook_configuration.0.webhook_authorization.0.username", "webhook_configuration.0.webhook_authorization.0.password_wo_version"},
 						Description: "The password for `basic` authentication (write-only). " +
 							"This value is only available during resource creation and update, and is **not** stored in Terraform state. " +
-							"To update the password, increment the `password_wo_version` attribute. " +
-							"Required when `method` is set to `basic` and `password` is not provided.",
+							"To change the password, update the `password_wo_version` attribute. " +
+							"Required only when `method` is set to `basic` and `password` is not provided.",
 					},
 					"password_wo_version": {
 						Type:         schema.TypeInt,
 						Optional:     true,
-						Description:  "Version number for password changes. Increment this value to trigger a password update when using `password_wo`.",
+						Description:  "Version number for password changes. Update this value to trigger a password change when using `password_wo`.",
 						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.password_wo"},
 					},
 					"token": {
@@ -69,7 +77,12 @@ var webhookConfig = &schema.Resource{
 						Optional:      true,
 						Sensitive:     true,
 						ConflictsWith: []string{"webhook_configuration.0.webhook_authorization.0.token_wo"},
-						Description: "The token used for `bearer` authentication. Required when `method` is set to `bearer`. " +
+						ExactlyOneOf: []string{
+							"webhook_configuration.0.webhook_authorization.0.username",
+							"webhook_configuration.0.webhook_authorization.0.token",
+							"webhook_configuration.0.webhook_authorization.0.token_wo",
+						},
+						Description: "The token used for `bearer` authentication. Required only when `method` is set to `bearer`. " +
 							"**Note:** For better security, consider using `token_wo` instead to prevent storing the token in Terraform state.",
 					},
 					"token_wo": {
@@ -78,16 +91,21 @@ var webhookConfig = &schema.Resource{
 						WriteOnly:     true,
 						Sensitive:     true,
 						ConflictsWith: []string{"webhook_configuration.0.webhook_authorization.0.token"},
-						RequiredWith:  []string{"webhook_configuration.0.webhook_authorization.0.token_wo_version"},
+						ExactlyOneOf: []string{
+							"webhook_configuration.0.webhook_authorization.0.username",
+							"webhook_configuration.0.webhook_authorization.0.token",
+							"webhook_configuration.0.webhook_authorization.0.token_wo",
+						},
+						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.token_wo_version"},
 						Description: "The token used for `bearer` authentication (write-only). " +
 							"This value is only available during resource creation and update, and is **not** stored in Terraform state. " +
-							"To update the token, increment the `token_wo_version` attribute. " +
-							"Required when `method` is set to `bearer` and `token` is not provided.",
+							"To change the token, update the `token_wo_version` attribute. " +
+							"Required only when `method` is set to `bearer` and `token` is not provided.",
 					},
 					"token_wo_version": {
 						Type:         schema.TypeInt,
 						Optional:     true,
-						Description:  "Version number for token changes. Increment this value to trigger a token update when using `token_wo`.",
+						Description:  "Version number for token changes. Update this value to trigger a token change when using `token_wo`.",
 						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.token_wo"},
 					},
 				},

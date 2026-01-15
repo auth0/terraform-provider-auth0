@@ -63,36 +63,7 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 		}
 
 		if auth, ok := config["webhook_authorization"].(map[string]interface{}); ok {
-			authMap := map[string]interface{}{
-				"method": auth["method"],
-			}
-			if auth["method"] == "basic" {
-				if v, ok := auth["username"]; ok && v != nil {
-					authMap["username"] = v
-				}
-
-				// Password is not returned from the API, so we get it from config if available.
-				if p := data.Get("webhook_configuration.0.webhook_authorization.0.password"); p != nil {
-					authMap["password"] = p
-				}
-				// The password_wo is write-only and should NOT be read from API or stored in state.
-				// Instead, we only preserve the version from config.
-				if version := data.Get("webhook_configuration.0.webhook_authorization.0.password_wo_version"); version != nil {
-					authMap["password_wo_version"] = version
-				}
-			} else if auth["method"] == "bearer" {
-				// Token is not returned from the API.
-				// For backward compatibility, preserve regular token from config if available.
-				if t := data.Get("webhook_configuration.0.webhook_authorization.0.token"); t != nil {
-					authMap["token"] = t
-				}
-				// The token_wo is write-only and should NOT be read from API or stored in state.
-				// Instead, we only preserve the version from config.
-				if version := data.Get("webhook_configuration.0.webhook_authorization.0.token_wo_version"); version != nil {
-					authMap["token_wo_version"] = version
-				}
-			}
-			webhookCfg["webhook_authorization"] = []interface{}{authMap}
+			webhookCfg["webhook_authorization"] = []interface{}{flattenWebhookAuthorization(auth, data)}
 		}
 
 		if err := data.Set("webhook_configuration", []interface{}{webhookCfg}); err != nil {
@@ -101,4 +72,35 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 	}
 
 	return nil
+}
+
+func flattenWebhookAuthorization(auth map[string]interface{}, data *schema.ResourceData) map[string]interface{} {
+	authMap := map[string]interface{}{
+		"method": auth["method"],
+	}
+	method := auth["method"].(string)
+	switch method {
+	case "basic":
+		if v, ok := auth["username"]; ok && v != "" {
+			authMap["username"] = v
+		}
+		// Password is not returned from the API, so we get it from config if available.
+		if password, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.password"); ok && password != "" {
+			authMap["password"] = password
+		}
+		if version, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.password_wo_version"); ok && version != "" {
+			authMap["password_wo_version"] = version
+		}
+
+	case "bearer":
+		// token is not returned from the API, so we get it from config if available.
+		if token, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.token"); ok && token != "" {
+			authMap["token"] = token
+		}
+		if version, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.token_wo_version"); ok && version != "" {
+			authMap["token_wo_version"] = version
+		}
+	}
+
+	return authMap
 }

@@ -2,10 +2,9 @@ package eventstream
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func expandEventStream(data *schema.ResourceData) *management.EventStream {
@@ -65,32 +64,7 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 			authRaw := webhookCfgRaw.GetAttr("webhook_authorization")
 			if !authRaw.IsNull() && authRaw.LengthInt() > 0 {
 				authRaw.ForEachElement(func(_ cty.Value, authCfgRaw cty.Value) (stop bool) {
-					methodRaw := authCfgRaw.GetAttr("method")
-					method := methodRaw.AsString()
-					authMap := map[string]interface{}{
-						"method": method,
-					}
-
-					if method == "basic" {
-						if username := getString(authCfgRaw.GetAttr("username")); username != "" {
-							authMap["username"] = username
-						}
-						passwordWO := getString(authCfgRaw.GetAttr("password_wo"))
-						if passwordWO != "" && (data.IsNewResource() || hasPasswordWOVersionChanged(data)) {
-							authMap["password"] = passwordWO
-						} else if password := getString(authCfgRaw.GetAttr("password")); password != "" {
-							authMap["password"] = password
-						}
-					} else if method == "bearer" {
-						// Prefer token_wo if set.
-						tokenWO := getString(authCfgRaw.GetAttr("token_wo"))
-						if tokenWO != "" && (data.IsNewResource() || hasTokenWOVersionChanged(data)) {
-							authMap["token"] = tokenWO
-						} else if token := getString(authCfgRaw.GetAttr("token")); token != "" {
-							authMap["token"] = token
-						}
-					}
-					configMap["webhook_authorization"] = authMap
+					configMap["webhook_authorization"] = extractWebhookAuth(authCfgRaw, data)
 					return true // Only process the first auth element.
 				})
 			}
@@ -116,22 +90,43 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 	return destination
 }
 
-// hasTokenWOVersionChanged checks if the token_wo_version attribute has changed.
-// This is used to determine if we need to update the token during resource updates.
+func extractWebhookAuth(authCfgRaw cty.Value, data *schema.ResourceData) map[string]interface{} {
+	methodRaw := authCfgRaw.GetAttr("method")
+	method := methodRaw.AsString()
+	authMap := map[string]interface{}{
+		"method": method,
+	}
+
+	switch method {
+	case "basic":
+		if username := authCfgRaw.GetAttr("username"); !nullOrEmptyString(username) {
+			authMap["username"] = username.AsString()
+		}
+		passwordWO := authCfgRaw.GetAttr("password_wo")
+		if !nullOrEmptyString(passwordWO) && (data.IsNewResource() || hasPasswordWOVersionChanged(data)) {
+			authMap["password"] = passwordWO.AsString()
+		} else if password := authCfgRaw.GetAttr("password"); !nullOrEmptyString(password) {
+			authMap["password"] = password.AsString()
+		}
+	case "bearer":
+		tokenWO := authCfgRaw.GetAttr("token_wo")
+		if !nullOrEmptyString(tokenWO) && (data.IsNewResource() || hasTokenWOVersionChanged(data)) {
+			authMap["token"] = tokenWO.AsString()
+		} else if token := authCfgRaw.GetAttr("token"); !nullOrEmptyString(token) {
+			authMap["token"] = token.AsString()
+		}
+	}
+	return authMap
+}
+
 func hasTokenWOVersionChanged(data *schema.ResourceData) bool {
 	return data.HasChange("webhook_configuration.0.webhook_authorization.0.token_wo_version")
 }
 
-// hasPasswordWOVersionChanged checks if the password_wo_version attribute has changed.
-// This is used to determine if we need to update the password during resource updates.
 func hasPasswordWOVersionChanged(data *schema.ResourceData) bool {
 	return data.HasChange("webhook_configuration.0.webhook_authorization.0.password_wo_version")
 }
 
-// getStringIfNotNull returns the string value of a cty.Value if it is not null, otherwise returns an empty string.
-func getString(val cty.Value) string {
-	if !val.IsNull() {
-		return val.AsString()
-	}
-	return ""
+func nullOrEmptyString(s cty.Value) bool {
+	return s.IsNull() || s.AsString() == ""
 }

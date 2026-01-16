@@ -2,9 +2,10 @@ package eventstream
 
 import (
 	"github.com/auth0/go-auth0/management"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func expandEventStream(data *schema.ResourceData) *management.EventStream {

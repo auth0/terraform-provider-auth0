@@ -93,7 +93,7 @@ func flattenWebhookAuthorization(auth map[string]interface{}, data *schema.Resou
 		}
 
 	case "bearer":
-		// token is not returned from the API, so we get it from config if available.
+		// Token is not returned from the API, so we get it from config if available.
 		if token, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.token"); ok && token != "" {
 			authMap["token"] = token
 		}

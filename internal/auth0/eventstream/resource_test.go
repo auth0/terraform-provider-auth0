@@ -154,7 +154,7 @@ func TestAccEventStream(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_endpoint", "https://test.com"),
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.method", "bearer"),
 
-					resource.TestCheckNoResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.token_wo"), // token_wo is write-only
+					resource.TestCheckNoResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.token_wo"),
 				),
 			},
 		},

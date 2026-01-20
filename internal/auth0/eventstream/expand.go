@@ -44,38 +44,33 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 
 	switch destType {
 	case "webhook":
-		webhookCfgList, ok := data.Get("webhook_configuration").([]interface{})
-		if ok && len(webhookCfgList) > 0 {
-			webhookCfg := webhookCfgList[0].(map[string]interface{})
-
-			if endpoint, ok := webhookCfg["webhook_endpoint"].(string); ok && endpoint != "" {
-				configMap["webhook_endpoint"] = endpoint
-			}
-
-			if authList, ok := webhookCfg["webhook_authorization"].([]interface{}); ok && len(authList) > 0 {
-				auth := authList[0].(map[string]interface{})
-				method := auth["method"].(string)
-
-				authMap := map[string]interface{}{
-					"method": method,
-				}
-
-				if method == "basic" {
-					if v, ok := auth["username"].(string); ok {
-						authMap["username"] = v
-					}
-					if v, ok := auth["password"].(string); ok {
-						authMap["password"] = v
-					}
-				} else if method == "bearer" {
-					if v, ok := auth["token"].(string); ok {
-						authMap["token"] = v
-					}
-				}
-
-				configMap["webhook_authorization"] = authMap
-			}
+		rawConfig := data.GetRawConfig()
+		if rawConfig.IsNull() {
+			break
 		}
+
+		webhookConfigRaw := rawConfig.GetAttr("webhook_configuration")
+		if webhookConfigRaw.IsNull() || webhookConfigRaw.LengthInt() == 0 {
+			break
+		}
+
+		webhookConfigRaw.ForEachElement(func(_ cty.Value, webhookCfgRaw cty.Value) (stop bool) {
+			// Webhook_endpoint.
+			endpointRaw := webhookCfgRaw.GetAttr("webhook_endpoint")
+			if !endpointRaw.IsNull() && endpointRaw.AsString() != "" {
+				configMap["webhook_endpoint"] = endpointRaw.AsString()
+			}
+
+			// Webhook_authorization.
+			authRaw := webhookCfgRaw.GetAttr("webhook_authorization")
+			if !authRaw.IsNull() && authRaw.LengthInt() > 0 {
+				authRaw.ForEachElement(func(_ cty.Value, authCfgRaw cty.Value) (stop bool) {
+					configMap["webhook_authorization"] = extractWebhookAuth(authCfgRaw, data)
+					return true // Only process the first auth element.
+				})
+			}
+			return true // Only process the first webhook config element.
+		})
 
 	case "eventbridge":
 		// Skip returning destination configuration for existing EventBridge resources during updates
@@ -94,4 +89,45 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 
 	destination.EventStreamDestinationConfiguration = configMap
 	return destination
+}
+
+func extractWebhookAuth(authCfgRaw cty.Value, data *schema.ResourceData) map[string]interface{} {
+	methodRaw := authCfgRaw.GetAttr("method")
+	method := methodRaw.AsString()
+	authMap := map[string]interface{}{
+		"method": method,
+	}
+
+	switch method {
+	case "basic":
+		if username := authCfgRaw.GetAttr("username"); !nullOrEmptyString(username) {
+			authMap["username"] = username.AsString()
+		}
+		passwordWO := authCfgRaw.GetAttr("password_wo")
+		if !nullOrEmptyString(passwordWO) && (data.IsNewResource() || hasPasswordWOVersionChanged(data)) {
+			authMap["password"] = passwordWO.AsString()
+		} else if password := authCfgRaw.GetAttr("password"); !nullOrEmptyString(password) {
+			authMap["password"] = password.AsString()
+		}
+	case "bearer":
+		tokenWO := authCfgRaw.GetAttr("token_wo")
+		if !nullOrEmptyString(tokenWO) && (data.IsNewResource() || hasTokenWOVersionChanged(data)) {
+			authMap["token"] = tokenWO.AsString()
+		} else if token := authCfgRaw.GetAttr("token"); !nullOrEmptyString(token) {
+			authMap["token"] = token.AsString()
+		}
+	}
+	return authMap
+}
+
+func hasTokenWOVersionChanged(data *schema.ResourceData) bool {
+	return data.HasChange("webhook_configuration.0.webhook_authorization.0.token_wo_version")
+}
+
+func hasPasswordWOVersionChanged(data *schema.ResourceData) bool {
+	return data.HasChange("webhook_configuration.0.webhook_authorization.0.password_wo_version")
+}
+
+func nullOrEmptyString(s cty.Value) bool {
+	return s.IsNull() || s.AsString() == ""
 }

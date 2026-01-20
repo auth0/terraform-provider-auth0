@@ -1,11 +1,8 @@
 package eventstream
 
 import (
-	"errors"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -16,16 +13,8 @@ func flattenEventStream(data *schema.ResourceData, es *management.EventStream) e
 		data.Set("created_at", es.GetCreatedAt().String()),
 		data.Set("updated_at", es.GetUpdatedAt().String()),
 		data.Set("subscriptions", flattenEventStreamSubscriptions(es.GetSubscriptions())),
+		flattenEventStreamDestination(data, es.GetDestination()),
 	)
-	if diags := flattenEventStreamDestination(data, es.GetDestination()); diags.HasError() {
-		for _, d := range diags {
-			msg := d.Summary
-			if d.Detail != "" {
-				msg += ": " + d.Detail
-			}
-			result = multierror.Append(result, errors.New(msg))
-		}
-	}
 
 	return result.ErrorOrNil()
 }
@@ -42,7 +31,7 @@ func flattenEventStreamSubscriptions(subs []management.EventStreamSubscription) 
 	return result
 }
 
-func flattenEventStreamDestination(data *schema.ResourceData, dest *management.EventStreamDestination) diag.Diagnostics {
+func flattenEventStreamDestination(data *schema.ResourceData, dest *management.EventStreamDestination) error {
 	if dest == nil {
 		return nil
 	}
@@ -54,7 +43,7 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 	}
 
 	if err := data.Set("destination_type", destType); err != nil {
-		return diag.FromErr(err)
+		return err
 	}
 
 	switch destType {
@@ -65,7 +54,7 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 			"aws_partner_event_source": config["aws_partner_event_source"],
 		}
 		if err := data.Set("eventbridge_configuration", []interface{}{eventbridgeCfg}); err != nil {
-			return diag.FromErr(err)
+			return err
 		}
 
 	case "webhook":
@@ -74,30 +63,44 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 		}
 
 		if auth, ok := config["webhook_authorization"].(map[string]interface{}); ok {
-			authMap := map[string]interface{}{
-				"method": auth["method"],
-			}
-			if auth["method"] == "basic" {
-				authMap["username"] = auth["username"]
-
-				// Token is not returned from the API, so we get it from config if available.
-				if p := data.Get("webhook_configuration.0.webhook_authorization.0.password"); p != nil {
-					authMap["password"] = p
-				}
-			} else if auth["method"] == "bearer" {
-				// Token is not returned from the API, so we get it from config if available.
-				if t := data.Get("webhook_configuration.0.webhook_authorization.0.token"); t != nil {
-					authMap["token"] = t
-				}
-			}
-
-			webhookCfg["webhook_authorization"] = []interface{}{authMap}
+			webhookCfg["webhook_authorization"] = []interface{}{flattenWebhookAuthorization(auth, data)}
 		}
 
 		if err := data.Set("webhook_configuration", []interface{}{webhookCfg}); err != nil {
-			return diag.FromErr(err)
+			return err
 		}
 	}
 
 	return nil
+}
+
+func flattenWebhookAuthorization(auth map[string]interface{}, data *schema.ResourceData) map[string]interface{} {
+	authMap := map[string]interface{}{
+		"method": auth["method"],
+	}
+	method := auth["method"].(string)
+	switch method {
+	case "basic":
+		if v, ok := auth["username"]; ok && v != "" {
+			authMap["username"] = v
+		}
+		// Password is not returned from the API, so we get it from config if available.
+		if password, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.password"); ok && password != "" {
+			authMap["password"] = password
+		}
+		if version, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.password_wo_version"); ok {
+			authMap["password_wo_version"] = version
+		}
+
+	case "bearer":
+		// Token is not returned from the API, so we get it from config if available.
+		if token, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.token"); ok && token != "" {
+			authMap["token"] = token
+		}
+		if version, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.token_wo_version"); ok {
+			authMap["token_wo_version"] = version
+		}
+	}
+
+	return authMap
 }

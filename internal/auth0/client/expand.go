@@ -1036,6 +1036,10 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 		clientGrant.AuthorizationDetailsTypes = value.Strings(cfg.GetAttr("authorization_details_types"))
 	}
 
+	if data.IsNewResource() || data.HasChange("allow_all_scopes") {
+		clientGrant.AllowAllScopes = value.Bool(cfg.GetAttr("allow_all_scopes"))
+	}
+
 	return clientGrant
 }
 

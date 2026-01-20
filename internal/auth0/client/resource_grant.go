@@ -2,6 +2,8 @@ package client
 
 import (
 	"context"
+	"fmt"
+	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -26,6 +28,7 @@ func NewGrantResource() *schema.Resource {
 			"resources to another entity without exposing credentials. The OAuth 2.0 protocol supports " +
 			"several types of grants, which allow different types of access. This resource allows " +
 			"you to create and manage client grants used with configured Auth0 clients.",
+		CustomizeDiff: validateClientGrant,
 		Schema: map[string]*schema.Schema{
 			"client_id": {
 				Type:        schema.TypeString,
@@ -45,8 +48,8 @@ func NewGrantResource() *schema.Resource {
 					Type:         schema.TypeString,
 					ValidateFunc: validation.StringIsNotEmpty,
 				},
-				Required:    true,
-				Description: "Permissions (scopes) included in this grant.",
+				Optional:    true,
+				Description: "Permissions (scopes) included in this grant. Can not be set when `allow_all_scopes` is true.",
 			},
 			"organization_usage": {
 				Type:     schema.TypeString,
@@ -86,6 +89,13 @@ func NewGrantResource() *schema.Resource {
 				Type:        schema.TypeBool,
 				Computed:    true,
 				Description: "Indicates whether this grant is a special grant created by Auth0. It cannot be modified or deleted directly.",
+			},
+			"allow_all_scopes": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+				Description: "When enabled, all scopes configured on the resource server are allowed for this client grant. " +
+					"`scopes` can not be set when this is true.",
 			},
 		},
 	}
@@ -133,6 +143,13 @@ func readClientGrant(ctx context.Context, data *schema.ResourceData, meta interf
 func updateClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
+	if data.HasChange("allow_all_scopes") && data.Get("allow_all_scopes") != true {
+		disableAllowAllScopesConfig := map[string]interface{}{"allow_all_scopes": false, "scope": []string{}}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("client-grants", data.Id()), disableAllowAllScopesConfig); err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+	}
+
 	if clientGrant := expandClientGrant(data); clientGrantHasChange(clientGrant) {
 		if err := api.ClientGrant.Update(ctx, data.Id(), clientGrant); err != nil {
 			return diag.FromErr(internalError.HandleAPIError(data, err))
@@ -156,4 +173,23 @@ func clientGrantHasChange(clientGrant *management.ClientGrant) bool {
 	// Hacky but we need to tell if an
 	// empty json is sent to the api.
 	return clientGrant.String() != "{}"
+}
+
+func validateClientGrant(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	if diff.GetRawConfig().IsNull() {
+		return nil
+	}
+
+	scopes := diff.GetRawConfig().GetAttr("scopes")
+	allowAllScopes := diff.Get("allow_all_scopes").(bool)
+
+	if allowAllScopes && !scopes.IsNull() {
+		return fmt.Errorf("`scopes` cannot be set when `allow_all_scopes` is true")
+	}
+
+	if !allowAllScopes && scopes.IsNull() {
+		return fmt.Errorf("either `scopes` or `allow_all_scopes` must be set")
+	}
+
+	return nil
 }

@@ -689,6 +689,7 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 		data.Set("subject_type", clientGrant.GetSubjectType()),
 		data.Set("authorization_details_types", clientGrant.GetAuthorizationDetailsTypes()),
 		data.Set("is_system", clientGrant.GetIsSystem()),
+		data.Set("allow_all_scopes", clientGrant.GetAllowAllScopes()),
 	)
 
 	return result.ErrorOrNil()

@@ -58,6 +58,11 @@ func NewClientGrantsDataSource() *schema.Resource {
 							Computed:    true,
 							Description: "The subject type (usually 'client').",
 						},
+						"allow_all_scopes": {
+							Type:        schema.TypeBool,
+							Computed:    true,
+							Description: "When enabled, all scopes configured on the resource server are allowed for this client grant.",
+						},
 					},
 				},
 			},
@@ -107,11 +112,12 @@ func dataSourceClientGrantsRead(ctx context.Context, data *schema.ResourceData, 
 
 	for _, cg := range allGrants {
 		item := map[string]interface{}{
-			"id":           cg.GetID(),
-			"client_id":    cg.GetClientID(),
-			"audience":     cg.GetAudience(),
-			"scope":        cg.GetScope(),
-			"subject_type": cg.GetSubjectType(),
+			"id":               cg.GetID(),
+			"client_id":        cg.GetClientID(),
+			"audience":         cg.GetAudience(),
+			"scope":            cg.GetScope(),
+			"subject_type":     cg.GetSubjectType(),
+			"allow_all_scopes": cg.GetAllowAllScopes(),
 		}
 		flattened = append(flattened, item)
 	}

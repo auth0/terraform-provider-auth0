@@ -47,4 +47,5 @@ resource "auth0_client_grant" "my_client_grant" {
   scopes                      = ["create:foo", "read:foo"]
   subject_type                = "user"
   authorization_details_types = ["payment", "shipping"]
+  allow_all_scopes            = false
 }

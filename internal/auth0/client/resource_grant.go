@@ -168,11 +168,12 @@ func clientGrantHasChange(clientGrant *management.ClientGrant) bool {
 }
 
 func validateClientGrant(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
-	if diff.GetRawConfig().IsNull() {
+	rawConfig := diff.GetRawConfig()
+	if rawConfig.IsNull() {
 		return nil
 	}
 
-	scopes := diff.GetRawConfig().GetAttr("scopes")
+	scopes := rawConfig.GetAttr("scopes")
 	allowAllScopes := diff.Get("allow_all_scopes").(bool)
 
 	if allowAllScopes && !scopes.IsNull() {

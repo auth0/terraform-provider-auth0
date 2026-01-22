@@ -76,15 +76,27 @@ resource "auth0_client_grant" "my_client_grant" {
 }
 `
 
+const testAccClientGrantConfigUpdateAgain = testAccGivenAClientAndAResourceServerWithScopes + `
+resource "auth0_client_grant" "my_client_grant" {
+	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
+
+	client_id = auth0_client.my_client.id
+	audience  = auth0_resource_server.my_resource_server.identifier
+	scopes    = [ ]
+	subject_type = "user"
+	authorization_details_types = ["payment"]
+}
+`
+
 const testAccClientGrantConfigUpdateAgainWithAllowAllScopes = testAccGivenAClientAndAResourceServerWithScopes + `
 resource "auth0_client_grant" "my_client_grant" {
 	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
 
 	client_id = auth0_client.my_client.id
 	audience  = auth0_resource_server.my_resource_server.identifier
-	allow_all_scopes = true
 	subject_type = "user"
 	authorization_details_types = ["payment"]
+	allow_all_scopes = true
 }
 `
 
@@ -160,9 +172,14 @@ func TestAccClientGrant(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccClientGrantConfigUpdateAgainWithAllowAllScopes, t.Name()),
+				Config: acctest.ParseTestName(testAccClientGrantConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientGrantConfigUpdateAgainWithAllowAllScopes, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "allow_all_scopes", "true"),
 				),
 			},

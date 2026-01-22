@@ -48,7 +48,7 @@ func NewGrantResource() *schema.Resource {
 					ValidateFunc: validation.StringIsNotEmpty,
 				},
 				Optional:    true,
-				Description: "Permissions (scopes) included in this grant. Can not be set when `allow_all_scopes` is true.",
+				Description: "Permissions (scopes) included in this grant. Can not be provided when `allow_all_scopes` is set to `true`.",
 			},
 			"organization_usage": {
 				Type:     schema.TypeString,
@@ -93,8 +93,8 @@ func NewGrantResource() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
-				Description: "When enabled, all scopes configured on the resource server are allowed for this client grant. " +
-					"`scopes` can not be set when this is true.",
+				Description: "When set to `true`, all scopes configured on the resource server are allowed for this client grant. " +
+					"`scopes` can not be provided when this is set to `true`.",
 			},
 		},
 	}
@@ -176,11 +176,11 @@ func validateClientGrant(_ context.Context, diff *schema.ResourceDiff, _ interfa
 	allowAllScopes := diff.Get("allow_all_scopes").(bool)
 
 	if allowAllScopes && !scopes.IsNull() {
-		return fmt.Errorf("`scopes` cannot be set when `allow_all_scopes` is true")
+		return fmt.Errorf("`scopes` cannot be provided when `allow_all_scopes` is set to `true`")
 	}
 
 	if !allowAllScopes && scopes.IsNull() {
-		return fmt.Errorf("either `scopes` or `allow_all_scopes` must be set")
+		return fmt.Errorf("either `scopes` must be provided or `allow_all_scopes` must be set to `true`")
 	}
 
 	return nil

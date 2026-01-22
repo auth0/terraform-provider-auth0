@@ -3,7 +3,6 @@ package client
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -142,13 +141,6 @@ func readClientGrant(ctx context.Context, data *schema.ResourceData, meta interf
 
 func updateClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
-	if data.HasChange("allow_all_scopes") && data.Get("allow_all_scopes") != true {
-		disableAllowAllScopesConfig := map[string]interface{}{"allow_all_scopes": false, "scope": []string{}}
-		if err := api.Request(ctx, http.MethodPatch, api.URI("client-grants", data.Id()), disableAllowAllScopesConfig); err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
-		}
-	}
 
 	if clientGrant := expandClientGrant(data); clientGrantHasChange(clientGrant) {
 		if err := api.ClientGrant.Update(ctx, data.Id(), clientGrant); err != nil {

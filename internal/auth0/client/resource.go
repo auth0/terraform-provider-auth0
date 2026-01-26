@@ -1433,7 +1433,6 @@ func NewResource() *schema.Resource {
 			"oidc_logout": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Computed:    true,
 				MaxItems:    1,
 				Description: "Configure OIDC logout for the Client",
 				Elem: &schema.Resource{

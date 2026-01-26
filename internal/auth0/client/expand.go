@@ -1221,47 +1221,41 @@ func isOIDCLogoutNull(data *schema.ResourceData) bool {
 
 	rawConfig := data.GetRawConfig().GetAttr("oidc_logout")
 
-	// If the oidc_logout block is explicitly set to null.
+	// If oidc_logout is explicitly set to null.
 	if rawConfig.IsNull() {
 		return true
 	}
 
-	// If the oidc_logout block exists, but all fields inside it are null or not set.
 	empty := true
 	rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		logoutURLs := cfg.GetAttr("backchannel_logout_urls")
+		initiators := cfg.GetAttr("backchannel_logout_initiators")
+		sessionMetadata := cfg.GetAttr("backchannel_logout_session_metadata")
+
+		// backchannel_logout_urls is a TypeSet of strings
 		if !logoutURLs.IsNull() && logoutURLs.LengthInt() > 0 {
 			empty = false
 			return stop
 		}
 
-		// Check backchannel_logout_initiators nested fields
-		initiators := cfg.GetAttr("backchannel_logout_initiators")
 		if !initiators.IsNull() {
-			initiators.ForEachElement(func(_ cty.Value, init cty.Value) (stop bool) {
-				mode := init.GetAttr("mode")
-				selectedInitiators := init.GetAttr("selected_initiators")
+			initiators.ForEachElement(func(_ cty.Value, initiatorCfg cty.Value) (stop bool) {
+				mode := initiatorCfg.GetAttr("mode")
+				selected := initiatorCfg.GetAttr("selected_initiators")
 
-				if (!mode.IsNull() && mode.AsString() != "") || (!selectedInitiators.IsNull() && selectedInitiators.LengthInt() > 0) {
+				if (!mode.IsNull() && mode.AsString() != "") ||
+					(!selected.IsNull() && selected.LengthInt() > 0) {
 					empty = false
-					return true
 				}
 				return stop
 			})
 		}
 
-		if !empty {
-			return true
-		}
-
-		sessionMetadata := cfg.GetAttr("backchannel_logout_session_metadata")
 		if !sessionMetadata.IsNull() {
-			sessionMetadata.ForEachElement(func(_ cty.Value, meta cty.Value) (stop bool) {
-				include := meta.GetAttr("include")
-
+			sessionMetadata.ForEachElement(func(_ cty.Value, metaCfg cty.Value) (stop bool) {
+				include := metaCfg.GetAttr("include")
 				if !include.IsNull() {
 					empty = false
-					return true
 				}
 				return stop
 			})

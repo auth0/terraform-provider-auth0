@@ -59,6 +59,7 @@ Read-Only:
 - `domain_metadata` (Map of String)
 - `origin_domain_name` (String)
 - `primary` (Boolean)
+- `relying_party_identifier` (String)
 - `status` (String)
 - `tls_policy` (String)
 - `type` (String)

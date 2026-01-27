@@ -34,6 +34,7 @@ resource "auth0_custom_domain" "my_custom_domain" {
 
 - `custom_client_ip_header` (String) The HTTP header to fetch the client's IP address. Cannot be set on auth0_managed domains.
 - `domain_metadata` (Map of String) Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed. (EA only).
+- `relying_party_identifier` (String) Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not provided or set to null, the full domain will be used.
 - `tls_policy` (String) TLS policy for the custom domain. Available options are: `compatible` or `recommended`. Compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2. Cannot be set on self_managed domains.
 
 ### Read-Only

@@ -75,11 +75,9 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 			client.TokenEndpointAuthMethod = auth0.String("none")
 		case "regular_web", "non_interactive":
 			client.TokenEndpointAuthMethod = auth0.String("client_secret_post")
+		case "resource_server":
+			client.ResourceServerIdentifier = value.String(config.GetAttr("resource_server_identifier"))
 		}
-	}
-
-	if data.IsNewResource() && client.ResourceServerIdentifier != nil {
-		client.ResourceServerIdentifier = value.String(config.GetAttr("resource_server_identifier"))
 	}
 
 	defaultConfig := data.GetRawConfig().GetAttr("default_organization")

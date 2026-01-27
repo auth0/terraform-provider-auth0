@@ -603,6 +603,7 @@ Read-Only:
 Read-Only:
 
 - `backchannel_logout_initiators` (List of Object) (see [below for nested schema](#nestedobjatt--oidc_logout--backchannel_logout_initiators))
+- `backchannel_logout_session_metadata` (List of Object) (see [below for nested schema](#nestedobjatt--oidc_logout--backchannel_logout_session_metadata))
 - `backchannel_logout_urls` (Set of String)
 
 <a id="nestedobjatt--oidc_logout--backchannel_logout_initiators"></a>
@@ -612,6 +613,14 @@ Read-Only:
 
 - `mode` (String)
 - `selected_initiators` (Set of String)
+
+
+<a id="nestedobjatt--oidc_logout--backchannel_logout_session_metadata"></a>
+### Nested Schema for `oidc_logout.backchannel_logout_session_metadata`
+
+Read-Only:
+
+- `include` (Boolean)
 
 
 

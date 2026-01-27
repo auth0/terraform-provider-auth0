@@ -314,6 +314,8 @@ resource "auth0_client" "my_client" {
             scope = ["create:bar"]
         }
     }
+
+    depends_on = [auth0_resource_server_scope.my_scope]
 }
 `
 
@@ -348,6 +350,8 @@ resource "auth0_client" "my_client" {
             scope = []
         }
     }
+
+    depends_on = [auth0_resource_server_scope.my_scope]
 }
 `
 
@@ -2807,6 +2811,8 @@ resource "auth0_resource_server" "my_resource_server" {
 }
 
 resource "auth0_client" "my_client" {
+  depends_on = [ auth0_resource_server.my_resource_server ]
+
 	name = "Acceptance Test - Resource Server Client - {{.testName}}"
 	app_type = "resource_server"
 	resource_server_identifier = auth0_resource_server.my_resource_server.identifier

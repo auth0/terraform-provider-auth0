@@ -2,6 +2,7 @@ package customdomain
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -115,6 +116,12 @@ func NewResource() *schema.Resource {
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed. (EA only).",
 			},
+			"relying_party_identifier": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
+				Description:  "Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not provided or set to null, the full domain will be used.",
+			},
 			"certificate": {
 				Type:     schema.TypeList,
 				Computed: true,
@@ -177,6 +184,13 @@ func updateCustomDomain(ctx context.Context, data *schema.ResourceData, meta int
 	api := meta.(*config.Config).GetAPI()
 
 	customDomain := expandCustomDomain(data)
+
+	nullFields := fetchNullableFields(data)
+	if len(nullFields) != 0 {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("custom-domains", data.Id()), nullFields); err != nil {
+			return diag.FromErr(err)
+		}
+	}
 
 	if err := api.CustomDomain.Update(ctx, data.Id(), customDomain); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

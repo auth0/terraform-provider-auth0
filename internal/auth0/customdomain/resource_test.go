@@ -33,6 +33,7 @@ resource "auth0_custom_domain" "my_custom_domain" {
         key1: "value1"
 		key2: "value2"
     }
+	relying_party_identifier = "tempdomain.com"
 }
 `
 
@@ -99,6 +100,7 @@ func TestAccCustomDomain(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.%", "2"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.key1", "value1"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.key2", "value2"),
+					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "relying_party_identifier", "tempdomain.com"),
 				),
 			},
 			{
@@ -118,6 +120,7 @@ func TestAccCustomDomain(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.%", "1"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.key1", "value3"),
 					resource.TestCheckNoResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.key2"),
+					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "relying_party_identifier", ""),
 				),
 			},
 		},

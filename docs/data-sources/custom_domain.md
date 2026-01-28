@@ -42,6 +42,7 @@ data "auth0_custom_domain" "test" {
 - `id` (String) The ID of this resource.
 - `origin_domain_name` (String) Once the configuration status is `ready`, the DNS name of the Auth0 origin server that handles traffic for the custom domain.
 - `primary` (Boolean) Indicates whether this is a primary domain.
+- `relying_party_identifier` (String) Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not provided or set to null, the full domain will be used.
 - `status` (String) Configuration status for the custom domain. Options include `disabled`, `pending`, `pending_verification`, `ready` and `failed`.
 - `tls_policy` (String) TLS policy for the custom domain. Available options are: `compatible` or `recommended`. Compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2. Cannot be set on self_managed domains.
 - `type` (String) Provisioning type for the custom domain. Options include `auth0_managed_certs` and `self_managed_certs`.

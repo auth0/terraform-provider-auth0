@@ -270,8 +270,10 @@ func flattenAuthenticationMethods(authenticationMethods *management.Authenticati
 	}
 
 	return map[string]interface{}{
-		"passkey":  flattenAuthenticationMethodPasskey(authenticationMethods.GetPasskey()),
-		"password": flattenAuthenticationMethodPassword(authenticationMethods.GetPassword()),
+		"passkey":   flattenAuthenticationMethodPasskey(authenticationMethods.GetPasskey()),
+		"password":  flattenAuthenticationMethodPassword(authenticationMethods.GetPassword()),
+		"email_otp": flattenAuthenticationMethodEmailOTP(authenticationMethods.GetEmailOTP()),
+		"phone_otp": flattenAuthenticationMethodPhoneOTP(authenticationMethods.GetPhoneOTP()),
 	}
 }
 
@@ -311,13 +313,38 @@ func flattenAuthenticationMethodPassword(passwordAuthenticationMethod *managemen
 	}
 }
 
+func flattenAuthenticationMethodEmailOTP(emailOTPAuthenticationMethod *management.EmailOTPAuthenticationMethod) interface{} {
+	if emailOTPAuthenticationMethod == nil {
+		return nil
+	}
+
+	return []map[string]bool{
+		{
+			"enabled": emailOTPAuthenticationMethod.GetEnabled(),
+		},
+	}
+}
+
+func flattenAuthenticationMethodPhoneOTP(phoneOTPAuthenticationMethod *management.PhoneOTPAuthenticationMethod) interface{} {
+	if phoneOTPAuthenticationMethod == nil {
+		return nil
+	}
+
+	return []map[string]bool{
+		{
+			"enabled": phoneOTPAuthenticationMethod.GetEnabled(),
+		},
+	}
+}
+
 func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) []map[string]interface{} {
 	if identifier == nil {
 		return nil
 	}
 	return []map[string]interface{}{
 		{
-			"active": identifier.GetActive(),
+			"active":         identifier.GetActive(),
+			"default_method": identifier.GetDefaultMethod(),
 		},
 	}
 }

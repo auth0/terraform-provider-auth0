@@ -209,6 +209,7 @@ Read-Only:
 Read-Only:
 
 - `active` (Boolean)
+- `default_method` (String)
 
 
 <a id="nestedobjatt--options--attributes--email--signup"></a>
@@ -244,6 +245,7 @@ Read-Only:
 Read-Only:
 
 - `active` (Boolean)
+- `default_method` (String)
 
 
 <a id="nestedobjatt--options--attributes--phone_number--signup"></a>
@@ -280,6 +282,7 @@ Read-Only:
 Read-Only:
 
 - `active` (Boolean)
+- `default_method` (String)
 
 
 <a id="nestedobjatt--options--attributes--username--signup"></a>
@@ -316,8 +319,18 @@ Read-Only:
 
 Read-Only:
 
+- `email_otp` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--email_otp))
 - `passkey` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--passkey))
 - `password` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--password))
+- `phone_otp` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--phone_otp))
+
+<a id="nestedobjatt--options--authentication_methods--email_otp"></a>
+### Nested Schema for `options.authentication_methods.email_otp`
+
+Read-Only:
+
+- `enabled` (Boolean)
+
 
 <a id="nestedobjatt--options--authentication_methods--passkey"></a>
 ### Nested Schema for `options.authentication_methods.passkey`
@@ -329,6 +342,14 @@ Read-Only:
 
 <a id="nestedobjatt--options--authentication_methods--password"></a>
 ### Nested Schema for `options.authentication_methods.password`
+
+Read-Only:
+
+- `enabled` (Boolean)
+
+
+<a id="nestedobjatt--options--authentication_methods--phone_otp"></a>
+### Nested Schema for `options.authentication_methods.phone_otp`
 
 Read-Only:
 

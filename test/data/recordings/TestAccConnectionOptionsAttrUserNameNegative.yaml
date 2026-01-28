@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 358
+        content_length: 499
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrUserNameNegative","strategy":"auth0","is_domain_connection":true,"options":{"brute_force_protection":true,"requires_username":true,"precedence":["username","email","phone_number"],"attributes":{"username":{"identifier":{"active":true},"profile_required":true,"signup":{"status":"required"}}}}}
+            {"name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrUserNameNegative","strategy":"auth0","is_domain_connection":true,"options":{"brute_force_protection":true,"requires_username":true,"authentication_methods":{"password":{"enabled":true},"passkey":{"enabled":false},"email_otp":{"enabled":true},"phone_otp":{"enabled":true}},"precedence":["username","email","phone_number"],"attributes":{"username":{"identifier":{"active":true},"profile_required":true,"signup":{"status":"required"}}}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
+                - Go-Auth0/1.32.1
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -36,4 +36,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 400 Bad Request
         code: 400
-        duration: 353.8645ms
+        duration: 359.714042ms

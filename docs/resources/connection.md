@@ -858,6 +858,7 @@ Optional:
 Optional:
 
 - `active` (Boolean) Defines whether email attribute is active as an identifier
+- `default_method` (String) Gets and Sets the default authentication method for the email identifier type. Valid values: `password`, `email_otp`
 
 
 <a id="nestedblock--options--attributes--email--signup"></a>
@@ -893,6 +894,7 @@ Optional:
 Optional:
 
 - `active` (Boolean) Defines whether Phone Number attribute is active as an identifier
+- `default_method` (String) Gets and Sets the default authentication method for the phone_number identifier type. Valid values: `password`, `phone_otp`
 
 
 <a id="nestedblock--options--attributes--phone_number--signup"></a>
@@ -929,6 +931,7 @@ Optional:
 Optional:
 
 - `active` (Boolean) Defines whether UserName attribute is active as an identifier
+- `default_method` (String) Gets and Sets the default authentication method for the username identifier type. Valid value: `password`
 
 
 <a id="nestedblock--options--attributes--username--signup"></a>
@@ -965,8 +968,18 @@ Optional:
 
 Optional:
 
+- `email_otp` (Block List, Max: 1) Configures Email OTP authentication (see [below for nested schema](#nestedblock--options--authentication_methods--email_otp))
 - `passkey` (Block List, Max: 1) Configures passkey authentication (see [below for nested schema](#nestedblock--options--authentication_methods--passkey))
 - `password` (Block List, Max: 1) Configures password authentication (see [below for nested schema](#nestedblock--options--authentication_methods--password))
+- `phone_otp` (Block List, Max: 1) Configures Phone OTP authentication (see [below for nested schema](#nestedblock--options--authentication_methods--phone_otp))
+
+<a id="nestedblock--options--authentication_methods--email_otp"></a>
+### Nested Schema for `options.authentication_methods.email_otp`
+
+Optional:
+
+- `enabled` (Boolean) Enables Email OTP authentication
+
 
 <a id="nestedblock--options--authentication_methods--passkey"></a>
 ### Nested Schema for `options.authentication_methods.passkey`
@@ -982,6 +995,14 @@ Optional:
 Optional:
 
 - `enabled` (Boolean) Enables password authentication
+
+
+<a id="nestedblock--options--authentication_methods--phone_otp"></a>
+### Nested Schema for `options.authentication_methods.phone_otp`
+
+Optional:
+
+- `enabled` (Boolean) Enables Phone OTP authentication
 
 
 

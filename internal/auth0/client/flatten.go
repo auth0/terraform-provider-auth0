@@ -107,6 +107,9 @@ func flattenOIDCLogout(oidcLogout *management.OIDCLogout) []interface{} {
 		"backchannel_logout_initiators": flattenBackChannelLogoutInitiators(
 			oidcLogout.GetBackChannelLogoutInitiators(),
 		),
+		"backchannel_logout_session_metadata": flattenBackChannelLogoutSessionMetadata(
+			oidcLogout.GetBackChannelLogoutSessionMetadata(),
+		),
 	}
 
 	return []interface{}{
@@ -122,6 +125,18 @@ func flattenBackChannelLogoutInitiators(initiators *management.BackChannelLogout
 		map[string]interface{}{
 			"mode":                initiators.GetMode(),
 			"selected_initiators": initiators.GetSelectedInitiators(),
+		},
+	}
+}
+
+func flattenBackChannelLogoutSessionMetadata(metadata *management.BackChannelLogoutSessionMetadata) []interface{} {
+	if metadata == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"include": metadata.GetInclude(),
 		},
 	}
 }
@@ -689,6 +704,7 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 		data.Set("subject_type", clientGrant.GetSubjectType()),
 		data.Set("authorization_details_types", clientGrant.GetAuthorizationDetailsTypes()),
 		data.Set("is_system", clientGrant.GetIsSystem()),
+		data.Set("allow_all_scopes", clientGrant.GetAllowAllScopes()),
 	)
 
 	return result.ErrorOrNil()

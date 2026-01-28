@@ -1,576 +1,540 @@
 ---
 version: 2
 interactions:
-  - id: 0
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 101
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","app_type":"non_interactive"}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: false
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"Ect5res5gdD951iS3Gg4FJPOUgsaSbgT","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 201 Created
-      code: 201
-      duration: 1ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/Ect5res5gdD951iS3Gg4FJPOUgsaSbgT
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"Ect5res5gdD951iS3Gg4FJPOUgsaSbgT","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 2
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/Ect5res5gdD951iS3Gg4FJPOUgsaSbgT
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"Ect5res5gdD951iS3Gg4FJPOUgsaSbgT","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 3
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/Ect5res5gdD951iS3Gg4FJPOUgsaSbgT
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"Ect5res5gdD951iS3Gg4FJPOUgsaSbgT","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 4
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: ""
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/Ect5res5gdD951iS3Gg4FJPOUgsaSbgT
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
-  - id: 5
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 208
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","app_type":"non_interactive","jwt_configuration":{"secret_encoded":true,"scopes":{"foo":"bar"},"alg":"RS256","lifetime_in_seconds":300}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: false
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"5eEZnMhA4OpSuhyYHqhpCYJJUhZmOaZf","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":true,"scopes":{"foo":"bar"},"alg":"RS256","lifetime_in_seconds":300},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 201 Created
-      code: 201
-      duration: 1ms
-  - id: 6
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5eEZnMhA4OpSuhyYHqhpCYJJUhZmOaZf
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"5eEZnMhA4OpSuhyYHqhpCYJJUhZmOaZf","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":true,"scopes":{"foo":"bar"},"alg":"RS256","lifetime_in_seconds":300},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 7
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5eEZnMhA4OpSuhyYHqhpCYJJUhZmOaZf
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"5eEZnMhA4OpSuhyYHqhpCYJJUhZmOaZf","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":true,"scopes":{"foo":"bar"},"alg":"RS256","lifetime_in_seconds":300},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 8
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5eEZnMhA4OpSuhyYHqhpCYJJUhZmOaZf
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"5eEZnMhA4OpSuhyYHqhpCYJJUhZmOaZf","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":true,"scopes":{"foo":"bar"},"alg":"RS256","lifetime_in_seconds":300},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 9
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: ""
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5eEZnMhA4OpSuhyYHqhpCYJJUhZmOaZf
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
-  - id: 10
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 196
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","app_type":"non_interactive","jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: false
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"bqdSAQz9riQXClJf1OrvgFtZDCprjiCR","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 201 Created
-      code: 201
-      duration: 1ms
-  - id: 11
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bqdSAQz9riQXClJf1OrvgFtZDCprjiCR
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"bqdSAQz9riQXClJf1OrvgFtZDCprjiCR","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 12
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bqdSAQz9riQXClJf1OrvgFtZDCprjiCR
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"bqdSAQz9riQXClJf1OrvgFtZDCprjiCR","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 13
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bqdSAQz9riQXClJf1OrvgFtZDCprjiCR
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"bqdSAQz9riQXClJf1OrvgFtZDCprjiCR","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 14
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bqdSAQz9riQXClJf1OrvgFtZDCprjiCR
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"bqdSAQz9riQXClJf1OrvgFtZDCprjiCR","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 15
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: ""
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bqdSAQz9riQXClJf1OrvgFtZDCprjiCR
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 151
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","app_type":"non_interactive","token_endpoint_auth_method":"client_secret_post"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"VwNaejRsjjglOE3V7XdULIbl3QU0zMeA","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 432.317292ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/VwNaejRsjjglOE3V7XdULIbl3QU0zMeA
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"VwNaejRsjjglOE3V7XdULIbl3QU0zMeA","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 334.939041ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/VwNaejRsjjglOE3V7XdULIbl3QU0zMeA
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"VwNaejRsjjglOE3V7XdULIbl3QU0zMeA","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 452.302709ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/VwNaejRsjjglOE3V7XdULIbl3QU0zMeA
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"VwNaejRsjjglOE3V7XdULIbl3QU0zMeA","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 352.475584ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/VwNaejRsjjglOE3V7XdULIbl3QU0zMeA
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 308.006667ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 258
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","app_type":"non_interactive","jwt_configuration":{"secret_encoded":true,"scopes":{"foo":"bar"},"alg":"RS256","lifetime_in_seconds":300},"token_endpoint_auth_method":"client_secret_post"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"eMa0DHkPBIsMiJvgFE4r6VOmrQWLe9fc","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":true,"scopes":{"foo":"bar"},"alg":"RS256","lifetime_in_seconds":300},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 465.873416ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eMa0DHkPBIsMiJvgFE4r6VOmrQWLe9fc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"eMa0DHkPBIsMiJvgFE4r6VOmrQWLe9fc","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":true,"scopes":{"foo":"bar"},"alg":"RS256","lifetime_in_seconds":300},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 369.679792ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eMa0DHkPBIsMiJvgFE4r6VOmrQWLe9fc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"eMa0DHkPBIsMiJvgFE4r6VOmrQWLe9fc","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":true,"scopes":{"foo":"bar"},"alg":"RS256","lifetime_in_seconds":300},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 310.220916ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eMa0DHkPBIsMiJvgFE4r6VOmrQWLe9fc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"eMa0DHkPBIsMiJvgFE4r6VOmrQWLe9fc","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":true,"scopes":{"foo":"bar"},"alg":"RS256","lifetime_in_seconds":300},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 325.238208ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eMa0DHkPBIsMiJvgFE4r6VOmrQWLe9fc
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 323.579417ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 246
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","app_type":"non_interactive","jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"token_endpoint_auth_method":"client_secret_post"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"GRJcROfvrnzLmieGHT9Nj1ZcI0Rf50Xz","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 507.873ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/GRJcROfvrnzLmieGHT9Nj1ZcI0Rf50Xz
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"GRJcROfvrnzLmieGHT9Nj1ZcI0Rf50Xz","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 425.612625ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/GRJcROfvrnzLmieGHT9Nj1ZcI0Rf50Xz
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"GRJcROfvrnzLmieGHT9Nj1ZcI0Rf50Xz","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 305.92125ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/GRJcROfvrnzLmieGHT9Nj1ZcI0Rf50Xz
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"GRJcROfvrnzLmieGHT9Nj1ZcI0Rf50Xz","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 382.021667ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/GRJcROfvrnzLmieGHT9Nj1ZcI0Rf50Xz
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - JWT Config - TestAccClientJWTConfiguration","client_id":"GRJcROfvrnzLmieGHT9Nj1ZcI0Rf50Xz","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"scopes":{},"alg":"RS256","lifetime_in_seconds":1},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 323.248084ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/GRJcROfvrnzLmieGHT9Nj1ZcI0Rf50Xz
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 334.01275ms

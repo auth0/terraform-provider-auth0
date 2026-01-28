@@ -224,6 +224,8 @@ func expandConnectionOptionsAuthenticationMethods(config cty.Value) *management.
 
 			authMethods.Password = expandConnectionOptionsAuthenticationMethodsPassword(attributes.GetAttr("password"))
 			authMethods.Passkey = expandConnectionOptionsAuthenticationMethodsPasskey(attributes.GetAttr("passkey"))
+			authMethods.EmailOTP = expandConnectionOptionsAuthenticationMethodsEmailOTP(attributes.GetAttr("email_otp"))
+			authMethods.PhoneOTP = expandConnectionOptionsAuthenticationMethodsPhoneOTP(attributes.GetAttr("phone_otp"))
 
 			return stop
 		})
@@ -252,6 +254,30 @@ func expandConnectionOptionsAuthenticationMethodsPasskey(config cty.Value) *mana
 			return stop
 		})
 	return passkeyAuth
+}
+
+func expandConnectionOptionsAuthenticationMethodsEmailOTP(config cty.Value) *management.EmailOTPAuthenticationMethod {
+	var emailOTPAuth *management.EmailOTPAuthenticationMethod
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			emailOTPAuth = &management.EmailOTPAuthenticationMethod{
+				Enabled: value.Bool(attributes.GetAttr("enabled")),
+			}
+			return stop
+		})
+	return emailOTPAuth
+}
+
+func expandConnectionOptionsAuthenticationMethodsPhoneOTP(config cty.Value) *management.PhoneOTPAuthenticationMethod {
+	var phoneOTPAuth *management.PhoneOTPAuthenticationMethod
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			phoneOTPAuth = &management.PhoneOTPAuthenticationMethod{
+				Enabled: value.Bool(attributes.GetAttr("enabled")),
+			}
+			return stop
+		})
+	return phoneOTPAuth
 }
 
 func expandConnectionOptionsPasskeyOptions(config cty.Value) *management.PasskeyOptions {
@@ -339,7 +365,8 @@ func expandConnectionOptionsAttributeIdentifier(config cty.Value) *management.Co
 	config.GetAttr("identifier").ForEachElement(
 		func(_ cty.Value, identifier cty.Value) (stop bool) {
 			coai = &management.ConnectionOptionsAttributeIdentifier{
-				Active: value.Bool(identifier.GetAttr("active")),
+				Active:        value.Bool(identifier.GetAttr("active")),
+				DefaultMethod: value.String(identifier.GetAttr("default_method")),
 			}
 			return stop
 		})

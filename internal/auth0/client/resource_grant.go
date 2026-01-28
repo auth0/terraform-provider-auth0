@@ -94,7 +94,7 @@ func NewGrantResource() *schema.Resource {
 				Optional: true,
 				Default:  false,
 				Description: "When set to `true`, all scopes configured on the resource server are allowed for this client grant. " +
-					"`scopes` can not be provided when this is set to `true`.",
+					"`scopes` can not be provided when this is set to `true`. EA Only.",
 			},
 		},
 	}

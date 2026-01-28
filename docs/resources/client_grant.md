@@ -74,7 +74,7 @@ resource "auth0_client_grant" "my_client_grant" {
 
 ### Optional
 
-- `allow_all_scopes` (Boolean) When set to `true`, all scopes configured on the resource server are allowed for this client grant. `scopes` can not be provided when this is set to `true`.
+- `allow_all_scopes` (Boolean) When set to `true`, all scopes configured on the resource server are allowed for this client grant. `scopes` can not be provided when this is set to `true`. EA Only.
 - `allow_any_organization` (Boolean) If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations.
 - `authorization_details_types` (List of String) Defines the types of authorization details allowed for this client grant.
 - `organization_usage` (String) Defines whether organizations can be used with client credentials exchanges for this grant. (defaults to deny when not defined)

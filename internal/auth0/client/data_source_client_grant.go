@@ -61,7 +61,7 @@ func NewClientGrantsDataSource() *schema.Resource {
 						"allow_all_scopes": {
 							Type:        schema.TypeBool,
 							Computed:    true,
-							Description: "When enabled, all scopes configured on the resource server are allowed for this client grant.",
+							Description: "When enabled, all scopes configured on the resource server are allowed for this client grant. EA Only.",
 						},
 					},
 				},

@@ -1433,7 +1433,6 @@ func NewResource() *schema.Resource {
 			"oidc_logout": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Computed:    true,
 				MaxItems:    1,
 				Description: "Configure OIDC logout for the Client",
 				Elem: &schema.Resource{
@@ -1466,6 +1465,21 @@ func NewResource() *schema.Resource {
 										},
 										Optional:    true,
 										Description: "Contains the list of initiators to be enabled for the given client.",
+									},
+								},
+							},
+						},
+						"backchannel_logout_session_metadata": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Controls whether session metadata is included in the logout token. Default value is null.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"include": {
+										Type:        schema.TypeBool,
+										Required:    true,
+										Description: "The `include` property determines whether session metadata is included in the logout token.",
 									},
 								},
 							},

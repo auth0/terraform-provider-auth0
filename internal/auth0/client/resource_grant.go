@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -26,6 +27,7 @@ func NewGrantResource() *schema.Resource {
 			"resources to another entity without exposing credentials. The OAuth 2.0 protocol supports " +
 			"several types of grants, which allow different types of access. This resource allows " +
 			"you to create and manage client grants used with configured Auth0 clients.",
+		CustomizeDiff: validateClientGrant,
 		Schema: map[string]*schema.Schema{
 			"client_id": {
 				Type:        schema.TypeString,
@@ -45,8 +47,8 @@ func NewGrantResource() *schema.Resource {
 					Type:         schema.TypeString,
 					ValidateFunc: validation.StringIsNotEmpty,
 				},
-				Required:    true,
-				Description: "Permissions (scopes) included in this grant.",
+				Optional:    true,
+				Description: "Permissions (scopes) included in this grant. Can not be provided when `allow_all_scopes` is set to `true`.",
 			},
 			"organization_usage": {
 				Type:     schema.TypeString,
@@ -86,6 +88,13 @@ func NewGrantResource() *schema.Resource {
 				Type:        schema.TypeBool,
 				Computed:    true,
 				Description: "Indicates whether this grant is a special grant created by Auth0. It cannot be modified or deleted directly.",
+			},
+			"allow_all_scopes": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+				Description: "When set to `true`, all scopes configured on the resource server are allowed for this client grant. " +
+					"`scopes` can not be provided when this is set to `true`. EA Only.",
 			},
 		},
 	}
@@ -156,4 +165,24 @@ func clientGrantHasChange(clientGrant *management.ClientGrant) bool {
 	// Hacky but we need to tell if an
 	// empty json is sent to the api.
 	return clientGrant.String() != "{}"
+}
+
+func validateClientGrant(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	rawConfig := diff.GetRawConfig()
+	if rawConfig.IsNull() {
+		return nil
+	}
+
+	scopes := rawConfig.GetAttr("scopes")
+	allowAllScopes := diff.Get("allow_all_scopes").(bool)
+
+	if allowAllScopes && !scopes.IsNull() {
+		return fmt.Errorf("`scopes` cannot be provided when `allow_all_scopes` is set to `true`")
+	}
+
+	if !allowAllScopes && scopes.IsNull() {
+		return fmt.Errorf("either `scopes` must be provided or `allow_all_scopes` must be set to `true`")
+	}
+
+	return nil
 }

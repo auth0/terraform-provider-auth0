@@ -69,6 +69,23 @@ resource "auth0_event_stream" "my_event_stream_webhook" {
 }
 `
 
+const testEventStreamCreateWebhookWithTokenWO = `
+resource "auth0_event_stream" "my_event_stream_webhook" {
+  name              = "{{.testName}}-my-webhook"
+  destination_type  = "webhook"
+  subscriptions     = ["user.created"]
+
+  webhook_configuration {
+    webhook_endpoint = "https://test.com"
+	webhook_authorization {
+	  method		   = "bearer"
+	  token_wo         = "secret_token_value"
+	  token_wo_version = 1
+	}
+  }
+}
+`
+
 func TestAccEventStream(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -127,6 +144,17 @@ func TestAccEventStream(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.method", "basic"),
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.username", "admin"),
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.password", "securepass"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testEventStreamCreateWebhookWithTokenWO, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "name", fmt.Sprintf("%s-my-webhook", t.Name())),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "destination_type", "webhook"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_endpoint", "https://test.com"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.method", "bearer"),
+
+					resource.TestCheckNoResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.token_wo"),
 				),
 			},
 		},

@@ -1433,7 +1433,6 @@ func NewResource() *schema.Resource {
 			"oidc_logout": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Computed:    true,
 				MaxItems:    1,
 				Description: "Configure OIDC logout for the Client",
 				Elem: &schema.Resource{
@@ -1466,6 +1465,21 @@ func NewResource() *schema.Resource {
 										},
 										Optional:    true,
 										Description: "Contains the list of initiators to be enabled for the given client.",
+									},
+								},
+							},
+						},
+						"backchannel_logout_session_metadata": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Controls whether session metadata is included in the logout token. Default value is null.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"include": {
+										Type:        schema.TypeBool,
+										Required:    true,
+										Description: "The `include` property determines whether session metadata is included in the logout token.",
 									},
 								},
 							},
@@ -1512,13 +1526,13 @@ func NewResource() *schema.Resource {
 						"enforce_cascade_revocation": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Computed:    true,
+							Default:     true,
 							Description: "Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities. Usually configured in the native application.",
 						},
 						"enforce_online_refresh_tokens": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Computed:    true,
+							Default:     true,
 							Description: "Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application.",
 						},
 					},

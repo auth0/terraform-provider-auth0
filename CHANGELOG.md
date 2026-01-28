@@ -1,3 +1,11 @@
+## v1.38.0
+
+ENHANCEMENTS:
+- `resource/auth0_log_stream` – Add support for `eu-central-2` as a valid AWS region  ([#1444](https://github.com/auth0/terraform-provider-auth0/pull/1444))
+
+BUG FIXES:
+- `resource/auth0_client` – Update schema defaults to set `enforce_cascade_revocation` and `enforce_online_refresh_tokens` to true ([#1446](https://github.com/auth0/terraform-provider-auth0/pull/1446))
+
 ## v1.37.0
 
 FEATURES:

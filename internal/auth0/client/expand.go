@@ -75,11 +75,9 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 			client.TokenEndpointAuthMethod = auth0.String("none")
 		case "regular_web", "non_interactive":
 			client.TokenEndpointAuthMethod = auth0.String("client_secret_post")
+		case "resource_server":
+			client.ResourceServerIdentifier = value.String(config.GetAttr("resource_server_identifier"))
 		}
-	}
-
-	if data.IsNewResource() && client.ResourceServerIdentifier != nil {
-		client.ResourceServerIdentifier = value.String(config.GetAttr("resource_server_identifier"))
 	}
 
 	defaultConfig := data.GetRawConfig().GetAttr("default_organization")
@@ -176,6 +174,7 @@ func expandOIDCLogout(data *schema.ResourceData) *management.OIDCLogout {
 	oidcLogoutConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		oidcLogout.BackChannelLogoutURLs = value.Strings(config.GetAttr("backchannel_logout_urls"))
 		oidcLogout.BackChannelLogoutInitiators = expandBackChannelLogoutInitiators(config.GetAttr("backchannel_logout_initiators"))
+		oidcLogout.BackChannelLogoutSessionMetadata = expandBackChannelLogoutSessionMetadata(config.GetAttr("backchannel_logout_session_metadata"))
 		return stop
 	})
 
@@ -204,6 +203,25 @@ func expandBackChannelLogoutInitiators(config cty.Value) *management.BackChannel
 	}
 
 	return &initiators
+}
+
+func expandBackChannelLogoutSessionMetadata(config cty.Value) *management.BackChannelLogoutSessionMetadata {
+	if config.IsNull() {
+		return nil
+	}
+
+	var metadata management.BackChannelLogoutSessionMetadata
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		metadata.Include = value.Bool(config.GetAttr("include"))
+		return stop
+	})
+
+	if metadata == (management.BackChannelLogoutSessionMetadata{}) {
+		return nil
+	}
+
+	return &metadata
 }
 
 func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefreshToken {
@@ -1036,6 +1054,11 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 		clientGrant.AuthorizationDetailsTypes = value.Strings(cfg.GetAttr("authorization_details_types"))
 	}
 
+	if data.IsNewResource() || data.HasChange("allow_all_scopes") {
+		v := data.Get("allow_all_scopes").(bool)
+		clientGrant.AllowAllScopes = &v
+	}
+
 	return clientGrant
 }
 
@@ -1062,8 +1085,13 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		sessionTransfer.AllowedAuthenticationMethods = value.Strings(config.GetAttr("allowed_authentication_methods"))
 		sessionTransfer.EnforceDeviceBinding = value.String(config.GetAttr("enforce_device_binding"))
 		sessionTransfer.AllowRefreshToken = value.Bool(config.GetAttr("allow_refresh_token"))
-		sessionTransfer.EnforceOnlineRefreshTokens = value.Bool(config.GetAttr("enforce_online_refresh_tokens"))
-		sessionTransfer.EnforceCascadeRevocation = value.Bool(config.GetAttr("enforce_cascade_revocation"))
+
+		enforceOnlineRefreshTokens := data.Get("session_transfer.0.enforce_online_refresh_tokens").(bool)
+		sessionTransfer.EnforceOnlineRefreshTokens = auth0.Bool(enforceOnlineRefreshTokens)
+
+		enforceCascadeRevocation := data.Get("session_transfer.0.enforce_cascade_revocation").(bool)
+		sessionTransfer.EnforceCascadeRevocation = auth0.Bool(enforceCascadeRevocation)
+
 		return stop
 	})
 
@@ -1074,9 +1102,10 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 	type nullCheckFunc func(*schema.ResourceData) bool
 
 	checks := map[string]nullCheckFunc{
-		"default_organization": isDefaultOrgNull,
-		"session_transfer":     isSessionTransferNull,
-		"cross_origin_loc":     isCrossOriginLocNull,
+		"default_organization":    isDefaultOrgNull,
+		"session_transfer":        isSessionTransferNull,
+		"oidc_backchannel_logout": isOIDCLogoutNull,
+		"cross_origin_loc":        isCrossOriginLocNull,
 		"encryption_key": func(d *schema.ResourceData) bool {
 			return isEncryptionKeyNull(d) && !d.IsNewResource()
 		},
@@ -1085,6 +1114,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		},
 		"token_quota": commons.IsTokenQuotaNull,
 		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
+		"organization_discovery_methods":                       isOrganizationDiscoveryMethodsNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1188,17 +1218,70 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 	return empty
 }
 
-func isSkipNonVerifiableCallbackURIConfirmationPromptNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") {
+func isOIDCLogoutNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("oidc_logout") {
 		return false
 	}
 
-	rawConfig := data.GetRawConfig()
+	rawConfig := data.GetRawConfig().GetAttr("oidc_logout")
+
+	// If oidc_logout is explicitly set to null.
 	if rawConfig.IsNull() {
 		return true
 	}
 
-	return rawConfig.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
+	empty := true
+	rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		logoutURLs := cfg.GetAttr("backchannel_logout_urls")
+		initiators := cfg.GetAttr("backchannel_logout_initiators")
+		sessionMetadata := cfg.GetAttr("backchannel_logout_session_metadata")
+
+		if !logoutURLs.IsNull() && logoutURLs.LengthInt() > 0 {
+			empty = false
+			return stop
+		}
+
+		if !initiators.IsNull() {
+			initiators.ForEachElement(func(_ cty.Value, initiatorCfg cty.Value) (stop bool) {
+				mode := initiatorCfg.GetAttr("mode")
+				selected := initiatorCfg.GetAttr("selected_initiators")
+
+				if (!mode.IsNull() && mode.AsString() != "") ||
+					(!selected.IsNull() && selected.LengthInt() > 0) {
+					empty = false
+				}
+				return stop
+			})
+		}
+
+		if !sessionMetadata.IsNull() {
+			sessionMetadata.ForEachElement(func(_ cty.Value, metaCfg cty.Value) (stop bool) {
+				include := metaCfg.GetAttr("include")
+				if !include.IsNull() {
+					empty = false
+				}
+				return stop
+			})
+		}
+
+		return stop
+	})
+
+	return empty
+}
+
+func isSkipNonVerifiableCallbackURIConfirmationPromptNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") {
+		return false
+	}
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
+}
+
+func isOrganizationDiscoveryMethodsNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("organization_discovery_methods") {
+		return false
+	}
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("organization_discovery_methods").IsNull()
 }
 
 func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressConfiguration {

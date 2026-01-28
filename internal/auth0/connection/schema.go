@@ -296,6 +296,40 @@ var optionsSchema = &schema.Schema{
 							Computed: true,
 							MaxItems: 1,
 						},
+						"email_otp": {
+							Description: "Configures Email OTP authentication",
+							Type:        schema.TypeList,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"enabled": {
+										Description: "Enables Email OTP authentication",
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+									},
+								},
+							},
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+						},
+						"phone_otp": {
+							Description: "Configures Phone OTP authentication",
+							Type:        schema.TypeList,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"enabled": {
+										Description: "Enables Phone OTP authentication",
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+									},
+								},
+							},
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+						},
 					},
 				},
 			},
@@ -1000,15 +1034,25 @@ var optionsSchema = &schema.Schema{
 									"identifier": {
 										Type:        schema.TypeList,
 										Optional:    true,
-										Computed:    false,
+										Computed:    true,
 										Description: "Connection Options Email Attribute Identifier",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"active": {
 													Type:        schema.TypeBool,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines whether email attribute is active as an identifier",
+												},
+												"default_method": {
+													Type:        schema.TypeString,
+													Optional:    true,
+													Computed:    false,
+													Description: "Gets and Sets the default authentication method for the email identifier type. Valid values: `password`, `email_otp`",
+													ValidateFunc: validation.StringInSlice([]string{
+														"password",
+														"email_otp",
+													}, false),
 												},
 											},
 										},
@@ -1016,7 +1060,7 @@ var optionsSchema = &schema.Schema{
 									"profile_required": {
 										Type:        schema.TypeBool,
 										Optional:    true,
-										Computed:    false,
+										Computed:    true,
 										Description: "Defines whether Profile is required",
 									},
 									"verification_method": {
@@ -1028,27 +1072,27 @@ var optionsSchema = &schema.Schema{
 									"signup": {
 										Type:        schema.TypeList,
 										Optional:    true,
-										Computed:    false,
+										Computed:    true,
 										Description: "Defines signup settings for Email attribute",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"status": {
 													Type:        schema.TypeString,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines signup status for Email Attribute",
 												},
 												"verification": {
 													Type:        schema.TypeList,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines settings for Verification under Email attribute",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 															"active": {
 																Type:        schema.TypeBool,
 																Optional:    true,
-																Computed:    false,
+																Computed:    true,
 																Description: "Defines verification settings for signup attribute",
 															},
 														},
@@ -1060,6 +1104,7 @@ var optionsSchema = &schema.Schema{
 									"unique": {
 										Type:        schema.TypeBool,
 										Optional:    true,
+										Computed:    true,
 										Description: "If set to false, it allow multiple accounts with the same email address",
 									},
 								},
@@ -1075,15 +1120,24 @@ var optionsSchema = &schema.Schema{
 									"identifier": {
 										Type:        schema.TypeList,
 										Optional:    true,
-										Computed:    false,
+										Computed:    true,
 										Description: "Connection options for User Name Attribute Identifier",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"active": {
 													Type:        schema.TypeBool,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines whether UserName attribute is active as an identifier",
+												},
+												"default_method": {
+													Type:        schema.TypeString,
+													Optional:    true,
+													Computed:    false,
+													Description: "Gets and Sets the default authentication method for the username identifier type. Valid value: `password`",
+													ValidateFunc: validation.StringInSlice([]string{
+														"password",
+													}, false),
 												},
 											},
 										},
@@ -1091,20 +1145,20 @@ var optionsSchema = &schema.Schema{
 									"profile_required": {
 										Type:        schema.TypeBool,
 										Optional:    true,
-										Computed:    false,
+										Computed:    true,
 										Description: "Defines whether Profile is required",
 									},
 									"signup": {
 										Type:        schema.TypeList,
 										Optional:    true,
-										Computed:    false,
+										Computed:    true,
 										Description: "Defines signup settings for User Name attribute",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"status": {
 													Type:        schema.TypeString,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines whether User Name attribute is active as an identifier",
 												},
 											},
@@ -1167,15 +1221,25 @@ var optionsSchema = &schema.Schema{
 									"identifier": {
 										Type:        schema.TypeList,
 										Optional:    true,
-										Computed:    false,
+										Computed:    true,
 										Description: "Connection Options Phone Number Attribute Identifier",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"active": {
 													Type:        schema.TypeBool,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines whether Phone Number attribute is active as an identifier",
+												},
+												"default_method": {
+													Type:        schema.TypeString,
+													Optional:    true,
+													Computed:    true,
+													Description: "Gets and Sets the default authentication method for the phone_number identifier type. Valid values: `password`, `phone_otp`",
+													ValidateFunc: validation.StringInSlice([]string{
+														"password",
+														"phone_otp",
+													}, false),
 												},
 											},
 										},
@@ -1183,33 +1247,33 @@ var optionsSchema = &schema.Schema{
 									"profile_required": {
 										Type:        schema.TypeBool,
 										Optional:    true,
-										Computed:    false,
+										Computed:    true,
 										Description: "Defines whether Profile is required",
 									},
 									"signup": {
 										Type:        schema.TypeList,
 										Optional:    true,
-										Computed:    false,
+										Computed:    true,
 										Description: "Defines signup settings for Phone Number attribute",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"status": {
 													Type:        schema.TypeString,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines status of signup for Phone Number attribute ",
 												},
 												"verification": {
 													Type:        schema.TypeList,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines verification settings for Phone Number attribute",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 															"active": {
 																Type:        schema.TypeBool,
 																Optional:    true,
-																Computed:    false,
+																Computed:    true,
 																Description: "Defines verification settings for Phone Number attribute",
 															},
 														},

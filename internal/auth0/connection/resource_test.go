@@ -200,6 +200,7 @@ resource "auth0_connection" "my_connection" {
 		{{.requires_username}}
 		{{.validation}}
 		{{.attributes}}
+		{{.authentication_methods}}
 		brute_force_protection = true
 	}
 }
@@ -214,6 +215,7 @@ func TestAccConnectionOptionsAttrPhoneNumber(t *testing.T) {
 			phone_number {
 				identifier {
 					active = true
+					default_method = "password"
 				}
 				profile_required = true
 				signup {
@@ -222,6 +224,20 @@ func TestAccConnectionOptionsAttrPhoneNumber(t *testing.T) {
 						active = false
 					}
 				}
+			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
 			}
 		}`}
 	acctest.Test(t, resource.TestCase{
@@ -237,6 +253,10 @@ func TestAccConnectionOptionsAttrPhoneNumber(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.profile_required", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.signup.0.status", "required"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.signup.0.verification.0.active", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.email_otp.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.phone_otp.0.enabled", "true"),
 				),
 			},
 			{
@@ -263,6 +283,7 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 			email {
 				identifier {
 					active = true
+					default_method = "email_otp"
 				}
 				profile_required = true
 				verification_method = "otp"
@@ -272,6 +293,20 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 						active = false
 					}
 				}
+			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = true
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = false
 			}
 		}`}
 	acctest.Test(t, resource.TestCase{
@@ -288,6 +323,10 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.verification_method", "otp"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.status", "required"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.verification.0.active", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.email_otp.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.phone_otp.0.enabled", "false"),
 				),
 			},
 			{
@@ -314,6 +353,7 @@ func TestAccConnectionOptionsAttrUserName(t *testing.T) {
 			username {
 				identifier {
 					active = true
+					default_method = "password"
 				}
 				profile_required = true
 				signup {
@@ -328,6 +368,20 @@ func TestAccConnectionOptionsAttrUserName(t *testing.T) {
 					}
 				}
 			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
+			}
 		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -339,12 +393,17 @@ func TestAccConnectionOptionsAttrUserName(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.identifier.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.identifier.0.default_method", "password"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.profile_required", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.signup.0.status", "required"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.min_length", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.max_length", "3"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.allowed_types.0.email", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.allowed_types.0.phone_number", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.email_otp.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.phone_otp.0.enabled", "true"),
 				),
 			},
 			{
@@ -376,6 +435,20 @@ func TestAccConnectionOptionsAttrUserNameNegative(t *testing.T) {
 				signup {
 					status = "required"
 				}
+			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
 			}
 		}`}
 	acctest.Test(t, resource.TestCase{
@@ -427,6 +500,20 @@ func TestAccConnectionOptionsAttrNoActiveNegative(t *testing.T) {
 					status = "required"
 				}
 			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
+			}
 		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -470,6 +557,20 @@ func TestAccConnectionOptionsAttrSetValidationNegative(t *testing.T) {
 					status = "required"
 				}
 			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
+			}
 		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -498,6 +599,20 @@ func TestAccConnectionOptionsAttrInactiveSignUpNegative(t *testing.T) {
 						active = false
 					}
 				}
+			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
 			}
 		}`}
 	acctest.Test(t, resource.TestCase{

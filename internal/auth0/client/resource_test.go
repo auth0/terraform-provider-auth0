@@ -314,6 +314,8 @@ resource "auth0_client" "my_client" {
             scope = ["create:bar"]
         }
     }
+
+    depends_on = [auth0_resource_server_scope.my_scope]
 }
 `
 
@@ -348,6 +350,8 @@ resource "auth0_client" "my_client" {
             scope = []
         }
     }
+
+    depends_on = [auth0_resource_server_scope.my_scope]
 }
 `
 
@@ -2588,6 +2592,9 @@ resource "auth0_client" "my_client" {
 		backchannel_logout_initiators {
 			mode = "all"
 		}
+		backchannel_logout_session_metadata {
+			include = true
+		}
     }
 }
 `
@@ -2602,6 +2609,9 @@ resource "auth0_client" "my_client" {
 		backchannel_logout_initiators {
 			mode = "custom"
 			selected_initiators = ["rp-logout", "idp-logout", "password-changed", "session-expired"]
+		}
+		backchannel_logout_session_metadata {
+			include = false
 		}
 	}
 }
@@ -2627,6 +2637,8 @@ func TestAccClientOIDCLogout(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.mode", "all"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.selected_initiators.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_session_metadata.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_session_metadata.0.include", "true"),
 				),
 			},
 			{
@@ -2640,6 +2652,8 @@ func TestAccClientOIDCLogout(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.mode", "custom"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.selected_initiators.#", "4"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_session_metadata.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_session_metadata.0.include", "false"),
 				),
 			},
 			{
@@ -2647,7 +2661,7 @@ func TestAccClientOIDCLogout(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - OIDC Logout - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "0"),
 				),
 			},
 		},
@@ -2797,6 +2811,8 @@ resource "auth0_resource_server" "my_resource_server" {
 }
 
 resource "auth0_client" "my_client" {
+  depends_on = [ auth0_resource_server.my_resource_server ]
+
 	name = "Acceptance Test - Resource Server Client - {{.testName}}"
 	app_type = "resource_server"
 	resource_server_identifier = auth0_resource_server.my_resource_server.identifier

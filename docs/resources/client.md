@@ -619,6 +619,7 @@ Required:
 Optional:
 
 - `backchannel_logout_initiators` (Block List, Max: 1) Configure OIDC logout initiators for the Client (see [below for nested schema](#nestedblock--oidc_logout--backchannel_logout_initiators))
+- `backchannel_logout_session_metadata` (Block List, Max: 1) Controls whether session metadata is included in the logout token. Default value is null. (see [below for nested schema](#nestedblock--oidc_logout--backchannel_logout_session_metadata))
 
 <a id="nestedblock--oidc_logout--backchannel_logout_initiators"></a>
 ### Nested Schema for `oidc_logout.backchannel_logout_initiators`
@@ -630,6 +631,14 @@ Required:
 Optional:
 
 - `selected_initiators` (Set of String) Contains the list of initiators to be enabled for the given client.
+
+
+<a id="nestedblock--oidc_logout--backchannel_logout_session_metadata"></a>
+### Nested Schema for `oidc_logout.backchannel_logout_session_metadata`
+
+Required:
+
+- `include` (Boolean) The `include` property determines whether session metadata is included in the logout token.
 
 
 

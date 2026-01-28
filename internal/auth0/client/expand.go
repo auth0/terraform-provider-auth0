@@ -1230,7 +1230,6 @@ func isOIDCLogoutNull(data *schema.ResourceData) bool {
 		initiators := cfg.GetAttr("backchannel_logout_initiators")
 		sessionMetadata := cfg.GetAttr("backchannel_logout_session_metadata")
 
-		// backchannel_logout_urls is a TypeSet of strings
 		if !logoutURLs.IsNull() && logoutURLs.LengthInt() > 0 {
 			empty = false
 			return stop

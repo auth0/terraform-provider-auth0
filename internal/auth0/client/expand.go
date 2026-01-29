@@ -1115,6 +1115,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"token_quota": commons.IsTokenQuotaNull,
 		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
 		"organization_discovery_methods":                       isOrganizationDiscoveryMethodsNull,
+		"token_exchange":                                       isTokenExchangeNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1322,4 +1323,12 @@ func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressCo
 	})
 
 	return result
+}
+
+func isTokenExchangeNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("token_exchange") {
+		return false
+	}
+
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("token_exchange").IsNull() || data.GetRawConfig().GetAttr("token_exchange").LengthInt() == 0
 }

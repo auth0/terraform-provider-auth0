@@ -85,6 +85,22 @@ var optionsSchema = &schema.Schema{
 	Description: "Configuration settings for connection options.",
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"custom_password_hash": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Description: "Configure custom password hashing within a connection.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"action_id": {
+							Required: true,
+							Type:     schema.TypeString,
+							Description: "Id of an existing action that should be invoked when validating a universal password hash. " +
+								"This action must support password-hash-migration trigger",
+						},
+					},
+				},
+			},
 			"validation": {
 				Type:        schema.TypeList,
 				MaxItems:    1,
@@ -224,6 +240,7 @@ var optionsSchema = &schema.Schema{
 			"brute_force_protection": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Computed: true,
 				Description: "Indicates whether to enable brute force protection, which will limit " +
 					"the number of signups and failed logins from a suspicious IP address.",
 			},

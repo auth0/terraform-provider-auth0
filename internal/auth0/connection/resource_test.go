@@ -2780,3 +2780,68 @@ EOF
 	}
 }
 `
+
+const testAccConnectionUniversalPasswordHash = `
+resource "auth0_action" "action_hash" {
+	name = "PasswordHashAction"
+	deploy = true
+	runtime = "node22"
+	supported_triggers {
+		id = "password-hash-migration"
+		version = "v1"
+	}
+	code = <<-EOT
+	exports.onContinuePostLogin = async (event, api) => {
+		console.log("foo")
+	};"
+	EOT
+}
+
+resource "auth0_connection" "PasswordHash" {
+	name = "PasswordHashConn"
+	strategy = "auth0"
+	options {
+		custom_password_hash {
+			action_id = auth0_action.action_hash.id
+		}
+	}
+}
+`
+
+func TestAccConnectionPasswordHash(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccConnectionUniversalPasswordHash,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(
+						"auth0_action.action_hash",
+						"name",
+						"PasswordHashAction",
+					),
+					resource.TestCheckResourceAttr("auth0_action.action_hash", "deploy", "true"),
+					resource.TestCheckResourceAttr("auth0_action.action_hash", "runtime", "node22"),
+					resource.TestCheckResourceAttr("auth0_action.action_hash", "supported_triggers.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.action_hash", "supported_triggers.0.id", "password-hash-migration"),
+					resource.TestCheckResourceAttr("auth0_action.action_hash", "supported_triggers.0.version", "v1"),
+					resource.TestCheckResourceAttrSet("auth0_action.action_hash", "code"),
+					resource.TestCheckResourceAttr(
+						"auth0_connection.PasswordHash",
+						"name",
+						"PasswordHashConn",
+					),
+					resource.TestCheckResourceAttr("auth0_connection.PasswordHash", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.PasswordHash", "options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.PasswordHash", "options.0.custom_password_hash.#", "1"),
+					resource.TestCheckResourceAttrSet("auth0_connection.PasswordHash", "options.0.custom_password_hash.0.action_id"),
+					resource.TestCheckResourceAttrPair(
+						"auth0_connection.PasswordHash",
+						"options.0.custom_password_hash.0.action_id",
+						"auth0_action.action_hash",
+						"id",
+					),
+				),
+			},
+		},
+	})
+}

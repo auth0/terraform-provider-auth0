@@ -301,6 +301,18 @@ func expandConnectionOptionsPasskeyOptions(config cty.Value) *management.Passkey
 	return passkeyOptions
 }
 
+func expandConnectionOptionsCustomPasswordHash(config cty.Value) *management.CustomPasswordHash {
+	var customPasswordHash *management.CustomPasswordHash
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			customPasswordHash = &management.CustomPasswordHash{
+				ActionID: value.String(attributes.GetAttr("action_id")),
+			}
+			return stop
+		})
+	return customPasswordHash
+}
+
 func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
 	var coa *management.ConnectionOptionsAttributes
 	config.ForEachElement(
@@ -576,6 +588,10 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 
 	if config.Type().HasAttribute("passkey_options") && !config.GetAttr("passkey_options").IsNull() {
 		options.PasskeyOptions = expandConnectionOptionsPasskeyOptions(config.GetAttr("passkey_options"))
+	}
+
+	if config.Type().HasAttribute("custom_password_hash") && !config.GetAttr("custom_password_hash").IsNull() {
+		options.CustomPasswordHash = expandConnectionOptionsCustomPasswordHash(config.GetAttr("custom_password_hash"))
 	}
 
 	var err error

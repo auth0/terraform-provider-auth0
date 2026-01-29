@@ -59,6 +59,11 @@ func NewDiscoveryDomainResource() *schema.Resource {
 				Computed:    true,
 				Description: "The full domain where the TXT record should be added.",
 			},
+			"use_for_organization_discovery": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Indicates whether this domain should be used for organization discovery during login.",
+			},
 		},
 	}
 }

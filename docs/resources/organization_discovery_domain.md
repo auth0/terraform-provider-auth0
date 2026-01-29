@@ -19,6 +19,10 @@ Manage organization discovery domains for Home Realm Discovery. These domains he
 - `organization_id` (String) The ID of the organization.
 - `status` (String) Verification status. Must be either 'pending' or 'verified'.
 
+### Optional
+
+- `use_for_organization_discovery` (Boolean) Indicates whether this domain should be used for organization discovery during login.
+
 ### Read-Only
 
 - `id` (String) The ID of the discovery domain.

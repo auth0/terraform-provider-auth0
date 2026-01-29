@@ -21,6 +21,7 @@ resource "auth0_organization_discovery_domain" "test_domain" {
 	organization_id = auth0_organization.test_org.id
 	domain         = "{{.testName}}.example.com"
 	status         = "pending"
+	use_for_organization_discovery = true
 }
 `
 
@@ -34,6 +35,7 @@ resource "auth0_organization_discovery_domain" "test_domain" {
 	organization_id = auth0_organization.test_org.id
 	domain         = "{{.testName}}.example.com"
 	status         = "verified"
+	use_for_organization_discovery = false
 }
 `
 
@@ -48,6 +50,7 @@ func TestAccOrganizationDiscoveryDomain(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_discovery_domain.test_domain", "domain", fmt.Sprintf("%s.example.com", domainName)),
 					resource.TestCheckResourceAttr("auth0_organization_discovery_domain.test_domain", "status", "pending"),
+					resource.TestCheckResourceAttr("auth0_organization_discovery_domain.test_domain", "use_for_organization_discovery", "true"),
 					resource.TestCheckResourceAttrSet("auth0_organization_discovery_domain.test_domain", "organization_id"),
 					resource.TestCheckResourceAttrSet("auth0_organization_discovery_domain.test_domain", "verification_txt"),
 					resource.TestCheckResourceAttrSet("auth0_organization_discovery_domain.test_domain", "verification_host"),
@@ -58,6 +61,7 @@ func TestAccOrganizationDiscoveryDomain(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_discovery_domain.test_domain", "domain", fmt.Sprintf("%s.example.com", domainName)),
 					resource.TestCheckResourceAttr("auth0_organization_discovery_domain.test_domain", "status", "verified"),
+					resource.TestCheckResourceAttr("auth0_organization_discovery_domain.test_domain", "use_for_organization_discovery", "false"),
 					resource.TestCheckResourceAttrSet("auth0_organization_discovery_domain.test_domain", "organization_id"),
 					resource.TestCheckResourceAttrSet("auth0_organization_discovery_domain.test_domain", "verification_txt"),
 					resource.TestCheckResourceAttrSet("auth0_organization_discovery_domain.test_domain", "verification_host"),

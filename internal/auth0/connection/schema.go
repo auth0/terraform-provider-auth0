@@ -89,7 +89,7 @@ var optionsSchema = &schema.Schema{
 				Type:        schema.TypeList,
 				MaxItems:    1,
 				Optional:    true,
-				Description: "Configure custom password hashing within a connection.",
+				Description: "Configure custom password hashing within a connection. (EA only)",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"action_id": {

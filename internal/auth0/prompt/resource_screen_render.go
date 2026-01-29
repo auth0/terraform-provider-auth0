@@ -96,6 +96,7 @@ var (
 		string(management.ScreenAcceptInvitation),
 		string(management.ScreenOrganizationSelection),
 		string(management.ScreenOrganizationPicker),
+		string(management.ScreenPreLoginOrganizationPicker),
 		string(management.ScreenMFAOTPChallenge),
 		string(management.ScreenMFAOTPEnrollmentCode),
 		string(management.ScreenMFAOTPEnrollmentQR),

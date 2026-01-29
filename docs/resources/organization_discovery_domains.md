@@ -30,6 +30,10 @@ Required:
 - `domain` (String) The domain name for organization discovery.
 - `status` (String) Verification status. Must be either 'pending' or 'verified'.
 
+Optional:
+
+- `use_for_organization_discovery` (Boolean) Indicates whether this domain should be used for organization discovery during login.
+
 Read-Only:
 
 - `id` (String) The ID of the discovery domain.

@@ -96,6 +96,7 @@ Read-Only:
 - `discovery_url` (String)
 - `domain` (String)
 - `domain_aliases` (Set of String)
+- `email` (Boolean)
 - `enable_script_context` (Boolean)
 - `enabled_database_customization` (Boolean)
 - `entity_id` (String)

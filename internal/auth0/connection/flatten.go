@@ -289,6 +289,16 @@ func flattenPasskeyOptions(passkeyOptions *management.PasskeyOptions) interface{
 	}
 }
 
+func flattenCustomPasswordHash(customPasswordHash *management.CustomPasswordHash) interface{} {
+	if customPasswordHash == nil {
+		return nil
+	}
+
+	return map[string]interface{}{
+		"action_id": customPasswordHash.GetActionID(),
+	}
+}
+
 func flattenAuthenticationMethodPasskey(passkeyAuthenticationMethod *management.PasskeyAuthenticationMethod) interface{} {
 	if passkeyAuthenticationMethod == nil {
 		return nil
@@ -450,6 +460,10 @@ func flattenConnectionOptionsAuth0(
 
 	if options.PasskeyOptions != nil {
 		optionsMap["passkey_options"] = []interface{}{flattenPasskeyOptions(options.GetPasskeyOptions())}
+	}
+
+	if options.CustomPasswordHash != nil {
+		optionsMap["custom_password_hash"] = []interface{}{flattenCustomPasswordHash(options.GetCustomPasswordHash())}
 	}
 
 	if options.PasswordComplexityOptions != nil {

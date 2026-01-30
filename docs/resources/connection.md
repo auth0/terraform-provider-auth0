@@ -730,6 +730,7 @@ Optional:
 - `consumer_key` (String) Identifies the client to the service provider
 - `consumer_secret` (String) Secret used to establish ownership of the consumer key.
 - `custom_headers` (Block Set) Configure extra headers to the Token endpoint of an OAuth 2.0 provider (see [below for nested schema](#nestedblock--options--custom_headers))
+- `custom_password_hash` (Block List, Max: 1) Configure custom password hashing within a connection. (EA only) (see [below for nested schema](#nestedblock--options--custom_password_hash))
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `decryption_key` (Block List, Max: 1) The key used to decrypt encrypted responses from the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively. (see [below for nested schema](#nestedblock--options--decryption_key))
@@ -1021,6 +1022,14 @@ Required:
 
 - `header` (String)
 - `value` (String)
+
+
+<a id="nestedblock--options--custom_password_hash"></a>
+### Nested Schema for `options.custom_password_hash`
+
+Required:
+
+- `action_id` (String) Id of an existing action that should be invoked when validating a universal password hash. This action must support password-hash-migration trigger
 
 
 <a id="nestedblock--options--decryption_key"></a>

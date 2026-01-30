@@ -84,6 +84,7 @@ Read-Only:
 - `consumer_key` (String)
 - `consumer_secret` (String)
 - `custom_headers` (Set of Object) (see [below for nested schema](#nestedobjatt--options--custom_headers))
+- `custom_password_hash` (List of Object) (see [below for nested schema](#nestedobjatt--options--custom_password_hash))
 - `custom_scripts` (Map of String)
 - `debug` (Boolean)
 - `decryption_key` (List of Object) (see [below for nested schema](#nestedobjatt--options--decryption_key))
@@ -372,6 +373,14 @@ Read-Only:
 
 - `header` (String)
 - `value` (String)
+
+
+<a id="nestedobjatt--options--custom_password_hash"></a>
+### Nested Schema for `options.custom_password_hash`
+
+Read-Only:
+
+- `action_id` (String)
 
 
 <a id="nestedobjatt--options--decryption_key"></a>

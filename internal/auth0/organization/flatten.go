@@ -138,6 +138,7 @@ func flattenOrganizationDiscoveryDomain(data *schema.ResourceData, discoveryDoma
 		data.Set("status", discoveryDomain.GetStatus()),
 		data.Set("verification_txt", discoveryDomain.GetVerificationTXT()),
 		data.Set("verification_host", discoveryDomain.GetVerificationHost()),
+		data.Set("use_for_organization_discovery", discoveryDomain.GetUseForOrganizationDiscovery()),
 	)
 
 	return result.ErrorOrNil()
@@ -151,11 +152,12 @@ func flattenOrganizationDiscoveryDomains(data *schema.ResourceData, domains []*m
 	var enabledDomains []interface{}
 	for _, domain := range domains {
 		enabledDomains = append(enabledDomains, map[string]interface{}{
-			"id":                domain.GetID(),
-			"domain":            domain.GetDomain(),
-			"status":            domain.GetStatus(),
-			"verification_txt":  domain.GetVerificationTXT(),
-			"verification_host": domain.GetVerificationHost(),
+			"id":                             domain.GetID(),
+			"domain":                         domain.GetDomain(),
+			"status":                         domain.GetStatus(),
+			"verification_txt":               domain.GetVerificationTXT(),
+			"verification_host":              domain.GetVerificationHost(),
+			"use_for_organization_discovery": domain.GetUseForOrganizationDiscovery(),
 		})
 	}
 

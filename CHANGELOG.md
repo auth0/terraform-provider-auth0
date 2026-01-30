@@ -8,6 +8,7 @@ FEATURES:
 - `resource/auth0_event_streams` – Add WriteOnly support for Sensitive fields like Token/Password  ([#1436](https://github.com/auth0/terraform-provider-auth0/pull/1436))
 - `resource/auth0_client_grant` – Add support for configuring `allow_all_scopes` (EA Only) ([#1452](https://github.com/auth0/terraform-provider-auth0/pull/1452))
 - `resource/auth0_connection` – Add support for configuring SMS and EMAIL passwordless authentication methods for database connections (EA Only) ([#1453](https://github.com/auth0/terraform-provider-auth0/pull/1453))
+- `resource/auth0_connection` – Add support for configuring `email` field for options ([#1453](https://github.com/auth0/terraform-provider-auth0/pull/1453))
 
 ENHANCEMENTS:
 - `resource/auth0_prompt_screen_renderer`: Added support for `ScreenPreLoginOrganizationPicker` ([#1459](https://github.com/auth0/terraform-provider-auth0/pull/1459))
@@ -16,7 +17,6 @@ ENHANCEMENTS:
 BUG FIXES:
 - `resource/auth0_client` – Allow setting `organization_discovery_methods` as null ([#1451](https://github.com/auth0/terraform-provider-auth0/pull/1451))
 - `resource/auth0_client` – Allow setting `token_exchange` as null ([#1460](https://github.com/auth0/terraform-provider-auth0/pull/1460))
-
 
 ## v1.38.0
 

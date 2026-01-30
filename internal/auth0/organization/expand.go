@@ -85,16 +85,18 @@ func expandOrganizationDiscoveryDomain(data *schema.ResourceData) *management.Or
 	cfg := data.GetRawConfig()
 
 	return &management.OrganizationDiscoveryDomain{
-		Domain: value.String(cfg.GetAttr("domain")),
-		Status: value.String(cfg.GetAttr("status")),
+		Domain:                      value.String(cfg.GetAttr("domain")),
+		Status:                      value.String(cfg.GetAttr("status")),
+		UseForOrganizationDiscovery: value.Bool(cfg.GetAttr("use_for_organization_discovery")),
 		// Note: ID, VerificationTXT, and VerificationHost are read-only and should not be sent to the API.
 	}
 }
 
 func expandOrganizationDiscoveryDomainFromConfig(domainCfg cty.Value) *management.OrganizationDiscoveryDomain {
 	return &management.OrganizationDiscoveryDomain{
-		Domain: value.String(domainCfg.GetAttr("domain")),
-		Status: value.String(domainCfg.GetAttr("status")),
+		Domain:                      value.String(domainCfg.GetAttr("domain")),
+		Status:                      value.String(domainCfg.GetAttr("status")),
+		UseForOrganizationDiscovery: value.Bool(domainCfg.GetAttr("use_for_organization_discovery")),
 		// Note: ID, VerificationTXT, and VerificationHost are read-only and should not be sent to the API.
 	}
 }

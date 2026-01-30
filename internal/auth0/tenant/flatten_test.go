@@ -101,4 +101,18 @@ func TestFlattenTenant(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, mockResourceData.Get("error_page"), []interface{}{})
 	})
+
+	t.Run("it sets ephemeral session values correctly when returned by the API", func(t *testing.T) {
+		tenant := management.Tenant{
+			EphemeralSessionLifetime:     auth0.Float64(1.5),
+			IdleEphemeralSessionLifetime: auth0.Float64(0.25),
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.Equal(t, 1.5, mockResourceData.Get("ephemeral_session_lifetime"))
+		assert.Equal(t, 0.25, mockResourceData.Get("idle_ephemeral_session_lifetime"))
+	})
+
 }

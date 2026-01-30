@@ -672,7 +672,7 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 			return false
 		})
 
-		// Only set CustomHeaders if the map is not empty to avoid sending "{}" to the API
+		// Only set CustomHeaders if the map is not empty to avoid sending "{}" to the API.
 		if len(customHeaders) > 0 {
 			options.CustomHeaders = &customHeaders
 		}
@@ -1164,7 +1164,7 @@ func expandConnectionOptionsOAuth1(_ *schema.ResourceData, config cty.Value) (in
 			return false
 		})
 
-		// Only set CustomHeaders if the map is not empty to avoid sending "{}" to the API
+		// Only set CustomHeaders if the map is not empty to avoid sending "{}" to the API.
 		if len(customHeaders) > 0 {
 			options.CustomHeaders = &customHeaders
 		}

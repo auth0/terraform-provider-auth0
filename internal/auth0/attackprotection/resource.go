@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
@@ -581,45 +582,74 @@ func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
 		// Map of providers to their required secret fields
 		providerSecretFields := map[string]struct {
 			path        string
+			providerKey string
 			secretField string
 			displayName string
 		}{
 			"recaptcha_v2": {
 				path:        "captcha.0.recaptcha_v2.0.secret",
+				providerKey: "recaptcha_v2",
 				secretField: "secret",
 				displayName: "reCAPTCHA v2",
 			},
 			"recaptcha_enterprise": {
 				path:        "captcha.0.recaptcha_enterprise.0.api_key",
+				providerKey: "recaptcha_enterprise",
 				secretField: "api_key",
 				displayName: "reCAPTCHA Enterprise",
 			},
 			"hcaptcha": {
 				path:        "captcha.0.hcaptcha.0.secret",
+				providerKey: "hcaptcha",
 				secretField: "secret",
 				displayName: "hCaptcha",
 			},
 			"friendly_captcha": {
 				path:        "captcha.0.friendly_captcha.0.secret",
+				providerKey: "friendly_captcha",
 				secretField: "secret",
 				displayName: "Friendly Captcha",
 			},
 			"arkose": {
 				path:        "captcha.0.arkose.0.secret",
+				providerKey: "arkose",
 				secretField: "secret",
 				displayName: "Arkose Labs",
 			},
 		}
 
-		if config, exists := providerSecretFields[provider]; exists {
-			_, secretOk := diff.GetOk(config.path)
-			if !secretOk {
-				return fmt.Errorf(
-					"%s is configured as the active CAPTCHA provider, but %q is not set. "+
-						"Please provide the %s for %s",
-					config.displayName, config.secretField, config.secretField, config.displayName,
-				)
-			}
+		config, exists := providerSecretFields[provider]
+		if !exists {
+			return nil
+		}
+
+		// Use GetRawPlan to distinguish between null (not set) and empty string (explicitly set)
+		// An empty string is considered valid, but null/unset is not
+		rawPlan := diff.GetRawPlan()
+		captchaAttr := rawPlan.GetAttr("captcha")
+
+		if captchaAttr.IsNull() || captchaAttr.LengthInt() == 0 {
+			return nil
+		}
+
+		captchaConfig := captchaAttr.Index(cty.NumberIntVal(0))
+		providerAttr := captchaConfig.GetAttr(config.providerKey)
+
+		if providerAttr.IsNull() || providerAttr.LengthInt() == 0 {
+			return nil
+		}
+
+		providerConfig := providerAttr.Index(cty.NumberIntVal(0))
+		secretAttr := providerConfig.GetAttr(config.secretField)
+
+		// If the secret is null or not provided, return an error
+		// Empty string is valid (secretAttr.AsString() == "" but !secretAttr.IsNull())
+		if secretAttr.IsNull() {
+			return fmt.Errorf(
+				"%s is configured as the active CAPTCHA provider, but %q is not set. "+
+					"Please provide the %s for %s",
+				config.displayName, config.secretField, config.secretField, config.displayName,
+			)
 		}
 
 		return nil

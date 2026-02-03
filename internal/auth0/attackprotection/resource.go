@@ -565,9 +565,8 @@ func NewResource() *schema.Resource {
 // This allows import to succeed (where secrets are not returned by the API)
 // while still enforcing that secrets are provided during create/update operations.
 func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
-	return func(ctx context.Context, diff *schema.ResourceDiff, meta interface{}) error {
-
-		// Skip validation during import (when the resource ID is set but it's a new resource)
+	return func(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+		// Skip validation during import (when the resource ID is set but it's a new resource).
 		if diff.Id() != "" && !diff.HasChange("captcha") {
 			return nil
 		}
@@ -579,7 +578,7 @@ func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
 
 		provider := activeProviderID.(string)
 
-		// Map of providers to their required secret fields
+		// Map of providers to their required secret fields.
 		providerSecretFields := map[string]struct {
 			path        string
 			providerKey string
@@ -623,8 +622,8 @@ func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
 			return nil
 		}
 
-		// Use GetRawPlan to distinguish between null (not set) and empty string (explicitly set)
-		// An empty string is considered valid, but null/unset is not
+		// Use GetRawPlan to distinguish between null (not set) and empty string (explicitly set).
+		// An empty string is considered valid, but null/unset is not.
 		rawPlan := diff.GetRawPlan()
 		captchaAttr := rawPlan.GetAttr("captcha")
 
@@ -642,8 +641,8 @@ func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
 		providerConfig := providerAttr.Index(cty.NumberIntVal(0))
 		secretAttr := providerConfig.GetAttr(config.secretField)
 
-		// If the secret is null or not provided, return an error
-		// Empty string is valid (secretAttr.AsString() == "" but !secretAttr.IsNull())
+		// If the secret is null or not provided, return an error.
+		// Empty string is valid (secretAttr.AsString() == "" but !secretAttr.IsNull()).
 		if secretAttr.IsNull() {
 			return fmt.Errorf(
 				"%s is configured as the active CAPTCHA provider, but %q is not set. "+

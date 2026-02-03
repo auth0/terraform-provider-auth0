@@ -658,6 +658,7 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 		PKCEEnabled:        value.Bool(config.GetAttr("pkce_enabled")),
 		Scripts:            value.MapOfStrings(config.GetAttr("scripts")),
 		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
+		Email:              value.Bool(config.GetAttr("email")),
 	}
 
 	customHeadersConfig := config.GetAttr("custom_headers")
@@ -671,7 +672,10 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 			return false
 		})
 
-		options.CustomHeaders = &customHeaders
+		// Only set CustomHeaders if the map is not empty to avoid sending "{}" to the API.
+		if len(customHeaders) > 0 {
+			options.CustomHeaders = &customHeaders
+		}
 	}
 
 	expandConnectionOptionsScopes(data, options)
@@ -1160,7 +1164,10 @@ func expandConnectionOptionsOAuth1(_ *schema.ResourceData, config cty.Value) (in
 			return false
 		})
 
-		options.CustomHeaders = &customHeaders
+		// Only set CustomHeaders if the map is not empty to avoid sending "{}" to the API.
+		if len(customHeaders) > 0 {
+			options.CustomHeaders = &customHeaders
+		}
 	}
 	return options, nil
 }

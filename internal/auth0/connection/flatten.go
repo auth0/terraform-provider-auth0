@@ -588,6 +588,7 @@ func flattenConnectionOptionsOAuth2(
 		"icon_url":                 options.GetLogoURL(),
 		"pkce_enabled":             options.GetPKCEEnabled(),
 		"strategy_version":         options.GetStrategyVersion(),
+		"email":                    options.GetEmail(),
 		"upstream_params":          upstreamParams,
 		"custom_headers":           flattenCustomHeaders(options.GetCustomHeaders()),
 	}

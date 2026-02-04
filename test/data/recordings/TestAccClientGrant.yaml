@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: 514
         uncompressed: false
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 378.438375ms
+        duration: 814.748542ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -55,7 +55,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
         method: POST
       response:
@@ -66,13 +66,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 580.801333ms
+        duration: 1.071886583s
     - id: 2
       request:
         proto: HTTP/1.1
@@ -88,8 +88,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -99,13 +99,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 402.873916ms
+        duration: 1.223700083s
     - id: 3
       request:
         proto: HTTP/1.1
@@ -121,7 +121,40 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 541.129ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -132,14 +165,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 433.297ms
-    - id: 4
+        duration: 1.014146959s
+    - id: 5
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -157,7 +190,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: PATCH
       response:
@@ -168,46 +201,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 316.912834ms
-    - id: 5
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 318.163541ms
+        duration: 690.058208ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -223,7 +223,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -234,13 +234,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 358.017875ms
+        duration: 574.374084ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -256,8 +256,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant&client_id=BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2&include_totals=true&per_page=50
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant&client_id=u5S9ThP6vxTp68pFY26Y91ou0vKdWJza&include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -273,26 +273,26 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 321.128625ms
+        duration: 617.709208ms
     - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 261
+        content_length: 236
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:bar"],"allow_all_scopes":false,"subject_type":"user","authorization_details_types":["payment","shipping"]}
+            {"client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:bar"],"subject_type":"user","authorization_details_types":["payment","shipping"]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants
         method: POST
       response:
@@ -301,15 +301,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 288
+        content_length: 263
         uncompressed: false
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:bar"],"subject_type":"user","authorization_details_types":["payment","shipping"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:bar"],"subject_type":"user","authorization_details_types":["payment","shipping"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 385.517833ms
+        duration: 733.907792ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -325,8 +325,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -336,13 +336,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:bar"],"subject_type":"user","authorization_details_types":["payment","shipping"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:bar"],"subject_type":"user","authorization_details_types":["payment","shipping"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 341.154417ms
+        duration: 560.943458ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -358,8 +358,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -369,13 +369,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 337.504166ms
+        duration: 661.889625ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -391,8 +391,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -402,13 +402,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 451.898875ms
+        duration: 689.552917ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -424,7 +424,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -435,13 +435,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 368.898458ms
+        duration: 638.515125ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -457,8 +457,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -468,13 +468,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:bar"],"subject_type":"user","authorization_details_types":["payment","shipping"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:bar"],"subject_type":"user","authorization_details_types":["payment","shipping"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 326.206459ms
+        duration: 617.283792ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -490,8 +490,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -501,13 +501,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 400.608958ms
+        duration: 490.713333ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -523,8 +523,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -534,13 +534,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 401.545709ms
+        duration: 569.312291ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -556,7 +556,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -567,13 +567,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 325.680084ms
+        duration: 744.6065ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -589,8 +589,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -600,13 +600,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:bar"],"subject_type":"user","authorization_details_types":["payment","shipping"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:bar"],"subject_type":"user","authorization_details_types":["payment","shipping"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 314.818708ms
+        duration: 605.341792ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -625,8 +625,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -636,13 +636,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:foo"],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:foo"],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 404.8355ms
+        duration: 606.225041ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -658,8 +658,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -669,13 +669,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:foo"],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:foo"],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 409.287ms
+        duration: 487.9655ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -691,8 +691,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -702,13 +702,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 354.160417ms
+        duration: 537.151ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -724,8 +724,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -735,13 +735,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 357.713792ms
+        duration: 639.408291ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -757,7 +757,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -768,13 +768,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 407.784792ms
+        duration: 507.787958ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -790,8 +790,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -801,13 +801,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:foo"],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:foo"],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 383.948375ms
+        duration: 1.134835542s
     - id: 24
       request:
         proto: HTTP/1.1
@@ -823,8 +823,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -834,13 +834,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 319.99675ms
+        duration: 609.354291ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -856,8 +856,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -867,13 +867,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 360.627125ms
+        duration: 746.686625ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -889,7 +889,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -900,13 +900,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 337.5665ms
+        duration: 559.433084ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -922,8 +922,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -933,13 +933,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:foo"],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":["create:foo"],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 363.867083ms
+        duration: 587.579125ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -958,8 +958,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -969,13 +969,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 335.152833ms
+        duration: 536.744291ms
     - id: 29
       request:
         proto: HTTP/1.1
@@ -991,8 +991,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -1002,13 +1002,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 307.194583ms
+        duration: 909.179291ms
     - id: 30
       request:
         proto: HTTP/1.1
@@ -1024,8 +1024,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -1035,13 +1035,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 337.441542ms
+        duration: 650.521958ms
     - id: 31
       request:
         proto: HTTP/1.1
@@ -1057,8 +1057,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -1068,13 +1068,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 355.242041ms
+        duration: 761.746084ms
     - id: 32
       request:
         proto: HTTP/1.1
@@ -1090,7 +1090,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -1101,13 +1101,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 327.597791ms
+        duration: 576.6955ms
     - id: 33
       request:
         proto: HTTP/1.1
@@ -1123,8 +1123,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -1134,13 +1134,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 465.360292ms
+        duration: 635.273083ms
     - id: 34
       request:
         proto: HTTP/1.1
@@ -1156,8 +1156,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -1167,13 +1167,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 318.619459ms
+        duration: 466.533667ms
     - id: 35
       request:
         proto: HTTP/1.1
@@ -1189,8 +1189,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -1200,13 +1200,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 392.699875ms
+        duration: 593.650208ms
     - id: 36
       request:
         proto: HTTP/1.1
@@ -1222,7 +1222,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -1233,13 +1233,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 337.225208ms
+        duration: 482.186792ms
     - id: 37
       request:
         proto: HTTP/1.1
@@ -1255,8 +1255,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -1266,13 +1266,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 319.719ms
+        duration: 634.311667ms
     - id: 38
       request:
         proto: HTTP/1.1
@@ -1291,8 +1291,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -1302,13 +1302,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":true}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":true}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 337.542333ms
+        duration: 672.25775ms
     - id: 39
       request:
         proto: HTTP/1.1
@@ -1324,8 +1324,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -1335,13 +1335,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":true}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":true}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 315.379625ms
+        duration: 608.00825ms
     - id: 40
       request:
         proto: HTTP/1.1
@@ -1357,8 +1357,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -1368,13 +1368,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 307.354084ms
+        duration: 659.702125ms
     - id: 41
       request:
         proto: HTTP/1.1
@@ -1390,8 +1390,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -1401,13 +1401,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 313.77425ms
+        duration: 743.201458ms
     - id: 42
       request:
         proto: HTTP/1.1
@@ -1423,7 +1423,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -1434,13 +1434,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 400.975083ms
+        duration: 531.716ms
     - id: 43
       request:
         proto: HTTP/1.1
@@ -1456,8 +1456,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -1467,13 +1467,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":true}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":true}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 390.558125ms
+        duration: 615.412542ms
     - id: 44
       request:
         proto: HTTP/1.1
@@ -1489,8 +1489,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -1500,13 +1500,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 356.977458ms
+        duration: 446.731167ms
     - id: 45
       request:
         proto: HTTP/1.1
@@ -1522,8 +1522,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -1533,13 +1533,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 557.961708ms
+        duration: 565.394708ms
     - id: 46
       request:
         proto: HTTP/1.1
@@ -1555,7 +1555,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -1566,13 +1566,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 340.126375ms
+        duration: 440.956667ms
     - id: 47
       request:
         proto: HTTP/1.1
@@ -1588,8 +1588,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: GET
       response:
         proto: HTTP/2.0
@@ -1599,13 +1599,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_wNCpMNY5QdtwU661","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":true}'
+        body: '{"id":"cgr_MpqEGFZCtImmAMHM","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":true}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 382.74425ms
+        duration: 454.532167ms
     - id: 48
       request:
         proto: HTTP/1.1
@@ -1621,8 +1621,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wNCpMNY5QdtwU661
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_MpqEGFZCtImmAMHM
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1638,7 +1638,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 386.501ms
+        duration: 489.994167ms
     - id: 49
       request:
         proto: HTTP/1.1
@@ -1657,7 +1657,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
         method: POST
       response:
@@ -1668,13 +1668,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"Acceptance Test - Client Grant Alt - TestAccClientGrant","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Client Grant Alt - TestAccClientGrant","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 732.88425ms
+        duration: 788.51625ms
     - id: 50
       request:
         proto: HTTP/1.1
@@ -1690,8 +1690,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NJlgW1cAIc99NhVACE8lNra7PgahU28E
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/Mva5toxbtjigQ4AVERaE1WPktu3ieZ81
         method: GET
       response:
         proto: HTTP/2.0
@@ -1701,13 +1701,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant Alt - TestAccClientGrant","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Client Grant Alt - TestAccClientGrant","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 361.315375ms
+        duration: 477.131167ms
     - id: 51
       request:
         proto: HTTP/1.1
@@ -1723,8 +1723,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant&client_id=NJlgW1cAIc99NhVACE8lNra7PgahU28E&include_totals=true&per_page=50
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant&client_id=Mva5toxbtjigQ4AVERaE1WPktu3ieZ81&include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1740,26 +1740,26 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 374.852333ms
+        duration: 450.154417ms
     - id: 52
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 238
+        content_length: 213
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"allow_all_scopes":false,"subject_type":"user","authorization_details_types":["payment"]}
+            {"client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants
         method: POST
       response:
@@ -1768,15 +1768,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 265
+        content_length: 240
         uncompressed: false
-        body: '{"id":"cgr_rcLcqHNURudSt0iu","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_07j0GiLSYbO3DTDD","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 351.597084ms
+        duration: 477.160625ms
     - id: 53
       request:
         proto: HTTP/1.1
@@ -1792,8 +1792,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_rcLcqHNURudSt0iu
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_07j0GiLSYbO3DTDD
         method: GET
       response:
         proto: HTTP/2.0
@@ -1803,13 +1803,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_rcLcqHNURudSt0iu","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_07j0GiLSYbO3DTDD","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 480.603458ms
+        duration: 527.326166ms
     - id: 54
       request:
         proto: HTTP/1.1
@@ -1825,8 +1825,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -1836,13 +1836,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 307.491584ms
+        duration: 654.984125ms
     - id: 55
       request:
         proto: HTTP/1.1
@@ -1858,8 +1858,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -1869,13 +1869,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 399.549583ms
+        duration: 655.042958ms
     - id: 56
       request:
         proto: HTTP/1.1
@@ -1891,7 +1891,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -1902,13 +1902,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 538.9255ms
+        duration: 684.919042ms
     - id: 57
       request:
         proto: HTTP/1.1
@@ -1924,8 +1924,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NJlgW1cAIc99NhVACE8lNra7PgahU28E
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/Mva5toxbtjigQ4AVERaE1WPktu3ieZ81
         method: GET
       response:
         proto: HTTP/2.0
@@ -1935,13 +1935,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant Alt - TestAccClientGrant","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Client Grant Alt - TestAccClientGrant","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 329.152ms
+        duration: 431.938666ms
     - id: 58
       request:
         proto: HTTP/1.1
@@ -1957,8 +1957,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_rcLcqHNURudSt0iu
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_07j0GiLSYbO3DTDD
         method: GET
       response:
         proto: HTTP/2.0
@@ -1968,13 +1968,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_rcLcqHNURudSt0iu","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_07j0GiLSYbO3DTDD","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 346.956084ms
+        duration: 413.979166ms
     - id: 59
       request:
         proto: HTTP/1.1
@@ -1990,8 +1990,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -2001,13 +2001,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 363.580542ms
+        duration: 440.796958ms
     - id: 60
       request:
         proto: HTTP/1.1
@@ -2023,8 +2023,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -2034,13 +2034,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 367.594417ms
+        duration: 457.726833ms
     - id: 61
       request:
         proto: HTTP/1.1
@@ -2056,7 +2056,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -2067,13 +2067,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 390.443917ms
+        duration: 420.437666ms
     - id: 62
       request:
         proto: HTTP/1.1
@@ -2089,8 +2089,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NJlgW1cAIc99NhVACE8lNra7PgahU28E
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/Mva5toxbtjigQ4AVERaE1WPktu3ieZ81
         method: GET
       response:
         proto: HTTP/2.0
@@ -2100,13 +2100,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant Alt - TestAccClientGrant","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Client Grant Alt - TestAccClientGrant","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 370.6365ms
+        duration: 513.047083ms
     - id: 63
       request:
         proto: HTTP/1.1
@@ -2122,8 +2122,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_rcLcqHNURudSt0iu
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_07j0GiLSYbO3DTDD
         method: GET
       response:
         proto: HTTP/2.0
@@ -2133,13 +2133,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_rcLcqHNURudSt0iu","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_07j0GiLSYbO3DTDD","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 391.433417ms
+        duration: 448.833459ms
     - id: 64
       request:
         proto: HTTP/1.1
@@ -2155,8 +2155,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant&client_id=NJlgW1cAIc99NhVACE8lNra7PgahU28E&include_totals=true&per_page=50
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant&client_id=Mva5toxbtjigQ4AVERaE1WPktu3ieZ81&include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2166,13 +2166,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"total":1,"start":0,"limit":50,"client_grants":[{"id":"cgr_rcLcqHNURudSt0iu","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}]}'
+        body: '{"total":1,"start":0,"limit":50,"client_grants":[{"id":"cgr_07j0GiLSYbO3DTDD","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 433.898291ms
+        duration: 490.664416ms
     - id: 65
       request:
         proto: HTTP/1.1
@@ -2188,8 +2188,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_rcLcqHNURudSt0iu
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_07j0GiLSYbO3DTDD
         method: GET
       response:
         proto: HTTP/2.0
@@ -2199,13 +2199,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_rcLcqHNURudSt0iu","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_07j0GiLSYbO3DTDD","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 379.7585ms
+        duration: 537.16775ms
     - id: 66
       request:
         proto: HTTP/1.1
@@ -2221,8 +2221,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: GET
       response:
         proto: HTTP/2.0
@@ -2232,13 +2232,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Client Grant - TestAccClientGrant","client_id":"u5S9ThP6vxTp68pFY26Y91ou0vKdWJza","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 314.042083ms
+        duration: 470.759833ms
     - id: 67
       request:
         proto: HTTP/1.1
@@ -2254,8 +2254,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: GET
       response:
         proto: HTTP/2.0
@@ -2265,13 +2265,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 393.991834ms
+        duration: 735.623292ms
     - id: 68
       request:
         proto: HTTP/1.1
@@ -2287,7 +2287,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: GET
       response:
@@ -2298,13 +2298,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":"Create bars"},{"value":"create:foo","description":"Create foos"}],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 398.133542ms
+        duration: 485.777375ms
     - id: 69
       request:
         proto: HTTP/1.1
@@ -2320,8 +2320,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NJlgW1cAIc99NhVACE8lNra7PgahU28E
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/Mva5toxbtjigQ4AVERaE1WPktu3ieZ81
         method: GET
       response:
         proto: HTTP/2.0
@@ -2331,13 +2331,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Grant Alt - TestAccClientGrant","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Client Grant Alt - TestAccClientGrant","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 319.084917ms
+        duration: 471.407875ms
     - id: 70
       request:
         proto: HTTP/1.1
@@ -2353,8 +2353,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_rcLcqHNURudSt0iu
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_07j0GiLSYbO3DTDD
         method: GET
       response:
         proto: HTTP/2.0
@@ -2364,13 +2364,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_rcLcqHNURudSt0iu","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_07j0GiLSYbO3DTDD","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 314.829708ms
+        duration: 456.248083ms
     - id: 71
       request:
         proto: HTTP/1.1
@@ -2386,8 +2386,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_rcLcqHNURudSt0iu
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_07j0GiLSYbO3DTDD
         method: GET
       response:
         proto: HTTP/2.0
@@ -2397,13 +2397,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_rcLcqHNURudSt0iu","client_id":"NJlgW1cAIc99NhVACE8lNra7PgahU28E","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"],"allow_all_scopes":false}'
+        body: '{"id":"cgr_07j0GiLSYbO3DTDD","client_id":"Mva5toxbtjigQ4AVERaE1WPktu3ieZ81","audience":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","scope":[],"subject_type":"user","authorization_details_types":["payment"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 331.155584ms
+        duration: 446.310333ms
     - id: 72
       request:
         proto: HTTP/1.1
@@ -2419,8 +2419,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_rcLcqHNURudSt0iu
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_07j0GiLSYbO3DTDD
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2436,7 +2436,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 334.753417ms
+        duration: 729.390625ms
     - id: 73
       request:
         proto: HTTP/1.1
@@ -2452,8 +2452,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/BREv1MA2MGw2Hu70uZkrzRp2ip2ofGl2
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/u5S9ThP6vxTp68pFY26Y91ou0vKdWJza
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2469,7 +2469,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 385.571209ms
+        duration: 885.863459ms
     - id: 74
       request:
         proto: HTTP/1.1
@@ -2485,8 +2485,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_rcLcqHNURudSt0iu
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_07j0GiLSYbO3DTDD
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2502,7 +2502,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 351.859583ms
+        duration: 465.518583ms
     - id: 75
       request:
         proto: HTTP/1.1
@@ -2518,8 +2518,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NJlgW1cAIc99NhVACE8lNra7PgahU28E
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/Mva5toxbtjigQ4AVERaE1WPktu3ieZ81
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2535,7 +2535,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 348.428125ms
+        duration: 565.884ms
     - id: 76
       request:
         proto: HTTP/1.1
@@ -2554,7 +2554,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fclient-grant%2FTestAccClientGrant
         method: PATCH
       response:
@@ -2565,13 +2565,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"697a36acbadfbf1ce91d85ce","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
+        body: '{"id":"6982f487c7e30688c32876c9","name":"Acceptance Test - Client Grant - TestAccClientGrant","identifier":"https://uat.tf.terraform-provider-auth0.com/client-grant/TestAccClientGrant","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[],"authorization_details":[{"type":"payment"},{"type":"shipping"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 384.778958ms
+        duration: 757.493125ms
     - id: 77
       request:
         proto: HTTP/1.1
@@ -2587,8 +2587,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/697a36acbadfbf1ce91d85ce
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6982f487c7e30688c32876c9
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2604,4 +2604,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 342.251042ms
+        duration: 526.816166ms

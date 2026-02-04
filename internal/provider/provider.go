@@ -154,6 +154,7 @@ func New() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"auth0_action":                               action.NewResource(),
+			"auth0_action_module":                        action.NewModuleResource(),
 			"auth0_trigger_actions":                      action.NewTriggerActionsResource(),
 			"auth0_trigger_action":                       action.NewTriggerActionResource(),
 			"auth0_attack_protection":                    attackprotection.NewResource(),
@@ -226,6 +227,10 @@ func New() *schema.Provider {
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_attack_protection":                    attackprotection.NewDataSource(),
+			"auth0_action_module":                        action.NewModuleDataSource(),
+			"auth0_action_module_versions":               action.NewModuleVersionsDataSource(),
+			"auth0_action_module_version":                action.NewModuleVersionDataSource(),
+			"auth0_action_module_actions":                action.NewModuleActionsDataSource(),
 			"auth0_action":                               action.NewDataSource(),
 			"auth0_branding":                             branding.NewDataSource(),
 			"auth0_branding_theme":                       branding.NewThemeDataSource(),

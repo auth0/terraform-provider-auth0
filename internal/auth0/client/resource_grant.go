@@ -142,8 +142,8 @@ func readClientGrant(ctx context.Context, data *schema.ResourceData, meta interf
 func updateClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	// if allow_all_scopes is removed from config to use specific scopes,
-	// first disable allow_all_scopes with an empty scope via a PATCH request
+	// If allow_all_scopes is removed from config to use specific scopes,
+	// first disable allow_all_scopes with an empty scope via a PATCH request.
 	if data.HasChange("allow_all_scopes") && data.Get("allow_all_scopes") != true {
 		disableAllowAllScopesConfig := map[string]interface{}{"allow_all_scopes": false, "scope": []string{}}
 		if err := api.Request(ctx, http.MethodPatch, api.URI("client-grants", data.Id()), disableAllowAllScopesConfig); err != nil {

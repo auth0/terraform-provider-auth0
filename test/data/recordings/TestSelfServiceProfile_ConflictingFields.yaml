@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.28.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: 515
         uncompressed: false
-        body: '{"id":"uap_1css8kTux8fEHw1U5R16sZ","name":"Test User Attribute Profile TestSelfServiceProfile_ConflictingFields","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        body: '{"id":"uap_1cwPABn1gNBodZzccC5fS8","name":"Test User Attribute Profile TestSelfServiceProfile_ConflictingFields","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 290.356083ms
+        duration: 642.25175ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -52,8 +52,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css8kTux8fEHw1U5R16sZ
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPABn1gNBodZzccC5fS8
         method: GET
       response:
         proto: HTTP/2.0
@@ -63,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1css8kTux8fEHw1U5R16sZ","name":"Test User Attribute Profile TestSelfServiceProfile_ConflictingFields","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        body: '{"id":"uap_1cwPABn1gNBodZzccC5fS8","name":"Test User Attribute Profile TestSelfServiceProfile_ConflictingFields","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 305.65475ms
+        duration: 530.663125ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -85,8 +85,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css8kTux8fEHw1U5R16sZ
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPABn1gNBodZzccC5fS8
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -102,4 +102,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 196.340291ms
+        duration: 523.175083ms

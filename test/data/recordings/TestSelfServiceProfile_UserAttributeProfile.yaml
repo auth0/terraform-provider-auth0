@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.28.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: 518
         uncompressed: false
-        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        body: '{"id":"uap_1cwPAA3BspGZd7dcThQW7B","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 242.226084ms
+        duration: 553.720541ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -52,8 +52,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAA3BspGZd7dcThQW7B
         method: GET
       response:
         proto: HTTP/2.0
@@ -63,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        body: '{"id":"uap_1cwPAA3BspGZd7dcThQW7B","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 310.727125ms
+        duration: 519.632292ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -82,13 +82,13 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","allowed_strategies":["oidc","samlp"],"user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}
+            {"name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","allowed_strategies":["oidc","samlp"],"user_attribute_profile_id":"uap_1cwPAA3BspGZd7dcThQW7B"}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.28.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles
         method: POST
       response:
@@ -99,13 +99,13 @@ interactions:
         trailer: {}
         content_length: 360
         uncompressed: false
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:42.162Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:14.743Z","user_attribute_profile_id":"uap_1cwPAA3BspGZd7dcThQW7B"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 194.824083ms
+        duration: 638.37ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -124,8 +124,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -135,13 +135,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:42.360Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:15.266Z","user_attribute_profile_id":"uap_1cwPAA3BspGZd7dcThQW7B"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 198.380208ms
+        duration: 521.8215ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -157,8 +157,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: GET
       response:
         proto: HTTP/2.0
@@ -168,13 +168,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:42.360Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:15.266Z","user_attribute_profile_id":"uap_1cwPAA3BspGZd7dcThQW7B"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 177.829375ms
+        duration: 606.12125ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -190,8 +190,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAA3BspGZd7dcThQW7B
         method: GET
       response:
         proto: HTTP/2.0
@@ -201,13 +201,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        body: '{"id":"uap_1cwPAA3BspGZd7dcThQW7B","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 168.862458ms
+        duration: 429.094667ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -223,8 +223,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: GET
       response:
         proto: HTTP/2.0
@@ -234,13 +234,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:42.360Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:15.266Z","user_attribute_profile_id":"uap_1cwPAA3BspGZd7dcThQW7B"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 211.943875ms
+        duration: 477.511333ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -256,8 +256,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: GET
       response:
         proto: HTTP/2.0
@@ -267,13 +267,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:15.266Z","user_attribute_profile_id":"uap_1cwPAA3BspGZd7dcThQW7B"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 167.2615ms
+        duration: 514.833041ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -289,8 +289,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAA3BspGZd7dcThQW7B
         method: GET
       response:
         proto: HTTP/2.0
@@ -300,13 +300,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:42.360Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        body: '{"id":"uap_1cwPAA3BspGZd7dcThQW7B","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 193.289875ms
+        duration: 593.516708ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -325,7 +325,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.28.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles
         method: POST
       response:
@@ -336,13 +336,13 @@ interactions:
         trailer: {}
         content_length: 531
         uncompressed: false
-        body: '{"id":"uap_1cssyn4uJHhtNZtVto9WTa","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
+        body: '{"id":"uap_1cwPAAx3usoNtgcoBkcP5K","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 253.92525ms
+        duration: 675.588333ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -358,8 +358,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssyn4uJHhtNZtVto9WTa
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAAx3usoNtgcoBkcP5K
         method: GET
       response:
         proto: HTTP/2.0
@@ -369,13 +369,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cssyn4uJHhtNZtVto9WTa","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
+        body: '{"id":"uap_1cwPAAx3usoNtgcoBkcP5K","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 193.081833ms
+        duration: 619.855292ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -394,8 +394,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -405,13 +405,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:44.972Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:21.422Z","user_attribute_profile_id":"uap_1cwPAA3BspGZd7dcThQW7B"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 178.574333ms
+        duration: 569.720458ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -424,14 +424,14 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","allowed_strategies":["oidc"],"user_attribute_profile_id":"uap_1cssyn4uJHhtNZtVto9WTa"}
+            {"name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","allowed_strategies":["oidc"],"user_attribute_profile_id":"uap_1cwPAAx3usoNtgcoBkcP5K"}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -441,13 +441,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:45.152Z","user_attribute_profile_id":"uap_1cssyn4uJHhtNZtVto9WTa"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:22.013Z","user_attribute_profile_id":"uap_1cwPAAx3usoNtgcoBkcP5K"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 180.569459ms
+        duration: 608.727375ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -463,8 +463,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: GET
       response:
         proto: HTTP/2.0
@@ -474,13 +474,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:45.152Z","user_attribute_profile_id":"uap_1cssyn4uJHhtNZtVto9WTa"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:22.013Z","user_attribute_profile_id":"uap_1cwPAAx3usoNtgcoBkcP5K"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 243.588917ms
+        duration: 462.104875ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -496,8 +496,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssyn4uJHhtNZtVto9WTa
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAA3BspGZd7dcThQW7B
         method: GET
       response:
         proto: HTTP/2.0
@@ -507,13 +507,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cssyn4uJHhtNZtVto9WTa","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
+        body: '{"id":"uap_1cwPAA3BspGZd7dcThQW7B","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 161.936959ms
+        duration: 393.04475ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -529,8 +529,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAAx3usoNtgcoBkcP5K
         method: GET
       response:
         proto: HTTP/2.0
@@ -540,13 +540,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        body: '{"id":"uap_1cwPAAx3usoNtgcoBkcP5K","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 168.304208ms
+        duration: 421.594333ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -562,8 +562,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: GET
       response:
         proto: HTTP/2.0
@@ -573,13 +573,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:45.152Z","user_attribute_profile_id":"uap_1cssyn4uJHhtNZtVto9WTa"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:22.013Z","user_attribute_profile_id":"uap_1cwPAAx3usoNtgcoBkcP5K"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 181.830125ms
+        duration: 601.483166ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -595,8 +595,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAA3BspGZd7dcThQW7B
         method: GET
       response:
         proto: HTTP/2.0
@@ -606,13 +606,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        body: '{"id":"uap_1cwPAA3BspGZd7dcThQW7B","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 161.94525ms
+        duration: 487.336583ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -628,8 +628,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssyn4uJHhtNZtVto9WTa
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: GET
       response:
         proto: HTTP/2.0
@@ -639,13 +639,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cssyn4uJHhtNZtVto9WTa","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:22.013Z","user_attribute_profile_id":"uap_1cwPAAx3usoNtgcoBkcP5K"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 164.910791ms
+        duration: 523.815083ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -661,8 +661,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAAx3usoNtgcoBkcP5K
         method: GET
       response:
         proto: HTTP/2.0
@@ -672,13 +672,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:45.152Z","user_attribute_profile_id":"uap_1cssyn4uJHhtNZtVto9WTa"}'
+        body: '{"id":"uap_1cwPAAx3usoNtgcoBkcP5K","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 184.081208ms
+        duration: 538.699583ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -697,8 +697,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -708,13 +708,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:47.429Z"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:26.675Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 188.247583ms
+        duration: 591.301458ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -733,8 +733,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -744,13 +744,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"sso-profile-no-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile removed","user_attributes":[{"name":"final-sample-name-TestSelfServiceProfile_UserAttributeProfile","description":"final-sample-description","is_optional":true}],"allowed_strategies":["samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:47.615Z"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"sso-profile-no-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile removed","user_attributes":[{"name":"final-sample-name-TestSelfServiceProfile_UserAttributeProfile","description":"final-sample-description","is_optional":true}],"allowed_strategies":["samlp"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:27.317Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 174.711042ms
+        duration: 616.011541ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -766,8 +766,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: GET
       response:
         proto: HTTP/2.0
@@ -777,13 +777,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"sso-profile-no-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile removed","user_attributes":[{"name":"final-sample-name-TestSelfServiceProfile_UserAttributeProfile","description":"final-sample-description","is_optional":true}],"allowed_strategies":["samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:47.615Z"}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"sso-profile-no-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile removed","user_attributes":[{"name":"final-sample-name-TestSelfServiceProfile_UserAttributeProfile","description":"final-sample-description","is_optional":true}],"allowed_strategies":["samlp"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:27.317Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 180.839542ms
+        duration: 367.254416ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -799,8 +799,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: GET
       response:
         proto: HTTP/2.0
@@ -810,13 +810,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        body: '{"id":"ssp_hQxACiPdU3BUcZXeeU7M8A","name":"sso-profile-no-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile removed","user_attributes":[{"name":"final-sample-name-TestSelfServiceProfile_UserAttributeProfile","description":"final-sample-description","is_optional":true}],"allowed_strategies":["samlp"],"created_at":"2026-02-05T08:21:14.743Z","updated_at":"2026-02-05T08:21:27.317Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 166.56625ms
+        duration: 569.451625ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -832,8 +832,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAAx3usoNtgcoBkcP5K
         method: GET
       response:
         proto: HTTP/2.0
@@ -843,13 +843,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"sso-profile-no-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile removed","user_attributes":[{"name":"final-sample-name-TestSelfServiceProfile_UserAttributeProfile","description":"final-sample-description","is_optional":true}],"allowed_strategies":["samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:47.615Z"}'
+        body: '{"id":"uap_1cwPAAx3usoNtgcoBkcP5K","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 180.394958ms
+        duration: 583.975417ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -865,8 +865,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssyn4uJHhtNZtVto9WTa
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAA3BspGZd7dcThQW7B
         method: GET
       response:
         proto: HTTP/2.0
@@ -876,13 +876,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"uap_1cssyn4uJHhtNZtVto9WTa","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
+        body: '{"id":"uap_1cwPAA3BspGZd7dcThQW7B","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 182.164042ms
+        duration: 619.431541ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -898,8 +898,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssyn4uJHhtNZtVto9WTa
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAA3BspGZd7dcThQW7B
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -915,7 +915,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 174.475416ms
+        duration: 421.035083ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -931,8 +931,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hQxACiPdU3BUcZXeeU7M8A
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -948,7 +948,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 184.083125ms
+        duration: 438.135625ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -964,8 +964,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.28.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cwPAAx3usoNtgcoBkcP5K
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -981,4 +981,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 196.134625ms
+        duration: 474.951333ms

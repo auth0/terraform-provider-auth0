@@ -3,6 +3,7 @@ package selfserviceprofile
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -12,6 +13,10 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+)
+
+var (
+	allowedStrategies = []string{"oidc", "samlp", "waad", "google-apps", "adfs", "okta", "keycloak-samlp", "pingfederate", "auth0-samlp", "okta-samlp"}
 )
 
 // NewResource will return a new auth0_self_service_profile resource.
@@ -112,13 +117,11 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Schema{
-					Type: schema.TypeString,
-					ValidateFunc: validation.StringInSlice([]string{
-						"oidc", "samlp", "waad", "google-apps",
-						"adfs", "okta", "keycloak-samlp", "pingfederate"},
-						false),
+					Type:         schema.TypeString,
+					ValidateFunc: validation.StringInSlice(allowedStrategies, false),
 				},
-				Description: "List of IdP strategies that will be shown to users during the Self-Service SSO flow.",
+				Description: "List of IdP strategies that will be shown to users during the Self-Service SSO flow." +
+					" Valid values are: " + strings.Join(allowedStrategies, ", ") + ".",
 			},
 			"created_at": {
 				Type:        schema.TypeString,

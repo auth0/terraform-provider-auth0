@@ -2,12 +2,15 @@ package attackprotection
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -27,6 +30,9 @@ func NewResource() *schema.Resource {
 		},
 		Description: "Auth0 can detect attacks and stop malicious attempts to access your " +
 			"application such as blocking traffic from certain IPs and displaying CAPTCHAs.",
+		CustomizeDiff: customdiff.All(
+			validateCaptchaProviderSecrets(),
+		),
 		Schema: map[string]*schema.Schema{
 			"breached_password_detection": {
 				Type:     schema.TypeList,
@@ -313,9 +319,9 @@ func NewResource() *schema.Resource {
 									},
 									"secret": {
 										Type:        schema.TypeString,
-										Required:    true,
+										Optional:    true,
 										Sensitive:   true,
-										Description: "Secret for reCAPTCHA v2.",
+										Description: "Secret for reCAPTCHA v2. Required when configuring reCAPTCHA v2.",
 									},
 								},
 							},
@@ -335,9 +341,9 @@ func NewResource() *schema.Resource {
 									},
 									"api_key": {
 										Type:        schema.TypeString,
-										Required:    true,
+										Optional:    true,
 										Sensitive:   true,
-										Description: "API key for reCAPTCHA Enterprise.",
+										Description: "API key for reCAPTCHA Enterprise. Required when configuring reCAPTCHA Enterprise.",
 									},
 									"project_id": {
 										Type:        schema.TypeString,
@@ -362,9 +368,9 @@ func NewResource() *schema.Resource {
 									},
 									"secret": {
 										Type:        schema.TypeString,
-										Required:    true,
+										Optional:    true,
 										Sensitive:   true,
-										Description: "Secret for hCaptcha.",
+										Description: "Secret for hCaptcha. Required when configuring hCaptcha.",
 									},
 								},
 							},
@@ -384,9 +390,9 @@ func NewResource() *schema.Resource {
 									},
 									"secret": {
 										Type:        schema.TypeString,
-										Required:    true,
+										Optional:    true,
 										Sensitive:   true,
-										Description: "Secret for Friendly Captcha.",
+										Description: "Secret for Friendly Captcha. Required when configuring Friendly Captcha.",
 									},
 								},
 							},
@@ -406,9 +412,9 @@ func NewResource() *schema.Resource {
 									},
 									"secret": {
 										Type:        schema.TypeString,
-										Required:    true,
+										Optional:    true,
 										Sensitive:   true,
-										Description: "Secret for Arkose Labs.",
+										Description: "Secret for Arkose Labs. Required when configuring Arkose Labs.",
 									},
 									"client_subdomain": {
 										Type:        schema.TypeString,
@@ -551,6 +557,101 @@ func NewResource() *schema.Resource {
 				},
 			},
 		},
+	}
+}
+
+// validateCaptchaProviderSecrets returns a CustomizeDiffFunc that validates
+// that when a CAPTCHA provider is active, its required secrets are provided.
+// This allows import to succeed (where secrets are not returned by the API)
+// while still enforcing that secrets are provided during create/update operations.
+func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
+	return func(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+		// Skip validation during import (when the resource ID is set but it's a new resource).
+		if diff.Id() != "" && !diff.HasChange("captcha") {
+			return nil
+		}
+
+		activeProviderID, ok := diff.GetOk("captcha.0.active_provider_id")
+		if !ok || activeProviderID == "" {
+			return nil
+		}
+
+		provider := activeProviderID.(string)
+
+		// Map of providers to their required secret fields.
+		providerSecretFields := map[string]struct {
+			path        string
+			providerKey string
+			secretField string
+			displayName string
+		}{
+			"recaptcha_v2": {
+				path:        "captcha.0.recaptcha_v2.0.secret",
+				providerKey: "recaptcha_v2",
+				secretField: "secret",
+				displayName: "reCAPTCHA v2",
+			},
+			"recaptcha_enterprise": {
+				path:        "captcha.0.recaptcha_enterprise.0.api_key",
+				providerKey: "recaptcha_enterprise",
+				secretField: "api_key",
+				displayName: "reCAPTCHA Enterprise",
+			},
+			"hcaptcha": {
+				path:        "captcha.0.hcaptcha.0.secret",
+				providerKey: "hcaptcha",
+				secretField: "secret",
+				displayName: "hCaptcha",
+			},
+			"friendly_captcha": {
+				path:        "captcha.0.friendly_captcha.0.secret",
+				providerKey: "friendly_captcha",
+				secretField: "secret",
+				displayName: "Friendly Captcha",
+			},
+			"arkose": {
+				path:        "captcha.0.arkose.0.secret",
+				providerKey: "arkose",
+				secretField: "secret",
+				displayName: "Arkose Labs",
+			},
+		}
+
+		config, exists := providerSecretFields[provider]
+		if !exists {
+			return nil
+		}
+
+		// Use GetRawPlan to distinguish between null (not set) and empty string (explicitly set).
+		// An empty string is considered valid, but null/unset is not.
+		rawPlan := diff.GetRawPlan()
+		captchaAttr := rawPlan.GetAttr("captcha")
+
+		if captchaAttr.IsNull() || captchaAttr.LengthInt() == 0 {
+			return nil
+		}
+
+		captchaConfig := captchaAttr.Index(cty.NumberIntVal(0))
+		providerAttr := captchaConfig.GetAttr(config.providerKey)
+
+		if providerAttr.IsNull() || providerAttr.LengthInt() == 0 {
+			return nil
+		}
+
+		providerConfig := providerAttr.Index(cty.NumberIntVal(0))
+		secretAttr := providerConfig.GetAttr(config.secretField)
+
+		// If the secret is null or not provided, return an error.
+		// Empty string is valid (secretAttr.AsString() == "" but !secretAttr.IsNull()).
+		if secretAttr.IsNull() {
+			return fmt.Errorf(
+				"%s is configured as the active CAPTCHA provider, but %q is not set. "+
+					"Please provide the %s for %s",
+				config.displayName, config.secretField, config.secretField, config.displayName,
+			)
+		}
+
+		return nil
 	}
 }
 

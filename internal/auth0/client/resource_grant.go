@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -92,7 +93,6 @@ func NewGrantResource() *schema.Resource {
 			"allow_all_scopes": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  false,
 				Description: "When set to `true`, all scopes configured on the resource server are allowed for this client grant. " +
 					"`scopes` can not be provided when this is set to `true`. EA Only.",
 			},
@@ -141,6 +141,15 @@ func readClientGrant(ctx context.Context, data *schema.ResourceData, meta interf
 
 func updateClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+
+	// If allow_all_scopes is removed from config to use specific scopes,
+	// first disable allow_all_scopes with an empty scope via a PATCH request.
+	if data.HasChange("allow_all_scopes") && data.Get("allow_all_scopes") != true {
+		disableAllowAllScopesConfig := map[string]interface{}{"allow_all_scopes": false, "scope": []string{}}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("client-grants", data.Id()), disableAllowAllScopesConfig); err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+	}
 
 	if clientGrant := expandClientGrant(data); clientGrantHasChange(clientGrant) {
 		if err := api.ClientGrant.Update(ctx, data.Id(), clientGrant); err != nil {

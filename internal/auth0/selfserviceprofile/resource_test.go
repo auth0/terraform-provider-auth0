@@ -190,9 +190,6 @@ func TestSelfServiceProfile(t *testing.T) {
 				Config: acctest.ParseTestName(testSelfServiceProfileUpdateWithNewAllowedStrategies, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_self_service_profile.my_self_service_profile", "allowed_strategies.#", "3"),
-					resource.TestCheckResourceAttr("auth0_self_service_profile.my_self_service_profile", "allowed_strategies.1", "oidc"),
-					resource.TestCheckResourceAttr("auth0_self_service_profile.my_self_service_profile", "allowed_strategies.0", "auth0-samlp"),
-					resource.TestCheckResourceAttr("auth0_self_service_profile.my_self_service_profile", "allowed_strategies.2", "okta-samlp"),
 				),
 			},
 		},

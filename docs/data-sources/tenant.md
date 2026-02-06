@@ -30,10 +30,12 @@ data "auth0_tenant" "my_tenant" {}
 - `disable_acr_values_supported` (Boolean) Disable list of supported ACR values.
 - `domain` (String) Your Auth0 domain name.
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
+- `ephemeral_session_lifetime` (Number) Number of hours an ephemeral (non-persistent) session will stay valid.
 - `error_page` (List of Object) Configuration for the error page (see [below for nested schema](#nestedatt--error_page))
 - `flags` (List of Object) Configuration settings for tenant flags. (see [below for nested schema](#nestedatt--flags))
 - `friendly_name` (String) Friendly name for the tenant.
 - `id` (String) The ID of this resource.
+- `idle_ephemeral_session_lifetime` (Number) Number of hours for which an ephemeral (non-persistent) session can be inactive before the user must log in again.
 - `idle_session_lifetime` (Number) Number of hours during which a session can be inactive before the user must log in again.
 - `management_api_identifier` (String) The identifier value of the built-in Management API resource server, which can be used as an audience when configuring client grants.
 - `mtls` (List of Object) Configuration for mTLS. (see [below for nested schema](#nestedatt--mtls))

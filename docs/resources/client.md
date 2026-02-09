@@ -27,7 +27,6 @@ resource "auth0_client" "my_client" {
   require_proof_of_possession         = false
 
   grant_types = [
-    // Specification conforming grants
     "authorization_code",
     "implicit",
     "password",
@@ -35,11 +34,10 @@ resource "auth0_client" "my_client" {
     "client_credentials",
     "urn:openid:params:grant-type:ciba",
     "urn:ietf:params:oauth:grant-type:device_code",
-    // Auth0 extension grants
     "http://auth0.com/oauth/grant-type/password-realm",
-    "http://auth0.com/oauth/grant-type/passwordless/otp"
+    "http://auth0.com/oauth/grant-type/passwordless/otp",
     "urn:okta:params:oauth:grant-type:webauthn",
-    "urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token",
+    "urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token"
   ]
 
   async_approval_notification_channels = [

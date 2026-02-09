@@ -1,12 +1,12 @@
 ## v1.39.1
 
 BUG FIXES:
-- `resource/auth0_attack_protection` – Improved CAPTCHA provider sensitive field validation to allow imports with null sensitive fields while enforcing necessary validations during create/update ([#1468](https://github.com/auth0/terraform-provider-auth0/pull/1468))
-- `resource/auth0_client_grant` – Fixed `allow_all_scopes` to be nullable so it is not sent in the API request when not explicitly provided, and added proper handling when transitioning from `allow_all_scopes` to specific scopes ([#1471](https://github.com/auth0/terraform-provider-auth0/pull/1471))
-- `resource/auth0_user_attribute_profile` – Removed redundant `MinItems` constraint from SAML mappings to fix terraform file generation errors ([#1461](https://github.com/auth0/terraform-provider-auth0/pull/1461))
+- `resource/auth0_attack_protection` – Improve CAPTCHA provider sensitive field validation to allow imports with null sensitive fields while enforcing necessary validations during create/update ([#1468](https://github.com/auth0/terraform-provider-auth0/pull/1468))
+- `resource/auth0_client_grant` – Fix `allow_all_scopes` to be nullable so it is not sent in the API request when not explicitly provided, and add proper handling when transitioning from `allow_all_scopes` to specific scopes ([#1471](https://github.com/auth0/terraform-provider-auth0/pull/1471))
+- `resource/auth0_user_attribute_profile` – Remove redundant `MinItems` constraint from SAML mappings to fix terraform file generation errors ([#1461](https://github.com/auth0/terraform-provider-auth0/pull/1461))
 
 ENHANCEMENTS:
-- `resource/auth0_client` – Updated `grant_types` documentation to include Auth0 extension grants ([#1470](https://github.com/auth0/terraform-provider-auth0/pull/1470))
+- `resource/auth0_client` – Update `grant_types` documentation to include Auth0 extension grants ([#1470](https://github.com/auth0/terraform-provider-auth0/pull/1470))
 
 ## v1.39.0
 

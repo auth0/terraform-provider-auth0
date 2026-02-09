@@ -1055,8 +1055,7 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 	}
 
 	if data.IsNewResource() || data.HasChange("allow_all_scopes") {
-		v := data.Get("allow_all_scopes").(bool)
-		clientGrant.AllowAllScopes = &v
+		clientGrant.AllowAllScopes = value.Bool(cfg.GetAttr("allow_all_scopes"))
 	}
 
 	return clientGrant

@@ -5,7 +5,7 @@ BUG FIXES:
 - `resource/auth0_client_grant` – Make `allow_all_scopes` nullable so it's omitted from API requests when not explicitly set, and fix transitions to specific scopes ([#1471](https://github.com/auth0/terraform-provider-auth0/pull/1471))
 - `resource/auth0_user_attribute_profile` – Remove redundant `MinItems` constraint from SAML mappings to fix Terraform generation errors ([#1461](https://github.com/auth0/terraform-provider-auth0/pull/1461))
 
-ENHANCEMENTS:
+NOTES:
 - `resource/auth0_client` – Update `grant_types` documentation to include Auth0 extension grants ([#1470](https://github.com/auth0/terraform-provider-auth0/pull/1470))
 
 ## v1.39.0

@@ -28,10 +28,16 @@ resource "auth0_client" "my_client" {
 
   grant_types = [
     "authorization_code",
-    "http://auth0.com/oauth/grant-type/password-realm",
     "implicit",
     "password",
-    "refresh_token"
+    "refresh_token",
+    "client_credentials",
+    "urn:openid:params:grant-type:ciba",
+    "urn:ietf:params:oauth:grant-type:device_code",
+    "http://auth0.com/oauth/grant-type/password-realm",
+    "http://auth0.com/oauth/grant-type/passwordless/otp",
+    "urn:okta:params:oauth:grant-type:webauthn",
+    "urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token"
   ]
 
   async_approval_notification_channels = [

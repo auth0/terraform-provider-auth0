@@ -292,13 +292,13 @@ Optional:
 
 Required:
 
-- `secret` (String, Sensitive) Secret for Arkose Labs.
 - `site_key` (String) Site key for Arkose Labs.
 
 Optional:
 
 - `client_subdomain` (String) Client subdomain for Arkose Labs.
 - `fail_open` (Boolean) Whether the captcha should fail open.
+- `secret` (String, Sensitive) Secret for Arkose Labs. Required when configuring Arkose Labs.
 - `verify_subdomain` (String) Verify subdomain for Arkose Labs.
 
 
@@ -315,8 +315,11 @@ Optional:
 
 Required:
 
-- `secret` (String, Sensitive) Secret for Friendly Captcha.
 - `site_key` (String) Site key for Friendly Captcha.
+
+Optional:
+
+- `secret` (String, Sensitive) Secret for Friendly Captcha. Required when configuring Friendly Captcha.
 
 
 <a id="nestedblock--captcha--hcaptcha"></a>
@@ -324,8 +327,11 @@ Required:
 
 Required:
 
-- `secret` (String, Sensitive) Secret for hCaptcha.
 - `site_key` (String) Site key for hCaptcha.
+
+Optional:
+
+- `secret` (String, Sensitive) Secret for hCaptcha. Required when configuring hCaptcha.
 
 
 <a id="nestedblock--captcha--recaptcha_enterprise"></a>
@@ -333,9 +339,12 @@ Required:
 
 Required:
 
-- `api_key` (String, Sensitive) API key for reCAPTCHA Enterprise.
 - `project_id` (String) Project ID for reCAPTCHA Enterprise.
 - `site_key` (String) Site key for reCAPTCHA Enterprise.
+
+Optional:
+
+- `api_key` (String, Sensitive) API key for reCAPTCHA Enterprise. Required when configuring reCAPTCHA Enterprise.
 
 
 <a id="nestedblock--captcha--recaptcha_v2"></a>
@@ -343,8 +352,11 @@ Required:
 
 Required:
 
-- `secret` (String, Sensitive) Secret for reCAPTCHA v2.
 - `site_key` (String) Site key for reCAPTCHA v2.
+
+Optional:
+
+- `secret` (String, Sensitive) Secret for reCAPTCHA v2. Required when configuring reCAPTCHA v2.
 
 
 

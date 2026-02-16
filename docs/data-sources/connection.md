@@ -167,6 +167,7 @@ Read-Only:
 - `upstream_params` (String)
 - `use_cert_auth` (Boolean)
 - `use_kerberos` (Boolean)
+- `use_oauth_spec_scope` (Boolean)
 - `use_wsfed` (Boolean)
 - `user_authorization_url` (String)
 - `user_id_attribute` (String)

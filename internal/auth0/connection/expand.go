@@ -659,6 +659,7 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 		Scripts:            value.MapOfStrings(config.GetAttr("scripts")),
 		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 		Email:              value.Bool(config.GetAttr("email")),
+		UseOauthSpecScope:  value.Bool(config.GetAttr("use_oauth_spec_scope")),
 	}
 
 	customHeadersConfig := config.GetAttr("custom_headers")

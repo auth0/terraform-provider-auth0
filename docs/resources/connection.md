@@ -813,6 +813,7 @@ Optional:
 - `upstream_params` (String) You can pass provider-specific parameters to an identity provider during authentication. The values can either be static per connection or dynamic per user.
 - `use_cert_auth` (Boolean) Indicates whether to use cert auth or not.
 - `use_kerberos` (Boolean) Indicates whether to use Kerberos or not.
+- `use_oauth_spec_scope` (Boolean) Determines the `scopes` format: `true` makes it a space-separated string (per OAuth2 specification); `false` makes it an array.
 - `use_wsfed` (Boolean) Whether to use WS-Fed.
 - `user_authorization_url` (String) URL used to obtain user authorization.
 - `user_id_attribute` (String) Attribute in the token that will be mapped to the user_id property in Auth0.

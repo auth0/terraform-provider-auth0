@@ -1429,6 +1429,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.0.value", "foo"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.header", "foo"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.value", "bar"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.use_oauth_spec_scope", "true"),
 				),
 			},
 		},
@@ -1486,6 +1487,7 @@ resource "auth0_connection" "oauth2" {
             header = "foo"
             value  = "bar"
         }
+		use_oauth_spec_scope = true
 	}
 }
 `

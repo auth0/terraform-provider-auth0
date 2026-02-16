@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: PATCH
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":true,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        body: '{"enabled":true,"shields":["block","user_notification"],"mode":"count_per_identifier_and_ip","allowlist":[],"max_attempts":10}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 391.577541ms
+        duration: 456.451041ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -52,7 +52,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -63,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 364.524125ms
+        duration: 360.807375ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -85,7 +85,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -96,13 +96,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":true,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        body: '{"enabled":true,"shields":["block","user_notification"],"mode":"count_per_identifier_and_ip","allowlist":[],"max_attempts":10}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 367.454208ms
+        duration: 411.374125ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -118,7 +118,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -129,13 +129,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 379.6745ms
+        duration: 421.373709ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -162,13 +162,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 367.156667ms
+        duration: 371.461292ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -195,13 +195,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 363.312209ms
+        duration: 366.9505ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -217,7 +217,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -228,13 +228,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 359.56775ms
+        duration: 377.63525ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -250,7 +250,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -261,13 +261,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":true,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        body: '{"enabled":true,"shields":["block","user_notification"],"mode":"count_per_identifier_and_ip","allowlist":[],"max_attempts":10}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 434.987541ms
+        duration: 366.84175ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -283,7 +283,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -294,13 +294,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 331.206541ms
+        duration: 358.43075ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -327,13 +327,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 347.837125ms
+        duration: 356.508083ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -360,13 +360,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 332.397208ms
+        duration: 390.986125ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -382,7 +382,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -393,13 +393,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 372.680916ms
+        duration: 373.623458ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -415,7 +415,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -426,13 +426,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":true,"shields":["user_notification","block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        body: '{"enabled":true,"shields":["block","user_notification"],"mode":"count_per_identifier_and_ip","allowlist":[],"max_attempts":10}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 390.499791ms
+        duration: 376.450208ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -448,7 +448,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -459,13 +459,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 349.850875ms
+        duration: 369.142292ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -492,13 +492,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 379.921792ms
+        duration: 378.022292ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -525,13 +525,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 363.296625ms
+        duration: 357.152667ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -550,7 +550,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: PATCH
       response:
@@ -561,13 +561,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":true,"shields":["block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        body: '{"enabled":true,"shields":["block"],"mode":"count_per_identifier","allowlist":[],"max_attempts":10}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 372.700792ms
+        duration: 380.254208ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -583,7 +583,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -594,13 +594,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 325.666667ms
+        duration: 367.04075ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -616,7 +616,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -627,13 +627,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":true,"shields":["block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        body: '{"enabled":true,"shields":["block"],"mode":"count_per_identifier","allowlist":[],"max_attempts":10}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 328.712333ms
+        duration: 355.375334ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -649,7 +649,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -660,13 +660,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 358.803834ms
+        duration: 515.383833ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -693,13 +693,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 361.340875ms
+        duration: 852.143542ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -726,13 +726,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 339.114417ms
+        duration: 359.443583ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -748,7 +748,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -759,13 +759,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 346.179917ms
+        duration: 349.73975ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -781,7 +781,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -792,13 +792,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":true,"shields":["block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        body: '{"enabled":true,"shields":["block"],"mode":"count_per_identifier","allowlist":[],"max_attempts":10}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 498.702375ms
+        duration: 395.782208ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -814,7 +814,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -825,13 +825,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 368.582125ms
+        duration: 358.501166ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -858,13 +858,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 728.817334ms
+        duration: 352.929291ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -891,13 +891,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 347.279792ms
+        duration: 404.351458ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -913,7 +913,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -924,13 +924,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 345.655041ms
+        duration: 392.089375ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -946,7 +946,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -957,13 +957,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":true,"shields":["block"],"mode":"count_per_identifier","allowlist":["127.0.0.1"],"max_attempts":5}'
+        body: '{"enabled":true,"shields":["block"],"mode":"count_per_identifier","allowlist":[],"max_attempts":10}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 2.3998375s
+        duration: 393.565833ms
     - id: 29
       request:
         proto: HTTP/1.1
@@ -979,7 +979,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -990,13 +990,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 322.097292ms
+        duration: 391.513916ms
     - id: 30
       request:
         proto: HTTP/1.1
@@ -1023,13 +1023,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 361.054875ms
+        duration: 404.472625ms
     - id: 31
       request:
         proto: HTTP/1.1
@@ -1056,13 +1056,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 972.272209ms
+        duration: 363.483542ms
     - id: 32
       request:
         proto: HTTP/1.1
@@ -1081,7 +1081,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: PATCH
       response:
@@ -1098,7 +1098,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 400.340083ms
+        duration: 357.315834ms
     - id: 33
       request:
         proto: HTTP/1.1
@@ -1114,7 +1114,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -1125,13 +1125,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 736.160833ms
+        duration: 374.112167ms
     - id: 34
       request:
         proto: HTTP/1.1
@@ -1147,7 +1147,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -1164,7 +1164,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 356.917833ms
+        duration: 374.793ms
     - id: 35
       request:
         proto: HTTP/1.1
@@ -1180,7 +1180,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -1191,13 +1191,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 362.529417ms
+        duration: 380.84675ms
     - id: 36
       request:
         proto: HTTP/1.1
@@ -1224,13 +1224,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 361.625084ms
+        duration: 379.591041ms
     - id: 37
       request:
         proto: HTTP/1.1
@@ -1257,13 +1257,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 343.931541ms
+        duration: 390.344208ms
     - id: 38
       request:
         proto: HTTP/1.1
@@ -1279,7 +1279,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -1290,13 +1290,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 346.485083ms
+        duration: 366.990958ms
     - id: 39
       request:
         proto: HTTP/1.1
@@ -1312,7 +1312,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -1329,7 +1329,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 344.231625ms
+        duration: 372.657041ms
     - id: 40
       request:
         proto: HTTP/1.1
@@ -1345,7 +1345,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -1356,13 +1356,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 589.863583ms
+        duration: 392.084791ms
     - id: 41
       request:
         proto: HTTP/1.1
@@ -1389,13 +1389,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 396.704958ms
+        duration: 376.289166ms
     - id: 42
       request:
         proto: HTTP/1.1
@@ -1422,13 +1422,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 390.647125ms
+        duration: 363.9065ms
     - id: 43
       request:
         proto: HTTP/1.1
@@ -1444,7 +1444,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -1455,13 +1455,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 397.584958ms
+        duration: 369.013792ms
     - id: 44
       request:
         proto: HTTP/1.1
@@ -1477,7 +1477,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -1494,7 +1494,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 340.38975ms
+        duration: 375.635542ms
     - id: 45
       request:
         proto: HTTP/1.1
@@ -1510,7 +1510,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -1521,13 +1521,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 326.32875ms
+        duration: 390.365333ms
     - id: 46
       request:
         proto: HTTP/1.1
@@ -1554,13 +1554,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 359.336542ms
+        duration: 347.367792ms
     - id: 47
       request:
         proto: HTTP/1.1
@@ -1587,13 +1587,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 357.610625ms
+        duration: 362.717833ms
     - id: 48
       request:
         proto: HTTP/1.1
@@ -1612,7 +1612,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: PATCH
       response:
@@ -1629,7 +1629,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 366.021625ms
+        duration: 370.445084ms
     - id: 49
       request:
         proto: HTTP/1.1
@@ -1645,7 +1645,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -1656,13 +1656,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 358.513208ms
+        duration: 360.286084ms
     - id: 50
       request:
         proto: HTTP/1.1
@@ -1678,7 +1678,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -1695,7 +1695,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 356.544459ms
+        duration: 376.84775ms
     - id: 51
       request:
         proto: HTTP/1.1
@@ -1711,7 +1711,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -1722,13 +1722,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 2.984481s
+        duration: 382.585667ms
     - id: 52
       request:
         proto: HTTP/1.1
@@ -1755,13 +1755,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 399.101ms
+        duration: 371.371ms
     - id: 53
       request:
         proto: HTTP/1.1
@@ -1788,13 +1788,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 887.792708ms
+        duration: 381.816708ms
     - id: 54
       request:
         proto: HTTP/1.1
@@ -1810,7 +1810,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: GET
       response:
@@ -1821,13 +1821,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 538.046042ms
+        duration: 403.581416ms
     - id: 55
       request:
         proto: HTTP/1.1
@@ -1843,7 +1843,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: GET
       response:
@@ -1860,7 +1860,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 341.309833ms
+        duration: 354.592958ms
     - id: 56
       request:
         proto: HTTP/1.1
@@ -1876,7 +1876,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: GET
       response:
@@ -1887,13 +1887,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 388.710125ms
+        duration: 367.669959ms
     - id: 57
       request:
         proto: HTTP/1.1
@@ -1920,13 +1920,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"challenge_password_policy":"always","challenge_passwordless_policy":"never","challenge_password_reset_policy":"when_risky","allowlist":["192.168.1.0"],"bot_detection_level":"medium","monitoring_mode_enabled":true}'
+        body: '{"challenge_password_policy":"never","challenge_passwordless_policy":"never","challenge_password_reset_policy":"never","allowlist":[],"bot_detection_level":"medium","monitoring_mode_enabled":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 326.019ms
+        duration: 591.306958ms
     - id: 58
       request:
         proto: HTTP/1.1
@@ -1953,13 +1953,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"active_provider_id":"simple_captcha","simple_captcha":{},"auth_challenge":{"fail_open":true},"recaptcha_v2":{"site_key":"updated-site-key-v2"},"recaptcha_enterprise":{"site_key":"updated-site-key-enterprise","project_id":"updated-project-id-enterprise"},"hcaptcha":{"site_key":"updated-site-key-hcaptcha"},"friendly_captcha":{"site_key":"updated-site-key-friendly"},"arkose":{"site_key":"updated-site-key-arkose","client_subdomain":"updated-client-api","verify_subdomain":"updated-verify-api","fail_open":true}}'
+        body: '{"active_provider_id":"hcaptcha","simple_captcha":{},"auth_challenge":{"fail_open":false},"recaptcha_v2":{"site_key":"test-site-key-v2"},"recaptcha_enterprise":{"site_key":"","project_id":""},"hcaptcha":{"site_key":"test-site-key-hcaptcha-5"},"friendly_captcha":{"site_key":""},"arkose":{"site_key":"","client_subdomain":"client-api","verify_subdomain":"verify-api","fail_open":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 478.726667ms
+        duration: 539.565708ms
     - id: 59
       request:
         proto: HTTP/1.1
@@ -1978,7 +1978,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
         method: PATCH
       response:
@@ -1989,13 +1989,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["admin_notification","user_notification","block"],"admin_notification_frequency":["monthly","immediately","weekly","daily"],"method":"standard","stage":{"pre-user-registration":{"shields":["admin_notification","block"]},"pre-change-password":{"shields":["admin_notification","block"]}}}'
+        body: '{"enabled":false,"shields":["block","admin_notification","user_notification"],"admin_notification_frequency":["monthly","daily","weekly","immediately"],"method":"standard","stage":{"pre-user-registration":{"shields":["block","admin_notification"]},"pre-change-password":{"shields":["block","admin_notification"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 490.996375ms
+        duration: 439.900292ms
     - id: 60
       request:
         proto: HTTP/1.1
@@ -2014,7 +2014,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
         method: PATCH
       response:
@@ -2031,7 +2031,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 327.970083ms
+        duration: 374.024958ms
     - id: 61
       request:
         proto: HTTP/1.1
@@ -2050,7 +2050,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
         method: PATCH
       response:
@@ -2061,10 +2061,10 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled":false,"shields":["block","admin_notification"],"allowlist":["127.0.0.1"],"stage":{"pre-login":{"max_attempts":5,"rate":34560},"pre-user-registration":{"max_attempts":5,"rate":34561},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
+        body: '{"enabled":false,"shields":["admin_notification","block"],"allowlist":[],"stage":{"pre-login":{"max_attempts":100,"rate":864000},"pre-user-registration":{"max_attempts":50,"rate":1200},"pre-custom-token-exchange":{"max_attempts":10,"rate":600000}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 329.120625ms
+        duration: 363.8925ms

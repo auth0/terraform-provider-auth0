@@ -76,6 +76,7 @@ resource "auth0_action" "my_action" {
 
 - `dependencies` (Block Set) List of third party npm modules, and their versions, that this action depends on. (see [below for nested schema](#nestedblock--dependencies))
 - `deploy` (Boolean) Deploying an action will create a new immutable version of the action. If the action is currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately.
+- `modules` (Block Set) List of action modules and their versions that this action depends on. (see [below for nested schema](#nestedblock--modules))
 - `runtime` (String) The Node runtime. Possible values are: `node12`, `node16` (not recommended), `node18`, `node22`
 - `secrets` (Block Set) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. If the secret block is edited, the whole object is re-provisioned. (see [below for nested schema](#nestedblock--secrets))
 
@@ -100,6 +101,20 @@ Required:
 
 - `name` (String) Dependency name, e.g. `lodash`.
 - `version` (String) Dependency version, e.g. `latest` or `4.17.21`.
+
+
+<a id="nestedblock--modules"></a>
+### Nested Schema for `modules`
+
+Required:
+
+- `module_id` (String) The unique ID of the module.
+- `module_version_id` (String) The ID of the specific module version to use.
+
+Read-Only:
+
+- `module_name` (String) The name of the module.
+- `module_version_number` (Number) The version number of the module.
 
 
 <a id="nestedblock--secrets"></a>

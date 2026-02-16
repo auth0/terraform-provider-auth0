@@ -32,6 +32,10 @@ func expandAction(data *schema.ResourceData) *management.Action {
 		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
 	}
 
+	if data.HasChange("modules") {
+		action.Modules = expandActionModules(config.GetAttr("modules"))
+	}
+
 	// If custom-token-exchange is part of SupportedTriggers for an action,
 	// we'd not manipulate it's runtime value.
 	// This is done, to support node18 as runtime.
@@ -96,6 +100,24 @@ func expandActionSecrets(secrets cty.Value) *[]management.ActionSecret {
 	})
 
 	return &actionSecrets
+}
+
+func expandActionModules(modules cty.Value) *[]management.ActionModules {
+	if modules.IsNull() {
+		return nil
+	}
+
+	actionModules := make([]management.ActionModules, 0)
+
+	modules.ForEachElement(func(_ cty.Value, module cty.Value) (stop bool) {
+		actionModules = append(actionModules, management.ActionModules{
+			ModuleID:        value.String(module.GetAttr("module_id")),
+			ModuleVersionID: value.String(module.GetAttr("module_version_id")),
+		})
+		return stop
+	})
+
+	return &actionModules
 }
 
 func expandTriggerBindings(config cty.Value) []*management.ActionBinding {

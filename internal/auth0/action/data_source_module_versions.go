@@ -102,19 +102,29 @@ func readActionModuleVersionsForDataSource(ctx context.Context, data *schema.Res
 	apiv2 := meta.(*config.Config).GetAPIV2()
 	moduleID := data.Get("module_id").(string)
 
-	versions, err := apiv2.Actions.Modules.Versions.List(ctx, moduleID)
+	versionsPage, err := apiv2.Actions.Modules.Versions.List(ctx, moduleID, &management.GetActionModuleVersionsRequestParameters{})
 	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	// Collect all versions using the iterator
+	var allVersions []*management.ActionModuleVersion
+	iterator := versionsPage.Iterator()
+	for iterator.Next(ctx) {
+		allVersions = append(allVersions, iterator.Current())
+	}
+	if err := iterator.Err(); err != nil {
 		return diag.FromErr(err)
 	}
 
 	data.SetId(moduleID)
 
-	return diag.FromErr(flattenActionModuleVersions(data, versions))
+	return diag.FromErr(flattenActionModuleVersions(data, allVersions))
 }
 
-func flattenActionModuleVersions(data *schema.ResourceData, response *management.GetActionModuleVersionsResponseContent) error {
+func flattenActionModuleVersions(data *schema.ResourceData, versions []*management.ActionModuleVersion) error {
 	result := multierror.Append(
-		data.Set("versions", flattenActionModuleVersionsList(response.GetVersions())),
+		data.Set("versions", flattenActionModuleVersionsList(versions)),
 	)
 
 	return result.ErrorOrNil()

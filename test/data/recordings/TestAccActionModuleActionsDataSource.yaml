@@ -1,0 +1,765 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 165
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Test Module TestAccActionModuleActionsDataSource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 387
+        uncompressed: false
+        body: '{"id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","name":"Test Module TestAccActionModuleActionsDataSource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[],"all_changes_published":false,"actions_using_module_total":0,"created_at":"2026-02-16T16:36:15.781102Z","updated_at":"2026-02-16T16:36:15.781102Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 378.016084ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/versions
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-02-16T16:36:16.143698Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 659.783875ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","name":"Test Module TestAccActionModuleActionsDataSource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[],"all_changes_published":true,"actions_using_module_total":0,"created_at":"2026-02-16T16:36:15.781102Z","updated_at":"2026-02-16T16:36:15.781102Z","latest_version":{"id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 347.174833ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/versions?page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"versions":[{"id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-02-16T16:36:16.143698Z"}],"total":1,"page":0,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 387.454083ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/versions?page=1&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"versions":[],"total":0,"page":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.400401833s
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 404
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Test Action TestAccActionModuleActionsDataSource","supported_triggers":[{"id":"post-login","version":"v3"}],"code":"const myModule = require('my-module');\nexports.onExecutePostLogin = async (event, api) =\u003e {\n\tconsole.log(myModule.greet(event.user.name));\n};\n","modules":[{"module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55"}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 723
+        uncompressed: false
+        body: '{"id":"5d89bdb9-5ef5-4764-8690-1019237bb775","name":"Test Action TestAccActionModuleActionsDataSource","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2026-02-16T16:36:21.932142822Z","updated_at":"2026-02-16T16:36:21.938430364Z","code":"const myModule = require(''my-module'');\nexports.onExecutePostLogin = async (event, api) => {\n\tconsole.log(myModule.greet(event.user.name));\n};\n","dependencies":[],"runtime":"node22","status":"pending","secrets":[],"modules":[{"module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","module_name":"Test Module TestAccActionModuleActionsDataSource","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_version_number":1}],"all_changes_deployed":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 391.5845ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d89bdb9-5ef5-4764-8690-1019237bb775
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"5d89bdb9-5ef5-4764-8690-1019237bb775","name":"Test Action TestAccActionModuleActionsDataSource","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2026-02-16T16:36:21.932142822Z","updated_at":"2026-02-16T16:36:21.938430364Z","code":"const myModule = require(''my-module'');\nexports.onExecutePostLogin = async (event, api) => {\n\tconsole.log(myModule.greet(event.user.name));\n};\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"modules":[{"module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","module_name":"Test Module TestAccActionModuleActionsDataSource","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_version_number":1}],"all_changes_deployed":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 380.174334ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d89bdb9-5ef5-4764-8690-1019237bb775/deploy
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"code":"const myModule = require(''my-module'');\nexports.onExecutePostLogin = async (event, api) => {\n\tconsole.log(myModule.greet(event.user.name));\n};\n","dependencies":[],"id":"d2f200b4-0f02-453e-b27f-ec68e516e15d","deployed":false,"number":1,"secrets":[],"modules":[{"module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","module_name":"Test Module TestAccActionModuleActionsDataSource","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_version_number":1}],"status":"built","created_at":"2026-02-16T16:36:22.677209866Z","updated_at":"2026-02-16T16:36:22.677209866Z","runtime":"node22","supported_triggers":[{"id":"post-login","version":"v3"}],"action":{"id":"5d89bdb9-5ef5-4764-8690-1019237bb775","name":"Test Action TestAccActionModuleActionsDataSource","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2026-02-16T16:36:21.932142822Z","updated_at":"2026-02-16T16:36:21.932142822Z","all_changes_deployed":false}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 347.402708ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d89bdb9-5ef5-4764-8690-1019237bb775
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"5d89bdb9-5ef5-4764-8690-1019237bb775","name":"Test Action TestAccActionModuleActionsDataSource","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2026-02-16T16:36:21.932142822Z","updated_at":"2026-02-16T16:36:21.938430364Z","code":"const myModule = require(''my-module'');\nexports.onExecutePostLogin = async (event, api) => {\n\tconsole.log(myModule.greet(event.user.name));\n};\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"modules":[{"module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","module_name":"Test Module TestAccActionModuleActionsDataSource","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_version_number":1}],"current_version":{"id":"d2f200b4-0f02-453e-b27f-ec68e516e15d","code":"const myModule = require(''my-module'');\nexports.onExecutePostLogin = async (event, api) => {\n\tconsole.log(myModule.greet(event.user.name));\n};\n","runtime":"node22","status":"BUILT","number":1,"build_time":"2026-02-16T16:36:22.781355264Z","created_at":"2026-02-16T16:36:22.677209866Z","updated_at":"2026-02-16T16:36:22.782141175Z"},"deployed_version":{"code":"const myModule = require(''my-module'');\nexports.onExecutePostLogin = async (event, api) => {\n\tconsole.log(myModule.greet(event.user.name));\n};\n","dependencies":[],"id":"d2f200b4-0f02-453e-b27f-ec68e516e15d","deployed":true,"number":1,"built_at":"2026-02-16T16:36:22.781355264Z","secrets":[],"modules":[{"module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","module_name":"Test Module TestAccActionModuleActionsDataSource","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_version_number":1}],"status":"built","created_at":"2026-02-16T16:36:22.677209866Z","updated_at":"2026-02-16T16:36:22.782141175Z","runtime":"node22","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 338.182416ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/actions?page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"actions":[{"action_id":"5d89bdb9-5ef5-4764-8690-1019237bb775","action_name":"Test Action TestAccActionModuleActionsDataSource","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_version_number":1}],"total":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 660.217125ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/actions?page=1&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 37
+        uncompressed: false
+        body: '{"actions":[],"page":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 333.483292ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/versions?page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"versions":[{"id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-02-16T16:36:16.143698Z"}],"total":1,"page":0,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 309.177ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/versions?page=1&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"versions":[],"total":0,"page":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.690142292s
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/actions?page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"actions":[{"action_id":"5d89bdb9-5ef5-4764-8690-1019237bb775","action_name":"Test Action TestAccActionModuleActionsDataSource","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_version_number":1}],"total":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.533879917s
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/actions?page=1&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 37
+        uncompressed: false
+        body: '{"actions":[],"page":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 447.120875ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","name":"Test Module TestAccActionModuleActionsDataSource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[],"all_changes_published":true,"actions_using_module_total":1,"created_at":"2026-02-16T16:36:15.781102Z","updated_at":"2026-02-16T16:36:15.781102Z","latest_version":{"id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 479.797292ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/versions?page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"versions":[{"id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-02-16T16:36:16.143698Z"}],"total":1,"page":0,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 900.713834ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/versions?page=1&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"versions":[],"total":0,"page":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 385.5095ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d89bdb9-5ef5-4764-8690-1019237bb775
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"5d89bdb9-5ef5-4764-8690-1019237bb775","name":"Test Action TestAccActionModuleActionsDataSource","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2026-02-16T16:36:21.932142822Z","updated_at":"2026-02-16T16:36:21.938430364Z","code":"const myModule = require(''my-module'');\nexports.onExecutePostLogin = async (event, api) => {\n\tconsole.log(myModule.greet(event.user.name));\n};\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"modules":[{"module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","module_name":"Test Module TestAccActionModuleActionsDataSource","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_version_number":1}],"current_version":{"id":"d2f200b4-0f02-453e-b27f-ec68e516e15d","code":"const myModule = require(''my-module'');\nexports.onExecutePostLogin = async (event, api) => {\n\tconsole.log(myModule.greet(event.user.name));\n};\n","runtime":"node22","status":"BUILT","number":1,"build_time":"2026-02-16T16:36:22.781355264Z","created_at":"2026-02-16T16:36:22.677209866Z","updated_at":"2026-02-16T16:36:22.782141175Z"},"deployed_version":{"code":"const myModule = require(''my-module'');\nexports.onExecutePostLogin = async (event, api) => {\n\tconsole.log(myModule.greet(event.user.name));\n};\n","dependencies":[],"id":"d2f200b4-0f02-453e-b27f-ec68e516e15d","deployed":true,"number":1,"built_at":"2026-02-16T16:36:22.781355264Z","secrets":[],"modules":[{"module_id":"ad94ed26-d51f-4c4a-8eca-4b84eeb48c50","module_name":"Test Module TestAccActionModuleActionsDataSource","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_version_number":1}],"status":"built","created_at":"2026-02-16T16:36:22.677209866Z","updated_at":"2026-02-16T16:36:22.782141175Z","runtime":"node22","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 366.553875ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/actions?page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"actions":[{"action_id":"5d89bdb9-5ef5-4764-8690-1019237bb775","action_name":"Test Action TestAccActionModuleActionsDataSource","module_version_id":"f9185f8b-1a9b-4c34-bcbe-d9c952d04d55","module_version_number":1}],"total":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 332.019ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50/actions?page=1&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 37
+        uncompressed: false
+        body: '{"actions":[],"page":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 343.562208ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d89bdb9-5ef5-4764-8690-1019237bb775
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 413.025542ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ad94ed26-d51f-4c4a-8eca-4b84eeb48c50
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 337.741ms

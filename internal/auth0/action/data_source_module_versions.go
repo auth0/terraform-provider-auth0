@@ -107,7 +107,7 @@ func readActionModuleVersionsForDataSource(ctx context.Context, data *schema.Res
 		return diag.FromErr(err)
 	}
 
-	// Collect all versions using the iterator
+	// Collect all versions using the iterator.
 	var allVersions []*management.ActionModuleVersion
 	iterator := versionsPage.Iterator()
 	for iterator.Next(ctx) {

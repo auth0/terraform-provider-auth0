@@ -21,7 +21,6 @@ func expandSupplementalSignals(data *schema.ResourceData) *management.UpdateSupp
 func expandSupplementalSignalsForDelete() *management.UpdateSupplementalSignalsRequestContent {
 	config := &management.UpdateSupplementalSignalsRequestContent{}
 
-	// Reset to default (false)
 	config.SetAkamaiEnabled(false)
 
 	return config

@@ -74,7 +74,6 @@ func deleteSupplementalSignals(ctx context.Context, data *schema.ResourceData, m
 
 	apiv2 := meta.(*config.Config).GetAPIV2()
 
-	// Reset to default (false) on delete
 	supplementalSignalsConfig := expandSupplementalSignalsForDelete()
 
 	if _, err := apiv2.SupplementalSignals.Patch(ctx, supplementalSignalsConfig); err != nil {

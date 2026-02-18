@@ -730,6 +730,17 @@ var optionsSchema = &schema.Schema{
 					"under the \"Attributes\" and \"Extended Attributes\" sections. Some examples: " +
 					"`basic_profile`, `ext_profile`, `ext_nested_groups`, etc.",
 			},
+			"use_oauth_spec_scope": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Determines the `scopes` format: `true` makes it a space-separated string (per OAuth2 specification); `false` makes it an array.",
+			},
+			"email": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Indicates whether to request the email scope. Used by some OAuth2 connections (e.g., LINE).",
+			},
 			"type": {
 				Type:     schema.TypeString,
 				Optional: true,

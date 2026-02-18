@@ -37,7 +37,7 @@ resource "auth0_self_service_profile" "my_self_service_profile" {
 
 ### Optional
 
-- `allowed_strategies` (Set of String) List of IdP strategies that will be shown to users during the Self-Service SSO flow.
+- `allowed_strategies` (Set of String) List of IdP strategies that will be shown to users during the Self-Service SSO flow. Valid values are: oidc, samlp, waad, google-apps, adfs, okta, keycloak-samlp, pingfederate, auth0-samlp, okta-samlp.
 - `branding` (Block List, Max: 1) Field can be used to customize the look and feel of the wizard. (see [below for nested schema](#nestedblock--branding))
 - `description` (String) The description of the self-service Profile
 - `user_attribute_profile_id` (String) The ID of the user attribute profile to use for this self-service profile. Cannot be used with user_attributes.

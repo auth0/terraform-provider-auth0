@@ -62,8 +62,8 @@ func NewCredentialsResource() *schema.Resource {
 					"self_signed_tls_client_auth",
 				},
 				Description: "Secret for the client when using `client_secret_post` or `client_secret_basic` " +
-					"authentication method. Keep this private. To access this attribute you need to add the " +
-					"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an " +
+					"authentication method. Keep this private. To access this attribute you need to add either " +
+					"`read:client_keys` or `read:client_credentials` scope to the Terraform client. Otherwise, the attribute will contain an " +
 					"empty string. The attribute will also be an empty string in case `private_key_jwt` is selected " +
 					"as an authentication method.",
 			},

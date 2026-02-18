@@ -1429,6 +1429,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.0.value", "foo"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.header", "foo"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.value", "bar"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.use_oauth_spec_scope", "true"),
 				),
 			},
 		},
@@ -1486,6 +1487,7 @@ resource "auth0_connection" "oauth2" {
             header = "foo"
             value  = "bar"
         }
+		use_oauth_spec_scope = true
 	}
 }
 `
@@ -2086,6 +2088,70 @@ resource "auth0_connection" "linkedin" {
 		client_secret = "client_secret_update"
 		strategy_version = 2
 		scopes = [ "basic_profile", "profile" ]
+	}
+}
+`
+
+func TestAccConnectionLine(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionLineConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.line", "name", "line"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "strategy", "line"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.client_id", ""),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.client_secret", ""),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.scopes.#", "3"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.line", "options.0.scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.line", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.line", "options.0.scopes.*", "email"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.email", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.set_user_root_attributes", "on_each_login"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionLineConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.client_id", ""),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.client_secret", ""),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.line", "options.0.scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.line", "options.0.scopes.*", "openid"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.email", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.set_user_root_attributes", "on_first_login"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionLineConfig = `
+resource "auth0_connection" "line" {
+	name = "line"
+	is_domain_connection = false
+	strategy = "line"
+	options {
+		client_id = ""
+		client_secret = ""
+		scopes = ["profile", "openid", "email"]
+		email = true
+		set_user_root_attributes = "on_each_login"
+	}
+}
+`
+
+const testAccConnectionLineConfigUpdate = `
+resource "auth0_connection" "line" {
+	name = "line"
+	is_domain_connection = false
+	strategy = "line"
+	options {
+		client_id = ""
+		client_secret = ""
+		scopes = ["profile", "openid"]
+		email = false
+		set_user_root_attributes = "on_first_login"
 	}
 }
 `

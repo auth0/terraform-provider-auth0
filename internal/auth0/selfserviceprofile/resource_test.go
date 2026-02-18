@@ -48,6 +48,25 @@ resource "auth0_self_service_profile" "my_self_service_profile" {
 }
 `
 
+const testSelfServiceProfileUpdateWithNewAllowedStrategies = `
+resource "auth0_self_service_profile" "my_self_service_profile" {
+	name = "updated-my-sso-profile-{{.testName}}"
+	description = "updated sample description"
+	allowed_strategies = ["oidc", "auth0-samlp", "okta-samlp"]
+	user_attributes	{
+		name		= "updated-sample-name-{{.testName}}"
+		description = "updated-sample-description"
+		is_optional = true
+	}
+	branding {
+		logo_url    = "https://newcompany.org/v2/logo.png"
+		colors {
+			primary = "#000000"
+		}
+	}
+}
+`
+
 const testSelfServiceProfileWithUserAttributeProfile = `
 resource "auth0_user_attribute_profile" "test_profile" {
 	name = "Test User Attribute Profile {{.testName}}"
@@ -165,6 +184,12 @@ func TestSelfServiceProfile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_self_service_profile.my_self_service_profile", "user_attributes.0.is_optional", "true"),
 					resource.TestCheckResourceAttr("auth0_self_service_profile.my_self_service_profile", "branding.0.logo_url", "https://newcompany.org/v2/logo.png"),
 					resource.TestCheckResourceAttr("auth0_self_service_profile.my_self_service_profile", "branding.0.colors.0.primary", "#000000"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testSelfServiceProfileUpdateWithNewAllowedStrategies, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_self_service_profile.my_self_service_profile", "allowed_strategies.#", "3"),
 				),
 			},
 		},

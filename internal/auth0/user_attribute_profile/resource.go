@@ -57,7 +57,6 @@ func NewResource() *schema.Resource {
 								ValidateFunc: validation.StringLenBetween(1, 128),
 							},
 							Description: "The SAML mapping for the user ID.",
-							MinItems:    1,
 							MaxItems:    3,
 						},
 						"scim_mapping": {
@@ -98,7 +97,6 @@ func NewResource() *schema.Resource {
 											ValidateFunc: validation.StringLenBetween(1, 128),
 										},
 										Description: "SAML mapping override for this strategy.",
-										MinItems:    1,
 										MaxItems:    3,
 									},
 									"scim_mapping": {
@@ -183,7 +181,6 @@ func NewResource() *schema.Resource {
 								ValidateFunc: validation.StringLenBetween(1, 128),
 							},
 							Description: "SAML mapping override for this strategy.",
-							MinItems:    1,
 							MaxItems:    3,
 						},
 						"scim_mapping": {
@@ -247,7 +244,6 @@ func NewResource() *schema.Resource {
 											ValidateFunc: validation.StringLenBetween(1, 128),
 										},
 										Description: "SAML mapping override for this strategy.",
-										MinItems:    1,
 										MaxItems:    3,
 									},
 									"scim_mapping": {

@@ -1,3 +1,33 @@
+## v1.39.1
+
+BUG FIXES:
+- `resource/auth0_attack_protection` – Improve CAPTCHA provider validation to allow imports with null sensitive fields while still enforcing checks on create/update ([#1468](https://github.com/auth0/terraform-provider-auth0/pull/1468))
+- `resource/auth0_client_grant` – Make `allow_all_scopes` nullable so it's omitted from API requests when not explicitly set, and fix transitions to specific scopes ([#1471](https://github.com/auth0/terraform-provider-auth0/pull/1471))
+- `resource/auth0_user_attribute_profile` – Remove redundant `MinItems` constraint from SAML mappings to fix Terraform generation errors ([#1461](https://github.com/auth0/terraform-provider-auth0/pull/1461))
+
+NOTES:
+- `resource/auth0_client` – Update `grant_types` documentation to include Auth0 extension grants ([#1470](https://github.com/auth0/terraform-provider-auth0/pull/1470))
+
+## v1.39.0
+
+FEATURES:
+- `resource/auth0_organization_discovery_domain` – Add support for configuring `use_for_organization_discovery` (EA Only) ([#1459](https://github.com/auth0/terraform-provider-auth0/pull/1459))
+- `resource/auth0_organization_discovery_domains` – Add support for configuring `use_for_organization_discovery` (EA Only) ([#1459](https://github.com/auth0/terraform-provider-auth0/pull/1459))
+- `resource/auth0_connection` – Add native support for configuring Universal Password Hashing via the `custom_password_hash` option block (EA Only) ([#1458](https://github.com/auth0/terraform-provider-auth0/pull/1458))
+- `resource/auth0_custom_domain` – Add support for configuring `relying_party_identifier` (EA Only) ([#1455](https://github.com/auth0/terraform-provider-auth0/pull/1455))
+- `resource/auth0_event_streams` – Add WriteOnly support for Sensitive fields like Token/Password  ([#1436](https://github.com/auth0/terraform-provider-auth0/pull/1436))
+- `resource/auth0_client_grant` – Add support for configuring `allow_all_scopes` (EA Only) ([#1452](https://github.com/auth0/terraform-provider-auth0/pull/1452))
+- `resource/auth0_connection` – Add support for configuring SMS and EMAIL passwordless authentication methods for database connections (EA Only) ([#1453](https://github.com/auth0/terraform-provider-auth0/pull/1453))
+- `resource/auth0_connection` – Add support for configuring `email` field for options ([#1453](https://github.com/auth0/terraform-provider-auth0/pull/1453))
+
+ENHANCEMENTS:
+- `resource/auth0_prompt_screen_renderer`: Added support for `ScreenPreLoginOrganizationPicker` ([#1459](https://github.com/auth0/terraform-provider-auth0/pull/1459))
+- `resource/auth0_client` – Add support for configuring `backchannel_logout_session_metadata` ([#1454](https://github.com/auth0/terraform-provider-auth0/pull/1454))
+
+BUG FIXES:
+- `resource/auth0_client` – Allow setting `organization_discovery_methods` as null ([#1451](https://github.com/auth0/terraform-provider-auth0/pull/1451))
+- `resource/auth0_client` – Allow setting `token_exchange` as null ([#1460](https://github.com/auth0/terraform-provider-auth0/pull/1460))
+
 ## v1.38.0
 
 ENHANCEMENTS:
@@ -129,7 +159,7 @@ FEATURES:
 
 FEATURES:
 
-- `resource/auth0_log_stream` - Add support for `pii_config` field ([#1315](https://github.com/auth0/terraform-provider-auth0/pull/1315))
+- `resourc v e/auth0_log_stream` - Add support for `pii_config` field ([#1315](https://github.com/auth0/terraform-provider-auth0/pull/1315))
 
 ## v1.25.0
 

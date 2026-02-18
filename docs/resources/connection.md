@@ -742,6 +742,7 @@ Optional:
 - `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.
 - `domain` (String) Domain name.
 - `domain_aliases` (Set of String) List of the domains that can be authenticated using the identity provider. Only needed for Identifier First authentication flows.
+- `email` (Boolean) Indicates whether to request the email scope. Used by some OAuth2 connections (e.g., LINE).
 - `enable_script_context` (Boolean) Set to `true` to inject context into custom DB scripts (warning: cannot be disabled once enabled).
 - `enabled_database_customization` (Boolean) Set to `true` to use a legacy user store.
 - `entity_id` (String) Custom Entity ID for the connection.
@@ -812,6 +813,7 @@ Optional:
 - `upstream_params` (String) You can pass provider-specific parameters to an identity provider during authentication. The values can either be static per connection or dynamic per user.
 - `use_cert_auth` (Boolean) Indicates whether to use cert auth or not.
 - `use_kerberos` (Boolean) Indicates whether to use Kerberos or not.
+- `use_oauth_spec_scope` (Boolean) Determines the `scopes` format: `true` makes it a space-separated string (per OAuth2 specification); `false` makes it an array.
 - `use_wsfed` (Boolean) Whether to use WS-Fed.
 - `user_authorization_url` (String) URL used to obtain user authorization.
 - `user_id_attribute` (String) Attribute in the token that will be mapped to the user_id property in Auth0.

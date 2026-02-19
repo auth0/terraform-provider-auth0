@@ -921,6 +921,7 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 		Issuer:                      value.String(config.GetAttr("issuer")),
 		JWKSURI:                     value.String(config.GetAttr("jwks_uri")),
 		Type:                        value.String(config.GetAttr("type")),
+		SendBackChannelNonce:        value.Bool(config.GetAttr("send_back_channel_nonce")),
 		UserInfoEndpoint:            value.String(config.GetAttr("userinfo_endpoint")),
 		TokenEndpoint:               value.String(config.GetAttr("token_endpoint")),
 		SetUserAttributes:           value.String(config.GetAttr("set_user_root_attributes")),

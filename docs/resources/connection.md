@@ -582,6 +582,7 @@ resource "auth0_connection" "oidc" {
     tenant_domain            = ""
     icon_url                 = "https://example.com/assets/logo.png"
     type                     = "back_channel"
+    send_back_channel_nonce  = true
     issuer                   = "https://www.paypalobjects.com"
     jwks_uri                 = "https://api.paypal.com/v1/oauth2/certs"
     discovery_url            = "https://www.paypalobjects.com/.well-known/openid-configuration"
@@ -787,6 +788,7 @@ Optional:
 - `requires_username` (Boolean) Indicates whether the user is required to provide a username in addition to an email address.
 - `scopes` (Set of String) Permissions to grant to the connection. Within the Auth0 dashboard these appear under the "Attributes" and "Extended Attributes" sections. Some examples: `basic_profile`, `ext_profile`, `ext_nested_groups`, etc.
 - `scripts` (Map of String) A map of scripts used for an OAuth connection. Only accepts a `fetchUserProfile` script.
+- `send_back_channel_nonce` (Boolean) When true and `type` is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. The identity provider must include this nonce in the ID token for validation.
 - `session_key` (String) Session Key for storing the request token.
 - `set_user_root_attributes` (String) Determines whether to sync user profile attributes (`name`, `given_name`, `family_name`, `nickname`, `picture`) at each login or only on the first login. Options include: `on_each_login`, `on_first_login`, `never_on_login`. Default value: `on_each_login`.
 - `should_trust_email_verified_connection` (String) Choose how Auth0 sets the email_verified field in the user profile.

@@ -1003,6 +1003,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.domain_aliases.*", "example.com"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.type", "back_channel"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.send_back_channel_nonce", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.issuer", "https://api.login.yahoo.com"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.jwks_uri", "https://api.login.yahoo.com/openid/v1/certs"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.discovery_url", "https://api.login.yahoo.com/.well-known/openid-configuration"),
@@ -1093,6 +1094,7 @@ resource "auth0_connection" "oidc" {
 			"api.example.com"
 		]
 		type                     = "back_channel"
+		send_back_channel_nonce  = true
 		issuer                   = "https://api.login.yahoo.com"
 		jwks_uri                 = "https://api.login.yahoo.com/openid/v1/certs"
 		discovery_url            = "https://api.login.yahoo.com/.well-known/openid-configuration"

@@ -748,6 +748,12 @@ var optionsSchema = &schema.Schema{
 					"Front Channel will use OIDC protocol with `response_mode=form_post` and `response_type=id_token`. " +
 					"Back Channel will use `response_type=code`.",
 			},
+			"send_back_channel_nonce": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: "When true and `type` is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. " +
+					"The identity provider must include this nonce in the ID token for validation.",
+			},
 			"issuer": {
 				Type:        schema.TypeString,
 				Optional:    true,

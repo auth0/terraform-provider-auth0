@@ -13,6 +13,7 @@ func flattenAction(data *schema.ResourceData, action *management.Action) error {
 		data.Set("code", action.GetCode()),
 		data.Set("dependencies", flattenActionDependencies(action.GetDependencies())),
 		data.Set("runtime", action.GetRuntime()),
+		data.Set("modules", flattenActionModulesForAction(data, action.GetModules())),
 	)
 
 	if action.GetRuntime() == "node18-actions" {
@@ -47,6 +48,43 @@ func flattenActionDependencies(dependencies []management.ActionDependency) []int
 			"name":    dependency.GetName(),
 			"version": dependency.GetVersion(),
 		})
+	}
+
+	return result
+}
+
+// flattenActionModulesForAction flattens modules from API response while preserving
+// the module_id and module_version_id from the config (since they are required inputs).
+func flattenActionModulesForAction(data *schema.ResourceData, modulesFromAPI []management.ActionModules) []interface{} {
+	// Build a map of module config values.
+	configModules := make(map[string]map[string]string)
+	if modulesSet, ok := data.GetOk("modules"); ok {
+		for _, m := range modulesSet.(*schema.Set).List() {
+			moduleMap := m.(map[string]interface{})
+			moduleID := moduleMap["module_id"].(string)
+			moduleVersionID := moduleMap["module_version_id"].(string)
+			configModules[moduleID] = map[string]string{
+				"module_id":         moduleID,
+				"module_version_id": moduleVersionID,
+			}
+		}
+	}
+
+	var result []interface{}
+	for _, module := range modulesFromAPI {
+		moduleMap := map[string]interface{}{
+			"module_id":             module.GetModuleID(),
+			"module_name":           module.GetModuleName(),
+			"module_version_id":     module.GetModuleVersionID(),
+			"module_version_number": module.GetModuleVersionNumber(),
+		}
+
+		// Preserve module_version_id from config if available.
+		if configModule, ok := configModules[module.GetModuleID()]; ok {
+			moduleMap["module_version_id"] = configModule["module_version_id"]
+		}
+
+		result = append(result, moduleMap)
 	}
 
 	return result

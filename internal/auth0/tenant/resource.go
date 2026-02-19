@@ -24,8 +24,8 @@ import (
 const (
 	idleSessionLifetimeDefault          = 72.00
 	sessionLifetimeDefault              = 168.00
-	ephemeralSessionLifetimeDefault     = 1.00 	ephemeralSessionLifetimeDefault     = 1.00 // 1 hour.
-	idleEphemeralSessionLifetimeDefault = 1.00 	idleEphemeralSessionLifetimeDefault = 1.00 // 1 hour.
+	ephemeralSessionLifetimeDefault     = 1.00 // 1 hour.
+	idleEphemeralSessionLifetimeDefault = 1.00 // 1 hour.
 )
 
 // NewResource will return a new auth0_tenant resource.

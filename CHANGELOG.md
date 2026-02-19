@@ -1,3 +1,20 @@
+## v1.40.0
+
+FEATURES:
+- `resource/auth0_action_module` – Add support for creating and managing Auth0 Action Modules with `publish` flag to publish module versions ([#1472](https://github.com/auth0/terraform-provider-auth0/pull/1472))
+- `data-source/auth0_action_module` – Add support for retrieving Auth0 Action Modules by ID ([#1472](https://github.com/auth0/terraform-provider-auth0/pull/1472))
+- `data-source/auth0_action_module_versions` – Add support for retrieving all published versions of an Auth0 Action Module ([#1472](https://github.com/auth0/terraform-provider-auth0/pull/1472))
+- `data-source/auth0_action_module_version` – Add support for retrieving a specific version of an Auth0 Action Module ([#1472](https://github.com/auth0/terraform-provider-auth0/pull/1472))
+- `data-source/auth0_action_module_actions` – Add support for retrieving all actions that are using a specific Auth0 Action Module ([#1472](https://github.com/auth0/terraform-provider-auth0/pull/1472))
+- `resource/auth0_tenant` – Add support for configuring `ephemeral_session_lifetime` and `idle_ephemeral_session_lifetime` fields ([#1483](https://github.com/auth0/terraform-provider-auth0/pull/1483))
+- `resource/auth0_supplemental_signals` – Add support for managing Supplemental Signals Configuration (e.g., akamai_enabled) ([#1481](https://github.com/auth0/terraform-provider-auth0/pull/1481))
+- `resource/auth0_self_service_profile` – Add support for new SAML strategies: `auth0-samlp` and `okta-samlp` ([#1479](https://github.com/auth0/terraform-provider-auth0/pull/1479)) 
+
+ENHANCEMENTS:
+- `resource/auth0_action` – Add support for configuring `modules` to reference Action Modules from within Actions ([#1472](https://github.com/auth0/terraform-provider-auth0/pull/1472))
+- `resource/auth0_connection` – Add support for configuring `send_back_channel_nonce` for OIDC back-channel connections (#1482) ([#1482](https://github.com/auth0/terraform-provider-auth0/pull/1482))
+- `resource/auth0_connection` – Add support for `use_oauth_spec_scope` to control OAuth2 scope formatting when communicating with identity providers ([#1480](https://github.com/auth0/terraform-provider-auth0/pull/1480))
+
 ## v1.39.1
 
 BUG FIXES:

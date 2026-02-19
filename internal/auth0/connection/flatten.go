@@ -794,6 +794,7 @@ func flattenConnectionOptionsOIDC(
 		"tenant_domain":                   options.GetTenantDomain(),
 		"domain_aliases":                  options.GetDomainAliases(),
 		"type":                            options.GetType(),
+		"send_back_channel_nonce":         options.GetSendBackChannelNonce(),
 		"scopes":                          options.Scopes(),
 		"issuer":                          options.GetIssuer(),
 		"jwks_uri":                        options.GetJWKSURI(),

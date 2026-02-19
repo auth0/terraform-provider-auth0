@@ -6,7 +6,11 @@ toolchain go1.24.7
 
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
+<<<<<<< DXCDT-1345/ActionModules
 	github.com/auth0/go-auth0 v1.34.0
+=======
+	github.com/auth0/go-auth0 v1.33.1-0.20260218104411-6e2e7a120208
+>>>>>>> main
 	github.com/auth0/go-auth0/v2 v2.5.0
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/go-cty v1.5.0

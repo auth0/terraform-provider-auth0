@@ -17,6 +17,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/form"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/selfserviceprofile"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/supplementalsignals"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -216,6 +217,7 @@ func New() *schema.Provider {
 			"auth0_rule_config":                          rule.NewConfigResource(),
 			"auth0_self_service_profile":                 selfserviceprofile.NewResource(),
 			"auth0_self_service_profile_custom_text":     selfserviceprofile.NewCustomTextResource(),
+			"auth0_supplemental_signals":                 supplementalsignals.NewResource(),
 			"auth0_tenant":                               tenant.NewResource(),
 			"auth0_token_exchange_profile":               tokenexchangeprofile.NewResource(),
 			"auth0_user":                                 user.NewResource(),

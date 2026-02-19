@@ -12,7 +12,7 @@ FEATURES:
 
 ENHANCEMENTS:
 - `resource/auth0_action` – Add support for configuring `modules` to reference Action Modules from within Actions ([#1472](https://github.com/auth0/terraform-provider-auth0/pull/1472))
-- `resource/auth0_connection` – Add support for configuring `send_back_channel_nonce` for OIDC back-channel connections (#1482) ([#1482](https://github.com/auth0/terraform-provider-auth0/pull/1482))
+- `resource/auth0_connection` – Add support for configuring `send_back_channel_nonce` for OIDC back-channel connections ([#1482](https://github.com/auth0/terraform-provider-auth0/pull/1482))
 - `resource/auth0_connection` – Add support for `use_oauth_spec_scope` to control OAuth2 scope formatting when communicating with identity providers ([#1480](https://github.com/auth0/terraform-provider-auth0/pull/1480))
 
 ## v1.39.1

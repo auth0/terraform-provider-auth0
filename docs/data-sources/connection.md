@@ -141,6 +141,7 @@ Read-Only:
 - `requires_username` (Boolean)
 - `scopes` (Set of String)
 - `scripts` (Map of String)
+- `send_back_channel_nonce` (Boolean)
 - `session_key` (String)
 - `set_user_root_attributes` (String)
 - `should_trust_email_verified_connection` (String)

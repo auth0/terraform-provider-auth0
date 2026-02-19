@@ -22,6 +22,8 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("allowed_logout_urls", tenant.GetAllowedLogoutURLs()),
 		data.Set("session_lifetime", tenant.GetSessionLifetime()),
 		data.Set("idle_session_lifetime", tenant.GetIdleSessionLifetime()),
+		data.Set("ephemeral_session_lifetime", tenant.GetEphemeralSessionLifetime()),
+		data.Set("idle_ephemeral_session_lifetime", tenant.GetIdleEphemeralSessionLifetime()),
 		data.Set("sandbox_version", tenant.GetSandboxVersion()),
 		data.Set("enabled_locales", tenant.GetEnabledLocales()),
 		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
@@ -43,6 +45,13 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 
 	if tenant.GetSessionLifetime() == 0 {
 		result = multierror.Append(result, data.Set("session_lifetime", sessionLifetimeDefault))
+	}
+
+	if tenant.GetIdleEphemeralSessionLifetime() == 0 {
+		result = multierror.Append(result, data.Set("idle_ephemeral_session_lifetime", idleSessionLifetimeDefault))
+	}
+	if tenant.GetEphemeralSessionLifetime() == 0 {
+		result = multierror.Append(result, data.Set("ephemeral_session_lifetime", sessionLifetimeDefault))
 	}
 
 	if tenant.GetACRValuesSupported() == nil {

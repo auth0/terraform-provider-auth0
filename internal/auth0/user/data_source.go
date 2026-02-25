@@ -40,10 +40,31 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "custom_domain_header")
 
+	dataSourceSchema["fetch_roles"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to fetch user roles. Setting this to `true` will make additional " +
+			"paginated API calls to /api/v2/users/{id}/roles. Default: `false` to optimize " +
+			"performance and reduce rate limit consumption.",
+	}
+
+	dataSourceSchema["fetch_permissions"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to fetch user permissions. Setting this to `true` will make additional " +
+			"paginated API calls to /api/v2/users/{id}/permissions. Default: `false` to optimize " +
+			"performance and reduce rate limit consumption.",
+	}
+
 	dataSourceSchema["permissions"] = &schema.Schema{
 		Type:        schema.TypeSet,
 		Computed:    true,
-		Description: "List of API permissions granted to the user.",
+		Description: "List of API permissions granted to the user. Only populated if " +
+			"`fetch_permissions` is `true`. When `fetch_permissions` is `false` (default), " +
+			"this will be an empty set to optimize performance and reduce rate limit consumption. " +
+			"Set `fetch_permissions = true` if you need to access this attribute.",
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"name": {
@@ -76,7 +97,10 @@ func dataSourceSchema() map[string]*schema.Schema {
 		Elem: &schema.Schema{
 			Type: schema.TypeString,
 		},
-		Description: "Set of IDs of roles assigned to the user.",
+		Description: "Set of IDs of roles assigned to the user. Only populated if " +
+			"`fetch_roles` is `true`. When `fetch_roles` is `false` (default), " +
+			"this will be an empty set to optimize performance and reduce rate limit consumption. " +
+			"Set `fetch_roles = true` if you need to access this attribute.",
 	}
 
 	return dataSourceSchema
@@ -125,40 +149,46 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 		}
 	}
 
-	// Populate Roles for the retrieved User.
+	// Conditionally populate Roles for the retrieved User.
 	var roles []*management.Role
-	var rolesPage int
-	for {
-		roleList, err := api.User.Roles(ctx, user.GetID(), management.Page(rolesPage), management.PerPage(100))
-		if err != nil {
-			return diag.FromErr(err)
+	fetchRoles := data.Get("fetch_roles").(bool)
+	if fetchRoles {
+		var rolesPage int
+		for {
+			roleList, err := api.User.Roles(ctx, user.GetID(), management.Page(rolesPage), management.PerPage(100))
+			if err != nil {
+				return diag.FromErr(err)
+			}
+
+			roles = append(roles, roleList.Roles...)
+
+			if !roleList.HasNext() {
+				break
+			}
+
+			rolesPage++
 		}
-
-		roles = append(roles, roleList.Roles...)
-
-		if !roleList.HasNext() {
-			break
-		}
-
-		rolesPage++
 	}
 
-	// Populate Permissions for the retrieved User.
+	// Conditionally populate Permissions for the retrieved User.
 	var permissions []*management.Permission
-	var permissionsPage int
-	for {
-		permissionList, err := api.User.Permissions(ctx, user.GetID(), management.Page(permissionsPage), management.PerPage(100))
-		if err != nil {
-			return diag.FromErr(err)
+	fetchPermissions := data.Get("fetch_permissions").(bool)
+	if fetchPermissions {
+		var permissionsPage int
+		for {
+			permissionList, err := api.User.Permissions(ctx, user.GetID(), management.Page(permissionsPage), management.PerPage(100))
+			if err != nil {
+				return diag.FromErr(err)
+			}
+
+			permissions = append(permissions, permissionList.Permissions...)
+
+			if !permissionList.HasNext() {
+				break
+			}
+
+			permissionsPage++
 		}
-
-		permissions = append(permissions, permissionList.Permissions...)
-
-		if !permissionList.HasNext() {
-			break
-		}
-
-		permissionsPage++
 	}
 
 	return diag.FromErr(flattenUserForDataSource(data, user, roles, permissions))

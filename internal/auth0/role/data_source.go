@@ -33,10 +33,27 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema["name"].Description = "The name of the role. If not provided, `role_id` must be set."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"role_id", "name"}
 
+	dataSourceSchema["fetch_permissions"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to fetch role permissions. Setting this to `true` will make additional " +
+			"paginated API calls to /api/v2/roles/{id}/permissions. Default: `false`.",
+	}
+
+	dataSourceSchema["fetch_users"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to fetch users assigned to this role (max 1000). Setting this to `true` " +
+			"will make additional paginated API calls to /api/v2/roles/{id}/users. Default: `false`.",
+	}
+
 	dataSourceSchema["permissions"] = &schema.Schema{
 		Type:        schema.TypeSet,
 		Computed:    true,
-		Description: "Configuration settings for permissions (scopes) attached to the role.",
+		Description: "Configuration settings for permissions (scopes) attached to the role. " +
+			"Only populated if `fetch_permissions` is `true`.",
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"name": {
@@ -69,7 +86,8 @@ func dataSourceSchema() map[string]*schema.Schema {
 			Type: schema.TypeString,
 		},
 		Computed:    true,
-		Description: "List of user IDs assigned to this role. Retrieves a maximum of 1000 user IDs.",
+		Description: "List of user IDs assigned to this role. Retrieves a maximum of 1000 user IDs. " +
+			"Only populated if `fetch_users` is `true`.",
 	}
 
 	return dataSourceSchema
@@ -99,14 +117,22 @@ func readRoleByID(
 		return diag.FromErr(err)
 	}
 
-	permissions, err := getAllRolePermissions(ctx, api, roleID)
-	if err != nil {
-		return diag.FromErr(err)
+	var permissions []*management.Permission
+	fetchPermissions := data.Get("fetch_permissions").(bool)
+	if fetchPermissions {
+		permissions, err = getAllRolePermissions(ctx, api, roleID)
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
-	users, err := getAllRoleUsers(ctx, api, role.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var users []*management.User
+	fetchUsers := data.Get("fetch_users").(bool)
+	if fetchUsers {
+		users, err = getAllRoleUsers(ctx, api, role.GetID())
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return diag.FromErr(flattenRoleForDataSource(data, role, permissions, users))
@@ -134,14 +160,22 @@ func readRoleByName(
 			if role.GetName() == roleName {
 				data.SetId(role.GetID())
 
-				permissions, err := getAllRolePermissions(ctx, api, role.GetID())
-				if err != nil {
-					return diag.FromErr(err)
+				var permissions []*management.Permission
+				fetchPermissions := data.Get("fetch_permissions").(bool)
+				if fetchPermissions {
+					permissions, err = getAllRolePermissions(ctx, api, role.GetID())
+					if err != nil {
+						return diag.FromErr(err)
+					}
 				}
 
-				users, err := getAllRoleUsers(ctx, api, role.GetID())
-				if err != nil {
-					return diag.FromErr(err)
+				var users []*management.User
+				fetchUsers := data.Get("fetch_users").(bool)
+				if fetchUsers {
+					users, err = getAllRoleUsers(ctx, api, role.GetID())
+					if err != nil {
+						return diag.FromErr(err)
+					}
 				}
 
 				return diag.FromErr(flattenRoleForDataSource(data, role, permissions, users))

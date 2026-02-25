@@ -36,9 +36,34 @@ func dataSourceSchema() map[string]*schema.Schema {
 		"For performance, it is advised to use the `organization_id` as a lookup if possible."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"organization_id", "name"}
 
+	dataSourceSchema["fetch_connections"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to fetch organization connections. Setting this to `true` will make additional " +
+			"paginated API calls to /api/v2/organizations/{id}/connections. Default: `false`.",
+	}
+
+	dataSourceSchema["fetch_members"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to fetch organization members. Setting this to `true` will make additional " +
+			"paginated API calls to /api/v2/organizations/{id}/members. Default: `false`.",
+	}
+
+	dataSourceSchema["fetch_client_grants"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to fetch organization client grants. Setting this to `true` will make an additional " +
+			"API call to /api/v2/organizations/{id}/client-grants. Default: `false`.",
+	}
+
 	dataSourceSchema["connections"] = &schema.Schema{
-		Type:     schema.TypeSet,
-		Computed: true,
+		Type:        schema.TypeSet,
+		Computed:    true,
+		Description: "Connections enabled for this organization. Only populated if `fetch_connections` is `true`.",
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"connection_id": {
@@ -76,7 +101,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 			Type: schema.TypeString,
 		},
 		Computed:    true,
-		Description: "User ID(s) that are members of the organization.",
+		Description: "User ID(s) that are members of the organization. Only populated if `fetch_members` is `true`.",
 	}
 
 	dataSourceSchema["client_grants"] = &schema.Schema{
@@ -85,7 +110,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 			Type: schema.TypeString,
 		},
 		Computed:    true,
-		Description: "Client Grant ID(s) that are associated to the organization.",
+		Description: "Client Grant ID(s) that are associated to the organization. Only populated if `fetch_client_grants` is `true`.",
 	}
 
 	return dataSourceSchema
@@ -101,19 +126,31 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 
 	data.SetId(foundOrganization.GetID())
 
-	foundConnections, err := fetchAllOrganizationConnections(ctx, api, foundOrganization.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var foundConnections []*management.OrganizationConnection
+	fetchConnections := data.Get("fetch_connections").(bool)
+	if fetchConnections {
+		foundConnections, err = fetchAllOrganizationConnections(ctx, api, foundOrganization.GetID())
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
-	foundMembers, err := fetchAllOrganizationMembers(ctx, api, foundOrganization.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var foundMembers []management.OrganizationMember
+	fetchMembers := data.Get("fetch_members").(bool)
+	if fetchMembers {
+		foundMembers, err = fetchAllOrganizationMembers(ctx, api, foundOrganization.GetID())
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
-	foundClientGrants, err := fetchAllOrganizationClientGrants(ctx, api, foundOrganization.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var foundClientGrants []*management.ClientGrant
+	fetchClientGrants := data.Get("fetch_client_grants").(bool)
+	if fetchClientGrants {
+		foundClientGrants, err = fetchAllOrganizationClientGrants(ctx, api, foundOrganization.GetID())
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers, foundClientGrants))

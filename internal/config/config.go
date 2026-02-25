@@ -15,6 +15,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/PuerkitoBio/rehttp"
@@ -422,10 +423,82 @@ func authenticationOptionV2(cfg ProviderConfig) option.RequestOption {
 	}
 }
 
+// rateLimitMetrics tracks API usage and rate limit encounters throughout execution.
+type rateLimitMetrics struct {
+	mu                sync.Mutex
+	totalRequests     int
+	rateLimitHits     int
+	totalWaitDuration time.Duration
+	minRemaining      int
+	maxRemaining      int
+	firstRequest      time.Time
+	lastRequest       time.Time
+}
+
+// Global metrics instance (per provider configuration)
+var globalMetrics = &rateLimitMetrics{
+	minRemaining: -1, // -1 means not yet set
+}
+
+func (m *rateLimitMetrics) recordRequest(remaining int, wasRateLimited bool, waitDuration time.Duration) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	now := time.Now()
+	if m.totalRequests == 0 {
+		m.firstRequest = now
+	}
+	m.lastRequest = now
+
+	m.totalRequests++
+
+	if wasRateLimited {
+		m.rateLimitHits++
+		m.totalWaitDuration += waitDuration
+	}
+
+	// Track min/max remaining
+	if remaining >= 0 {
+		if m.minRemaining == -1 || remaining < m.minRemaining {
+			m.minRemaining = remaining
+		}
+		if remaining > m.maxRemaining {
+			m.maxRemaining = remaining
+		}
+	}
+}
+
+func (m *rateLimitMetrics) logSummary(ctx context.Context) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	if m.totalRequests == 0 {
+		return // No requests made, skip summary
+	}
+
+	efficiencyScore := 100.0
+	if m.totalRequests > 0 {
+		efficiencyScore = 100.0 - (float64(m.rateLimitHits)/float64(m.totalRequests))*100.0
+	}
+
+	tflog.Info(ctx, "Auth0 API Usage Summary",
+		map[string]interface{}{
+			"total_requests":      m.totalRequests,
+			"rate_limit_hits":     m.rateLimitHits,
+			"total_wait_duration": m.totalWaitDuration.String(),
+			"min_remaining":       m.minRemaining,
+			"max_remaining":       m.maxRemaining,
+			"efficiency_score":    fmt.Sprintf("%.1f%%", efficiencyScore),
+			"execution_duration":  m.lastRequest.Sub(m.firstRequest).String(),
+		},
+	)
+}
+
 // rateLimitLoggingTransport wraps an http.RoundTripper to provide diagnostic
-// logging when rate limits are encountered or approached.
+// logging and metrics tracking for rate limits.
 type rateLimitLoggingTransport struct {
 	transport http.RoundTripper
+	metrics   *rateLimitMetrics
 }
 
 func (t *rateLimitLoggingTransport) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -442,11 +515,20 @@ func (t *rateLimitLoggingTransport) RoundTrip(req *http.Request) (*http.Response
 	limit := resp.Header.Get("X-RateLimit-Limit")
 	resetAt := resp.Header.Get("X-RateLimit-Reset")
 
+	// Parse remaining for metrics
+	remainingInt := -1
+	if remaining != "" {
+		remainingInt, _ = strconv.Atoi(remaining)
+	}
+
+	wasRateLimited := resp.StatusCode == http.StatusTooManyRequests
+	var waitDuration time.Duration
+
 	// Check if we hit rate limit (429 Too Many Requests)
-	if resp.StatusCode == http.StatusTooManyRequests {
+	if wasRateLimited {
 		resetAtUnix, _ := strconv.ParseInt(resetAt, 10, 64)
 		resetTime := time.Unix(resetAtUnix, 0)
-		waitDuration := time.Until(resetTime)
+		waitDuration = time.Until(resetTime)
 
 		// Log rate limit encounter with details
 		tflog.Warn(ctx, "Auth0 rate limit exceeded, waiting for reset",
@@ -467,7 +549,14 @@ func (t *rateLimitLoggingTransport) RoundTrip(req *http.Request) (*http.Response
 				"(2) Reducing the number of data source lookups, "+
 				"(3) Using 'terraform plan -target' for specific resources.",
 		)
+	}
 
+	// Record metrics for this request
+	if t.metrics != nil {
+		t.metrics.recordRequest(remainingInt, wasRateLimited, waitDuration)
+	}
+
+	if wasRateLimited {
 		return resp, err
 	}
 
@@ -524,20 +613,40 @@ func (t *rateLimitLoggingTransport) RoundTrip(req *http.Request) (*http.Response
 	return resp, err
 }
 
-func newRateLimitLoggingTransport(tripper http.RoundTripper) http.RoundTripper {
+func newRateLimitLoggingTransport(tripper http.RoundTripper, metrics *rateLimitMetrics) http.RoundTripper {
 	return &rateLimitLoggingTransport{
 		transport: tripper,
+		metrics:   metrics,
+	}
+}
+
+// logMetricsSummary should be called at the end of provider operations
+// to display the usage summary. This is typically called from provider
+// cleanup or at the end of major operations.
+func logMetricsSummary(ctx context.Context) {
+	if globalMetrics != nil {
+		globalMetrics.logSummary(ctx)
+
+		// Add user-friendly tips based on metrics
+		if globalMetrics.rateLimitHits > 0 {
+			tflog.Info(ctx,
+				"Tip: Rate limits were hit during this run. "+
+					"Consider using fetch_* parameters on data sources to reduce API calls. "+
+					"See: https://registry.terraform.io/providers/auth0/auth0/latest/docs",
+			)
+		}
 	}
 }
 
 func customClientWithRetries() *http.Client {
 	client := &http.Client{
-		Transport: newRateLimitLoggingTransport( // Add logging layer
+		Transport: newRateLimitLoggingTransport( // Add logging & metrics layer
 			rateLimitTransport( // Rate limit handling
 				retryableErrorTransport( // Error retries
 					http.DefaultTransport,
 				),
 			),
+			globalMetrics, // Pass metrics tracker
 		),
 	}
 

@@ -250,6 +250,15 @@ func NewResource() *schema.Resource {
 							Optional:    true,
 							Description: "Disable proof-of-possession.",
 						},
+						"required_for": {
+							Type:     schema.TypeString,
+							Optional: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"all_clients", "public_clients",
+							}, true),
+							Description: "Specifies which client types require Proof-of-Possession" +
+								"`all_clients` or `public_clients` is supported.",
+						},
 					},
 				},
 			},

@@ -124,6 +124,7 @@ Optional:
 - `disable` (Boolean) Disable proof-of-possession.
 - `mechanism` (String) Mechanism used for proof-of-possession. `mtls` or `dpop` is supported.
 - `required` (Boolean) Indicates whether proof-of-possession is required with this resource server.
+- `required_for` (String) Specifies which client types require Proof-of-Possession`all_clients` or `public_clients` is supported.
 
 
 <a id="nestedblock--subject_type_authorization"></a>

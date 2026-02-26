@@ -294,6 +294,7 @@ func expandProofOfPossession(data *schema.ResourceData) *management.ResourceServ
 	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		proofOfPossession.Mechanism = value.String(cfg.GetAttr("mechanism"))
 		proofOfPossession.Required = value.Bool(cfg.GetAttr("required"))
+		proofOfPossession.RequiredFor = value.String(cfg.GetAttr("required_for"))
 		return stop
 	})
 

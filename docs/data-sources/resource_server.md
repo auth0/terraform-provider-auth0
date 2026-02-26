@@ -69,6 +69,7 @@ Read-Only:
 - `disable` (Boolean)
 - `mechanism` (String)
 - `required` (Boolean)
+- `required_for` (String)
 
 
 <a id="nestedatt--scopes"></a>

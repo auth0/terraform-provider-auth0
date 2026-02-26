@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.31.0
+                - Go-Auth0/1.34.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
         method: POST
       response:
@@ -30,34 +30,31 @@ interactions:
         trailer: {}
         content_length: 486
         uncompressed: false
-        body: '{"id":"691ca11775c27084b9f94f2d","name":"Acceptance Test - IsSystem - TestAccResourceServerIsSystem","identifier":"https://uat.api.terraform-provider-auth0.com/issystem/TestAccResourceServerIsSystem","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":7200,"token_lifetime_for_web":3600,"signing_alg":"RS256","enforce_policies":false}'
+        body: '{"id":"69a006b2b917ad2948e1a2ad","name":"Acceptance Test - IsSystem - TestAccResourceServerIsSystem","identifier":"https://uat.api.terraform-provider-auth0.com/issystem/TestAccResourceServerIsSystem","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":7200,"token_lifetime_for_web":3600,"signing_alg":"RS256","enforce_policies":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 621.437417ms
+        duration: 308.8345ms
     - id: 1
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 24
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"consent_policy":null}
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.31.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/691ca11775c27084b9f94f2d
-        method: PATCH
+                - Go-Auth0/1.34.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/69a006b2b917ad2948e1a2ad
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -66,34 +63,31 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"691ca11775c27084b9f94f2d","name":"Acceptance Test - IsSystem - TestAccResourceServerIsSystem","identifier":"https://uat.api.terraform-provider-auth0.com/issystem/TestAccResourceServerIsSystem","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":7200,"token_lifetime_for_web":3600,"signing_alg":"RS256","enforce_policies":false}'
+        body: '{"id":"69a006b2b917ad2948e1a2ad","name":"Acceptance Test - IsSystem - TestAccResourceServerIsSystem","identifier":"https://uat.api.terraform-provider-auth0.com/issystem/TestAccResourceServerIsSystem","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":7200,"token_lifetime_for_web":3600,"signing_alg":"RS256","enforce_policies":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 434.232334ms
+        duration: 378.755375ms
     - id: 2
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 31
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"authorization_details":null}
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.31.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/691ca11775c27084b9f94f2d
-        method: PATCH
+                - Go-Auth0/1.34.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/69a006b2b917ad2948e1a2ad
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -102,90 +96,18 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"691ca11775c27084b9f94f2d","name":"Acceptance Test - IsSystem - TestAccResourceServerIsSystem","identifier":"https://uat.api.terraform-provider-auth0.com/issystem/TestAccResourceServerIsSystem","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":7200,"token_lifetime_for_web":3600,"signing_alg":"RS256","enforce_policies":false}'
+        body: '{"id":"69a006b2b917ad2948e1a2ad","name":"Acceptance Test - IsSystem - TestAccResourceServerIsSystem","identifier":"https://uat.api.terraform-provider-auth0.com/issystem/TestAccResourceServerIsSystem","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":7200,"token_lifetime_for_web":3600,"signing_alg":"RS256","enforce_policies":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 499.012375ms
+        duration: 305.127ms
     - id: 3
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 26
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"token_encryption":null}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.31.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/691ca11775c27084b9f94f2d
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"691ca11775c27084b9f94f2d","name":"Acceptance Test - IsSystem - TestAccResourceServerIsSystem","identifier":"https://uat.api.terraform-provider-auth0.com/issystem/TestAccResourceServerIsSystem","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":7200,"token_lifetime_for_web":3600,"signing_alg":"RS256","enforce_policies":false}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 596.468084ms
-    - id: 4
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 29
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"proof_of_possession":null}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.31.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/691ca11775c27084b9f94f2d
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"691ca11775c27084b9f94f2d","name":"Acceptance Test - IsSystem - TestAccResourceServerIsSystem","identifier":"https://uat.api.terraform-provider-auth0.com/issystem/TestAccResourceServerIsSystem","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":7200,"token_lifetime_for_web":3600,"signing_alg":"RS256","enforce_policies":false}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 493.834875ms
-    - id: 5
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
         content_length: 0
         transfer_encoding: []
         trailer: {}
@@ -196,74 +118,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.31.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/691ca11775c27084b9f94f2d
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"691ca11775c27084b9f94f2d","name":"Acceptance Test - IsSystem - TestAccResourceServerIsSystem","identifier":"https://uat.api.terraform-provider-auth0.com/issystem/TestAccResourceServerIsSystem","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":7200,"token_lifetime_for_web":3600,"signing_alg":"RS256","enforce_policies":false}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 427.665541ms
-    - id: 6
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.31.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/691ca11775c27084b9f94f2d
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"691ca11775c27084b9f94f2d","name":"Acceptance Test - IsSystem - TestAccResourceServerIsSystem","identifier":"https://uat.api.terraform-provider-auth0.com/issystem/TestAccResourceServerIsSystem","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"user":{"policy":"allow_all"},"client":{"policy":"require_client_grant"}},"token_lifetime":7200,"token_lifetime_for_web":3600,"signing_alg":"RS256","enforce_policies":false}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 602.582416ms
-    - id: 7
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.31.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/691ca11775c27084b9f94f2d
+                - Go-Auth0/1.34.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/69a006b2b917ad2948e1a2ad
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -279,4 +135,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 491.48525ms
+        duration: 309.718916ms

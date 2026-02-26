@@ -137,8 +137,9 @@ func flattenProofOfPossession(proofOfPossession *management.ResourceServerProofO
 		}
 	}
 	result := map[string]interface{}{
-		"mechanism": proofOfPossession.GetMechanism(),
-		"required":  proofOfPossession.GetRequired(),
+		"mechanism":    proofOfPossession.GetMechanism(),
+		"required":     proofOfPossession.GetRequired(),
+		"required_for": proofOfPossession.GetRequiredFor(),
 	}
 
 	return []map[string]interface{}{result}

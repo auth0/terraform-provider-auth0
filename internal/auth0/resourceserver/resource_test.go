@@ -122,6 +122,7 @@ EOF
 	proof_of_possession {
 		mechanism = "dpop"
 		required = true
+		required_for = "all_clients"
 	}
 
 }
@@ -352,6 +353,7 @@ func TestAccResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.disable", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.mechanism", "dpop"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required", "true"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required_for", "all_clients"),
 				),
 			},
 			{

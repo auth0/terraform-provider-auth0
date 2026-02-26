@@ -502,9 +502,9 @@ resource "auth0_resource_server" "auth0" {
 `
 
 func TestAccResourceServerAuth0APIManagementImport(t *testing.T) {
-	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
-		t.Skip()
-	}
+	//if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+	//	t.Skip()
+	//}
 
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

@@ -22,7 +22,7 @@ func NewCustomTextResource() *schema.Resource {
 		UpdateContext: updateCustomTextForSSOProfile,
 		DeleteContext: deleteCustomTextForSSOProfile,
 		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
+			StateContext: internalSchema.ImportResourceGroupID("sso_id", "language", "page"),
 		},
 		Description: "With this resource, you can set custom text for Self-Service Profile",
 		Schema: map[string]*schema.Schema{

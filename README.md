@@ -7,6 +7,7 @@
 [![Codecov](https://img.shields.io/codecov/c/github/auth0/terraform-provider-auth0?logo=codecov&style=flat-square)](https://codecov.io/gh/auth0/terraform-provider-auth0)
 [![License](https://img.shields.io/github/license/auth0/terraform-provider-auth0.svg?logo=fossa&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/blob/main/LICENSE)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/auth0/terraform-provider-auth0/main.yml?branch=main)](https://github.com/auth0/terraform-provider-auth0/actions?query=branch%3Amain)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/auth0/terraform-provider-auth0)
 
 </div>
 
@@ -95,4 +96,3 @@ This project is licensed under the MPL-2.0 license. See the [LICENSE](LICENSE) f
 report.
 
 </div>
-

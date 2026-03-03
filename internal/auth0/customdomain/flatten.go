@@ -7,6 +7,10 @@ import (
 )
 
 func flattenCustomDomain(data *schema.ResourceData, customDomain *management.CustomDomain) error {
+	if customDomain == nil {
+		return nil
+	}
+
 	result := multierror.Append(
 		data.Set("domain", customDomain.GetDomain()),
 		data.Set("type", customDomain.GetType()),
@@ -17,8 +21,10 @@ func flattenCustomDomain(data *schema.ResourceData, customDomain *management.Cus
 		data.Set("tls_policy", customDomain.GetTLSPolicy()),
 		data.Set("verification", flattenCustomDomainVerificationMethods(customDomain.GetVerification())),
 		data.Set("domain_metadata", customDomain.GetDomainMetadata()),
+		data.Set("relying_party_identifier", customDomain.GetRelyingPartyIdentifier()),
 		data.Set("certificate", flattenCustomDomainCertificates(customDomain.GetCertificate())),
 	)
+
 	return result.ErrorOrNil()
 }
 
@@ -59,4 +65,35 @@ func flattenCustomDomainVerification(data *schema.ResourceData, customDomain *ma
 	)
 
 	return result.ErrorOrNil()
+}
+
+func flattenCustomDomainList(data *schema.ResourceData, customDomains []*management.CustomDomain) error {
+	if customDomains == nil {
+		return data.Set("custom_domains", make([]map[string]interface{}, 0))
+	}
+
+	list := make([]map[string]interface{}, 0, len(customDomains))
+	for _, domain := range customDomains {
+		if domain == nil {
+			continue
+		}
+
+		entry := map[string]interface{}{
+			"domain":                   domain.GetDomain(),
+			"type":                     domain.GetType(),
+			"primary":                  domain.GetPrimary(),
+			"status":                   domain.GetStatus(),
+			"origin_domain_name":       domain.GetOriginDomainName(),
+			"custom_client_ip_header":  domain.GetCustomClientIPHeader(),
+			"tls_policy":               domain.GetTLSPolicy(),
+			"verification":             flattenCustomDomainVerificationMethods(domain.GetVerification()),
+			"domain_metadata":          domain.GetDomainMetadata(),
+			"certificate":              flattenCustomDomainCertificates(domain.GetCertificate()),
+			"relying_party_identifier": domain.GetRelyingPartyIdentifier(),
+		}
+
+		list = append(list, entry)
+	}
+
+	return data.Set("custom_domains", list)
 }

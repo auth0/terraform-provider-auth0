@@ -114,6 +114,7 @@ func NewResource() *schema.Resource {
 								"cn-north-1",
 								"cn-northwest-1",
 								"eu-central-1",
+								"eu-central-2",
 								"eu-north-1",
 								"eu-west-1",
 								"eu-west-2",
@@ -364,6 +365,11 @@ func NewResource() *schema.Resource {
 						},
 					},
 				},
+			},
+			"start_from": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The optional datetime (ISO 8601) to start streaming logs from.",
 			},
 		},
 	}

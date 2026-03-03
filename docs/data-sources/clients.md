@@ -50,20 +50,49 @@ Read-Only:
 - `allowed_logout_urls` (List of String)
 - `allowed_origins` (List of String)
 - `app_type` (String)
+- `async_approval_notification_channels` (List of String)
 - `callbacks` (List of String)
 - `client_id` (String)
 - `client_metadata` (Map of String)
 - `client_secret` (String)
 - `description` (String)
+- `express_configuration` (List of Object) (see [below for nested schema](#nestedobjatt--clients--express_configuration))
 - `grant_types` (List of String)
 - `is_first_party` (Boolean)
 - `is_token_endpoint_ip_header_trusted` (Boolean)
 - `name` (String)
 - `oidc_logout` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout))
+- `organization_discovery_methods` (List of String)
+- `resource_server_identifier` (String)
 - `session_transfer` (List of Object) (see [below for nested schema](#nestedobjatt--clients--session_transfer))
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (String)
 - `token_exchange` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_exchange))
 - `token_quota` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_quota))
 - `web_origins` (List of String)
+
+<a id="nestedobjatt--clients--express_configuration"></a>
+### Nested Schema for `clients.express_configuration`
+
+Read-Only:
+
+- `admin_login_domain` (String)
+- `connection_profile_id` (String)
+- `enable_client` (Boolean)
+- `enable_organization` (Boolean)
+- `initiate_login_uri_template` (String)
+- `linked_clients` (List of Object) (see [below for nested schema](#nestedobjatt--clients--express_configuration--linked_clients))
+- `oin_submission_id` (String)
+- `okta_oin_client_id` (String)
+- `user_attribute_profile_id` (String)
+
+<a id="nestedobjatt--clients--express_configuration--linked_clients"></a>
+### Nested Schema for `clients.express_configuration.linked_clients`
+
+Read-Only:
+
+- `client_id` (String)
+
+
 
 <a id="nestedobjatt--clients--oidc_logout"></a>
 ### Nested Schema for `clients.oidc_logout`
@@ -71,6 +100,7 @@ Read-Only:
 Read-Only:
 
 - `backchannel_logout_initiators` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout--backchannel_logout_initiators))
+- `backchannel_logout_session_metadata` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout--backchannel_logout_session_metadata))
 - `backchannel_logout_urls` (Set of String)
 
 <a id="nestedobjatt--clients--oidc_logout--backchannel_logout_initiators"></a>
@@ -82,6 +112,14 @@ Read-Only:
 - `selected_initiators` (Set of String)
 
 
+<a id="nestedobjatt--clients--oidc_logout--backchannel_logout_session_metadata"></a>
+### Nested Schema for `clients.oidc_logout.backchannel_logout_session_metadata`
+
+Read-Only:
+
+- `include` (Boolean)
+
+
 
 <a id="nestedobjatt--clients--session_transfer"></a>
 ### Nested Schema for `clients.session_transfer`
@@ -91,7 +129,9 @@ Read-Only:
 - `allow_refresh_token` (Boolean)
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean)
+- `enforce_cascade_revocation` (Boolean)
 - `enforce_device_binding` (String)
+- `enforce_online_refresh_tokens` (Boolean)
 
 
 <a id="nestedobjatt--clients--token_exchange"></a>

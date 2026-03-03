@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"time"
 
+	"encoding/json"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -60,8 +62,8 @@ func NewCredentialsResource() *schema.Resource {
 					"self_signed_tls_client_auth",
 				},
 				Description: "Secret for the client when using `client_secret_post` or `client_secret_basic` " +
-					"authentication method. Keep this private. To access this attribute you need to add the " +
-					"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an " +
+					"authentication method. Keep this private. To access this attribute you need to add either " +
+					"`read:client_keys` or `read:client_credentials` scope to the Terraform client. Otherwise, the attribute will contain an " +
 					"empty string. The attribute will also be an empty string in case `private_key_jwt` is selected " +
 					"as an authentication method.",
 			},
@@ -740,7 +742,29 @@ func detachClientCredentials(ctx context.Context, api *management.Management, cl
 }
 
 func updateClientInternal(ctx context.Context, api *management.Management, clientID string, client interface{}) error {
-	request, err := api.NewRequest(ctx, http.MethodPatch, api.URI("clients", clientID), client)
+	c, err := api.Client.Read(ctx, clientID, management.IncludeFields("client_id", "app_type"))
+	if err != nil {
+		return err
+	}
+
+	var payloadMap map[string]interface{}
+	jsonBytes, _ := json.Marshal(client)
+	_ = json.Unmarshal(jsonBytes, &payloadMap)
+
+	if c.GetAppType() == "express_configuration" {
+		// Go's delete is safe even if the key doesn't exist.
+		delete(payloadMap, "signed_request_object")
+		delete(payloadMap, "token_endpoint_auth_method")
+		if payloadMap["client_authentication_methods"] == nil {
+			payloadMap["client_authentication_methods"] = management.ClientAuthenticationMethods{
+				PrivateKeyJWT: &management.PrivateKeyJWT{
+					Credentials: &[]management.Credential{},
+				},
+			}
+		}
+	}
+
+	request, err := api.NewRequest(ctx, http.MethodPatch, api.URI("clients", clientID), payloadMap)
 	if err != nil {
 		return err
 	}

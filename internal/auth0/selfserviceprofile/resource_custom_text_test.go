@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/stretchr/testify/require"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
@@ -54,6 +56,39 @@ func TestAccSSOCustomText(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_self_service_profile_custom_text.sso_custom_text", "page", "get-started"),
 					resource.TestCheckResourceAttr("auth0_self_service_profile_custom_text.sso_custom_text", "body", "{}"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccSSOCustomTextImport(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccSSOCustomTextCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("auth0_self_service_profile_custom_text.sso_custom_text", "sso_id"),
+					resource.TestCheckResourceAttr("auth0_self_service_profile_custom_text.sso_custom_text", "page", "get-started"),
+					resource.TestCheckResourceAttr("auth0_self_service_profile_custom_text.sso_custom_text", "language", "en"),
+				),
+			},
+			{
+				Config:            testAccSSOCustomTextCreate,
+				ResourceName:      "auth0_self_service_profile_custom_text.sso_custom_text",
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					ssoID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_self_service_profile.my_self_service_profile", "id")
+					require.NoError(t, err)
+
+					lang, err := acctest.ExtractResourceAttributeFromState(state, "auth0_self_service_profile_custom_text.sso_custom_text", "language")
+					require.NoError(t, err)
+
+					page, err := acctest.ExtractResourceAttributeFromState(state, "auth0_self_service_profile_custom_text.sso_custom_text", "page")
+					require.NoError(t, err)
+
+					return ssoID + "::" + lang + "::" + page, nil
+				},
 			},
 		},
 	})

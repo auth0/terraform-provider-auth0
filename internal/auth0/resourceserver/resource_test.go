@@ -38,6 +38,14 @@ resource "auth0_resource_server" "my_resource_server" {
 	proof_of_possession {
 		disable = true
 	}
+	subject_type_authorization {
+		user {
+		  policy = "allow_all"
+		}
+		client {
+		  policy = "require_client_grant"
+		}
+  	}
 }
 `
 
@@ -72,6 +80,14 @@ EOF
 		mechanism = "mtls"
 		required = true
 	}
+	subject_type_authorization {
+		user {
+		  policy = "deny_all"
+		}
+		client {
+		  policy = "deny_all"
+		}
+  	}
 
 }
 `
@@ -106,6 +122,7 @@ EOF
 	proof_of_possession {
 		mechanism = "dpop"
 		required = true
+		required_for = "all_clients"
 	}
 
 }
@@ -292,6 +309,8 @@ func TestAccResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.disable", "true"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.mechanism", ""),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "subject_type_authorization.0.user.0.policy", "allow_all"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "subject_type_authorization.0.client.0.policy", "require_client_grant"),
 				),
 			},
 			{
@@ -334,6 +353,7 @@ func TestAccResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.disable", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.mechanism", "dpop"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required", "true"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required_for", "all_clients"),
 				),
 			},
 			{
@@ -364,6 +384,8 @@ func TestAccResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.disable", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.mechanism", "mtls"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required", "true"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "subject_type_authorization.0.user.0.policy", "deny_all"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "subject_type_authorization.0.client.0.policy", "deny_all"),
 				),
 			},
 			{

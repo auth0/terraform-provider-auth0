@@ -2,10 +2,15 @@ package attackprotection
 
 import (
 	"context"
+	"fmt"
+	"log"
+	"strings"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -25,6 +30,9 @@ func NewResource() *schema.Resource {
 		},
 		Description: "Auth0 can detect attacks and stop malicious attempts to access your " +
 			"application such as blocking traffic from certain IPs and displaying CAPTCHAs.",
+		CustomizeDiff: customdiff.All(
+			validateCaptchaProviderSecrets(),
+		),
 		Schema: map[string]*schema.Schema{
 			"breached_password_detection": {
 				Type:     schema.TypeList,
@@ -203,6 +211,252 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"bot_detection": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Bot detection configuration to identify and prevent automated threats.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"bot_detection_level": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"low",
+								"medium",
+								"high",
+							}, false),
+							Description: "Bot detection level. Possible values: `low`, `medium`, `high`. Set to empty string to disable.",
+						},
+						"challenge_password_policy": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"never",
+								"when_risky",
+								"always",
+							}, false),
+							Description: "Challenge policy for password flow. Possible values: `never`, `when_risky`, `always`.",
+						},
+						"challenge_passwordless_policy": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"never",
+								"when_risky",
+								"always",
+							}, false),
+							Description: "Challenge policy for passwordless flow. Possible values: `never`, `when_risky`, `always`.",
+						},
+						"challenge_password_reset_policy": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"never",
+								"when_risky",
+								"always",
+							}, false),
+							Description: "Challenge policy for password reset flow. Possible values: `never`, `when_risky`, `always`.",
+						},
+						"allowlist": {
+							Type:     schema.TypeSet,
+							Optional: true,
+							Computed: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+							Description: "List of IP addresses or ranges that will not trigger bot detection.",
+						},
+						"monitoring_mode_enabled": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Whether monitoring mode is enabled for bot detection.",
+						},
+					},
+				},
+			},
+			"captcha": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "CAPTCHA configuration for attack protection.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"active_provider_id": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"recaptcha_v2",
+								"recaptcha_enterprise",
+								"hcaptcha",
+								"friendly_captcha",
+								"arkose",
+								"auth_challenge",
+								"simple_captcha",
+							}, false),
+							Description: "Active CAPTCHA provider ID. Set to empty string to disable CAPTCHA. Possible values: `recaptcha_v2`, `recaptcha_enterprise`, `hcaptcha`, `friendly_captcha`, `arkose`, `auth_challenge`, `simple_captcha`.",
+						},
+						"recaptcha_v2": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Configuration for Google reCAPTCHA v2.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"site_key": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "Site key for reCAPTCHA v2.",
+									},
+									"secret": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+										Description: "Secret for reCAPTCHA v2. Required when configuring reCAPTCHA v2.",
+									},
+								},
+							},
+						},
+						"recaptcha_enterprise": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Configuration for Google reCAPTCHA Enterprise.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"site_key": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "Site key for reCAPTCHA Enterprise.",
+									},
+									"api_key": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+										Description: "API key for reCAPTCHA Enterprise. Required when configuring reCAPTCHA Enterprise.",
+									},
+									"project_id": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "Project ID for reCAPTCHA Enterprise.",
+									},
+								},
+							},
+						},
+						"hcaptcha": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Configuration for hCaptcha.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"site_key": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "Site key for hCaptcha.",
+									},
+									"secret": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+										Description: "Secret for hCaptcha. Required when configuring hCaptcha.",
+									},
+								},
+							},
+						},
+						"friendly_captcha": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Configuration for Friendly Captcha.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"site_key": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "Site key for Friendly Captcha.",
+									},
+									"secret": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+										Description: "Secret for Friendly Captcha. Required when configuring Friendly Captcha.",
+									},
+								},
+							},
+						},
+						"arkose": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Configuration for Arkose Labs.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"site_key": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "Site key for Arkose Labs.",
+									},
+									"secret": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+										Description: "Secret for Arkose Labs. Required when configuring Arkose Labs.",
+									},
+									"client_subdomain": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Computed:    true,
+										Description: "Client subdomain for Arkose Labs.",
+									},
+									"verify_subdomain": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Computed:    true,
+										Description: "Verify subdomain for Arkose Labs.",
+									},
+									"fail_open": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Whether the captcha should fail open.",
+									},
+								},
+							},
+						},
+						"auth_challenge": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Configuration for Auth0's Auth Challenge.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"fail_open": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Whether the auth challenge should fail open.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"suspicious_ip_throttling": {
 				Type:     schema.TypeList,
 				Optional: true,
@@ -306,6 +560,101 @@ func NewResource() *schema.Resource {
 	}
 }
 
+// validateCaptchaProviderSecrets returns a CustomizeDiffFunc that validates
+// that when a CAPTCHA provider is active, its required secrets are provided.
+// This allows import to succeed (where secrets are not returned by the API)
+// while still enforcing that secrets are provided during create/update operations.
+func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
+	return func(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+		// Skip validation during import (when the resource ID is set but it's a new resource).
+		if diff.Id() != "" && !diff.HasChange("captcha") {
+			return nil
+		}
+
+		activeProviderID, ok := diff.GetOk("captcha.0.active_provider_id")
+		if !ok || activeProviderID == "" {
+			return nil
+		}
+
+		provider := activeProviderID.(string)
+
+		// Map of providers to their required secret fields.
+		providerSecretFields := map[string]struct {
+			path        string
+			providerKey string
+			secretField string
+			displayName string
+		}{
+			"recaptcha_v2": {
+				path:        "captcha.0.recaptcha_v2.0.secret",
+				providerKey: "recaptcha_v2",
+				secretField: "secret",
+				displayName: "reCAPTCHA v2",
+			},
+			"recaptcha_enterprise": {
+				path:        "captcha.0.recaptcha_enterprise.0.api_key",
+				providerKey: "recaptcha_enterprise",
+				secretField: "api_key",
+				displayName: "reCAPTCHA Enterprise",
+			},
+			"hcaptcha": {
+				path:        "captcha.0.hcaptcha.0.secret",
+				providerKey: "hcaptcha",
+				secretField: "secret",
+				displayName: "hCaptcha",
+			},
+			"friendly_captcha": {
+				path:        "captcha.0.friendly_captcha.0.secret",
+				providerKey: "friendly_captcha",
+				secretField: "secret",
+				displayName: "Friendly Captcha",
+			},
+			"arkose": {
+				path:        "captcha.0.arkose.0.secret",
+				providerKey: "arkose",
+				secretField: "secret",
+				displayName: "Arkose Labs",
+			},
+		}
+
+		config, exists := providerSecretFields[provider]
+		if !exists {
+			return nil
+		}
+
+		// Use GetRawPlan to distinguish between null (not set) and empty string (explicitly set).
+		// An empty string is considered valid, but null/unset is not.
+		rawPlan := diff.GetRawPlan()
+		captchaAttr := rawPlan.GetAttr("captcha")
+
+		if captchaAttr.IsNull() || captchaAttr.LengthInt() == 0 {
+			return nil
+		}
+
+		captchaConfig := captchaAttr.Index(cty.NumberIntVal(0))
+		providerAttr := captchaConfig.GetAttr(config.providerKey)
+
+		if providerAttr.IsNull() || providerAttr.LengthInt() == 0 {
+			return nil
+		}
+
+		providerConfig := providerAttr.Index(cty.NumberIntVal(0))
+		secretAttr := providerConfig.GetAttr(config.secretField)
+
+		// If the secret is null or not provided, return an error.
+		// Empty string is valid (secretAttr.AsString() == "" but !secretAttr.IsNull()).
+		if secretAttr.IsNull() {
+			return fmt.Errorf(
+				"%s is configured as the active CAPTCHA provider, but %q is not set. "+
+					"Please provide the %s for %s",
+				config.displayName, config.secretField, config.secretField, config.displayName,
+			)
+		}
+
+		return nil
+	}
+}
+
 func createAttackProtection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	data.SetId(id.UniqueId())
 	return updateAttackProtection(ctx, data, meta)
@@ -313,6 +662,7 @@ func createAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 
 func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	breachedPasswords, err := api.AttackProtection.GetBreachedPasswordDetection(ctx)
 	if err != nil {
@@ -329,10 +679,28 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		return diag.FromErr(err)
 	}
 
+	botDetection, err := apiv2.AttackProtection.BotDetection.Get(ctx)
+	if err != nil {
+		if !strings.Contains(err.Error(), "insufficient_scope") {
+			return diag.FromErr(err)
+		}
+		log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
+	}
+
+	captcha, err := apiv2.AttackProtection.Captcha.Get(ctx)
+	if err != nil {
+		if !strings.Contains(err.Error(), "insufficient_scope") {
+			return diag.FromErr(err)
+		}
+		log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
+	}
+
 	result := multierror.Append(
 		data.Set("breached_password_detection", flattenBreachedPasswordProtection(breachedPasswords)),
 		data.Set("brute_force_protection", flattenBruteForceProtection(bruteForce)),
 		data.Set("suspicious_ip_throttling", flattenSuspiciousIPThrottling(ipThrottling)),
+		data.Set("bot_detection", flattenBotDetection(botDetection)),
+		data.Set("captcha", flattenCaptcha(data, captcha)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -340,6 +708,7 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 
 func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	var result *multierror.Error
 	if ipt := expandSuspiciousIPThrottling(data); ipt != nil {
@@ -354,6 +723,26 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 		result = multierror.Append(result, api.AttackProtection.UpdateBreachedPasswordDetection(ctx, bpd))
 	}
 
+	if botDetection := expandBotDetection(data); botDetection != nil {
+		if _, err := apiv2.AttackProtection.BotDetection.Update(ctx, botDetection); err != nil {
+			if !strings.Contains(err.Error(), "insufficient_scope") {
+				result = multierror.Append(result, err)
+			} else {
+				log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
+			}
+		}
+	}
+
+	if captcha := expandCaptcha(data); captcha != nil {
+		if _, err := apiv2.AttackProtection.Captcha.Update(ctx, captcha); err != nil {
+			if !strings.Contains(err.Error(), "insufficient_scope") {
+				result = multierror.Append(result, err)
+			} else {
+				log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
+			}
+		}
+	}
+
 	if result.ErrorOrNil() != nil {
 		return diag.FromErr(result.ErrorOrNil())
 	}
@@ -366,7 +755,8 @@ func deleteAttackProtection(ctx context.Context, _ *schema.ResourceData, meta in
 
 	enabled := false
 
-	result := multierror.Append(
+	var result *multierror.Error
+	result = multierror.Append(result,
 		api.AttackProtection.UpdateBreachedPasswordDetection(
 			ctx,
 			&management.BreachedPasswordDetection{

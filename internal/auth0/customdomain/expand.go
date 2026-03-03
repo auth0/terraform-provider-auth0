@@ -11,9 +11,10 @@ func expandCustomDomain(data *schema.ResourceData) *management.CustomDomain {
 	cfg := data.GetRawConfig()
 
 	customDomain := &management.CustomDomain{
-		TLSPolicy:            value.String(cfg.GetAttr("tls_policy")),
-		CustomClientIPHeader: value.String(cfg.GetAttr("custom_client_ip_header")),
-		DomainMetadata:       expandCustomDomainMetadata(data),
+		TLSPolicy:              value.String(cfg.GetAttr("tls_policy")),
+		CustomClientIPHeader:   value.String(cfg.GetAttr("custom_client_ip_header")),
+		DomainMetadata:         expandCustomDomainMetadata(data),
+		RelyingPartyIdentifier: value.String(cfg.GetAttr("relying_party_identifier")),
 	}
 
 	if data.IsNewResource() {
@@ -22,6 +23,36 @@ func expandCustomDomain(data *schema.ResourceData) *management.CustomDomain {
 	}
 
 	return customDomain
+}
+
+func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
+	type nullCheckFunc func(*schema.ResourceData) bool
+
+	checks := map[string]nullCheckFunc{
+		"relying_party_identifier": isRelyingPartyIdentifierNull,
+	}
+
+	nullableMap := make(map[string]interface{})
+
+	for field, checkFunc := range checks {
+		if checkFunc(data) {
+			nullableMap[field] = nil
+		}
+	}
+
+	return nullableMap
+}
+
+func isRelyingPartyIdentifierNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("relying_party_identifier") {
+		return false
+	}
+
+	config := data.GetRawConfig()
+	attr := config.GetAttr("relying_party_identifier")
+
+	// If it's null, it means it was explicitly removed or not set.
+	return attr.IsNull()
 }
 
 func expandCustomDomainMetadata(data *schema.ResourceData) *map[string]interface{} {

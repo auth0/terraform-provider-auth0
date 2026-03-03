@@ -6,6 +6,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	managementv2 "github.com/auth0/go-auth0/v2/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -53,6 +54,8 @@ var expandConnectionOptionsMap = map[string]expandConnectionOptionsFunc{
 	management.ConnectionStrategySAML:         expandConnectionOptionsSAML,
 	management.ConnectionStrategyADFS:         expandConnectionOptionsADFS,
 	management.ConnectionStrategyPingFederate: expandConnectionOptionsPingFederate,
+
+	management.ConnectionStrategyOAuth1: expandConnectionOptionsOAuth1,
 }
 
 type expandConnectionOptionsFunc func(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics)
@@ -73,6 +76,8 @@ func expandConnection(
 		DisplayName:        value.String(config.GetAttr("display_name")),
 		IsDomainConnection: value.Bool(config.GetAttr("is_domain_connection")),
 		Metadata:           value.MapOfStrings(config.GetAttr("metadata")),
+		Authentication:     expandConnectionAuthentication(data),
+		ConnectedAccounts:  expandConnectionConnectedAccounts(data),
 	}
 
 	strategy := data.Get("strategy").(string)
@@ -117,6 +122,37 @@ func expandConnection(
 	}
 
 	return connection, diagnostics
+}
+
+func expandConnectionAuthentication(data *schema.ResourceData) *management.Authentication {
+	if !data.HasChange("authentication") {
+		return nil
+	}
+
+	var authentication management.Authentication
+
+	data.GetRawConfig().GetAttr("authentication").ForEachElement(func(_, config cty.Value) (stop bool) {
+		authentication.Active = value.Bool(config.GetAttr("active"))
+		return stop
+	})
+
+	return &authentication
+}
+
+func expandConnectionConnectedAccounts(data *schema.ResourceData) *management.ConnectedAccounts {
+	if !data.HasChange("connected_accounts") {
+		return nil
+	}
+
+	var connectedAccounts management.ConnectedAccounts
+
+	data.GetRawConfig().GetAttr("connected_accounts").ForEachElement(func(_, config cty.Value) (stop bool) {
+		connectedAccounts.Active = value.Bool(config.GetAttr("active"))
+
+		return stop
+	})
+
+	return &connectedAccounts
 }
 
 func connectionIsEnterprise(strategy string) bool {
@@ -188,6 +224,8 @@ func expandConnectionOptionsAuthenticationMethods(config cty.Value) *management.
 
 			authMethods.Password = expandConnectionOptionsAuthenticationMethodsPassword(attributes.GetAttr("password"))
 			authMethods.Passkey = expandConnectionOptionsAuthenticationMethodsPasskey(attributes.GetAttr("passkey"))
+			authMethods.EmailOTP = expandConnectionOptionsAuthenticationMethodsEmailOTP(attributes.GetAttr("email_otp"))
+			authMethods.PhoneOTP = expandConnectionOptionsAuthenticationMethodsPhoneOTP(attributes.GetAttr("phone_otp"))
 
 			return stop
 		})
@@ -218,6 +256,30 @@ func expandConnectionOptionsAuthenticationMethodsPasskey(config cty.Value) *mana
 	return passkeyAuth
 }
 
+func expandConnectionOptionsAuthenticationMethodsEmailOTP(config cty.Value) *management.EmailOTPAuthenticationMethod {
+	var emailOTPAuth *management.EmailOTPAuthenticationMethod
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			emailOTPAuth = &management.EmailOTPAuthenticationMethod{
+				Enabled: value.Bool(attributes.GetAttr("enabled")),
+			}
+			return stop
+		})
+	return emailOTPAuth
+}
+
+func expandConnectionOptionsAuthenticationMethodsPhoneOTP(config cty.Value) *management.PhoneOTPAuthenticationMethod {
+	var phoneOTPAuth *management.PhoneOTPAuthenticationMethod
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			phoneOTPAuth = &management.PhoneOTPAuthenticationMethod{
+				Enabled: value.Bool(attributes.GetAttr("enabled")),
+			}
+			return stop
+		})
+	return phoneOTPAuth
+}
+
 func expandConnectionOptionsPasskeyOptions(config cty.Value) *management.PasskeyOptions {
 	var passkeyOptions *management.PasskeyOptions
 	config.ForEachElement(
@@ -237,6 +299,18 @@ func expandConnectionOptionsPasskeyOptions(config cty.Value) *management.Passkey
 			return stop
 		})
 	return passkeyOptions
+}
+
+func expandConnectionOptionsCustomPasswordHash(config cty.Value) *management.CustomPasswordHash {
+	var customPasswordHash *management.CustomPasswordHash
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			customPasswordHash = &management.CustomPasswordHash{
+				ActionID: value.String(attributes.GetAttr("action_id")),
+			}
+			return stop
+		})
+	return customPasswordHash
 }
 
 func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
@@ -262,6 +336,7 @@ func expandConnectionOptionsEmailAttribute(config cty.Value) *management.Connect
 				ProfileRequired:    value.Bool(email.GetAttr("profile_required")),
 				VerificationMethod: (*management.ConnectionOptionsEmailAttributeVerificationMethod)(value.String(email.GetAttr("verification_method"))),
 				Signup:             expandConnectionOptionsAttributeSignup(email),
+				Unique:             value.Bool(email.GetAttr("unique")),
 			}
 			return stop
 		})
@@ -302,7 +377,8 @@ func expandConnectionOptionsAttributeIdentifier(config cty.Value) *management.Co
 	config.GetAttr("identifier").ForEachElement(
 		func(_ cty.Value, identifier cty.Value) (stop bool) {
 			coai = &management.ConnectionOptionsAttributeIdentifier{
-				Active: value.Bool(identifier.GetAttr("active")),
+				Active:        value.Bool(identifier.GetAttr("active")),
+				DefaultMethod: value.String(identifier.GetAttr("default_method")),
 			}
 			return stop
 		})
@@ -514,6 +590,10 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		options.PasskeyOptions = expandConnectionOptionsPasskeyOptions(config.GetAttr("passkey_options"))
 	}
 
+	if config.Type().HasAttribute("custom_password_hash") && !config.GetAttr("custom_password_hash").IsNull() {
+		options.CustomPasswordHash = expandConnectionOptionsCustomPasswordHash(config.GetAttr("custom_password_hash"))
+	}
+
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
@@ -578,6 +658,8 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 		PKCEEnabled:        value.Bool(config.GetAttr("pkce_enabled")),
 		Scripts:            value.MapOfStrings(config.GetAttr("scripts")),
 		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
+		Email:              value.Bool(config.GetAttr("email")),
+		UseOauthSpecScope:  value.Bool(config.GetAttr("use_oauth_spec_scope")),
 	}
 
 	customHeadersConfig := config.GetAttr("custom_headers")
@@ -591,7 +673,10 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 			return false
 		})
 
-		options.CustomHeaders = &customHeaders
+		// Only set CustomHeaders if the map is not empty to avoid sending "{}" to the API.
+		if len(customHeaders) > 0 {
+			options.CustomHeaders = &customHeaders
+		}
 	}
 
 	expandConnectionOptionsScopes(data, options)
@@ -836,6 +921,7 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 		Issuer:                      value.String(config.GetAttr("issuer")),
 		JWKSURI:                     value.String(config.GetAttr("jwks_uri")),
 		Type:                        value.String(config.GetAttr("type")),
+		SendBackChannelNonce:        value.Bool(config.GetAttr("send_back_channel_nonce")),
 		UserInfoEndpoint:            value.String(config.GetAttr("userinfo_endpoint")),
 		TokenEndpoint:               value.String(config.GetAttr("token_endpoint")),
 		SetUserAttributes:           value.String(config.GetAttr("set_user_root_attributes")),
@@ -1055,6 +1141,37 @@ func expandConnectionOptionsPingFederate(_ *schema.ResourceData, config cty.Valu
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsOAuth1(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
+	options := &management.ConnectionOptionsOAuth1{
+		ConsumerKey:          value.String(config.GetAttr("consumer_key")),
+		ConsumerSecret:       value.String(config.GetAttr("consumer_secret")),
+		RequestTokenURL:      value.String(config.GetAttr("request_token_url")),
+		AccessTokenURL:       value.String(config.GetAttr("access_token_url")),
+		UserAuthorizationURL: value.String(config.GetAttr("user_authorization_url")),
+		SessionKey:           value.String(config.GetAttr("session_key")),
+		SignatureMethod:      value.String(config.GetAttr("signature_method")),
+		Scripts:              value.MapOfStrings(config.GetAttr("scripts")),
+	}
+
+	customHeadersConfig := config.GetAttr("custom_headers")
+
+	if !customHeadersConfig.IsNull() {
+		customHeaders := make(map[string]string)
+
+		customHeadersConfig.ForEachElement(func(_ cty.Value, httpHeader cty.Value) (stop bool) {
+			m := httpHeader.AsValueMap()
+			customHeaders[m["header"].AsString()] = m["value"].AsString()
+			return false
+		})
+
+		// Only set CustomHeaders if the map is not empty to avoid sending "{}" to the API.
+		if len(customHeaders) > 0 {
+			options.CustomHeaders = &customHeaders
+		}
+	}
+	return options, nil
 }
 
 func expandConnectionOptionsScopes(data *schema.ResourceData, options scoper) {
@@ -1346,4 +1463,52 @@ func expandSCIMConfiguration(data *schema.ResourceData) *management.SCIMConfigur
 	}
 
 	return nil
+}
+
+func expandDirectoryMapping(data *schema.ResourceData) []*managementv2.DirectoryProvisioningMappingItem {
+	srcMapping := data.Get("mapping").(*schema.Set)
+	mapping := make([]*managementv2.DirectoryProvisioningMappingItem, 0, srcMapping.Len())
+	for _, item := range srcMapping.List() {
+		srcMap := item.(map[string]interface{})
+		mappingItem := &managementv2.DirectoryProvisioningMappingItem{}
+		mappingItem.SetAuth0(srcMap["auth0"].(string))
+		mappingItem.SetIdp(srcMap["idp"].(string))
+		mapping = append(mapping, mappingItem)
+	}
+
+	return mapping
+}
+
+func expandDirectory(data *schema.ResourceData) *managementv2.CreateDirectoryProvisioningRequestContent {
+	cfg := data.GetRawConfig()
+	directoryConfig := &managementv2.CreateDirectoryProvisioningRequestContent{}
+
+	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
+		mapping := expandDirectoryMapping(data)
+		directoryConfig.SetMapping(mapping)
+	}
+
+	if !cfg.GetAttr("synchronize_automatically").IsNull() {
+		syncAuto := data.Get("synchronize_automatically").(bool)
+		directoryConfig.SetSynchronizeAutomatically(&syncAuto)
+	}
+
+	return directoryConfig
+}
+
+func expandDirectoryUpdate(data *schema.ResourceData) *managementv2.UpdateDirectoryProvisioningRequestContent {
+	cfg := data.GetRawConfig()
+	directoryConfig := &managementv2.UpdateDirectoryProvisioningRequestContent{}
+
+	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
+		mapping := expandDirectoryMapping(data)
+		directoryConfig.SetMapping(mapping)
+	}
+
+	if !cfg.GetAttr("synchronize_automatically").IsNull() {
+		syncAuto := data.Get("synchronize_automatically").(bool)
+		directoryConfig.SetSynchronizeAutomatically(&syncAuto)
+	}
+
+	return directoryConfig
 }

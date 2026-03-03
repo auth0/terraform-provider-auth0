@@ -13,6 +13,7 @@ resource "auth0_connection" "oidc" {
     tenant_domain            = ""
     icon_url                 = "https://example.com/assets/logo.png"
     type                     = "back_channel"
+    send_back_channel_nonce  = true
     issuer                   = "https://www.paypalobjects.com"
     jwks_uri                 = "https://api.paypal.com/v1/oauth2/certs"
     discovery_url            = "https://www.paypalobjects.com/.well-known/openid-configuration"

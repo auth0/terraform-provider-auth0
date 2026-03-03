@@ -21,21 +21,46 @@ resource "auth0_resource_server" "my_resource_server" {
   name       = "Example Resource Server - Client Grant (Managed by Terraform)"
   identifier = "https://api.example.com/client-grant"
 
+  authorization_details {
+    type = "payment"
+  }
+  authorization_details {
+    type = "shipping"
+  }
+  subject_type_authorization {
+    user {
+      policy = "allow_all"
+    }
+    client {
+      policy = "require_client_grant"
+    }
+  }
+}
+
+
+resource "auth0_resource_server_scopes" "my_scopes" {
+  depends_on = [auth0_resource_server.my_resource_server]
+
+  resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+
   scopes {
-    value       = "create:foo"
-    description = "Create foos"
+    name        = "read:foo"
+    description = "Can read Foo"
   }
 
   scopes {
-    value       = "create:bar"
-    description = "Create bars"
+    name        = "create:foo"
+    description = "Can create Foo"
   }
 }
 
 resource "auth0_client_grant" "my_client_grant" {
-  client_id = auth0_client.my_client.id
-  audience  = auth0_resource_server.my_resource_server.identifier
-  scopes    = ["create:foo", "create:bar"]
+  client_id                   = auth0_client.my_client.id
+  audience                    = auth0_resource_server.my_resource_server.identifier
+  scopes                      = ["create:foo", "read:foo"]
+  subject_type                = "user"
+  authorization_details_types = ["payment", "shipping"]
+  allow_all_scopes            = false
 }
 ```
 
@@ -46,16 +71,20 @@ resource "auth0_client_grant" "my_client_grant" {
 
 - `audience` (String) Audience or API Identifier for this grant.
 - `client_id` (String) ID of the client for this grant.
-- `scopes` (List of String) Permissions (scopes) included in this grant.
 
 ### Optional
 
+- `allow_all_scopes` (Boolean) When set to `true`, all scopes configured on the resource server are allowed for this client grant. `scopes` can not be provided when this is set to `true`. EA Only.
 - `allow_any_organization` (Boolean) If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations.
+- `authorization_details_types` (List of String) Defines the types of authorization details allowed for this client grant.
 - `organization_usage` (String) Defines whether organizations can be used with client credentials exchanges for this grant. (defaults to deny when not defined)
+- `scopes` (List of String) Permissions (scopes) included in this grant. Can not be provided when `allow_all_scopes` is set to `true`.
+- `subject_type` (String) Defines the type of subject for this grant. Can be one of `client` or `user`. Defaults to `client` when not defined.
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `is_system` (Boolean) Indicates whether this grant is a special grant created by Auth0. It cannot be modified or deleted directly.
 
 ## Import
 

@@ -2,6 +2,8 @@ package client
 
 import (
 	"context"
+	"fmt"
+	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -26,6 +28,7 @@ func NewGrantResource() *schema.Resource {
 			"resources to another entity without exposing credentials. The OAuth 2.0 protocol supports " +
 			"several types of grants, which allow different types of access. This resource allows " +
 			"you to create and manage client grants used with configured Auth0 clients.",
+		CustomizeDiff: validateClientGrant,
 		Schema: map[string]*schema.Schema{
 			"client_id": {
 				Type:        schema.TypeString,
@@ -45,8 +48,8 @@ func NewGrantResource() *schema.Resource {
 					Type:         schema.TypeString,
 					ValidateFunc: validation.StringIsNotEmpty,
 				},
-				Required:    true,
-				Description: "Permissions (scopes) included in this grant.",
+				Optional:    true,
+				Description: "Permissions (scopes) included in this grant. Can not be provided when `allow_all_scopes` is set to `true`.",
 			},
 			"organization_usage": {
 				Type:     schema.TypeString,
@@ -62,6 +65,36 @@ func NewGrantResource() *schema.Resource {
 				Optional: true,
 				Description: "If enabled, any organization can be used with this grant. If disabled (default), " +
 					"the grant must be explicitly assigned to the desired organizations.",
+			},
+			"subject_type": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ForceNew: true,
+				Computed: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"client", "user",
+				}, true),
+				Description: "Defines the type of subject for this grant. Can be one of `client` or `user`. Defaults to `client` when not defined.",
+			},
+			"authorization_details_types": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type:         schema.TypeString,
+					ValidateFunc: validation.StringIsNotEmpty,
+				},
+				Description: "Defines the types of authorization details allowed for this client grant.",
+			},
+			"is_system": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Indicates whether this grant is a special grant created by Auth0. It cannot be modified or deleted directly.",
+			},
+			"allow_all_scopes": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: "When set to `true`, all scopes configured on the resource server are allowed for this client grant. " +
+					"`scopes` can not be provided when this is set to `true`. EA Only.",
 			},
 		},
 	}
@@ -109,6 +142,15 @@ func readClientGrant(ctx context.Context, data *schema.ResourceData, meta interf
 func updateClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
+	// If allow_all_scopes is removed from config to use specific scopes,
+	// first disable allow_all_scopes with an empty scope via a PATCH request.
+	if data.HasChange("allow_all_scopes") && data.Get("allow_all_scopes") != true {
+		disableAllowAllScopesConfig := map[string]interface{}{"allow_all_scopes": false, "scope": []string{}}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("client-grants", data.Id()), disableAllowAllScopesConfig); err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+	}
+
 	if clientGrant := expandClientGrant(data); clientGrantHasChange(clientGrant) {
 		if err := api.ClientGrant.Update(ctx, data.Id(), clientGrant); err != nil {
 			return diag.FromErr(internalError.HandleAPIError(data, err))
@@ -132,4 +174,24 @@ func clientGrantHasChange(clientGrant *management.ClientGrant) bool {
 	// Hacky but we need to tell if an
 	// empty json is sent to the api.
 	return clientGrant.String() != "{}"
+}
+
+func validateClientGrant(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	rawConfig := diff.GetRawConfig()
+	if rawConfig.IsNull() {
+		return nil
+	}
+
+	scopes := rawConfig.GetAttr("scopes")
+	allowAllScopes := diff.Get("allow_all_scopes").(bool)
+
+	if allowAllScopes && !scopes.IsNull() {
+		return fmt.Errorf("`scopes` cannot be provided when `allow_all_scopes` is set to `true`")
+	}
+
+	if !allowAllScopes && scopes.IsNull() {
+		return fmt.Errorf("either `scopes` must be provided or `allow_all_scopes` must be set to `true`")
+	}
+
+	return nil
 }

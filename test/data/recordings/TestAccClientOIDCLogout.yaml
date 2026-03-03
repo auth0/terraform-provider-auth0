@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 243
+        content_length: 298
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","app_type":"spa","token_endpoint_auth_method":"none","oidc_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"],"backchannel_logout_initiators":{"mode":"all"}}}
+            {"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","app_type":"spa","token_endpoint_auth_method":"none","oidc_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"],"backchannel_logout_initiators":{"mode":"all"},"backchannel_logout_session_metadata":{"include":true}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
+                - Go-Auth0/1.32.1
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"7XO5l7Alatnmh2uddHCnS78l64vIkHrK","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"],"backchannel_logout_initiators":{"mode":"all"}}}'
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"],"backchannel_logout_initiators":{"mode":"all"},"backchannel_logout_session_metadata":{"include":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 302.140625ms
+        duration: 436.154042ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -51,11 +51,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7XO5l7Alatnmh2uddHCnS78l64vIkHrK
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
         method: GET
       response:
         proto: HTTP/2.0
@@ -65,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"7XO5l7Alatnmh2uddHCnS78l64vIkHrK","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"],"backchannel_logout_initiators":{"mode":"all"}}}'
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"],"backchannel_logout_initiators":{"mode":"all"},"backchannel_logout_session_metadata":{"include":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 161.292416ms
+        duration: 311.748833ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -86,11 +84,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7XO5l7Alatnmh2uddHCnS78l64vIkHrK
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
         method: GET
       response:
         proto: HTTP/2.0
@@ -100,13 +96,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"7XO5l7Alatnmh2uddHCnS78l64vIkHrK","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"],"backchannel_logout_initiators":{"mode":"all"}}}'
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"],"backchannel_logout_initiators":{"mode":"all"},"backchannel_logout_session_metadata":{"include":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 191.072209ms
+        duration: 356.074791ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -121,11 +117,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7XO5l7Alatnmh2uddHCnS78l64vIkHrK
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
         method: GET
       response:
         proto: HTTP/2.0
@@ -135,33 +129,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"7XO5l7Alatnmh2uddHCnS78l64vIkHrK","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"],"backchannel_logout_initiators":{"mode":"all"}}}'
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/all/logout"],"backchannel_logout_initiators":{"mode":"all"},"backchannel_logout_session_metadata":{"include":true}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 172.13725ms
+        duration: 395.507667ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 299
+        content_length: 355
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","app_type":"spa","oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]}}}
+            {"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","app_type":"spa","oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]},"backchannel_logout_session_metadata":{"include":false}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7XO5l7Alatnmh2uddHCnS78l64vIkHrK
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -171,13 +165,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"7XO5l7Alatnmh2uddHCnS78l64vIkHrK","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]}}}'
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]},"backchannel_logout_session_metadata":{"include":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 178.24575ms
+        duration: 340.905292ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -192,11 +186,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7XO5l7Alatnmh2uddHCnS78l64vIkHrK
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
         method: GET
       response:
         proto: HTTP/2.0
@@ -206,13 +198,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"7XO5l7Alatnmh2uddHCnS78l64vIkHrK","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]}}}'
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]},"backchannel_logout_session_metadata":{"include":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 170.381209ms
+        duration: 300.906333ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -227,11 +219,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7XO5l7Alatnmh2uddHCnS78l64vIkHrK
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
         method: GET
       response:
         proto: HTTP/2.0
@@ -241,13 +231,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"7XO5l7Alatnmh2uddHCnS78l64vIkHrK","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]}}}'
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]},"backchannel_logout_session_metadata":{"include":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 145.103333ms
+        duration: 308.736875ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -262,11 +252,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7XO5l7Alatnmh2uddHCnS78l64vIkHrK
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
         method: GET
       response:
         proto: HTTP/2.0
@@ -276,33 +264,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"7XO5l7Alatnmh2uddHCnS78l64vIkHrK","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]}}}'
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]},"backchannel_logout_session_metadata":{"include":false}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 148.960291ms
+        duration: 354.562209ms
     - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 33
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"oidc_backchannel_logout":null}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7XO5l7Alatnmh2uddHCnS78l64vIkHrK
-        method: GET
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -311,14 +300,50 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"7XO5l7Alatnmh2uddHCnS78l64vIkHrK","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"]},"oidc_logout":{"backchannel_logout_urls":["https://auth0.test/custom/logout"],"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["idp-logout","password-changed","rp-logout","session-expired"]}}}'
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 161.26475ms
+        duration: 334.953208ms
     - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 84
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","app_type":"spa"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 374.144125ms
+    - id: 10
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -332,11 +357,75 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7XO5l7Alatnmh2uddHCnS78l64vIkHrK
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 320.704916ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIDC Logout - TestAccClientOIDCLogout","client_id":"QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 318.834833ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/QXKW8CxcUgkPUa4QXiYDtZflSlFBM3xu
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -352,4 +441,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 200.545958ms
+        duration: 361.744625ms

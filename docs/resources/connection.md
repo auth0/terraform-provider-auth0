@@ -582,6 +582,7 @@ resource "auth0_connection" "oidc" {
     tenant_domain            = ""
     icon_url                 = "https://example.com/assets/logo.png"
     type                     = "back_channel"
+    send_back_channel_nonce  = true
     issuer                   = "https://www.paypalobjects.com"
     jwks_uri                 = "https://api.paypal.com/v1/oauth2/certs"
     discovery_url            = "https://www.paypalobjects.com/.well-known/openid-configuration"
@@ -672,11 +673,13 @@ resource "auth0_connection" "okta" {
 
 ### Required
 
-- `name` (String) Name of the connection.
+- `name` (String) Name of the connection. This value is immutable and changing it requires the creation of a new resource.
 - `strategy` (String) Type of the connection, which indicates the identity provider.
 
 ### Optional
 
+- `authentication` (Block List, Max: 1) Configure the purpose of a connection to be used for authentication during login. (see [below for nested schema](#nestedblock--authentication))
+- `connected_accounts` (Block List, Max: 1) Configure the purpose of a connection to be used for connected accounts and Token Vault. (see [below for nested schema](#nestedblock--connected_accounts))
 - `display_name` (String) Name used in login screen.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
 - `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars).
@@ -688,11 +691,28 @@ resource "auth0_connection" "okta" {
 
 - `id` (String) The ID of this resource.
 
+<a id="nestedblock--authentication"></a>
+### Nested Schema for `authentication`
+
+Required:
+
+- `active` (Boolean)
+
+
+<a id="nestedblock--connected_accounts"></a>
+### Nested Schema for `connected_accounts`
+
+Required:
+
+- `active` (Boolean)
+
+
 <a id="nestedblock--options"></a>
 ### Nested Schema for `options`
 
 Optional:
 
+- `access_token_url` (String) URL used to exchange a user-authorized request token for an access token.
 - `adfs_server` (String) ADFS URL where to fetch the metadata source.
 - `allowed_audiences` (Set of String) List of allowed audiences.
 - `api_enable_users` (Boolean) Enable API Access to users.
@@ -708,7 +728,10 @@ Optional:
 - `community_base_url` (String) Salesforce community base URL.
 - `configuration` (Map of String, Sensitive) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
 - `connection_settings` (Block List, Max: 1) Proof Key for Code Exchange (PKCE) configuration settings for an OIDC or Okta Workforce connection. (see [below for nested schema](#nestedblock--options--connection_settings))
+- `consumer_key` (String) Identifies the client to the service provider
+- `consumer_secret` (String) Secret used to establish ownership of the consumer key.
 - `custom_headers` (Block Set) Configure extra headers to the Token endpoint of an OAuth 2.0 provider (see [below for nested schema](#nestedblock--options--custom_headers))
+- `custom_password_hash` (Block List, Max: 1) Configure custom password hashing within a connection. (EA only) (see [below for nested schema](#nestedblock--options--custom_password_hash))
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `decryption_key` (Block List, Max: 1) The key used to decrypt encrypted responses from the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively. (see [below for nested schema](#nestedblock--options--decryption_key))
@@ -720,6 +743,7 @@ Optional:
 - `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.
 - `domain` (String) Domain name.
 - `domain_aliases` (Set of String) List of the domains that can be authenticated using the identity provider. Only needed for Identifier First authentication flows.
+- `email` (Boolean) Indicates whether to request the email scope. Used by some OAuth2 connections (e.g., LINE).
 - `enable_script_context` (Boolean) Set to `true` to inject context into custom DB scripts (warning: cannot be disabled once enabled).
 - `enabled_database_customization` (Boolean) Set to `true` to use a legacy user store.
 - `entity_id` (String) Custom Entity ID for the connection.
@@ -760,15 +784,19 @@ Optional:
 - `provider` (String) Defines the custom `sms_gateway` provider.
 - `realm_fallback` (Boolean) Allows configuration if connections_realm_fallback flag is enabled for the tenant
 - `request_template` (String) Template that formats the SAML request.
+- `request_token_url` (String) URL used to obtain an unauthorized request token.
 - `requires_username` (Boolean) Indicates whether the user is required to provide a username in addition to an email address.
 - `scopes` (Set of String) Permissions to grant to the connection. Within the Auth0 dashboard these appear under the "Attributes" and "Extended Attributes" sections. Some examples: `basic_profile`, `ext_profile`, `ext_nested_groups`, etc.
 - `scripts` (Map of String) A map of scripts used for an OAuth connection. Only accepts a `fetchUserProfile` script.
+- `send_back_channel_nonce` (Boolean) When true and `type` is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. The identity provider must include this nonce in the ID token for validation.
+- `session_key` (String) Session Key for storing the request token.
 - `set_user_root_attributes` (String) Determines whether to sync user profile attributes (`name`, `given_name`, `family_name`, `nickname`, `picture`) at each login or only on the first login. Options include: `on_each_login`, `on_first_login`, `never_on_login`. Default value: `on_each_login`.
 - `should_trust_email_verified_connection` (String) Choose how Auth0 sets the email_verified field in the user profile.
 - `sign_in_endpoint` (String) SAML single login URL for the connection.
 - `sign_out_endpoint` (String) SAML single logout URL for the connection.
 - `sign_saml_request` (Boolean) When enabled, the SAML authentication request will be signed.
 - `signature_algorithm` (String) Sign Request Algorithm.
+- `signature_method` (String) Signature method used to sign the request
 - `signing_cert` (String) X.509 signing certificate (encoded in PEM or CER) you retrieved from the IdP, Base64-encoded.
 - `signing_key` (Block List, Max: 1) The key used to sign requests in the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively. (see [below for nested schema](#nestedblock--options--signing_key))
 - `strategy_version` (Number) Version 1 is deprecated, use version 2.
@@ -787,7 +815,9 @@ Optional:
 - `upstream_params` (String) You can pass provider-specific parameters to an identity provider during authentication. The values can either be static per connection or dynamic per user.
 - `use_cert_auth` (Boolean) Indicates whether to use cert auth or not.
 - `use_kerberos` (Boolean) Indicates whether to use Kerberos or not.
+- `use_oauth_spec_scope` (Boolean) Determines the `scopes` format: `true` makes it a space-separated string (per OAuth2 specification); `false` makes it an array.
 - `use_wsfed` (Boolean) Whether to use WS-Fed.
+- `user_authorization_url` (String) URL used to obtain user authorization.
 - `user_id_attribute` (String) Attribute in the token that will be mapped to the user_id property in Auth0.
 - `userinfo_endpoint` (String) User info endpoint.
 - `validation` (Block List, Max: 1) Validation of the minimum and maximum values allowed for a user to have as username. (see [below for nested schema](#nestedblock--options--validation))
@@ -824,6 +854,7 @@ Optional:
 - `identifier` (Block List) Connection Options Email Attribute Identifier (see [below for nested schema](#nestedblock--options--attributes--email--identifier))
 - `profile_required` (Boolean) Defines whether Profile is required
 - `signup` (Block List) Defines signup settings for Email attribute (see [below for nested schema](#nestedblock--options--attributes--email--signup))
+- `unique` (Boolean) If set to false, it allow multiple accounts with the same email address
 - `verification_method` (String) Defines whether whether user will receive a link or an OTP during user signup for email verification and password reset for email verification
 
 <a id="nestedblock--options--attributes--email--identifier"></a>
@@ -832,6 +863,7 @@ Optional:
 Optional:
 
 - `active` (Boolean) Defines whether email attribute is active as an identifier
+- `default_method` (String) Gets and Sets the default authentication method for the email identifier type. Valid values: `password`, `email_otp`
 
 
 <a id="nestedblock--options--attributes--email--signup"></a>
@@ -867,6 +899,7 @@ Optional:
 Optional:
 
 - `active` (Boolean) Defines whether Phone Number attribute is active as an identifier
+- `default_method` (String) Gets and Sets the default authentication method for the phone_number identifier type. Valid values: `password`, `phone_otp`
 
 
 <a id="nestedblock--options--attributes--phone_number--signup"></a>
@@ -903,6 +936,7 @@ Optional:
 Optional:
 
 - `active` (Boolean) Defines whether UserName attribute is active as an identifier
+- `default_method` (String) Gets and Sets the default authentication method for the username identifier type. Valid value: `password`
 
 
 <a id="nestedblock--options--attributes--username--signup"></a>
@@ -939,8 +973,18 @@ Optional:
 
 Optional:
 
+- `email_otp` (Block List, Max: 1) Configures Email OTP authentication (see [below for nested schema](#nestedblock--options--authentication_methods--email_otp))
 - `passkey` (Block List, Max: 1) Configures passkey authentication (see [below for nested schema](#nestedblock--options--authentication_methods--passkey))
 - `password` (Block List, Max: 1) Configures password authentication (see [below for nested schema](#nestedblock--options--authentication_methods--password))
+- `phone_otp` (Block List, Max: 1) Configures Phone OTP authentication (see [below for nested schema](#nestedblock--options--authentication_methods--phone_otp))
+
+<a id="nestedblock--options--authentication_methods--email_otp"></a>
+### Nested Schema for `options.authentication_methods.email_otp`
+
+Optional:
+
+- `enabled` (Boolean) Enables Email OTP authentication
+
 
 <a id="nestedblock--options--authentication_methods--passkey"></a>
 ### Nested Schema for `options.authentication_methods.passkey`
@@ -956,6 +1000,14 @@ Optional:
 Optional:
 
 - `enabled` (Boolean) Enables password authentication
+
+
+<a id="nestedblock--options--authentication_methods--phone_otp"></a>
+### Nested Schema for `options.authentication_methods.phone_otp`
+
+Optional:
+
+- `enabled` (Boolean) Enables Phone OTP authentication
 
 
 
@@ -974,6 +1026,14 @@ Required:
 
 - `header` (String)
 - `value` (String)
+
+
+<a id="nestedblock--options--custom_password_hash"></a>
+### Nested Schema for `options.custom_password_hash`
+
+Required:
+
+- `action_id` (String) Id of an existing action that should be invoked when validating a universal password hash. This action must support password-hash-migration trigger
 
 
 <a id="nestedblock--options--decryption_key"></a>

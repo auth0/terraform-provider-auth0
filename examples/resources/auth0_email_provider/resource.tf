@@ -66,7 +66,7 @@ resource "auth0_email_provider" "ms365_email_provider" {
 # The action with custom-email-provider as supported_triggers is a prerequisite.
 resource "auth0_action" "custom_email_provider_action" {
   name    = "custom-email-provider-action"
-  runtime = "node18"
+  runtime = "node22"
   deploy  = true
   code    = <<-EOT
   /**

@@ -81,6 +81,7 @@ var networkACLRuleSchema = &schema.Schema{
 					"management",
 					"authentication",
 					"tenant",
+					"dynamic_client_registration",
 				}, false),
 			},
 		},

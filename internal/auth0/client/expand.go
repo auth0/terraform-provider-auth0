@@ -29,8 +29,10 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		AllowedOrigins:                     value.Strings(config.GetAttr("allowed_origins")),
 		AllowedClients:                     value.Strings(config.GetAttr("allowed_clients")),
 		GrantTypes:                         value.Strings(config.GetAttr("grant_types")),
+		AsyncApprovalNotificationChannels:  value.Strings(config.GetAttr("async_approval_notification_channels")),
 		OrganizationUsage:                  value.String(config.GetAttr("organization_usage")),
 		OrganizationRequireBehavior:        value.String(config.GetAttr("organization_require_behavior")),
+		OrganizationDiscoveryMethods:       value.Strings(config.GetAttr("organization_discovery_methods")),
 		WebOrigins:                         value.Strings(config.GetAttr("web_origins")),
 		RequirePushedAuthorizationRequests: value.Bool(config.GetAttr("require_pushed_authorization_requests")),
 		SSO:                                value.Bool(config.GetAttr("sso")),
@@ -43,20 +45,24 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		InitiateLoginURI:                   value.String(config.GetAttr("initiate_login_uri")),
 		EncryptionKey:                      value.MapOfStrings(config.GetAttr("encryption_key")),
 		IsTokenEndpointIPHeaderTrusted:     value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
-		OIDCBackchannelLogout:              expandOIDCBackchannelLogout(data),
-		OIDCLogout:                         expandOIDCLogout(data),
-		ClientMetadata:                     expandClientMetadata(data),
-		RefreshToken:                       expandClientRefreshToken(data),
-		JWTConfiguration:                   expandClientJWTConfiguration(data),
-		Addons:                             expandClientAddons(data),
-		NativeSocialLogin:                  expandClientNativeSocialLogin(data),
-		Mobile:                             expandClientMobile(data),
-		DefaultOrganization:                expandDefaultOrganization(data),
-		TokenExchange:                      expandTokenExchange(data),
-		RequireProofOfPossession:           value.Bool(config.GetAttr("require_proof_of_possession")),
-		SessionTransfer:                    expandSessionTransfer(data),
-		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
-		TokenQuota:                         commons.ExpandTokenQuota(config.GetAttr("token_quota")),
+		// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
+		//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
+		OIDCBackchannelLogout:    expandOIDCBackchannelLogout(data),
+		OIDCLogout:               expandOIDCLogout(data),
+		ClientMetadata:           expandClientMetadata(data),
+		RefreshToken:             expandClientRefreshToken(data),
+		JWTConfiguration:         expandClientJWTConfiguration(data),
+		Addons:                   expandClientAddons(data),
+		NativeSocialLogin:        expandClientNativeSocialLogin(data),
+		Mobile:                   expandClientMobile(data),
+		DefaultOrganization:      expandDefaultOrganization(data),
+		TokenExchange:            expandTokenExchange(data),
+		RequireProofOfPossession: value.Bool(config.GetAttr("require_proof_of_possession")),
+		SessionTransfer:          expandSessionTransfer(data),
+		ComplianceLevel:          value.String(config.GetAttr("compliance_level")),
+		TokenQuota:               commons.ExpandTokenQuota(config.GetAttr("token_quota")),
+		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
+		ExpressConfiguration:                           expandExpressConfiguration(data),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
@@ -69,6 +75,8 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 			client.TokenEndpointAuthMethod = auth0.String("none")
 		case "regular_web", "non_interactive":
 			client.TokenEndpointAuthMethod = auth0.String("client_secret_post")
+		case "resource_server":
+			client.ResourceServerIdentifier = value.String(config.GetAttr("resource_server_identifier"))
 		}
 	}
 
@@ -136,6 +144,9 @@ func expandTokenExchange(data *schema.ResourceData) *management.ClientTokenExcha
 	return &tokenExchange
 }
 
+// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
+//
+//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
 func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBackchannelLogout {
 	raw := data.GetRawConfig().GetAttr("oidc_backchannel_logout_urls")
 
@@ -145,6 +156,8 @@ func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBack
 		return nil
 	}
 
+	// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
+	//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
 	return &management.OIDCBackchannelLogout{
 		BackChannelLogoutURLs: logoutUrls,
 	}
@@ -161,8 +174,13 @@ func expandOIDCLogout(data *schema.ResourceData) *management.OIDCLogout {
 	oidcLogoutConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		oidcLogout.BackChannelLogoutURLs = value.Strings(config.GetAttr("backchannel_logout_urls"))
 		oidcLogout.BackChannelLogoutInitiators = expandBackChannelLogoutInitiators(config.GetAttr("backchannel_logout_initiators"))
+		oidcLogout.BackChannelLogoutSessionMetadata = expandBackChannelLogoutSessionMetadata(config.GetAttr("backchannel_logout_session_metadata"))
 		return stop
 	})
+
+	if oidcLogout == (management.OIDCLogout{}) {
+		return nil
+	}
 
 	return &oidcLogout
 }
@@ -185,6 +203,25 @@ func expandBackChannelLogoutInitiators(config cty.Value) *management.BackChannel
 	}
 
 	return &initiators
+}
+
+func expandBackChannelLogoutSessionMetadata(config cty.Value) *management.BackChannelLogoutSessionMetadata {
+	if config.IsNull() {
+		return nil
+	}
+
+	var metadata management.BackChannelLogoutSessionMetadata
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		metadata.Include = value.Bool(config.GetAttr("include"))
+		return stop
+	})
+
+	if metadata == (management.BackChannelLogoutSessionMetadata{}) {
+		return nil
+	}
+
+	return &metadata
 }
 
 func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefreshToken {
@@ -998,6 +1035,7 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 	if data.IsNewResource() {
 		clientGrant.ClientID = value.String(cfg.GetAttr("client_id"))
 		clientGrant.Audience = value.String(cfg.GetAttr("audience"))
+		clientGrant.SubjectType = value.String(cfg.GetAttr("subject_type"))
 	}
 
 	if data.IsNewResource() || data.HasChange("scopes") {
@@ -1010,6 +1048,14 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 
 	if data.IsNewResource() || data.HasChange("organization_usage") {
 		clientGrant.OrganizationUsage = value.String(cfg.GetAttr("organization_usage"))
+	}
+
+	if data.IsNewResource() || data.HasChange("authorization_details_types") {
+		clientGrant.AuthorizationDetailsTypes = value.Strings(cfg.GetAttr("authorization_details_types"))
+	}
+
+	if data.IsNewResource() || data.HasChange("allow_all_scopes") {
+		clientGrant.AllowAllScopes = value.Bool(cfg.GetAttr("allow_all_scopes"))
 	}
 
 	return clientGrant
@@ -1038,6 +1084,13 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		sessionTransfer.AllowedAuthenticationMethods = value.Strings(config.GetAttr("allowed_authentication_methods"))
 		sessionTransfer.EnforceDeviceBinding = value.String(config.GetAttr("enforce_device_binding"))
 		sessionTransfer.AllowRefreshToken = value.Bool(config.GetAttr("allow_refresh_token"))
+
+		enforceOnlineRefreshTokens := data.Get("session_transfer.0.enforce_online_refresh_tokens").(bool)
+		sessionTransfer.EnforceOnlineRefreshTokens = auth0.Bool(enforceOnlineRefreshTokens)
+
+		enforceCascadeRevocation := data.Get("session_transfer.0.enforce_cascade_revocation").(bool)
+		sessionTransfer.EnforceCascadeRevocation = auth0.Bool(enforceCascadeRevocation)
+
 		return stop
 	})
 
@@ -1048,9 +1101,10 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 	type nullCheckFunc func(*schema.ResourceData) bool
 
 	checks := map[string]nullCheckFunc{
-		"default_organization": isDefaultOrgNull,
-		"session_transfer":     isSessionTransferNull,
-		"cross_origin_loc":     isCrossOriginLocNull,
+		"default_organization":    isDefaultOrgNull,
+		"session_transfer":        isSessionTransferNull,
+		"oidc_backchannel_logout": isOIDCLogoutNull,
+		"cross_origin_loc":        isCrossOriginLocNull,
 		"encryption_key": func(d *schema.ResourceData) bool {
 			return isEncryptionKeyNull(d) && !d.IsNewResource()
 		},
@@ -1058,6 +1112,9 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 			return clientHasChange(client) && client.GetAddons() != nil
 		},
 		"token_quota": commons.IsTokenQuotaNull,
+		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
+		"organization_discovery_methods":                       isOrganizationDiscoveryMethodsNull,
+		"token_exchange":                                       isTokenExchangeNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1159,4 +1216,118 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 	})
 
 	return empty
+}
+
+func isOIDCLogoutNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("oidc_logout") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("oidc_logout")
+
+	// If oidc_logout is explicitly set to null.
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	empty := true
+	rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		logoutURLs := cfg.GetAttr("backchannel_logout_urls")
+		initiators := cfg.GetAttr("backchannel_logout_initiators")
+		sessionMetadata := cfg.GetAttr("backchannel_logout_session_metadata")
+
+		if !logoutURLs.IsNull() && logoutURLs.LengthInt() > 0 {
+			empty = false
+			return stop
+		}
+
+		if !initiators.IsNull() {
+			initiators.ForEachElement(func(_ cty.Value, initiatorCfg cty.Value) (stop bool) {
+				mode := initiatorCfg.GetAttr("mode")
+				selected := initiatorCfg.GetAttr("selected_initiators")
+
+				if (!mode.IsNull() && mode.AsString() != "") ||
+					(!selected.IsNull() && selected.LengthInt() > 0) {
+					empty = false
+				}
+				return stop
+			})
+		}
+
+		if !sessionMetadata.IsNull() {
+			sessionMetadata.ForEachElement(func(_ cty.Value, metaCfg cty.Value) (stop bool) {
+				include := metaCfg.GetAttr("include")
+				if !include.IsNull() {
+					empty = false
+				}
+				return stop
+			})
+		}
+
+		return stop
+	})
+
+	return empty
+}
+
+func isSkipNonVerifiableCallbackURIConfirmationPromptNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") {
+		return false
+	}
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
+}
+
+func isOrganizationDiscoveryMethodsNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("organization_discovery_methods") {
+		return false
+	}
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("organization_discovery_methods").IsNull()
+}
+
+func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressConfiguration {
+	config := data.GetRawConfig()
+	expressConfig := config.GetAttr("express_configuration")
+
+	if expressConfig.IsNull() || expressConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var result *management.ExpressConfiguration
+
+	expressConfig.ForEachElement(func(_ cty.Value, elem cty.Value) (stop bool) {
+		result = &management.ExpressConfiguration{
+			InitiateLoginURITemplate: value.String(elem.GetAttr("initiate_login_uri_template")),
+			UserAttributeProfileID:   value.String(elem.GetAttr("user_attribute_profile_id")),
+			ConnectionProfileID:      value.String(elem.GetAttr("connection_profile_id")),
+			EnableClient:             value.Bool(elem.GetAttr("enable_client")),
+			EnableOrganization:       value.Bool(elem.GetAttr("enable_organization")),
+			AdminLoginDomain:         value.String(elem.GetAttr("admin_login_domain")),
+			OktaOINClientID:          value.String(elem.GetAttr("okta_oin_client_id")),
+			OINSubmissionID:          value.String(elem.GetAttr("okta_oin_client_id")),
+		}
+
+		linkedClientsAttr := elem.GetAttr("linked_clients")
+		if !linkedClientsAttr.IsNull() && linkedClientsAttr.LengthInt() > 0 {
+			linkedClients := make([]management.LinkedClient, 0)
+			linkedClientsAttr.ForEachElement(func(_ cty.Value, lc cty.Value) (stop bool) {
+				linkedClients = append(linkedClients, management.LinkedClient{
+					ClientID: value.String(lc.GetAttr("client_id")),
+				})
+				return stop
+			})
+			result.LinkedClients = &linkedClients
+		}
+
+		return stop
+	})
+
+	return result
+}
+
+func isTokenExchangeNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("token_exchange") {
+		return false
+	}
+
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("token_exchange").IsNull() || data.GetRawConfig().GetAttr("token_exchange").LengthInt() == 0
 }

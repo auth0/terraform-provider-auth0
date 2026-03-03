@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
+                - Go-Auth0/1.31.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 303.468833ms
+        duration: 709.865708ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -51,11 +51,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -65,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 133.338291ms
+        duration: 519.465208ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -86,11 +84,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -100,13 +96,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 140.340584ms
+        duration: 706.755584ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -121,11 +117,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -135,13 +129,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 139.352709ms
+        duration: 584.100791ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -156,11 +150,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -170,13 +162,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 149.371291ms
+        duration: 488.000292ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -191,11 +183,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id%2Capp_type&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -205,13 +195,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 150.600667ms
+        duration: 526.819792ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -226,11 +216,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials?include_totals=true&per_page=50
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -246,7 +234,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 133.985833ms
+        duration: 476.515209ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -265,8 +253,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -276,13 +264,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 148.141959ms
+        duration: 496.977917ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -297,11 +285,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -311,13 +297,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 177.021333ms
+        duration: 497.131708ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -332,11 +318,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -346,13 +330,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 137.922041ms
+        duration: 487.0425ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -367,11 +351,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -381,13 +363,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 170.436417ms
+        duration: 527.35325ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -402,11 +384,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id%2Capp_type&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -416,13 +396,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 183.405208ms
+        duration: 480.894ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -437,11 +417,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials?include_totals=true&per_page=50
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -457,7 +435,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 134.01775ms
+        duration: 526.77825ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -476,8 +454,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -487,13 +465,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 217.107792ms
+        duration: 504.504292ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -512,8 +490,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -523,13 +501,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 149.93775ms
+        duration: 491.743292ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -544,11 +522,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -558,13 +534,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 164.644458ms
+        duration: 472.901459ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -579,11 +555,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -593,13 +567,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 146.893875ms
+        duration: 490.531666ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -618,8 +592,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials
         method: POST
       response:
         proto: HTTP/2.0
@@ -629,50 +603,14 @@ interactions:
         trailer: {}
         content_length: 268
         uncompressed: false
-        body: '{"id":"cred_3C1xrznjqgCGDhJ77haFPz","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:19:52.171Z","updated_at":"2024-08-30T19:19:52.171Z"}'
+        body: '{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:07.382Z","updated_at":"2025-11-18T17:27:07.382Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 178.515334ms
+        duration: 560.36925ms
     - id: 18
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 143
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_3C1xrznjqgCGDhJ77haFPz"}]}},"token_endpoint_auth_method":null}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_3C1xrznjqgCGDhJ77haFPz"}]}}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 150.918916ms
-    - id: 19
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -686,11 +624,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -700,13 +636,49 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_3C1xrznjqgCGDhJ77haFPz"}]}}}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 154.08525ms
+        duration: 524.888416ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 143
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm"}]}},"token_endpoint_auth_method":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm"}]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 505.401583ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -721,11 +693,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_3C1xrznjqgCGDhJ77haFPz
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -735,13 +705,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cred_3C1xrznjqgCGDhJ77haFPz","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:19:52.171Z","updated_at":"2024-08-30T19:19:52.171Z"}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 155.795458ms
+        duration: 519.137791ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -756,11 +726,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_aLRnq8qR6RAWqJMnyRSiXm
         method: GET
       response:
         proto: HTTP/2.0
@@ -770,13 +738,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_3C1xrznjqgCGDhJ77haFPz"}]}}}'
+        body: '{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:07.382Z","updated_at":"2025-11-18T17:27:07.382Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 146.984792ms
+        duration: 475.279875ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -791,11 +759,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -805,13 +771,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_3C1xrznjqgCGDhJ77haFPz"}]}}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 157.158666ms
+        duration: 517.997458ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -826,11 +792,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_3C1xrznjqgCGDhJ77haFPz
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -840,13 +804,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cred_3C1xrznjqgCGDhJ77haFPz","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:19:52.171Z","updated_at":"2024-08-30T19:19:52.171Z"}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 136.504709ms
+        duration: 510.463292ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -861,11 +825,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_aLRnq8qR6RAWqJMnyRSiXm
         method: GET
       response:
         proto: HTTP/2.0
@@ -875,13 +837,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_3C1xrznjqgCGDhJ77haFPz"}]}}}'
+        body: '{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:07.382Z","updated_at":"2025-11-18T17:27:07.382Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 172.048125ms
+        duration: 492.343833ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -896,11 +858,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -910,13 +870,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_3C1xrznjqgCGDhJ77haFPz"}]}}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 153.043083ms
+        duration: 532.880166ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -931,11 +891,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_3C1xrznjqgCGDhJ77haFPz
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -945,13 +903,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cred_3C1xrznjqgCGDhJ77haFPz","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:19:52.171Z","updated_at":"2024-08-30T19:19:52.171Z"}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 136.951417ms
+        duration: 478.509375ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -966,11 +924,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id%2Capp_type&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_aLRnq8qR6RAWqJMnyRSiXm
         method: GET
       response:
         proto: HTTP/2.0
@@ -980,13 +936,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:07.382Z","updated_at":"2025-11-18T17:27:07.382Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 159.925875ms
+        duration: 492.140334ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -1001,11 +957,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials?include_totals=true&per_page=50
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -1015,34 +969,31 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '[{"id":"cred_3C1xrznjqgCGDhJ77haFPz","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:19:52.171Z","updated_at":"2024-08-30T19:19:52.171Z"}]'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 147.752709ms
+        duration: 519.600375ms
     - id: 29
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 118
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"client_authentication_methods":null,"token_endpoint_auth_method":"client_secret_post","signed_request_object":null}
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: PATCH
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials?include_totals=true&per_page=50
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -1051,13 +1002,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '[{"id":"cred_aLRnq8qR6RAWqJMnyRSiXm","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:07.382Z","updated_at":"2025-11-18T17:27:07.382Z"}]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 153.768292ms
+        duration: 487.01175ms
     - id: 30
       request:
         proto: HTTP/1.1
@@ -1072,11 +1023,78 @@ interactions:
         body: ""
         form: {}
         headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 954.333291ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 118
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"client_authentication_methods":null,"signed_request_object":null,"token_endpoint_auth_method":"client_secret_post"}
+        form: {}
+        headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_3C1xrznjqgCGDhJ77haFPz
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 531.133792ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_aLRnq8qR6RAWqJMnyRSiXm
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1092,8 +1110,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 137.312875ms
-    - id: 31
+        duration: 464.075916ms
+    - id: 33
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1107,11 +1125,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -1121,14 +1137,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 143.402708ms
-    - id: 32
+        duration: 485.300875ms
+    - id: 34
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1146,8 +1162,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials
         method: POST
       response:
         proto: HTTP/2.0
@@ -1157,84 +1173,13 @@ interactions:
         trailer: {}
         content_length: 268
         uncompressed: false
-        body: '{"id":"cred_9X57EQHgLqq1sBvC9kXGc9","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:20:01.818Z","updated_at":"2024-08-30T19:20:01.818Z"}'
+        body: '{"id":"cred_wEYzZAiXtUaSFGC5jziMu9","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:18.851Z","updated_at":"2025-11-18T17:27:18.851Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 149.083ms
-    - id: 33
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 143
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_9X57EQHgLqq1sBvC9kXGc9"}]}},"token_endpoint_auth_method":null}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_9X57EQHgLqq1sBvC9kXGc9"}]}}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 162.052458ms
-    - id: 34
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_9X57EQHgLqq1sBvC9kXGc9"}]}}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 140.253625ms
+        duration: 498.382875ms
     - id: 35
       request:
         proto: HTTP/1.1
@@ -1249,11 +1194,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_9X57EQHgLqq1sBvC9kXGc9
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -1263,33 +1206,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cred_9X57EQHgLqq1sBvC9kXGc9","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:20:01.818Z","updated_at":"2024-08-30T19:20:01.818Z"}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 135.162ms
+        duration: 486.268416ms
     - id: 36
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 143
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_wEYzZAiXtUaSFGC5jziMu9"}]}},"token_endpoint_auth_method":null}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: GET
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -1298,13 +1242,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_9X57EQHgLqq1sBvC9kXGc9"}]}}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_wEYzZAiXtUaSFGC5jziMu9"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 155.662833ms
+        duration: 506.366792ms
     - id: 37
       request:
         proto: HTTP/1.1
@@ -1319,11 +1263,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -1333,13 +1275,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_9X57EQHgLqq1sBvC9kXGc9"}]}}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_wEYzZAiXtUaSFGC5jziMu9"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 142.829459ms
+        duration: 498.363542ms
     - id: 38
       request:
         proto: HTTP/1.1
@@ -1354,11 +1296,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_9X57EQHgLqq1sBvC9kXGc9
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_wEYzZAiXtUaSFGC5jziMu9
         method: GET
       response:
         proto: HTTP/2.0
@@ -1368,13 +1308,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cred_9X57EQHgLqq1sBvC9kXGc9","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:20:01.818Z","updated_at":"2024-08-30T19:20:01.818Z"}'
+        body: '{"id":"cred_wEYzZAiXtUaSFGC5jziMu9","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:18.851Z","updated_at":"2025-11-18T17:27:18.851Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 136.94875ms
+        duration: 490.64ms
     - id: 39
       request:
         proto: HTTP/1.1
@@ -1389,11 +1329,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -1403,13 +1341,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_9X57EQHgLqq1sBvC9kXGc9"}]}}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_wEYzZAiXtUaSFGC5jziMu9"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 148.515875ms
+        duration: 557.992625ms
     - id: 40
       request:
         proto: HTTP/1.1
@@ -1424,11 +1362,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -1438,13 +1374,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_9X57EQHgLqq1sBvC9kXGc9"}]}}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_wEYzZAiXtUaSFGC5jziMu9"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 147.158875ms
+        duration: 496.232792ms
     - id: 41
       request:
         proto: HTTP/1.1
@@ -1459,11 +1395,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_9X57EQHgLqq1sBvC9kXGc9
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_wEYzZAiXtUaSFGC5jziMu9
         method: GET
       response:
         proto: HTTP/2.0
@@ -1473,13 +1407,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cred_9X57EQHgLqq1sBvC9kXGc9","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:20:01.818Z","updated_at":"2024-08-30T19:20:01.818Z"}'
+        body: '{"id":"cred_wEYzZAiXtUaSFGC5jziMu9","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:18.851Z","updated_at":"2025-11-18T17:27:18.851Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 158.692292ms
+        duration: 504.793916ms
     - id: 42
       request:
         proto: HTTP/1.1
@@ -1494,11 +1428,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id%2Capp_type&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -1508,13 +1440,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_wEYzZAiXtUaSFGC5jziMu9"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 141.288875ms
+        duration: 719.46325ms
     - id: 43
       request:
         proto: HTTP/1.1
@@ -1529,11 +1461,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials?include_totals=true&per_page=50
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -1543,34 +1473,31 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '[{"id":"cred_9X57EQHgLqq1sBvC9kXGc9","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:20:01.818Z","updated_at":"2024-08-30T19:20:01.818Z"}]'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_wEYzZAiXtUaSFGC5jziMu9"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 133.671ms
+        duration: 492.4155ms
     - id: 44
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 118
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"client_authentication_methods":null,"token_endpoint_auth_method":"client_secret_post","signed_request_object":null}
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: PATCH
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_wEYzZAiXtUaSFGC5jziMu9
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -1579,13 +1506,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"id":"cred_wEYzZAiXtUaSFGC5jziMu9","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:18.851Z","updated_at":"2025-11-18T17:27:18.851Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 148.388375ms
+        duration: 509.753708ms
     - id: 45
       request:
         proto: HTTP/1.1
@@ -1600,11 +1527,144 @@ interactions:
         body: ""
         form: {}
         headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 536.236917ms
+    - id: 46
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials?include_totals=true&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '[{"id":"cred_wEYzZAiXtUaSFGC5jziMu9","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:18.851Z","updated_at":"2025-11-18T17:27:18.851Z"}]'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 663.329209ms
+    - id: 47
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 530.45925ms
+    - id: 48
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 118
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"client_authentication_methods":null,"signed_request_object":null,"token_endpoint_auth_method":"client_secret_post"}
+        form: {}
+        headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_9X57EQHgLqq1sBvC9kXGc9
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 506.762208ms
+    - id: 49
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_wEYzZAiXtUaSFGC5jziMu9
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1620,8 +1680,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 136.707167ms
-    - id: 46
+        duration: 511.884875ms
+    - id: 50
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1635,11 +1695,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -1649,14 +1707,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 158.073584ms
-    - id: 47
+        duration: 484.36575ms
+    - id: 51
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1674,8 +1732,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -1685,153 +1743,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 164.859ms
-    - id: 48
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 143.815708ms
-    - id: 49
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 151.690375ms
-    - id: 50
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 158.867667ms
-    - id: 51
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 149.335ms
+        duration: 523.209959ms
     - id: 52
       request:
         proto: HTTP/1.1
@@ -1846,11 +1764,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -1860,13 +1776,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 138.781333ms
+        duration: 537.376084ms
     - id: 53
       request:
         proto: HTTP/1.1
@@ -1881,11 +1797,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id%2Capp_type&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -1895,13 +1809,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 141.111ms
+        duration: 516.253042ms
     - id: 54
       request:
         proto: HTTP/1.1
@@ -1916,11 +1830,141 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials?include_totals=true&per_page=50
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 571.645167ms
+    - id: 55
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 586.282708ms
+    - id: 56
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_basic","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 529.702958ms
+    - id: 57
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 493.937416ms
+    - id: 58
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1936,8 +1980,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 142.337583ms
-    - id: 55
+        duration: 477.304875ms
+    - id: 59
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1955,8 +1999,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -1966,14 +2010,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 155.365833ms
-    - id: 56
+        duration: 488.277833ms
+    - id: 60
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1987,11 +2031,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -2001,14 +2043,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 135.718584ms
-    - id: 57
+        duration: 551.298333ms
+    - id: 61
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2026,8 +2068,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials
         method: POST
       response:
         proto: HTTP/2.0
@@ -2037,154 +2079,13 @@ interactions:
         trailer: {}
         content_length: 268
         uncompressed: false
-        body: '{"id":"cred_iMKzPfmnFh3RERkh6m4wgn","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:20:18.221Z","updated_at":"2024-08-30T19:20:18.221Z"}'
+        body: '{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:38.138Z","updated_at":"2025-11-18T17:27:38.138Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 146.658125ms
-    - id: 58
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 143
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_iMKzPfmnFh3RERkh6m4wgn"}]}},"token_endpoint_auth_method":null}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_iMKzPfmnFh3RERkh6m4wgn"}]}}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 163.451167ms
-    - id: 59
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_iMKzPfmnFh3RERkh6m4wgn"}]}}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 145.214875ms
-    - id: 60
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_iMKzPfmnFh3RERkh6m4wgn
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"cred_iMKzPfmnFh3RERkh6m4wgn","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:20:18.221Z","updated_at":"2024-08-30T19:20:18.221Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 143.022083ms
-    - id: 61
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_iMKzPfmnFh3RERkh6m4wgn"}]}}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 160.767042ms
+        duration: 498.451333ms
     - id: 62
       request:
         proto: HTTP/1.1
@@ -2199,11 +2100,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -2213,33 +2112,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_iMKzPfmnFh3RERkh6m4wgn"}]}}}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 144.462667ms
+        duration: 527.382458ms
     - id: 63
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 143
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm"}]}},"token_endpoint_auth_method":null}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_iMKzPfmnFh3RERkh6m4wgn
-        method: GET
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -2248,13 +2148,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cred_iMKzPfmnFh3RERkh6m4wgn","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:20:18.221Z","updated_at":"2024-08-30T19:20:18.221Z"}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 146.472ms
+        duration: 510.584709ms
     - id: 64
       request:
         proto: HTTP/1.1
@@ -2269,11 +2169,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -2283,13 +2181,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_iMKzPfmnFh3RERkh6m4wgn"}]}}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 152.239792ms
+        duration: 612.6395ms
     - id: 65
       request:
         proto: HTTP/1.1
@@ -2304,11 +2202,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_u5Bf4DRyTL3Y4Ch2sVH1Jm
         method: GET
       response:
         proto: HTTP/2.0
@@ -2318,13 +2214,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_iMKzPfmnFh3RERkh6m4wgn"}]}}}'
+        body: '{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:38.138Z","updated_at":"2025-11-18T17:27:38.138Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 201.31175ms
+        duration: 466.402917ms
     - id: 66
       request:
         proto: HTTP/1.1
@@ -2339,11 +2235,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_iMKzPfmnFh3RERkh6m4wgn
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -2353,13 +2247,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cred_iMKzPfmnFh3RERkh6m4wgn","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:20:18.221Z","updated_at":"2024-08-30T19:20:18.221Z"}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 184.680292ms
+        duration: 531.299291ms
     - id: 67
       request:
         proto: HTTP/1.1
@@ -2374,11 +2268,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs?fields=client_id%2Capp_type&include_fields=true
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
         method: GET
       response:
         proto: HTTP/2.0
@@ -2388,13 +2280,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 160.505542ms
+        duration: 488.234166ms
     - id: 68
       request:
         proto: HTTP/1.1
@@ -2409,11 +2301,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials?include_totals=true&per_page=50
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_u5Bf4DRyTL3Y4Ch2sVH1Jm
         method: GET
       response:
         proto: HTTP/2.0
@@ -2423,34 +2313,31 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '[{"id":"cred_iMKzPfmnFh3RERkh6m4wgn","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2024-08-30T19:20:18.221Z","updated_at":"2024-08-30T19:20:18.221Z"}]'
+        body: '{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:38.138Z","updated_at":"2025-11-18T17:27:38.138Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 138.030459ms
+        duration: 498.662541ms
     - id: 69
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 118
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"client_authentication_methods":null,"token_endpoint_auth_method":"client_secret_post","signed_request_object":null}
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
-        method: PATCH
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -2459,13 +2346,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 165.094792ms
+        duration: 500.940666ms
     - id: 70
       request:
         proto: HTTP/1.1
@@ -2480,27 +2367,25 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs/credentials/cred_iMKzPfmnFh3RERkh6m4wgn
-        method: DELETE
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"client_authentication_methods":{"tls_client_auth":{"credentials":[{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm"}]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 142.617834ms
+        status: 200 OK
+        code: 200
+        duration: 520.670375ms
     - id: 71
       request:
         proto: HTTP/1.1
@@ -2515,11 +2400,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_u5Bf4DRyTL3Y4Ch2sVH1Jm
         method: GET
       response:
         proto: HTTP/2.0
@@ -2529,13 +2412,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:38.138Z","updated_at":"2025-11-18T17:27:38.138Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 155.027708ms
+        duration: 477.401ms
     - id: 72
       request:
         proto: HTTP/1.1
@@ -2550,11 +2433,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -2564,13 +2445,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 140.096ms
+        duration: 595.778292ms
     - id: 73
       request:
         proto: HTTP/1.1
@@ -2585,11 +2466,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2599,13 +2478,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '[{"id":"cred_u5Bf4DRyTL3Y4Ch2sVH1Jm","credential_type":"cert_subject_dn","name":"Testing Credentials 1","subject_dn":"C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience","created_at":"2025-11-18T17:27:38.138Z","updated_at":"2025-11-18T17:27:38.138Z"}]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 146.467ms
+        duration: 512.714958ms
     - id: 74
       request:
         proto: HTTP/1.1
@@ -2620,11 +2499,78 @@ interactions:
         body: ""
         form: {}
         headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo?fields=client_id%2Capp_type&include_fields=true
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","app_type":"non_interactive","signing_keys":[{"cert":"[REDACTED]"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 613.91225ms
+    - id: 75
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 118
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"client_authentication_methods":null,"signed_request_object":null,"token_endpoint_auth_method":"client_secret_post"}
+        form: {}
+        headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.9.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/TJKtN7JarwNJzwlEwbp6uBpl2w6MHscs
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 499.665917ms
+    - id: 76
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo/credentials/cred_u5Bf4DRyTL3Y4Ch2sVH1Jm
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2640,4 +2586,136 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 211.823292ms
+        duration: 521.588583ms
+    - id: 77
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 476.123291ms
+    - id: 78
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 509.58325ms
+    - id: 79
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Client Credentials - TestAccClientAuthenticationMethodsTLSClientAuth","client_id":"NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 590.321791ms
+    - id: 80
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.31.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NXEoLr0WmRlbI8HB1ctgEemp0yvRpRMo
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 610.111584ms

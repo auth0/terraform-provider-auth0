@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
@@ -86,6 +87,9 @@ func flattenRefreshTokenPolicies(policies []management.ClientRefreshTokenPolicy)
 	return result
 }
 
+// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
+//
+//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
 func flattenOIDCBackchannelURLs(backchannelLogout *management.OIDCBackchannelLogout, logout *management.OIDCLogout) []string {
 	if logout != nil {
 		return nil
@@ -103,6 +107,9 @@ func flattenOIDCLogout(oidcLogout *management.OIDCLogout) []interface{} {
 		"backchannel_logout_initiators": flattenBackChannelLogoutInitiators(
 			oidcLogout.GetBackChannelLogoutInitiators(),
 		),
+		"backchannel_logout_session_metadata": flattenBackChannelLogoutSessionMetadata(
+			oidcLogout.GetBackChannelLogoutSessionMetadata(),
+		),
 	}
 
 	return []interface{}{
@@ -118,6 +125,18 @@ func flattenBackChannelLogoutInitiators(initiators *management.BackChannelLogout
 		map[string]interface{}{
 			"mode":                initiators.GetMode(),
 			"selected_initiators": initiators.GetSelectedInitiators(),
+		},
+	}
+}
+
+func flattenBackChannelLogoutSessionMetadata(metadata *management.BackChannelLogoutSessionMetadata) []interface{} {
+	if metadata == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"include": metadata.GetInclude(),
 		},
 	}
 }
@@ -614,8 +633,10 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("allowed_origins", client.GetAllowedOrigins()),
 		data.Set("allowed_clients", client.GetAllowedClients()),
 		data.Set("grant_types", client.GetGrantTypes()),
+		data.Set("async_approval_notification_channels", client.GetAsyncApprovalNotificationChannels()),
 		data.Set("organization_usage", client.GetOrganizationUsage()),
 		data.Set("organization_require_behavior", client.GetOrganizationRequireBehavior()),
+		data.Set("organization_discovery_methods", client.GetOrganizationDiscoveryMethods()),
 		data.Set("web_origins", client.GetWebOrigins()),
 		data.Set("sso", client.GetSSO()),
 		data.Set("sso_disabled", client.GetSSODisabled()),
@@ -641,10 +662,14 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("compliance_level", client.GetComplianceLevel()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
+		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
+		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
+			value.BoolPtrToString(client.SkipNonVerifiableCallbackURIConfirmationPrompt)),
+		data.Set("express_configuration", flattenExpressConfiguration(client.GetExpressConfiguration())),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
-		result = multierror.Append(data.Set("encryption_key", client.GetEncryptionKey()))
+		result = multierror.Append(result, data.Set("encryption_key", client.GetEncryptionKey()))
 	}
 
 	return result.ErrorOrNil()
@@ -660,6 +685,8 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 		"allowed_authentication_methods":    sessionTransfer.GetAllowedAuthenticationMethods(),
 		"enforce_device_binding":            sessionTransfer.GetEnforceDeviceBinding(),
 		"allow_refresh_token":               sessionTransfer.GetAllowRefreshToken(),
+		"enforce_online_refresh_tokens":     sessionTransfer.GetEnforceOnlineRefreshTokens(),
+		"enforce_cascade_revocation":        sessionTransfer.GetEnforceCascadeRevocation(),
 	}
 
 	return []interface{}{
@@ -674,6 +701,10 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 		data.Set("scopes", clientGrant.GetScope()),
 		data.Set("allow_any_organization", clientGrant.GetAllowAnyOrganization()),
 		data.Set("organization_usage", clientGrant.GetOrganizationUsage()),
+		data.Set("subject_type", clientGrant.GetSubjectType()),
+		data.Set("authorization_details_types", clientGrant.GetAuthorizationDetailsTypes()),
+		data.Set("is_system", clientGrant.GetIsSystem()),
+		data.Set("allow_all_scopes", clientGrant.GetAllowAllScopes()),
 	)
 
 	return result.ErrorOrNil()
@@ -930,4 +961,34 @@ func flattenClientList(data *schema.ResourceData, clients []*management.Client) 
 	}
 
 	return data.Set("clients", clientList)
+}
+
+func flattenExpressConfiguration(ec *management.ExpressConfiguration) []interface{} {
+	if ec == nil {
+		return nil
+	}
+
+	result := map[string]interface{}{
+		"initiate_login_uri_template": ec.GetInitiateLoginURITemplate(),
+		"user_attribute_profile_id":   ec.GetUserAttributeProfileID(),
+		"connection_profile_id":       ec.GetConnectionProfileID(),
+		"enable_client":               ec.GetEnableClient(),
+		"enable_organization":         ec.GetEnableOrganization(),
+		"okta_oin_client_id":          ec.GetOktaOINClientID(),
+		"admin_login_domain":          ec.GetAdminLoginDomain(),
+		"oin_submission_id":           ec.GetOINSubmissionID(),
+	}
+
+	// Flatten linked_clients.
+	if linkedClients := ec.GetLinkedClients(); len(linkedClients) > 0 {
+		linkedClientsList := make([]interface{}, len(linkedClients))
+		for i, lc := range linkedClients {
+			linkedClientsList[i] = map[string]interface{}{
+				"client_id": lc.GetClientID(),
+			}
+		}
+		result["linked_clients"] = linkedClientsList
+	}
+
+	return []interface{}{result}
 }

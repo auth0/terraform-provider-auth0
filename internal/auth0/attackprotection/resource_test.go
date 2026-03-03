@@ -323,3 +323,371 @@ func TestAccAttackProtectionSuspiciousIPThrottling(t *testing.T) {
 		},
 	})
 }
+
+// ============================================================================.
+
+const testAccBotDetectionEnable = `
+resource "auth0_attack_protection" "my_protection" {
+	bot_detection {
+		bot_detection_level = "low"
+		challenge_password_policy = "when_risky"
+		challenge_passwordless_policy = "when_risky"
+		challenge_password_reset_policy = "when_risky"
+		allowlist = ["192.168.1.1", "10.0.0.0"]
+		monitoring_mode_enabled = false
+	}
+}
+`
+
+const testAccBotDetectionUpdate = `
+resource "auth0_attack_protection" "my_protection" {
+	bot_detection {
+		bot_detection_level = "medium"
+		challenge_password_policy = "always"
+		challenge_passwordless_policy = "never"
+		challenge_password_reset_policy = "when_risky"
+		allowlist = ["192.168.1.0"]
+		monitoring_mode_enabled = true
+	}
+}
+`
+
+func TestAccAttackProtectionBotDetection(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccBotDetectionEnable,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.0.bot_detection_level", "low"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.0.challenge_password_policy", "when_risky"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.0.challenge_passwordless_policy", "when_risky"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.0.challenge_password_reset_policy", "when_risky"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.0.monitoring_mode_enabled", "false"),
+					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "bot_detection.0.allowlist.*", "192.168.1.1"),
+					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "bot_detection.0.allowlist.*", "10.0.0.0"),
+				),
+			},
+			{
+				Config: testAccBotDetectionUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.0.bot_detection_level", "medium"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.0.challenge_password_policy", "always"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.0.challenge_passwordless_policy", "never"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.0.challenge_password_reset_policy", "when_risky"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.0.monitoring_mode_enabled", "true"),
+					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "bot_detection.0.allowlist.*", "192.168.1.0"),
+				),
+			},
+		},
+	})
+}
+
+// ============================================================================.
+
+// Terraform configurations for all CAPTCHA providers.
+
+// --- reCAPTCHA v2 Configurations ---.
+const testAccCaptchaRecaptchaV2 = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "recaptcha_v2"
+		recaptcha_v2 {
+			site_key = "test-site-key-v2"
+			secret = "test-secret-v2"
+		}
+	}
+}
+`
+
+const testAccCaptchaRecaptchaV2Update = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "recaptcha_v2"
+		recaptcha_v2 {
+			site_key = "updated-site-key-v2"
+			secret = "updated-secret-v2"
+		}
+	}
+}
+`
+
+// --- reCAPTCHA Enterprise Configurations ---.
+const testAccCaptchaRecaptchaEnterprise = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "recaptcha_enterprise"
+		recaptcha_enterprise {
+			site_key = "test-site-key-enterprise"
+			api_key = "test-api-key-enterprise"
+			project_id = "test-project-id-enterprise"
+		}
+	}
+}
+`
+
+const testAccCaptchaRecaptchaEnterpriseUpdate = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "recaptcha_enterprise"
+		recaptcha_enterprise {
+			site_key = "updated-site-key-enterprise"
+			api_key = "updated-api-key-enterprise"
+			project_id = "updated-project-id-enterprise"
+		}
+	}
+}
+`
+
+// --- hCaptcha Configurations ---.
+const testAccCaptchaHcaptcha = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "hcaptcha"
+		hcaptcha {
+			site_key = "test-site-key-hcaptcha"
+			secret = "test-secret-hcaptcha"
+		}
+	}
+}
+`
+
+const testAccCaptchaHcaptchaUpdate = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "hcaptcha"
+		hcaptcha {
+			site_key = "updated-site-key-hcaptcha"
+			secret = "updated-secret-hcaptcha"
+		}
+	}
+}
+`
+
+// --- Friendly Captcha Configurations ---.
+const testAccCaptchaFriendlyCaptcha = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "friendly_captcha"
+		friendly_captcha {
+			site_key = "test-site-key-friendly"
+			secret = "test-secret-friendly"
+		}
+	}
+}
+`
+
+const testAccCaptchaFriendlyCaptchaUpdate = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "friendly_captcha"
+		friendly_captcha {
+			site_key = "updated-site-key-friendly"
+			secret = "updated-secret-friendly"
+		}
+	}
+}
+`
+
+// --- Arkose Labs Configurations ---.
+const testAccCaptchaArkose = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "arkose"
+		arkose {
+			site_key = "test-site-key-arkose"
+			secret = "test-secret-arkose"
+			client_subdomain = "client-api"
+			verify_subdomain = "verify-api"
+			fail_open = false
+		}
+	}
+}
+`
+
+const testAccCaptchaArkoseUpdate = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "arkose"
+		arkose {
+			site_key = "updated-site-key-arkose"
+			secret = "updated-secret-arkose"
+			client_subdomain = "updated-client-api"
+			verify_subdomain = "updated-verify-api"
+			fail_open = true
+		}
+	}
+}
+`
+
+// --- Auth Challenge Configurations ---.
+const testAccCaptchaAuthChallenge = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "auth_challenge"
+		auth_challenge {
+			fail_open = false
+		}
+	}
+}
+`
+
+const testAccCaptchaAuthChallengeUpdate = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "auth_challenge"
+		auth_challenge {
+			fail_open = true
+		}
+	}
+}
+`
+
+// --- Simple Captcha (Auth0 v1) Configurations ---.
+const testAccCaptchaSimpleCaptcha = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "simple_captcha"
+	}
+}
+`
+
+// TestAccAttackProtectionCaptcha is a comprehensive test covering all CAPTCHA providers.
+// Each provider is tested with its own set of steps including creation and update scenarios.
+func TestAccAttackProtectionCaptcha(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// =================================================================.
+			{
+				Config: testAccCaptchaRecaptchaV2,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "recaptcha_v2"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.recaptcha_v2.0.site_key", "test-site-key-v2"),
+				),
+			},
+			// STEP 2: Test reCAPTCHA v2 - Update Credentials.
+			{
+				Config: testAccCaptchaRecaptchaV2Update,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "recaptcha_v2"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.recaptcha_v2.0.site_key", "updated-site-key-v2"),
+				),
+			},
+
+			// =================================================================.
+			{
+				Config: testAccCaptchaRecaptchaEnterprise,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "recaptcha_enterprise"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.recaptcha_enterprise.0.site_key", "test-site-key-enterprise"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.recaptcha_enterprise.0.project_id", "test-project-id-enterprise"),
+				),
+			},
+			// STEP 4: Test reCAPTCHA Enterprise - Update All Credentials.
+			{
+				Config: testAccCaptchaRecaptchaEnterpriseUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "recaptcha_enterprise"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.recaptcha_enterprise.0.site_key", "updated-site-key-enterprise"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.recaptcha_enterprise.0.project_id", "updated-project-id-enterprise"),
+				),
+			},
+
+			// =================================================================.
+			{
+				Config: testAccCaptchaHcaptcha,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "hcaptcha"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.hcaptcha.0.site_key", "test-site-key-hcaptcha"),
+				),
+			},
+			// STEP 6: Test hCaptcha - Update Credentials.
+			{
+				Config: testAccCaptchaHcaptchaUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "hcaptcha"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.hcaptcha.0.site_key", "updated-site-key-hcaptcha"),
+				),
+			},
+
+			// =================================================================.
+			{
+				Config: testAccCaptchaFriendlyCaptcha,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "friendly_captcha"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.friendly_captcha.0.site_key", "test-site-key-friendly"),
+				),
+			},
+			// STEP 8: Test Friendly Captcha - Update Credentials.
+			{
+				Config: testAccCaptchaFriendlyCaptchaUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "friendly_captcha"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.friendly_captcha.0.site_key", "updated-site-key-friendly"),
+				),
+			},
+
+			// =================================================================.
+			{
+				Config: testAccCaptchaArkose,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "arkose"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.arkose.0.site_key", "test-site-key-arkose"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.arkose.0.client_subdomain", "client-api"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.arkose.0.verify_subdomain", "verify-api"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.arkose.0.fail_open", "false"),
+				),
+			},
+			// STEP 10: Test Arkose Labs - Update All Fields Including Boolean.
+			{
+				Config: testAccCaptchaArkoseUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "arkose"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.arkose.0.site_key", "updated-site-key-arkose"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.arkose.0.client_subdomain", "updated-client-api"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.arkose.0.verify_subdomain", "updated-verify-api"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.arkose.0.fail_open", "true"),
+				),
+			},
+
+			// =================================================================.
+			{
+				Config: testAccCaptchaAuthChallenge,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "auth_challenge"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.auth_challenge.0.fail_open", "false"),
+				),
+			},
+			// STEP 12: Test Auth Challenge - Update Boolean Flag.
+			{
+				Config: testAccCaptchaAuthChallengeUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "auth_challenge"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.auth_challenge.0.fail_open", "true"),
+				),
+			},
+
+			// =================================================================.
+			{
+				Config: testAccCaptchaSimpleCaptcha,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.0.active_provider_id", "simple_captcha"),
+				),
+			},
+		},
+	})
+}

@@ -216,7 +216,7 @@ func createEmailProvider(ctx context.Context, data *schema.ResourceData, meta in
 		return updateEmailProvider(ctx, data, meta)
 	}
 
-	emailProviderConfig := expandEmailProvider(data.GetRawConfig())
+	emailProviderConfig := expandEmailProvider(data, data.GetRawConfig())
 
 	if err := api.EmailProvider.Create(ctx, emailProviderConfig); err != nil {
 		return diag.FromErr(err)
@@ -239,7 +239,7 @@ func readEmailProvider(ctx context.Context, data *schema.ResourceData, meta inte
 func updateEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	emailProviderConfig := expandEmailProvider(data.GetRawConfig())
+	emailProviderConfig := expandEmailProvider(data, data.GetRawConfig())
 
 	if err := api.EmailProvider.Update(ctx, emailProviderConfig); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

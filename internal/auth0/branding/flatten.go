@@ -212,3 +212,44 @@ func flattenPhoneProviderCredentials(data *schema.ResourceData) []interface{} {
 		},
 	}
 }
+
+func flattenPhoneNotificationTemplate(data *schema.ResourceData, template *management.BrandingPhoneNotificationTemplate) error {
+	result := multierror.Append(
+		data.Set("template_id", template.GetID()),
+		data.Set("channel", template.GetChannel()),
+		data.Set("tenant", template.GetTenant()),
+		data.Set("type", template.GetType()),
+		data.Set("customizable", template.GetCustomizable()),
+		data.Set("disabled", template.GetDisabled()),
+		data.Set("content", flattenPhoneNotificationTemplateContent(template.GetContent())),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenPhoneNotificationTemplateContent(content *management.BrandingPhoneNotificationTemplateContent) []interface{} {
+	if content == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"syntax": content.GetSyntax(),
+			"from":   content.GetFrom(),
+			"body":   flattenPhoneNotificationTemplateContentBody(content.GetBody()),
+		},
+	}
+}
+
+func flattenPhoneNotificationTemplateContentBody(body *management.BrandingPhoneNotificationTemplateContentBody) []interface{} {
+	if body == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"text":  body.GetText(),
+			"voice": body.GetVoice(),
+		},
+	}
+}

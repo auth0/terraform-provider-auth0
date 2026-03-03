@@ -1,0 +1,369 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 559
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource","display_name":"Acceptance-Test-Directory-TestAccDirectoryDataSource","strategy":"google-apps","is_domain_connection":false,"show_as_button":false,"options":{"client_id":"","client_secret":"","domain":"example.com","tenant_domain":"example.com","ext_profile":true,"ext_groups":true,"api_enable_users":true,"set_user_root_attributes":"on_first_login","map_user_id_to_id":true,"domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 932
+        uncompressed: false
+        body: '{"id":"con_Noy6zWiRLZIaA9fm","options":{"client_id":"","client_secret":"","domain":"example.com","tenant_domain":"example.com","ext_profile":true,"ext_groups":true,"api_enable_users":true,"set_user_root_attributes":"on_first_login","map_user_id_to_id":true,"domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"email":true,"profile":true,"scope":["email","profile"],"handle_login_from_social":true},"strategy":"google-apps","name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource","provisioning_ticket_url":"https://login.eu.auth0.com/terraform-provider-auth0-dev/p/google-apps/KUaTyBmZ","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-Directory-TestAccDirectoryDataSource","enabled_clients":[],"realms":["Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 352.964458ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Noy6zWiRLZIaA9fm
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_Noy6zWiRLZIaA9fm","options":{"email":true,"scope":["email","profile"],"domain":"example.com","profile":true,"client_id":"","ext_groups":true,"ext_profile":true,"client_secret":"","tenant_domain":"example.com","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"map_user_id_to_id":true,"handle_login_from_social":true,"set_user_root_attributes":"on_first_login"},"strategy":"google-apps","name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource","provisioning_ticket_url":"https://login.eu.auth0.com/terraform-provider-auth0-dev/p/google-apps/KUaTyBmZ","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-Directory-TestAccDirectoryDataSource","enabled_clients":[],"realms":["Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 394.547042ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 87
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"mapping":[{"auth0":"external_id","idp":"id"},{"auth0":"email","idp":"primaryEmail"}]}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Noy6zWiRLZIaA9fm/directory-provisioning
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 349
+        uncompressed: false
+        body: '{"connection_id":"con_Noy6zWiRLZIaA9fm","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"external_id"},{"idp":"primaryEmail","auth0":"email"}],"synchronize_automatically":false,"created_at":"2025-12-22T07:39:54.926Z","updated_at":"2025-12-22T07:39:54.926Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 308.0945ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Noy6zWiRLZIaA9fm/directory-provisioning
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"connection_id":"con_Noy6zWiRLZIaA9fm","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"external_id"},{"idp":"primaryEmail","auth0":"email"}],"synchronize_automatically":false,"created_at":"2025-12-22T07:39:54.926Z","updated_at":"2025-12-22T07:39:54.926Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 245.723416ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Noy6zWiRLZIaA9fm/directory-provisioning
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"connection_id":"con_Noy6zWiRLZIaA9fm","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"external_id"},{"idp":"primaryEmail","auth0":"email"}],"synchronize_automatically":false,"created_at":"2025-12-22T07:39:54.926Z","updated_at":"2025-12-22T07:39:54.926Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.550416ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Noy6zWiRLZIaA9fm/directory-provisioning
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"connection_id":"con_Noy6zWiRLZIaA9fm","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"external_id"},{"idp":"primaryEmail","auth0":"email"}],"synchronize_automatically":false,"created_at":"2025-12-22T07:39:54.926Z","updated_at":"2025-12-22T07:39:54.926Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 246.116125ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Noy6zWiRLZIaA9fm
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_Noy6zWiRLZIaA9fm","options":{"email":true,"scope":["email","profile"],"domain":"example.com","profile":true,"client_id":"","ext_groups":true,"ext_profile":true,"client_secret":"","tenant_domain":"example.com","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"map_user_id_to_id":true,"handle_login_from_social":true,"set_user_root_attributes":"on_first_login"},"strategy":"google-apps","name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource","provisioning_ticket_url":"https://login.eu.auth0.com/terraform-provider-auth0-dev/p/google-apps/KUaTyBmZ","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-Directory-TestAccDirectoryDataSource","enabled_clients":[],"realms":["Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 272.213667ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Noy6zWiRLZIaA9fm/directory-provisioning
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"connection_id":"con_Noy6zWiRLZIaA9fm","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"external_id"},{"idp":"primaryEmail","auth0":"email"}],"synchronize_automatically":false,"created_at":"2025-12-22T07:39:54.926Z","updated_at":"2025-12-22T07:39:54.926Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 235.174666ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Noy6zWiRLZIaA9fm/directory-provisioning
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"connection_id":"con_Noy6zWiRLZIaA9fm","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"external_id"},{"idp":"primaryEmail","auth0":"email"}],"synchronize_automatically":false,"created_at":"2025-12-22T07:39:54.926Z","updated_at":"2025-12-22T07:39:54.926Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 244.219583ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Noy6zWiRLZIaA9fm/directory-provisioning
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 302.293417ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.32.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Noy6zWiRLZIaA9fm
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2025-12-22T07:39:59.382Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 287.140416ms

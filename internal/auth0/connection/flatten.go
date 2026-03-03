@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/auth0/go-auth0/management"
+	managementv2 "github.com/auth0/go-auth0/v2/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -54,6 +55,8 @@ var flattenConnectionOptionsMap = map[string]flattenConnectionOptionsFunc{
 	management.ConnectionStrategySAML:         flattenConnectionOptionsSAML,
 	management.ConnectionStrategyADFS:         flattenConnectionOptionsADFS,
 	management.ConnectionStrategyPingFederate: flattenConnectionOptionsPingFederate,
+
+	management.ConnectionStrategyOAuth1: flattenConnectionOptionsOAuth1,
 }
 
 type flattenConnectionOptionsFunc func(data *schema.ResourceData, options interface{}) (interface{}, diag.Diagnostics)
@@ -72,6 +75,8 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		data.Set("options", connectionOptions),
 		data.Set("realms", connection.GetRealms()),
 		data.Set("metadata", connection.GetMetadata()),
+		data.Set("authentication", flattenConnectionAuthentication(connection.GetAuthentication())),
+		data.Set("connected_accounts", flattenConnectionConnectedAccounts(connection.GetConnectedAccounts())),
 	)
 
 	if connectionIsEnterprise(connection.GetStrategy()) {
@@ -93,6 +98,34 @@ func flattenConnectionForDataSource(data *schema.ResourceData, connection *manag
 	diags = append(diags, diag.FromErr(err)...)
 
 	return diags
+}
+
+func flattenConnectionAuthentication(authentication *management.Authentication) []interface{} {
+	if authentication == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"active": authentication.GetActive(),
+	}
+
+	return []interface{}{
+		flattened,
+	}
+}
+
+func flattenConnectionConnectedAccounts(connectedAccounts *management.ConnectedAccounts) []interface{} {
+	if connectedAccounts == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"active": connectedAccounts.GetActive(),
+	}
+
+	return []interface{}{
+		flattened,
+	}
 }
 
 func flattenConnectionOptions(data *schema.ResourceData, connection *management.Connection) ([]interface{}, diag.Diagnostics) {
@@ -197,6 +230,7 @@ func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttr
 			"profile_required":    emailAttribute.GetProfileRequired(),
 			"signup":              flattenSignUp(emailAttribute.GetSignup()),
 			"verification_method": emailAttribute.GetVerificationMethod(),
+			"unique":              emailAttribute.GetUnique(),
 		},
 	}
 }
@@ -236,8 +270,10 @@ func flattenAuthenticationMethods(authenticationMethods *management.Authenticati
 	}
 
 	return map[string]interface{}{
-		"passkey":  flattenAuthenticationMethodPasskey(authenticationMethods.GetPasskey()),
-		"password": flattenAuthenticationMethodPassword(authenticationMethods.GetPassword()),
+		"passkey":   flattenAuthenticationMethodPasskey(authenticationMethods.GetPasskey()),
+		"password":  flattenAuthenticationMethodPassword(authenticationMethods.GetPassword()),
+		"email_otp": flattenAuthenticationMethodEmailOTP(authenticationMethods.GetEmailOTP()),
+		"phone_otp": flattenAuthenticationMethodPhoneOTP(authenticationMethods.GetPhoneOTP()),
 	}
 }
 
@@ -250,6 +286,16 @@ func flattenPasskeyOptions(passkeyOptions *management.PasskeyOptions) interface{
 		"challenge_ui":                   passkeyOptions.GetChallengeUI(),
 		"local_enrollment_enabled":       passkeyOptions.GetLocalEnrollmentEnabled(),
 		"progressive_enrollment_enabled": passkeyOptions.GetProgressiveEnrollmentEnabled(),
+	}
+}
+
+func flattenCustomPasswordHash(customPasswordHash *management.CustomPasswordHash) interface{} {
+	if customPasswordHash == nil {
+		return nil
+	}
+
+	return map[string]interface{}{
+		"action_id": customPasswordHash.GetActionID(),
 	}
 }
 
@@ -277,13 +323,38 @@ func flattenAuthenticationMethodPassword(passwordAuthenticationMethod *managemen
 	}
 }
 
+func flattenAuthenticationMethodEmailOTP(emailOTPAuthenticationMethod *management.EmailOTPAuthenticationMethod) interface{} {
+	if emailOTPAuthenticationMethod == nil {
+		return nil
+	}
+
+	return []map[string]bool{
+		{
+			"enabled": emailOTPAuthenticationMethod.GetEnabled(),
+		},
+	}
+}
+
+func flattenAuthenticationMethodPhoneOTP(phoneOTPAuthenticationMethod *management.PhoneOTPAuthenticationMethod) interface{} {
+	if phoneOTPAuthenticationMethod == nil {
+		return nil
+	}
+
+	return []map[string]bool{
+		{
+			"enabled": phoneOTPAuthenticationMethod.GetEnabled(),
+		},
+	}
+}
+
 func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) []map[string]interface{} {
 	if identifier == nil {
 		return nil
 	}
 	return []map[string]interface{}{
 		{
-			"active": identifier.GetActive(),
+			"active":         identifier.GetActive(),
+			"default_method": identifier.GetDefaultMethod(),
 		},
 	}
 }
@@ -389,6 +460,10 @@ func flattenConnectionOptionsAuth0(
 
 	if options.PasskeyOptions != nil {
 		optionsMap["passkey_options"] = []interface{}{flattenPasskeyOptions(options.GetPasskeyOptions())}
+	}
+
+	if options.CustomPasswordHash != nil {
+		optionsMap["custom_password_hash"] = []interface{}{flattenCustomPasswordHash(options.GetCustomPasswordHash())}
 	}
 
 	if options.PasswordComplexityOptions != nil {
@@ -513,6 +588,8 @@ func flattenConnectionOptionsOAuth2(
 		"icon_url":                 options.GetLogoURL(),
 		"pkce_enabled":             options.GetPKCEEnabled(),
 		"strategy_version":         options.GetStrategyVersion(),
+		"email":                    options.GetEmail(),
+		"use_oauth_spec_scope":     options.GetUseOauthSpecScope(),
 		"upstream_params":          upstreamParams,
 		"custom_headers":           flattenCustomHeaders(options.GetCustomHeaders()),
 	}
@@ -717,6 +794,7 @@ func flattenConnectionOptionsOIDC(
 		"tenant_domain":                   options.GetTenantDomain(),
 		"domain_aliases":                  options.GetDomainAliases(),
 		"type":                            options.GetType(),
+		"send_back_channel_nonce":         options.GetSendBackChannelNonce(),
 		"scopes":                          options.Scopes(),
 		"issuer":                          options.GetIssuer(),
 		"jwks_uri":                        options.GetJWKSURI(),
@@ -1116,6 +1194,30 @@ func flattenConnectionOptionsPingFederate(
 	return optionsMap, nil
 }
 
+func flattenConnectionOptionsOAuth1(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsOAuth1)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
+	}
+
+	optionsMap := map[string]interface{}{
+		"consumer_key":           options.GetConsumerKey(),
+		"consumer_secret":        options.GetConsumerSecret(),
+		"request_token_url":      options.GetRequestTokenURL(),
+		"access_token_url":       options.GetAccessTokenURL(),
+		"user_authorization_url": options.GetUserAuthorizationURL(),
+		"session_key":            options.GetSessionKey(),
+		"signature_method":       options.GetSignatureMethod(),
+		"custom_headers":         flattenCustomHeaders(options.GetCustomHeaders()),
+		"scripts":                options.GetScripts(),
+	}
+
+	return optionsMap, nil
+}
+
 func flattenConnectionClient(data *schema.ResourceData, connection *management.Connection) error {
 	result := multierror.Append(
 		data.Set("name", connection.GetName()),
@@ -1193,5 +1295,47 @@ func flattenConnectionKey(data *schema.ResourceData, connectionID string, key *m
 	for k, v := range m {
 		result = multierror.Append(result, data.Set(k, v))
 	}
+	return diag.FromErr(result.ErrorOrNil())
+}
+
+func flattenDirectoryMappings(mappings []*managementv2.DirectoryProvisioningMappingItem) []interface{} {
+	if mappings == nil {
+		return nil
+	}
+
+	flattenedMappings := make([]interface{}, 0, len(mappings))
+	for _, mapping := range mappings {
+		flattenedMappings = append(flattenedMappings, map[string]interface{}{
+			"auth0": mapping.GetAuth0(),
+			"idp":   mapping.GetIdp(),
+		})
+	}
+
+	return flattenedMappings
+}
+
+func flattenDirectory(data *schema.ResourceData, directoryConfig *managementv2.GetDirectoryProvisioningResponseContent) diag.Diagnostics {
+	result := multierror.Append(
+		data.Set("connection_id", directoryConfig.GetConnectionID()),
+		data.Set("connection_name", directoryConfig.GetConnectionName()),
+		data.Set("strategy", directoryConfig.GetStrategy()),
+		data.Set("mapping", flattenDirectoryMappings(directoryConfig.GetMapping())),
+		data.Set("synchronize_automatically", directoryConfig.GetSynchronizeAutomatically()),
+		data.Set("created_at", directoryConfig.GetCreatedAt().String()),
+		data.Set("updated_at", directoryConfig.GetUpdatedAt().String()),
+	)
+
+	if directoryConfig.LastSynchronizationAt != nil {
+		result = multierror.Append(result, data.Set("last_synchronization_at", directoryConfig.GetLastSynchronizationAt().String()))
+	}
+
+	if directoryConfig.LastSynchronizationStatus != nil {
+		result = multierror.Append(result, data.Set("last_synchronization_status", directoryConfig.GetLastSynchronizationStatus()))
+	}
+
+	if directoryConfig.LastSynchronizationError != nil {
+		result = multierror.Append(result, data.Set("last_synchronization_error", directoryConfig.GetLastSynchronizationError()))
+	}
+
 	return diag.FromErr(result.ErrorOrNil())
 }

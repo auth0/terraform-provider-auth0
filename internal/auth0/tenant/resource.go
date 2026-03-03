@@ -22,8 +22,10 @@ import (
 )
 
 const (
-	idleSessionLifetimeDefault = 72.00
-	sessionLifetimeDefault     = 168.00
+	idleSessionLifetimeDefault          = 72.00
+	sessionLifetimeDefault              = 168.00
+	ephemeralSessionLifetimeDefault     = 1.00 // 1 hour.
+	idleEphemeralSessionLifetimeDefault = 1.00 // 1 hour.
 )
 
 // NewResource will return a new auth0_tenant resource.
@@ -107,6 +109,20 @@ func NewResource() *schema.Resource {
 				Default:      idleSessionLifetimeDefault,
 				ValidateFunc: validation.FloatAtLeast(0.01),
 				Description:  "Number of hours during which a session can be inactive before the user must log in again.",
+			},
+			"ephemeral_session_lifetime": {
+				Type:         schema.TypeFloat,
+				Optional:     true,
+				Default:      ephemeralSessionLifetimeDefault,
+				ValidateFunc: validation.FloatAtLeast(0.0167),
+				Description:  "Number of hours an ephemeral (non-persistent) session will stay valid.",
+			},
+			"idle_ephemeral_session_lifetime": {
+				Type:         schema.TypeFloat,
+				Optional:     true,
+				Default:      idleEphemeralSessionLifetimeDefault,
+				ValidateFunc: validation.FloatAtLeast(0.0167),
+				Description:  "Number of hours for which an ephemeral (non-persistent) session can be inactive before the user must log in again.",
 			},
 			"enabled_locales": {
 				Type:     schema.TypeList,
@@ -430,6 +446,15 @@ func NewResource() *schema.Resource {
 						"clients":       commons.TokenQuotaSchema(),
 						"organizations": commons.TokenQuotaSchema(),
 					},
+				},
+			},
+			"skip_non_verifiable_callback_uri_confirmation_prompt": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Description:  "Indicates whether the confirmation prompt appears when using non-verifiable callback URIs. Set to true to skip the prompt, false to show it, or null to unset. Accepts (true/false/null) or (\"true\"/\"false\"/\"null\") ",
+				ValidateFunc: validation.StringInSlice([]string{"true", "false", "null"}, false),
+				DiffSuppressFunc: func(_, o, n string, _ *schema.ResourceData) bool {
+					return (o == "null" && n == "") || o == n
 				},
 			},
 		},

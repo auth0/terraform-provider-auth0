@@ -42,6 +42,37 @@ EOF
     mechanism = "mtls"
     required  = true
   }
+  subject_type_authorization {
+    user {
+      policy = "allow_all"
+    }
+    client {
+      policy = "require_client_grant"
+    }
+  }
+}
+
+
+
+# Sample OIN resource server configuration
+resource "auth0_resource_server" "okta_oin_express_configuration_api" {
+  identifier                                      = "urn:auth0:express-configure"
+  name                                            = "Okta OIN Express Configuration API"
+  signing_alg                                     = "RS256"
+  signing_secret                                  = null
+  skip_consent_for_verifiable_first_party_clients = false
+  token_dialect                                   = null
+  token_lifetime                                  = 86400
+  verification_location                           = null
+  proof_of_possession {
+    disable   = true
+    mechanism = null
+    required  = false
+  }
+  token_encryption {
+    disable = true
+    format  = null
+  }
 }
 ```
 
@@ -63,6 +94,7 @@ EOF
 - `signing_alg` (String) Algorithm used to sign JWTs. Options include `HS256`, `RS256`, and `PS256`.
 - `signing_secret` (String) Secret used to sign tokens when using symmetric algorithms (HS256).
 - `skip_consent_for_verifiable_first_party_clients` (Boolean) Indicates whether to skip user consent for applications flagged as first party.
+- `subject_type_authorization` (Block List, Max: 1) Authorization policies for user and client flows. (see [below for nested schema](#nestedblock--subject_type_authorization))
 - `token_dialect` (String) Dialect of access tokens that should be issued for this resource server. Options include `access_token`, `rfc9068_profile`, `access_token_authz`, and `rfc9068_profile_authz`. `access_token` is a JWT containing standard Auth0 claims. `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` is a JWT containing standard Auth0 claims, including RBAC permissions claims. `rfc9068_profile_authz` is a JWT conforming to the IETF JWT Access Token Profile, including RBAC permissions claims. RBAC permissions claims are available if RBAC (`enforce_policies`) is enabled for this API. For more details, refer to [Access Token Profiles](https://auth0.com/docs/secure/tokens/access-tokens/access-token-profiles).
 - `token_encryption` (Block List, Max: 1) Configuration for JSON Web Encryption(JWE) of tokens for this resource server. (see [below for nested schema](#nestedblock--token_encryption))
 - `token_lifetime` (Number) Number of seconds during which access tokens issued for this resource server from the token endpoint remain valid.
@@ -71,7 +103,9 @@ EOF
 
 ### Read-Only
 
+- `client_id` (String) The ID of the client associated with this resource server. If a client has been created and linked to this resource server, this field will be populated with that client's ID.
 - `id` (String) The ID of this resource.
+- `is_system` (Boolean) Indicates whether this resource server is a special resource server created by Auth0. It cannot be modified or deleted directly.
 
 <a id="nestedblock--authorization_details"></a>
 ### Nested Schema for `authorization_details`
@@ -90,6 +124,32 @@ Optional:
 - `disable` (Boolean) Disable proof-of-possession.
 - `mechanism` (String) Mechanism used for proof-of-possession. `mtls` or `dpop` is supported.
 - `required` (Boolean) Indicates whether proof-of-possession is required with this resource server.
+- `required_for` (String) Specifies which client types require Proof-of-Possession`all_clients` or `public_clients` is supported.
+
+
+<a id="nestedblock--subject_type_authorization"></a>
+### Nested Schema for `subject_type_authorization`
+
+Optional:
+
+- `client` (Block List, Max: 1) Client authorization policies for the resource server. (see [below for nested schema](#nestedblock--subject_type_authorization--client))
+- `user` (Block List, Max: 1) User authorization policies for the resource server. (see [below for nested schema](#nestedblock--subject_type_authorization--user))
+
+<a id="nestedblock--subject_type_authorization--client"></a>
+### Nested Schema for `subject_type_authorization.client`
+
+Optional:
+
+- `policy` (String) Client flows policy. One of `deny_all`, `require_client_grant`.
+
+
+<a id="nestedblock--subject_type_authorization--user"></a>
+### Nested Schema for `subject_type_authorization.user`
+
+Optional:
+
+- `policy` (String) User flows policy. One of `allow_all`, `deny_all`, `require_client_grant`.
+
 
 
 <a id="nestedblock--token_encryption"></a>

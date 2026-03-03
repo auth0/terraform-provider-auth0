@@ -28,11 +28,23 @@ resource "auth0_client" "my_client" {
 
   grant_types = [
     "authorization_code",
-    "http://auth0.com/oauth/grant-type/password-realm",
     "implicit",
     "password",
-    "refresh_token"
+    "refresh_token",
+    "client_credentials",
+    "urn:openid:params:grant-type:ciba",
+    "urn:ietf:params:oauth:grant-type:device_code",
+    "http://auth0.com/oauth/grant-type/password-realm",
+    "http://auth0.com/oauth/grant-type/passwordless/otp",
+    "urn:okta:params:oauth:grant-type:webauthn",
+    "urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token"
   ]
+
+  async_approval_notification_channels = [
+    "guardian-push",
+    "email"
+  ]
+
   client_metadata = {
     foo = "zoo"
   }
@@ -125,7 +137,8 @@ resource "auth0_client" "my_client" {
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
-- `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`.
+- `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`, `express_configuration`
+- `async_approval_notification_channels` (List of String) List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated. Defaults to `["guardian-push"]` if not specified.
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
@@ -137,6 +150,7 @@ resource "auth0_client" "my_client" {
 - `default_organization` (Block List, Max: 1) Configure and associate an organization with the Client (see [below for nested schema](#nestedblock--default_organization))
 - `description` (String) Description of the purpose of the client.
 - `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
+- `express_configuration` (Block List, Max: 1) Express Configuration settings for the client. Used with OIN Express Configuration. (see [below for nested schema](#nestedblock--express_configuration))
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
@@ -149,12 +163,15 @@ resource "auth0_client" "my_client" {
 - `oidc_backchannel_logout_urls` (Set of String, Deprecated) Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
 - `oidc_conformant` (Boolean) Indicates whether this client will conform to strict OIDC specifications.
 - `oidc_logout` (Block List, Max: 1) Configure OIDC logout for the Client (see [below for nested schema](#nestedblock--oidc_logout))
+- `organization_discovery_methods` (List of String) Methods for discovering organizations during the pre_login_prompt. Can include `email` (allows users to find their organization by entering their email address) and/or `organization_name` (requires users to enter the organization name directly). These methods can be combined. Setting this property requires that `organization_require_behavior` is set to `pre_login_prompt`.
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
 - `refresh_token` (Block List, Max: 1) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedblock--refresh_token))
 - `require_proof_of_possession` (Boolean) Makes the use of Proof-of-Possession mandatory for this client.
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
+- `resource_server_identifier` (String) The identifier of a resource server that client is associated withThis property can be sent only when app_type=resource_server.This property can not be changed, once the client is created.
 - `session_transfer` (Block List, Max: 1) (see [below for nested schema](#nestedblock--session_transfer))
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (String) Indicates whether the confirmation prompt appears when using non-verifiable callback URIs. Set to true to skip the prompt, false to show it, or null to unset. Accepts (true/false/null) or ("true"/"false"/"null")
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_exchange` (Block List, Max: 1) Allows configuration for token exchange (see [below for nested schema](#nestedblock--token_exchange))
@@ -499,6 +516,33 @@ Optional:
 - `organization_id` (String) The unique identifier of the organization
 
 
+<a id="nestedblock--express_configuration"></a>
+### Nested Schema for `express_configuration`
+
+Optional:
+
+- `admin_login_domain` (String) The domain that admins are expected to log in via for authenticating for express configuration.
+- `connection_profile_id` (String) The ID of the connection profile to use for this application.
+- `enable_client` (Boolean) When true, all connections made via express configuration will be enabled for this application.
+- `enable_organization` (Boolean) When true, all connections made via express configuration will have the associated organization enabled.
+- `initiate_login_uri_template` (String) The URI users should bookmark to log in to this application. Variable substitution is permitted for: organization_name, organization_id, and connection_name.
+- `linked_clients` (Block List) List of client IDs that are linked to this express configuration (e.g. web or mobile clients). (see [below for nested schema](#nestedblock--express_configuration--linked_clients))
+- `okta_oin_client_id` (String) The unique identifier for the Okta OIN Express Configuration Client.
+- `user_attribute_profile_id` (String) The ID of the user attribute profile to use for this application.
+
+Read-Only:
+
+- `oin_submission_id` (String) The identifier of the published application in the OKTA OIN.
+
+<a id="nestedblock--express_configuration--linked_clients"></a>
+### Nested Schema for `express_configuration.linked_clients`
+
+Optional:
+
+- `client_id` (String) The ID of the linked client.
+
+
+
 <a id="nestedblock--jwt_configuration"></a>
 ### Nested Schema for `jwt_configuration`
 
@@ -581,6 +625,7 @@ Required:
 Optional:
 
 - `backchannel_logout_initiators` (Block List, Max: 1) Configure OIDC logout initiators for the Client (see [below for nested schema](#nestedblock--oidc_logout--backchannel_logout_initiators))
+- `backchannel_logout_session_metadata` (Block List, Max: 1) Controls whether session metadata is included in the logout token. Default value is null. (see [below for nested schema](#nestedblock--oidc_logout--backchannel_logout_session_metadata))
 
 <a id="nestedblock--oidc_logout--backchannel_logout_initiators"></a>
 ### Nested Schema for `oidc_logout.backchannel_logout_initiators`
@@ -592,6 +637,14 @@ Required:
 Optional:
 
 - `selected_initiators` (Set of String) Contains the list of initiators to be enabled for the given client.
+
+
+<a id="nestedblock--oidc_logout--backchannel_logout_session_metadata"></a>
+### Nested Schema for `oidc_logout.backchannel_logout_session_metadata`
+
+Required:
+
+- `include` (Boolean) The `include` property determines whether session metadata is included in the logout token.
 
 
 
@@ -630,7 +683,9 @@ Optional:
 - `allow_refresh_token` (Boolean) Indicates whether the application is allowed to use a refresh token when using a session_transfer_token session.
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean) Indicates whether the application(Native app) can use the Token Exchange endpoint to create a session_transfer_token
+- `enforce_cascade_revocation` (Boolean) Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities. Usually configured in the native application.
 - `enforce_device_binding` (String) Configures the level of device binding enforced when a session_transfer_token is consumed. Can be one of `ip`, `asn` or `none`.
+- `enforce_online_refresh_tokens` (Boolean) Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application.
 
 
 <a id="nestedblock--token_exchange"></a>

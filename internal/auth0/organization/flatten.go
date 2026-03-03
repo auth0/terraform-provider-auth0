@@ -129,3 +129,37 @@ func flattenOrganizationClientGrantsSlice(clientGrants []*management.ClientGrant
 	}
 	return flattenedClientGrants
 }
+
+func flattenOrganizationDiscoveryDomain(data *schema.ResourceData, discoveryDomain *management.OrganizationDiscoveryDomain, organizationID string) error {
+	result := multierror.Append(
+		data.Set("organization_id", organizationID),
+		data.Set("id", discoveryDomain.GetID()),
+		data.Set("domain", discoveryDomain.GetDomain()),
+		data.Set("status", discoveryDomain.GetStatus()),
+		data.Set("verification_txt", discoveryDomain.GetVerificationTXT()),
+		data.Set("verification_host", discoveryDomain.GetVerificationHost()),
+		data.Set("use_for_organization_discovery", discoveryDomain.GetUseForOrganizationDiscovery()),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenOrganizationDiscoveryDomains(data *schema.ResourceData, domains []*management.OrganizationDiscoveryDomain) error {
+	if len(domains) == 0 {
+		return data.Set("discovery_domains", []interface{}{})
+	}
+
+	var enabledDomains []interface{}
+	for _, domain := range domains {
+		enabledDomains = append(enabledDomains, map[string]interface{}{
+			"id":                             domain.GetID(),
+			"domain":                         domain.GetDomain(),
+			"status":                         domain.GetStatus(),
+			"verification_txt":               domain.GetVerificationTXT(),
+			"verification_host":              domain.GetVerificationHost(),
+			"use_for_organization_discovery": domain.GetUseForOrganizationDiscovery(),
+		})
+	}
+
+	return data.Set("discovery_domains", enabledDomains)
+}

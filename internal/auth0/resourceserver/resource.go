@@ -250,8 +250,80 @@ func NewResource() *schema.Resource {
 							Optional:    true,
 							Description: "Disable proof-of-possession.",
 						},
+						"required_for": {
+							Type:     schema.TypeString,
+							Optional: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"all_clients", "public_clients",
+							}, true),
+							Description: "Specifies which client types require Proof-of-Possession" +
+								"`all_clients` or `public_clients` is supported.",
+						},
 					},
 				},
+			},
+			"subject_type_authorization": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Authorization policies for user and client flows.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"user": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "User authorization policies for the resource server.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"policy": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"allow_all",
+											"deny_all",
+											"require_client_grant",
+										}, false),
+										Description: "User flows policy. One of `allow_all`, `deny_all`, `require_client_grant`.",
+									},
+								},
+							},
+						},
+						"client": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Client authorization policies for the resource server.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"policy": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"deny_all",
+											"require_client_grant",
+										}, false),
+										Description: "Client flows policy. One of `deny_all`, `require_client_grant`.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"client_id": {
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: "The ID of the client associated with this resource server. If a client has been created " +
+					"and linked to this resource server, this field will be populated with that client's ID.",
+			},
+			"is_system": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Indicates whether this resource server is a special resource server created by Auth0. It cannot be modified or deleted directly.",
 			},
 		},
 	}
@@ -267,11 +339,6 @@ func createResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 	}
 
 	data.SetId(resourceServer.GetID())
-
-	if err := fixNullableAttributes(ctx, data, api); err != nil {
-		return diag.FromErr(err)
-	}
-	time.Sleep(200 * time.Millisecond)
 
 	return readResourceServer(ctx, data, meta)
 }

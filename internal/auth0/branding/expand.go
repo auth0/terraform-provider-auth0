@@ -196,3 +196,46 @@ func expandPhoneProviderCredentials(config cty.Value) *management.BrandingPhoneP
 
 	return credentials
 }
+
+func expandPhoneNotificationTemplate(config cty.Value) *management.BrandingPhoneNotificationTemplate {
+	template := &management.BrandingPhoneNotificationTemplate{
+		Type:     value.String(config.GetAttr("type")),
+		Disabled: value.Bool(config.GetAttr("disabled")),
+		Content:  expandPhoneNotificationTemplateContent(config.GetAttr("content")),
+	}
+
+	return template
+}
+
+func expandPhoneNotificationTemplateContent(config cty.Value) *management.BrandingPhoneNotificationTemplateContent {
+	var content management.BrandingPhoneNotificationTemplateContent
+
+	config.ForEachElement(func(_ cty.Value, c cty.Value) (stop bool) {
+		content.Syntax = value.String(c.GetAttr("syntax"))
+		content.From = value.String(c.GetAttr("from"))
+		content.Body = expandPhoneNotificationTemplateContentBody(c.GetAttr("body"))
+		return stop
+	})
+
+	if content == (management.BrandingPhoneNotificationTemplateContent{}) {
+		return nil
+	}
+
+	return &content
+}
+
+func expandPhoneNotificationTemplateContentBody(config cty.Value) *management.BrandingPhoneNotificationTemplateContentBody {
+	var body management.BrandingPhoneNotificationTemplateContentBody
+
+	config.ForEachElement(func(_ cty.Value, b cty.Value) (stop bool) {
+		body.Text = value.String(b.GetAttr("text"))
+		body.Voice = value.String(b.GetAttr("voice"))
+		return stop
+	})
+
+	if body == (management.BrandingPhoneNotificationTemplateContentBody{}) {
+		return nil
+	}
+
+	return &body
+}

@@ -213,3 +213,52 @@ func TestAccResourceServerScopes(t *testing.T) {
 		},
 	})
 }
+
+const testAccResourceServerIsSystemRead = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - IsSystem - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/issystem/{{.testName}}"
+	signing_alg = "RS256"
+	allow_offline_access = true
+	token_lifetime = 7200
+	token_lifetime_for_web = 3600
+	skip_consent_for_verifiable_first_party_clients = true
+	enforce_policies = false
+	consent_policy = "null"
+	authorization_details {
+		disable = true
+	}
+	token_encryption {
+		disable = true
+	}
+	proof_of_possession {
+		disable = true
+	}
+	subject_type_authorization {
+		user {
+		  policy = "allow_all"
+		}
+		client {
+		  policy = "require_client_grant"
+		}
+	}
+}
+`
+
+func TestAccResourceServerIsSystem(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccResourceServerIsSystemRead, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", fmt.Sprintf("Acceptance Test - IsSystem - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/issystem/%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "is_system", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "signing_alg", "RS256"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_offline_access", "true"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime", "7200"),
+				),
+			},
+		},
+	})
+}

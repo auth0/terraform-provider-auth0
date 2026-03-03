@@ -19,10 +19,10 @@ import (
 
 // ValidAppTypes contains all valid values for client app_type.
 var ValidAppTypes = []string{
-	"native", "spa", "regular_web", "non_interactive", "rms",
+	"native", "spa", "regular_web", "non_interactive", "resource_server", "rms",
 	"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
 	"egnyte", "newrelic", "office365", "salesforce", "sentry",
-	"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
+	"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom", "express_configuration",
 }
 
 // NewResource will return a new auth0_client resource.
@@ -67,10 +67,10 @@ func NewResource() *schema.Resource {
 				Optional:     true,
 				ValidateFunc: validation.StringInSlice(ValidAppTypes, false),
 				Description: "Type of application the client represents. Possible values are: `native`, `spa`, " +
-					"`regular_web`, `non_interactive`, `sso_integration`. Specific SSO integrations types accepted " +
+					"`regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted " +
 					"as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, " +
 					"`newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, " +
-					"`zoom`.",
+					"`zoom`, `express_configuration`",
 			},
 			"logo_uri": {
 				Type:     schema.TypeString,
@@ -104,6 +104,7 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeList,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
+				Computed: true,
 				Description: "URLs that Auth0 may call back to after a user authenticates for the client. " +
 					"Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. " +
 					"With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.",
@@ -132,9 +133,25 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Description: "Types of grants that this client is authorized to use.",
 			},
+			"async_approval_notification_channels": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"guardian-push",
+						"email",
+					}, false),
+				},
+				Optional: true,
+				Computed: true,
+				Description: "List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. " +
+					"Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated. " +
+					"Defaults to `[\"guardian-push\"]` if not specified.",
+			},
 			"organization_usage": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"deny", "allow", "require",
 				}, false),
@@ -144,11 +161,27 @@ func NewResource() *schema.Resource {
 			"organization_require_behavior": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"no_prompt", "pre_login_prompt", "post_login_prompt",
 				}, false),
 				Description: "Defines how to proceed during an authentication transaction when " +
 					"`organization_usage = \"require\"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.",
+			},
+			"organization_discovery_methods": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"email", "organization_name",
+					}, false),
+				},
+				Optional: true,
+				Description: "Methods for discovering organizations during the pre_login_prompt. " +
+					"Can include `email` (allows users to find their organization by entering their email address) " +
+					"and/or `organization_name` (requires users to enter the organization name directly). " +
+					"These methods can be combined. Setting this property requires that " +
+					"`organization_require_behavior` is set to `pre_login_prompt`.",
 			},
 			"allowed_origins": {
 				Type:     schema.TypeList,
@@ -1400,7 +1433,6 @@ func NewResource() *schema.Resource {
 			"oidc_logout": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Computed:    true,
 				MaxItems:    1,
 				Description: "Configure OIDC logout for the Client",
 				Elem: &schema.Resource{
@@ -1433,6 +1465,21 @@ func NewResource() *schema.Resource {
 										},
 										Optional:    true,
 										Description: "Contains the list of initiators to be enabled for the given client.",
+									},
+								},
+							},
+						},
+						"backchannel_logout_session_metadata": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Controls whether session metadata is included in the logout token. Default value is null.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"include": {
+										Type:        schema.TypeBool,
+										Required:    true,
+										Description: "The `include` property determines whether session metadata is included in the logout token.",
 									},
 								},
 							},
@@ -1476,10 +1523,105 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "Indicates whether the application is allowed to use a refresh token when using a session_transfer_token session.",
 						},
+						"enforce_cascade_revocation": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Default:     true,
+							Description: "Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities. Usually configured in the native application.",
+						},
+						"enforce_online_refresh_tokens": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Default:     true,
+							Description: "Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application.",
+						},
 					},
 				},
 			},
 			"token_quota": commons.TokenQuotaSchema(),
+			"skip_non_verifiable_callback_uri_confirmation_prompt": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Description:  "Indicates whether the confirmation prompt appears when using non-verifiable callback URIs. Set to true to skip the prompt, false to show it, or null to unset. Accepts (true/false/null) or (\"true\"/\"false\"/\"null\") ",
+				ValidateFunc: validation.StringInSlice([]string{"true", "false", "null"}, false),
+				DiffSuppressFunc: func(_, o, n string, _ *schema.ResourceData) bool {
+					return (o == "null" && n == "") || o == n
+				},
+			},
+			"resource_server_identifier": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Description: "The identifier of a resource server that client is associated with" +
+					"This property can be sent only when app_type=resource_server." +
+					"This property can not be changed, once the client is created.",
+			},
+			"express_configuration": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Express Configuration settings for the client. Used with OIN Express Configuration.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"initiate_login_uri_template": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The URI users should bookmark to log in to this application. Variable substitution is permitted for: organization_name, organization_id, and connection_name.",
+						},
+						"user_attribute_profile_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The ID of the user attribute profile to use for this application.",
+						},
+						"connection_profile_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The ID of the connection profile to use for this application.",
+						},
+						"enable_client": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "When true, all connections made via express configuration will be enabled for this application.",
+						},
+						"enable_organization": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "When true, all connections made via express configuration will have the associated organization enabled.",
+						},
+						"okta_oin_client_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "The unique identifier for the Okta OIN Express Configuration Client.",
+						},
+						"admin_login_domain": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The domain that admins are expected to log in via for authenticating for express configuration.",
+						},
+						"oin_submission_id": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The identifier of the published application in the OKTA OIN.",
+						},
+						"linked_clients": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							Description: "List of client IDs that are linked to this express configuration (e.g. web or mobile clients).",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"client_id": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "The ID of the linked client.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }

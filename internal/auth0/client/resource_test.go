@@ -314,6 +314,8 @@ resource "auth0_client" "my_client" {
             scope = ["create:bar"]
         }
     }
+
+    depends_on = [auth0_resource_server_scope.my_scope]
 }
 `
 
@@ -348,6 +350,8 @@ resource "auth0_client" "my_client" {
             scope = []
         }
     }
+
+    depends_on = [auth0_resource_server_scope.my_scope]
 }
 `
 
@@ -539,6 +543,7 @@ resource "auth0_client" "my_client" {
 	organization_require_behavior = "no_prompt"
 	organization_usage = "deny"
 	require_pushed_authorization_requests = false
+	skip_non_verifiable_callback_uri_confirmation_prompt = true
 	sso = false
 	sso_disabled = false
 	custom_login_page_on = true
@@ -570,6 +575,7 @@ resource "auth0_client" "my_client" {
 	organization_require_behavior = "no_prompt"
 	organization_usage = "deny"
 	require_pushed_authorization_requests = false
+	skip_non_verifiable_callback_uri_confirmation_prompt = false
 	sso = true
 	sso_disabled = true
 	custom_login_page_on = true
@@ -659,6 +665,7 @@ func TestAccClientConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_usage", "deny"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "require_pushed_authorization_requests", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso_disabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page_on", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "true"),
@@ -721,6 +728,7 @@ func TestAccClientConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "no_prompt"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_usage", "deny"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "require_pushed_authorization_requests", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso_disabled", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page_on", "true"),
@@ -2584,6 +2592,9 @@ resource "auth0_client" "my_client" {
 		backchannel_logout_initiators {
 			mode = "all"
 		}
+		backchannel_logout_session_metadata {
+			include = true
+		}
     }
 }
 `
@@ -2598,6 +2609,9 @@ resource "auth0_client" "my_client" {
 		backchannel_logout_initiators {
 			mode = "custom"
 			selected_initiators = ["rp-logout", "idp-logout", "password-changed", "session-expired"]
+		}
+		backchannel_logout_session_metadata {
+			include = false
 		}
 	}
 }
@@ -2623,6 +2637,8 @@ func TestAccClientOIDCLogout(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.mode", "all"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.selected_initiators.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_session_metadata.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_session_metadata.0.include", "true"),
 				),
 			},
 			{
@@ -2636,6 +2652,8 @@ func TestAccClientOIDCLogout(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.mode", "custom"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.selected_initiators.#", "4"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_session_metadata.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_session_metadata.0.include", "false"),
 				),
 			},
 			{
@@ -2643,7 +2661,7 @@ func TestAccClientOIDCLogout(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - OIDC Logout - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "0"),
 				),
 			},
 		},
@@ -2668,6 +2686,8 @@ resource "auth0_client" "my_client" {
 		allowed_authentication_methods = ["cookie", "query"]
 		enforce_device_binding = "asn"
 		allow_refresh_token               = true
+		enforce_online_refresh_tokens     = false
+		enforce_cascade_revocation        = false
 	}
 }`
 
@@ -2708,6 +2728,8 @@ resource "auth0_client" "my_client" {
     allowed_authentication_methods    = []
     enforce_device_binding            = "none"
     allow_refresh_token               = false
+	enforce_online_refresh_tokens     = false
+	enforce_cascade_revocation        = false
   }
 }
 `
@@ -2724,6 +2746,8 @@ func TestAccClientSessionTransfer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "ip"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_online_refresh_tokens", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_cascade_revocation", "true"),
 				),
 			},
 			{
@@ -2734,6 +2758,9 @@ func TestAccClientSessionTransfer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "2"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "asn"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_online_refresh_tokens", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_cascade_revocation", "false"),
 				),
 			},
 			{
@@ -2769,6 +2796,313 @@ func TestAccClientSessionTransfer(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_online_refresh_tokens", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_cascade_revocation", "false"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientResourceServer = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - Resource Server - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+
+resource "auth0_client" "my_client" {
+  depends_on = [ auth0_resource_server.my_resource_server ]
+
+	name = "Acceptance Test - Resource Server Client - {{.testName}}"
+	app_type = "resource_server"
+	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+}
+`
+
+func TestAccClientResourceServer(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientResourceServer, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "resource_server"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "resource_server_identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_id"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientSkipPromptNullConfig = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
+	app_type = "spa"
+	# skip_non_verifiable_callback_uri_confirmation_prompt not specified (null)
+}
+`
+
+const testAccClientSkipPromptTrueConfig = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
+	app_type = "spa"
+	skip_non_verifiable_callback_uri_confirmation_prompt = true
+}
+`
+
+const testAccClientSkipPromptFalseConfig = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
+	app_type = "spa"
+	skip_non_verifiable_callback_uri_confirmation_prompt = false
+}`
+
+const testAccClientSkipPromptNullConfig1 = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
+	app_type = "spa"
+	skip_non_verifiable_callback_uri_confirmation_prompt = null
+}
+`
+
+func TestAccClientSkipPrompt(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientSkipPromptNullConfig1, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "null"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSkipPromptTrueConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSkipPromptNullConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "null"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSkipPromptFalseConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSkipPromptNullConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "null"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientWithAsyncApprovalChannels = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
+	app_type = "non_interactive"
+
+	async_approval_notification_channels = [
+		"email"
+	]
+}
+`
+
+const testAccClientWithAsyncApprovalChannelsUpdate = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
+	app_type = "non_interactive"
+
+	async_approval_notification_channels = [
+		"email",
+		"guardian-push"
+	]
+}
+`
+
+func TestAccClientAsyncApprovalNotificationChannels(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientWithAsyncApprovalChannels, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "email"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientWithAsyncApprovalChannelsUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "email"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.1", "guardian-push"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientExpressAppConfig = `
+resource "auth0_client" "my_client" {
+  name                          = "Acceptance Test - Express App - {{.testName}}"
+  app_type                      = "express_configuration"
+  organization_require_behavior = "post_login_prompt"
+}
+resource "auth0_client_credentials" "client_creds" {
+  client_id             = auth0_client.my_client.id
+  authentication_method = "private_key_jwt"
+
+  private_key_jwt {
+    credentials {
+      name            = "Test Credential - {{.testName}}"
+      credential_type = "public_key"
+      pem             = <<-EOT
+        -----BEGIN PUBLIC KEY-----
+        MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAua6LXMfgDE/tDdkOL1Oe
+        3oWUwg1r4dSTg9L7RCcI5hItUzmkVofHtWN0H4CH2lm2ANmaJUsnhzctYowYW2+R
+        tHvU9afTmtbdhpy993972hUqZSYLsE3iGziphYkOKVsqq38+VRH3TNg93zSLoRao
+        JnTTkMXseVqiyqYRmFN8+gQQoEclHSGPUWQG5XMZ+hhuXeFyo+Yw/qbZWca/6/2I
+        3rsca9jXR1alhxhHrXrg8N4Dm3gBgGbmiht6YYYT2Tyl1OqB9+iOI/9D7dfoCF6X
+        AWJXRE454cmC8k8oucpjZVpflA+ocKshwPDR6YTLQYbXYiaWxEoaz0QGUErNQBnG
+        I+sr9jDY3ua/s6HF6h0qyi/HVZH4wx+m4CtOfJoYTjrGBbaRszzUxhtSN2/MhXDu
+        +a35q9/2zcu/3fjkkfVvGUt+NyyiYOKQ9vsJC1g/xxdUWtowjNwjfZE2zcG4usi8
+        r38Bp0lmiipAsMLduZM/D5dFXkRdWCBNDfULmmg/4nv2wwjbjQuLemAMh7mmrztW
+        i/85WMnjKQZT8NqS43pmgyIzg1gK1neMqdS90YmQ/PvJ36qALxCs245w1JpN9BAL
+        JbwxCg/dbmKT7PalfWrksx9hGcJxtGqebldaOpw+5GVIPxxtC1C0gVr9BKeiDS3f
+        aibASY5pIRiKENmbZELDtucCAwEAAQ==
+        -----END PUBLIC KEY-----
+      EOT
+    }
+  }
+}
+`
+
+func TestAccClientExpressApp(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientExpressAppConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Express App - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "express_configuration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "post_login_prompt"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.0.pem"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientExpressConfigurationConfig = `
+resource "auth0_client" "oin_source" {
+  name     = "OIN Express Config Client - {{.testName}}"
+  app_type = "express_configuration"
+}
+
+resource "auth0_user_attribute_profile" "profile" {
+
+  name = "Acceptance Test - User Attribute Profile - {{.testName}}"
+
+  user_id {
+    oidc_mapping = "sub"
+    saml_mapping = ["urn:oid:0.9.2342.19200300.100.1.1"]
+    scim_mapping = "userName"
+  }
+
+  user_attributes {
+    name             = "email"
+    description      = "User's email address"
+    label            = "Email"
+    profile_required = true
+    auth0_mapping    = "email"
+
+    oidc_mapping {
+      mapping      = "email"
+      display_name = "Email Address"
+    }
+
+    saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+    scim_mapping = "emails[primary eq true].value"
+  }
+}
+
+resource "auth0_client" "my_client" {
+  depends_on = [auth0_client.oin_source,auth0_user_attribute_profile.profile]
+  name     = "Acceptance Test - Main Client - {{.testName}}"
+  app_type = "regular_web"
+
+  express_configuration {
+    okta_oin_client_id          = auth0_client.oin_source.id
+    connection_profile_id       = "cop_1cu7hYRotxr9BYXXwLH14g"
+    initiate_login_uri_template = "https://example.com/login?org={organization_name}"
+    admin_login_domain          = "admin.example.com"
+    enable_client               = true
+    enable_organization         = true
+    user_attribute_profile_id   = auth0_user_attribute_profile.profile.id
+  }
+}
+`
+
+func TestAccClientExpressAppConfiguration(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientExpressConfigurationConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					// OIN source client.
+					resource.TestCheckResourceAttrSet("auth0_client.oin_source", "client_id"),
+					resource.TestCheckResourceAttr("auth0_client.oin_source", "app_type", "express_configuration"),
+
+					// User attribute profile.
+					resource.TestCheckResourceAttrSet("auth0_user_attribute_profile.profile", "id"),
+					resource.TestCheckResourceAttr("auth0_user_attribute_profile.profile", "user_attributes.0.name", "email"),
+
+					// Main app.
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "regular_web"),
+
+					// Express Configuration.
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.connection_profile_id", "cop_1cu7hYRotxr9BYXXwLH14g"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.initiate_login_uri_template", "https://example.com/login?org={organization_name}"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.admin_login_domain", "admin.example.com"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.enable_client", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.enable_organization", "true"),
+
+					// The OIN client should match.
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"express_configuration.0.okta_oin_client_id",
+						"auth0_client.oin_source",
+						"client_id",
+					),
+
+					// The user attribute profile should match.
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"express_configuration.0.user_attribute_profile_id",
+						"auth0_user_attribute_profile.profile",
+						"id",
+					),
 				),
 			},
 		},

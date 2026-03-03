@@ -2,13 +2,21 @@ package selfserviceprofile
 
 import (
 	"context"
+	"net/http"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/go-auth0/management"
+
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+)
+
+var (
+	allowedStrategies = []string{"oidc", "samlp", "waad", "google-apps", "adfs", "okta", "keycloak-samlp", "pingfederate", "auth0-samlp", "okta-samlp"}
 )
 
 // NewResource will return a new auth0_self_service_profile resource.
@@ -35,13 +43,20 @@ func NewResource() *schema.Resource {
 				ValidateFunc: validation.StringLenBetween(1, 140),
 				Description:  "The description of the self-service Profile",
 			},
+			"user_attribute_profile_id": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"user_attributes"},
+				Description:   "The ID of the user attribute profile to use for this self-service profile. Cannot be used with user_attributes.",
+			},
 			"user_attributes": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 20,
+				Type:          schema.TypeList,
+				Optional:      true,
+				MaxItems:      20,
+				ConflictsWith: []string{"user_attribute_profile_id"},
 				Description: "This array stores the mapping information that will be shown to the user during " +
 					"the SS-SSO flow. The user will be prompted to map the attributes on their identity provider " +
-					"to ensure the specified attributes get passed to Auth0.",
+					"to ensure the specified attributes get passed to Auth0. Cannot be used with user_attribute_profile_id.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -102,13 +117,11 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Schema{
-					Type: schema.TypeString,
-					ValidateFunc: validation.StringInSlice([]string{
-						"oidc", "samlp", "waad", "google-apps",
-						"adfs", "okta", "keycloak-samlp", "pingfederate"},
-						false),
+					Type:         schema.TypeString,
+					ValidateFunc: validation.StringInSlice(allowedStrategies, false),
 				},
-				Description: "List of IdP strategies that will be shown to users during the Self-Service SSO flow.",
+				Description: "List of IdP strategies that will be shown to users during the Self-Service SSO flow." +
+					" Valid values are: " + strings.Join(allowedStrategies, ", ") + ".",
 			},
 			"created_at": {
 				Type:        schema.TypeString,
@@ -124,6 +137,30 @@ func NewResource() *schema.Resource {
 	}
 }
 
+func fixMutuallyExclusiveFields(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	// Check if we need to explicitly clear user_attributes when using user_attribute_profile_id.
+	if data.Get("user_attribute_profile_id").(string) != "" {
+		// Clear user_attributes by setting it to null.
+		if err := api.Request(ctx, http.MethodPatch, api.URI("self-service-profiles", data.Id()), map[string]interface{}{
+			"user_attributes": nil,
+		}); err != nil {
+			return err
+		}
+	}
+
+	// Check if we need to explicitly clear user_attribute_profile_id when using user_attributes.
+	if userAttrs := data.Get("user_attributes").([]interface{}); len(userAttrs) > 0 {
+		// Clear user_attribute_profile_id by setting it to null.
+		if err := api.Request(ctx, http.MethodPatch, api.URI("self-service-profiles", data.Id()), map[string]interface{}{
+			"user_attribute_profile_id": nil,
+		}); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func createSelfServiceProfile(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
@@ -134,6 +171,11 @@ func createSelfServiceProfile(ctx context.Context, data *schema.ResourceData, me
 	}
 
 	data.SetId(ssp.GetID())
+
+	// Fix mutually exclusive fields by explicitly clearing the unused one.
+	if err := fixMutuallyExclusiveFields(ctx, data, api); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return readSelfServiceProfile(ctx, data, meta)
 }
@@ -151,6 +193,11 @@ func readSelfServiceProfile(ctx context.Context, data *schema.ResourceData, meta
 
 func updateSelfServiceProfile(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+
+	// First, clear any conflicting fields before the main update.
+	if err := fixMutuallyExclusiveFields(ctx, data, api); err != nil {
+		return diag.FromErr(err)
+	}
 
 	ssp := expandSelfServiceProfiles(data)
 

@@ -129,6 +129,35 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Version ID of the action. This value is available if `deploy` is set to true.",
 			},
+			"modules": {
+				Type:        schema.TypeSet,
+				Optional:    true,
+				Description: "List of action modules and their versions that this action depends on.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"module_id": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The unique ID of the module.",
+						},
+						"module_version_id": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The ID of the specific module version to use.",
+						},
+						"module_name": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The name of the module.",
+						},
+						"module_version_number": {
+							Type:        schema.TypeInt,
+							Computed:    true,
+							Description: "The version number of the module.",
+						},
+					},
+				},
+			},
 		},
 	}
 }

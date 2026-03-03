@@ -32,6 +32,8 @@ data "auth0_connection" "some-connection-by-id" {
 
 ### Read-Only
 
+- `authentication` (List of Object) Configure the purpose of a connection to be used for authentication during login. (see [below for nested schema](#nestedatt--authentication))
+- `connected_accounts` (List of Object) Configure the purpose of a connection to be used for connected accounts and Token Vault. (see [below for nested schema](#nestedatt--connected_accounts))
 - `display_name` (String) Name used in login screen.
 - `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
 - `id` (String) The ID of this resource.
@@ -42,11 +44,28 @@ data "auth0_connection" "some-connection-by-id" {
 - `show_as_button` (Boolean) Display connection as a button. Only available on enterprise connections.
 - `strategy` (String) Type of the connection, which indicates the identity provider.
 
+<a id="nestedatt--authentication"></a>
+### Nested Schema for `authentication`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+<a id="nestedatt--connected_accounts"></a>
+### Nested Schema for `connected_accounts`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
 <a id="nestedatt--options"></a>
 ### Nested Schema for `options`
 
 Read-Only:
 
+- `access_token_url` (String)
 - `adfs_server` (String)
 - `allowed_audiences` (Set of String)
 - `api_enable_users` (Boolean)
@@ -62,7 +81,10 @@ Read-Only:
 - `community_base_url` (String)
 - `configuration` (Map of String)
 - `connection_settings` (List of Object) (see [below for nested schema](#nestedobjatt--options--connection_settings))
+- `consumer_key` (String)
+- `consumer_secret` (String)
 - `custom_headers` (Set of Object) (see [below for nested schema](#nestedobjatt--options--custom_headers))
+- `custom_password_hash` (List of Object) (see [below for nested schema](#nestedobjatt--options--custom_password_hash))
 - `custom_scripts` (Map of String)
 - `debug` (Boolean)
 - `decryption_key` (List of Object) (see [below for nested schema](#nestedobjatt--options--decryption_key))
@@ -74,6 +96,7 @@ Read-Only:
 - `discovery_url` (String)
 - `domain` (String)
 - `domain_aliases` (Set of String)
+- `email` (Boolean)
 - `enable_script_context` (Boolean)
 - `enabled_database_customization` (Boolean)
 - `entity_id` (String)
@@ -114,15 +137,19 @@ Read-Only:
 - `provider` (String)
 - `realm_fallback` (Boolean)
 - `request_template` (String)
+- `request_token_url` (String)
 - `requires_username` (Boolean)
 - `scopes` (Set of String)
 - `scripts` (Map of String)
+- `send_back_channel_nonce` (Boolean)
+- `session_key` (String)
 - `set_user_root_attributes` (String)
 - `should_trust_email_verified_connection` (String)
 - `sign_in_endpoint` (String)
 - `sign_out_endpoint` (String)
 - `sign_saml_request` (Boolean)
 - `signature_algorithm` (String)
+- `signature_method` (String)
 - `signing_cert` (String)
 - `signing_key` (List of Object) (see [below for nested schema](#nestedobjatt--options--signing_key))
 - `strategy_version` (Number)
@@ -141,7 +168,9 @@ Read-Only:
 - `upstream_params` (String)
 - `use_cert_auth` (Boolean)
 - `use_kerberos` (Boolean)
+- `use_oauth_spec_scope` (Boolean)
 - `use_wsfed` (Boolean)
+- `user_authorization_url` (String)
 - `user_id_attribute` (String)
 - `userinfo_endpoint` (String)
 - `validation` (List of Object) (see [below for nested schema](#nestedobjatt--options--validation))
@@ -175,6 +204,7 @@ Read-Only:
 - `identifier` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email--identifier))
 - `profile_required` (Boolean)
 - `signup` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email--signup))
+- `unique` (Boolean)
 - `verification_method` (String)
 
 <a id="nestedobjatt--options--attributes--email--identifier"></a>
@@ -183,6 +213,7 @@ Read-Only:
 Read-Only:
 
 - `active` (Boolean)
+- `default_method` (String)
 
 
 <a id="nestedobjatt--options--attributes--email--signup"></a>
@@ -218,6 +249,7 @@ Read-Only:
 Read-Only:
 
 - `active` (Boolean)
+- `default_method` (String)
 
 
 <a id="nestedobjatt--options--attributes--phone_number--signup"></a>
@@ -254,6 +286,7 @@ Read-Only:
 Read-Only:
 
 - `active` (Boolean)
+- `default_method` (String)
 
 
 <a id="nestedobjatt--options--attributes--username--signup"></a>
@@ -290,8 +323,18 @@ Read-Only:
 
 Read-Only:
 
+- `email_otp` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--email_otp))
 - `passkey` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--passkey))
 - `password` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--password))
+- `phone_otp` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--phone_otp))
+
+<a id="nestedobjatt--options--authentication_methods--email_otp"></a>
+### Nested Schema for `options.authentication_methods.email_otp`
+
+Read-Only:
+
+- `enabled` (Boolean)
+
 
 <a id="nestedobjatt--options--authentication_methods--passkey"></a>
 ### Nested Schema for `options.authentication_methods.passkey`
@@ -303,6 +346,14 @@ Read-Only:
 
 <a id="nestedobjatt--options--authentication_methods--password"></a>
 ### Nested Schema for `options.authentication_methods.password`
+
+Read-Only:
+
+- `enabled` (Boolean)
+
+
+<a id="nestedobjatt--options--authentication_methods--phone_otp"></a>
+### Nested Schema for `options.authentication_methods.phone_otp`
 
 Read-Only:
 
@@ -325,6 +376,14 @@ Read-Only:
 
 - `header` (String)
 - `value` (String)
+
+
+<a id="nestedobjatt--options--custom_password_hash"></a>
+### Nested Schema for `options.custom_password_hash`
+
+Read-Only:
+
+- `action_id` (String)
 
 
 <a id="nestedobjatt--options--decryption_key"></a>

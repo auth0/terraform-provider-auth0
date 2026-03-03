@@ -23,6 +23,10 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "metadata.key1", "foo"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "metadata.key2", "bar"),
 					resource.TestCheckNoResourceAttr("auth0_connection.my_connection", "show_as_button"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "authentication.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "authentication.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "connected_accounts.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "connected_accounts.0.active", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_policy", "fair"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_no_personal_info.0.enable", "true"),
@@ -76,6 +80,12 @@ resource "auth0_connection" "my_connection" {
 	metadata = {
 		key1 = "foo"
 		key2 = "bar"
+	}
+	authentication {
+		active = true
+	}
+	connected_accounts {
+		active = true
 	}
 	options {
 		strategy_version = 2
@@ -190,6 +200,7 @@ resource "auth0_connection" "my_connection" {
 		{{.requires_username}}
 		{{.validation}}
 		{{.attributes}}
+		{{.authentication_methods}}
 		brute_force_protection = true
 	}
 }
@@ -204,6 +215,7 @@ func TestAccConnectionOptionsAttrPhoneNumber(t *testing.T) {
 			phone_number {
 				identifier {
 					active = true
+					default_method = "password"
 				}
 				profile_required = true
 				signup {
@@ -212,6 +224,20 @@ func TestAccConnectionOptionsAttrPhoneNumber(t *testing.T) {
 						active = false
 					}
 				}
+			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
 			}
 		}`}
 	acctest.Test(t, resource.TestCase{
@@ -227,6 +253,10 @@ func TestAccConnectionOptionsAttrPhoneNumber(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.profile_required", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.signup.0.status", "required"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.signup.0.verification.0.active", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.email_otp.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.phone_otp.0.enabled", "true"),
 				),
 			},
 			{
@@ -253,6 +283,7 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 			email {
 				identifier {
 					active = true
+					default_method = "email_otp"
 				}
 				profile_required = true
 				verification_method = "otp"
@@ -262,6 +293,20 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 						active = false
 					}
 				}
+			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = true
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = false
 			}
 		}`}
 	acctest.Test(t, resource.TestCase{
@@ -278,6 +323,10 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.verification_method", "otp"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.status", "required"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.verification.0.active", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.email_otp.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.phone_otp.0.enabled", "false"),
 				),
 			},
 			{
@@ -304,6 +353,7 @@ func TestAccConnectionOptionsAttrUserName(t *testing.T) {
 			username {
 				identifier {
 					active = true
+					default_method = "password"
 				}
 				profile_required = true
 				signup {
@@ -318,6 +368,20 @@ func TestAccConnectionOptionsAttrUserName(t *testing.T) {
 					}
 				}
 			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
+			}
 		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -329,12 +393,17 @@ func TestAccConnectionOptionsAttrUserName(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.identifier.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.identifier.0.default_method", "password"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.profile_required", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.signup.0.status", "required"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.min_length", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.max_length", "3"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.allowed_types.0.email", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.allowed_types.0.phone_number", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.email_otp.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.phone_otp.0.enabled", "true"),
 				),
 			},
 			{
@@ -366,6 +435,20 @@ func TestAccConnectionOptionsAttrUserNameNegative(t *testing.T) {
 				signup {
 					status = "required"
 				}
+			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
 			}
 		}`}
 	acctest.Test(t, resource.TestCase{
@@ -417,6 +500,20 @@ func TestAccConnectionOptionsAttrNoActiveNegative(t *testing.T) {
 					status = "required"
 				}
 			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
+			}
 		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -460,6 +557,20 @@ func TestAccConnectionOptionsAttrSetValidationNegative(t *testing.T) {
 					status = "required"
 				}
 			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
+			}
 		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -488,6 +599,20 @@ func TestAccConnectionOptionsAttrInactiveSignUpNegative(t *testing.T) {
 						active = false
 					}
 				}
+			}
+		}`,
+		"authentication_methods": `authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+			email_otp {
+				enabled = true
+			}
+			phone_otp {
+				enabled = true
 			}
 		}`}
 	acctest.Test(t, resource.TestCase{
@@ -878,6 +1003,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.domain_aliases.*", "example.com"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.type", "back_channel"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.send_back_channel_nonce", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.issuer", "https://api.login.yahoo.com"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.jwks_uri", "https://api.login.yahoo.com/openid/v1/certs"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.discovery_url", "https://api.login.yahoo.com/.well-known/openid-configuration"),
@@ -968,6 +1094,7 @@ resource "auth0_connection" "oidc" {
 			"api.example.com"
 		]
 		type                     = "back_channel"
+		send_back_channel_nonce  = true
 		issuer                   = "https://api.login.yahoo.com"
 		jwks_uri                 = "https://api.login.yahoo.com/openid/v1/certs"
 		discovery_url            = "https://api.login.yahoo.com/.well-known/openid-configuration"
@@ -1304,6 +1431,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.0.value", "foo"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.header", "foo"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.value", "bar"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.use_oauth_spec_scope", "true"),
 				),
 			},
 		},
@@ -1361,6 +1489,7 @@ resource "auth0_connection" "oauth2" {
             header = "foo"
             value  = "bar"
         }
+		use_oauth_spec_scope = true
 	}
 }
 `
@@ -1961,6 +2090,70 @@ resource "auth0_connection" "linkedin" {
 		client_secret = "client_secret_update"
 		strategy_version = 2
 		scopes = [ "basic_profile", "profile" ]
+	}
+}
+`
+
+func TestAccConnectionLine(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionLineConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.line", "name", "line"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "strategy", "line"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.client_id", ""),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.client_secret", ""),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.scopes.#", "3"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.line", "options.0.scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.line", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.line", "options.0.scopes.*", "email"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.email", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.set_user_root_attributes", "on_each_login"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionLineConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.client_id", ""),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.client_secret", ""),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.line", "options.0.scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.line", "options.0.scopes.*", "openid"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.email", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.line", "options.0.set_user_root_attributes", "on_first_login"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionLineConfig = `
+resource "auth0_connection" "line" {
+	name = "line"
+	is_domain_connection = false
+	strategy = "line"
+	options {
+		client_id = ""
+		client_secret = ""
+		scopes = ["profile", "openid", "email"]
+		email = true
+		set_user_root_attributes = "on_each_login"
+	}
+}
+`
+
+const testAccConnectionLineConfigUpdate = `
+resource "auth0_connection" "line" {
+	name = "line"
+	is_domain_connection = false
+	strategy = "line"
+	options {
+		client_id = ""
+		client_secret = ""
+		scopes = ["profile", "openid"]
+		email = false
+		set_user_root_attributes = "on_first_login"
 	}
 }
 `
@@ -2655,3 +2848,68 @@ EOF
 	}
 }
 `
+
+const testAccConnectionUniversalPasswordHash = `
+resource "auth0_action" "action_hash" {
+	name = "PasswordHashAction"
+	deploy = true
+	runtime = "node22"
+	supported_triggers {
+		id = "password-hash-migration"
+		version = "v1"
+	}
+	code = <<-EOT
+	exports.onContinuePostLogin = async (event, api) => {
+		console.log("foo")
+	};"
+	EOT
+}
+
+resource "auth0_connection" "PasswordHash" {
+	name = "PasswordHashConn"
+	strategy = "auth0"
+	options {
+		custom_password_hash {
+			action_id = auth0_action.action_hash.id
+		}
+	}
+}
+`
+
+func TestAccConnectionPasswordHash(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccConnectionUniversalPasswordHash,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(
+						"auth0_action.action_hash",
+						"name",
+						"PasswordHashAction",
+					),
+					resource.TestCheckResourceAttr("auth0_action.action_hash", "deploy", "true"),
+					resource.TestCheckResourceAttr("auth0_action.action_hash", "runtime", "node22"),
+					resource.TestCheckResourceAttr("auth0_action.action_hash", "supported_triggers.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.action_hash", "supported_triggers.0.id", "password-hash-migration"),
+					resource.TestCheckResourceAttr("auth0_action.action_hash", "supported_triggers.0.version", "v1"),
+					resource.TestCheckResourceAttrSet("auth0_action.action_hash", "code"),
+					resource.TestCheckResourceAttr(
+						"auth0_connection.PasswordHash",
+						"name",
+						"PasswordHashConn",
+					),
+					resource.TestCheckResourceAttr("auth0_connection.PasswordHash", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.PasswordHash", "options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.PasswordHash", "options.0.custom_password_hash.#", "1"),
+					resource.TestCheckResourceAttrSet("auth0_connection.PasswordHash", "options.0.custom_password_hash.0.action_id"),
+					resource.TestCheckResourceAttrPair(
+						"auth0_connection.PasswordHash",
+						"options.0.custom_password_hash.0.action_id",
+						"auth0_action.action_hash",
+						"id",
+					),
+				),
+			},
+		},
+	})
+}

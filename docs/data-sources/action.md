@@ -35,6 +35,7 @@ data "auth0_action" "my_action" {
 - `code` (String) The source code of the action.
 - `dependencies` (Set of Object) List of third party npm modules, and their versions, that this action depends on. (see [below for nested schema](#nestedatt--dependencies))
 - `deploy` (Boolean) Deploying an action will create a new immutable version of the action. If the action is currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately.
+- `modules` (Set of Object) List of action modules and their versions that this action depends on. (see [below for nested schema](#nestedatt--modules))
 - `runtime` (String) The Node runtime. Possible values are: `node12`, `node16` (not recommended), `node18`, `node22`
 - `secrets` (Set of Object) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. If the secret block is edited, the whole object is re-provisioned. (see [below for nested schema](#nestedatt--secrets))
 - `supported_triggers` (List of Object) List of triggers that this action supports. At this time, an action can only target a single trigger at a time. Read [Retrieving the set of triggers available within actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/action_triggers) to retrieve the latest trigger versions supported. (see [below for nested schema](#nestedatt--supported_triggers))
@@ -47,6 +48,17 @@ Read-Only:
 
 - `name` (String)
 - `version` (String)
+
+
+<a id="nestedatt--modules"></a>
+### Nested Schema for `modules`
+
+Read-Only:
+
+- `module_id` (String)
+- `module_name` (String)
+- `module_version_id` (String)
+- `module_version_number` (Number)
 
 
 <a id="nestedatt--secrets"></a>

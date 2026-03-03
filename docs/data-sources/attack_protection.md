@@ -19,10 +19,25 @@ data "auth0_attack_protection" "my_protection" {}
 
 ### Read-Only
 
+- `bot_detection` (List of Object) Bot detection configuration to identify and prevent automated threats. (see [below for nested schema](#nestedatt--bot_detection))
 - `breached_password_detection` (List of Object) Breached password detection protects your applications from bad actors logging in with stolen credentials. (see [below for nested schema](#nestedatt--breached_password_detection))
 - `brute_force_protection` (List of Object) Brute-force protection safeguards against a single IP address attacking a single user account. (see [below for nested schema](#nestedatt--brute_force_protection))
+- `captcha` (List of Object) CAPTCHA configuration for attack protection. (see [below for nested schema](#nestedatt--captcha))
 - `id` (String) The ID of this resource.
 - `suspicious_ip_throttling` (List of Object) Suspicious IP throttling blocks traffic from any IP address that rapidly attempts too many logins or signups. (see [below for nested schema](#nestedatt--suspicious_ip_throttling))
+
+<a id="nestedatt--bot_detection"></a>
+### Nested Schema for `bot_detection`
+
+Read-Only:
+
+- `allowlist` (Set of String)
+- `bot_detection_level` (String)
+- `challenge_password_policy` (String)
+- `challenge_password_reset_policy` (String)
+- `challenge_passwordless_policy` (String)
+- `monitoring_mode_enabled` (Boolean)
+
 
 <a id="nestedatt--breached_password_detection"></a>
 ### Nested Schema for `breached_password_detection`
@@ -63,6 +78,77 @@ Read-Only:
 - `max_attempts` (Number)
 - `mode` (String)
 - `shields` (Set of String)
+
+
+<a id="nestedatt--captcha"></a>
+### Nested Schema for `captcha`
+
+Read-Only:
+
+- `active_provider_id` (String)
+- `arkose` (List of Object) (see [below for nested schema](#nestedobjatt--captcha--arkose))
+- `auth_challenge` (List of Object) (see [below for nested schema](#nestedobjatt--captcha--auth_challenge))
+- `friendly_captcha` (List of Object) (see [below for nested schema](#nestedobjatt--captcha--friendly_captcha))
+- `hcaptcha` (List of Object) (see [below for nested schema](#nestedobjatt--captcha--hcaptcha))
+- `recaptcha_enterprise` (List of Object) (see [below for nested schema](#nestedobjatt--captcha--recaptcha_enterprise))
+- `recaptcha_v2` (List of Object) (see [below for nested schema](#nestedobjatt--captcha--recaptcha_v2))
+
+<a id="nestedobjatt--captcha--arkose"></a>
+### Nested Schema for `captcha.arkose`
+
+Read-Only:
+
+- `client_subdomain` (String)
+- `fail_open` (Boolean)
+- `secret` (String)
+- `site_key` (String)
+- `verify_subdomain` (String)
+
+
+<a id="nestedobjatt--captcha--auth_challenge"></a>
+### Nested Schema for `captcha.auth_challenge`
+
+Read-Only:
+
+- `fail_open` (Boolean)
+
+
+<a id="nestedobjatt--captcha--friendly_captcha"></a>
+### Nested Schema for `captcha.friendly_captcha`
+
+Read-Only:
+
+- `secret` (String)
+- `site_key` (String)
+
+
+<a id="nestedobjatt--captcha--hcaptcha"></a>
+### Nested Schema for `captcha.hcaptcha`
+
+Read-Only:
+
+- `secret` (String)
+- `site_key` (String)
+
+
+<a id="nestedobjatt--captcha--recaptcha_enterprise"></a>
+### Nested Schema for `captcha.recaptcha_enterprise`
+
+Read-Only:
+
+- `api_key` (String)
+- `project_id` (String)
+- `site_key` (String)
+
+
+<a id="nestedobjatt--captcha--recaptcha_v2"></a>
+### Nested Schema for `captcha.recaptcha_v2`
+
+Read-Only:
+
+- `secret` (String)
+- `site_key` (String)
+
 
 
 <a id="nestedatt--suspicious_ip_throttling"></a>

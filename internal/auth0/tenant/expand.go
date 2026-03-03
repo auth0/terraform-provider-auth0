@@ -13,8 +13,10 @@ import (
 func expandTenant(data *schema.ResourceData) *management.Tenant {
 	config := data.GetRawConfig()
 
-	sessionLifetime := data.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
-	idleSessionLifetime := data.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
+	sessionLifetime := data.Get("session_lifetime").(float64)                             // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
+	idleSessionLifetime := data.Get("idle_session_lifetime").(float64)                    // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
+	ephemeralSessionLifetime := data.Get("ephemeral_session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
+	idleEphemeralSessionLifetime := data.Get("idle_ephemeral_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
 
 	tenant := management.Tenant{
 		DefaultAudience:                      value.String(config.GetAttr("default_audience")),
@@ -26,6 +28,7 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		SupportURL:                           value.String(config.GetAttr("support_url")),
 		AllowedLogoutURLs:                    value.Strings(config.GetAttr("allowed_logout_urls")),
 		SessionLifetime:                      &sessionLifetime,
+		EphemeralSessionLifetime:             &ephemeralSessionLifetime,
 		SandboxVersion:                       value.String(config.GetAttr("sandbox_version")),
 		EnabledLocales:                       value.Strings(config.GetAttr("enabled_locales")),
 		Flags:                                expandTenantFlags(config.GetAttr("flags")),
@@ -39,10 +42,14 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		MTLS:                                 expandMTLSConfiguration(data),
 		ErrorPage:                            expandErrorPageConfiguration(data),
 		DefaultTokenQuota:                    expandDefaultTokenQuota(data),
+		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
 		tenant.IdleSessionLifetime = &idleSessionLifetime
+	}
+	if data.IsNewResource() || data.HasChange("idle_ephemeral_session_lifetime") {
+		tenant.IdleEphemeralSessionLifetime = &idleEphemeralSessionLifetime
 	}
 
 	return &tenant
@@ -274,6 +281,7 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 		"acr_values_supported": isACRValuesSupportedNull,
 		"mtls":                 isMTLSConfigurationNull,
 		"error_page":           isErrorPageConfigurationNull,
+		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -357,4 +365,17 @@ func isDefaultTokenQuotaNull(data *schema.ResourceData) bool {
 	})
 
 	return !hasClients && !hasOrgs
+}
+
+func isSkipNonVerifiableCallbackURIConfirmationPromptNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig()
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	return rawConfig.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
 }

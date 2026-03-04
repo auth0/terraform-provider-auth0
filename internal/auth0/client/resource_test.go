@@ -2961,6 +2961,44 @@ func TestAccClientAsyncApprovalNotificationChannels(t *testing.T) {
 	})
 }
 
+const testAccClientWithOrganizationDiscoveryMethods = `
+resource "auth0_client" "my_client" {
+	name                          = "Acceptance Test - Org Discovery Methods - {{.testName}}"
+	organization_discovery_methods = [
+		"organization_name"
+	]
+}
+`
+
+const testAccClientWithEmptyOrganizationDiscoveryMethodsUpdate = `
+resource "auth0_client" "my_client" {
+	name                          = "Acceptance Test - Org Discovery Methods - {{.testName}}"
+	organization_discovery_methods = []
+}
+`
+
+func TestAccClientOrganizationDiscoveryMethods(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientWithOrganizationDiscoveryMethods, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Org Discovery Methods - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_discovery_methods.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_discovery_methods.0", "organization_name"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientWithEmptyOrganizationDiscoveryMethodsUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Org Discovery Methods - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_discovery_methods.#", "0"),
+				),
+			},
+		},
+	})
+}
+
 const testAccClientExpressAppConfig = `
 resource "auth0_client" "my_client" {
   name                          = "Acceptance Test - Express App - {{.testName}}"

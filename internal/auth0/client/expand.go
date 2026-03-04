@@ -1125,6 +1125,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
 		"organization_discovery_methods":                       isOrganizationDiscoveryMethodsNull,
 		"token_exchange":                                       isTokenExchangeNull,
+		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1291,7 +1292,14 @@ func isOrganizationDiscoveryMethodsNull(data *schema.ResourceData) bool {
 	if !data.IsNewResource() && !data.HasChange("organization_discovery_methods") {
 		return false
 	}
-	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("organization_discovery_methods").IsNull()
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("organization_discovery_methods").IsNull() || data.GetRawConfig().GetAttr("organization_discovery_methods").LengthInt() == 0
+}
+
+func isAsyncApprovalNotificationChannelsNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("async_approval_notification_channels") {
+		return false
+	}
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("async_approval_notification_channels").IsNull() || data.GetRawConfig().GetAttr("async_approval_notification_channels").LengthInt() == 0
 }
 
 func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressConfiguration {

@@ -143,10 +143,8 @@ func NewResource() *schema.Resource {
 					}, false),
 				},
 				Optional: true,
-				Computed: true,
 				Description: "List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. " +
-					"Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated. " +
-					"Defaults to `[\"guardian-push\"]` if not specified.",
+					"Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated. ",
 			},
 			"organization_usage": {
 				Type:     schema.TypeString,

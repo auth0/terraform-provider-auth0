@@ -29,10 +29,8 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		AllowedOrigins:                     value.Strings(config.GetAttr("allowed_origins")),
 		AllowedClients:                     value.Strings(config.GetAttr("allowed_clients")),
 		GrantTypes:                         value.Strings(config.GetAttr("grant_types")),
-		AsyncApprovalNotificationChannels:  value.Strings(config.GetAttr("async_approval_notification_channels")),
 		OrganizationUsage:                  value.String(config.GetAttr("organization_usage")),
 		OrganizationRequireBehavior:        value.String(config.GetAttr("organization_require_behavior")),
-		OrganizationDiscoveryMethods:       value.Strings(config.GetAttr("organization_discovery_methods")),
 		WebOrigins:                         value.Strings(config.GetAttr("web_origins")),
 		RequirePushedAuthorizationRequests: value.Bool(config.GetAttr("require_pushed_authorization_requests")),
 		SSO:                                value.Bool(config.GetAttr("sso")),
@@ -63,6 +61,18 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		TokenQuota:               commons.ExpandTokenQuota(config.GetAttr("token_quota")),
 		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 		ExpressConfiguration:                           expandExpressConfiguration(data),
+	}
+
+	// Ignore empty array to prevent API errors.
+	if asyncApproval := config.GetAttr("async_approval_notification_channels"); !asyncApproval.IsNull() {
+		if asyncValues := value.Strings(asyncApproval); asyncValues != nil && len(*asyncValues) > 0 {
+			client.AsyncApprovalNotificationChannels = asyncValues
+		}
+	}
+	if orgDiscovery := config.GetAttr("organization_discovery_methods"); !orgDiscovery.IsNull() {
+		if orgDiscoveryValues := value.Strings(orgDiscovery); orgDiscoveryValues != nil && len(*orgDiscoveryValues) > 0 {
+			client.OrganizationDiscoveryMethods = orgDiscoveryValues
+		}
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
@@ -1115,6 +1125,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
 		"organization_discovery_methods":                       isOrganizationDiscoveryMethodsNull,
 		"token_exchange":                                       isTokenExchangeNull,
+		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1281,7 +1292,14 @@ func isOrganizationDiscoveryMethodsNull(data *schema.ResourceData) bool {
 	if !data.IsNewResource() && !data.HasChange("organization_discovery_methods") {
 		return false
 	}
-	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("organization_discovery_methods").IsNull()
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("organization_discovery_methods").IsNull() || data.GetRawConfig().GetAttr("organization_discovery_methods").LengthInt() == 0
+}
+
+func isAsyncApprovalNotificationChannelsNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("async_approval_notification_channels") {
+		return false
+	}
+	return data.GetRawConfig().IsNull() || data.GetRawConfig().GetAttr("async_approval_notification_channels").IsNull() || data.GetRawConfig().GetAttr("async_approval_notification_channels").LengthInt() == 0
 }
 
 func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressConfiguration {

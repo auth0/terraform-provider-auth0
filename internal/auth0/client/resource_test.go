@@ -2923,6 +2923,13 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccClientWithoutAsyncApprovalChannelsUpdate = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
+	app_type = "non_interactive"
+}
+`
+
 const testAccClientWithAsyncApprovalChannelsUpdate = `
 resource "auth0_client" "my_client" {
 	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
@@ -2932,6 +2939,15 @@ resource "auth0_client" "my_client" {
 		"email",
 		"guardian-push"
 	]
+}
+`
+
+const testAccClientWithEmptyAsyncApprovalChannelsUpdate = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
+	app_type = "non_interactive"
+	
+	async_approval_notification_channels = []
 }
 `
 
@@ -2948,6 +2964,14 @@ func TestAccClientAsyncApprovalNotificationChannels(t *testing.T) {
 				),
 			},
 			{
+				Config: acctest.ParseTestName(testAccClientWithoutAsyncApprovalChannelsUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "0"),
+				),
+			},
+			{
 				Config: acctest.ParseTestName(testAccClientWithAsyncApprovalChannelsUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
@@ -2955,6 +2979,52 @@ func TestAccClientAsyncApprovalNotificationChannels(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "2"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "email"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.1", "guardian-push"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientWithEmptyAsyncApprovalChannelsUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientWithOrganizationDiscoveryMethods = `
+resource "auth0_client" "my_client" {
+	name                          = "Acceptance Test - Org Discovery Methods - {{.testName}}"
+	organization_discovery_methods = [
+		"organization_name"
+	]
+}
+`
+
+const testAccClientWithEmptyOrganizationDiscoveryMethodsUpdate = `
+resource "auth0_client" "my_client" {
+	name                          = "Acceptance Test - Org Discovery Methods - {{.testName}}"
+	organization_discovery_methods = []
+}
+`
+
+func TestAccClientOrganizationDiscoveryMethods(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientWithOrganizationDiscoveryMethods, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Org Discovery Methods - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_discovery_methods.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_discovery_methods.0", "organization_name"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientWithEmptyOrganizationDiscoveryMethodsUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Org Discovery Methods - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_discovery_methods.#", "0"),
 				),
 			},
 		},

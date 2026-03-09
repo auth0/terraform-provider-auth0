@@ -50,6 +50,7 @@ resource "auth0_tenant" "my_tenant" {
 	customize_mfa_in_postlogin_action             = false
 	pushed_authorization_requests_supported       = true
 	skip_non_verifiable_callback_uri_confirmation_prompt = false
+	phone_consolidated_experience 		   = true
 
 	flags {
 		disable_clickjack_protection_headers   = true
@@ -186,6 +187,7 @@ resource "auth0_tenant" "my_tenant" {
 	customize_mfa_in_postlogin_action             = true
 	pushed_authorization_requests_supported       = false
 	skip_non_verifiable_callback_uri_confirmation_prompt = true
+	phone_consolidated_experience 		   = false
 
 	flags {
 		enable_public_signup_user_exists_error = true
@@ -352,6 +354,7 @@ func TestAccTenant_Main(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.remove_alg_from_jwks", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "phone_consolidated_experience", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "non-persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "false"),
@@ -386,6 +389,7 @@ func TestAccTenant_Main(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.remove_alg_from_jwks", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "phone_consolidated_experience", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allowed_logout_urls.#", "0"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),

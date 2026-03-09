@@ -73,6 +73,7 @@ resource "auth0_tenant" "my_tenant" {
 - `idle_session_lifetime` (Number) Number of hours during which a session can be inactive before the user must log in again.
 - `mtls` (Block List, Max: 1) Configuration for mTLS. (see [below for nested schema](#nestedblock--mtls))
 - `oidc_logout` (Block List, Max: 1) Settings related to OIDC RP-initiated Logout. (see [below for nested schema](#nestedblock--oidc_logout))
+- `phone_consolidated_experience` (Boolean) When enabled, the tenant-level Phone Provider is used for Multi-Factor Authentication (MFA) and Passwordless phone notifications.
 - `picture_url` (String) URL of logo to be shown for the tenant. Recommended size is 150px x 150px. If no URL is provided, the Auth0 logo will be used.
 - `pushed_authorization_requests_supported` (Boolean) Enable pushed authorization requests.
 - `sandbox_version` (String) Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.

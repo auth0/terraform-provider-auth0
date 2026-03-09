@@ -49,6 +49,8 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.api_behavior", "required"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.signup_behavior", "allow"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.challenge_ui", "both"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.local_enrollment_enabled", "true"),
@@ -193,7 +195,6 @@ resource "auth0_connection" "my_connection" {
 const testAccConnectionOptionAttributesTemplate = `
 resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.testName}}"
-	is_domain_connection = true
 	strategy = "auth0"
 	options {
 		precedence = ["username","email","phone_number"]
@@ -620,6 +621,80 @@ func TestAccConnectionOptionsAttrInactiveSignUpNegative(t *testing.T) {
 			{
 				Config:      acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
 				ExpectError: regexp.MustCompile("attribute phone_number must also be required on signup"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionPasswordAuthenticationBehaviors(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+			email {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+		}`,
+		"authentication_methods": `authentication_methods {
+
+			password {
+				enabled = true
+				api_behavior = "optional"
+				signup_behavior = "allow"
+			}
+		}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.api_behavior", "optional"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.signup_behavior", "allow"),
+				),
+			},
+			{
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, map[string]interface{}{
+					"testName":          t.Name(),
+					"requires_username": `requires_username = false`,
+					"validation":        ``,
+					"attributes": `attributes {
+						email {
+							identifier {
+								active = true
+							}
+							profile_required = true
+							signup {
+								status = "required"
+								verification {
+									active = false
+								}
+							}
+						}
+					}`,
+					"authentication_methods": `authentication_methods {
+						password {
+							enabled = true
+							api_behavior = "required"
+						}
+					}`}),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.api_behavior", "required"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.signup_behavior", "allow"),
+				),
 			},
 		},
 	})

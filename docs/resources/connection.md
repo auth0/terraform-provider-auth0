@@ -999,7 +999,9 @@ Optional:
 
 Optional:
 
+- `api_behavior` (String) Specifies whether password is required or optional when creating users via API. Possible values: "required", "optional". Defaults to "required".
 - `enabled` (Boolean) Enables password authentication
+- `signup_behavior` (String) Specifies whether password is allowed or blocked during signup flows. Possible values: "allow", "block". Defaults to "allow".
 
 
 <a id="nestedblock--options--authentication_methods--phone_otp"></a>

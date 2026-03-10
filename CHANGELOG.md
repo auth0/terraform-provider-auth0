@@ -1,3 +1,13 @@
+## v1.41.0
+
+FEATURES:
+- `resource/auth0_connection` – Add support for configuring api_behavior and signup_behavior under options.password.authentication_methods (EA Only) ([#1494](https://github.com/auth0/terraform-provider-auth0/pull/1494))
+- `resource/auth0_tenant` – Add support for configuring `phone_consolidated_experience` (Unified Phone Experience flag) ([#1495](https://github.com/auth0/terraform-provider-auth0/pull/1495))
+- `resource/auth0_resource_server` – Add support for configuring required_for in DPoP configuration (GA) ([#1487](https://github.com/auth0/terraform-provider-auth0/pull/1487))
+
+BUG FIXES:
+- `resource/auth0_client` – Support empty arrays for `async_approval_notification_channels` and `organization_discovery_methods` ([#1493](https://github.com/auth0/terraform-provider-auth0/pull/1493))
+
 ## v1.40.0
 
 FEATURES:

@@ -566,85 +566,42 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 		flexibleMappingsMap, _ = structure.FlattenJsonToString(addon.GetFlexibleMappings())
 	}
 
-	// The API response omits fields that weren't explicitly set, so nil pointer fields fall
-	// back to Go zero values instead of Auth0 defaults — causing drift on import.
-	// Hence manually apply defaults here when the field is absent.
-	createUPNClaim := samlDefault.createUPNClaim
-	if addon.CreateUPNClaim != nil {
-		createUPNClaim = addon.GetCreateUPNClaim()
-	}
-
-	mapUnknownClaimsAsIs := samlDefault.mapUnknownClaimsAsIs
-	if addon.MapUnknownClaimsAsIs != nil {
-		mapUnknownClaimsAsIs = addon.GetMapUnknownClaimsAsIs()
-	}
-
-	passthroughClaimsWithNoMapping := samlDefault.passthroughClaimsWithNoMapping
-	if addon.PassthroughClaimsWithNoMapping != nil {
-		passthroughClaimsWithNoMapping = addon.GetPassthroughClaimsWithNoMapping()
-	}
-
-	mapIdentities := samlDefault.mapIdentities
-	if addon.MapIdentities != nil {
-		mapIdentities = addon.GetMapIdentities()
-	}
-
-	typedAttributes := samlDefault.typedAttributes
-	if addon.TypedAttributes != nil {
-		typedAttributes = addon.GetTypedAttributes()
-	}
-
-	includeAttributeNameFormat := samlDefault.includeAttributeNameFormat
-	if addon.IncludeAttributeNameFormat != nil {
-		includeAttributeNameFormat = addon.GetIncludeAttributeNameFormat()
-	}
-
-	lifetimeInSeconds := samlDefault.lifetimeInSeconds
-	if addon.LifetimeInSeconds != nil {
-		lifetimeInSeconds = addon.GetLifetimeInSeconds()
-	}
-
-	signatureAlgorithm := samlDefault.signatureAlgorithm
-	if addon.SignatureAlgorithm != nil {
-		signatureAlgorithm = addon.GetSignatureAlgorithm()
-	}
-
-	digestAlgorithm := samlDefault.digestAlgorithm
-	if addon.DigestAlgorithm != nil {
-		digestAlgorithm = addon.GetDigestAlgorithm()
-	}
-
-	nameIdentifierFormat := samlDefault.nameIdentifierFormat
-	if addon.NameIdentifierFormat != nil {
-		nameIdentifierFormat = addon.GetNameIdentifierFormat()
-	}
-
+	// The API response omits fields that weren't explicitly set, so nil pointer fields fall back to Go zero values instead of Auth0 defaults, causing drift on import.
+	// Hence manually apply defaults here when the field is absent using getNonNilValueOrDefault.
 	return []interface{}{
 		map[string]interface{}{
 			"mappings":                           addon.GetMappings(),
 			"flexible_mappings":                  flexibleMappingsMap,
 			"audience":                           addon.GetAudience(),
 			"recipient":                          addon.GetRecipient(),
-			"create_upn_claim":                   createUPNClaim,
-			"map_unknown_claims_as_is":           mapUnknownClaimsAsIs,
-			"passthrough_claims_with_no_mapping": passthroughClaimsWithNoMapping,
-			"map_identities":                     mapIdentities,
-			"signature_algorithm":                signatureAlgorithm,
-			"digest_algorithm":                   digestAlgorithm,
+			"create_upn_claim":                   getNonNilValueOrDefault(addon.CreateUPNClaim, samlDefault.createUPNClaim),
+			"map_unknown_claims_as_is":           getNonNilValueOrDefault(addon.MapUnknownClaimsAsIs, samlDefault.mapUnknownClaimsAsIs),
+			"passthrough_claims_with_no_mapping": getNonNilValueOrDefault(addon.PassthroughClaimsWithNoMapping, samlDefault.passthroughClaimsWithNoMapping),
+			"map_identities":                     getNonNilValueOrDefault(addon.MapIdentities, samlDefault.mapIdentities),
+			"signature_algorithm":                getNonNilValueOrDefault(addon.SignatureAlgorithm, samlDefault.signatureAlgorithm),
+			"digest_algorithm":                   getNonNilValueOrDefault(addon.DigestAlgorithm, samlDefault.digestAlgorithm),
 			"issuer":                             addon.GetIssuer(),
 			"destination":                        addon.GetDestination(),
-			"lifetime_in_seconds":                lifetimeInSeconds,
+			"lifetime_in_seconds":                getNonNilValueOrDefault(addon.LifetimeInSeconds, samlDefault.lifetimeInSeconds),
 			"sign_response":                      addon.GetSignResponse(),
-			"name_identifier_format":             nameIdentifierFormat,
+			"name_identifier_format":             getNonNilValueOrDefault(addon.NameIdentifierFormat, samlDefault.nameIdentifierFormat),
 			"name_identifier_probes":             addon.GetNameIdentifierProbes(),
 			"authn_context_class_ref":            addon.GetAuthnContextClassRef(),
-			"typed_attributes":                   typedAttributes,
-			"include_attribute_name_format":      includeAttributeNameFormat,
+			"typed_attributes":                   getNonNilValueOrDefault(addon.TypedAttributes, samlDefault.typedAttributes),
+			"include_attribute_name_format":      getNonNilValueOrDefault(addon.IncludeAttributeNameFormat, samlDefault.includeAttributeNameFormat),
 			"binding":                            addon.GetBinding(),
 			"signing_cert":                       addon.GetSigningCert(),
 			"logout":                             logout,
 		},
 	}
+}
+
+// getNonNilValueOrDefault returns the dereferenced value if the pointer is non-nil, otherwise returns the provided default value.
+func getNonNilValueOrDefault[T any](value *T, defaultValue T) T {
+	if value != nil {
+		return *value
+	}
+	return defaultValue
 }
 
 func flattenDefaultOrganization(defaultOrganization *management.ClientDefaultOrganization) []interface{} {

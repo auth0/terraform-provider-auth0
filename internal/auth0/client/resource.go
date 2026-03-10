@@ -27,8 +27,8 @@ var ValidAppTypes = []string{
 
 var samlDefault = struct {
 	createUPNClaim, passthroughClaimsWithNoMapping, mapUnknownClaimsAsIs, mapIdentities, typedAttributes, includeAttributeNameFormat bool
-	lifetimeInSeconds                                                                                          int
-	signatureAlgorithm, digestAlgorithm, nameIdentifierFormat                                                  string
+	lifetimeInSeconds                                                                                                                int
+	signatureAlgorithm, digestAlgorithm, nameIdentifierFormat                                                                        string
 }{
 	createUPNClaim:                 true,
 	passthroughClaimsWithNoMapping: true,

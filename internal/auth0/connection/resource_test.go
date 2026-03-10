@@ -25,8 +25,6 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckNoResourceAttr("auth0_connection.my_connection", "show_as_button"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "authentication.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "authentication.0.active", "true"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "connected_accounts.#", "1"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "connected_accounts.0.active", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_policy", "fair"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_no_personal_info.0.enable", "true"),
@@ -74,6 +72,7 @@ func TestAccConnection(t *testing.T) {
 	})
 }
 
+// TODO : Add another testcase that handles connected_accounts
 const testAccConnectionConfig = `
 resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.testName}}"
@@ -84,9 +83,6 @@ resource "auth0_connection" "my_connection" {
 		key2 = "bar"
 	}
 	authentication {
-		active = true
-	}
-	connected_accounts {
 		active = true
 	}
 	options {
@@ -701,6 +697,15 @@ func TestAccConnectionPasswordAuthenticationBehaviors(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.api_behavior", "optional"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.signup_behavior", "block"),
+				),
+			},
+			{
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.api_behavior", "required"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.signup_behavior", "allow"),
 				),
 			},
 		},

@@ -237,7 +237,9 @@ func expandConnectionOptionsAuthenticationMethodsPassword(config cty.Value) *man
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
 			passwordAuth = &management.PasswordAuthenticationMethod{
-				Enabled: value.Bool(attributes.GetAttr("enabled")),
+				Enabled:        value.Bool(attributes.GetAttr("enabled")),
+				APIBehavior:    value.String(attributes.GetAttr("api_behavior")),
+				SignupBehavior: value.String(attributes.GetAttr("signup_behavior")),
 			}
 			return stop
 		})

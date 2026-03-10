@@ -316,9 +316,11 @@ func flattenAuthenticationMethodPassword(passwordAuthenticationMethod *managemen
 		return nil
 	}
 
-	return []map[string]bool{
+	return []map[string]interface{}{
 		{
-			"enabled": *passwordAuthenticationMethod.Enabled,
+			"enabled":         passwordAuthenticationMethod.GetEnabled(),
+			"api_behavior":    passwordAuthenticationMethod.GetAPIBehavior(),
+			"signup_behavior": passwordAuthenticationMethod.GetSignupBehavior(),
 		},
 	}
 }

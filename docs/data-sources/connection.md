@@ -349,7 +349,9 @@ Read-Only:
 
 Read-Only:
 
+- `api_behavior` (String)
 - `enabled` (Boolean)
+- `signup_behavior` (String)
 
 
 <a id="nestedobjatt--options--authentication_methods--phone_otp"></a>

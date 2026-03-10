@@ -566,27 +566,80 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 		flexibleMappingsMap, _ = structure.FlattenJsonToString(addon.GetFlexibleMappings())
 	}
 
+	// The API response omits fields that weren't explicitly set, so nil pointer fields fall
+	// back to Go zero values instead of Auth0 defaults — causing drift on import.
+	// Hence manually apply defaults here when the field is absent.
+	createUPNClaim := samlDefault.createUPNClaim
+	if addon.CreateUPNClaim != nil {
+		createUPNClaim = addon.GetCreateUPNClaim()
+	}
+
+	mapUnknownClaimsAsIs := samlDefault.mapUnknownClaimsAsIs
+	if addon.MapUnknownClaimsAsIs != nil {
+		mapUnknownClaimsAsIs = addon.GetMapUnknownClaimsAsIs()
+	}
+
+	passthroughClaimsWithNoMapping := samlDefault.passthroughClaimsWithNoMapping
+	if addon.PassthroughClaimsWithNoMapping != nil {
+		passthroughClaimsWithNoMapping = addon.GetPassthroughClaimsWithNoMapping()
+	}
+
+	mapIdentities := samlDefault.mapIdentities
+	if addon.MapIdentities != nil {
+		mapIdentities = addon.GetMapIdentities()
+	}
+
+	typedAttributes := samlDefault.typedAttributes
+	if addon.TypedAttributes != nil {
+		typedAttributes = addon.GetTypedAttributes()
+	}
+
+	includeAttributeNameFormat := samlDefault.includeAttributeNameFormat
+	if addon.IncludeAttributeNameFormat != nil {
+		includeAttributeNameFormat = addon.GetIncludeAttributeNameFormat()
+	}
+
+	lifetimeInSeconds := samlDefault.lifetimeInSeconds
+	if addon.LifetimeInSeconds != nil {
+		lifetimeInSeconds = addon.GetLifetimeInSeconds()
+	}
+
+	signatureAlgorithm := samlDefault.signatureAlgorithm
+	if addon.SignatureAlgorithm != nil {
+		signatureAlgorithm = addon.GetSignatureAlgorithm()
+	}
+
+	digestAlgorithm := samlDefault.digestAlgorithm
+	if addon.DigestAlgorithm != nil {
+		digestAlgorithm = addon.GetDigestAlgorithm()
+	}
+
+	nameIdentifierFormat := samlDefault.nameIdentifierFormat
+	if addon.NameIdentifierFormat != nil {
+		nameIdentifierFormat = addon.GetNameIdentifierFormat()
+	}
+
 	return []interface{}{
 		map[string]interface{}{
 			"mappings":                           addon.GetMappings(),
 			"flexible_mappings":                  flexibleMappingsMap,
 			"audience":                           addon.GetAudience(),
 			"recipient":                          addon.GetRecipient(),
-			"create_upn_claim":                   addon.GetCreateUPNClaim(),
-			"map_unknown_claims_as_is":           addon.GetMapUnknownClaimsAsIs(),
-			"passthrough_claims_with_no_mapping": addon.GetPassthroughClaimsWithNoMapping(),
-			"map_identities":                     addon.GetMapIdentities(),
-			"signature_algorithm":                addon.GetSignatureAlgorithm(),
-			"digest_algorithm":                   addon.GetDigestAlgorithm(),
+			"create_upn_claim":                   createUPNClaim,
+			"map_unknown_claims_as_is":           mapUnknownClaimsAsIs,
+			"passthrough_claims_with_no_mapping": passthroughClaimsWithNoMapping,
+			"map_identities":                     mapIdentities,
+			"signature_algorithm":                signatureAlgorithm,
+			"digest_algorithm":                   digestAlgorithm,
 			"issuer":                             addon.GetIssuer(),
 			"destination":                        addon.GetDestination(),
-			"lifetime_in_seconds":                addon.GetLifetimeInSeconds(),
+			"lifetime_in_seconds":                lifetimeInSeconds,
 			"sign_response":                      addon.GetSignResponse(),
-			"name_identifier_format":             addon.GetNameIdentifierFormat(),
+			"name_identifier_format":             nameIdentifierFormat,
 			"name_identifier_probes":             addon.GetNameIdentifierProbes(),
 			"authn_context_class_ref":            addon.GetAuthnContextClassRef(),
-			"typed_attributes":                   addon.GetTypedAttributes(),
-			"include_attribute_name_format":      addon.GetIncludeAttributeNameFormat(),
+			"typed_attributes":                   typedAttributes,
+			"include_attribute_name_format":      includeAttributeNameFormat,
 			"binding":                            addon.GetBinding(),
 			"signing_cert":                       addon.GetSigningCert(),
 			"logout":                             logout,

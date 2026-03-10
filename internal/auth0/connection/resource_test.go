@@ -72,7 +72,7 @@ func TestAccConnection(t *testing.T) {
 	})
 }
 
-// TODO : Add another testcase that handles connected_accounts
+// TODO : Add another testcase that handles connected_accounts.
 const testAccConnectionConfig = `
 resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.testName}}"

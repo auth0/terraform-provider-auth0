@@ -32,6 +32,23 @@ var ValidTokenExchangeProfileTypes = []string{
 	"custom_authentication", "on_behalf_of_token_exchange",
 }
 
+var samlDefault = struct {
+	createUPNClaim, passthroughClaimsWithNoMapping, mapUnknownClaimsAsIs, mapIdentities, typedAttributes, includeAttributeNameFormat bool
+	lifetimeInSeconds                                                                                          int
+	signatureAlgorithm, digestAlgorithm, nameIdentifierFormat                                                  string
+}{
+	createUPNClaim:                 true,
+	passthroughClaimsWithNoMapping: true,
+	mapUnknownClaimsAsIs:           false,
+	mapIdentities:                  true,
+	typedAttributes:                true,
+	includeAttributeNameFormat:     true,
+	lifetimeInSeconds:              3600,
+	signatureAlgorithm:             "rsa-sha1",
+	digestAlgorithm:                "sha1",
+	nameIdentifierFormat:           "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+}
+
 // NewResource will return a new auth0_client resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -1234,14 +1251,14 @@ func NewResource() *schema.Resource {
 									"create_upn_claim": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  true,
+										Default:  samlDefault.createUPNClaim,
 										Description: "Indicates whether a UPN claim should be created. " +
 											"Defaults to `true`.",
 									},
 									"passthrough_claims_with_no_mapping": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  true,
+										Default:  samlDefault.passthroughClaimsWithNoMapping,
 										Description: "Indicates whether or not to passthrough " +
 											"claims that are not mapped to the common profile " +
 											"in the output assertion. Defaults to `true`.",
@@ -1249,7 +1266,7 @@ func NewResource() *schema.Resource {
 									"map_unknown_claims_as_is": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  false,
+										Default:  samlDefault.mapUnknownClaimsAsIs,
 										Description: "Indicates whether to add a prefix of `http://schema.auth0.com` " +
 											"to any claims that are not mapped to the common profile when passed " +
 											"through in the output assertion. Defaults to `false`.",
@@ -1257,7 +1274,7 @@ func NewResource() *schema.Resource {
 									"map_identities": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  true,
+										Default:  samlDefault.mapIdentities,
 										Description: "Indicates whether or not to add additional identity " +
 											"information in the token, such as the provider used and the " +
 											"`access_token`, if available. Defaults to `true`.",
@@ -1265,14 +1282,14 @@ func NewResource() *schema.Resource {
 									"signature_algorithm": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "rsa-sha1",
+										Default:  samlDefault.signatureAlgorithm,
 										Description: "Algorithm used to sign the SAML Assertion or response. " +
 											"Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.",
 									},
 									"digest_algorithm": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "sha1",
+										Default:  samlDefault.digestAlgorithm,
 										Description: "Algorithm used to calculate the digest of the SAML Assertion " +
 											"or response. Options include `sha1` and `sha256`. Defaults to `sha1`.",
 									},
@@ -1286,7 +1303,7 @@ func NewResource() *schema.Resource {
 									"lifetime_in_seconds": {
 										Type:     schema.TypeInt,
 										Optional: true,
-										Default:  3600,
+										Default:  samlDefault.lifetimeInSeconds,
 										Description: "Number of seconds during which the token is valid. " +
 											"Defaults to `3600` seconds.",
 									},
@@ -1299,9 +1316,9 @@ func NewResource() *schema.Resource {
 									"name_identifier_format": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+										Default:  samlDefault.nameIdentifierFormat,
 										Description: "Format of the name identifier. " +
-											"Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.",
+											"Defaults to `" + samlDefault.nameIdentifierFormat + "`.",
 									},
 									"name_identifier_probes": {
 										Type:     schema.TypeList,

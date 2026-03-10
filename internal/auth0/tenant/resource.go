@@ -457,6 +457,12 @@ func NewResource() *schema.Resource {
 					return (o == "null" && n == "") || o == n
 				},
 			},
+			"phone_consolidated_experience": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "When enabled, the tenant-level Phone Provider is used for Multi-Factor Authentication (MFA) and Passwordless phone notifications.",
+			},
 		},
 	}
 }

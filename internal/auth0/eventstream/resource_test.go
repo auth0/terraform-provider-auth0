@@ -100,7 +100,7 @@ resource "auth0_action" "my_action" {
 }
 `
 
-const testEventStreamCreateAction = actionConfig + `
+const testEventStreamCreate = actionConfig + `
 
 resource "auth0_event_stream" "my_event_stream_action" {
 	name             = "{{.testName}}-my-action"
@@ -113,7 +113,7 @@ resource "auth0_event_stream" "my_event_stream_action" {
 }
 `
 
-const testEventStreamUpdateAction = actionConfig + `
+const testEventStreamUpdate = actionConfig + `
 
 resource "auth0_event_stream" "my_event_stream_action" {
 	name             = "{{.testName}}-my-action-updated"
@@ -205,7 +205,7 @@ func TestAccEventStreamAction(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testEventStreamCreateAction, t.Name()),
+				Config: acctest.ParseTestName(testEventStreamCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_action", "name", fmt.Sprintf("%s-my-action", t.Name())),
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_action", "destination_type", "action"),
@@ -217,7 +217,7 @@ func TestAccEventStreamAction(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testEventStreamUpdateAction, t.Name()),
+				Config: acctest.ParseTestName(testEventStreamUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_action", "name", fmt.Sprintf("%s-my-action-updated", t.Name())),
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_action", "destination_type", "action"),

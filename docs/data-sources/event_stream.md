@@ -26,14 +26,23 @@ data "auth0_event_stream" "test" {
 
 ### Read-Only
 
+- `action_configuration` (List of Object) Configuration for the Action destination. This block is only applicable when `destination_type` is set to `action`. Action configurations **cannot** be updated after creation. Any change to this block will force the resource to be recreated. (see [below for nested schema](#nestedatt--action_configuration))
 - `created_at` (String) The ISO 8601 timestamp when the stream was created.
-- `destination_type` (String) The type of event stream destination (either 'eventbridge' or 'webhook').
+- `destination_type` (String) The type of event stream destination. Possible values: `eventbridge`, `webhook`, or `action`.
 - `eventbridge_configuration` (List of Object) Configuration for the EventBridge destination. This block is only applicable when `destination_type` is set to `eventbridge`. EventBridge configurations **cannot** be updated after creation. Any change to this block will force the resource to be recreated. (see [below for nested schema](#nestedatt--eventbridge_configuration))
 - `name` (String) The name of the event stream.
 - `status` (String) The current status of the event stream.
 - `subscriptions` (List of String) List of event types this stream is subscribed to.
 - `updated_at` (String) The ISO 8601 timestamp when the stream was last updated.
 - `webhook_configuration` (List of Object) Configuration for the Webhook destination. This block is only applicable when `destination_type` is set to `webhook`. Webhook configurations **can** be updated after creation, including the endpoint and authorization fields. (see [below for nested schema](#nestedatt--webhook_configuration))
+
+<a id="nestedatt--action_configuration"></a>
+### Nested Schema for `action_configuration`
+
+Read-Only:
+
+- `action_id` (String)
+
 
 <a id="nestedatt--eventbridge_configuration"></a>
 ### Nested Schema for `eventbridge_configuration`

@@ -85,6 +85,13 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 			configMap["aws_account_id"] = bridgeCfg["aws_account_id"]
 			configMap["aws_region"] = bridgeCfg["aws_region"]
 		}
+
+	case "action":
+		actionCfgList, ok := data.Get("action_configuration").([]interface{})
+		if ok && len(actionCfgList) > 0 {
+			actionCfg := actionCfgList[0].(map[string]interface{})
+			configMap["action_id"] = actionCfg["action_id"]
+		}
 	}
 
 	destination.EventStreamDestinationConfiguration = configMap

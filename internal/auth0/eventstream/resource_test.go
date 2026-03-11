@@ -86,7 +86,7 @@ resource "auth0_event_stream" "my_event_stream_webhook" {
 }
 `
 
-const testEventStreamCreateAction = `
+const actionConfig = `
 resource "auth0_action" "my_action" {
 	name    = "Test Action {{.testName}}"
 	runtime = "node22"
@@ -98,6 +98,9 @@ resource "auth0_action" "my_action" {
 		version = "v1"
 	}
 }
+`
+
+const testEventStreamCreateAction = actionConfig + `
 
 resource "auth0_event_stream" "my_event_stream_action" {
 	name             = "{{.testName}}-my-action"
@@ -110,18 +113,7 @@ resource "auth0_event_stream" "my_event_stream_action" {
 }
 `
 
-const testEventStreamUpdateAction = `
-resource "auth0_action" "my_action" {
-	name    = "Test Action {{.testName}}"
-	runtime = "node22"
-	deploy  = true
-	code    = "exports.onExecuteEventStream = async (event, api) => {};"
-
-	supported_triggers {
-		id      = "event-stream"
-		version = "v1"
-	}
-}
+const testEventStreamUpdateAction = actionConfig + `
 
 resource "auth0_event_stream" "my_event_stream_action" {
 	name             = "{{.testName}}-my-action-updated"

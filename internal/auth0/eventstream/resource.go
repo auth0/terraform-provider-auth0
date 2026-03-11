@@ -204,10 +204,12 @@ func NewResource() *schema.Resource {
 			"action_configuration": {
 				Type:     schema.TypeList,
 				Optional: true,
+				ForceNew: true,
 				MaxItems: 1,
 				Description: "Configuration for the Action destination. " +
 					"This block is only applicable when `destination_type` is set to `action`. " +
-					"The `action_id` can be updated after creation to point to a different Auth0 Action.",
+					"Action configurations **cannot** be updated after creation. " +
+					"Any change to this block will force the resource to be recreated.",
 				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration", "action_configuration"},
 				Elem:         actionConfig,
 			},

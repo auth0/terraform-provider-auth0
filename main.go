@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
@@ -21,8 +22,9 @@ func main() {
 	schema.DescriptionKind = schema.StringMarkdown
 
 	debug := false
-	if v := os.Getenv("TF_PROVIDER_AUTH0_DEBUG"); v == "true" {
-		debug = true
+
+	if debugEnv, err := strconv.ParseBool(os.Getenv("TF_PROVIDER_AUTH0_DEBUG")); err == nil {
+		debug = debugEnv
 	}
 
 	plugin.Serve(&plugin.ServeOpts{

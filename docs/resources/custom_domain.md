@@ -41,6 +41,7 @@ resource "auth0_custom_domain" "my_custom_domain" {
 
 - `certificate` (List of Object) The Custom Domain certificate. (see [below for nested schema](#nestedatt--certificate))
 - `id` (String) The ID of this resource.
+- `is_default` (Boolean) Indicates whether this custom domain is the default domain for the tenant
 - `origin_domain_name` (String) Once the configuration status is `ready`, the DNS name of the Auth0 origin server that handles traffic for the custom domain.
 - `primary` (Boolean, Deprecated) Indicates whether this is a primary domain.
 - `status` (String) Configuration status for the custom domain. Options include `disabled`, `pending`, `pending_verification`, `ready` and `failed`.

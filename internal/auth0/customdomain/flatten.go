@@ -23,6 +23,7 @@ func flattenCustomDomain(data *schema.ResourceData, customDomain *management.Cus
 		data.Set("domain_metadata", customDomain.GetDomainMetadata()),
 		data.Set("relying_party_identifier", customDomain.GetRelyingPartyIdentifier()),
 		data.Set("certificate", flattenCustomDomainCertificates(customDomain.GetCertificate())),
+		data.Set("is_default", customDomain.GetIsDefault()),
 	)
 
 	return result.ErrorOrNil()

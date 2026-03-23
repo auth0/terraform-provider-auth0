@@ -57,6 +57,7 @@ Read-Only:
 - `custom_client_ip_header` (String)
 - `domain` (String)
 - `domain_metadata` (Map of String)
+- `is_default` (Boolean)
 - `origin_domain_name` (String)
 - `primary` (Boolean)
 - `relying_party_identifier` (String)

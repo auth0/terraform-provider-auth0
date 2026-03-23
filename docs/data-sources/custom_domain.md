@@ -40,6 +40,7 @@ data "auth0_custom_domain" "test" {
 - `domain` (String) Name of the custom domain.
 - `domain_metadata` (Map of String) Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed. (EA only).
 - `id` (String) The ID of this resource.
+- `is_default` (Boolean) Indicates whether this custom domain is the default domain for the tenant
 - `origin_domain_name` (String) Once the configuration status is `ready`, the DNS name of the Auth0 origin server that handles traffic for the custom domain.
 - `primary` (Boolean) Indicates whether this is a primary domain.
 - `relying_party_identifier` (String) Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not provided or set to null, the full domain will be used.

@@ -6,7 +6,7 @@ description: |-
 
 # Resource: auth0_custom_domain_default
 
-With this resource, you can configure the default domain for your Auth0 tenant. The default domain is the domain that Auth0 will use for various tenant-level operations.
+With this resource, you can configure the default domain for your Auth0 tenant. The default domain is the domain that Auth0 will use for various tenant-level operations. This resource manages the default domain configuration via the custom domains API.
 
 ## Example Usage
 

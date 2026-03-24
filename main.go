@@ -1,6 +1,9 @@
 package main
 
 import (
+	"os"
+	"strconv"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 
@@ -18,7 +21,14 @@ func main() {
 	// this will be used in document generation.
 	schema.DescriptionKind = schema.StringMarkdown
 
+	debug := false
+
+	if debugEnv, err := strconv.ParseBool(os.Getenv("TF_PROVIDER_AUTH0_DEBUG")); err == nil {
+		debug = debugEnv
+	}
+
 	plugin.Serve(&plugin.ServeOpts{
 		ProviderFunc: provider.New,
+		Debug:        debug,
 	})
 }

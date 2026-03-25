@@ -524,8 +524,9 @@ func TestAccTenantDefaults(t *testing.T) {
 			{
 				Config: testAccEmptyTenant,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_lifetime", "168"),     // Auth0 default.
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "idle_session_lifetime", "72"), // Auth0 default.
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_lifetime", "168"),                   // Auth0 default.
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "idle_session_lifetime", "72"),               // Auth0 default.
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_client_connections", "true"), // Auth0 default when not explicitly set.
 				),
 			},
 		},

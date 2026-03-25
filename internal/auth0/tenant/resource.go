@@ -142,9 +142,9 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enable_client_connections": {
-							Type:     schema.TypeBool,
-							Optional: true,
-							Default:  enableClientConnectionsDefault,
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Default:     enableClientConnectionsDefault,
 							Description: "Indicates whether all current connections should be enabled when a new client is created. (Default: `true`)",
 						},
 						"enable_apis_section": {

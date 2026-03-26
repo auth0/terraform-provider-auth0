@@ -1390,7 +1390,7 @@ var optionsSchema = &schema.Schema{
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.StringInSlice([]string{"ES256", "Ed25519"}, false),
-				Description:  "Signature method used to sign the request",
+				Description:  "Signature method used to sign the request. EA Only",
 			},
 		},
 	},

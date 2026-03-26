@@ -360,7 +360,7 @@ func TestAccClientAuthenticationMethodsPrivateKeyJWT(t *testing.T) {
 				),
 			},
 			{
-				Config: fmt.Sprintf(acctest.ParseTestName(testAccAddUpdateClientCredentialsPrivateKeyJWTExpiresAt, t.Name()), credsCert1, credsCert2),
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccAddUpdateClientCredentialsPrivateKeyJWTExpiresAt, t.Name()), credsCert3, credsCert2),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Client Credentials - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.alg", "RS256"),

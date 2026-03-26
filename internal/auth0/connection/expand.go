@@ -930,6 +930,7 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 		NonPersistentAttrs:          value.Strings(config.GetAttr("non_persistent_attrs")),
 		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
 		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
+		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
 	}
 
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
@@ -978,6 +979,7 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 		LogoURL:                     value.String(config.GetAttr("icon_url")),
 		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
 		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
+		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
 	}
 
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {

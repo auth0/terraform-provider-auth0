@@ -52,7 +52,7 @@ resource "auth0_prompt_screen_partials" "customized-consent" {
 
 ### Required
 
-- `prompt_type` (String) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless`, `customized-consent`.
+- `prompt_type` (String) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless`, `customized-consent`, `passkeys`.
 
 ### Optional
 

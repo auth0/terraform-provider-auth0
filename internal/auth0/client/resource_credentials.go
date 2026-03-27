@@ -471,20 +471,27 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 		switch oldAuthMethod {
 		case "private_key_jwt", "tls_client_auth", "self_signed_tls_client_auth":
 			clientID := data.Get("client_id").(string)
-			credentials, err := api.Client.ListCredentials(ctx, clientID)
-			if err != nil {
-				return diag.FromErr(err)
-			}
 
-			if len(credentials) > 0 {
-				if err := detachClientCredentials(ctx, api, clientID, authenticationMethod); err != nil {
+			// Delete only credentials that belonged to the old auth method. Using
+			// state-derived IDs avoids accidentally deleting signed_request_object (JAR)
+			// credentials, which ListCredentials would also return.
+			oldCredentialsKey := fmt.Sprintf("%s.0.credentials", oldAuthMethod)
+			oldCredentialsRaw, _ := data.GetChange(oldCredentialsKey)
+			oldCreds, _ := oldCredentialsRaw.([]interface{})
+
+			if len(oldCreds) > 0 {
+				if err := detachAuthenticationMethodCredentials(ctx, api, clientID, authenticationMethod); err != nil {
 					return diag.FromErr(err)
 				}
 
-				for _, credential := range credentials {
-					if err := api.Client.DeleteCredential(ctx, clientID, credential.GetID()); err != nil {
-						if !internalError.IsStatusNotFound(err) {
-							return diag.FromErr(err)
+				for _, cred := range oldCreds {
+					if credMap, ok := cred.(map[string]interface{}); ok {
+						if id, ok := credMap["id"].(string); ok && id != "" {
+							if err := api.Client.DeleteCredential(ctx, clientID, id); err != nil {
+								if !internalError.IsStatusNotFound(err) {
+									return diag.FromErr(err)
+								}
+							}
 						}
 					}
 				}
@@ -609,7 +616,7 @@ func modifyAuthenticationMethodCredentials(ctx context.Context, api *management.
 		index      int
 		credential *management.Credential
 		oldID      string
-		action     string // "keep", "replace", "add", "update"
+		action     string // "keep", "replace", "add", "update".
 	}
 
 	actions := make([]credentialAction, 0, len(credentials))
@@ -622,11 +629,12 @@ func modifyAuthenticationMethodCredentials(ctx context.Context, api *management.
 			continue
 		}
 
-		if credentialID == "" {
+		switch {
+		case credentialID == "":
 			actions = append(actions, credentialAction{index: index, credential: credential, action: "add"})
-		} else if credentialNeedsReplacement(data, configAddress) {
+		case credentialNeedsReplacement(data, configAddress):
 			actions = append(actions, credentialAction{index: index, credential: credential, oldID: credentialID, action: "replace"})
-		} else {
+		default:
 			// Only mutable fields changed (e.g. expires_at).
 			stateExpiresAt := data.Get(fmt.Sprintf("%s.expires_at", configAddress)).(string)
 			if stateExpiresAt != "" {
@@ -858,6 +866,22 @@ func attachSignedRequestObjectNoCredentials(ctx context.Context, api *management
 	return updateClientInternal(ctx, api, client.ID, client)
 }
 
+// detachAuthenticationMethodCredentials clears client_authentication_methods and sets a new
+// token_endpoint_auth_method. It does not touch signed_request_object, so JAR configuration
+// is preserved during auth method transitions.
+func detachAuthenticationMethodCredentials(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string) error {
+	client := clientWithAuthMethod{
+		ID:                          clientID,
+		ClientAuthenticationMethods: nil,
+		// API doesn't accept nil on both of these, so we temporarily set this to a default.
+		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
+	}
+
+	return updateClientInternal(ctx, api, client.ID, client)
+}
+
+// detachClientCredentials clears client_authentication_methods, signed_request_object, and sets a
+// new token_endpoint_auth_method. Used during resource deletion to fully reset auth configuration.
 func detachClientCredentials(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string) error {
 	client := clientWithAuthMethodAndSignedRequestObject{
 		ID:                          clientID,

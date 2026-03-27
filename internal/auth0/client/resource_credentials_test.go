@@ -1426,7 +1426,7 @@ func TestAccClientCredentialsImport(t *testing.T) {
 			{
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction("auth0_client_credentials.test_jwt_ca_client", plancheck.ResourceActionDestroyBeforeCreate),
+						plancheck.ExpectResourceAction("auth0_client_credentials.test_jwt_ca_client", plancheck.ResourceActionUpdate),
 					},
 				},
 				Config: fmt.Sprintf(testAccImportClientWithPrivateKeyJWT, credsCert),

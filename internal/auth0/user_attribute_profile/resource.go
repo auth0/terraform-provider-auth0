@@ -2,6 +2,7 @@ package userattributeprofile
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -19,6 +20,7 @@ func NewResource() *schema.Resource {
 		ReadContext:   readUserAttributeProfile,
 		UpdateContext: updateUserAttributeProfile,
 		DeleteContext: deleteUserAttributeProfile,
+		CustomizeDiff: validateUserAttributeProfile(),
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -260,6 +262,100 @@ func NewResource() *schema.Resource {
 				},
 			},
 		},
+	}
+}
+
+func validateUserAttributeProfile() schema.CustomizeDiffFunc {
+	return func(ctx context.Context, diff *schema.ResourceDiff, meta interface{}) error {
+		// Cast the meta parameter 'v' to your Auth0 API client
+		// (Adjust '*management.Management' if your client type is named differently)
+		api := meta.(*config.Config).GetAPI()
+		// if !ok {
+		// 	return fmt.Errorf("failed to cast provider meta to api client")
+		// }
+
+		// If diff.Id() is empty, this is a creation plan. No server state exists yet.
+		if diff.Id() == "" {
+			return nil
+		}
+
+		// --- Primary Data Sources ---
+		rawPlan := diff.GetRawPlan()
+		currentCodeConfig := diff.GetRawConfig()
+
+		// Fetch the server-side reality
+		userAttributeProfile, err := api.UserAttributeProfile.Read(ctx, diff.Id())
+		if err != nil {
+			return fmt.Errorf("failed to read user attribute profile from Auth0: %v", err)
+		}
+
+		// Prevent Go compiler "unused variable" errors so you can still inspect these in Delve
+		_ = rawPlan
+		_ = currentCodeConfig
+
+		// Safely extract the configured attributes from currentCodeConfig's underlying data
+		currentAttributes := diff.Get("user_attributes").([]interface{})
+		serverAttributes := userAttributeProfile.UserAttributes
+
+		// Iterate over the current configuration and compare with server-side attributes
+		for i, currentAttr := range currentAttributes {
+			currentAttrMap, ok := currentAttr.(map[string]interface{})
+			if !ok {
+				continue
+			}
+
+			name, nameOk := currentAttrMap["name"].(string)
+			if !nameOk || name == "" {
+				continue
+			}
+
+			// Look up the corresponding attribute from the server response
+			serverAttr, exists := serverAttributes[name]
+			if !exists {
+				// If it doesn't exist on the server, Terraform needs to create it. Skip clearing.
+				continue
+			}
+
+			// Compare individual fields and clear them from the diff if they match the server
+
+			// Note: If your Auth0 Go SDK uses pointers (e.g., *string) for these fields,
+			// you must dereference them like `*serverAttr.Description`.
+			// If they are regular strings/bools, you can remove the pointer `*` syntax.
+
+			// --- THE MAGIC BULLET ---
+			// Clear the name field so Terraform doesn't think the blocks swapped!
+			diff.Clear(fmt.Sprintf("user_attributes.%d.name", i))
+
+			if val, ok := currentAttrMap["auth0_mapping"]; ok {
+				if serverAttr.Auth0Mapping != nil && val == *serverAttr.Auth0Mapping {
+					path := fmt.Sprintf("user_attributes.%d.auth0_mapping", i)
+					diff.Clear(path)
+				}
+			}
+
+			if val, ok := currentAttrMap["description"]; ok {
+				if serverAttr.Description != nil && val == *serverAttr.Description {
+					path := fmt.Sprintf("user_attributes.%d.description", i)
+					diff.Clear(path)
+				}
+			}
+
+			if val, ok := currentAttrMap["label"]; ok {
+				if serverAttr.Label != nil && val == *serverAttr.Label {
+					path := fmt.Sprintf("user_attributes.%d.label", i)
+					diff.Clear(path)
+				}
+			}
+
+			if val, ok := currentAttrMap["profile_required"]; ok {
+				if serverAttr.ProfileRequired != nil && val == *serverAttr.ProfileRequired {
+					path := fmt.Sprintf("user_attributes.%d.profile_required", i)
+					diff.Clear(path)
+				}
+			}
+		}
+
+		return nil
 	}
 }
 

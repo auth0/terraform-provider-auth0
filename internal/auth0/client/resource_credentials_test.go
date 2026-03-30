@@ -1386,14 +1386,14 @@ func TestAccClientCredentialsImport(t *testing.T) {
 				Config:             testAccImportClientWithSecretPost,
 				ResourceName:       "auth0_client.my_test_client_secret",
 				ImportState:        true,
-				ImportStateId:      "ZZS635abxff29S7rJrTaRU1oVNdrQiLT",
+				ImportStateId:      "WKNowJHxIJKTbOrC5lEr3jjjKsYCxmvo",
 				ImportStatePersist: true,
 			},
 			{
 				Config:             testAccImportClientWithSecretPost,
 				ResourceName:       "auth0_client_credentials.test_simple_client",
 				ImportState:        true,
-				ImportStateId:      "ZZS635abxff29S7rJrTaRU1oVNdrQiLT",
+				ImportStateId:      "WKNowJHxIJKTbOrC5lEr3jjjKsYCxmvo",
 				ImportStatePersist: true,
 			},
 			{
@@ -1413,14 +1413,14 @@ func TestAccClientCredentialsImport(t *testing.T) {
 				Config:             testAccImportClientWithPrivateKeyJWT,
 				ResourceName:       "auth0_client.my_test_client_jwt_ca",
 				ImportState:        true,
-				ImportStateId:      "UCc9x6EROad1v7wcdsX6B0dhhD7T0HhH",
+				ImportStateId:      "6MiO1GfrbUMn8z7LhX7KwtY6bqacyjwx",
 				ImportStatePersist: true,
 			},
 			{
 				Config:             fmt.Sprintf(testAccImportClientWithPrivateKeyJWT, credsCert),
 				ResourceName:       "auth0_client_credentials.test_jwt_ca_client",
 				ImportState:        true,
-				ImportStateId:      "UCc9x6EROad1v7wcdsX6B0dhhD7T0HhH",
+				ImportStateId:      "6MiO1GfrbUMn8z7LhX7KwtY6bqacyjwx",
 				ImportStatePersist: true,
 			},
 			{

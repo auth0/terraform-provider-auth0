@@ -61,6 +61,7 @@ data "auth0_client" "some-client-by-id" {
 - `jwt_configuration` (List of Object) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedatt--jwt_configuration))
 - `logo_uri` (String) URL of the logo for the client. Recommended size is 150px x 150px. If none is set, the default badge for the application type will be shown.
 - `mobile` (List of Object) Additional configuration for native mobile apps. (see [below for nested schema](#nestedatt--mobile))
+- `my_organization_configuration` (List of Object) Configuration for self-service organization features, controlling how organizations are created and managed for this client. (see [below for nested schema](#nestedatt--my_organization_configuration))
 - `native_social_login` (List of Object) Configuration settings to toggle native social login for mobile native applications. Once this is set it must stay set, with both resources set to `false` in order to change the `app_type`. (see [below for nested schema](#nestedatt--native_social_login))
 - `oidc_backchannel_logout_urls` (Set of String) Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
 - `oidc_conformant` (Boolean) Indicates whether this client will conform to strict OIDC specifications.
@@ -561,6 +562,17 @@ Read-Only:
 - `app_bundle_identifier` (String)
 - `team_id` (String)
 
+
+
+<a id="nestedatt--my_organization_configuration"></a>
+### Nested Schema for `my_organization_configuration`
+
+Read-Only:
+
+- `allowed_strategies` (List of String)
+- `connection_deletion_behavior` (String)
+- `connection_profile_id` (String)
+- `user_attribute_profile_id` (String)
 
 
 <a id="nestedatt--native_social_login"></a>

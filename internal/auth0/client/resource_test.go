@@ -2946,7 +2946,7 @@ const testAccClientWithEmptyAsyncApprovalChannelsUpdate = `
 resource "auth0_client" "my_client" {
 	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
 	app_type = "non_interactive"
-	
+
 	async_approval_notification_channels = []
 }
 `
@@ -3173,6 +3173,167 @@ func TestAccClientExpressAppConfiguration(t *testing.T) {
 						"auth0_user_attribute_profile.profile",
 						"id",
 					),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientMyOrganizationConfigurationCreate = `
+
+resource "auth0_connection_profile" "my_profile" {
+	name = "Test-Profile-Conn"
+	organization {
+		show_as_button            = "required"
+		assign_membership_on_login = "optional"
+	}
+	connection_name_prefix_template = "template1"
+	enabled_features = [
+		"scim",
+		"universal_logout"
+	]
+}
+
+resource "auth0_user_attribute_profile" "my_uap" {
+	name = "My-temp-UAP"
+	user_id {
+		oidc_mapping = "sub"
+		saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+		scim_mapping = "userName"
+	}
+	user_attributes {
+		name             = "email"
+		description      = "User's email address"
+		label            = "Email"
+		profile_required = true
+		auth0_mapping    = "email"
+		oidc_mapping {
+			mapping = "email"
+		}
+		saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+		scim_mapping = "emails[primary eq true].value"
+	}
+}
+
+resource "auth0_client" "my_client" {
+	depends_on  = [auth0_user_attribute_profile.my_uap]
+	name        = "Acceptance Test - MyOrgConfig - {{.testName}}"
+	description = "Client with my_organization_configuration"
+
+	my_organization_configuration {
+		connection_profile_id        = auth0_connection_profile.my_profile.id
+		user_attribute_profile_id    = auth0_user_attribute_profile.my_uap.id
+		allowed_strategies           = ["pingfederate", "adfs", "waad", "google-apps", "okta", "oidc", "samlp"]
+		connection_deletion_behavior = "allow"
+	}
+}
+`
+
+const testAccClientMyOrganizationConfigurationUpdate = `
+resource "auth0_connection_profile" "my_profile" {
+	name = "Test-Profile-Conn"
+	organization {
+		show_as_button            = "required"
+		assign_membership_on_login = "optional"
+	}
+	connection_name_prefix_template = "template1"
+	enabled_features = [
+		"scim",
+		"universal_logout"
+	]
+}
+
+resource "auth0_user_attribute_profile" "my_uap" {
+	name = "My-temp-UAP"
+	user_id {
+		oidc_mapping = "sub"
+		saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+		scim_mapping = "userName"
+	}
+	user_attributes {
+		name             = "email"
+		description      = "User's email address"
+		label            = "Email"
+		profile_required = true
+		auth0_mapping    = "email"
+		oidc_mapping {
+			mapping = "email"
+		}
+		saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+		scim_mapping = "emails[primary eq true].value"
+	}
+}
+
+resource "auth0_client" "my_client" {
+	depends_on  = [auth0_user_attribute_profile.my_uap]
+	name        = "Updated MyOrgConfig Client"
+	description = "Client with updated my_organization_configuration."
+
+	my_organization_configuration {
+		connection_profile_id        = auth0_connection_profile.my_profile.id
+		user_attribute_profile_id    = auth0_user_attribute_profile.my_uap.id
+		allowed_strategies           = ["okta", "samlp", "oidc"]
+		connection_deletion_behavior = "allow_if_empty"
+	}
+}
+`
+
+func TestAccClientMyOrganizationConfiguration(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientMyOrganizationConfigurationCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - MyOrgConfig - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "description", "Client with my_organization_configuration"),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "my_organization_configuration.0.connection_profile_id"),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.user_attribute_profile_id",
+						"auth0_user_attribute_profile.my_uap",
+						"id",
+					),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.connection_profile_id",
+						"auth0_connection_profile.my_profile",
+						"id",
+					),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.#", "7"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.0", "pingfederate"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.1", "adfs"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.2", "waad"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.3", "google-apps"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.4", "okta"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.5", "oidc"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.6", "samlp"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.connection_deletion_behavior", "allow"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMyOrganizationConfigurationUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", "Updated MyOrgConfig Client"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "description", "Client with updated my_organization_configuration."),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.user_attribute_profile_id",
+						"auth0_user_attribute_profile.my_uap",
+						"id",
+					),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.connection_profile_id",
+						"auth0_connection_profile.my_profile",
+						"id",
+					),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.#", "3"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.0", "okta"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.1", "samlp"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.2", "oidc"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.connection_deletion_behavior", "allow_if_empty"),
 				),
 			},
 		},

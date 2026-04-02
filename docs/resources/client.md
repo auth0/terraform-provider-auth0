@@ -159,6 +159,7 @@ resource "auth0_client" "my_client" {
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
 - `logo_uri` (String) URL of the logo for the client. Recommended size is 150px x 150px. If none is set, the default badge for the application type will be shown.
 - `mobile` (Block List, Max: 1) Additional configuration for native mobile apps. (see [below for nested schema](#nestedblock--mobile))
+- `my_organization_configuration` (Block List, Max: 1) Configuration for self-service organization features, controlling how organizations are created and managed for this client. (see [below for nested schema](#nestedblock--my_organization_configuration))
 - `native_social_login` (Block List, Max: 1) Configuration settings to toggle native social login for mobile native applications. Once this is set it must stay set, with both resources set to `false` in order to change the `app_type`. (see [below for nested schema](#nestedblock--native_social_login))
 - `oidc_backchannel_logout_urls` (Set of String, Deprecated) Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
 - `oidc_conformant` (Boolean) Indicates whether this client will conform to strict OIDC specifications.
@@ -579,6 +580,17 @@ Optional:
 - `app_bundle_identifier` (String)
 - `team_id` (String)
 
+
+
+<a id="nestedblock--my_organization_configuration"></a>
+### Nested Schema for `my_organization_configuration`
+
+Optional:
+
+- `allowed_strategies` (List of String) The list of connection strategies that are allowed when creating organizations for this client (e.g. "okta", "samlp").
+- `connection_deletion_behavior` (String) Controls the behavior when deleting connections associated with organizations for this client. Possible values: `allow`, `allow_if_empty`.
+- `connection_profile_id` (String) The ID of the connection profile to use when creating organizations for this client.
+- `user_attribute_profile_id` (String) The ID of the user attribute profile to use when creating organizations for this client.
 
 
 <a id="nestedblock--native_social_login"></a>

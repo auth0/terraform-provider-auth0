@@ -1386,6 +1386,12 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "Signature method used to sign the request",
 			},
+			"dpop_signing_alg": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringInSlice([]string{"ES256", "Ed25519"}, false),
+				Description:  "Signature method used to sign the request. EA Only",
+			},
 		},
 	},
 }

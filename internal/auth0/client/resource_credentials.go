@@ -95,7 +95,6 @@ func NewCredentialsResource() *schema.Resource {
 									"name": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										ForceNew:    true,
 										Description: "Friendly name for a credential.",
 									},
 									"key_id": {
@@ -106,21 +105,18 @@ func NewCredentialsResource() *schema.Resource {
 									"credential_type": {
 										Type:         schema.TypeString,
 										Required:     true,
-										ForceNew:     true,
 										ValidateFunc: validation.StringInSlice([]string{"public_key"}, false),
 										Description:  "Credential type. Supported types: `public_key`.",
 									},
 									"pem": {
 										Type:     schema.TypeString,
 										Required: true,
-										ForceNew: true,
 										Description: "PEM-formatted public key (SPKI and PKCS1) or X509 certificate. " +
 											"Must be JSON escaped.",
 									},
 									"algorithm": {
 										Type:         schema.TypeString,
 										Optional:     true,
-										ForceNew:     true,
 										ValidateFunc: validation.StringInSlice([]string{"RS256", "RS384", "PS256"}, false),
 										Default:      "RS256",
 										Description: "Algorithm which will be used with the credential. " +
@@ -130,7 +126,6 @@ func NewCredentialsResource() *schema.Resource {
 									"parse_expiry_from_cert": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										ForceNew: true,
 										Description: "Parse expiry from x509 certificate. " +
 											"If true, attempts to parse the expiry date from the provided PEM. " +
 											"If also the `expires_at` is set the credential expiry will be set to " +
@@ -467,6 +462,43 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	}
 
 	authenticationMethod := data.Get("authentication_method").(string)
+
+	// When switching away from a credential-based auth method, detach and
+	// delete the old credentials before setting the new method.
+	if data.HasChange("authentication_method") {
+		oldMethod, _ := data.GetChange("authentication_method")
+		oldAuthMethod, _ := oldMethod.(string)
+		switch oldAuthMethod {
+		case "private_key_jwt", "tls_client_auth", "self_signed_tls_client_auth":
+			clientID := data.Get("client_id").(string)
+
+			// Delete only credentials that belonged to the old auth method. Using
+			// state-derived IDs avoids accidentally deleting signed_request_object (JAR)
+			// credentials, which ListCredentials would also return.
+			oldCredentialsKey := fmt.Sprintf("%s.0.credentials", oldAuthMethod)
+			oldCredentialsRaw, _ := data.GetChange(oldCredentialsKey)
+			oldCreds, _ := oldCredentialsRaw.([]interface{})
+
+			if len(oldCreds) > 0 {
+				if err := detachAuthenticationMethodCredentials(ctx, api, clientID, authenticationMethod); err != nil {
+					return diag.FromErr(err)
+				}
+
+				for _, cred := range oldCreds {
+					if credMap, ok := cred.(map[string]interface{}); ok {
+						if id, ok := credMap["id"].(string); ok && id != "" {
+							if err := api.Client.DeleteCredential(ctx, clientID, id); err != nil {
+								if !internalError.IsStatusNotFound(err) {
+									return diag.FromErr(err)
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	switch authenticationMethod {
 	case "private_key_jwt", "tls_client_auth", "self_signed_tls_client_auth":
 		if diagnostics := modifyAuthenticationMethodCredentials(ctx, api, data, authenticationMethod); diagnostics.HasError() {
@@ -572,30 +604,135 @@ func modifyAuthenticationMethodCredentials(ctx context.Context, api *management.
 	}
 
 	clientID := data.Get("client_id").(string)
+	credentialsKey := fmt.Sprintf("%s.0.credentials", authenticationMethod)
 
+	// Determine how many credentials existed before this change.
+	oldCount, newCount := data.GetChange(credentialsKey + ".#")
+	oldCredentialCount, _ := oldCount.(int)
+	newCredentialCount, _ := newCount.(int)
+
+	// Classify each credential: unchanged, needs replacement, needs creation, or needs update.
+	type credentialAction struct {
+		index      int
+		credential *management.Credential
+		oldID      string
+		action     string // "keep", "replace", "add", "update".
+	}
+
+	actions := make([]credentialAction, 0, len(credentials))
 	for index, credential := range credentials {
-		configAddress := fmt.Sprintf("%s.0.credentials.%d", authenticationMethod, index)
-		if !data.HasChange(configAddress) {
-			continue
-		}
-
+		configAddress := fmt.Sprintf("%s.%d", credentialsKey, index)
 		credentialID := data.Get(fmt.Sprintf("%s.id", configAddress)).(string)
-		stateExpiresAt := data.Get(fmt.Sprintf("%s.expires_at", configAddress)).(string)
-		if stateExpiresAt == "" {
+
+		if !data.HasChange(configAddress) {
+			actions = append(actions, credentialAction{index: index, credential: credential, oldID: credentialID, action: "keep"})
 			continue
 		}
 
-		// The error can be ignored, the schema validates the type.
-		expiresAt, _ := time.Parse(time.RFC3339, stateExpiresAt)
-		credential.ExpiresAt = &expiresAt
+		switch {
+		case credentialID == "":
+			actions = append(actions, credentialAction{index: index, credential: credential, action: "add"})
+		case credentialNeedsReplacement(data, configAddress):
+			actions = append(actions, credentialAction{index: index, credential: credential, oldID: credentialID, action: "replace"})
+		default:
+			// Only mutable fields changed (e.g. expires_at).
+			stateExpiresAt := data.Get(fmt.Sprintf("%s.expires_at", configAddress)).(string)
+			if stateExpiresAt != "" {
+				expiresAt, _ := time.Parse(time.RFC3339, stateExpiresAt)
+				credential.ExpiresAt = &expiresAt
+			}
+			actions = append(actions, credentialAction{index: index, credential: credential, oldID: credentialID, action: "update"})
+		}
+	}
 
-		// Limitation: Unable to update the credential to never expire. Needs to get deleted and recreated if needed.
-		if err := api.Client.UpdateCredential(ctx, clientID, credentialID, credential); err != nil {
+	// Collect old IDs to delete (from replacements and removals).
+	idsToDelete := make([]string, 0)
+	for _, a := range actions {
+		if a.action == "replace" {
+			idsToDelete = append(idsToDelete, a.oldID)
+		}
+	}
+	for index := newCredentialCount; index < oldCredentialCount; index++ {
+		configAddress := fmt.Sprintf("%s.%d", credentialsKey, index)
+		credentialID := data.Get(fmt.Sprintf("%s.id", configAddress)).(string)
+		if credentialID != "" {
+			idsToDelete = append(idsToDelete, credentialID)
+		}
+	}
+
+	needsStructuralChange := len(idsToDelete) > 0
+	for _, a := range actions {
+		if a.action == "add" {
+			needsStructuralChange = true
+			break
+		}
+	}
+
+	if needsStructuralChange {
+		// Step 1: Detach credentials that need to be deleted by re-attaching
+		// only the ones we're keeping.
+		keepIDs := make([]management.Credential, 0)
+		for _, a := range actions {
+			if a.action == "keep" || a.action == "update" {
+				keepIDs = append(keepIDs, management.Credential{ID: &a.oldID})
+			}
+		}
+		if err := attachAuthenticationMethodCredentials(ctx, api, clientID, authenticationMethod, keepIDs); err != nil {
+			return diag.FromErr(err)
+		}
+
+		// Step 2: Delete old credentials that are no longer attached.
+		// Handle 404 gracefully in case a prior partial apply already deleted them.
+		for _, id := range idsToDelete {
+			if err := api.Client.DeleteCredential(ctx, clientID, id); err != nil {
+				if !internalError.IsStatusNotFound(err) {
+					return diag.FromErr(err)
+				}
+			}
+		}
+
+		// Step 3: Create new credentials (additions and replacements).
+		for i, a := range actions {
+			if a.action == "add" || a.action == "replace" {
+				if err := api.Client.CreateCredential(ctx, clientID, a.credential); err != nil {
+					return diag.FromErr(err)
+				}
+				actions[i].oldID = a.credential.GetID()
+			}
+		}
+
+		// Step 4: Re-attach all credentials in config order.
+		allIDs := make([]management.Credential, 0, len(actions))
+		for _, a := range actions {
+			allIDs = append(allIDs, management.Credential{ID: &a.oldID})
+		}
+		if err := attachAuthenticationMethodCredentials(ctx, api, clientID, authenticationMethod, allIDs); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
+	// Handle in-place updates (e.g. expires_at changes).
+	for _, a := range actions {
+		if a.action == "update" {
+			if err := api.Client.UpdateCredential(ctx, clientID, a.oldID, a.credential); err != nil {
+				return diag.FromErr(err)
+			}
+		}
+	}
+
 	return nil
+}
+
+// credentialNeedsReplacement checks whether any API-immutable fields changed,
+// requiring the credential to be deleted and recreated.
+func credentialNeedsReplacement(data *schema.ResourceData, configAddress string) bool {
+	immutableFields := []string{"pem", "algorithm", "credential_type", "name", "parse_expiry_from_cert"}
+	for _, field := range immutableFields {
+		if data.HasChange(fmt.Sprintf("%s.%s", configAddress, field)) {
+			return true
+		}
+	}
+	return false
 }
 
 func createSignedRequestObject(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
@@ -729,6 +866,22 @@ func attachSignedRequestObjectNoCredentials(ctx context.Context, api *management
 	return updateClientInternal(ctx, api, client.ID, client)
 }
 
+// detachAuthenticationMethodCredentials clears client_authentication_methods and sets a new
+// token_endpoint_auth_method. It does not touch signed_request_object, so JAR configuration
+// is preserved during auth method transitions.
+func detachAuthenticationMethodCredentials(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string) error {
+	client := clientWithAuthMethod{
+		ID:                          clientID,
+		ClientAuthenticationMethods: nil,
+		// API doesn't accept nil on both of these, so we temporarily set this to a default.
+		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
+	}
+
+	return updateClientInternal(ctx, api, client.ID, client)
+}
+
+// detachClientCredentials clears client_authentication_methods, signed_request_object, and sets a
+// new token_endpoint_auth_method. Used during resource deletion to fully reset auth configuration.
 func detachClientCredentials(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string) error {
 	client := clientWithAuthMethodAndSignedRequestObject{
 		ID:                          clientID,

@@ -1120,7 +1120,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_secret", "1234567"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.domain_aliases.#", "1"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.domain_aliases.*", "example.com"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.type", "front_channel"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.type", "back_channel"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.issuer", "https://www.paypalobjects.com"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.jwks_uri", "https://api.paypal.com/v1/oauth2/certs"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.discovery_url", "https://www.paypalobjects.com/.well-known/openid-configuration"),
@@ -1223,7 +1223,7 @@ resource "auth0_connection" "oidc" {
 		domain_aliases = [
 			"example.com"
 		]
-		type                   = "front_channel"
+		type                   = "back_channel"
 		issuer                 = "https://www.paypalobjects.com"
 		jwks_uri               = "https://api.paypal.com/v1/oauth2/certs"
 		discovery_url          = "https://www.paypalobjects.com/.well-known/openid-configuration"

@@ -69,6 +69,14 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 		if err := data.Set("webhook_configuration", []interface{}{webhookCfg}); err != nil {
 			return err
 		}
+
+	case "action":
+		actionCfg := map[string]interface{}{
+			"action_id": config["action_id"],
+		}
+		if err := data.Set("action_configuration", []interface{}{actionCfg}); err != nil {
+			return err
+		}
 	}
 
 	return nil

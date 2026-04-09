@@ -63,9 +63,14 @@ func expandActionModuleSecrets(secrets cty.Value) []*management.ActionModuleSecr
 	actionModuleSecrets := make([]*management.ActionModuleSecretRequest, 0)
 
 	secrets.ForEachElement(func(_ cty.Value, secret cty.Value) (stop bool) {
+		secretName := value.String(secret.GetAttr("name"))
+		secretValue := value.String(secret.GetAttr("value"))
+		if secretName == nil || secretValue == nil {
+			return stop
+		}
 		actionModuleSecrets = append(actionModuleSecrets, &management.ActionModuleSecretRequest{
-			Name:  *value.String(secret.GetAttr("name")),
-			Value: *value.String(secret.GetAttr("value")),
+			Name:  *secretName,
+			Value: *secretValue,
 		})
 		return stop
 	})

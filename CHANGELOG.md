@@ -1,3 +1,12 @@
+## v1.42.0
+
+FEATURES:
+- `resource/auth0_prompt_screen_partials` – Add `passkeys` into list of supported prompts for partials ([#1504](https://github.com/auth0/terraform-provider-auth0/pull/1504))
+- `resource/auth0_connection` – Add support for configuring `dpop_signing_alg` for Okta and OIDC connections ([#1516](https://github.com/auth0/terraform-provider-auth0/pull/1516))
+
+BUG FIXES:
+- `resource/auth0_tenant` – Introduce default value for `enable_client_connections` flag  ([#1515](https://github.com/auth0/terraform-provider-auth0/pull/1515))
+
 ## v1.41.0
 
 FEATURES:

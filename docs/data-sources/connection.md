@@ -96,6 +96,7 @@ Read-Only:
 - `discovery_url` (String)
 - `domain` (String)
 - `domain_aliases` (Set of String)
+- `dpop_signing_alg` (String)
 - `email` (Boolean)
 - `enable_script_context` (Boolean)
 - `enabled_database_customization` (Boolean)

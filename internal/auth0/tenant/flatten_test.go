@@ -102,6 +102,36 @@ func TestFlattenTenant(t *testing.T) {
 		assert.Equal(t, mockResourceData.Get("error_page"), []interface{}{})
 	})
 
+	t.Run("it defaults enable_client_connections to true when API returns nil", func(t *testing.T) {
+		tenant := management.Tenant{
+			Flags: &management.TenantFlags{
+				EnableClientConnections: nil,
+				EnableSSO:               auth0.Bool(true),
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		flags := mockResourceData.Get("flags").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, true, flags["enable_client_connections"])
+		assert.Equal(t, true, flags["enable_sso"])
+	})
+
+	t.Run("it preserves enable_client_connections false when API returns explicit false", func(t *testing.T) {
+		tenant := management.Tenant{
+			Flags: &management.TenantFlags{
+				EnableClientConnections: auth0.Bool(false),
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		flags := mockResourceData.Get("flags").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, false, flags["enable_client_connections"])
+	})
+
 	t.Run("it sets ephemeral session values correctly when returned by the API", func(t *testing.T) {
 		tenant := management.Tenant{
 			EphemeralSessionLifetime:     auth0.Float64(1.5),

@@ -26,6 +26,7 @@ const (
 	sessionLifetimeDefault              = 168.00
 	ephemeralSessionLifetimeDefault     = 1.00 // 1 hour.
 	idleEphemeralSessionLifetimeDefault = 1.00 // 1 hour.
+	enableClientConnectionsDefault      = true
 )
 
 // NewResource will return a new auth0_tenant resource.
@@ -143,8 +144,8 @@ func NewResource() *schema.Resource {
 						"enable_client_connections": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Computed:    true,
-							Description: "Indicates whether all current connections should be enabled when a new client is created.",
+							Default:     enableClientConnectionsDefault,
+							Description: "Indicates whether all current connections should be enabled when a new client is created. (Default: `true`)",
 						},
 						"enable_apis_section": {
 							Type:        schema.TypeBool,

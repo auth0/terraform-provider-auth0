@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 963
+        content_length: 990
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","strategy":"oidc","show_as_button":true,"options":{"client_id":"123456","client_secret":"123456","domain_aliases":["api.example.com","example.com"],"discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","type":"back_channel","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"connection_settings":{"pkce":"disabled"},"attribute_map":{"mapping_mode":"bind_all"},"send_back_channel_nonce":true}}
+            {"name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","strategy":"oidc","show_as_button":true,"options":{"client_id":"123456","client_secret":"123456","domain_aliases":["api.example.com","example.com"],"discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","type":"back_channel","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"connection_settings":{"pkce":"disabled"},"attribute_map":{"mapping_mode":"bind_all"},"send_back_channel_nonce":true,"dpop_signing_alg":"ES256"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.36.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"id":"con_2EHcpcTBprIPEO0Z","options":{"client_id":"123456","client_secret":"123456","domain_aliases":["api.example.com","example.com"],"discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","type":"back_channel","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"connection_settings":{"pkce":"disabled"},"attribute_map":{"mapping_mode":"bind_all"},"send_back_channel_nonce":true,"oidc_metadata":{"issuer":"https://api.login.yahoo.com","authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"subject_types_supported":["public"],"grant_types_supported":["authorization_code","refresh_token"],"id_token_signing_alg_values_supported":["ES256","RS256"],"scopes_supported":["openid","openid2","profile","email"],"acr_values_supported":["AAL1","AAL2"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"],"claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"response_modes_supported":["query"],"display_values_supported":["page"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false},"schema_version":"oidc-V4"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":true,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"client_id":"123456","client_secret":"123456","domain_aliases":["api.example.com","example.com"],"discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","type":"back_channel","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"connection_settings":{"pkce":"disabled"},"attribute_map":{"mapping_mode":"bind_all"},"send_back_channel_nonce":true,"dpop_signing_alg":"ES256","oidc_metadata":{"issuer":"https://api.login.yahoo.com","authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"subject_types_supported":["public"],"grant_types_supported":["authorization_code","refresh_token"],"id_token_signing_alg_values_supported":["ES256","RS256"],"scopes_supported":["openid","openid2","profile","email"],"acr_values_supported":["AAL1","AAL2"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"],"claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"response_modes_supported":["query"],"display_values_supported":["page"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false},"schema_version":"oidc-V4"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":true,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 541.100041ms
+        duration: 551.512708ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -52,8 +52,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2EHcpcTBprIPEO0Z
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
         method: GET
       response:
         proto: HTTP/2.0
@@ -63,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_2EHcpcTBprIPEO0Z","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"domain_aliases":["api.example.com","example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","send_back_channel_nonce":true,"set_user_root_attributes":"on_each_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":true,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"domain_aliases":["api.example.com","example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","upstream_params":{"screen_name":{"alias":"login_hint"}},"dpop_signing_alg":"ES256","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","send_back_channel_nonce":true,"set_user_root_attributes":"on_each_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":true,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 314.89675ms
+        duration: 395.84875ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -85,8 +85,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2EHcpcTBprIPEO0Z
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
         method: GET
       response:
         proto: HTTP/2.0
@@ -96,13 +96,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_2EHcpcTBprIPEO0Z","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"domain_aliases":["api.example.com","example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","send_back_channel_nonce":true,"set_user_root_attributes":"on_each_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":true,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"domain_aliases":["api.example.com","example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","upstream_params":{"screen_name":{"alias":"login_hint"}},"dpop_signing_alg":"ES256","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","send_back_channel_nonce":true,"set_user_root_attributes":"on_each_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":true,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 306.023292ms
+        duration: 370.132834ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -118,8 +118,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2EHcpcTBprIPEO0Z
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
         method: GET
       response:
         proto: HTTP/2.0
@@ -129,33 +129,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_2EHcpcTBprIPEO0Z","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"domain_aliases":["api.example.com","example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","send_back_channel_nonce":true,"set_user_root_attributes":"on_each_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":true,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"domain_aliases":["api.example.com","example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","upstream_params":{"screen_name":{"alias":"login_hint"}},"dpop_signing_alg":"ES256","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","send_back_channel_nonce":true,"set_user_root_attributes":"on_each_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":true,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 297.998417ms
+        duration: 377.535709ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 1080
+        content_length: 1108
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","show_as_button":false,"options":{"client_id":"1234567","client_secret":"1234567","domain_aliases":["example.com"],"discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","authorization_endpoint":"https://www.paypal.com/signin/authorize","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","type":"front_channel","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","token_endpoint":"https://api.paypal.com/v1/oauth2/token","scope":"email openid","set_user_root_attributes":"on_first_login","connection_settings":{"pkce":"auto"},"attribute_map":{"userinfo_scope":"openid email profile groups","mapping_mode":"use_map","attributes":{"email":"${context.tokenset.email}","email_verified":"${context.tokenset.email_verified}","family_name":"${context.tokenset.family_name}","given_name":"${context.tokenset.given_name}","name":"${context.tokenset.name}","nickname":"${context.tokenset.nickname}","picture":"${context.tokenset.picture}"}}}}
+            {"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","show_as_button":false,"options":{"client_id":"1234567","client_secret":"1234567","domain_aliases":["example.com"],"discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","authorization_endpoint":"https://www.paypal.com/signin/authorize","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","type":"back_channel","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","token_endpoint":"https://api.paypal.com/v1/oauth2/token","scope":"email openid","set_user_root_attributes":"on_first_login","connection_settings":{"pkce":"auto"},"attribute_map":{"userinfo_scope":"openid email profile groups","mapping_mode":"use_map","attributes":{"email":"${context.tokenset.email}","email_verified":"${context.tokenset.email_verified}","family_name":"${context.tokenset.family_name}","given_name":"${context.tokenset.given_name}","name":"${context.tokenset.name}","nickname":"${context.tokenset.nickname}","picture":"${context.tokenset.picture}"}},"dpop_signing_alg":"Ed25519"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.33.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2EHcpcTBprIPEO0Z
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -165,13 +165,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_2EHcpcTBprIPEO0Z","options":{"type":"front_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"use_map","userinfo_scope":"openid email profile groups"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"type":"back_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"use_map","userinfo_scope":"openid email profile groups"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","dpop_signing_alg":"Ed25519","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 475.569334ms
+        duration: 517.410167ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -187,8 +187,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2EHcpcTBprIPEO0Z
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
         method: GET
       response:
         proto: HTTP/2.0
@@ -198,13 +198,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_2EHcpcTBprIPEO0Z","options":{"type":"front_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"use_map","userinfo_scope":"openid email profile groups"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"type":"back_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"use_map","userinfo_scope":"openid email profile groups"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","dpop_signing_alg":"Ed25519","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 370.4785ms
+        duration: 325.122375ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -220,8 +220,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2EHcpcTBprIPEO0Z
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
         method: GET
       response:
         proto: HTTP/2.0
@@ -231,13 +231,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_2EHcpcTBprIPEO0Z","options":{"type":"front_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"use_map","userinfo_scope":"openid email profile groups"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"type":"back_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"use_map","userinfo_scope":"openid email profile groups"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","dpop_signing_alg":"Ed25519","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 405.816834ms
+        duration: 333.653375ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -253,8 +253,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2EHcpcTBprIPEO0Z
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
         method: GET
       response:
         proto: HTTP/2.0
@@ -264,31 +264,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_2EHcpcTBprIPEO0Z","options":{"type":"front_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"use_map","userinfo_scope":"openid email profile groups"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"type":"back_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"use_map","userinfo_scope":"openid email profile groups"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","dpop_signing_alg":"Ed25519","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 298.407792ms
+        duration: 839.34375ms
     - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 637
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","show_as_button":false,"options":{"client_id":"1234567","client_secret":"1234567","domain_aliases":["example.com"],"discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","authorization_endpoint":"https://www.paypal.com/signin/authorize","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","type":"front_channel","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","token_endpoint":"https://api.paypal.com/v1/oauth2/token","scope":"email openid","set_user_root_attributes":"on_first_login"}}
         form: {}
         headers:
+            Content-Type:
+                - application/json
             User-Agent:
-                - Go-Auth0/1.33.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2EHcpcTBprIPEO0Z
-        method: GET
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -297,13 +300,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_2EHcpcTBprIPEO0Z","options":{"type":"front_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"use_map","userinfo_scope":"openid email profile groups"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"type":"front_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 316.99775ms
+        duration: 511.081417ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -319,8 +322,74 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2EHcpcTBprIPEO0Z
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"type":"front_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 341.175375ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_xUTjfYOUheX4Vhn2","options":{"type":"front_channel","scope":"email openid","issuer":"https://www.paypalobjects.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","client_id":"1234567","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"1234567","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"domain_aliases":["example.com"],"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oidc","name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDC-TestAccConnectionOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDC-TestAccConnectionOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 349.404ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.36.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xUTjfYOUheX4Vhn2
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -330,10 +399,10 @@ interactions:
         trailer: {}
         content_length: 41
         uncompressed: false
-        body: '{"deleted_at":"2026-02-18T11:14:25.894Z"}'
+        body: '{"deleted_at":"2026-04-02T09:07:44.260Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 202 Accepted
         code: 202
-        duration: 367.072333ms
+        duration: 343.654042ms

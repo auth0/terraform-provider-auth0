@@ -6,10 +6,10 @@ FEATURES:
 
 BUG FIXES:
 - `resource/auth0_action_module` – Fix provider crash when creating action modules with secrets missing `name` or `value` by marking both fields as required ([#1524](https://github.com/auth0/terraform-provider-auth0/pull/1524))
-- Fix debug logging not being applied to management API clients by reordering SDK option calls ([#1526](https://github.com/auth0/terraform-provider-auth0/pull/1526))
 
 NOTES:
 - `data-source/auth0_custom_domains` – Fix example documentation to use `query` instead of `q` ([#1523](https://github.com/auth0/terraform-provider-auth0/pull/1523))
+- Fix debug logging not being applied to management API clients by reordering SDK option calls ([#1526](https://github.com/auth0/terraform-provider-auth0/pull/1526))
 
 ## v1.42.0
 

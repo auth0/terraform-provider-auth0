@@ -209,12 +209,12 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 
 		apiClient, err := management.New(config.Domain,
 			authenticationOption(config),
-			management.WithDebug(config.Debug),
 			management.WithUserAgent(userAgent(terraformVersion)),
 			management.WithAuth0ClientEnvEntry(providerName, version),
 			management.WithNoRetries(),
 			management.WithClient(customClientWithRetries()),
-			management.WithCustomDomainHeader(config.CustomDomainHeader))
+			management.WithCustomDomainHeader(config.CustomDomainHeader),
+			management.WithDebug(config.Debug))
 
 		if err != nil {
 			return nil, diag.FromErr(err)
@@ -222,11 +222,11 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 
 		apiClientV2, err := managementv2.New(config.Domain,
 			authenticationOptionV2(config),
-			option.WithDebug(config.Debug),
 			option.WithUserAgent(userAgent(terraformVersion)),
 			option.WithAuth0ClientEnvEntry(providerName, version),
 			option.WithHTTPClient(customClientWithRetries()),
-			option.WithCustomDomainHeader(config.CustomDomainHeader))
+			option.WithCustomDomainHeader(config.CustomDomainHeader),
+			option.WithDebug(config.Debug))
 
 		if err != nil {
 			return nil, diag.FromErr(err)

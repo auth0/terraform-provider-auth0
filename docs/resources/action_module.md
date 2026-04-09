@@ -74,10 +74,10 @@ Required:
 <a id="nestedblock--secrets"></a>
 ### Nested Schema for `secrets`
 
-Optional:
+Required:
 
-- `name` (String) Secret name. Required when configuring secrets
-- `value` (String, Sensitive) Secret value. Required when configuring secrets
+- `name` (String) Secret name.
+- `value` (String, Sensitive) Secret value.
 
 Read-Only:
 

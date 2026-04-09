@@ -155,6 +155,6 @@ func readClientsForDataSource(ctx context.Context, data *schema.ResourceData, me
 
 func generateFilterID(nameFilter string, appTypes []string, isFirstParty bool) string {
 	h := sha256.New()
-	h.Write([]byte(fmt.Sprintf("%s-%v-%v", nameFilter, appTypes, isFirstParty)))
+	_, _ = fmt.Fprintf(h, "%s-%v-%v", nameFilter, appTypes, isFirstParty)
 	return fmt.Sprintf("clients-%x", h.Sum(nil))
 }

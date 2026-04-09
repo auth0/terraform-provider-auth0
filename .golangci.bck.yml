@@ -1,0 +1,43 @@
+run:
+  timeout: 2m
+  allow-parallel-runners: true
+
+linters:
+  disable-all: true
+  enable:
+    - unused
+    - gofmt
+    - staticcheck
+    - revive
+    - godot
+    - whitespace
+    - goimports
+    - gosimple
+    - errcheck
+    - unconvert
+    - gocritic
+    - gosec
+    - gocyclo
+
+linters-settings:
+  gofmt:
+    simplify: true
+  staticcheck:
+    checks: [ "all" ]
+  godot:
+    scope: all
+    capital: true
+    period: true
+  goimports:
+    local-prefixes: "github.com/auth0/terraform-provider-auth0"
+  gocyclo:
+    min-complexity: 30 # This is the default but our goal is to take this down to 15.
+
+issues:
+  exclude-use-default: false
+  exclude-rules:
+    - path: "(.+)_test.go"
+      linters:
+        - gosec
+  exclude:
+    - "should have a package comment"

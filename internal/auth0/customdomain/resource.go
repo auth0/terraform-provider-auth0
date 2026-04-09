@@ -151,6 +151,11 @@ func NewResource() *schema.Resource {
 				},
 				Description: "The Custom Domain certificate. ",
 			},
+			"is_default": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Indicates whether this custom domain is the default domain for the tenant",
+			},
 		},
 	}
 }

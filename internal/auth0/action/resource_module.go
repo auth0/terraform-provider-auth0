@@ -61,14 +61,14 @@ func NewModuleResource() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"name": {
 							Type:        schema.TypeString,
-							Optional:    true,
-							Description: "Secret name. Required when configuring secrets",
+							Required:    true,
+							Description: "Secret name.",
 						},
 						"value": {
 							Type:        schema.TypeString,
-							Optional:    true,
+							Required:    true,
 							Sensitive:   true,
-							Description: "Secret value. Required when configuring secrets",
+							Description: "Secret value.",
 						},
 						"updated_at": {
 							Type:        schema.TypeString,

@@ -81,13 +81,13 @@ func deleteCustomDomainDefault(_ context.Context, data *schema.ResourceData, _ i
 	return nil
 }
 
-func expandCustomDomainDefault(data *schema.ResourceData) *management.CustomDomainDefault {
-	return &management.CustomDomainDefault{
+func expandCustomDomainDefault(data *schema.ResourceData) *management.CustomDomain {
+	return &management.CustomDomain{
 		Domain: auth0.String(data.Get("domain").(string)),
 	}
 }
 
-func flattenCustomDomainDefault(data *schema.ResourceData, customDomainDefault *management.CustomDomainDefault) error {
+func flattenCustomDomainDefault(data *schema.ResourceData, customDomainDefault *management.CustomDomain) error {
 	if customDomainDefault == nil {
 		return nil
 	}

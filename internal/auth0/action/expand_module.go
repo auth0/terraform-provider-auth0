@@ -27,11 +27,11 @@ func expandActionModuleUpdate(data *schema.ResourceData) *management.UpdateActio
 	}
 
 	if data.HasChange("dependencies") {
-		module.Dependencies = expandActionModuleDependencies(config.GetAttr("dependencies"))
+		module.SetDependencies(expandActionModuleDependencies(config.GetAttr("dependencies")))
 	}
 
 	if data.HasChange("secrets") {
-		module.Secrets = expandActionModuleSecrets(config.GetAttr("secrets"))
+		module.SetSecrets(expandActionModuleSecrets(config.GetAttr("secrets")))
 	}
 
 	return module

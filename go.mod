@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
 	github.com/auth0/go-auth0 v1.38.0
-	github.com/auth0/go-auth0/v2 v2.5.0
+	github.com/auth0/go-auth0/v2 v2.8.0
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/go-cty v1.5.0
 	github.com/hashicorp/go-multierror v1.1.1
@@ -92,7 +92,7 @@ require (
 	golang.org/x/exp v0.0.0-20240525044651-4c93da0ed11d // indirect
 	golang.org/x/mod v0.31.0 // indirect
 	golang.org/x/net v0.48.0 // indirect
-	golang.org/x/oauth2 v0.35.0 // indirect
+	golang.org/x/oauth2 v0.36.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/text v0.33.0 // indirect

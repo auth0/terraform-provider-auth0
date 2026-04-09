@@ -191,7 +191,7 @@ func updateEncryptionKeyManager(ctx context.Context, data *schema.ResourceData, 
 						return diag.FromErr(err)
 					}
 				} else if len(rootKeyID) == 0 || len(publicWrappingKey) == 0 {
-					return diag.FromErr(fmt.Errorf("The wrapped_key attribute should not be specified in the " +
+					return diag.FromErr(fmt.Errorf("the wrapped_key attribute should not be specified in the " +
 						"customer_provided_root_key block until after the public_wrapping_key has been generated"))
 				}
 			}

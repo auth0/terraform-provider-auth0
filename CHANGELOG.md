@@ -1,3 +1,16 @@
+## v1.43.0
+
+FEATURES:
+- `resource/auth0_custom_domain_default` – Add support for setting the tenant's default custom domain ([#1512](https://github.com/auth0/terraform-provider-auth0/pull/1512))
+- `resource/auth0_custom_domain` – Add computed `is_default` attribute to custom domain resources and data sources ([#1512](https://github.com/auth0/terraform-provider-auth0/pull/1512))
+
+BUG FIXES:
+- `resource/auth0_action_module` – Fix provider crash when creating action modules with secrets missing `name` or `value` by marking both fields as required ([#1524](https://github.com/auth0/terraform-provider-auth0/pull/1524))
+- Fix debug logging not being applied to management API clients by reordering SDK option calls ([#1526](https://github.com/auth0/terraform-provider-auth0/pull/1526))
+
+NOTES:
+- `data-source/auth0_custom_domains` – Fix example documentation to use `query` instead of `q` ([#1523](https://github.com/auth0/terraform-provider-auth0/pull/1523))
+
 ## v1.42.0
 
 FEATURES:

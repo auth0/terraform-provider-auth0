@@ -112,9 +112,19 @@ func createClientGrant(ctx context.Context, data *schema.ResourceData, meta inte
 		return diag.FromErr(err)
 	}
 
-	if len(grantList.ClientGrants) != 0 {
-		data.SetId(grantList.ClientGrants[0].GetID())
-		return readClientGrant(ctx, data, meta)
+	// Auth0 supports multiple client grants for the same (client_id, audience)
+	// differentiated by subject_type (e.g. one grant for "client" access and another
+	// for "user" access). We must therefore adopt an existing grant only when its
+	// subject_type matches the one in configuration; otherwise we fall through and
+	// create a new grant. Prior behavior (adopting grantList.ClientGrants[0]
+	// unconditionally) caused silent drift where a user-scoped grant configuration
+	// was collapsed onto a pre-existing client-scoped grant id.
+	desiredSubjectType := normalizeSubjectType(data.Get("subject_type").(string))
+	for _, existingGrant := range grantList.ClientGrants {
+		if normalizeSubjectType(existingGrant.GetSubjectType()) == desiredSubjectType {
+			data.SetId(existingGrant.GetID())
+			return readClientGrant(ctx, data, meta)
+		}
 	}
 
 	clientGrant := expandClientGrant(data)
@@ -126,6 +136,16 @@ func createClientGrant(ctx context.Context, data *schema.ResourceData, meta inte
 	data.SetId(clientGrant.GetID())
 
 	return readClientGrant(ctx, data, meta)
+}
+
+// normalizeSubjectType maps an empty subject_type to the schema-documented default
+// ("client"), so that missing values from either the user's configuration or the
+// Auth0 API are compared consistently.
+func normalizeSubjectType(subjectType string) string {
+	if subjectType == "" {
+		return "client"
+	}
+	return subjectType
 }
 
 func readClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

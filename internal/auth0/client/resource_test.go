@@ -2834,6 +2834,99 @@ func TestAccClientResourceServer(t *testing.T) {
 	})
 }
 
+const testAccClientOnBehalfOfTokenExchange = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - On-Behalf-Of Token Exchange - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+
+resource "auth0_client" "my_client" {
+	depends_on = [auth0_resource_server.my_resource_server]
+
+	name                       = "Acceptance Test - On-Behalf-Of Token Exchange - {{.testName}}"
+	app_type                   = "resource_server"
+	oidc_conformant            = true
+	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+	token_exchange {
+		allow_any_profile_of_type = ["on_behalf_of_token_exchange"]
+	}
+}
+`
+
+func TestAccClientOnBehalfOfTokenExchange(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientOnBehalfOfTokenExchange, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - On-Behalf-Of Token Exchange - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "resource_server"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "on_behalf_of_token_exchange"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientMixedTokenExchangeProfiles = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - Mixed Token Exchange - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+
+resource "auth0_client" "my_client" {
+	depends_on = [auth0_resource_server.my_resource_server]
+
+	name                       = "Acceptance Test - Mixed Token Exchange - {{.testName}}"
+	app_type                   = "resource_server"
+	oidc_conformant            = true
+	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication", "on_behalf_of_token_exchange"]
+	}
+}
+`
+
+func TestAccClientMixedTokenExchangeProfiles(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientMixedTokenExchangeProfiles, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mixed Token Exchange - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "resource_server"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.#", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.1", "on_behalf_of_token_exchange"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccClientTokenExchangeValidationError(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		ProviderFactories: acctest.TestFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config: `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Invalid Token Exchange"
+	token_exchange {
+		allow_any_profile_of_type = ["invalid_profile_type"]
+	}
+}
+`,
+				ExpectError: regexp.MustCompile(`expected .+ to be one of`),
+			},
+		},
+	})
+}
+
 const testAccClientSkipPromptNullConfig = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"

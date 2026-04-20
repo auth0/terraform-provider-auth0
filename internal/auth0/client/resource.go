@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
@@ -23,6 +24,11 @@ var ValidAppTypes = []string{
 	"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
 	"egnyte", "newrelic", "office365", "salesforce", "sentry",
 	"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom", "express_configuration",
+}
+
+// ValidTokenExchangeProfileTypes contains all valid values for token_exchange.allow_any_profile_of_type.
+var ValidTokenExchangeProfileTypes = []string{
+	"custom_authentication", "on_behalf_of_token_exchange",
 }
 
 // NewResource will return a new auth0_client resource.
@@ -1407,10 +1413,14 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"allow_any_profile_of_type": {
-							Required:    true,
-							Type:        schema.TypeList,
-							Elem:        &schema.Schema{Type: schema.TypeString},
-							Description: "List of allowed profile types for token exchange",
+							Required: true,
+							Type:     schema.TypeList,
+							Elem: &schema.Schema{
+								Type:         schema.TypeString,
+								ValidateFunc: validation.StringInSlice(ValidTokenExchangeProfileTypes, false),
+							},
+							Description: "List of allowed profile types for token exchange. " +
+								"Supported values include: " + strings.Join(ValidTokenExchangeProfileTypes, ", ") + ".",
 						},
 					},
 				},

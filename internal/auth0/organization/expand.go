@@ -42,14 +42,57 @@ func expandOrganizationBranding(brandingList cty.Value) *management.Organization
 
 	return organizationBranding
 }
+func expandOrganizationConnectionCreate(data *schema.ResourceData) *managementv2.CreateOrganizationAllConnectionRequestParameters {
+	cfg := data.GetRawConfig()
+	isEnabled := data.Get("is_enabled").(bool)
+	req := &managementv2.CreateOrganizationAllConnectionRequestParameters{
+		ConnectionID:               cfg.GetAttr("connection_id").AsString(),
+		AssignMembershipOnLogin:    value.Bool(cfg.GetAttr("assign_membership_on_login")),
+		IsSignupEnabled:            value.Bool(cfg.GetAttr("is_signup_enabled")),
+		ShowAsButton:               value.Bool(cfg.GetAttr("show_as_button")),
+		IsEnabled:                  &isEnabled,
+		OrganizationConnectionName: value.String(cfg.GetAttr("organization_connection_name")),
+	}
 
-func expandOrganizationConnectionCreate(connectionCfg cty.Value) *managementv2.CreateOrganizationAllConnectionRequestParameters {
+	if orgAccessLevel := value.String(cfg.GetAttr("organization_access_level")); orgAccessLevel != nil {
+		level := managementv2.OrganizationAccessLevelEnum(*orgAccessLevel)
+		req.OrganizationAccessLevel = &level
+	}
+
+	return req
+}
+
+func expandOrganizationConnectionUpdate(data *schema.ResourceData) *managementv2.UpdateOrganizationConnectionRequestParameters {
+	cfg := data.GetRawConfig()
+	isEnabled := data.Get("is_enabled").(bool)
+	req := &managementv2.UpdateOrganizationConnectionRequestParameters{
+		AssignMembershipOnLogin:    value.Bool(cfg.GetAttr("assign_membership_on_login")),
+		IsSignupEnabled:            value.Bool(cfg.GetAttr("is_signup_enabled")),
+		ShowAsButton:               value.Bool(cfg.GetAttr("show_as_button")),
+		IsEnabled:                  &isEnabled,
+		OrganizationConnectionName: value.String(cfg.GetAttr("organization_connection_name")),
+	}
+
+	if orgAccessLevel := value.String(cfg.GetAttr("organization_access_level")); orgAccessLevel != nil {
+		level := managementv2.OrganizationAccessLevelEnumWithNull(*orgAccessLevel)
+		req.OrganizationAccessLevel = &level
+	}
+
+	return req
+}
+
+func expandOrganizationConnectionCreateFromConfig(connectionCfg cty.Value) *managementv2.CreateOrganizationAllConnectionRequestParameters {
+	isEnabled := true
+	if !connectionCfg.GetAttr("is_enabled").IsNull() {
+		isEnabled = connectionCfg.GetAttr("is_enabled").True()
+	}
+
 	req := &managementv2.CreateOrganizationAllConnectionRequestParameters{
 		ConnectionID:               connectionCfg.GetAttr("connection_id").AsString(),
 		AssignMembershipOnLogin:    value.Bool(connectionCfg.GetAttr("assign_membership_on_login")),
 		IsSignupEnabled:            value.Bool(connectionCfg.GetAttr("is_signup_enabled")),
 		ShowAsButton:               value.Bool(connectionCfg.GetAttr("show_as_button")),
-		IsEnabled:                  value.Bool(connectionCfg.GetAttr("is_enabled")),
+		IsEnabled:                  &isEnabled,
 		OrganizationConnectionName: value.String(connectionCfg.GetAttr("organization_connection_name")),
 	}
 
@@ -61,28 +104,11 @@ func expandOrganizationConnectionCreate(connectionCfg cty.Value) *managementv2.C
 	return req
 }
 
-func expandOrganizationConnectionUpdate(connectionCfg cty.Value) *managementv2.UpdateOrganizationConnectionRequestParameters {
-	req := &managementv2.UpdateOrganizationConnectionRequestParameters{
-		AssignMembershipOnLogin:    value.Bool(connectionCfg.GetAttr("assign_membership_on_login")),
-		IsSignupEnabled:            value.Bool(connectionCfg.GetAttr("is_signup_enabled")),
-		ShowAsButton:               value.Bool(connectionCfg.GetAttr("show_as_button")),
-		IsEnabled:                  value.Bool(connectionCfg.GetAttr("is_enabled")),
-		OrganizationConnectionName: value.String(connectionCfg.GetAttr("organization_connection_name")),
-	}
-
-	if orgAccessLevel := value.String(connectionCfg.GetAttr("organization_access_level")); orgAccessLevel != nil {
-		level := managementv2.OrganizationAccessLevelEnumWithNull(*orgAccessLevel)
-		req.OrganizationAccessLevel = &level
-	}
-
-	return req
-}
-
 func expandOrganizationConnectionsCreate(cfg cty.Value) []*managementv2.CreateOrganizationAllConnectionRequestParameters {
 	connections := make([]*managementv2.CreateOrganizationAllConnectionRequestParameters, 0)
 
 	cfg.ForEachElement(func(_ cty.Value, connectionCfg cty.Value) (stop bool) {
-		connections = append(connections, expandOrganizationConnectionCreate(connectionCfg))
+		connections = append(connections, expandOrganizationConnectionCreateFromConfig(connectionCfg))
 
 		return stop
 	})

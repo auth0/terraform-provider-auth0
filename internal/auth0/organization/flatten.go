@@ -21,7 +21,7 @@ func flattenOrganization(data *schema.ResourceData, organization *management.Org
 	return result.ErrorOrNil()
 }
 
-func flattenOrganizationForDataSourceV2(
+func flattenOrganizationForDataSource(
 	data *schema.ResourceData,
 	organization *management.Organization,
 	connections []*managementv2.OrganizationAllConnectionPost,
@@ -30,7 +30,7 @@ func flattenOrganizationForDataSourceV2(
 ) error {
 	result := multierror.Append(
 		flattenOrganization(data, organization),
-		data.Set("connections", flattenOrganizationEnabledConnectionsV2(connections)),
+		data.Set("connections", flattenOrganizationEnabledConnections(connections)),
 		data.Set("members", flattenOrganizationMembersSlice(members)),
 		data.Set("client_grants", flattenOrganizationClientGrantsSlice(clientGrants)),
 	)
@@ -51,7 +51,7 @@ func flattenOrganizationBranding(organizationBranding *management.OrganizationBr
 	}
 }
 
-func flattenOrganizationConnectionV2(data *schema.ResourceData, orgConn *managementv2.GetOrganizationAllConnectionResponseContent) error {
+func flattenOrganizationConnection(data *schema.ResourceData, orgConn *managementv2.GetOrganizationAllConnectionResponseContent) error {
 	conn := orgConn.GetConnection()
 	result := multierror.Append(
 		data.Set("assign_membership_on_login", orgConn.GetAssignMembershipOnLogin()),
@@ -67,16 +67,16 @@ func flattenOrganizationConnectionV2(data *schema.ResourceData, orgConn *managem
 	return result.ErrorOrNil()
 }
 
-func flattenOrganizationConnectionsV2(data *schema.ResourceData, connections []*managementv2.OrganizationAllConnectionPost) error {
+func flattenOrganizationConnections(data *schema.ResourceData, connections []*managementv2.OrganizationAllConnectionPost) error {
 	result := multierror.Append(
 		data.Set("organization_id", data.Id()),
-		data.Set("enabled_connections", flattenOrganizationEnabledConnectionsV2(connections)),
+		data.Set("enabled_connections", flattenOrganizationEnabledConnections(connections)),
 	)
 
 	return result.ErrorOrNil()
 }
 
-func flattenOrganizationEnabledConnectionsV2(connections []*managementv2.OrganizationAllConnectionPost) []interface{} {
+func flattenOrganizationEnabledConnections(connections []*managementv2.OrganizationAllConnectionPost) []interface{} {
 	if connections == nil {
 		return nil
 	}

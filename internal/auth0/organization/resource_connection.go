@@ -37,7 +37,7 @@ func NewConnectionResource() *schema.Resource {
 			"assign_membership_on_login": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  false,
+				Computed: true,
 				Description: "When `true`, all users that log in with this connection will be automatically granted " +
 					"membership in the organization. When `false`, users must be granted membership in the organization " +
 					"before logging in with this connection.",
@@ -45,7 +45,7 @@ func NewConnectionResource() *schema.Resource {
 			"is_signup_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  false,
+				Computed: true,
 				Description: "Determines whether organization sign-up should be enabled for this " +
 					"organization connection. Only applicable for database connections. " +
 					"Note: `is_signup_enabled` can only be `true` if `assign_membership_on_login` is `true`.",
@@ -53,7 +53,7 @@ func NewConnectionResource() *schema.Resource {
 			"show_as_button": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  true,
+				Computed: true,
 				Description: "Determines whether a connection should be displayed on this organization's " +
 					"login prompt. Only applicable for enterprise connections.",
 			},
@@ -65,7 +65,6 @@ func NewConnectionResource() *schema.Resource {
 			},
 			"organization_connection_name": {
 				Type:        schema.TypeString,
-				Optional:    true,
 				Computed:    true,
 				Description: "Name of the connection in the scope of this organization.",
 			},
@@ -95,7 +94,7 @@ func NewConnectionResource() *schema.Resource {
 func createOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	apiv2 := meta.(*config.Config).GetAPIV2()
 	organizationID := data.Get("organization_id").(string)
-	createReq := expandOrganizationConnectionCreate(data.GetRawConfig())
+	createReq := expandOrganizationConnectionCreate(data)
 
 	if _, err := apiv2.Organizations.Connections.Create(ctx, organizationID, createReq); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
@@ -116,7 +115,7 @@ func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, 
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenOrganizationConnectionV2(data, organizationConnection))
+	return diag.FromErr(flattenOrganizationConnection(data, organizationConnection))
 }
 
 func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -124,7 +123,7 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
-	updateReq := expandOrganizationConnectionUpdate(data.GetRawConfig())
+	updateReq := expandOrganizationConnectionUpdate(data)
 
 	if _, err := apiv2.Organizations.Connections.Update(ctx, organizationID, connectionID, updateReq); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

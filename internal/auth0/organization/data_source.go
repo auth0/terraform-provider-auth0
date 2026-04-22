@@ -5,6 +5,7 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	managementv2 "github.com/auth0/go-auth0/v2/management"
 	managementv2client "github.com/auth0/go-auth0/v2/management/client"
@@ -84,7 +85,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 				"organization_access_level": {
 					Type:        schema.TypeString,
 					Computed:    true,
-					Description: "The access level for this organization connection. Can be `member`, `non_member`, or `everyone`.",
+					Description: "The access level for this organization connection. Can be `none`, `readonly`, `limited`, or `full`.",
 				},
 			},
 		},
@@ -137,7 +138,7 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 		return diag.FromErr(err)
 	}
 
-	return diag.FromErr(flattenOrganizationForDataSourceV2(data, foundOrganization, foundConnections, foundMembers, foundClientGrants))
+	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers, foundClientGrants))
 }
 
 func findOrganizationByIDOrName(
@@ -157,7 +158,7 @@ func findOrganizationByIDOrName(
 func fetchAllOrganizationConnectionsV2(ctx context.Context, apiv2 *managementv2client.Management, organizationID string) ([]*managementv2.OrganizationAllConnectionPost, error) {
 	var foundConnections []*managementv2.OrganizationAllConnectionPost
 
-	page, err := apiv2.Organizations.Connections.List(ctx, organizationID, &managementv2.ListOrganizationAllConnectionsRequestParameters{})
+	page, err := apiv2.Organizations.Connections.List(ctx, organizationID, &managementv2.ListOrganizationAllConnectionsRequestParameters{IsEnabled: auth0.Bool(true)})
 	if err != nil {
 		return nil, err
 	}

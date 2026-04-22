@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/auth0/go-auth0"
 	managementv2 "github.com/auth0/go-auth0/v2/management"
@@ -31,6 +33,7 @@ func NewConnectionsResource() *schema.Resource {
 			},
 			"enabled_connections": {
 				Type: schema.TypeSet,
+				Set:  organizationConnectionSetHash,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_id": {
@@ -70,7 +73,6 @@ func NewConnectionsResource() *schema.Resource {
 						"organization_connection_name": {
 							Type:        schema.TypeString,
 							Optional:    true,
-							Computed:    true,
 							Description: "Name of the connection in the scope of this organization.",
 						},
 						"organization_access_level": {
@@ -78,9 +80,9 @@ func NewConnectionsResource() *schema.Resource {
 							Optional: true,
 							Computed: true,
 							ValidateFunc: validation.StringInSlice([]string{
-								"member", "non_member", "everyone",
+								"none", "readonly", "limited", "full",
 							}, false),
-							Description: "The access level for this organization connection. Can be `member`, `non_member`, or `everyone`.",
+							Description: "The access level for this organization connection. Can be `none`, `readonly`, `limited`, or `full`.",
 						},
 					},
 				},
@@ -97,6 +99,25 @@ func NewConnectionsResource() *schema.Resource {
 		},
 		Description: "With this resource, you can manage enabled connections on an organization.",
 	}
+}
+
+// organizationConnectionSetHash computes the set hash using only fields that
+// have deterministic values at plan time (i.e. Required or have a Default).
+// The fields organization_access_level (Optional+Computed) and
+// organization_connection_name (Optional) are excluded because their values
+// may differ between the config and the API response, which would cause the
+// set hash to change on every read and produce perpetual diffs.
+func organizationConnectionSetHash(v interface{}) int {
+	m := v.(map[string]interface{})
+
+	var buf strings.Builder
+	buf.WriteString(m["connection_id"].(string))
+	buf.WriteString(strconv.FormatBool(m["assign_membership_on_login"].(bool)))
+	buf.WriteString(strconv.FormatBool(m["is_signup_enabled"].(bool)))
+	buf.WriteString(strconv.FormatBool(m["show_as_button"].(bool)))
+	buf.WriteString(strconv.FormatBool(m["is_enabled"].(bool)))
+
+	return schema.HashString(buf.String())
 }
 
 func createOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -128,7 +149,7 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	connectionsToAdd := expandOrganizationConnectionsCreate(data.GetRawConfig().GetAttr("enabled_connections"))
 
-	if diagnostics := guardAgainstErasingUnwantedConnectionsV2(
+	if diagnostics := guardAgainstErasingUnwantedConnections(
 		organizationID,
 		alreadyEnabledConnections,
 		connectionsToAdd,
@@ -159,7 +180,8 @@ func readOrganizationConnections(ctx context.Context, data *schema.ResourceData,
 	var connections []*managementv2.OrganizationAllConnectionPost
 	page, err := apiv2.Organizations.Connections.List(ctx,
 		data.Id(),
-		&managementv2.ListOrganizationAllConnectionsRequestParameters{IsEnabled: auth0.Bool(true)})
+		&managementv2.ListOrganizationAllConnectionsRequestParameters{IsEnabled: auth0.Bool(true)},
+	)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
@@ -175,7 +197,7 @@ func readOrganizationConnections(ctx context.Context, data *schema.ResourceData,
 		connections = append(connections, page.Results...)
 	}
 
-	return diag.FromErr(flattenOrganizationConnectionsV2(data, connections))
+	return diag.FromErr(flattenOrganizationConnections(data, connections))
 }
 
 func updateOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -183,6 +205,8 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	organizationID := data.Id()
 
+	// We use expandOrganizationConnectionsCreate (not value.Difference) to preserve
+	// the full typed struct. Value.Difference gives us untyped maps for delete/add.
 	connections := expandOrganizationConnectionsCreate(data.GetRawConfig().GetAttr("enabled_connections"))
 	connectionMap := make(map[string]*managementv2.CreateOrganizationAllConnectionRequestParameters)
 	for _, connection := range connections {
@@ -237,7 +261,7 @@ func deleteOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func guardAgainstErasingUnwantedConnectionsV2(
+func guardAgainstErasingUnwantedConnections(
 	organizationID string,
 	alreadyEnabledConnections []*managementv2.OrganizationAllConnectionPost,
 	connectionsToAdd []*managementv2.CreateOrganizationAllConnectionRequestParameters,

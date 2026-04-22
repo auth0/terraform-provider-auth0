@@ -5,6 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
@@ -53,8 +54,29 @@ func NewConnectionResource() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  true,
-				Description: "Determines whether a connection should be displayed on this organization’s " +
+				Description: "Determines whether a connection should be displayed on this organization's " +
 					"login prompt. Only applicable for enterprise connections.",
+			},
+			"is_enabled": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+				Description: "Whether the connection is enabled for the organization.",
+			},
+			"organization_connection_name": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "Name of the connection in the scope of this organization.",
+			},
+			"organization_access_level": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"none", "readonly", "limited", "full",
+				}, false),
+				Description: "The access level for this organization connection. Can be `none`, `readonly`, `limited` or `full`.",
 			},
 			"name": {
 				Type:        schema.TypeString,
@@ -71,44 +93,40 @@ func NewConnectionResource() *schema.Resource {
 }
 
 func createOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 	organizationID := data.Get("organization_id").(string)
-	organizationConnection := expandOrganizationConnection(data.GetRawConfig())
+	createReq := expandOrganizationConnectionCreate(data.GetRawConfig())
 
-	if err := api.Organization.AddConnection(ctx, organizationID, organizationConnection); err != nil {
-		return diag.FromErr(err)
+	if _, err := apiv2.Organizations.Connections.Create(ctx, organizationID, createReq); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
-
-	internalSchema.SetResourceGroupID(data, organizationID, organizationConnection.GetConnectionID())
+	internalSchema.SetResourceGroupID(data, organizationID, createReq.ConnectionID)
 
 	return readOrganizationConnection(ctx, data, meta)
 }
 
 func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
 
-	organizationConnection, err := api.Organization.Connection(ctx, organizationID, connectionID)
+	organizationConnection, err := apiv2.Organizations.Connections.Get(ctx, organizationID, connectionID)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenOrganizationConnection(data, organizationConnection))
+	return diag.FromErr(flattenOrganizationConnectionV2(data, organizationConnection))
 }
 
 func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	organizationID := data.Get("organization_id").(string)
-	organizationConnection := expandOrganizationConnection(data.GetRawConfig())
-	connectionID := organizationConnection.GetConnectionID()
+	connectionID := data.Get("connection_id").(string)
+	updateReq := expandOrganizationConnectionUpdate(data.GetRawConfig())
 
-	// UpdateConnection doesn't like this to be set.
-	organizationConnection.ConnectionID = nil
-
-	if err := api.Organization.UpdateConnection(ctx, organizationID, connectionID, organizationConnection); err != nil {
+	if _, err := apiv2.Organizations.Connections.Update(ctx, organizationID, connectionID, updateReq); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -116,12 +134,12 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 }
 
 func deleteOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
 
-	if err := api.Organization.DeleteConnection(ctx, organizationID, connectionID); err != nil {
+	if err := apiv2.Organizations.Connections.Delete(ctx, organizationID, connectionID); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 

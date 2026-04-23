@@ -187,10 +187,6 @@ resource "auth0_action_module" "my_module" {
 	EOT
 }
 
-data "auth0_action_module_versions" "my_module_versions" {
-	module_id = auth0_action_module.my_module.id
-}
-
 resource "auth0_action" "my_action" {
 	name   = "Test Action {{.testName}}"
 	deploy = true
@@ -208,7 +204,7 @@ resource "auth0_action" "my_action" {
 
 	modules {
 		module_id         = auth0_action_module.my_module.id
-		module_version_id = data.auth0_action_module_versions.my_module_versions.versions.0.id
+		module_version_id = auth0_action_module.my_module.version_id
 	}
 }
 

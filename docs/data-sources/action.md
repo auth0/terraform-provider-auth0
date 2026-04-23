@@ -37,7 +37,9 @@ data "auth0_action" "my_action" {
 - `deploy` (Boolean) Deploying an action will create a new immutable version of the action. If the action is currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately.
 - `modules` (Set of Object) List of action modules and their versions that this action depends on. (see [below for nested schema](#nestedatt--modules))
 - `runtime` (String) The Node runtime. Possible values are: `node12`, `node16` (not recommended), `node18`, `node22`
-- `secrets` (Set of Object) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. If the secret block is edited, the whole object is re-provisioned. (see [below for nested schema](#nestedatt--secrets))
+- `secrets` (Set of Object) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. If the secret block is edited, the whole object is re-provisioned. **Note:** Secret values are persisted in Terraform state as plain text. For better security, consider using `secrets_wo` instead, which supports write-only values and ephemeral variables. (see [below for nested schema](#nestedatt--secrets))
+- `secrets_wo` (List of Object) List of secrets for the action (write-only). Secret values are only available during resource creation and update, and are **not** stored in Terraform state. To change the secrets, update the `secrets_wo_version` attribute. Conflicts with `secrets`. (see [below for nested schema](#nestedatt--secrets_wo))
+- `secrets_wo_version` (Number) Version number for `secrets_wo` changes. Update this value to trigger a secret update when using `secrets_wo`.
 - `supported_triggers` (List of Object) List of triggers that this action supports. At this time, an action can only target a single trigger at a time. Read [Retrieving the set of triggers available within actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/action_triggers) to retrieve the latest trigger versions supported. (see [below for nested schema](#nestedatt--supported_triggers))
 - `version_id` (String) Version ID of the action. This value is available if `deploy` is set to true.
 
@@ -63,6 +65,15 @@ Read-Only:
 
 <a id="nestedatt--secrets"></a>
 ### Nested Schema for `secrets`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
+
+
+<a id="nestedatt--secrets_wo"></a>
+### Nested Schema for `secrets_wo`
 
 Read-Only:
 

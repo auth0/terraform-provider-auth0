@@ -666,6 +666,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
 			value.BoolPtrToString(client.SkipNonVerifiableCallbackURIConfirmationPrompt)),
 		data.Set("express_configuration", flattenExpressConfiguration(client.GetExpressConfiguration())),
+		data.Set("my_organization_configuration", flattenMyOrganizationConfiguration(client.GetMyOrganizationConfiguration())),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
@@ -988,6 +989,24 @@ func flattenExpressConfiguration(ec *management.ExpressConfiguration) []interfac
 			}
 		}
 		result["linked_clients"] = linkedClientsList
+	}
+
+	return []interface{}{result}
+}
+
+func flattenMyOrganizationConfiguration(moc *management.MyOrganizationConfiguration) []interface{} {
+	if moc == nil {
+		return nil
+	}
+
+	result := map[string]interface{}{
+		"connection_profile_id":        moc.GetConnectionProfileID(),
+		"user_attribute_profile_id":    moc.GetUserAttributeProfileID(),
+		"connection_deletion_behavior": moc.GetConnectionDeletionBehavior(),
+	}
+
+	if strategies := moc.GetAllowedStrategies(); len(strategies) > 0 {
+		result["allowed_strategies"] = strategies
 	}
 
 	return []interface{}{result}

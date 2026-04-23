@@ -1553,6 +1553,41 @@ func NewResource() *schema.Resource {
 					"This property can be sent only when app_type=resource_server." +
 					"This property can not be changed, once the client is created.",
 			},
+			"my_organization_configuration": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration for self-service organization features, controlling how organizations are created and managed for this client.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"connection_profile_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The ID of the connection profile to use when creating organizations for this client.",
+						},
+						"user_attribute_profile_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The ID of the user attribute profile to use when creating organizations for this client.",
+						},
+						"allowed_strategies": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+							Description: "The list of connection strategies that are allowed when creating organizations for this client (e.g. \"okta\", \"samlp\").",
+						},
+						"connection_deletion_behavior": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Description:  "Controls the behavior when deleting connections associated with organizations for this client. Possible values: `allow`, `allow_if_empty`.",
+							ValidateFunc: validation.StringInSlice([]string{"allow", "allow_if_empty"}, false),
+						},
+					},
+				},
+			},
 			"express_configuration": {
 				Type:        schema.TypeList,
 				Optional:    true,

@@ -234,7 +234,7 @@ func cimdClientHasChange(req *mgmtv2.UpdateClientRequestContent) (bool, error) {
 }
 
 func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv2.UpdateClientRequestContent) {
-	// config := data.GetRawConfig()
+	config := data.GetRawConfig()
 
 	// nullChecks := map[string]func(){
 	// 	"description": func() {
@@ -313,6 +313,10 @@ func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv2.UpdateClientRequ
 	// 		applyNull()
 	// 	}
 	// }
+
+	if data.HasChange("allowed_origins") && config.GetAttr("allowed_origins").IsNull() {
+		req.SetAllowedOrigins([]string{})
+	}
 
 	if isCIMDDefaultOrgNull(data) {
 		req.SetDefaultOrganization(nil)

@@ -1723,10 +1723,9 @@ func importClient(ctx context.Context, data *schema.ResourceData, meta interface
 
 	if client.GetExternalMetadataType() == "cimd" {
 		return nil, fmt.Errorf(
-			"client %q is a CIMD client (external_metadata_type=%q). "+
+			"client %q is a CIMD client. "+
 				"Use the auth0_client_cimd resource to manage CIMD clients",
 			data.Id(),
-			client.GetExternalMetadataType(),
 		)
 	}
 

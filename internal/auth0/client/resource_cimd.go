@@ -25,8 +25,8 @@ type schemaFieldDefinition struct {
 	editableChildren schemaFields
 }
 
-// cmidEditableSchemaDefinitions defines PATCHable fields for CIMD clients.
-var cmidEditableSchemaDefinitions = schemaFields{
+// cimdEditableSchemaDefinitions defines PATCHable fields for CIMD clients.
+var cimdEditableSchemaDefinitions = schemaFields{
 	"allowed_origins": nil,
 	"description":     nil,
 	"oidc_conformant": {
@@ -96,11 +96,11 @@ func NewCIMDResource() *schema.Resource {
 }
 
 // cimdClientSchema derives the CIMD schema from auth0_client by applying
-// cmidEditableSchemaDefinitions and adding the external_client_id field.
+// cimdEditableSchemaDefinitions and adding the external_client_id field.
 func cimdClientSchema() map[string]*schema.Schema {
 	baseSchema := NewResource().Schema
 
-	updateSchemaProperties(baseSchema, cmidEditableSchemaDefinitions)
+	updateSchemaProperties(baseSchema, cimdEditableSchemaDefinitions)
 
 	// Computed in auth0_client → Required+ForceNew for CIMD registration URL.
 	baseSchema["external_client_id"] = &schema.Schema{

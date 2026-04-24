@@ -318,6 +318,10 @@ func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv2.UpdateClientRequ
 		req.SetAllowedOrigins([]string{})
 	}
 
+	if data.HasChange("web_origins") && config.GetAttr("web_origins").IsNull() {
+		req.SetWebOrigins([]string{})
+	}
+
 	if isCIMDDefaultOrgNull(data) {
 		req.SetDefaultOrganization(nil)
 	}

@@ -195,13 +195,13 @@ func cimdClientSchema() map[string]*schema.Schema {
 				Schema: map[string]*schema.Schema{
 					"flows": {
 						Type:        schema.TypeList,
-						Optional:    true,
+						Required:    true,
 						Elem:        &schema.Schema{Type: schema.TypeString},
 						Description: "Definition of the flow that needs to be configured. Eg. client_credentials",
 					},
 					"organization_id": {
 						Type:        schema.TypeString,
-						Optional:    true,
+						Required:    true,
 						Description: "The unique identifier of the organization",
 					},
 				},
@@ -258,10 +258,12 @@ func cimdClientSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"rotation_type": {
-						Type:        schema.TypeString,
-						Optional:    true,
-						Computed:    true,
-						Description: "Refresh token rotation type.",
+						Type:     schema.TypeString,
+						Optional: true,
+						Computed: true,
+						Description: "Refresh token rotation type." +
+							"Valid values are `rotating` and `non-rotating`",
+						ValidateFunc: validation.StringInSlice([]string{"rotating", "non-rotating"}, false),
 					},
 					"expiration_type": {
 						Type:     schema.TypeString,
@@ -346,13 +348,22 @@ func createCIMDClient(ctx context.Context, data *schema.ResourceData, meta inter
 
 	data.SetId(clientID)
 
+	return updateCIMDClient(ctx, data, meta)
+}
+
+func updateCIMDClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	apiv2 := meta.(*config.Config).GetAPIV2()
+
 	updateReq := expandCIMDClient(data)
-	// TODO add null check calls to remove nullified params
+	if !data.IsNewResource() {
+		applyCIMDNullFields(data, updateReq)
+	}
+
 	if hasChange, err := cimdClientHasChange(updateReq); err != nil {
 		return diag.FromErr(fmt.Errorf("failed to determine if CIMD client has changes: %w", err))
 	} else if hasChange {
 		if _, err := apiv2.Clients.Update(ctx, data.Id(), updateReq); err != nil {
-			return diag.FromErr(fmt.Errorf("failed to update CIMD client after registration: %w", err))
+			return diag.FromErr(err)
 		}
 	}
 
@@ -372,23 +383,6 @@ func readCIMDClient(ctx context.Context, data *schema.ResourceData, meta interfa
 	}
 
 	return nil
-}
-
-func updateCIMDClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
-
-	updateReq := expandCIMDClient(data)
-	applyCIMDNullFields(data, updateReq)
-
-	if hasChange, err := cimdClientHasChange(updateReq); err != nil {
-		return diag.FromErr(fmt.Errorf("failed to determine if CIMD client has changes: %w", err))
-	} else if hasChange {
-		if _, err := apiv2.Clients.Update(ctx, data.Id(), updateReq); err != nil {
-			return diag.FromErr(err)
-		}
-	}
-
-	return readCIMDClient(ctx, data, meta)
 }
 
 func deleteCIMDClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

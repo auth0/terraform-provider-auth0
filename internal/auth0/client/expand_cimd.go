@@ -140,10 +140,6 @@ func expandCIMDDefaultOrganization(data *schema.ResourceData) *mgmtv2.ClientDefa
 		return nil
 	}
 
-	if defaultOrg.OrganizationID == "" && len(defaultOrg.Flows) == 0 {
-		return nil
-	}
-
 	return &defaultOrg
 }
 
@@ -333,21 +329,5 @@ func isCIMDDefaultOrgNull(data *schema.ResourceData) bool {
 	}
 
 	config := data.GetRawConfig().GetAttr("default_organization")
-	if config.IsNull() || config.LengthInt() == 0 {
-		return true
-	}
-
-	shouldNull := true
-	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-		flows := cfg.GetAttr("flows")
-		orgID := cfg.GetAttr("organization_id")
-		if (!flows.IsNull() && flows.LengthInt() > 0) ||
-			(!orgID.IsNull() && orgID.AsString() != "") {
-			shouldNull = false
-		}
-
-		return false
-	})
-
-	return shouldNull
+	return config.IsNull() || config.LengthInt() == 0
 }

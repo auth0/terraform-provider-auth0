@@ -322,6 +322,10 @@ func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv2.UpdateClientRequ
 		req.SetWebOrigins([]string{})
 	}
 
+	if data.HasChange("organization_discovery_methods") && config.GetAttr("organization_discovery_methods").IsNull() {
+		req.SetOrganizationDiscoveryMethods(nil)
+	}
+
 	if isCIMDDefaultOrgNull(data) {
 		req.SetDefaultOrganization(nil)
 	}

@@ -262,10 +262,6 @@ func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefre
 }
 
 func expandRefreshTokenPolicies(policies cty.Value) *[]management.ClientRefreshTokenPolicy {
-	if policies.IsNull() {
-		return nil
-	}
-
 	clientRefreshTokenPolicy := make([]management.ClientRefreshTokenPolicy, 0)
 
 	policies.ForEachElement(func(_ cty.Value, dep cty.Value) (stop bool) {
@@ -1037,9 +1033,7 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 	return &samlpAddon
 }
 
-// clientHasChange returns true if the expanded client has any non-nil fields.
 func clientHasChange(c *management.Client) bool {
-	// All fields use omitempty, so String() returns "{}" when nothing is set.
 	return c.String() != "{}"
 }
 

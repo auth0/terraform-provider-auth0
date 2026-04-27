@@ -3,10 +3,11 @@ resource "auth0_client_cimd" "minimal_client" {
 }
 
 resource "auth0_client_cimd" "my_mcp_agent" {
-  external_client_id = "https://mcp-agent2.example.com/.well-known/client.json"
-  description        = "MCP Agent - Production"
-  app_type           = "spa"
-  oidc_conformant    = true
+  external_client_id         = "https://mcp-agent2.example.com/.well-known/client.json"
+  external_client_id_version = 1
+  description                = "MCP Agent - Production"
+  app_type                   = "spa"
+  oidc_conformant            = true
 
   allowed_origins = ["https://mcp-agent2.example.com"]
   web_origins     = ["https://mcp-agent2.example.com"]

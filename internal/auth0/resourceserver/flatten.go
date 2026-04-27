@@ -7,8 +7,20 @@ import (
 )
 
 func flattenResourceServer(data *schema.ResourceData, resourceServer *management.ResourceServer) error {
+	// The My Account API ignores the `name` field on write and always returns
+	// "Auth0 My Account API" on read. To avoid a perpetual diff when users set
+	// a different name in their configuration, retain the name from state.
+	name := resourceServer.GetName()
+	if name == auth0MyAccountAPIName {
+		if existing, ok := data.GetOk("name"); ok {
+			if s, ok := existing.(string); ok && s != "" {
+				name = s
+			}
+		}
+	}
+
 	result := multierror.Append(
-		data.Set("name", resourceServer.GetName()),
+		data.Set("name", name),
 		data.Set("identifier", resourceServer.GetIdentifier()),
 		data.Set("token_lifetime", resourceServer.GetTokenLifetime()),
 		data.Set("allow_offline_access", resourceServer.GetAllowOfflineAccess()),
@@ -24,6 +36,7 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 		data.Set("token_encryption", flattenTokenEncryption(data, resourceServer.GetTokenEncryption())),
 		data.Set("proof_of_possession", flattenProofOfPossession(resourceServer.GetProofOfPossession())),
 		data.Set("subject_type_authorization", flattenSubjectTypeAuthorization(resourceServer.GetSubjectTypeAuthorization())),
+		data.Set("authorization_policy", flattenAuthorizationPolicy(resourceServer.GetAuthorizationPolicy())),
 		data.Set("client_id", resourceServer.GetClientID()),
 		data.Set("is_system", resourceServer.GetIsSystem()),
 	)
@@ -169,4 +182,15 @@ func flattenSubjectTypeAuthorization(subjectType *management.ResourceServerSubje
 	}
 
 	return []interface{}{m}
+}
+
+func flattenAuthorizationPolicy(policy *management.ResourceServerAuthorizationPolicy) []interface{} {
+	if policy == nil {
+		return nil
+	}
+	return []interface{}{
+		map[string]interface{}{
+			"policy_id": policy.GetPolicyID(),
+		},
+	}
 }

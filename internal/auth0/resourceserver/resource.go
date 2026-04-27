@@ -18,7 +18,10 @@ import (
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
-const auth0ManagementAPIName = "Auth0 Management API"
+const (
+	auth0ManagementAPIName = "Auth0 Management API"
+	auth0MyAccountAPIName  = "Auth0 My Account API"
+)
 
 // NewResource will return a new auth0_resource_server resource.
 func NewResource() *schema.Resource {
@@ -77,6 +80,7 @@ func NewResource() *schema.Resource {
 			"allow_offline_access": {
 				Type:        schema.TypeBool,
 				Optional:    true,
+				Computed:    true,
 				Description: "Indicates whether refresh tokens can be issued for this resource server.",
 			},
 			"token_lifetime": {
@@ -258,6 +262,23 @@ func NewResource() *schema.Resource {
 							}, true),
 							Description: "Specifies which client types require Proof-of-Possession" +
 								"`all_clients` or `public_clients` is supported.",
+						},
+					},
+				},
+			},
+			"authorization_policy": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Authorization policy for the resource server.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"policy_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "Identifier of the authorization policy.",
 						},
 					},
 				},

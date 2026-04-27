@@ -24,9 +24,12 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 
 	// Allow updating SubjectTypeAuthorization for Auth0 Management API as well as non-management API.
 	resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(data)
+	resourceServer.AuthorizationPolicy = expandAuthorizationPolicy(data)
 
 	if !resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
-		resourceServer.Name = value.String(cfg.GetAttr("name"))
+		if !resourceServerIsAuth0MyAccountAPI(data.GetRawState()) {
+			resourceServer.Name = value.String(cfg.GetAttr("name"))
+		}
 		resourceServer.SigningAlgorithm = value.String(cfg.GetAttr("signing_alg"))
 		resourceServer.SigningSecret = value.String(cfg.GetAttr("signing_secret"))
 		resourceServer.AllowOfflineAccess = value.Bool(cfg.GetAttr("allow_offline_access"))
@@ -40,6 +43,30 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.ProofOfPossession = expandProofOfPossession(data)
 	}
 	return resourceServer
+}
+
+func expandAuthorizationPolicy(data *schema.ResourceData) *management.ResourceServerAuthorizationPolicy {
+	if !data.IsNewResource() && !data.HasChange("authorization_policy") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("authorization_policy")
+	if config.IsNull() {
+		return nil
+	}
+
+	var policy management.ResourceServerAuthorizationPolicy
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		policy.PolicyID = value.String(cfg.GetAttr("policy_id"))
+		return stop
+	})
+
+	if policy == (management.ResourceServerAuthorizationPolicy{}) {
+		return nil
+	}
+
+	return &policy
 }
 
 func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.ResourceServerSubjectTypeAuthorization {
@@ -311,4 +338,12 @@ func resourceServerIsAuth0ManagementAPI(state cty.Value) bool {
 	}
 
 	return state.GetAttr("name").AsString() == auth0ManagementAPIName
+}
+
+func resourceServerIsAuth0MyAccountAPI(state cty.Value) bool {
+	if state.IsNull() {
+		return false
+	}
+
+	return state.GetAttr("name").AsString() == auth0MyAccountAPIName
 }

@@ -216,103 +216,10 @@ func cimdClientHasChange(req *mgmtv2.UpdateClientRequestContent) (bool, error) {
 	fmt.Println("===============")
 	fmt.Println(string(reqBytes))
 	return string(reqBytes) != "{}", nil
-	// return req.Description != nil ||
-	// 	req.AppType != nil ||
-	// 	len(req.AllowedOrigins) > 0 ||
-	// 	len(req.WebOrigins) > 0 ||
-	// 	len(req.GrantTypes) > 0 ||
-	// 	req.OidcConformant != nil ||
-	// 	len(req.OrganizationDiscoveryMethods) > 0 ||
-	// 	req.ClientMetadata != nil ||
-	// 	req.RequireProofOfPossession != nil ||
-	// 	req.SkipNonVerifiableCallbackURIConfirmationPrompt != nil ||
-	// 	req.JwtConfiguration != nil ||
-	// 	req.RefreshToken != nil ||
-	// 	req.DefaultOrganization != nil ||
-	// 	req.TokenQuota != nil ||
-	// 	req.RedirectionPolicy != nil, nil
 }
 
 func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv2.UpdateClientRequestContent) {
 	config := data.GetRawConfig()
-
-	// nullChecks := map[string]func(){
-	// 	"description": func() {
-	// 		if config.GetAttr("description").IsNull() {
-	// 			req.SetDescription(nil)
-	// 		}
-	// 	},
-	// 	"app_type": func() {
-	// 		if config.GetAttr("app_type").IsNull() {
-	// 			req.SetAppType(nil)
-	// 		}
-	// 	},
-	// 	"allowed_origins": func() {
-	// 		v := config.GetAttr("allowed_origins")
-	// 		if v.IsNull() || v.LengthInt() == 0 {
-	// 			req.SetAllowedOrigins(nil)
-	// 		}
-	// 	},
-	// 	"web_origins": func() {
-	// 		v := config.GetAttr("web_origins")
-	// 		if v.IsNull() || v.LengthInt() == 0 {
-	// 			req.SetWebOrigins(nil)
-	// 		}
-	// 	},
-	// 	"grant_types": func() {
-	// 		v := config.GetAttr("grant_types")
-	// 		if v.IsNull() || v.LengthInt() == 0 {
-	// 			req.SetGrantTypes(nil)
-	// 		}
-	// 	},
-	// 	"oidc_conformant": func() {
-	// 		if config.GetAttr("oidc_conformant").IsNull() {
-	// 			req.SetOidcConformant(nil)
-	// 		}
-	// 	},
-	// 	"organization_discovery_methods": func() {
-	// 		v := config.GetAttr("organization_discovery_methods")
-	// 		if v.IsNull() || v.LengthInt() == 0 {
-	// 			req.SetOrganizationDiscoveryMethods(nil)
-	// 		}
-	// 	},
-	// 	"require_proof_of_possession": func() {
-	// 		if config.GetAttr("require_proof_of_possession").IsNull() {
-	// 			req.SetRequireProofOfPossession(nil)
-	// 		}
-	// 	},
-	// 	"skip_non_verifiable_callback_uri_confirmation_prompt": func() {
-	// 		if config.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull() {
-	// 			req.SetSkipNonVerifiableCallbackURIConfirmationPrompt(nil)
-	// 		}
-	// 	},
-	// 	"jwt_configuration": func() {
-	// 		if config.GetAttr("jwt_configuration").IsNull() {
-	// 			req.SetJwtConfiguration(nil)
-	// 		}
-	// 	},
-	// 	"refresh_token": func() {
-	// 		if config.GetAttr("refresh_token").IsNull() {
-	// 			req.SetRefreshToken(nil)
-	// 		}
-	// 	},
-	// 	"client_metadata": func() {
-	// 		if config.GetAttr("client_metadata").IsNull() {
-	// 			req.SetClientMetadata(nil)
-	// 		}
-	// 	},
-	// 	"redirection_policy": func() {
-	// 		if config.GetAttr("redirection_policy").IsNull() {
-	// 			req.SetRedirectionPolicy(nil)
-	// 		}
-	// 	},
-	// }
-
-	// for field, applyNull := range nullChecks {
-	// 	if data.HasChange(field) {
-	// 		applyNull()
-	// 	}
-	// }
 
 	if data.HasChange("allowed_origins") && config.GetAttr("allowed_origins").IsNull() {
 		req.SetAllowedOrigins([]string{})
@@ -330,20 +237,16 @@ func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv2.UpdateClientRequ
 		req.SetClientMetadata(&map[string]any{})
 	}
 
-	if isCIMDDefaultOrgNull(data) {
+	if data.HasChange("default_organization") &&
+		(config.GetAttr("default_organization").IsNull() || config.GetAttr("default_organization").LengthInt() == 0) {
 		req.SetDefaultOrganization(nil)
+	}
+
+	if data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") && config.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull() {
+		req.SetSkipNonVerifiableCallbackURIConfirmationPrompt(nil)
 	}
 
 	if commons.IsTokenQuotaNull(data) {
 		req.SetTokenQuota(nil)
 	}
-}
-
-func isCIMDDefaultOrgNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("default_organization") {
-		return false
-	}
-
-	config := data.GetRawConfig().GetAttr("default_organization")
-	return config.IsNull() || config.LengthInt() == 0
 }

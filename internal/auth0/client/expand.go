@@ -61,6 +61,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		TokenQuota:               commons.ExpandTokenQuota(config.GetAttr("token_quota")),
 		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 		ExpressConfiguration:                           expandExpressConfiguration(data),
+		MyOrganizationConfiguration:                    expandMyOrganizationConfiguration(data),
 	}
 
 	// Ignore empty array to prevent API errors.
@@ -1334,6 +1335,36 @@ func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressCo
 				return stop
 			})
 			result.LinkedClients = &linkedClients
+		}
+
+		return stop
+	})
+
+	return result
+}
+
+func expandMyOrganizationConfiguration(data *schema.ResourceData) *management.MyOrganizationConfiguration {
+	config := data.GetRawConfig()
+	myOrgConfig := config.GetAttr("my_organization_configuration")
+
+	if myOrgConfig.IsNull() || myOrgConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var result *management.MyOrganizationConfiguration
+
+	myOrgConfig.ForEachElement(func(_ cty.Value, elem cty.Value) (stop bool) {
+		result = &management.MyOrganizationConfiguration{
+			ConnectionProfileID:        value.String(elem.GetAttr("connection_profile_id")),
+			UserAttributeProfileID:     value.String(elem.GetAttr("user_attribute_profile_id")),
+			ConnectionDeletionBehavior: value.String(elem.GetAttr("connection_deletion_behavior")),
+		}
+
+		allowedStrategiesAttr := elem.GetAttr("allowed_strategies")
+		if !allowedStrategiesAttr.IsNull() && allowedStrategiesAttr.LengthInt() > 0 {
+			if strategies := value.Strings(allowedStrategiesAttr); strategies != nil && len(*strategies) > 0 {
+				result.AllowedStrategies = strategies
+			}
 		}
 
 		return stop

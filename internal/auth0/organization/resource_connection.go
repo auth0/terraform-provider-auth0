@@ -5,6 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
@@ -36,7 +37,7 @@ func NewConnectionResource() *schema.Resource {
 			"assign_membership_on_login": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  false,
+				Computed: true,
 				Description: "When `true`, all users that log in with this connection will be automatically granted " +
 					"membership in the organization. When `false`, users must be granted membership in the organization " +
 					"before logging in with this connection.",
@@ -44,7 +45,7 @@ func NewConnectionResource() *schema.Resource {
 			"is_signup_enabled": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  false,
+				Computed: true,
 				Description: "Determines whether organization sign-up should be enabled for this " +
 					"organization connection. Only applicable for database connections. " +
 					"Note: `is_signup_enabled` can only be `true` if `assign_membership_on_login` is `true`.",
@@ -52,9 +53,29 @@ func NewConnectionResource() *schema.Resource {
 			"show_as_button": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Default:  true,
-				Description: "Determines whether a connection should be displayed on this organization’s " +
+				Computed: true,
+				Description: "Determines whether a connection should be displayed on this organization's " +
 					"login prompt. Only applicable for enterprise connections.",
+			},
+			"is_enabled": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+				Description: "Whether the connection is enabled for the organization.",
+			},
+			"organization_connection_name": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Name of the connection in the scope of this organization.",
+			},
+			"organization_access_level": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"none", "readonly", "limited", "full",
+				}, false),
+				Description: "The access level for this organization connection. Can be `none`, `readonly`, `limited` or `full`.",
 			},
 			"name": {
 				Type:        schema.TypeString,
@@ -71,26 +92,25 @@ func NewConnectionResource() *schema.Resource {
 }
 
 func createOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 	organizationID := data.Get("organization_id").(string)
-	organizationConnection := expandOrganizationConnection(data.GetRawConfig())
+	createReq := expandOrganizationConnectionCreate(data)
 
-	if err := api.Organization.AddConnection(ctx, organizationID, organizationConnection); err != nil {
-		return diag.FromErr(err)
+	if _, err := apiv2.Organizations.Connections.Create(ctx, organizationID, createReq); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
-
-	internalSchema.SetResourceGroupID(data, organizationID, organizationConnection.GetConnectionID())
+	internalSchema.SetResourceGroupID(data, organizationID, createReq.ConnectionID)
 
 	return readOrganizationConnection(ctx, data, meta)
 }
 
 func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
 
-	organizationConnection, err := api.Organization.Connection(ctx, organizationID, connectionID)
+	organizationConnection, err := apiv2.Organizations.Connections.Get(ctx, organizationID, connectionID)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
@@ -99,16 +119,13 @@ func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, 
 }
 
 func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	organizationID := data.Get("organization_id").(string)
-	organizationConnection := expandOrganizationConnection(data.GetRawConfig())
-	connectionID := organizationConnection.GetConnectionID()
+	connectionID := data.Get("connection_id").(string)
+	updateReq := expandOrganizationConnectionUpdate(data)
 
-	// UpdateConnection doesn't like this to be set.
-	organizationConnection.ConnectionID = nil
-
-	if err := api.Organization.UpdateConnection(ctx, organizationID, connectionID, organizationConnection); err != nil {
+	if _, err := apiv2.Organizations.Connections.Update(ctx, organizationID, connectionID, updateReq); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -116,12 +133,12 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 }
 
 func deleteOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
 
-	if err := api.Organization.DeleteConnection(ctx, organizationID, connectionID); err != nil {
+	if err := apiv2.Organizations.Connections.Delete(ctx, organizationID, connectionID); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 

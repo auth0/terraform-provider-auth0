@@ -1,3 +1,25 @@
+## v1.43.0
+
+FEATURES:
+- `resource/auth0_custom_domain_default` – Add support for setting the tenant's default custom domain ([#1512](https://github.com/auth0/terraform-provider-auth0/pull/1512))
+- `resource/auth0_custom_domain` – Add computed `is_default` attribute to custom domain resources and data sources ([#1512](https://github.com/auth0/terraform-provider-auth0/pull/1512))
+
+BUG FIXES:
+- `resource/auth0_action_module` – Fix provider crash when creating action modules with secrets missing `name` or `value` by marking both fields as required ([#1524](https://github.com/auth0/terraform-provider-auth0/pull/1524))
+
+NOTES:
+- `data-source/auth0_custom_domains` – Fix example documentation to use `query` instead of `q` ([#1523](https://github.com/auth0/terraform-provider-auth0/pull/1523))
+- Fix debug logging not being applied to management API clients by reordering SDK option calls ([#1526](https://github.com/auth0/terraform-provider-auth0/pull/1526))
+
+## v1.42.0
+
+FEATURES:
+- `resource/auth0_prompt_screen_partials` – Add `passkeys` into list of supported prompts for partials ([#1504](https://github.com/auth0/terraform-provider-auth0/pull/1504))
+- `resource/auth0_connection` – Add support for configuring `dpop_signing_alg` for Okta and OIDC connections ([#1516](https://github.com/auth0/terraform-provider-auth0/pull/1516))
+
+BUG FIXES:
+- `resource/auth0_tenant` – Introduce default value for `enable_client_connections` flag  ([#1515](https://github.com/auth0/terraform-provider-auth0/pull/1515))
+
 ## v1.41.0
 
 FEATURES:

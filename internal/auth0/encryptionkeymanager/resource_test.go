@@ -195,7 +195,7 @@ func TestAccEncryptionKeyManagerCustomerProvidedRootKey(t *testing.T) {
 					_ = os.Setenv("TF_VAR_WRAPPED_KEY", "bad-key-value")
 				},
 				Config:      testAccEncryptionKeyManagerAddWrappedKey,
-				ExpectError: regexp.MustCompile(`Error: The wrapped_key attribute should not be specified`),
+				ExpectError: regexp.MustCompile(`Error: the wrapped_key attribute should not be specified`),
 			},
 			{
 				Config: testAccEncryptionKeyManagerCreateRootKey,

@@ -166,7 +166,7 @@ func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain s
 			client.ClientSecret = &redacted
 		}
 
-		clientBody, err := json.Marshal(client)
+		clientBody, err := json.Marshal(client) //nolint:gosec // G117: ClientSecret is already redacted above.
 		require.NoError(t, err)
 
 		i.Response.Body = string(clientBody)

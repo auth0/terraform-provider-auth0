@@ -38,6 +38,8 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("default_token_quota", flattenDefaultTokenQuota(tenant.GetDefaultTokenQuota())),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt", value.BoolPtrToString(tenant.SkipNonVerifiableCallbackURIConfirmationPrompt)),
 		data.Set("phone_consolidated_experience", tenant.GetPhoneConsolidatedExperience()),
+		data.Set("client_id_metadata_document_supported", tenant.GetClientIDMetadataDocumentSupported()),
+		data.Set("resource_parameter_profile", tenant.GetResourceParameterProfile()),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {

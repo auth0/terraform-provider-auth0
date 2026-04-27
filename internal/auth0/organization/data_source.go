@@ -2,13 +2,19 @@ package organization
 
 import (
 	"context"
+	"errors"
 	"strings"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	managementv2 "github.com/auth0/go-auth0/v2/management"
+	managementv2client "github.com/auth0/go-auth0/v2/management/client"
+	"github.com/auth0/go-auth0/v2/management/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -63,8 +69,23 @@ func dataSourceSchema() map[string]*schema.Schema {
 				"show_as_button": {
 					Type:     schema.TypeBool,
 					Computed: true,
-					Description: "Determines whether a connection should be displayed on this organization’s " +
+					Description: "Determines whether a connection should be displayed on this organization's " +
 						"login prompt. Only applicable for enterprise connections.",
+				},
+				"is_enabled": {
+					Type:        schema.TypeBool,
+					Computed:    true,
+					Description: "Whether the connection is enabled for the organization.",
+				},
+				"organization_connection_name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Name of the connection in the scope of this organization.",
+				},
+				"organization_access_level": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The access level for this organization connection. Can be `none`, `readonly`, `limited`, or `full`.",
 				},
 			},
 		},
@@ -93,6 +114,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	foundOrganization, err := findOrganizationByIDOrName(ctx, data, api)
 	if err != nil {
@@ -101,9 +123,9 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 
 	data.SetId(foundOrganization.GetID())
 
-	foundConnections, err := fetchAllOrganizationConnections(ctx, api, foundOrganization.GetID())
+	foundConnections, err := fetchAllOrganizationConnectionsV2(ctx, apiv2, foundOrganization.GetID())
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	foundMembers, err := fetchAllOrganizationMembers(ctx, api, foundOrganization.GetID())
@@ -133,23 +155,23 @@ func findOrganizationByIDOrName(
 	return api.Organization.ReadByName(ctx, organizationName)
 }
 
-func fetchAllOrganizationConnections(ctx context.Context, api *management.Management, organizationID string) ([]*management.OrganizationConnection, error) {
-	var foundConnections []*management.OrganizationConnection
-	var page int
+func fetchAllOrganizationConnectionsV2(ctx context.Context, apiv2 *managementv2client.Management, organizationID string) ([]*managementv2.OrganizationAllConnectionPost, error) {
+	var foundConnections []*managementv2.OrganizationAllConnectionPost
 
+	page, err := apiv2.Organizations.Connections.List(ctx, organizationID, &managementv2.ListOrganizationAllConnectionsRequestParameters{IsEnabled: auth0.Bool(true)})
+	if err != nil {
+		return nil, err
+	}
+	foundConnections = append(foundConnections, page.Results...)
 	for {
-		connections, err := api.Organization.Connections(ctx, organizationID, management.Page(page), management.PerPage(100))
+		page, err = page.GetNextPage(ctx)
 		if err != nil {
+			if errors.Is(err, core.ErrNoPages) {
+				break
+			}
 			return nil, err
 		}
-
-		foundConnections = append(foundConnections, connections.OrganizationConnections...)
-
-		if !connections.HasNext() {
-			break
-		}
-
-		page++
+		foundConnections = append(foundConnections, page.Results...)
 	}
 
 	return foundConnections, nil

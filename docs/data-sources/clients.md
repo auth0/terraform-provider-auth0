@@ -65,6 +65,7 @@ Read-Only:
 - `is_first_party` (Boolean)
 - `is_token_endpoint_ip_header_trusted` (Boolean)
 - `jwks_uri` (String)
+- `my_organization_configuration` (List of Object) (see [below for nested schema](#nestedobjatt--clients--my_organization_configuration))
 - `name` (String)
 - `oidc_logout` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout))
 - `organization_discovery_methods` (List of String)
@@ -97,6 +98,17 @@ Read-Only:
 
 - `client_id` (String)
 
+
+
+<a id="nestedobjatt--clients--my_organization_configuration"></a>
+### Nested Schema for `clients.my_organization_configuration`
+
+Read-Only:
+
+- `allowed_strategies` (List of String)
+- `connection_deletion_behavior` (String)
+- `connection_profile_id` (String)
+- `user_attribute_profile_id` (String)
 
 
 <a id="nestedobjatt--clients--oidc_logout"></a>

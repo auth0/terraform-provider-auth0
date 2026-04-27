@@ -57,7 +57,10 @@ Read-Only:
 
 - `assign_membership_on_login` (Boolean)
 - `connection_id` (String)
+- `is_enabled` (Boolean)
 - `is_signup_enabled` (Boolean)
+- `organization_access_level` (String)
+- `organization_connection_name` (String)
 - `show_as_button` (Boolean)
 
 

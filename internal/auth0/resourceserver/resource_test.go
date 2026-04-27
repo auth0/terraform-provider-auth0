@@ -552,6 +552,15 @@ resource "auth0_resource_server" "my_account_api" {
 // for this special resource server and always returns "Auth0 My Account API",
 // so the configured name is retained in state to avoid perpetual drift.
 func TestAccResourceServer_ACR(t *testing.T) {
+	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+		// The test runs only with recordings as it requires an initial setup.
+		// If this test requires updating, the objects defined in the above configurations
+		// should be manually added to your tenant, and the appropriate ids should be copied
+		// into the test code as ImportStateId. These will be cleaned up by the test,
+		// so you should copy the ids immediately before running `make test-acc-record`.
+		// When running the recording, you may need to disable the call to `t.Skip()`.
+		t.Skip()
+	}
 	domain := os.Getenv("AUTH0_DOMAIN")
 	if domain == "" {
 		t.Skip("AUTH0_DOMAIN is not set")

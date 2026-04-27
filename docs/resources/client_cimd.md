@@ -91,7 +91,7 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 - `jwks_uri` (String) URL for the JSON Web Key Set (JWKS) containing the public keys used for `private_key_jwt` authentication.
 - `logo_uri` (String) URL of the logo for this client, derived from the CIMD metadata document.
 - `name` (String) Name of the client, derived from the CIMD metadata document.
-- `signing_keys` (List of Map of String) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
+- `signing_keys` (List of Map of String, Sensitive) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
 - `third_party_security_mode` (String) Security mode for third-party clients. `strict` enforces enhanced security controls
 
 <a id="nestedblock--default_organization"></a>

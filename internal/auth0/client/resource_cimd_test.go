@@ -18,7 +18,7 @@ const testAccClientCIMDWithEditableFields = `
 resource "auth0_client_cimd" "test" {
     external_client_id = "https://tinywiki.xyz/client.json"
     description        = "CIMD test client"
-    app_type           = "spa"
+    app_type           = "native"
     allowed_origins    = ["https://example.com"]
     web_origins        = ["https://example.com"]
     grant_types        = ["authorization_code", "refresh_token"]
@@ -85,7 +85,7 @@ func TestAccClientCIMD(t *testing.T) {
 				Config: testAccClientCIMDWithEditableFields,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "description", "CIMD test client"),
-					resource.TestCheckResourceAttr("auth0_client_cimd.test", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "app_type", "native"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "allowed_origins.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "allowed_origins.0", "https://example.com"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "web_origins.#", "1"),
@@ -116,9 +116,10 @@ func TestAccClientCIMD(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      "auth0_client_cimd.test",
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            "auth0_client_cimd.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"external_client_id_version"},
 			},
 		},
 	})

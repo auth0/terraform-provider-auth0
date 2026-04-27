@@ -12,6 +12,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewCIMDResource returns a new auth0_client_cimd resource.
@@ -77,9 +78,10 @@ func cimdClientSchema() map[string]*schema.Schema {
 			Description: "Whether this is a first-party client. Always `false` for CIMD clients.",
 		},
 		"signing_keys": {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem:     &schema.Schema{Type: schema.TypeMap},
+			Type:      schema.TypeList,
+			Computed:  true,
+			Sensitive: true,
+			Elem:      &schema.Schema{Type: schema.TypeMap},
 			Description: "List containing a map of the public cert of the signing key and the public cert " +
 				"of the signing key in PKCS7.",
 		},
@@ -383,7 +385,7 @@ func readCIMDClient(ctx context.Context, data *schema.ResourceData, meta interfa
 
 	client, err := apiv2.Clients.Get(ctx, data.Id(), &mgmtv2.GetClientRequestParameters{})
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	if err := flattenCIMDClient(data, client); err != nil {
@@ -397,7 +399,7 @@ func deleteCIMDClient(ctx context.Context, data *schema.ResourceData, meta inter
 	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	if err := apiv2.Clients.Delete(ctx, data.Id()); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

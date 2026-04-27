@@ -120,7 +120,7 @@ func expandCIMDDefaultOrganization(data *schema.ResourceData) *mgmtv2.ClientDefa
 
 	var defaultOrg mgmtv2.ClientDefaultOrganization
 
-	if config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		if orgID := value.String(cfg.GetAttr("organization_id")); orgID != nil {
 			defaultOrg.OrganizationID = *orgID
 		}
@@ -133,9 +133,7 @@ func expandCIMDDefaultOrganization(data *schema.ResourceData) *mgmtv2.ClientDefa
 		}
 
 		return stop
-	}) {
-		return nil
-	}
+	})
 
 	return &defaultOrg
 }

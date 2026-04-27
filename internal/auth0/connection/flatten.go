@@ -299,6 +299,58 @@ func flattenCustomPasswordHash(customPasswordHash *management.CustomPasswordHash
 	}
 }
 
+func flattenPasswordOptions(po *management.PasswordOptions) map[string]interface{} {
+	m := map[string]interface{}{}
+
+	if po.Complexity != nil {
+		m["complexity"] = []interface{}{flattenPasswordOptionsComplexity(po.GetComplexity())}
+	}
+	if po.ProfileData != nil {
+		m["profile_data"] = []interface{}{flattenPasswordOptionsProfileData(po.GetProfileData())}
+	}
+	if po.History != nil {
+		m["history"] = []interface{}{flattenPasswordOptionsHistory(po.GetHistory())}
+	}
+	if po.Dictionary != nil {
+		m["dictionary"] = []interface{}{flattenPasswordOptionsDictionary(po.GetDictionary())}
+	}
+
+	return m
+}
+
+func flattenPasswordOptionsComplexity(c *management.PasswordOptionsComplexity) map[string]interface{} {
+	return map[string]interface{}{
+		"min_length":            c.GetMinLength(),
+		"character_types":       c.GetCharacterTypes(),
+		"character_type_rule":   c.GetCharacterTypeRule(),
+		"identical_characters":  c.GetIdenticalCharacters(),
+		"sequential_characters": c.GetSequentialCharacters(),
+		"max_length_exceeded":   c.GetMaxLengthExceeded(),
+	}
+}
+
+func flattenPasswordOptionsProfileData(p *management.PasswordOptionsProfileData) map[string]interface{} {
+	return map[string]interface{}{
+		"active":         p.GetActive(),
+		"blocked_fields": p.GetBlockedFields(),
+	}
+}
+
+func flattenPasswordOptionsHistory(h *management.PasswordOptionsHistory) map[string]interface{} {
+	return map[string]interface{}{
+		"active": h.GetActive(),
+		"size":   h.GetSize(),
+	}
+}
+
+func flattenPasswordOptionsDictionary(d *management.PasswordOptionsDictionary) map[string]interface{} {
+	return map[string]interface{}{
+		"active":  d.GetActive(),
+		"default": d.GetDefault(),
+		"custom":  d.GetCustom(),
+	}
+}
+
 func flattenAuthenticationMethodPasskey(passkeyAuthenticationMethod *management.PasskeyAuthenticationMethod) interface{} {
 	if passkeyAuthenticationMethod == nil {
 		return nil
@@ -466,6 +518,10 @@ func flattenConnectionOptionsAuth0(
 
 	if options.CustomPasswordHash != nil {
 		optionsMap["custom_password_hash"] = []interface{}{flattenCustomPasswordHash(options.GetCustomPasswordHash())}
+	}
+
+	if options.PasswordOptions != nil {
+		optionsMap["password_options"] = []interface{}{flattenPasswordOptions(options.GetPasswordOptions())}
 	}
 
 	if options.PasswordComplexityOptions != nil {

@@ -2,6 +2,8 @@ module github.com/auth0/terraform-provider-auth0
 
 go 1.25.8
 
+replace github.com/auth0/go-auth0 v1.38.0 => /Users/kartik.jha/Code/go-auth0
+
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
 	github.com/auth0/go-auth0 v1.38.0

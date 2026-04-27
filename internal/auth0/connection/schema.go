@@ -1392,6 +1392,170 @@ var optionsSchema = &schema.Schema{
 				ValidateFunc: validation.StringInSlice([]string{"ES256", "Ed25519"}, false),
 				Description:  "Signature method used to sign the request. EA Only",
 			},
+			"password_options": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "Flexible password policy configuration. Only available for `auth0` strategy connections. " +
+					"Cannot be set together with legacy password policy fields (`password_policy`, `password_complexity_options`, " +
+					"`password_history`, `password_no_personal_info`, `password_dictionary`).",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"complexity": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Password complexity requirements.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"min_length": {
+										Type:         schema.TypeInt,
+										Optional:     true,
+										Computed:     true,
+										ValidateFunc: validation.IntBetween(1, 72),
+										Description:  "Minimum password length. Must be between 1 and 72. Default: 15.",
+									},
+									"character_types": {
+										Type:     schema.TypeSet,
+										Optional: true,
+										Computed: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+											ValidateFunc: validation.StringInSlice([]string{
+												"uppercase", "lowercase", "number", "special",
+											}, false),
+										},
+										Description: "Required character types. Valid values: `uppercase`, `lowercase`, `number`, `special`.",
+									},
+									"character_type_rule": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"all", "three_of_four",
+										}, false),
+										Description: "When all 4 character types are specified, determines if all or 3 of 4 are required. " +
+											"Possible values: `all`, `three_of_four`. Default: `all`.",
+									},
+									"identical_characters": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"allow", "block",
+										}, false),
+										Description: "Controls whether 3+ consecutive identical characters are allowed. " +
+											"Possible values: `allow`, `block`. Default: `allow`.",
+									},
+									"sequential_characters": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"allow", "block",
+										}, false),
+										Description: "Controls whether sequential characters (abc, 123, etc.) are allowed. " +
+											"Possible values: `allow`, `block`. Default: `allow`.",
+									},
+									"max_length_exceeded": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"truncate", "error",
+										}, false),
+										Description: "Controls behavior when the password exceeds 72 bytes. " +
+											"Possible values: `truncate`, `error`. Default: `error`.",
+									},
+								},
+							},
+						},
+						"profile_data": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Personal information restriction policy.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"active": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Prevents users from including profile data in passwords.",
+									},
+									"blocked_fields": {
+										Type:        schema.TypeSet,
+										Optional:    true,
+										Computed:    true,
+										Elem:        &schema.Schema{Type: schema.TypeString},
+										Description: "User profile fields to block from passwords. Maximum 12 items, each max 100 characters.",
+									},
+								},
+							},
+						},
+						"history": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Password history enforcement.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"active": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Enables password history checking.",
+									},
+									"size": {
+										Type:         schema.TypeInt,
+										Optional:     true,
+										Computed:     true,
+										ValidateFunc: validation.IntBetween(1, 24),
+										Description:  "Number of previous passwords to check against. Must be between 1 and 24. Default: 3.",
+									},
+								},
+							},
+						},
+						"dictionary": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Dictionary-based password validation.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"active": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Enables dictionary checking.",
+									},
+									"default": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"en_10k", "en_100k",
+										}, false),
+										Description: "Default dictionary to use. Possible values: `en_10k`, `en_100k`. Default: `en_100k`.",
+									},
+									"custom": {
+										Type:        schema.TypeSet,
+										Optional:    true,
+										Computed:    true,
+										Elem:        &schema.Schema{Type: schema.TypeString},
+										Description: "Custom list of disallowed terms.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	},
 }

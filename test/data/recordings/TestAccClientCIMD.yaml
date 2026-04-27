@@ -25,15 +25,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","mapped_fields":{"external_client_id":"https://tinywiki.xyz/client.json","name":"TinyWiki","callbacks":["https://tinywiki.xyz/"],"logo_uri":"https://tinywiki.xyz/logo.png","grant_types":["authorization_code"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]}}'
+        content_length: 492
+        uncompressed: false
+        body: '{"client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","mapped_fields":{"external_client_id":"https://tinywiki.xyz/client.json","name":"TinyWiki","callbacks":["https://tinywiki.xyz/"],"logo_uri":"https://tinywiki.xyz/logo.png","grant_types":["authorization_code"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 703.544208ms
+        status: 201 Created
+        code: 201
+        duration: 708.87075ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -48,9 +48,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: GET
       response:
         proto: HTTP/2.0
@@ -60,13 +60,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
+        body: '{"name":"TinyWiki","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 471.543417ms
+        duration: 484.924458ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -81,9 +81,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: GET
       response:
         proto: HTTP/2.0
@@ -93,13 +93,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
+        body: '{"name":"TinyWiki","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 468.685375ms
+        duration: 403.782083ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -114,9 +114,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: GET
       response:
         proto: HTTP/2.0
@@ -126,33 +126,30 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
+        body: '{"name":"TinyWiki","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 412.123083ms
+        duration: 427.515792ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 115
+        content_length: 483
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"description":"CIMD test client","allowed_origins":["https://example.com"],"web_origins":["https://example.com"]}
+        body: '{"description":"CIMD test client","allowed_origins":["https://example.com"],"web_origins":["https://example.com"],"grant_types":["authorization_code","refresh_token"],"jwt_configuration":{"lifetime_in_seconds":7200,"alg":"RS256"},"app_type":"native","oidc_conformant":true,"refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":30,"token_lifetime":2592000,"infinite_token_lifetime":false,"idle_token_lifetime":1296000,"infinite_idle_token_lifetime":false}}'
         form: {}
         headers:
             Content-Type:
                 - application/json
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -162,13 +159,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","description":"CIMD test client","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000}}'
+        body: '{"name":"TinyWiki","description":"CIMD test client","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":7200},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":30,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 485.626667ms
+        duration: 505.485458ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -183,9 +180,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: GET
       response:
         proto: HTTP/2.0
@@ -195,13 +192,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","description":"CIMD test client","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
+        body: '{"name":"TinyWiki","description":"CIMD test client","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":7200},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":30,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 395.309875ms
+        duration: 406.628834ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -216,9 +213,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: GET
       response:
         proto: HTTP/2.0
@@ -228,13 +225,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","description":"CIMD test client","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
+        body: '{"name":"TinyWiki","description":"CIMD test client","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":7200},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":30,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 364.486125ms
+        duration: 400.649791ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -249,9 +246,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: GET
       response:
         proto: HTTP/2.0
@@ -261,33 +258,30 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","description":"CIMD test client","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
+        body: '{"name":"TinyWiki","description":"CIMD test client","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":7200},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":30,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 430.60725ms
+        duration: 387.358625ms
     - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 143
+        content_length: 497
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"description":"Updated CIMD test client","allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"]}
+        body: '{"description":"Updated CIMD test client","allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"grant_types":["authorization_code"],"jwt_configuration":{"lifetime_in_seconds":3600,"alg":"RS256"},"app_type":"native","oidc_conformant":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"expiring","leeway":0,"token_lifetime":1296000,"infinite_token_lifetime":false,"idle_token_lifetime":648000,"infinite_idle_token_lifetime":false}}'
         form: {}
         headers:
             Content-Type:
                 - application/json
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -297,13 +291,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","description":"Updated CIMD test client","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000}}'
+        body: '{"name":"TinyWiki","description":"Updated CIMD test client","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"expiring","leeway":0,"token_lifetime":1296000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":648000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 565.100625ms
+        duration: 417.691584ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -318,9 +312,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: GET
       response:
         proto: HTTP/2.0
@@ -330,13 +324,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","description":"Updated CIMD test client","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
+        body: '{"name":"TinyWiki","description":"Updated CIMD test client","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"expiring","leeway":0,"token_lifetime":1296000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":648000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 350.388334ms
+        duration: 409.259583ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -351,9 +345,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: GET
       response:
         proto: HTTP/2.0
@@ -363,13 +357,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","description":"Updated CIMD test client","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
+        body: '{"name":"TinyWiki","description":"Updated CIMD test client","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"expiring","leeway":0,"token_lifetime":1296000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":648000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 498.733041ms
+        duration: 439.55725ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -384,9 +378,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: GET
       response:
         proto: HTTP/2.0
@@ -396,13 +390,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","description":"Updated CIMD test client","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
+        body: '{"name":"TinyWiki","description":"Updated CIMD test client","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"expiring","leeway":0,"token_lifetime":1296000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":648000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 582.171917ms
+        duration: 469.536458ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -417,9 +411,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: GET
       response:
         proto: HTTP/2.0
@@ -429,13 +423,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"TinyWiki","description":"Updated CIMD test client","client_id":"tpc_pfpAUqzQrcVKgb7Zvz3s41","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
+        body: '{"name":"TinyWiki","description":"Updated CIMD test client","client_id":"tpc_hqjDNPpF9fzLpaCMtFPs1W","client_secret":"[REDACTED]","app_type":"native","logo_uri":"https://tinywiki.xyz/logo.png","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":["https://tinywiki.xyz/"],"allowed_origins":["https://example.com","https://other.com"],"web_origins":["https://example.com"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"expiring","leeway":0,"token_lifetime":1296000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":648000},"external_client_id":"https://tinywiki.xyz/client.json","external_metadata_type":"cimd","external_metadata_created_by":"admin"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 458.15075ms
+        duration: 422.384708ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -452,7 +446,7 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_pfpAUqzQrcVKgb7Zvz3s41
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_hqjDNPpF9fzLpaCMtFPs1W
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -468,4 +462,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 405.110292ms
+        duration: 493.810083ms

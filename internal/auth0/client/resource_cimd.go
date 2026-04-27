@@ -212,6 +212,34 @@ func cimdClientSchema() map[string]*schema.Schema {
 				},
 			},
 		},
+		"validation": {
+			Type:        schema.TypeList,
+			Computed:    true,
+			Description: "Validation result of the CIMD metadata document.",
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"valid": {
+						Type:        schema.TypeBool,
+						Computed:    true,
+						Description: "Whether the metadata document passed validation.",
+					},
+					"violations": {
+						Type:     schema.TypeList,
+						Computed: true,
+						Elem:     &schema.Schema{Type: schema.TypeString},
+						Description: "Array of validation violation messages, if any. " +
+							"Violations indicate issues that prevented the metadata document from being fully processed.",
+					},
+					"warnings": {
+						Type:     schema.TypeList,
+						Computed: true,
+						Elem:     &schema.Schema{Type: schema.TypeString},
+						Description: "Array of warning messages, if any. " +
+							"Warnings indicate non-critical issues such as unsupported properties being ignored.",
+					},
+				},
+			},
+		},
 		"token_quota": commons.TokenQuotaSchema(),
 		"redirection_policy": {
 			Type:        schema.TypeString,
@@ -369,9 +397,9 @@ func updateCIMDClient(ctx context.Context, data *schema.ResourceData, meta inter
 		applyCIMDNullFields(data, updateReq)
 	}
 
-	if hasChange, err := cimdClientHasChange(updateReq); err != nil {
-		return diag.FromErr(fmt.Errorf("failed to determine if CIMD client has changes: %w", err))
-	} else if hasChange {
+	if emptyreq, err := isEmptyRequest(updateReq); err != nil {
+		return diag.FromErr(fmt.Errorf("failed to determine if update request is empty: %w", err))
+	} else if !emptyreq {
 		if _, err := apiv2.Clients.Update(ctx, data.Id(), updateReq); err != nil {
 			return diag.FromErr(err)
 		}
@@ -388,7 +416,14 @@ func readCIMDClient(ctx context.Context, data *schema.ResourceData, meta interfa
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	if err := flattenCIMDClient(data, client); err != nil {
+	preview, err := apiv2.Clients.PreviewCimdMetadata(ctx, &mgmtv2.PreviewCimdMetadataRequestContent{
+		ExternalClientID: client.GetExternalClientID(),
+	})
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("failed to fetch CIMD metadata preview: %w", err))
+	}
+
+	if err := flattenCIMDClient(data, client, preview.Validation); err != nil {
 		return diag.FromErr(err)
 	}
 

@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func flattenCIMDClient(data *schema.ResourceData, client *mgmtv2.GetClientResponseContent) error {
+func flattenCIMDClient(data *schema.ResourceData, client *mgmtv2.GetClientResponseContent, validation *mgmtv2.CimdValidationResult) error {
 	result := multierror.Append(
 		data.Set("client_id", client.GetClientID()),
 		data.Set("name", client.GetName()),
@@ -34,10 +34,9 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv2.GetClientRespon
 		data.Set("refresh_token", flattenCIMDRefreshToken(client.RefreshToken)),
 		data.Set("default_organization", flattenCIMDDefaultOrganization(client.DefaultOrganization)),
 		data.Set("token_quota", flattenCIMDTokenQuota(client.TokenQuota)),
+		data.Set("validation", flattenCIMDValidation(validation)),
+		data.Set("external_client_id_version", data.Get("external_client_id_version")),
 	)
-	if v, ok := data.GetOk("external_client_id_version"); ok {
-		result = multierror.Append(result, data.Set("external_client_id_version", v.(int)))
-	}
 
 	return result.ErrorOrNil()
 }
@@ -131,6 +130,20 @@ func flattenCIMDSigningKeys(keys *mgmtv2.ClientSigningKeys) []interface{} {
 	}
 
 	return result
+}
+
+func flattenCIMDValidation(v *mgmtv2.CimdValidationResult) []interface{} {
+	if v == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"valid":      v.GetValid(),
+			"violations": v.GetViolations(),
+			"warnings":   v.GetWarnings(),
+		},
+	}
 }
 
 func enumSliceToStrings[T ~string](s []T) []string {

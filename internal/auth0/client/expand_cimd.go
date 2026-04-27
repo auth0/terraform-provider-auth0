@@ -201,12 +201,12 @@ func expandCIMDTokenQuota(data *schema.ResourceData) *mgmtv2.UpdateTokenQuota {
 	return quota
 }
 
-func cimdClientHasChange(req *mgmtv2.UpdateClientRequestContent) (bool, error) {
+func isEmptyRequest(req *mgmtv2.UpdateClientRequestContent) (bool, error) {
 	reqBytes, err := req.MarshalJSON()
 	if err != nil {
 		return false, err
 	}
-	return string(reqBytes) != "{}", nil
+	return string(reqBytes) == "{}", nil
 }
 
 func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv2.UpdateClientRequestContent) {

@@ -7,20 +7,8 @@ import (
 )
 
 func flattenResourceServer(data *schema.ResourceData, resourceServer *management.ResourceServer) error {
-	// The My Account API ignores the `name` field on write and always returns
-	// "Auth0 My Account API" on read. To avoid a perpetual diff when users set
-	// a different name in their configuration, retain the name from state.
-	name := resourceServer.GetName()
-	if name == auth0MyAccountAPIName {
-		if existing, ok := data.GetOk("name"); ok {
-			if s, ok := existing.(string); ok && s != "" {
-				name = s
-			}
-		}
-	}
-
 	result := multierror.Append(
-		data.Set("name", name),
+		data.Set("name", resourceServer.GetName()),
 		data.Set("identifier", resourceServer.GetIdentifier()),
 		data.Set("token_lifetime", resourceServer.GetTokenLifetime()),
 		data.Set("allow_offline_access", resourceServer.GetAllowOfflineAccess()),

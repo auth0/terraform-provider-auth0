@@ -51,7 +51,7 @@ func expandAuthorizationPolicy(data *schema.ResourceData) *management.ResourceSe
 	}
 
 	config := data.GetRawConfig().GetAttr("authorization_policy")
-	if config.IsNull() {
+	if config.IsNull() || config.LengthInt() == 0 {
 		return nil
 	}
 
@@ -67,6 +67,40 @@ func expandAuthorizationPolicy(data *schema.ResourceData) *management.ResourceSe
 	}
 
 	return &policy
+}
+
+func isAuthorizationPolicyNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("authorization_policy") {
+		return false
+	}
+	return data.GetRawConfig().IsNull() ||
+		data.GetRawConfig().GetAttr("authorization_policy").IsNull() ||
+		data.GetRawConfig().GetAttr("authorization_policy").LengthInt() == 0
+}
+
+// fetchNullableFields returns a map of fields that need to be explicitly set
+// to null on the resource server via a follow-up PATCH request, since the
+// regular Update call uses `omitempty` and cannot transmit nil values.
+func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
+	type nullCheckFunc func(*schema.ResourceData) bool
+
+	checks := map[string]nullCheckFunc{
+		"consent_policy":        isConsentPolicyNull,
+		"authorization_details": isAuthorizationDetailsNull,
+		"token_encryption":      isTokenEncryptionNull,
+		"proof_of_possession":   isProofOfPossessionNull,
+		"authorization_policy":  isAuthorizationPolicyNull,
+	}
+
+	nullableMap := make(map[string]interface{})
+
+	for field, checkFunc := range checks {
+		if checkFunc(data) {
+			nullableMap[field] = nil
+		}
+	}
+
+	return nullableMap
 }
 
 func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.ResourceServerSubjectTypeAuthorization {

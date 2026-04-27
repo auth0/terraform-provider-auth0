@@ -12,8 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
-	"github.com/auth0/go-auth0/management"
-
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
@@ -271,7 +269,7 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				MaxItems:    1,
-				Description: "Authorization policy for the resource server.",
+				Description: "Authorization policy for the resource server.(EA Only)",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"policy_id": {
@@ -373,8 +371,11 @@ func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	if err := fixNullableAttributes(ctx, data, api); err != nil {
-		return diag.FromErr(err)
+	nullFields := fetchNullableFields(data)
+	if len(nullFields) != 0 {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), nullFields); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 	time.Sleep(200 * time.Millisecond)
 
@@ -457,42 +458,6 @@ func validateResourceServer(_ context.Context, diff *schema.ResourceDiff, _ inte
 	}
 
 	return result.ErrorOrNil()
-}
-
-func fixNullableAttributes(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
-	if isConsentPolicyNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
-			"consent_policy": nil,
-		}); err != nil {
-			return err
-		}
-	}
-
-	if isAuthorizationDetailsNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
-			"authorization_details": nil,
-		}); err != nil {
-			return err
-		}
-	}
-
-	if isTokenEncryptionNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
-			"token_encryption": nil,
-		}); err != nil {
-			return err
-		}
-	}
-
-	if isProofOfPossessionNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
-			"proof_of_possession": nil,
-		}); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func readResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

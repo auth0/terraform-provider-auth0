@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	mgmtv2 "github.com/auth0/go-auth0/v2/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -147,10 +148,10 @@ func cimdClientSchema() map[string]*schema.Schema {
 				"CIMD clients support `authorization_code` and `refresh_token`.",
 		},
 		"oidc_conformant": {
-			Type:         schema.TypeBool,
-			Optional:     true,
-			Computed:     true,
-			ValidateFunc: validateBoolEquals(true),
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Computed:         true,
+			ValidateDiagFunc: validateBoolEquals(true),
 			Description: "Whether this client conforms to strict OIDC specifications. " +
 				"Must be `true` for CIMD clients.",
 		},
@@ -304,10 +305,10 @@ func cimdClientSchema() map[string]*schema.Schema {
 						Description: "The time in seconds after which inactive refresh tokens will expire.",
 					},
 					"infinite_idle_token_lifetime": {
-						Type:         schema.TypeBool,
-						Optional:     true,
-						Computed:     true,
-						ValidateFunc: validateBoolEquals(false),
+						Type:             schema.TypeBool,
+						Optional:         true,
+						Computed:         true,
+						ValidateDiagFunc: validateBoolEquals(false),
 						Description: "Whether inactive refresh tokens should remain valid indefinitely. " +
 							"Must be `false` for CIMD clients.",
 					},
@@ -317,17 +318,16 @@ func cimdClientSchema() map[string]*schema.Schema {
 	}
 }
 
-func validateBoolEquals(expected bool) schema.SchemaValidateFunc {
-	return func(val interface{}, key string) (warns []string, errs []error) {
+func validateBoolEquals(expected bool) schema.SchemaValidateDiagFunc {
+	return func(val interface{}, path cty.Path) diag.Diagnostics {
 		v, ok := val.(bool)
 		if !ok {
-			errs = append(errs, fmt.Errorf("expected type of %s to be bool", key))
-			return warns, errs
+			return diag.Errorf("expected type of %v to be bool", path)
 		}
 		if v != expected {
-			errs = append(errs, fmt.Errorf("%q must be %t for CIMD clients", key, expected))
+			return diag.Errorf("%v must be %t for CIMD clients", path, expected)
 		}
-		return
+		return nil
 	}
 }
 

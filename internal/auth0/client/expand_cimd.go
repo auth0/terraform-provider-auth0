@@ -1,8 +1,6 @@
 package client
 
 import (
-	"fmt"
-
 	mgmtv2 "github.com/auth0/go-auth0/v2/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -123,7 +121,6 @@ func expandCIMDDefaultOrganization(data *schema.ResourceData) *mgmtv2.ClientDefa
 	var defaultOrg mgmtv2.ClientDefaultOrganization
 
 	if config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-
 		if orgID := value.String(cfg.GetAttr("organization_id")); orgID != nil {
 			defaultOrg.OrganizationID = *orgID
 		}
@@ -162,8 +159,7 @@ func expandCIMDClientMetadata(data *schema.ResourceData) *mgmtv2.ClientMetadata 
 		return nil
 	}
 
-	cm := mgmtv2.ClientMetadata(newMetadataMap)
-	return &cm
+	return &newMetadataMap
 }
 
 func expandCIMDTokenQuota(data *schema.ResourceData) *mgmtv2.UpdateTokenQuota {
@@ -207,14 +203,11 @@ func expandCIMDTokenQuota(data *schema.ResourceData) *mgmtv2.UpdateTokenQuota {
 	return quota
 }
 
-// TODO check if marshal json can be used to determine if empty
 func cimdClientHasChange(req *mgmtv2.UpdateClientRequestContent) (bool, error) {
 	reqBytes, err := req.MarshalJSON()
 	if err != nil {
 		return false, err
 	}
-	fmt.Println("===============")
-	fmt.Println(string(reqBytes))
 	return string(reqBytes) != "{}", nil
 }
 

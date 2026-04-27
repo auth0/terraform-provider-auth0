@@ -480,6 +480,9 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 			oldCreds, _ := oldCredentialsRaw.([]interface{})
 
 			if len(oldCreds) > 0 {
+				// Detach with the new auth method as the temporary token_endpoint_auth_method.
+				// If apply fails after this point, the client briefly has no credentials attached,
+				// but a re-apply will recover since Terraform retries the full desired state.
 				if err := detachAuthenticationMethodCredentials(ctx, api, clientID, authenticationMethod); err != nil {
 					return diag.FromErr(err)
 				}

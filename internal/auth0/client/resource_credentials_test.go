@@ -283,6 +283,8 @@ func TestAccClientAuthenticationMethodsPrivateKeyJWT(t *testing.T) {
 	credsCert3, err := os.ReadFile("./../../../test/data/creds-cert-3.pem")
 	require.NoError(t, err)
 
+	var savedKeyIDCred1 string
+
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -337,7 +339,10 @@ func TestAccClientAuthenticationMethodsPrivateKeyJWT(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.parse_expiry_from_cert", "false"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.expires_at", "2095-05-13T09:33:13.000Z"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.pem"),
-					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.key_id"),
+					resource.TestCheckResourceAttrWith("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.key_id", func(v string) error {
+						savedKeyIDCred1 = v
+						return nil
+					}),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.created_at"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.updated_at"),
 				),
@@ -356,7 +361,12 @@ func TestAccClientAuthenticationMethodsPrivateKeyJWT(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.name", "Testing Credentials 1"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.key_id"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.name", "Testing Credentials 2"),
-					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.key_id"),
+					resource.TestCheckResourceAttrWith("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.key_id", func(v string) error {
+						if v != savedKeyIDCred1 {
+							return fmt.Errorf("expected credential 1 key_id to be unchanged after rotation: got %q, want %q", v, savedKeyIDCred1)
+						}
+						return nil
+					}),
 				),
 			},
 			{

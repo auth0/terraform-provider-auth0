@@ -93,6 +93,7 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 - `name` (String) Name of the client, derived from the CIMD metadata document.
 - `signing_keys` (List of Map of String, Sensitive) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
 - `third_party_security_mode` (String) Security mode for third-party clients. `strict` enforces enhanced security controls
+- `validation` (List of Object) Validation result of the CIMD metadata document. (see [below for nested schema](#nestedatt--validation))
 
 <a id="nestedblock--default_organization"></a>
 ### Nested Schema for `default_organization`
@@ -145,6 +146,17 @@ Optional:
 - `enforce` (Boolean) If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
 - `per_day` (Number) Maximum number of issued tokens per day
 - `per_hour` (Number) Maximum number of issued tokens per hour
+
+
+
+<a id="nestedatt--validation"></a>
+### Nested Schema for `validation`
+
+Read-Only:
+
+- `valid` (Boolean)
+- `violations` (List of String)
+- `warnings` (List of String)
 
 ## Import
 

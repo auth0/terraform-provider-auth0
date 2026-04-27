@@ -16,7 +16,7 @@ resource "auth0_user" "user" {
 	connection_name = "Username-Password-Authentication"
 	email           = "{{.testName}}@auth0.com"
 	password        = "MyPass123$"
-	username        = "{{.testName}}"
+	username        = "randomusername"
 }
 
 resource "auth0_connection" "my_connection" {
@@ -131,7 +131,7 @@ func TestAccDataSourceOrganizationInsufficientScope(t *testing.T) {
 				//	_ = os.Setenv("AUTH0_CLIENT_SECRET", "some-client-secret")
 				// },.
 				Config: `data "auth0_organization" "test" {
-					organization_id = "org_P0nITxTkwnKQvD22"
+					organization_id = "org_SAwsaBQwbJU4Odo1"
 				}`,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "grant_ids.#", "0")),

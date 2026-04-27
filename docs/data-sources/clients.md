@@ -33,6 +33,7 @@ data "auth0_clients" "first_party_apps" {
 ### Optional
 
 - `app_types` (Set of String) Filter clients by application types.
+- `external_client_id` (String) Filter clients by CIMD external client ID URL.
 - `is_first_party` (Boolean) Filter clients by first party status.
 - `name_filter` (String) Filter clients by name (partial matches supported).
 
@@ -57,9 +58,14 @@ Read-Only:
 - `client_secret` (String)
 - `description` (String)
 - `express_configuration` (List of Object) (see [below for nested schema](#nestedobjatt--clients--express_configuration))
+- `external_client_id` (String)
+- `external_metadata_created_by` (String)
+- `external_metadata_type` (String)
 - `grant_types` (List of String)
 - `is_first_party` (Boolean)
 - `is_token_endpoint_ip_header_trusted` (Boolean)
+- `jwks_uri` (String)
+- `my_organization_configuration` (List of Object) (see [below for nested schema](#nestedobjatt--clients--my_organization_configuration))
 - `name` (String)
 - `oidc_logout` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout))
 - `organization_discovery_methods` (List of String)
@@ -92,6 +98,17 @@ Read-Only:
 
 - `client_id` (String)
 
+
+
+<a id="nestedobjatt--clients--my_organization_configuration"></a>
+### Nested Schema for `clients.my_organization_configuration`
+
+Read-Only:
+
+- `allowed_strategies` (List of String)
+- `connection_deletion_behavior` (String)
+- `connection_profile_id` (String)
+- `user_attribute_profile_id` (String)
 
 
 <a id="nestedobjatt--clients--oidc_logout"></a>

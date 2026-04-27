@@ -36,7 +36,7 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv2.GetClientRespon
 		data.Set("token_quota", flattenCIMDTokenQuota(client.TokenQuota)),
 	)
 	if v, ok := data.GetOk("external_client_id_version"); ok {
-		data.Set("external_client_id_version", v.(int))
+		result = multierror.Append(result, data.Set("external_client_id_version", v.(int)))
 	}
 
 	return result.ErrorOrNil()

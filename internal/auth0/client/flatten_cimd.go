@@ -9,6 +9,7 @@ import (
 func flattenCIMDClient(data *schema.ResourceData, client *mgmtv2.GetClientResponseContent) error {
 	result := multierror.Append(
 		data.Set("client_id", client.GetClientID()),
+		data.Set("external_client_id_version", data.Get("external_client_id_version").(int)),
 		data.Set("name", client.GetName()),
 		data.Set("logo_uri", client.GetLogoURI()),
 		data.Set("is_first_party", client.GetIsFirstParty()),
@@ -128,13 +129,6 @@ func flattenCIMDSigningKeys(keys *mgmtv2.ClientSigningKeys) []interface{} {
 	}
 
 	return result
-}
-
-func enumToStr[T ~string](e *T) string {
-	if e == nil {
-		return ""
-	}
-	return string(*e)
 }
 
 func enumSliceToStrings[T ~string](s []T) []string {

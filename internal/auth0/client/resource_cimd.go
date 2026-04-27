@@ -42,6 +42,12 @@ func cimdClientSchema() map[string]*schema.Schema {
 				"Must include a path component (e.g. `https://app.example.com/client.json`). " +
 				"This value is immutable after creation.",
 		},
+		"external_client_id_version": {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Description: "Version number for external_client_id metadata document changes. " +
+				"Update this value to sync the client with the latest values of the json metadata document.",
+		},
 		"client_id": {
 			Type:        schema.TypeString,
 			Computed:    true,
@@ -328,11 +334,9 @@ func validateBoolEquals(expected bool) schema.SchemaValidateFunc {
 func createCIMDClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	apiv2 := meta.(*config.Config).GetAPIV2()
 
-	externalClientID := data.Get("external_client_id").(string)
-	req := &mgmtv2.RegisterCimdClientRequestContent{}
-	req.SetExternalClientID(externalClientID)
-
-	result, err := apiv2.Clients.RegisterCimdClient(ctx, req)
+	result, err := apiv2.Clients.RegisterCimdClient(ctx, &mgmtv2.RegisterCimdClientRequestContent{
+		ExternalClientID: data.Get("external_client_id").(string),
+	})
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("CIMD registration failed: %w", err))
 	}
@@ -349,6 +353,14 @@ func createCIMDClient(ctx context.Context, data *schema.ResourceData, meta inter
 
 func updateCIMDClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	apiv2 := meta.(*config.Config).GetAPIV2()
+
+	if !data.IsNewResource() && data.HasChange("external_client_id_version") {
+		if _, err := apiv2.Clients.RegisterCimdClient(ctx, &mgmtv2.RegisterCimdClientRequestContent{
+			ExternalClientID: data.Get("external_client_id").(string),
+		}); err != nil {
+			return diag.FromErr(fmt.Errorf("CIMD sync failed: %w", err))
+		}
+	}
 
 	updateReq := expandCIMDClient(data)
 	if !data.IsNewResource() {

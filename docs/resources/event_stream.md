@@ -84,8 +84,6 @@ resource "auth0_event_stream" "my_event_stream_webhook_secure" {
 
 ### Optional
 
-> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
-
 - `eventbridge_configuration` (Block List, Max: 1) Configuration for the EventBridge destination. This block is only applicable when `destination_type` is set to `eventbridge`. EventBridge configurations **cannot** be updated after creation. Any change to this block will force the resource to be recreated. (see [below for nested schema](#nestedblock--eventbridge_configuration))
 - `webhook_configuration` (Block List, Max: 1) Configuration for the Webhook destination. This block is only applicable when `destination_type` is set to `webhook`. Webhook configurations **can** be updated after creation, including the endpoint and authorization fields. (see [below for nested schema](#nestedblock--webhook_configuration))
 
@@ -114,8 +112,6 @@ Read-Only:
 
 Required:
 
-> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
-
 - `webhook_authorization` (Block List, Min: 1, Max: 1) Authorization details for the webhook endpoint. Supports `basic` authentication using `username` and `password`, or `bearer` authentication using a `token`. The appropriate fields must be set based on the chosen method. (see [below for nested schema](#nestedblock--webhook_configuration--webhook_authorization))
 - `webhook_endpoint` (String) The HTTPS endpoint that will receive the webhook events. Must be a valid, publicly accessible URL.
 
@@ -128,13 +124,11 @@ Required:
 
 Optional:
 
-> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
-
 - `password` (String, Sensitive) The password for `basic` authentication. Required only when `method` is set to `basic`. **Note:** For better security, consider using `password_wo` instead to prevent storing the password in Terraform state.
-- `password_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The password for `basic` authentication (write-only). This value is only available during resource creation and update, and is **not** stored in Terraform state. To change the password, update the `password_wo_version` attribute. Required only when `method` is set to `basic` and `password` is not provided.
+- `password_wo` (String, Sensitive) The password for `basic` authentication (write-only). This value is only available during resource creation and update, and is **not** stored in Terraform state. To change the password, update the `password_wo_version` attribute. Required only when `method` is set to `basic` and `password` is not provided.
 - `password_wo_version` (Number) Version number for password changes. Update this value to trigger a password change when using `password_wo`.
 - `token` (String, Sensitive) The token used for `bearer` authentication. Required only when `method` is set to `bearer`. **Note:** For better security, consider using `token_wo` instead to prevent storing the token in Terraform state.
-- `token_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The token used for `bearer` authentication (write-only). This value is only available during resource creation and update, and is **not** stored in Terraform state. To change the token, update the `token_wo_version` attribute. Required only when `method` is set to `bearer` and `token` is not provided.
+- `token_wo` (String, Sensitive) The token used for `bearer` authentication (write-only). This value is only available during resource creation and update, and is **not** stored in Terraform state. To change the token, update the `token_wo_version` attribute. Required only when `method` is set to `bearer` and `token` is not provided.
 - `token_wo_version` (Number) Version number for token changes. Update this value to trigger a token change when using `token_wo`.
 - `username` (String) The username for `basic` authentication. Required only when `method` is set to `basic`.
 

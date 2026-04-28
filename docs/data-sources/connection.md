@@ -130,6 +130,7 @@ Read-Only:
 - `password_dictionary` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_dictionary))
 - `password_history` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_history))
 - `password_no_personal_info` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_no_personal_info))
+- `password_options` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_options))
 - `password_policy` (String)
 - `ping_federate_base_url` (String)
 - `pkce_enabled` (Boolean)
@@ -472,6 +473,58 @@ Read-Only:
 Read-Only:
 
 - `enable` (Boolean)
+
+
+<a id="nestedobjatt--options--password_options"></a>
+### Nested Schema for `options.password_options`
+
+Read-Only:
+
+- `complexity` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_options--complexity))
+- `dictionary` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_options--dictionary))
+- `history` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_options--history))
+- `profile_data` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_options--profile_data))
+
+<a id="nestedobjatt--options--password_options--complexity"></a>
+### Nested Schema for `options.password_options.complexity`
+
+Read-Only:
+
+- `character_type_rule` (String)
+- `character_types` (Set of String)
+- `identical_characters` (String)
+- `max_length_exceeded` (String)
+- `min_length` (Number)
+- `sequential_characters` (String)
+
+
+<a id="nestedobjatt--options--password_options--dictionary"></a>
+### Nested Schema for `options.password_options.dictionary`
+
+Read-Only:
+
+- `active` (Boolean)
+- `custom` (Set of String)
+- `default` (String)
+
+
+<a id="nestedobjatt--options--password_options--history"></a>
+### Nested Schema for `options.password_options.history`
+
+Read-Only:
+
+- `active` (Boolean)
+- `size` (Number)
+
+
+<a id="nestedobjatt--options--password_options--profile_data"></a>
+### Nested Schema for `options.password_options.profile_data`
+
+Read-Only:
+
+- `active` (Boolean)
+- `blocked_fields` (Set of String)
+
 
 
 <a id="nestedobjatt--options--signing_key"></a>

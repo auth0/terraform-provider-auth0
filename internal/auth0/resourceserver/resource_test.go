@@ -538,7 +538,7 @@ func TestAccResourceServerAuth0APIManagementImport(t *testing.T) {
 const testAccResourceServerACR = `
 resource "auth0_resource_server" "my_account_api" {
 	name       = "Test-ResourceServer-Name"
-	identifier = "https://%s/me/"
+	identifier = "https://terraform-provider-auth0-dev.eu.auth0.com/me/"
 
 	authorization_policy {
 		policy_id = "019b76da-a800-73c9-b656-b349ae415c17"
@@ -553,25 +553,15 @@ resource "auth0_resource_server" "my_account_api" {
 // so the configured name is retained in state to avoid perpetual drift.
 func TestAccResourceServer_ACR(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
-		// The test runs only with recordings as it requires an initial setup.
-		// If this test requires updating, the objects defined in the above configurations
-		// should be manually added to your tenant, and the appropriate ids should be copied
-		// into the test code as ImportStateId. These will be cleaned up by the test,
-		// so you should copy the ids immediately before running `make test-acc-record`.
-		// When running the recording, you may need to disable the call to `t.Skip()`.
 		t.Skip()
-	}
-	domain := os.Getenv("AUTH0_DOMAIN")
-	if domain == "" {
-		t.Skip("AUTH0_DOMAIN is not set")
 	}
 
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: fmt.Sprintf(acctest.ParseTestName(testAccResourceServerACR, t.Name()), domain),
+				Config: testAccResourceServerACR,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "identifier", fmt.Sprintf("https://%s/me/", domain)),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "identifier", "https://terraform-provider-auth0-dev.eu.auth0.com/me/"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "name", "Test-ResourceServer-Name"),
 					resource.TestCheckResourceAttrSet("auth0_resource_server.my_account_api", "id"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "authorization_policy.#", "1"),

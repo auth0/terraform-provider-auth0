@@ -40,6 +40,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("phone_consolidated_experience", tenant.GetPhoneConsolidatedExperience()),
 		data.Set("client_id_metadata_document_supported", tenant.GetClientIDMetadataDocumentSupported()),
 		data.Set("resource_parameter_profile", tenant.GetResourceParameterProfile()),
+		data.Set("dynamic_client_registration_security_mode", tenant.GetDynamicClientRegistrationSecurityMode()),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {

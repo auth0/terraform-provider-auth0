@@ -144,4 +144,35 @@ func TestFlattenTenant(t *testing.T) {
 		assert.Equal(t, 1.5, mockResourceData.Get("ephemeral_session_lifetime"))
 		assert.Equal(t, 0.25, mockResourceData.Get("idle_ephemeral_session_lifetime"))
 	})
+
+	t.Run("it sets dynamic_client_registration_security_mode when returned by API", func(t *testing.T) {
+		tenant := management.Tenant{
+			DynamicClientRegistrationSecurityMode: auth0.String("strict"),
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.Equal(t, "strict", mockResourceData.Get("dynamic_client_registration_security_mode"))
+	})
+
+	t.Run("it handles nil dynamic_client_registration_security_mode for newer tenants", func(t *testing.T) {
+		tenant := management.Tenant{
+			DynamicClientRegistrationSecurityMode: nil,
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.Equal(t, "", mockResourceData.Get("dynamic_client_registration_security_mode"))
+	})
+
+	t.Run("it handles missing dynamic_client_registration_security_mode for newer tenants", func(t *testing.T) {
+		tenant := management.Tenant{}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.Equal(t, "", mockResourceData.Get("dynamic_client_registration_security_mode"))
+	})
 }

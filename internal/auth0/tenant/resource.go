@@ -479,6 +479,16 @@ func NewResource() *schema.Resource {
 					"endpoints. When set to `audience` (default), the `audience` parameter is used. When set " +
 					"to `compatibility`, the `resource` parameter is used as fallback if `audience` is not provided.",
 			},
+			"dynamic_client_registration_security_mode": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"strict", "permissive"}, false),
+				Description: "Sets the third_party_security_mode assigned to clients created via Dynamic Client Registration. " +
+					"`strict` applies enhanced security controls. `permissive` [preserves pre-existing behavior " +
+					"and is only available to tenants with prior third-party client usage]" +
+					"(https://auth0.com/docs/get-started/applications/third-party-applications/permissive-mode#dynamic-client-registration-in-permissive-mode).",
+			},
 		},
 	}
 }

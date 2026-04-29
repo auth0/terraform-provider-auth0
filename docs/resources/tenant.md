@@ -65,6 +65,7 @@ resource "auth0_tenant" "my_tenant" {
 - `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
 - `default_token_quota` (Block List, Max: 1) Token Quota configuration. (see [below for nested schema](#nestedblock--default_token_quota))
 - `disable_acr_values_supported` (Boolean) Disable list of supported ACR values.
+- `dynamic_client_registration_security_mode` (String) Sets the third_party_security_mode assigned to clients created via Dynamic Client Registration. `strict` applies enhanced security controls. `permissive` [preserves pre-existing behavior and is only available to tenants with prior third-party client usage](https://auth0.com/docs/get-started/applications/third-party-applications/permissive-mode#dynamic-client-registration-in-permissive-mode).
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
 - `ephemeral_session_lifetime` (Number) Number of hours an ephemeral (non-persistent) session will stay valid.
 - `error_page` (Block List, Max: 1) Configuration for the error page (see [below for nested schema](#nestedblock--error_page))

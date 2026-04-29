@@ -1049,6 +1049,7 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 		clientGrant.ClientID = value.String(cfg.GetAttr("client_id"))
 		clientGrant.Audience = value.String(cfg.GetAttr("audience"))
 		clientGrant.SubjectType = value.String(cfg.GetAttr("subject_type"))
+		clientGrant.DefaultFor = value.String(cfg.GetAttr("default_for"))
 	}
 
 	if data.IsNewResource() || data.HasChange("scopes") {

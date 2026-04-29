@@ -1105,6 +1105,10 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.token_endpoint_auth_signing_alg", "RS256"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.0", "RS256"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.1", "ES256"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.0.pkce", "disabled"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
@@ -1132,6 +1136,11 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.token_endpoint_auth_signing_alg", "RS384"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.#", "3"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.0", "RS256"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.1", "RS384"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.2", "ES256"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.0.pkce", "auto"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
@@ -1193,6 +1202,8 @@ resource "auth0_connection" "oidc" {
 		scopes                   = [ "openid", "email", "profile" ]
 		set_user_root_attributes = "on_each_login"
 		non_persistent_attrs     = ["gender","hair_color"]
+		token_endpoint_auth_signing_alg = "RS256"
+		id_token_signed_response_algs = ["RS256", "ES256"]
 		upstream_params          = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"
@@ -1232,6 +1243,8 @@ resource "auth0_connection" "oidc" {
 		authorization_endpoint = "https://www.paypal.com/signin/authorize"
 		scopes                 = [ "openid", "email" ]
 		set_user_root_attributes = "on_first_login"
+		token_endpoint_auth_signing_alg = "RS384"
+		id_token_signed_response_algs = ["RS256", "RS384", "ES256"]
 
 		connection_settings {
 			pkce = "auto"
@@ -1308,6 +1321,10 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", `{"screen_name":{"alias":"login_hint"}}`),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint_auth_signing_alg", "PS256"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.0", "RS256"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.1", "PS256"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.0.pkce", "disabled"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),
@@ -1396,6 +1413,8 @@ resource "auth0_connection" "okta" {
 		non_persistent_attrs     = [ "gender", "hair_color" ]
 		set_user_root_attributes = "on_each_login"
 		icon_url                 = "https://example.com/logo.svg"
+		token_endpoint_auth_signing_alg = "PS256"
+		id_token_signed_response_algs = ["RS256", "PS256"]
 		upstream_params = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"

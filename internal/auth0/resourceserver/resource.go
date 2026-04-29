@@ -37,6 +37,7 @@ func NewResource() *schema.Resource {
 			"name": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Computed:    true,
 				Description: "Friendly name for the resource server. Cannot include `<` or `>` characters.",
 			},
 			"identifier": {
@@ -384,6 +385,16 @@ func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 
 func validateResourceServer(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
 	var result *multierror.Error
+
+	// The "Auth0 My Account API" resource server has a fixed name on the Auth0
+	// side and cannot be renamed. Suppress any planned change to "name" so we
+	// don't produce a perpetual diff when users define a different name in
+	// their configuration.
+	if resourceServerIsAuth0MyAccountAPI(diff.GetRawState()) && diff.HasChange("name") {
+		if err := diff.Clear("name"); err != nil {
+			return err
+		}
+	}
 
 	authorizationDetailsConfig := diff.GetRawConfig().GetAttr("authorization_details")
 	if !authorizationDetailsConfig.IsNull() {

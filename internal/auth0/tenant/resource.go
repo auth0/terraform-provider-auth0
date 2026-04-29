@@ -26,6 +26,7 @@ const (
 	sessionLifetimeDefault              = 168.00
 	ephemeralSessionLifetimeDefault     = 1.00 // 1 hour.
 	idleEphemeralSessionLifetimeDefault = 1.00 // 1 hour.
+	enableClientConnectionsDefault      = true
 )
 
 // NewResource will return a new auth0_tenant resource.
@@ -143,8 +144,8 @@ func NewResource() *schema.Resource {
 						"enable_client_connections": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Computed:    true,
-							Description: "Indicates whether all current connections should be enabled when a new client is created.",
+							Default:     enableClientConnectionsDefault,
+							Description: "Indicates whether all current connections should be enabled when a new client is created. (Default: `true`)",
 						},
 						"enable_apis_section": {
 							Type:        schema.TypeBool,
@@ -462,6 +463,21 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				Description: "When enabled, the tenant-level Phone Provider is used for Multi-Factor Authentication (MFA) and Passwordless phone notifications.",
+			},
+			"client_id_metadata_document_supported": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Whether the tenant supports Client ID Metadata Document (CIMD) for client registration.",
+			},
+			"resource_parameter_profile": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"audience", "compatibility"}, false),
+				Description: "Profile that determines how the protected resource identity is specified in OAuth " +
+					"endpoints. When set to `audience` (default), the `audience` parameter is used. When set " +
+					"to `compatibility`, the `resource` parameter is used as fallback if `audience` is not provided.",
 			},
 		},
 	}

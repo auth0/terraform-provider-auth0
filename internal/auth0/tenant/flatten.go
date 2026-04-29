@@ -38,6 +38,8 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("default_token_quota", flattenDefaultTokenQuota(tenant.GetDefaultTokenQuota())),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt", value.BoolPtrToString(tenant.SkipNonVerifiableCallbackURIConfirmationPrompt)),
 		data.Set("phone_consolidated_experience", tenant.GetPhoneConsolidatedExperience()),
+		data.Set("client_id_metadata_document_supported", tenant.GetClientIDMetadataDocumentSupported()),
+		data.Set("resource_parameter_profile", tenant.GetResourceParameterProfile()),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {
@@ -76,7 +78,11 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	}
 
 	m := make(map[string]interface{})
-	m["enable_client_connections"] = flags.EnableClientConnections
+	if flags.EnableClientConnections != nil {
+		m["enable_client_connections"] = *flags.EnableClientConnections
+	} else {
+		m["enable_client_connections"] = enableClientConnectionsDefault
+	}
 	m["enable_apis_section"] = flags.EnableAPIsSection
 	m["enable_pipeline2"] = flags.EnablePipeline2
 	m["enable_dynamic_client_registration"] = flags.EnableDynamicClientRegistration

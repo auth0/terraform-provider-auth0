@@ -3432,3 +3432,47 @@ func TestAccClientMyOrganizationConfiguration(t *testing.T) {
 		},
 	})
 }
+
+const testAccClientThirdPartySecurityModeCreate = `
+resource "auth0_client" "my_client" {
+	name                      = "Acceptance Test - 3P Client - {{.testName}}"
+	is_first_party            = false
+	app_type                  = "regular_web"
+	third_party_security_mode = "strict"
+	redirection_policy        = "open_redirect_protection"
+	callbacks                 = ["https://example.com/callback"]
+}
+`
+
+const testAccClientThirdPartySecurityModeUpdate = `
+resource "auth0_client" "my_client" {
+	name                      = "Acceptance Test - 3P Client - {{.testName}}"
+	is_first_party            = false
+	app_type                  = "regular_web"
+	third_party_security_mode = "strict"
+	redirection_policy        = "allow_always"
+	callbacks                 = ["https://example.com/callback"]
+}
+`
+
+func TestAccClient_ThirdPartySecurityMode(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientThirdPartySecurityModeCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "third_party_security_mode", "strict"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "redirection_policy", "open_redirect_protection"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientThirdPartySecurityModeUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "third_party_security_mode", "strict"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "redirection_policy", "allow_always"),
+				),
+			},
+		},
+	})
+}

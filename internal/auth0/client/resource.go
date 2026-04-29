@@ -113,6 +113,22 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Indicates whether this client is a first-party client.",
 			},
+			"third_party_security_mode": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"strict", "permissive"}, false),
+				Description: "Security mode for third-party clients. " +
+					"Allowed values: `strict` or `permissive`.",
+			},
+			"redirection_policy": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"allow_always", "open_redirect_protection"}, false),
+				Description: "Controls whether Auth0 redirects users to the application's callback URL on authentication errors or in email verification flows." +
+					"Allowed values: `allow_always` or `open_redirect_protection`.",
+			},
 			"is_token_endpoint_ip_header_trusted": {
 				Type:     schema.TypeBool,
 				Optional: true,

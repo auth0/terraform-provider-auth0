@@ -660,6 +660,8 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("token_exchange", flattenTokenExchange(client.GetTokenExchange())),
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
 		data.Set("compliance_level", client.GetComplianceLevel()),
+		data.Set("third_party_security_mode", client.GetThirdPartySecurityMode()),
+		data.Set("redirection_policy", client.GetRedirectionPolicy()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),

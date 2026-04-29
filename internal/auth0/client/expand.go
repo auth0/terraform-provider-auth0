@@ -58,6 +58,8 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		RequireProofOfPossession: value.Bool(config.GetAttr("require_proof_of_possession")),
 		SessionTransfer:          expandSessionTransfer(data),
 		ComplianceLevel:          value.String(config.GetAttr("compliance_level")),
+		ThirdPartySecurityMode:   value.String(config.GetAttr("third_party_security_mode")),
+		RedirectionPolicy:        value.String(config.GetAttr("redirection_policy")),
 		TokenQuota:               commons.ExpandTokenQuota(config.GetAttr("token_quota")),
 		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 		ExpressConfiguration:                           expandExpressConfiguration(data),

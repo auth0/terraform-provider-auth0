@@ -666,6 +666,10 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
 			value.BoolPtrToString(client.SkipNonVerifiableCallbackURIConfirmationPrompt)),
 		data.Set("express_configuration", flattenExpressConfiguration(client.GetExpressConfiguration())),
+		data.Set("external_client_id", client.GetExternalClientID()),
+		data.Set("external_metadata_type", client.GetExternalMetadataType()),
+		data.Set("external_metadata_created_by", client.GetExternalMetadataCreatedBy()),
+		data.Set("jwks_uri", client.GetJwksURI()),
 		data.Set("my_organization_configuration", flattenMyOrganizationConfiguration(client.GetMyOrganizationConfiguration())),
 	)
 

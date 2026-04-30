@@ -165,6 +165,7 @@ func New() *schema.Provider {
 			"auth0_client":                               client.NewResource(),
 			"auth0_client_credentials":                   client.NewCredentialsResource(),
 			"auth0_client_grant":                         client.NewGrantResource(),
+			"auth0_client_cimd":                          client.NewCIMDResource(),
 			"auth0_connection":                           connection.NewResource(),
 			"auth0_connection_client":                    connection.NewClientResource(),
 			"auth0_connection_clients":                   connection.NewClientsResource(),

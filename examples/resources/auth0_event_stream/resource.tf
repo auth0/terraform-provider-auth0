@@ -58,3 +58,17 @@ resource "auth0_event_stream" "my_event_stream_webhook_secure" {
     }
   }
 }
+
+# Creates an event stream of type action
+resource "auth0_event_stream" "my_event_stream_action" {
+  name             = "my-action-stream"
+  destination_type = "action"
+  subscriptions = [
+    "user.created",
+    "user.updated"
+  ]
+
+  action_configuration {
+    action_id = auth0_action.my_action.id
+  }
+}

@@ -1,3 +1,19 @@
+## v1.44.0
+
+FEATURES:
+- `resource/auth0_client_cimd` – Add support for managing Client ID Metadata Document (CIMD) client registrations ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `resource/auth0_client` – Add support for configuring dedicated CIMD fields ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `resource/auth0_client` – Add support for configuring `my_organization_configuration` ([#1518](https://github.com/auth0/terraform-provider-auth0/pull/1518))
+- `resource/auth0_client` – Add support for the new `on_behalf_of_token_exchange` value on `token_exchange.allow_any_profile_of_type` ([#1535](https://github.com/auth0/terraform-provider-auth0/pull/1535))
+- `resource/auth0_tenant` – Add support for configuring `client_id_metadata_document_supported` and `resource_parameter_profile` ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `data-source/auth0_client` – Add support for retrieving CIMD fields ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `data-source/auth0_clients` – Add support for filtering by `external_client_id` for CIMD clients ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+
+ENHANCEMENTS:
+- `resource/auth0_organization_connection` – Migrate to the new Organization Connections endpoints in `go-auth0/v2` ([#1539](https://github.com/auth0/terraform-provider-auth0/pull/1539))
+- `resource/auth0_organization_connections` – Migrate to the new Organization Connections endpoints in `go-auth0/v2` ([#1539](https://github.com/auth0/terraform-provider-auth0/pull/1539))
+- `data-source/auth0_organization` – Expose `organization_connection_name` and `organization_access_level` for enabled connections ([#1539](https://github.com/auth0/terraform-provider-auth0/pull/1539))
+
 ## v1.43.0
 
 FEATURES:

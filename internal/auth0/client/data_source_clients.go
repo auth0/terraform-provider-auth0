@@ -39,6 +39,11 @@ func NewClientsDataSource() *schema.Resource {
 				Optional:    true,
 				Description: "Filter clients by first party status.",
 			},
+			"external_client_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Filter clients by CIMD external client ID URL.",
+			},
 			"clients": {
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -99,6 +104,7 @@ func readClientsForDataSource(ctx context.Context, data *schema.ResourceData, me
 	nameFilter := data.Get("name_filter").(string)
 	appTypesSet := data.Get("app_types").(*schema.Set)
 	isFirstParty := data.Get("is_first_party").(bool)
+	externalClientID := data.Get("external_client_id").(string)
 
 	appTypes := make([]string, 0, appTypesSet.Len())
 	for _, v := range appTypesSet.List() {
@@ -116,6 +122,9 @@ func readClientsForDataSource(ctx context.Context, data *schema.ResourceData, me
 	}
 	if isFirstParty {
 		params = append(params, management.Parameter("is_first_party", "true"))
+	}
+	if externalClientID != "" {
+		params = append(params, management.Parameter("external_client_id", externalClientID))
 	}
 
 	var page int
@@ -143,7 +152,7 @@ func readClientsForDataSource(ctx context.Context, data *schema.ResourceData, me
 		page++
 	}
 
-	filterID := generateFilterID(nameFilter, appTypes, isFirstParty)
+	filterID := generateFilterID(nameFilter, appTypes, isFirstParty, externalClientID)
 	data.SetId(filterID)
 
 	if err := flattenClientList(data, clients); err != nil {
@@ -153,8 +162,12 @@ func readClientsForDataSource(ctx context.Context, data *schema.ResourceData, me
 	return nil
 }
 
-func generateFilterID(nameFilter string, appTypes []string, isFirstParty bool) string {
+func generateFilterID(nameFilter string, appTypes []string, isFirstParty bool, externalClientID string) string {
+	filterID := fmt.Sprintf("%s-%v-%v", nameFilter, appTypes, isFirstParty)
+	if externalClientID != "" {
+		filterID += fmt.Sprintf("-%s", externalClientID)
+	}
 	h := sha256.New()
-	_, _ = fmt.Fprintf(h, "%s-%v-%v", nameFilter, appTypes, isFirstParty)
+	_, _ = fmt.Fprintf(h, "%s", filterID)
 	return fmt.Sprintf("clients-%x", h.Sum(nil))
 }

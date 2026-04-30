@@ -87,6 +87,7 @@ resource "auth0_resource_server" "okta_oin_express_configuration_api" {
 
 - `allow_offline_access` (Boolean) Indicates whether refresh tokens can be issued for this resource server.
 - `authorization_details` (Block List) Authorization details for this resource server. (see [below for nested schema](#nestedblock--authorization_details))
+- `authorization_policy` (Block List, Max: 1) Authorization policy for the resource server.(EA Only) (see [below for nested schema](#nestedblock--authorization_policy))
 - `consent_policy` (String) Consent policy for this resource server. Options include `transactional-authorization-with-mfa`, or `null` to disable.
 - `enforce_policies` (Boolean) If this setting is enabled, RBAC authorization policies will be enforced for this API. Role and permission assignments will be evaluated during the login transaction.
 - `name` (String) Friendly name for the resource server. Cannot include `<` or `>` characters.
@@ -114,6 +115,14 @@ Optional:
 
 - `disable` (Boolean) Disable authorization details.
 - `type` (String) Type of authorization details.
+
+
+<a id="nestedblock--authorization_policy"></a>
+### Nested Schema for `authorization_policy`
+
+Optional:
+
+- `policy_id` (String) Identifier of the authorization policy.
 
 
 <a id="nestedblock--proof_of_possession"></a>

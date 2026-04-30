@@ -12,13 +12,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
-	"github.com/auth0/go-auth0/management"
-
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
-const auth0ManagementAPIName = "Auth0 Management API"
+const (
+	auth0ManagementAPIName = "Auth0 Management API"
+	auth0MyAccountAPIName  = "Auth0 My Account API"
+)
 
 // NewResource will return a new auth0_resource_server resource.
 func NewResource() *schema.Resource {
@@ -36,6 +37,7 @@ func NewResource() *schema.Resource {
 			"name": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Computed:    true,
 				Description: "Friendly name for the resource server. Cannot include `<` or `>` characters.",
 			},
 			"identifier": {
@@ -77,6 +79,7 @@ func NewResource() *schema.Resource {
 			"allow_offline_access": {
 				Type:        schema.TypeBool,
 				Optional:    true,
+				Computed:    true,
 				Description: "Indicates whether refresh tokens can be issued for this resource server.",
 			},
 			"token_lifetime": {
@@ -262,6 +265,23 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"authorization_policy": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Authorization policy for the resource server.(EA Only)",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"policy_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "Identifier of the authorization policy.",
+						},
+					},
+				},
+			},
 			"subject_type_authorization": {
 				Type:        schema.TypeList,
 				Optional:    true,
@@ -352,8 +372,11 @@ func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	if err := fixNullableAttributes(ctx, data, api); err != nil {
-		return diag.FromErr(err)
+	nullFields := fetchNullableFields(data)
+	if len(nullFields) != 0 {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), nullFields); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 	time.Sleep(200 * time.Millisecond)
 
@@ -362,6 +385,16 @@ func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 
 func validateResourceServer(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
 	var result *multierror.Error
+
+	// The "Auth0 My Account API" resource server has a fixed name on the Auth0
+	// side and cannot be renamed. Suppress any planned change to "name" so we
+	// don't produce a perpetual diff when users define a different name in
+	// their configuration.
+	if resourceServerIsAuth0MyAccountAPI(diff.GetRawState()) && diff.HasChange("name") {
+		if err := diff.Clear("name"); err != nil {
+			return err
+		}
+	}
 
 	authorizationDetailsConfig := diff.GetRawConfig().GetAttr("authorization_details")
 	if !authorizationDetailsConfig.IsNull() {
@@ -436,42 +469,6 @@ func validateResourceServer(_ context.Context, diff *schema.ResourceDiff, _ inte
 	}
 
 	return result.ErrorOrNil()
-}
-
-func fixNullableAttributes(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
-	if isConsentPolicyNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
-			"consent_policy": nil,
-		}); err != nil {
-			return err
-		}
-	}
-
-	if isAuthorizationDetailsNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
-			"authorization_details": nil,
-		}); err != nil {
-			return err
-		}
-	}
-
-	if isTokenEncryptionNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
-			"token_encryption": nil,
-		}); err != nil {
-			return err
-		}
-	}
-
-	if isProofOfPossessionNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
-			"proof_of_possession": nil,
-		}); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func readResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

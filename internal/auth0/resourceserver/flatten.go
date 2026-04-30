@@ -24,6 +24,7 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 		data.Set("token_encryption", flattenTokenEncryption(data, resourceServer.GetTokenEncryption())),
 		data.Set("proof_of_possession", flattenProofOfPossession(resourceServer.GetProofOfPossession())),
 		data.Set("subject_type_authorization", flattenSubjectTypeAuthorization(resourceServer.GetSubjectTypeAuthorization())),
+		data.Set("authorization_policy", flattenAuthorizationPolicy(resourceServer.GetAuthorizationPolicy())),
 		data.Set("client_id", resourceServer.GetClientID()),
 		data.Set("is_system", resourceServer.GetIsSystem()),
 	)
@@ -169,4 +170,15 @@ func flattenSubjectTypeAuthorization(subjectType *management.ResourceServerSubje
 	}
 
 	return []interface{}{m}
+}
+
+func flattenAuthorizationPolicy(policy *management.ResourceServerAuthorizationPolicy) []interface{} {
+	if policy == nil {
+		return nil
+	}
+	return []interface{}{
+		map[string]interface{}{
+			"policy_id": policy.GetPolicyID(),
+		},
+	}
 }

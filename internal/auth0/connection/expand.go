@@ -106,49 +106,19 @@ func expandConnection(
 	}
 
 	// Prevent erasing database configuration secrets.
-	// Also preserves password_options since the PATCH API replaces the entire
-	// connection.options object — if password_options is not included in the
-	// PATCH body it gets wiped from the API.
 	if !data.IsNewResource() && strategy == management.ConnectionStrategyAuth0 && connection.Options != nil {
 		apiConn, err := api.Connection.Read(ctx, data.Id())
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
 
-		expandedOptions := connection.Options.(*management.ConnectionOptions)
-		existingOptions := apiConn.Options.(*management.ConnectionOptions)
-
 		diagnostics = append(
 			diagnostics,
 			checkForUnmanagedConfigurationSecrets(
-				expandedOptions.GetConfiguration(),
-				existingOptions.GetConfiguration(),
+				connection.Options.(*management.ConnectionOptions).GetConfiguration(),
+				apiConn.Options.(*management.ConnectionOptions).GetConfiguration(),
 			)...,
 		)
-
-		// Carry over existing PasswordOptions when TF config does not explicitly
-		// manage them. Without this, a PATCH that omits password_options would
-		// silently clear any flexible password policy already set on the connection.
-		if expandedOptions.PasswordOptions == nil && existingOptions.PasswordOptions != nil {
-			expandedOptions.PasswordOptions = existingOptions.PasswordOptions
-			connection.Options = expandedOptions
-		} else if expandedOptions.PasswordOptions != nil && existingOptions.PasswordOptions != nil {
-			// Carry over individual sub-fields not specified in TF config.
-			// Without this, a PATCH with only some sub-fields would silently wipe
-			// any unspecified sub-fields already set on the connection.
-			if expandedOptions.PasswordOptions.Complexity == nil {
-				expandedOptions.PasswordOptions.Complexity = existingOptions.PasswordOptions.Complexity
-			}
-			if expandedOptions.PasswordOptions.History == nil {
-				expandedOptions.PasswordOptions.History = existingOptions.PasswordOptions.History
-			}
-			if expandedOptions.PasswordOptions.ProfileData == nil {
-				expandedOptions.PasswordOptions.ProfileData = existingOptions.PasswordOptions.ProfileData
-			}
-			if expandedOptions.PasswordOptions.Dictionary == nil {
-				expandedOptions.PasswordOptions.Dictionary = existingOptions.PasswordOptions.Dictionary
-			}
-		}
 	}
 
 	return connection, diagnostics

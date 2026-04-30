@@ -300,22 +300,12 @@ func flattenCustomPasswordHash(customPasswordHash *management.CustomPasswordHash
 }
 
 func flattenPasswordOptions(po *management.PasswordOptions) map[string]interface{} {
-	m := map[string]interface{}{}
-
-	if po.Complexity != nil {
-		m["complexity"] = []interface{}{flattenPasswordOptionsComplexity(po.GetComplexity())}
+	return map[string]interface{}{
+		"complexity":   []interface{}{flattenPasswordOptionsComplexity(po.GetComplexity())},
+		"profile_data": []interface{}{flattenPasswordOptionsProfileData(po.GetProfileData())},
+		"history":      []interface{}{flattenPasswordOptionsHistory(po.GetHistory())},
+		"dictionary":   []interface{}{flattenPasswordOptionsDictionary(po.GetDictionary())},
 	}
-	if po.ProfileData != nil {
-		m["profile_data"] = []interface{}{flattenPasswordOptionsProfileData(po.GetProfileData())}
-	}
-	if po.History != nil {
-		m["history"] = []interface{}{flattenPasswordOptionsHistory(po.GetHistory())}
-	}
-	if po.Dictionary != nil {
-		m["dictionary"] = []interface{}{flattenPasswordOptionsDictionary(po.GetDictionary())}
-	}
-
-	return m
 }
 
 func flattenPasswordOptionsComplexity(c *management.PasswordOptionsComplexity) map[string]interface{} {

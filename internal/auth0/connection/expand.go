@@ -132,6 +132,22 @@ func expandConnection(
 		if expandedOptions.PasswordOptions == nil && existingOptions.PasswordOptions != nil {
 			expandedOptions.PasswordOptions = existingOptions.PasswordOptions
 			connection.Options = expandedOptions
+		} else if expandedOptions.PasswordOptions != nil && existingOptions.PasswordOptions != nil {
+			// Carry over individual sub-fields not specified in TF config.
+			// Without this, a PATCH with only some sub-fields would silently wipe
+			// any unspecified sub-fields already set on the connection.
+			if expandedOptions.PasswordOptions.Complexity == nil {
+				expandedOptions.PasswordOptions.Complexity = existingOptions.PasswordOptions.Complexity
+			}
+			if expandedOptions.PasswordOptions.History == nil {
+				expandedOptions.PasswordOptions.History = existingOptions.PasswordOptions.History
+			}
+			if expandedOptions.PasswordOptions.ProfileData == nil {
+				expandedOptions.PasswordOptions.ProfileData = existingOptions.PasswordOptions.ProfileData
+			}
+			if expandedOptions.PasswordOptions.Dictionary == nil {
+				expandedOptions.PasswordOptions.Dictionary = existingOptions.PasswordOptions.Dictionary
+			}
 		}
 	}
 

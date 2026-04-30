@@ -3010,6 +3010,19 @@ func TestAccConnectionPasswordOptions(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.active", "true"),
 				),
 			},
+			{
+				// Specify only the complexity sub-field. The history and dictionary
+				// sub-fields must be carried over from the existing API state and
+				// must not be wiped by the PATCH.
+				Config: acctest.ParseTestName(testAccConnectionPasswordOptionsPartialSubField, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.min_length", "20"),
+					// history and dictionary must be preserved from the previous step.
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.active", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.active", "true"),
+				),
+			},
 		},
 	})
 }
@@ -3070,6 +3083,22 @@ resource "auth0_connection" "my_connection" {
 			}
 			dictionary {
 				active = true
+			}
+		}
+	}
+}
+`
+
+const testAccConnectionPasswordOptionsPartialSubField = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+
+	options {
+		brute_force_protection = false
+		password_options {
+			complexity {
+				min_length = 20
 			}
 		}
 	}

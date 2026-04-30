@@ -1,6 +1,7 @@
 package resourceserver
 
 import (
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -27,8 +28,8 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 	resourceServer.AuthorizationPolicy = expandAuthorizationPolicy(data)
 
 	if !resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
-		if !resourceServerIsAuth0MyAccountAPI(data.GetRawState()) {
-			resourceServer.Name = value.String(cfg.GetAttr("name"))
+		if resourceServerIsAuth0MyAccountAPI(data.GetRawState()) {
+			resourceServer.Name = auth0.String(auth0MyAccountAPIName)
 		}
 		resourceServer.SigningAlgorithm = value.String(cfg.GetAttr("signing_alg"))
 		resourceServer.SigningSecret = value.String(cfg.GetAttr("signing_secret"))

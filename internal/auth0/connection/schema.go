@@ -1347,9 +1347,36 @@ var optionsSchema = &schema.Schema{
 				Description: "Specifies the authentication method for the token endpoint. (Okta/OIDC Connections)",
 			},
 			"token_endpoint_auth_signing_alg": {
-				Type:        schema.TypeString,
-				Optional:    true,
+				Type:     schema.TypeString,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"RS256", "RS384", "RS512",
+					"PS256", "PS384",
+					"ES256", "ES384",
+				}, false),
 				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)",
+			},
+			"id_token_signed_response_algs": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"RS256", "RS384", "RS512",
+						"PS256", "PS384",
+						"ES256", "ES384",
+					}, false),
+				},
+				Optional:    true,
+				Description: "List of allowed algorithms for the ID token signature. If not set, RS256 will be applied at runtime. (Okta/OIDC Connections)",
+			},
+			"token_endpoint_jwtca_aud_format": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"issuer",
+					"token_endpoint",
+				}, false),
+				Description: "Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC Connections)",
 			},
 			"consumer_key": {
 				Type:        schema.TypeString,

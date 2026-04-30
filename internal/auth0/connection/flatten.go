@@ -856,6 +856,7 @@ func flattenConnectionOptionsOIDC(
 		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
 		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
 		"dpop_signing_alg":                options.GetDPoPSigningAlg(),
+		"id_token_signed_response_algs":   options.GetIDTokenSignedResponseAlgs(),
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -916,6 +917,7 @@ func flattenConnectionOptionsOkta(
 		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
 		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
 		"dpop_signing_alg":                options.GetDPoPSigningAlg(),
+		"id_token_signed_response_algs":   options.GetIDTokenSignedResponseAlgs(),
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())

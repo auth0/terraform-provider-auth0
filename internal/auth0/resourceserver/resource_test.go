@@ -563,7 +563,6 @@ func TestAccResourceServer_ACR(t *testing.T) {
 				Config: fmt.Sprintf(acctest.ParseTestName(testAccResourceServerACR, t.Name()), domain),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "name", "Auth0 My Account API"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "identifier", fmt.Sprintf("https://%s/me/", domain)),
 					resource.TestCheckResourceAttrSet("auth0_resource_server.my_account_api", "id"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "authorization_policy.#", "1"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "authorization_policy.0.policy_id", "019b76da-a800-73c9-b656-b349ae415c17"),

@@ -294,16 +294,19 @@ func expandClientJWTConfiguration(data *schema.ResourceData) *management.ClientJ
 	}
 
 	var jwt management.ClientJWTConfiguration
+	isNewResource := data.IsNewResource()
 
 	jwtConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-		jwt.LifetimeInSeconds = value.Int(config.GetAttr("lifetime_in_seconds"))
 		jwt.Algorithm = value.String(config.GetAttr("alg"))
+		if isNewResource || data.HasChange("jwt_configuration.0.lifetime_in_seconds") {
+			jwt.LifetimeInSeconds = value.Int(config.GetAttr("lifetime_in_seconds"))
+		}
 
-		if data.IsNewResource() || data.HasChange("jwt_configuration.0.scopes") {
+		if isNewResource || data.HasChange("jwt_configuration.0.scopes") {
 			jwt.Scopes = value.MapOfStrings(config.GetAttr("scopes"))
 		}
 
-		if data.IsNewResource() {
+		if isNewResource {
 			jwt.SecretEncoded = value.Bool(config.GetAttr("secret_encoded"))
 		}
 

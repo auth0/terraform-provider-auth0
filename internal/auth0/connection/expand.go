@@ -1003,6 +1003,7 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
 		IDTokenSignedResponseAlgs:   value.Strings(config.GetAttr("id_token_signed_response_algs")),
 		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
+		TokenEndpointJwtcaAudFormat: value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
 	}
 
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
@@ -1053,6 +1054,7 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
 		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
 		IDTokenSignedResponseAlgs:   value.Strings(config.GetAttr("id_token_signed_response_algs")),
+		TokenEndpointJwtcaAudFormat: value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
 	}
 
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {

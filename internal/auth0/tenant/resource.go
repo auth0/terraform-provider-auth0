@@ -485,8 +485,7 @@ func NewResource() *schema.Resource {
 				Computed:     true,
 				ValidateFunc: validation.StringInSlice([]string{"strict", "permissive"}, false),
 				Description: "Sets the third_party_security_mode assigned to clients created via Dynamic Client Registration. " +
-					"`strict` applies enhanced security controls. `permissive` [preserves pre-existing behavior " +
-					"and is only available to tenants with prior third-party client usage]" +
+					"Can only be configured by [customers with pre-existing third-party client usage before April 2026]" +
 					"(https://auth0.com/docs/get-started/applications/third-party-applications/permissive-mode#dynamic-client-registration-in-permissive-mode).",
 			},
 		},

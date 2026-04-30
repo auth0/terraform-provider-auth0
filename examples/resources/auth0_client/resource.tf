@@ -109,3 +109,22 @@ resource "auth0_client" "my_client" {
     }
   }
 }
+
+resource "auth0_resource_server" "my_api" {
+  name       = "My API"
+  identifier = "https://api.example.com"
+}
+
+resource "auth0_client" "mcp_server" {
+  depends_on = [auth0_resource_server.my_api]
+
+  name                       = "My MCP Server"
+  app_type                   = "resource_server"
+  is_first_party             = true
+  oidc_conformant            = true
+  resource_server_identifier = auth0_resource_server.my_api.identifier
+
+  token_exchange {
+    allow_any_profile_of_type = ["on_behalf_of_token_exchange"]
+  }
+}

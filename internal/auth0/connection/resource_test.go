@@ -2988,6 +2988,121 @@ resource "auth0_connection" "PasswordHash" {
 }
 `
 
+func TestAccConnectionPasswordOptions(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionPasswordOptionsCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.#", "1"),
+					// Complexity.
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.min_length", "12"),
+					// Profile_data.
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.profile_data.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.profile_data.0.blocked_fields.#", "4"),
+					// History.
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.size", "5"),
+					// Dictionary.
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.default", "en_100k"),
+				),
+			},
+			{
+				// Update an unrelated field while populating every password_options
+				// sub-field to verify the PATCH round-trips all values.
+				Config: acctest.ParseTestName(testAccConnectionPasswordOptionsUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.#", "1"),
+					// Complexity (all fields).
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.min_length", "14"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.character_types.#", "4"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.character_type_rule", "three_of_four"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.identical_characters", "block"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.sequential_characters", "block"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.max_length_exceeded", "truncate"),
+					// Profile_data.
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.profile_data.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.profile_data.0.blocked_fields.#", "4"),
+					// History.
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.size", "8"),
+					// Dictionary.
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.default", "en_10k"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.custom.#", "2"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionPasswordOptionsCreate = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+
+	options {
+		brute_force_protection = true
+		password_options {
+			profile_data {
+				active = true
+				blocked_fields = ["name","username","nickname","email"]
+			}
+			complexity {
+				min_length = 12
+			}
+			history {
+				active = true
+				size   = 5
+			}
+			dictionary {
+				active = true
+				default = "en_100k"
+			}
+		}
+	}
+}
+`
+
+const testAccConnectionPasswordOptionsUpdate = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+
+	options {
+		brute_force_protection = false
+		password_options {
+			complexity {
+				min_length            = 14
+				character_types       = ["uppercase", "lowercase", "number", "special"]
+				character_type_rule   = "three_of_four"
+				identical_characters  = "block"
+				sequential_characters = "block"
+				max_length_exceeded   = "truncate"
+			}
+			profile_data {
+				active         = true
+				blocked_fields = ["name", "username", "nickname", "email"]
+			}
+			history {
+				active = true
+				size   = 8
+			}
+			dictionary {
+				active  = true
+				default = "en_10k"
+				custom  = ["company-name", "product-name"]
+			}
+		}
+	}
+}
+`
+
 func TestAccConnectionPasswordHash(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

@@ -596,10 +596,81 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		options.CustomPasswordHash = expandConnectionOptionsCustomPasswordHash(config.GetAttr("custom_password_hash"))
 	}
 
+	if config.Type().HasAttribute("password_options") && !config.GetAttr("password_options").IsNull() {
+		options.PasswordOptions = expandConnectionOptionsPasswordOptions(config.GetAttr("password_options"))
+	}
+
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsPasswordOptions(config cty.Value) *management.PasswordOptions {
+	var po *management.PasswordOptions
+	config.ForEachElement(func(_ cty.Value, attrs cty.Value) (stop bool) {
+		po = &management.PasswordOptions{
+			Complexity:  expandPasswordOptionsComplexity(attrs.GetAttr("complexity")),
+			ProfileData: expandPasswordOptionsProfileData(attrs.GetAttr("profile_data")),
+			History:     expandPasswordOptionsHistory(attrs.GetAttr("history")),
+			Dictionary:  expandPasswordOptionsDictionary(attrs.GetAttr("dictionary")),
+		}
+		return stop
+	})
+	return po
+}
+
+func expandPasswordOptionsComplexity(config cty.Value) *management.PasswordOptionsComplexity {
+	var c *management.PasswordOptionsComplexity
+	config.ForEachElement(func(_ cty.Value, attrs cty.Value) (stop bool) {
+		c = &management.PasswordOptionsComplexity{
+			MinLength:            value.Int(attrs.GetAttr("min_length")),
+			CharacterTypes:       value.Strings(attrs.GetAttr("character_types")),
+			CharacterTypeRule:    value.String(attrs.GetAttr("character_type_rule")),
+			IdenticalCharacters:  value.String(attrs.GetAttr("identical_characters")),
+			SequentialCharacters: value.String(attrs.GetAttr("sequential_characters")),
+			MaxLengthExceeded:    value.String(attrs.GetAttr("max_length_exceeded")),
+		}
+		return stop
+	})
+	return c
+}
+
+func expandPasswordOptionsProfileData(config cty.Value) *management.PasswordOptionsProfileData {
+	var p *management.PasswordOptionsProfileData
+	config.ForEachElement(func(_ cty.Value, attrs cty.Value) (stop bool) {
+		p = &management.PasswordOptionsProfileData{
+			Active:        value.Bool(attrs.GetAttr("active")),
+			BlockedFields: value.Strings(attrs.GetAttr("blocked_fields")),
+		}
+		return stop
+	})
+	return p
+}
+
+func expandPasswordOptionsHistory(config cty.Value) *management.PasswordOptionsHistory {
+	var h *management.PasswordOptionsHistory
+	config.ForEachElement(func(_ cty.Value, attrs cty.Value) (stop bool) {
+		h = &management.PasswordOptionsHistory{
+			Active: value.Bool(attrs.GetAttr("active")),
+			Size:   value.Int(attrs.GetAttr("size")),
+		}
+		return stop
+	})
+	return h
+}
+
+func expandPasswordOptionsDictionary(config cty.Value) *management.PasswordOptionsDictionary {
+	var d *management.PasswordOptionsDictionary
+	config.ForEachElement(func(_ cty.Value, attrs cty.Value) (stop bool) {
+		d = &management.PasswordOptionsDictionary{
+			Active:  value.Bool(attrs.GetAttr("active")),
+			Default: value.String(attrs.GetAttr("default")),
+			Custom:  value.Strings(attrs.GetAttr("custom")),
+		}
+		return stop
+	})
+	return d
 }
 
 func expandConnectionOptionsGoogleOAuth2(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {

@@ -1,0 +1,138 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 162
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Test-ResourceServer-Name","identifier":"https://terraform-provider-auth0-dev.us.auth0.com/me/","authorization_policy":{"policy_id":"019b76da-a800-73c9-b656-b349ae415c17"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.38.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 780
+        uncompressed: false
+        body: '{"id":"69f2dc6f1fe9298c44d9b9f3","name":"Auth0 My Account API","identifier":"https://terraform-provider-auth0-dev.us.auth0.com/me/","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"client":{"policy":"deny_all"},"user":{"policy":"require_client_grant"}},"token_lifetime":600,"token_lifetime_for_web":600,"signing_alg":"RS256","scopes":[{"value":"create:me:connected_accounts","description":"Create Connected Accounts"},{"value":"read:me:connected_accounts","description":"Read Connected Accounts"},{"value":"delete:me:connected_accounts","description":"Delete Connected Accounts"}],"is_system":true,"proof_of_possession":{"mechanism":"dpop","required":false},"authorization_policy":{"policy_id":"019b76da-a800-73c9-b656-b349ae415c17"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 556.285041ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.38.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/69f2dc6f1fe9298c44d9b9f3
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"69f2dc6f1fe9298c44d9b9f3","name":"Auth0 My Account API","identifier":"https://terraform-provider-auth0-dev.us.auth0.com/me/","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"client":{"policy":"deny_all"},"user":{"policy":"require_client_grant"}},"token_lifetime":600,"token_lifetime_for_web":600,"signing_alg":"RS256","scopes":[{"value":"create:me:connected_accounts","description":"Create Connected Accounts"},{"value":"read:me:connected_accounts","description":"Read Connected Accounts"},{"value":"delete:me:connected_accounts","description":"Delete Connected Accounts"},{"value":"read:me:authentication_methods","description":"Read Authentication Methods"},{"value":"delete:me:authentication_methods","description":"Delete Authentication Methods"},{"value":"update:me:authentication_methods","description":"Update Authentication Methods"},{"value":"read:me:factors","description":"Read Factors"},{"value":"create:me:authentication_methods","description":"Create Authentication Methods"}],"is_system":true,"proof_of_possession":{"mechanism":"dpop","required":false},"authorization_policy":{"policy_id":"019b76da-a800-73c9-b656-b349ae415c17"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 363.678458ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.38.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/69f2dc6f1fe9298c44d9b9f3
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"69f2dc6f1fe9298c44d9b9f3","name":"Auth0 My Account API","identifier":"https://terraform-provider-auth0-dev.us.auth0.com/me/","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"subject_type_authorization":{"client":{"policy":"deny_all"},"user":{"policy":"require_client_grant"}},"token_lifetime":600,"token_lifetime_for_web":600,"signing_alg":"RS256","scopes":[{"value":"create:me:connected_accounts","description":"Create Connected Accounts"},{"value":"read:me:connected_accounts","description":"Read Connected Accounts"},{"value":"delete:me:connected_accounts","description":"Delete Connected Accounts"},{"value":"read:me:authentication_methods","description":"Read Authentication Methods"},{"value":"delete:me:authentication_methods","description":"Delete Authentication Methods"},{"value":"update:me:authentication_methods","description":"Update Authentication Methods"},{"value":"read:me:factors","description":"Read Factors"},{"value":"create:me:authentication_methods","description":"Create Authentication Methods"}],"is_system":true,"proof_of_possession":{"mechanism":"dpop","required":false},"authorization_policy":{"policy_id":"019b76da-a800-73c9-b656-b349ae415c17"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 365.112375ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.38.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/69f2dc6f1fe9298c44d9b9f3
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 346.094917ms

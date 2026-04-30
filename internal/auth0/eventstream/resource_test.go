@@ -86,6 +86,46 @@ resource "auth0_event_stream" "my_event_stream_webhook" {
 }
 `
 
+const actionConfig = `
+resource "auth0_action" "my_action" {
+	name    = "Test Action {{.testName}}"
+	runtime = "node22"
+	deploy  = true
+	code    = "exports.onExecuteEventStream = async (event, api) => {};"
+
+	supported_triggers {
+		id      = "event-stream"
+		version = "v1"
+	}
+}
+`
+
+const testEventStreamCreate = actionConfig + `
+
+resource "auth0_event_stream" "my_event_stream_action" {
+	name             = "{{.testName}}-my-action"
+	destination_type = "action"
+	subscriptions    = ["user.created", "user.updated"]
+
+	action_configuration {
+		action_id = auth0_action.my_action.id
+	}
+}
+`
+
+const testEventStreamUpdate = actionConfig + `
+
+resource "auth0_event_stream" "my_event_stream_action" {
+	name             = "{{.testName}}-my-action-updated"
+	destination_type = "action"
+	subscriptions    = ["user.updated"]
+
+	action_configuration {
+		action_id = auth0_action.my_action.id
+	}
+}
+`
+
 func TestAccEventStream(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -155,6 +195,36 @@ func TestAccEventStream(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.method", "bearer"),
 
 					resource.TestCheckNoResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.token_wo"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccEventStreamAction(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testEventStreamCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_action", "name", fmt.Sprintf("%s-my-action", t.Name())),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_action", "destination_type", "action"),
+					resource.TestCheckResourceAttrSet("auth0_event_stream.my_event_stream_action", "action_configuration.0.action_id"),
+
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_action", "subscriptions.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_event_stream.my_event_stream_action", "subscriptions.*", "user.created"),
+					resource.TestCheckTypeSetElemAttr("auth0_event_stream.my_event_stream_action", "subscriptions.*", "user.updated"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testEventStreamUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_action", "name", fmt.Sprintf("%s-my-action-updated", t.Name())),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_action", "destination_type", "action"),
+					resource.TestCheckResourceAttrSet("auth0_event_stream.my_event_stream_action", "action_configuration.0.action_id"),
+
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_action", "subscriptions.#", "1"),
+					resource.TestCheckTypeSetElemAttr("auth0_event_stream.my_event_stream_action", "subscriptions.*", "user.updated"),
 				),
 			},
 		},

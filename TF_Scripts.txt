@@ -1,0 +1,613 @@
+# ==============================================================
+# TF_Scripts.txt — Flexible Password Policy Test Scripts
+# Generated: Thu Apr 30 12:42:52 IST 2026
+# Auth0 Domain: kartik-esd-57610.sus.auth0.com
+# ==============================================================
+
+# ==============================================================
+# FILE: provider.tf
+# ==============================================================
+terraform {
+  required_providers {
+    auth0 = {
+      source = "auth0/auth0"
+      # Version is omitted here since you are attaching to your local debug build!
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# Provider Configuration
+# -------------------------------------------------------------------------
+provider "auth0" {
+  domain        = "kartik-esd-57610.sus.auth0.com"
+  client_id     = var.auth0_client_id
+  client_secret = var.auth0_client_secret
+}
+
+variable "auth0_client_id" {
+  type        = string
+  description = "The Client ID of the M2M app"
+}
+
+variable "auth0_client_secret" {
+  type        = string
+  description = "The Client Secret of the M2M app"
+  sensitive   = true
+}
+
+# ==============================================================
+# FILE: main.tf (scenarios 1-7)
+# ==============================================================
+# -------------------------------------------------------------------------
+# 1. Full password_options — all fields explicitly set
+# -------------------------------------------------------------------------
+resource "auth0_connection" "full_password_options" {
+  name     = "test-full-password-options"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        min_length           = 12
+        character_types      = ["uppercase", "lowercase", "number", "special"]
+        character_type_rule  = "three_of_four"
+        identical_characters = "block"
+        sequential_characters = "block"
+        max_length_exceeded  = "error"
+      }
+
+      profile_data {
+        active         = true
+        blocked_fields = ["username", "name", "email"]
+      }
+
+      history {
+        active = true
+        size   = 5
+      }
+
+      dictionary {
+        active  = true
+        default = "en_100k"
+        custom  = ["companyname", "product123"]
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 2. Minimal password_options — only complexity.min_length
+# -------------------------------------------------------------------------
+resource "auth0_connection" "minimal_password_options" {
+  name     = "test-minimal-password-options"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        min_length = 8
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 3. character_type_rule = "all" with all four character types
+# -------------------------------------------------------------------------
+resource "auth0_connection" "all_character_types" {
+  name     = "test-all-character-types"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        min_length          = 16
+        character_types     = ["uppercase", "lowercase", "number", "special"]
+        character_type_rule = "all"
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 4. History only — no other password_options blocks
+# -------------------------------------------------------------------------
+resource "auth0_connection" "history_only" {
+  name     = "test-history-only"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      history {
+        active = true
+        size   = 24
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 5. Dictionary with en_10k and custom words, no other blocks
+# -------------------------------------------------------------------------
+resource "auth0_connection" "dictionary_only" {
+  name     = "test-dictionary-only"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      dictionary {
+        active  = true
+        default = "en_10k"
+        custom  = ["forbidden", "password", "letmein"]
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 6. profile_data with multiple blocked_fields
+# -------------------------------------------------------------------------
+resource "auth0_connection" "profile_data_only" {
+  name     = "test-profile-data-only"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      profile_data {
+        active         = true
+        blocked_fields = ["username", "name", "email", "nickname", "given_name", "family_name"]
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 7. max_length_exceeded = "truncate"
+# -------------------------------------------------------------------------
+resource "auth0_connection" "truncate_max_length" {
+  name     = "test-truncate-max-length"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        max_length_exceeded = "truncate"
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# Outputs — useful for verifying computed fields are read back correctly
+# -------------------------------------------------------------------------
+output "full_password_options_id" {
+  value = auth0_connection.full_password_options.id
+}
+
+output "minimal_password_options_id" {
+  value = auth0_connection.minimal_password_options.id
+}
+
+# ==============================================================
+# FILE: auth_methods.tf (scenarios 8-17)
+# ==============================================================
+# -------------------------------------------------------------------------
+# 8. authentication_methods — api_behavior = "optional" (passwordless API)
+# -------------------------------------------------------------------------
+resource "auth0_connection" "api_behavior_optional" {
+  name     = "test-api-behavior-optional"
+  strategy = "auth0"
+
+  options {
+    authentication_methods {
+      password {
+        enabled      = true
+        api_behavior = "optional"
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 9. authentication_methods — signup_behavior = "allow" + api_behavior = "optional"
+#    NOTE: signup_behavior = "block" is NOT tested here because the API requires
+#    passkey.enabled = true when signup_behavior = "block", and passkey in turn
+#    requires Identifier First connection configuration (out of scope for this suite).
+# -------------------------------------------------------------------------
+resource "auth0_connection" "signup_behavior_allow_api_optional" {
+  name     = "test-signup-allow-api-optional"
+  strategy = "auth0"
+
+  options {
+    authentication_methods {
+      password {
+        enabled         = true
+        api_behavior    = "optional"
+        signup_behavior = "allow"
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 10. Combined: password_options + authentication_methods.password
+# -------------------------------------------------------------------------
+resource "auth0_connection" "combined_options_and_auth_methods" {
+  name     = "test-combined-options-auth-methods"
+  strategy = "auth0"
+
+  options {
+    authentication_methods {
+      password {
+        enabled      = true
+        api_behavior = "optional"
+      }
+    }
+
+    password_options {
+      complexity {
+        min_length            = 10
+        character_types       = ["uppercase", "lowercase", "number"]
+        identical_characters  = "block"
+        sequential_characters = "block"
+        max_length_exceeded   = "error"
+      }
+
+      history {
+        active = true
+        size   = 5
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 11. password_options — identical_characters = "block" only
+# -------------------------------------------------------------------------
+resource "auth0_connection" "identical_chars_block" {
+  name     = "test-identical-chars-block"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        identical_characters = "block"
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 12. password_options — sequential_characters = "block" only
+# -------------------------------------------------------------------------
+resource "auth0_connection" "sequential_chars_block" {
+  name     = "test-sequential-chars-block"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        sequential_characters = "block"
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 13. password_options — profile_data active=false (disabled but set)
+# -------------------------------------------------------------------------
+resource "auth0_connection" "profile_data_inactive" {
+  name     = "test-profile-data-inactive"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      profile_data {
+        active = false
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 14. password_options — history active=false with size set
+# -------------------------------------------------------------------------
+resource "auth0_connection" "history_inactive" {
+  name     = "test-history-inactive"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      history {
+        active = false
+        size   = 10
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 15. password_options — dictionary active=false with custom words
+# -------------------------------------------------------------------------
+resource "auth0_connection" "dictionary_inactive" {
+  name     = "test-dictionary-inactive"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      dictionary {
+        active  = false
+        default = "en_10k"
+        custom  = ["example", "test"]
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 16. password_options — max 12 blocked_fields
+# -------------------------------------------------------------------------
+resource "auth0_connection" "profile_data_max_fields" {
+  name     = "test-profile-data-max-fields"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      profile_data {
+        active = true
+        blocked_fields = [
+          "name",
+          "username",
+          "nickname",
+          "email",
+          "phone_number",
+          "user_metadata.name",
+          "user_metadata.first",
+          "user_metadata.last",
+          "given_name",
+          "family_name",
+          "middle_name",
+          "preferred_username",
+        ]
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 17. password_options — all 4 sections active simultaneously
+#    NOTE: passkey_and_password is NOT tested here because the API rejects passkey
+#    unless the connection uses Identifier First configuration (out of scope).
+# -------------------------------------------------------------------------
+resource "auth0_connection" "all_password_options_active" {
+  name     = "test-all-password-options-active"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        min_length            = 14
+        character_types       = ["uppercase", "lowercase", "number"]
+        character_type_rule   = "all"
+        identical_characters  = "block"
+        sequential_characters = "block"
+        max_length_exceeded   = "error"
+      }
+
+      profile_data {
+        active         = true
+        blocked_fields = ["name", "username", "email"]
+      }
+
+      history {
+        active = true
+        size   = 3
+      }
+
+      dictionary {
+        active  = true
+        default = "en_100k"
+        custom  = ["acme", "acme123"]
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# Outputs for new resources
+# -------------------------------------------------------------------------
+output "api_behavior_optional_id" {
+  value = auth0_connection.api_behavior_optional.id
+}
+
+output "signup_behavior_allow_api_optional_id" {
+  value = auth0_connection.signup_behavior_allow_api_optional.id
+}
+
+output "combined_options_and_auth_methods_id" {
+  value = auth0_connection.combined_options_and_auth_methods.id
+}
+
+# ==============================================================
+# FILE: additional_scenarios.tf (scenarios 18-27)
+# ==============================================================
+# -------------------------------------------------------------------------
+# 18. Baseline — auth0 connection without any password_options
+# -------------------------------------------------------------------------
+resource "auth0_connection" "baseline_no_password_options" {
+  name     = "test-baseline-no-password-options"
+  strategy = "auth0"
+}
+
+# -------------------------------------------------------------------------
+# 19. Partial character_types — only uppercase + lowercase (2 of 4)
+#     character_type_rule must not be set (only valid when all 4 are present)
+# -------------------------------------------------------------------------
+resource "auth0_connection" "character_types_partial" {
+  name     = "test-character-types-partial"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        min_length      = 10
+        character_types = ["uppercase", "lowercase"]
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 20. min_length = 1 (minimum boundary value)
+# -------------------------------------------------------------------------
+resource "auth0_connection" "min_length_min" {
+  name     = "test-min-length-min"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        min_length = 1
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 21. min_length = 72 (maximum boundary value)
+# -------------------------------------------------------------------------
+resource "auth0_connection" "min_length_max" {
+  name     = "test-min-length-max"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        min_length = 72
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 22. history.size = 1 (minimum boundary)
+# -------------------------------------------------------------------------
+resource "auth0_connection" "history_size_min" {
+  name     = "test-history-size-min"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      history {
+        active = true
+        size   = 1
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 23. history.size = 24 (maximum boundary)
+# -------------------------------------------------------------------------
+resource "auth0_connection" "history_size_max" {
+  name     = "test-history-size-max"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      history {
+        active = true
+        size   = 24
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 24. profile_data active=true without blocked_fields (use API defaults)
+# -------------------------------------------------------------------------
+resource "auth0_connection" "profile_data_active_defaults" {
+  name     = "test-profile-data-active-defaults"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      profile_data {
+        active = true
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 25. complexity — three character types (uppercase, lowercase, number)
+#     with identical_characters and sequential_characters both blocked
+# -------------------------------------------------------------------------
+resource "auth0_connection" "three_char_types_with_blocks" {
+  name     = "test-three-char-types-blocks"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        min_length            = 12
+        character_types       = ["uppercase", "lowercase", "number"]
+        identical_characters  = "block"
+        sequential_characters = "block"
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 26. dictionary — custom words only, no default dictionary specified
+# -------------------------------------------------------------------------
+resource "auth0_connection" "dictionary_custom_only" {
+  name     = "test-dictionary-custom-only"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      dictionary {
+        active = true
+        custom = ["acme", "secret", "admin"]
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# 27. identical_characters = "allow" (explicit, non-default assertion)
+# -------------------------------------------------------------------------
+resource "auth0_connection" "identical_chars_allow" {
+  name     = "test-identical-chars-allow"
+  strategy = "auth0"
+
+  options {
+    password_options {
+      complexity {
+        identical_characters = "allow"
+      }
+    }
+  }
+}
+
+# -------------------------------------------------------------------------
+# Outputs for additional scenarios
+# -------------------------------------------------------------------------
+output "baseline_no_password_options_id" {
+  value = auth0_connection.baseline_no_password_options.id
+}
+
+output "character_types_partial_id" {
+  value = auth0_connection.character_types_partial.id
+}
+
+output "history_size_min_id" {
+  value = auth0_connection.history_size_min.id
+}
+
+output "history_size_max_id" {
+  value = auth0_connection.history_size_max.id
+}

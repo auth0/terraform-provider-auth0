@@ -17,32 +17,30 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 	config := data.GetRawConfig()
 
 	client := &management.Client{
-		Name:                               value.String(config.GetAttr("name")),
-		Description:                        value.String(config.GetAttr("description")),
-		AppType:                            value.String(config.GetAttr("app_type")),
-		LogoURI:                            value.String(config.GetAttr("logo_uri")),
-		IsFirstParty:                       value.Bool(config.GetAttr("is_first_party")),
-		OIDCConformant:                     value.Bool(config.GetAttr("oidc_conformant")),
-		ClientAliases:                      value.Strings(config.GetAttr("client_aliases")),
-		Callbacks:                          value.Strings(config.GetAttr("callbacks")),
-		AllowedLogoutURLs:                  value.Strings(config.GetAttr("allowed_logout_urls")),
-		AllowedOrigins:                     value.Strings(config.GetAttr("allowed_origins")),
-		AllowedClients:                     value.Strings(config.GetAttr("allowed_clients")),
-		GrantTypes:                         value.Strings(config.GetAttr("grant_types")),
-		OrganizationUsage:                  value.String(config.GetAttr("organization_usage")),
-		OrganizationRequireBehavior:        value.String(config.GetAttr("organization_require_behavior")),
-		WebOrigins:                         value.Strings(config.GetAttr("web_origins")),
-		RequirePushedAuthorizationRequests: value.Bool(config.GetAttr("require_pushed_authorization_requests")),
-		SSO:                                value.Bool(config.GetAttr("sso")),
-		SSODisabled:                        value.Bool(config.GetAttr("sso_disabled")),
-		CrossOriginAuth:                    value.Bool(config.GetAttr("cross_origin_auth")),
-		CrossOriginLocation:                value.String(config.GetAttr("cross_origin_loc")),
-		CustomLoginPageOn:                  value.Bool(config.GetAttr("custom_login_page_on")),
-		CustomLoginPage:                    value.String(config.GetAttr("custom_login_page")),
-		FormTemplate:                       value.String(config.GetAttr("form_template")),
-		InitiateLoginURI:                   value.String(config.GetAttr("initiate_login_uri")),
-		EncryptionKey:                      value.MapOfStrings(config.GetAttr("encryption_key")),
-		IsTokenEndpointIPHeaderTrusted:     value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
+		Name:                           value.String(config.GetAttr("name")),
+		Description:                    value.String(config.GetAttr("description")),
+		AppType:                        value.String(config.GetAttr("app_type")),
+		LogoURI:                        value.String(config.GetAttr("logo_uri")),
+		IsFirstParty:                   value.Bool(config.GetAttr("is_first_party")),
+		OIDCConformant:                 value.Bool(config.GetAttr("oidc_conformant")),
+		ClientAliases:                  value.Strings(config.GetAttr("client_aliases")),
+		Callbacks:                      value.Strings(config.GetAttr("callbacks")),
+		AllowedLogoutURLs:              value.Strings(config.GetAttr("allowed_logout_urls")),
+		AllowedOrigins:                 value.Strings(config.GetAttr("allowed_origins")),
+		AllowedClients:                 value.Strings(config.GetAttr("allowed_clients")),
+		GrantTypes:                     value.Strings(config.GetAttr("grant_types")),
+		OrganizationUsage:              value.String(config.GetAttr("organization_usage")),
+		OrganizationRequireBehavior:    value.String(config.GetAttr("organization_require_behavior")),
+		WebOrigins:                     value.Strings(config.GetAttr("web_origins")),
+		SSODisabled:                    value.Bool(config.GetAttr("sso_disabled")),
+		CrossOriginAuth:                value.Bool(config.GetAttr("cross_origin_auth")),
+		CrossOriginLocation:            value.String(config.GetAttr("cross_origin_loc")),
+		CustomLoginPageOn:              value.Bool(config.GetAttr("custom_login_page_on")),
+		CustomLoginPage:                value.String(config.GetAttr("custom_login_page")),
+		FormTemplate:                   value.String(config.GetAttr("form_template")),
+		InitiateLoginURI:               value.String(config.GetAttr("initiate_login_uri")),
+		EncryptionKey:                  value.MapOfStrings(config.GetAttr("encryption_key")),
+		IsTokenEndpointIPHeaderTrusted: value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
 		// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
 		//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
 		OIDCBackchannelLogout:    expandOIDCBackchannelLogout(data),
@@ -64,6 +62,13 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 		ExpressConfiguration:                           expandExpressConfiguration(data),
 		MyOrganizationConfiguration:                    expandMyOrganizationConfiguration(data),
+	}
+
+	if data.IsNewResource() || data.HasChange("require_pushed_authorization_requests") {
+		client.RequirePushedAuthorizationRequests = value.Bool(config.GetAttr("require_pushed_authorization_requests"))
+	}
+	if data.IsNewResource() || data.HasChange("sso") {
+		client.SSO = value.Bool(config.GetAttr("sso"))
 	}
 
 	// Ignore empty array to prevent API errors.
@@ -293,7 +298,10 @@ func expandClientJWTConfiguration(data *schema.ResourceData) *management.ClientJ
 	jwtConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		jwt.LifetimeInSeconds = value.Int(config.GetAttr("lifetime_in_seconds"))
 		jwt.Algorithm = value.String(config.GetAttr("alg"))
-		jwt.Scopes = value.MapOfStrings(config.GetAttr("scopes"))
+
+		if data.IsNewResource() || data.HasChange("jwt_configuration.0.scopes") {
+			jwt.Scopes = value.MapOfStrings(config.GetAttr("scopes"))
+		}
 
 		if data.IsNewResource() {
 			jwt.SecretEncoded = value.Bool(config.GetAttr("secret_encoded"))

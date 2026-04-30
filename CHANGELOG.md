@@ -6,7 +6,9 @@ FEATURES:
 - `resource/auth0_event_stream` – Add support for `action` destination type with `action_configuration`  from event streams ([#1501](https://github.com/auth0/terraform-provider-auth0/pull/1501))
 - `data-source/auth0_event_stream` – Expose `action_configuration` for action-type event streams ([#1501](https://github.com/auth0/terraform-provider-auth0/pull/1501))
 - `resource/auth0_connection` – Add support for the new unified `password_options` for `auth0` strategy connections ([#1544](https://github.com/auth0/terraform-provider-auth0/pull/1544))
-- `data-source/auth0_connection` – Expose the new `password_options` block ([#1544](https://github.com/auth0/terraform-provider-auth0/pull/1544))
+- `data-source/auth0_connection` – Expose `password_options` as read block  ([#1544](https://github.com/auth0/terraform-provider-auth0/pull/1544))
+- `resource/auth0_connection` – Add support for configuring `id_token_signed_response_algs` and `token_endpoint_jwtca_aud_format` ([#1553](https://github.com/auth0/terraform-provider-auth0/pull/1553))
+- `data-source/auth0_connection` – Expose `id_token_signed_response_algs` and `token_endpoint_jwtca_aud_format` as read only properties ([#1553](https://github.com/auth0/terraform-provider-auth0/pull/1553))
 
 ## v1.44.0
 

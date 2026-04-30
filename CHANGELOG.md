@@ -1,3 +1,31 @@
+## v1.45.0
+
+FEATURES:
+- `resource/auth0_resource_server` – Add support for Authentication Assurance (ACR) configuration (EA Only) ([#1545](https://github.com/auth0/terraform-provider-auth0/pull/1545))
+- `data-source/auth0_resource_server` – Expose Authentication Assurance (ACR) fields ([#1545](https://github.com/auth0/terraform-provider-auth0/pull/1545))
+- `resource/auth0_event_stream` – Add support for `action` destination type with `action_configuration`  from event streams ([#1501](https://github.com/auth0/terraform-provider-auth0/pull/1501))
+- `data-source/auth0_event_stream` – Expose `action_configuration` for action-type event streams ([#1501](https://github.com/auth0/terraform-provider-auth0/pull/1501))
+- `resource/auth0_connection` – Add support for the new unified `password_options` for `auth0` strategy connections ([#1544](https://github.com/auth0/terraform-provider-auth0/pull/1544))
+- `data-source/auth0_connection` – Expose `password_options` as read block  ([#1544](https://github.com/auth0/terraform-provider-auth0/pull/1544))
+- `resource/auth0_connection` – Add support for configuring `id_token_signed_response_algs` and `token_endpoint_jwtca_aud_format` ([#1553](https://github.com/auth0/terraform-provider-auth0/pull/1553))
+- `data-source/auth0_connection` – Expose `id_token_signed_response_algs` and `token_endpoint_jwtca_aud_format` as read only properties ([#1553](https://github.com/auth0/terraform-provider-auth0/pull/1553))
+
+## v1.44.0
+
+FEATURES:
+- `resource/auth0_client_cimd` – Add support for managing Client ID Metadata Document (CIMD) client registrations ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `resource/auth0_client` – Add support for configuring dedicated CIMD fields ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `resource/auth0_client` – Add support for configuring `my_organization_configuration` ([#1518](https://github.com/auth0/terraform-provider-auth0/pull/1518))
+- `resource/auth0_client` – Add support for the new `on_behalf_of_token_exchange` value on `token_exchange.allow_any_profile_of_type` ([#1535](https://github.com/auth0/terraform-provider-auth0/pull/1535))
+- `resource/auth0_tenant` – Add support for configuring `client_id_metadata_document_supported` and `resource_parameter_profile` ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `data-source/auth0_client` – Add support for retrieving CIMD fields ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `data-source/auth0_clients` – Add support for filtering by `external_client_id` for CIMD clients ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+
+ENHANCEMENTS:
+- `resource/auth0_organization_connection` – Migrate to the new Organization Connections endpoints in `go-auth0/v2` ([#1539](https://github.com/auth0/terraform-provider-auth0/pull/1539))
+- `resource/auth0_organization_connections` – Migrate to the new Organization Connections endpoints in `go-auth0/v2` ([#1539](https://github.com/auth0/terraform-provider-auth0/pull/1539))
+- `data-source/auth0_organization` – Expose `organization_connection_name` and `organization_access_level` for enabled connections ([#1539](https://github.com/auth0/terraform-provider-auth0/pull/1539))
+
 ## v1.43.0
 
 FEATURES:

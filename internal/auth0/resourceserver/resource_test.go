@@ -534,3 +534,39 @@ func TestAccResourceServerAuth0APIManagementImport(t *testing.T) {
 		},
 	})
 }
+
+const testAccResourceServerACR = `
+resource "auth0_resource_server" "my_account_api" {
+	name       = "Test-ResourceServer-Name"
+	identifier = "https://%s/me/"
+
+	authorization_policy {
+		policy_id = "019b76da-a800-73c9-b656-b349ae415c17"
+	}
+}
+`
+
+// TestAccResourceServer_ACR verifies that creating a resource server with the
+// My Account API identifier (https://<tenant>/me/) correctly handles the
+// authorization_policy attribute. Note: the API ignores any user-provided name
+// for this special resource server and always returns "Auth0 My Account API",
+// so the configured name is retained in state to avoid perpetual drift.
+func TestAccResourceServer_ACR(t *testing.T) {
+	t.Skip()
+	domain := os.Getenv("AUTH0_DOMAIN")
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccResourceServerACR, t.Name()), domain),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "name", "Auth0 My Account API"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "identifier", fmt.Sprintf("https://%s/me/", domain)),
+					resource.TestCheckResourceAttrSet("auth0_resource_server.my_account_api", "id"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "authorization_policy.#", "1"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_account_api", "authorization_policy.0.policy_id", "019b76da-a800-73c9-b656-b349ae415c17"),
+				),
+			},
+		},
+	})
+}

@@ -757,6 +757,7 @@ Optional:
 - `global_token_revocation_jwt_iss` (String) Specifies the issuer of the JWT used for global token revocation for the SAML connection.
 - `global_token_revocation_jwt_sub` (String) Specifies the subject of the JWT used for global token revocation for the SAML connection.
 - `icon_url` (String) Icon URL.
+- `id_token_signed_response_algs` (List of String) List of allowed algorithms for the ID token signature. If not set, RS256 will be applied at runtime. (Okta/OIDC Connections)
 - `identity_api` (String) Azure AD Identity API. Available options are: `microsoft-identity-platform-v2.0` or `azure-active-directory-v1.0`.
 - `idp_initiated` (Block List, Max: 1) Configuration options for IDP Initiated Authentication. This is an object with the properties: `client_id`, `client_protocol`, and `client_authorize_query`. (see [below for nested schema](#nestedblock--options--idp_initiated))
 - `import_mode` (Boolean) Indicates whether you have a legacy user store and want to gradually migrate those users to the Auth0 user store.
@@ -777,6 +778,7 @@ Optional:
 - `password_dictionary` (Block List, Max: 1) Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary. (see [below for nested schema](#nestedblock--options--password_dictionary))
 - `password_history` (Block List) Configuration settings for the password history that is maintained for each user to prevent the reuse of passwords. (see [below for nested schema](#nestedblock--options--password_history))
 - `password_no_personal_info` (Block List, Max: 1) Configuration settings for the password personal info check, which does not allow passwords that contain any part of the user's personal data, including user's `name`, `username`, `nickname`, `user_metadata.name`, `user_metadata.first`, `user_metadata.last`, user's `email`, or first part of the user's `email`. (see [below for nested schema](#nestedblock--options--password_no_personal_info))
+- `password_options` (Block List, Max: 1) Flexible password policy configuration. Only available for `auth0` strategy connections. Cannot be set together with legacy password policy fields (`password_policy`, `password_complexity_options`, `password_history`, `password_no_personal_info`, `password_dictionary`). (see [below for nested schema](#nestedblock--options--password_options))
 - `password_policy` (String) Indicates level of password strength to enforce during authentication. A strong password policy will make it difficult, if not improbable, for someone to guess a password through either manual or automated means. Options include `none`, `low`, `fair`, `good`, `excellent`.
 - `ping_federate_base_url` (String) Ping Federate Server URL.
 - `pkce_enabled` (Boolean) Enables Proof Key for Code Exchange (PKCE) functionality for OAuth2 connections.
@@ -809,6 +811,7 @@ Optional:
 - `token_endpoint` (String) Token endpoint.
 - `token_endpoint_auth_method` (String) Specifies the authentication method for the token endpoint. (Okta/OIDC Connections)
 - `token_endpoint_auth_signing_alg` (String) Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)
+- `token_endpoint_jwtca_aud_format` (String) Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC Connections)
 - `totp` (Block List, Max: 1) Configuration options for one-time passwords. (see [below for nested schema](#nestedblock--options--totp))
 - `twilio_sid` (String) SID for your Twilio account.
 - `twilio_token` (String, Sensitive) AuthToken for your Twilio account.
@@ -1122,6 +1125,58 @@ Optional:
 Optional:
 
 - `enable` (Boolean)
+
+
+<a id="nestedblock--options--password_options"></a>
+### Nested Schema for `options.password_options`
+
+Optional:
+
+- `complexity` (Block List, Max: 1) Password complexity requirements. (see [below for nested schema](#nestedblock--options--password_options--complexity))
+- `dictionary` (Block List, Max: 1) Dictionary-based password validation. (see [below for nested schema](#nestedblock--options--password_options--dictionary))
+- `history` (Block List, Max: 1) Password history enforcement. (see [below for nested schema](#nestedblock--options--password_options--history))
+- `profile_data` (Block List, Max: 1) Personal information restriction policy. (see [below for nested schema](#nestedblock--options--password_options--profile_data))
+
+<a id="nestedblock--options--password_options--complexity"></a>
+### Nested Schema for `options.password_options.complexity`
+
+Optional:
+
+- `character_type_rule` (String) When all 4 character types are specified, determines if all or 3 of 4 are required. Possible values: `all`, `three_of_four`. Default: `all`.
+- `character_types` (Set of String) Required character types. Valid values: `uppercase`, `lowercase`, `number`, `special`.
+- `identical_characters` (String) Controls whether 3+ consecutive identical characters are allowed. Possible values: `allow`, `block`. Default: `allow`.
+- `max_length_exceeded` (String) Controls behavior when the password exceeds 72 bytes. Possible values: `truncate`, `error`. Default: `error`.
+- `min_length` (Number) Minimum password length. Must be between 1 and 72. Default: 15.
+- `sequential_characters` (String) Controls whether sequential characters (abc, 123, etc.) are allowed. Possible values: `allow`, `block`. Default: `allow`.
+
+
+<a id="nestedblock--options--password_options--dictionary"></a>
+### Nested Schema for `options.password_options.dictionary`
+
+Optional:
+
+- `active` (Boolean) Enables dictionary checking.
+- `custom` (Set of String) Custom list of disallowed terms.
+- `default` (String) Default dictionary to use. Possible values: `en_10k`, `en_100k`. Default: `en_100k`.
+
+
+<a id="nestedblock--options--password_options--history"></a>
+### Nested Schema for `options.password_options.history`
+
+Optional:
+
+- `active` (Boolean) Enables password history checking.
+- `size` (Number) Number of previous passwords to check against. Must be between 1 and 24. Default: 3.
+
+
+<a id="nestedblock--options--password_options--profile_data"></a>
+### Nested Schema for `options.password_options.profile_data`
+
+Optional:
+
+- `active` (Boolean) Prevents users from including profile data in passwords.
+- `blocked_fields` (Set of String) User profile fields to block from passwords. Maximum 12 items, each max 100 characters.
+
 
 
 <a id="nestedblock--options--signing_key"></a>

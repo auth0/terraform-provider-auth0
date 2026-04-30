@@ -2971,6 +2971,111 @@ resource "auth0_connection" "PasswordHash" {
 }
 `
 
+func TestAccConnectionPasswordOptions(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionPasswordOptionsCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.min_length", "12"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.size", "5"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "true"),
+				),
+			},
+			{
+				// Update a field unrelated to password_options to verify that
+				// password_options is not wiped by the PATCH (which replaces the
+				// entire connection.options object).
+				Config: acctest.ParseTestName(testAccConnectionPasswordOptionsUpdateOtherField, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.min_length", "12"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.size", "5"),
+				),
+			},
+			{
+				// Update password_options to verify changes are applied correctly.
+				Config: acctest.ParseTestName(testAccConnectionPasswordOptionsUpdatePasswordOpts, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.min_length", "16"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.active", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.active", "true"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionPasswordOptionsCreate = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+
+	options {
+		brute_force_protection = true
+		password_options {
+			complexity {
+				min_length = 12
+			}
+			history {
+				active = true
+				size   = 5
+			}
+		}
+	}
+}
+`
+
+const testAccConnectionPasswordOptionsUpdateOtherField = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+
+	options {
+		brute_force_protection = false
+		password_options {
+			complexity {
+				min_length = 12
+			}
+			history {
+				active = true
+				size   = 5
+			}
+		}
+	}
+}
+`
+
+const testAccConnectionPasswordOptionsUpdatePasswordOpts = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+
+	options {
+		brute_force_protection = false
+		password_options {
+			complexity {
+				min_length = 16
+			}
+			history {
+				active = false
+			}
+			dictionary {
+				active = true
+			}
+		}
+	}
+}
+`
+
 func TestAccConnectionPasswordHash(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

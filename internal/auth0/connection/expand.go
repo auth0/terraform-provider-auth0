@@ -106,19 +106,33 @@ func expandConnection(
 	}
 
 	// Prevent erasing database configuration secrets.
+	// Also preserves password_options since the PATCH API replaces the entire
+	// connection.options object — if password_options is not included in the
+	// PATCH body it gets wiped from the API.
 	if !data.IsNewResource() && strategy == management.ConnectionStrategyAuth0 && connection.Options != nil {
 		apiConn, err := api.Connection.Read(ctx, data.Id())
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
 
+		expandedOptions := connection.Options.(*management.ConnectionOptions)
+		existingOptions := apiConn.Options.(*management.ConnectionOptions)
+
 		diagnostics = append(
 			diagnostics,
 			checkForUnmanagedConfigurationSecrets(
-				connection.Options.(*management.ConnectionOptions).GetConfiguration(),
-				apiConn.Options.(*management.ConnectionOptions).GetConfiguration(),
+				expandedOptions.GetConfiguration(),
+				existingOptions.GetConfiguration(),
 			)...,
 		)
+
+		// Carry over existing PasswordOptions when TF config does not explicitly
+		// manage them. Without this, a PATCH that omits password_options would
+		// silently clear any flexible password policy already set on the connection.
+		if expandedOptions.PasswordOptions == nil && existingOptions.PasswordOptions != nil {
+			expandedOptions.PasswordOptions = existingOptions.PasswordOptions
+			connection.Options = expandedOptions
+		}
 	}
 
 	return connection, diagnostics

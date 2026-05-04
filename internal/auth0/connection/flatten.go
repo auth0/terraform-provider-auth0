@@ -594,6 +594,7 @@ func flattenConnectionOptionsGoogleApps(
 		"domain":                   options.GetDomain(),
 		"tenant_domain":            options.GetTenantDomain(),
 		"api_enable_users":         options.GetEnableUsersAPI(),
+		"api_enable_groups":        options.GetEnableGroupsAPI(),
 		"scopes":                   options.Scopes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"domain_aliases":           options.GetDomainAliases(),

@@ -697,6 +697,7 @@ func expandConnectionOptionsGoogleApps(data *schema.ResourceData, config cty.Val
 		Domain:             value.String(config.GetAttr("domain")),
 		TenantDomain:       value.String(config.GetAttr("tenant_domain")),
 		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
+		EnableGroupsAPI:    value.Bool(config.GetAttr("api_enable_groups")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 		DomainAliases:      value.Strings(config.GetAttr("domain_aliases")),
 		LogoURL:            value.String(config.GetAttr("icon_url")),

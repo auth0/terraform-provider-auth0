@@ -1375,6 +1375,7 @@ func flattenDirectory(data *schema.ResourceData, directoryConfig *managementv2.G
 		data.Set("strategy", directoryConfig.GetStrategy()),
 		data.Set("mapping", flattenDirectoryMappings(directoryConfig.GetMapping())),
 		data.Set("synchronize_automatically", directoryConfig.GetSynchronizeAutomatically()),
+		data.Set("synchronize_groups", directoryConfig.GetSynchronizeGroups()),
 		data.Set("created_at", directoryConfig.GetCreatedAt().String()),
 		data.Set("updated_at", directoryConfig.GetUpdatedAt().String()),
 	)

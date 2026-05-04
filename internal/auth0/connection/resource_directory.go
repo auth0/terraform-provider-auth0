@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	syncGroupValidValues []string = []string{"off", "all", "selected"}
+	syncGroupValidValues = []string{"off", "all", "selected"}
 )
 
 // NewDirectoryResource will return a new auth0_connection_directory (1:1) resource.

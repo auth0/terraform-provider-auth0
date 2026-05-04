@@ -1570,6 +1570,11 @@ func expandDirectory(data *schema.ResourceData) *managementv2.CreateDirectoryPro
 		directoryConfig.SetSynchronizeAutomatically(&syncAuto)
 	}
 
+	if !cfg.GetAttr("synchronize_groups").IsNull() {
+		syncGroups := managementv2.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
+		directoryConfig.SetSynchronizeGroups(&syncGroups)
+	}
+
 	return directoryConfig
 }
 
@@ -1585,6 +1590,11 @@ func expandDirectoryUpdate(data *schema.ResourceData) *managementv2.UpdateDirect
 	if !cfg.GetAttr("synchronize_automatically").IsNull() {
 		syncAuto := data.Get("synchronize_automatically").(bool)
 		directoryConfig.SetSynchronizeAutomatically(&syncAuto)
+	}
+
+	if !cfg.GetAttr("synchronize_groups").IsNull() {
+		syncGroups := managementv2.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
+		directoryConfig.SetSynchronizeGroups(&syncGroups)
 	}
 
 	return directoryConfig

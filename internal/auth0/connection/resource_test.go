@@ -1359,11 +1359,11 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/v2/logo.svg"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint_auth_signing_alg", "RS384"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint_jwtca_aud_format", "issuer"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint_jwtca_aud_format", "token_endpoint"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.0.pkce", "auto"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.0", "RS384"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.0", "PS384"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.1", "ES384"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
@@ -1462,6 +1462,7 @@ resource "auth0_connection" "okta" {
 		set_user_root_attributes = "on_first_login"
 		icon_url                 = "https://example.com/v2/logo.svg"
 		id_token_signed_response_algs = ["PS384", "ES384"]
+		token_endpoint_auth_signing_alg = "RS384"
 		token_endpoint_jwtca_aud_format = "token_endpoint"
 
 		connection_settings {

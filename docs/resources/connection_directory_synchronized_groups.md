@@ -48,4 +48,10 @@ resource "auth0_connection_directory_synchronized_groups" "my_groups" {
 
 - `id` (String) The ID of this resource.
 
+## Import
 
+Import is supported using the following syntax:
+
+```shell
+terraform import auth0_connection_directory_synchronized_groups.my_groups "con_XXXXXXXXXXXXXX"
+```

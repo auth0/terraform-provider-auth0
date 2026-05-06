@@ -186,6 +186,7 @@ resource "auth0_client" "mcp_server" {
 - `organization_discovery_methods` (List of String) Methods for discovering organizations during the pre_login_prompt. Can include `email` (allows users to find their organization by entering their email address) and/or `organization_name` (requires users to enter the organization name directly). These methods can be combined. Setting this property requires that `organization_require_behavior` is set to `pre_login_prompt`.
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
+- `redirection_policy` (String) Controls whether Auth0 redirects users to the application's callback URL on authentication errors or in email verification flows.Allowed values: `allow_always` or `open_redirect_protection`.
 - `refresh_token` (Block List, Max: 1) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedblock--refresh_token))
 - `require_proof_of_possession` (Boolean) Makes the use of Proof-of-Possession mandatory for this client.
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
@@ -194,6 +195,7 @@ resource "auth0_client" "mcp_server" {
 - `skip_non_verifiable_callback_uri_confirmation_prompt` (String) Indicates whether the confirmation prompt appears when using non-verifiable callback URIs. Set to true to skip the prompt, false to show it, or null to unset. Accepts (true/false/null) or ("true"/"false"/"null")
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
+- `third_party_security_mode` (String) Security mode for third-party clients. Allowed values: `strict` or `permissive`.
 - `token_exchange` (Block List, Max: 1) Allows configuration for token exchange (see [below for nested schema](#nestedblock--token_exchange))
 - `token_quota` (Block List, Max: 1) The token quota configuration. (see [below for nested schema](#nestedblock--token_quota))
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.

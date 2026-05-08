@@ -4,6 +4,7 @@ package prefetch
 
 import (
 	"sync"
+	"sync/atomic"
 )
 
 // resourceType identifies the kind of resource stored in the cache.
@@ -26,12 +27,30 @@ type pageState struct {
 	exhausted bool
 }
 
+// Summary holds hit/miss/page-fetch counts for a single resource type.
+type Summary struct {
+	// Hits is the number of lookups satisfied from cache.
+	Hits int64
+	// Misses is the number of lookups not found in cache (including fallbacks).
+	Misses int64
+	// PagesFetched is the number of list-API pages fetched.
+	PagesFetched int64
+}
+
+// typeCounters holds atomic counters for one resource type.
+type typeCounters struct {
+	hits         atomic.Int64
+	misses       atomic.Int64
+	pagesFetched atomic.Int64
+}
+
 // Cache is an in-memory, thread-safe store for pre-fetched Auth0 resources.
 // It tracks both the resource values and the page-fetch cursor per resource type.
 type Cache struct {
 	mu         sync.RWMutex
 	entries    map[cacheKey]interface{}
 	pageStates map[resourceType]*pageState
+	counters   map[resourceType]*typeCounters
 }
 
 // NewCache returns an initialised *Cache.
@@ -39,7 +58,53 @@ func NewCache() *Cache {
 	return &Cache{
 		entries:    make(map[cacheKey]interface{}),
 		pageStates: make(map[resourceType]*pageState),
+		counters:   make(map[resourceType]*typeCounters),
 	}
+}
+
+// Summary returns hit/miss/page-fetch counts for the given resource type.
+func (c *Cache) Summary(kind resourceType) Summary {
+	tc := c.getOrInitCounters(kind)
+	return Summary{
+		Hits:         tc.hits.Load(),
+		Misses:       tc.misses.Load(),
+		PagesFetched: tc.pagesFetched.Load(),
+	}
+}
+
+// recordHit increments the hit counter for kind.
+func (c *Cache) recordHit(kind resourceType) {
+	c.getOrInitCounters(kind).hits.Add(1)
+}
+
+// recordMiss increments the miss counter for kind.
+func (c *Cache) recordMiss(kind resourceType) {
+	c.getOrInitCounters(kind).misses.Add(1)
+}
+
+// recordPageFetch increments the page-fetch counter for kind.
+func (c *Cache) recordPageFetch(kind resourceType) {
+	c.getOrInitCounters(kind).pagesFetched.Add(1)
+}
+
+// getOrInitCounters returns the typeCounters for kind, initialising on first use.
+// Safe for concurrent use; uses a double-check pattern under c.mu.
+func (c *Cache) getOrInitCounters(kind resourceType) *typeCounters {
+	c.mu.RLock()
+	tc, ok := c.counters[kind]
+	c.mu.RUnlock()
+	if ok {
+		return tc
+	}
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if tc, ok = c.counters[kind]; ok {
+		return tc
+	}
+	tc = &typeCounters{}
+	c.counters[kind] = tc
+	return tc
 }
 
 // getEntry returns the cached value and whether it was found.
@@ -82,8 +147,6 @@ func (c *Cache) isExhausted(kind resourceType) bool {
 
 	return c.getOrInitPageState(kind).exhausted
 }
-
-
 
 // getOrInitPageState returns the pageState for kind, initialising it if necessary.
 // Callers must hold c.mu (read or write).

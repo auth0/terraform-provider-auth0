@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 const defaultPageSize = 50
@@ -16,6 +17,7 @@ const defaultPageSize = 50
 func GetClient(ctx context.Context, cache *Cache, api *management.Management, id string) (*management.Client, error) {
 	// Check cache first.
 	if v, ok := cache.getEntry(resourceTypeClient, id); ok {
+		cache.recordHit(resourceTypeClient)
 		return v.(*management.Client), nil
 	}
 
@@ -28,6 +30,7 @@ func GetClient(ctx context.Context, cache *Cache, api *management.Management, id
 			management.PerPage(defaultPageSize),
 		)
 		if err != nil {
+			cache.recordMiss(resourceTypeClient)
 			return api.Client.Read(ctx, id)
 		}
 
@@ -36,14 +39,27 @@ func GetClient(ctx context.Context, cache *Cache, api *management.Management, id
 			items[c.GetClientID()] = c
 		}
 		cache.setEntries(resourceTypeClient, items, list.HasNext())
+		cache.recordPageFetch(resourceTypeClient)
+
+		s := cache.Summary(resourceTypeClient)
+		tflog.Debug(ctx, "prefetch: fetched client page", map[string]interface{}{
+			"page":          page,
+			"count":         len(list.Clients),
+			"has_more":      list.HasNext(),
+			"cache_hits":    s.Hits,
+			"cache_misses":  s.Misses,
+			"pages_fetched": s.PagesFetched,
+		})
 
 		// Re-check after the page load.
 		if v, ok := cache.getEntry(resourceTypeClient, id); ok {
+			cache.recordHit(resourceTypeClient)
 			return v.(*management.Client), nil
 		}
 	}
 
 	// Fall back to a direct single-resource fetch.
+	cache.recordMiss(resourceTypeClient)
 	return api.Client.Read(ctx, id)
 }
 
@@ -55,6 +71,7 @@ func GetClient(ctx context.Context, cache *Cache, api *management.Management, id
 func GetClientGrant(ctx context.Context, cache *Cache, api *management.Management, id string) (*management.ClientGrant, error) {
 	// Check cache first.
 	if v, ok := cache.getEntry(resourceTypeClientGrant, id); ok {
+		cache.recordHit(resourceTypeClientGrant)
 		return v.(*management.ClientGrant), nil
 	}
 
@@ -67,6 +84,7 @@ func GetClientGrant(ctx context.Context, cache *Cache, api *management.Managemen
 			management.PerPage(defaultPageSize),
 		)
 		if err != nil {
+			cache.recordMiss(resourceTypeClientGrant)
 			return api.ClientGrant.Read(ctx, id)
 		}
 
@@ -75,13 +93,26 @@ func GetClientGrant(ctx context.Context, cache *Cache, api *management.Managemen
 			items[g.GetID()] = g
 		}
 		cache.setEntries(resourceTypeClientGrant, items, list.HasNext())
+		cache.recordPageFetch(resourceTypeClientGrant)
+
+		s := cache.Summary(resourceTypeClientGrant)
+		tflog.Debug(ctx, "prefetch: fetched client_grant page", map[string]interface{}{
+			"page":          page,
+			"count":         len(list.ClientGrants),
+			"has_more":      list.HasNext(),
+			"cache_hits":    s.Hits,
+			"cache_misses":  s.Misses,
+			"pages_fetched": s.PagesFetched,
+		})
 
 		// Re-check after the page load.
 		if v, ok := cache.getEntry(resourceTypeClientGrant, id); ok {
+			cache.recordHit(resourceTypeClientGrant)
 			return v.(*management.ClientGrant), nil
 		}
 	}
 
 	// Fall back to a direct single-resource fetch.
+	cache.recordMiss(resourceTypeClientGrant)
 	return api.ClientGrant.Read(ctx, id)
 }

@@ -73,6 +73,48 @@ func TestCache_ResourceTypeIsolation(t *testing.T) {
 	})
 }
 
+func TestCache_Summary(t *testing.T) {
+	t.Run("it starts with all zero counts", func(t *testing.T) {
+		c := NewCache()
+		s := c.Summary(resourceTypeClient)
+		assert.Equal(t, int64(0), s.Hits)
+		assert.Equal(t, int64(0), s.Misses)
+		assert.Equal(t, int64(0), s.PagesFetched)
+	})
+
+	t.Run("it counts hits", func(t *testing.T) {
+		c := NewCache()
+		c.recordHit(resourceTypeClient)
+		c.recordHit(resourceTypeClient)
+		assert.Equal(t, int64(2), c.Summary(resourceTypeClient).Hits)
+	})
+
+	t.Run("it counts misses", func(t *testing.T) {
+		c := NewCache()
+		c.recordMiss(resourceTypeClient)
+		assert.Equal(t, int64(1), c.Summary(resourceTypeClient).Misses)
+	})
+
+	t.Run("it counts page fetches", func(t *testing.T) {
+		c := NewCache()
+		c.recordPageFetch(resourceTypeClient)
+		c.recordPageFetch(resourceTypeClient)
+		c.recordPageFetch(resourceTypeClient)
+		assert.Equal(t, int64(3), c.Summary(resourceTypeClient).PagesFetched)
+	})
+
+	t.Run("it tracks counters independently per resource type", func(t *testing.T) {
+		c := NewCache()
+		c.recordHit(resourceTypeClient)
+		c.recordMiss(resourceTypeClientGrant)
+
+		assert.Equal(t, int64(1), c.Summary(resourceTypeClient).Hits)
+		assert.Equal(t, int64(0), c.Summary(resourceTypeClient).Misses)
+		assert.Equal(t, int64(0), c.Summary(resourceTypeClientGrant).Hits)
+		assert.Equal(t, int64(1), c.Summary(resourceTypeClientGrant).Misses)
+	})
+}
+
 func TestCache_ConcurrentAccess(t *testing.T) {
 	t.Run("it does not race on concurrent reads and writes", func(t *testing.T) {
 		c := NewCache()

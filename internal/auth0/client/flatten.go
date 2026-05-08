@@ -14,6 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+const timeRFC3339WithMilliseconds = "2006-01-02T15:04:05.000Z07:00"
+
 func flattenCustomSocialConfiguration(customSocial *management.ClientNativeSocialLogin) []interface{} {
 	if customSocial == nil {
 		return nil
@@ -885,8 +887,6 @@ func flattenCredentials(
 		return nil, nil
 	}
 
-	const timeRFC3339WithMilliseconds = "2006-01-02T15:04:05.000Z07:00"
-
 	stateCredentials := make([]interface{}, 0)
 	for index, cred := range credentials {
 		credential, err := api.Client.GetCredential(ctx, data.Id(), cred.GetID())
@@ -909,8 +909,21 @@ func flattenCredentials(
 			stateCredential["algorithm"] = credential.GetAlgorithm()
 			stateCredential["key_id"] = credential.GetKeyID()
 
-			if isResource {
-				// These ones don't get read back, so we have to get them from the state.
+			if isResource && attribute == "private_key_jwt" {
+				statePEM, parseExpiry := findCredentialInState(data, attribute, credential.GetID())
+				if statePEM == "" {
+					statePEM, parseExpiry = findCredentialInStateByName(data, attribute, credential.GetName())
+				}
+				// Detect external key rotation: if the PEM in state no longer
+				// matches the API-returned key_id, clear it so Terraform sees drift.
+				if statePEM != "" && credential.GetKeyID() != "" {
+					if jwkThumbprint(statePEM) != credential.GetKeyID() {
+						statePEM = ""
+					}
+				}
+				stateCredential["pem"] = statePEM
+				stateCredential["parse_expiry_from_cert"] = parseExpiry
+			} else if isResource {
 				stateCredential["pem"] = data.Get(
 					fmt.Sprintf("%s.0.credentials.%d.pem", attribute, index),
 				)
@@ -922,14 +935,12 @@ func flattenCredentials(
 			stateCredential["subject_dn"] = credential.GetSubjectDN()
 
 			if isResource {
-				// This one doesn't get read back, so we have to get it from the state.
 				stateCredential["pem"] = data.Get(
 					fmt.Sprintf("%s.0.credentials.%d.pem", attribute, index),
 				)
 			}
 		case "x509_cert":
 			if isResource {
-				// This one doesn't get read back, so we have to get it from the state.
 				stateCredential["pem"] = data.Get(
 					fmt.Sprintf("%s.0.credentials.%d.pem", attribute, index),
 				)
@@ -940,6 +951,65 @@ func flattenCredentials(
 	}
 
 	return stateCredentials, nil
+}
+
+// findCredentialInState looks up a credential's PEM and parse_expiry_from_cert
+// from the current state by matching on credential ID. This avoids positional
+// index issues when credentials is a TypeSet.
+func findCredentialInState(data *schema.ResourceData, attribute string, credentialID string) (string, bool) {
+	credentialsRaw := data.Get(fmt.Sprintf("%s.0.credentials", attribute))
+	if credentialsRaw == nil {
+		return "", false
+	}
+
+	credSet, ok := credentialsRaw.(*schema.Set)
+	if !ok {
+		return "", false
+	}
+
+	for _, item := range credSet.List() {
+		credMap, ok := item.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		if id, _ := credMap["id"].(string); id == credentialID {
+			pem, _ := credMap["pem"].(string)
+			parseExpiry, _ := credMap["parse_expiry_from_cert"].(bool)
+			return pem, parseExpiry
+		}
+	}
+
+	return "", false
+}
+
+// findCredentialInStateByName searches all credentials in the planned state by
+// name. Used as a fallback for newly created credentials whose IDs aren't in
+// state yet but whose name matches the API response.
+func findCredentialInStateByName(data *schema.ResourceData, attribute string, name string) (string, bool) {
+	credentialsRaw := data.Get(fmt.Sprintf("%s.0.credentials", attribute))
+	if credentialsRaw == nil {
+		return "", false
+	}
+
+	credSet, ok := credentialsRaw.(*schema.Set)
+	if !ok {
+		return "", false
+	}
+
+	for _, item := range credSet.List() {
+		credMap, ok := item.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		n, _ := credMap["name"].(string)
+		if n == name {
+			pem, _ := credMap["pem"].(string)
+			parseExpiry, _ := credMap["parse_expiry_from_cert"].(bool)
+			return pem, parseExpiry
+		}
+	}
+
+	return "", false
 }
 
 func flattenClientList(data *schema.ResourceData, clients []*management.Client) error {

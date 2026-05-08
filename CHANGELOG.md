@@ -1,3 +1,11 @@
+## v1.46.0 (Unreleased)
+
+ENHANCEMENTS:
+- `resource/auth0_client_credentials` – `private_key_jwt` credentials now use an unordered set instead of an ordered list, preventing unnecessary resource recreation when removing or reordering credentials. Adding, removing, or rotating individual credentials no longer destroys the entire resource — only the affected credential is created/deleted. Updating `expires_at` on an existing credential is now handled via in-place PATCH (when `parse_expiry_from_cert` is not enabled). ([#XXXX](https://github.com/auth0/terraform-provider-auth0/pull/XXXX))
+
+NOTES:
+- `resource/auth0_client_credentials` – State schema upgraded from v0 to v1 for `private_key_jwt` credentials (TypeList → TypeSet). Existing state will be migrated automatically on the next `terraform plan` or `terraform apply`.
+
 ## v1.45.0
 
 FEATURES:

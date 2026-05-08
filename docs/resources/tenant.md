@@ -190,9 +190,9 @@ Optional:
 <a id="nestedblock--oidc_logout"></a>
 ### Nested Schema for `oidc_logout`
 
-Required:
+Optional:
 
-- `rp_logout_end_session_endpoint_discovery` (Boolean) Enable the end_session_endpoint URL in the .well-known discovery configuration.
+- `rp_logout_end_session_endpoint_discovery` (Boolean) Enable the end_session_endpoint URL in the .well-known discovery configuration. (Default: `true`)
 
 
 <a id="nestedblock--session_cookie"></a>

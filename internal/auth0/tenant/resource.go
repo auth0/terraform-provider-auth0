@@ -22,12 +22,15 @@ import (
 )
 
 const (
-	idleSessionLifetimeDefault          = 72.00
-	sessionLifetimeDefault              = 168.00
-	ephemeralSessionLifetimeDefault     = 1.00 // 1 hour.
-	idleEphemeralSessionLifetimeDefault = 1.00 // 1 hour.
-	enableClientConnectionsDefault      = true
-	oidcLogoutPromptEnabledDefault      = true
+	idleSessionLifetimeDefault                 = 72.00
+	sessionLifetimeDefault                     = 168.00
+	ephemeralSessionLifetimeDefault            = 72.00
+	idleEphemeralSessionLifetimeDefault        = 24.00
+	enableClientConnectionsDefault             = true
+	oidcLogoutPromptEnabledDefault             = true
+	rpLogoutEndSessionEndpointDiscoveryDefault = true
+	enablePipeline2Default                     = true
+	disableManagementAPISMSObfuscationDefault  = true
 )
 
 // NewResource will return a new auth0_tenant resource.
@@ -354,8 +357,9 @@ func NewResource() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"rp_logout_end_session_endpoint_discovery": {
 							Type:        schema.TypeBool,
-							Required:    true,
-							Description: "Enable the end_session_endpoint URL in the .well-known discovery configuration.",
+							Optional:    true,
+							Default:     rpLogoutEndSessionEndpointDiscoveryDefault,
+							Description: "Enable the end_session_endpoint URL in the .well-known discovery configuration. (Default: `true`)",
 						},
 					},
 				},

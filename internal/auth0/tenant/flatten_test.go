@@ -171,6 +171,101 @@ func TestFlattenTenant(t *testing.T) {
 		assert.Equal(t, 0.25, mockResourceData.Get("idle_ephemeral_session_lifetime"))
 	})
 
+	t.Run("it defaults ephemeral_session_lifetime to 72 when API returns nil", func(t *testing.T) {
+		tenant := management.Tenant{
+			EphemeralSessionLifetime:     nil,
+			IdleEphemeralSessionLifetime: nil,
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.Equal(t, 72.00, mockResourceData.Get("ephemeral_session_lifetime"))
+		assert.Equal(t, 24.00, mockResourceData.Get("idle_ephemeral_session_lifetime"))
+	})
+
+	t.Run("it defaults enable_pipeline2 to true when API returns nil", func(t *testing.T) {
+		tenant := management.Tenant{
+			Flags: &management.TenantFlags{
+				EnablePipeline2: nil,
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		flags := mockResourceData.Get("flags").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, true, flags["enable_pipeline2"])
+	})
+
+	t.Run("it preserves enable_pipeline2 false when API returns explicit false", func(t *testing.T) {
+		tenant := management.Tenant{
+			Flags: &management.TenantFlags{
+				EnablePipeline2: auth0.Bool(false),
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		flags := mockResourceData.Get("flags").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, false, flags["enable_pipeline2"])
+	})
+
+	t.Run("it defaults disable_management_api_sms_obfuscation to true when API returns nil", func(t *testing.T) {
+		tenant := management.Tenant{
+			Flags: &management.TenantFlags{
+				DisableManagementAPISMSObfuscation: nil,
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		flags := mockResourceData.Get("flags").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, true, flags["disable_management_api_sms_obfuscation"])
+	})
+
+	t.Run("it preserves disable_management_api_sms_obfuscation false when API returns explicit false", func(t *testing.T) {
+		tenant := management.Tenant{
+			Flags: &management.TenantFlags{
+				DisableManagementAPISMSObfuscation: auth0.Bool(false),
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		flags := mockResourceData.Get("flags").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, false, flags["disable_management_api_sms_obfuscation"])
+	})
+
+	t.Run("it defaults rp_logout_end_session_endpoint_discovery to true when API returns nil", func(t *testing.T) {
+		tenant := management.Tenant{
+			OIDCLogout: nil,
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		oidcLogout := mockResourceData.Get("oidc_logout").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, true, oidcLogout["rp_logout_end_session_endpoint_discovery"])
+	})
+
+	t.Run("it preserves rp_logout_end_session_endpoint_discovery false when API returns explicit false", func(t *testing.T) {
+		tenant := management.Tenant{
+			OIDCLogout: &management.TenantOIDCLogout{
+				OIDCResourceProviderLogoutEndSessionEndpointDiscovery: auth0.Bool(false),
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		oidcLogout := mockResourceData.Get("oidc_logout").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, false, oidcLogout["rp_logout_end_session_endpoint_discovery"])
+	})
+
 	t.Run("it sets dynamic_client_registration_security_mode when returned by API", func(t *testing.T) {
 		tenant := management.Tenant{
 			DynamicClientRegistrationSecurityMode: auth0.String("strict"),

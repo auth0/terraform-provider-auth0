@@ -27,8 +27,6 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		SupportEmail:                         value.String(config.GetAttr("support_email")),
 		SupportURL:                           value.String(config.GetAttr("support_url")),
 		AllowedLogoutURLs:                    value.Strings(config.GetAttr("allowed_logout_urls")),
-		SessionLifetime:                      &sessionLifetime,
-		EphemeralSessionLifetime:             &ephemeralSessionLifetime,
 		SandboxVersion:                       value.String(config.GetAttr("sandbox_version")),
 		EnabledLocales:                       value.Strings(config.GetAttr("enabled_locales")),
 		Flags:                                expandTenantFlags(config.GetAttr("flags")),
@@ -49,8 +47,14 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		DynamicClientRegistrationSecurityMode:          value.String(config.GetAttr("dynamic_client_registration_security_mode")),
 	}
 
+	if data.IsNewResource() || data.HasChange("session_lifetime") {
+		tenant.SessionLifetime = &sessionLifetime
+	}
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
 		tenant.IdleSessionLifetime = &idleSessionLifetime
+	}
+	if data.IsNewResource() || data.HasChange("ephemeral_session_lifetime") {
+		tenant.EphemeralSessionLifetime = &ephemeralSessionLifetime
 	}
 	if data.IsNewResource() || data.HasChange("idle_ephemeral_session_lifetime") {
 		tenant.IdleEphemeralSessionLifetime = &idleEphemeralSessionLifetime

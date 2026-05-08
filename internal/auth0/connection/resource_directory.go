@@ -79,7 +79,7 @@ func NewDirectoryResource() *schema.Resource {
 				Computed:     true,
 				ValidateFunc: validation.StringInSlice(syncGroupValidValues, false),
 				Description: "Group synchronization configuration. " +
-					"Valid values are: " + strings.Join(syncGroupValidValues, ", ") + ".",
+					"Valid values are: " + strings.Join(syncGroupValidValues, ", ") + ". (EA only)",
 			},
 			"created_at": {
 				Type:        schema.TypeString,

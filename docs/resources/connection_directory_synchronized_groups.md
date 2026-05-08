@@ -1,12 +1,14 @@
 ---
 page_title: "Resource: auth0_connection_directory_synchronized_groups"
 description: |-
-  With this resource, you can manage the set of Google Workspace group IDs synchronized via directory provisioning for an Auth0 connection.
+  With this resource, you can manage the set of Google Workspace group IDs synchronized via directory provisioning for an Auth0 connection. (EA only)
 ---
 
 # Resource: auth0_connection_directory_synchronized_groups
 
-With this resource, you can manage the set of Google Workspace group IDs synchronized via directory provisioning for an Auth0 connection.
+With this resource, you can manage the set of Google Workspace group IDs synchronized via directory provisioning for an Auth0 connection. (EA only)
+
+-> This resource is only available for [EA](https://auth0.com/docs/troubleshoot/product-lifecycle/product-release-stages#early-access) users.
 
 ## Example Usage
 
@@ -41,8 +43,8 @@ resource "auth0_connection_directory_synchronized_groups" "my_groups" {
 
 ### Required
 
-- `connection_id` (String) ID of the connection for which to manage synchronized groups.
-- `group_ids` (Set of String) List of Google Workspace Directory group IDs to synchronize.
+- `connection_id` (String) ID of the connection for which to manage synchronized groups. (EA only)
+- `group_ids` (Set of String) List of Google Workspace Directory group IDs to synchronize. (EA only)
 
 ### Read-Only
 

@@ -8,6 +8,8 @@ description: |-
 
 Data source to retrieve the selected synchronized group IDs for a connection's directory provisioning configuration.
 
+-> This data source is only available for [EA](https://auth0.com/docs/troubleshoot/product-lifecycle/product-release-stages#early-access) users.
+
 ## Example Usage
 
 ```terraform
@@ -21,11 +23,11 @@ data "auth0_connection_directory_synchronized_groups" "my_groups" {
 
 ### Required
 
-- `connection_id` (String) ID of the connection for which to manage synchronized groups.
+- `connection_id` (String) ID of the connection for which to manage synchronized groups. (EA only)
 
 ### Read-Only
 
-- `group_ids` (Set of String) List of Google Workspace Directory group IDs to synchronize.
+- `group_ids` (Set of String) List of Google Workspace Directory group IDs to synchronize. (EA only)
 - `id` (String) The ID of this resource.
 
 

@@ -74,7 +74,7 @@ resource "auth0_connection_directory" "with_selected_groups" {
 
 - `mapping` (Block Set) Mapping between Auth0 attributes and IDP user attributes. Defaults to default mapping for the connection type if not specified. (see [below for nested schema](#nestedblock--mapping))
 - `synchronize_automatically` (Boolean) Whether periodic automatic synchronization is enabled. Defaults to false.
-- `synchronize_groups` (String) Group synchronization configuration. Valid values are: off, all, selected.
+- `synchronize_groups` (String) Group synchronization configuration. Valid values are: off, all, selected. (EA only)
 
 ### Read-Only
 

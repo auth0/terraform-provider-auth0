@@ -27,19 +27,19 @@ func NewDirectorySynchronizedGroupsResource() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Description: "With this resource, you can manage the set of Google Workspace group IDs " +
-			"synchronized via directory provisioning for an Auth0 connection.",
+			"synchronized via directory provisioning for an Auth0 connection. (EA only)",
 		Schema: map[string]*schema.Schema{
 			"connection_id": {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "ID of the connection for which to manage synchronized groups.",
+				Description: "ID of the connection for which to manage synchronized groups. (EA only)",
 			},
 			"group_ids": {
 				Type:        schema.TypeSet,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Required:    true,
-				Description: "List of Google Workspace Directory group IDs to synchronize.",
+				Description: "List of Google Workspace Directory group IDs to synchronize. (EA only)",
 			},
 		},
 	}

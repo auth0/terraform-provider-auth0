@@ -25,6 +25,7 @@ type cacheKey struct {
 type pageState struct {
 	nextPage  int
 	exhausted bool
+	total     int // total resources cached so far across all pages
 }
 
 // Summary holds hit/miss/page-fetch counts for a single resource type.
@@ -35,6 +36,17 @@ type Summary struct {
 	Misses int64
 	// PagesFetched is the number of list-API pages fetched.
 	PagesFetched int64
+	// Cached is the total number of resources stored in the cache.
+	Cached int64
+}
+
+// HitRate returns the cache hit rate as a percentage (0–100), or 0 if no lookups have occurred.
+func (s Summary) HitRate() float64 {
+	total := s.Hits + s.Misses
+	if total == 0 {
+		return 0
+	}
+	return float64(s.Hits) / float64(total) * 100
 }
 
 // typeCounters holds atomic counters for one resource type.
@@ -42,14 +54,24 @@ type typeCounters struct {
 	hits         atomic.Int64
 	misses       atomic.Int64
 	pagesFetched atomic.Int64
+	cached       atomic.Int64
 }
 
 // Cache is an in-memory, thread-safe store for pre-fetched Auth0 resources.
 // It tracks both the resource values and the page-fetch cursor per resource type.
 type Cache struct {
+	// mu protects entries, pageStates, and fetchMu.
 	mu         sync.RWMutex
 	entries    map[cacheKey]interface{}
 	pageStates map[resourceType]*pageState
+
+	// fetchMu serialises page fetches per resource type, preventing multiple
+	// goroutines from concurrently fetching the same page (TOCTOU).
+	fetchMu map[resourceType]*sync.Mutex
+
+	// countersMu protects counters independently of mu to avoid deadlocks
+	// when setEntries (holding mu write lock) needs to update counters.
+	countersMu sync.RWMutex
 	counters   map[resourceType]*typeCounters
 }
 
@@ -58,18 +80,31 @@ func NewCache() *Cache {
 	return &Cache{
 		entries:    make(map[cacheKey]interface{}),
 		pageStates: make(map[resourceType]*pageState),
+		fetchMu:    make(map[resourceType]*sync.Mutex),
 		counters:   make(map[resourceType]*typeCounters),
 	}
 }
 
-// Summary returns hit/miss/page-fetch counts for the given resource type.
+// Summary returns hit/miss/page-fetch/cached counts for the given resource type.
 func (c *Cache) Summary(kind resourceType) Summary {
 	tc := c.getOrInitCounters(kind)
 	return Summary{
 		Hits:         tc.hits.Load(),
 		Misses:       tc.misses.Load(),
 		PagesFetched: tc.pagesFetched.Load(),
+		Cached:       tc.cached.Load(),
 	}
+}
+
+// lockFetch acquires the per-type fetch mutex, blocking any other goroutine
+// that is concurrently fetching a page for the same resource type.
+func (c *Cache) lockFetch(kind resourceType) {
+	c.getOrInitFetchMu(kind).Lock()
+}
+
+// unlockFetch releases the per-type fetch mutex.
+func (c *Cache) unlockFetch(kind resourceType) {
+	c.getOrInitFetchMu(kind).Unlock()
 }
 
 // recordHit increments the hit counter for kind.
@@ -87,26 +122,6 @@ func (c *Cache) recordPageFetch(kind resourceType) {
 	c.getOrInitCounters(kind).pagesFetched.Add(1)
 }
 
-// getOrInitCounters returns the typeCounters for kind, initialising on first use.
-// Safe for concurrent use; uses a double-check pattern under c.mu.
-func (c *Cache) getOrInitCounters(kind resourceType) *typeCounters {
-	c.mu.RLock()
-	tc, ok := c.counters[kind]
-	c.mu.RUnlock()
-	if ok {
-		return tc
-	}
-
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	if tc, ok = c.counters[kind]; ok {
-		return tc
-	}
-	tc = &typeCounters{}
-	c.counters[kind] = tc
-	return tc
-}
-
 // getEntry returns the cached value and whether it was found.
 func (c *Cache) getEntry(kind resourceType, id string) (interface{}, bool) {
 	c.mu.RLock()
@@ -116,8 +131,9 @@ func (c *Cache) getEntry(kind resourceType, id string) (interface{}, bool) {
 	return v, ok
 }
 
-// setEntries stores a batch of values in the cache and advances the page cursor.
-func (c *Cache) setEntries(kind resourceType, items map[string]interface{}, hasMore bool) {
+// setEntries stores a batch of values in the cache, advances the page cursor,
+// and emits a summary log when the cache transitions to exhausted.
+func (c *Cache) setEntries(kind resourceType, items map[string]interface{}, hasMore bool) (exhausted bool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -127,9 +143,13 @@ func (c *Cache) setEntries(kind resourceType, items map[string]interface{}, hasM
 
 	ps := c.getOrInitPageState(kind)
 	ps.nextPage++
+	ps.total += len(items)
 	if !hasMore {
 		ps.exhausted = true
 	}
+
+	c.getOrInitCounters(kind).cached.Store(int64(ps.total))
+	return ps.exhausted
 }
 
 // nextPage returns the next page number to fetch for the given resource type.
@@ -157,4 +177,42 @@ func (c *Cache) getOrInitPageState(kind resourceType) *pageState {
 		c.pageStates[kind] = ps
 	}
 	return ps
+}
+
+// getOrInitFetchMu returns the fetch mutex for kind, initialising it if necessary.
+func (c *Cache) getOrInitFetchMu(kind resourceType) *sync.Mutex {
+	c.mu.RLock()
+	mu, ok := c.fetchMu[kind]
+	c.mu.RUnlock()
+	if ok {
+		return mu
+	}
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if mu, ok = c.fetchMu[kind]; ok {
+		return mu
+	}
+	mu = &sync.Mutex{}
+	c.fetchMu[kind] = mu
+	return mu
+}
+
+// getOrInitCounters returns the typeCounters for kind, initialising on first use.
+func (c *Cache) getOrInitCounters(kind resourceType) *typeCounters {
+	c.countersMu.RLock()
+	tc, ok := c.counters[kind]
+	c.countersMu.RUnlock()
+	if ok {
+		return tc
+	}
+
+	c.countersMu.Lock()
+	defer c.countersMu.Unlock()
+	if tc, ok = c.counters[kind]; ok {
+		return tc
+	}
+	tc = &typeCounters{}
+	c.counters[kind] = tc
+	return tc
 }

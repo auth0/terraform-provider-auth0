@@ -715,6 +715,7 @@ Optional:
 - `access_token_url` (String) URL used to exchange a user-authorized request token for an access token.
 - `adfs_server` (String) ADFS URL where to fetch the metadata source.
 - `allowed_audiences` (Set of String) List of allowed audiences.
+- `api_enable_groups` (Boolean) Enable API Access to groups.
 - `api_enable_users` (Boolean) Enable API Access to users.
 - `app_id` (String) App ID.
 - `attribute_map` (Block List, Max: 1) OpenID Connect and Okta Workforce connections can automatically map claims received from the identity provider (IdP). You can configure this mapping through a library template provided by Auth0 or by entering your own template directly. Click [here](https://auth0.com/docs/authenticate/identity-providers/enterprise-identity-providers/configure-pkce-claim-mapping-for-oidc#map-claims-for-oidc-connections) for more info. (see [below for nested schema](#nestedblock--options--attribute_map))

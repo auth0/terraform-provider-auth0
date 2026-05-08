@@ -594,6 +594,7 @@ func flattenConnectionOptionsGoogleApps(
 		"domain":                   options.GetDomain(),
 		"tenant_domain":            options.GetTenantDomain(),
 		"api_enable_users":         options.GetEnableUsersAPI(),
+		"api_enable_groups":        options.GetEnableGroupsAPI(),
 		"scopes":                   options.Scopes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"domain_aliases":           options.GetDomainAliases(),
@@ -1375,6 +1376,7 @@ func flattenDirectory(data *schema.ResourceData, directoryConfig *managementv2.G
 		data.Set("strategy", directoryConfig.GetStrategy()),
 		data.Set("mapping", flattenDirectoryMappings(directoryConfig.GetMapping())),
 		data.Set("synchronize_automatically", directoryConfig.GetSynchronizeAutomatically()),
+		data.Set("synchronize_groups", directoryConfig.GetSynchronizeGroups()),
 		data.Set("created_at", directoryConfig.GetCreatedAt().String()),
 		data.Set("updated_at", directoryConfig.GetUpdatedAt().String()),
 	)

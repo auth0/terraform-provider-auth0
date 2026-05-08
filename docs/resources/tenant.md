@@ -190,9 +190,9 @@ Optional:
 <a id="nestedblock--oidc_logout"></a>
 ### Nested Schema for `oidc_logout`
 
-Optional:
+Required:
 
-- `rp_logout_end_session_endpoint_discovery` (Boolean) Enable the end_session_endpoint URL in the .well-known discovery configuration. (Default: `true`)
+- `rp_logout_end_session_endpoint_discovery` (Boolean) Enable the end_session_endpoint URL in the .well-known discovery configuration.
 
 
 <a id="nestedblock--session_cookie"></a>
@@ -206,9 +206,9 @@ Optional:
 <a id="nestedblock--sessions"></a>
 ### Nested Schema for `sessions`
 
-Optional:
+Required:
 
-- `oidc_logout_prompt_enabled` (Boolean) When active, users will be presented with a consent prompt to confirm the logout request if the request is not trustworthy. Turn off the consent prompt to bypass user confirmation. (Default: `true`)
+- `oidc_logout_prompt_enabled` (Boolean) When active, users will be presented with a consent prompt to confirm the logout request if the request is not trustworthy. Turn off the consent prompt to bypass user confirmation.
 
 ## Import
 

@@ -338,11 +338,10 @@ func NewResource() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"oidc_logout_prompt_enabled": {
 							Type:     schema.TypeBool,
-							Optional: true,
-							Default:  oidcLogoutPromptEnabledDefault,
+							Required: true,
 							Description: "When active, users will be presented with a consent prompt to confirm the " +
 								"logout request if the request is not trustworthy. Turn off the consent prompt to " +
-								"bypass user confirmation. (Default: `true`)",
+								"bypass user confirmation.",
 						},
 					},
 				},
@@ -357,9 +356,8 @@ func NewResource() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"rp_logout_end_session_endpoint_discovery": {
 							Type:        schema.TypeBool,
-							Optional:    true,
-							Default:     rpLogoutEndSessionEndpointDiscoveryDefault,
-							Description: "Enable the end_session_endpoint URL in the .well-known discovery configuration. (Default: `true`)",
+							Required:    true,
+							Description: "Enable the end_session_endpoint URL in the .well-known discovery configuration.",
 						},
 					},
 				},

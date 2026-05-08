@@ -28,6 +28,7 @@ import (
 	"github.com/zalando/go-keyring"
 
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/auth0/terraform-provider-auth0/internal/prefetch"
 )
 
 const providerName = "Terraform-Provider-Auth0"    // #nosec G101
@@ -58,9 +59,10 @@ type CliConfig struct {
 // Config is the type used for the
 // *schema.Provider meta parameter.
 type Config struct {
-	api   *management.Management
-	apiv2 *managementv2.Management
-	mutex *mutex.KeyValue
+	api           *management.Management
+	apiv2         *managementv2.Management
+	mutex         *mutex.KeyValue
+	prefetchCache *prefetch.Cache
 }
 
 // New instantiates a new Config.
@@ -95,9 +97,15 @@ func (c *Config) GetMutex() *mutex.KeyValue {
 	return c.mutex
 }
 
+// GetPrefetchCache returns the *prefetch.Cache, or nil if pre-fetch is disabled.
+func (c *Config) GetPrefetchCache() *prefetch.Cache {
+	return c.prefetchCache
+}
+
 // ProviderConfig holds the loaded provider configuration values.
 type ProviderConfig struct {
 	Debug                     bool
+	Prefetch                  bool
 	Domain                    string
 	ClientID                  string
 	ClientSecret              string
@@ -113,6 +121,7 @@ func ParseResourceConfigData(data *schema.ResourceData) (ProviderConfig, diag.Di
 	cfg := ProviderConfig{
 		Domain:                    data.Get("domain").(string),
 		Debug:                     data.Get("debug").(bool),
+		Prefetch:                  data.Get("prefetch").(bool),
 		ClientID:                  data.Get("client_id").(string),
 		ClientSecret:              data.Get("client_secret").(string),
 		APIToken:                  data.Get("api_token").(string),
@@ -232,7 +241,12 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			return nil, diag.FromErr(err)
 		}
 
-		return NewWithV2(apiClient, apiClientV2), nil
+		cfg := NewWithV2(apiClient, apiClientV2)
+		if config.Prefetch {
+			cfg.prefetchCache = prefetch.NewCache()
+		}
+
+		return cfg, nil
 	}
 }
 

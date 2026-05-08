@@ -152,6 +152,21 @@ func New() *schema.Provider {
 				Description: "When specified, this header is added to requests targeting a set of pre-defined whitelisted URLs " +
 					"Global setting overrides all resource specific `custom_domain_header` value",
 			},
+			"prefetch": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				DefaultFunc: func() (interface{}, error) {
+					v := os.Getenv("AUTH0_PREFETCH")
+					if v == "" {
+						return false, nil
+					}
+					return v == "1" || v == "true" || v == "on", nil
+				},
+				Description: "Enables opportunistic pre-fetch mode for `auth0_client` and `auth0_client_grant` resources. " +
+					"When enabled, the provider batches upstream API calls using page-based list endpoints, " +
+					"which dramatically reduces total API call count for large deployments. " +
+					"It can also be sourced from the `AUTH0_PREFETCH` environment variable.",
+			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"auth0_action":                                   action.NewResource(),

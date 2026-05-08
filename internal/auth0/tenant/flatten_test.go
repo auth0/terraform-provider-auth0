@@ -132,6 +132,32 @@ func TestFlattenTenant(t *testing.T) {
 		assert.Equal(t, false, flags["enable_client_connections"])
 	})
 
+	t.Run("it defaults oidc_logout_prompt_enabled to true when API returns nil sessions", func(t *testing.T) {
+		tenant := management.Tenant{
+			Sessions: nil,
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		sessions := mockResourceData.Get("sessions").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, true, sessions["oidc_logout_prompt_enabled"])
+	})
+
+	t.Run("it preserves oidc_logout_prompt_enabled false when API returns explicit false", func(t *testing.T) {
+		tenant := management.Tenant{
+			Sessions: &management.TenantSessions{
+				OIDCLogoutPromptEnabled: auth0.Bool(false),
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		sessions := mockResourceData.Get("sessions").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, false, sessions["oidc_logout_prompt_enabled"])
+	})
+
 	t.Run("it sets ephemeral session values correctly when returned by the API", func(t *testing.T) {
 		tenant := management.Tenant{
 			EphemeralSessionLifetime:     auth0.Float64(1.5),

@@ -120,8 +120,11 @@ func flattenTenantSessionCookie(sessionCookie *management.TenantSessionCookie) [
 
 func flattenTenantSessions(sessions *management.TenantSessions) []interface{} {
 	m := make(map[string]interface{})
-	m["oidc_logout_prompt_enabled"] = sessions.GetOIDCLogoutPromptEnabled()
-
+	if sessions != nil && sessions.OIDCLogoutPromptEnabled != nil {
+		m["oidc_logout_prompt_enabled"] = *sessions.OIDCLogoutPromptEnabled
+	} else {
+		m["oidc_logout_prompt_enabled"] = oidcLogoutPromptEnabledDefault
+	}
 	return []interface{}{m}
 }
 

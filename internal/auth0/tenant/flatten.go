@@ -79,10 +79,21 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	}
 
 	m := make(map[string]interface{})
+	// Set explicitly on nil as backend and Go defaults differ.
 	if flags.EnableClientConnections != nil {
 		m["enable_client_connections"] = *flags.EnableClientConnections
 	} else {
 		m["enable_client_connections"] = enableClientConnectionsDefault
+	}
+	if flags.EnablePipeline2 != nil {
+		m["enable_pipeline2"] = *flags.EnablePipeline2
+	} else {
+		m["enable_pipeline2"] = enablePipeline2Default
+	}
+	if flags.DisableManagementAPISMSObfuscation != nil {
+		m["disable_management_api_sms_obfuscation"] = *flags.DisableManagementAPISMSObfuscation
+	} else {
+		m["disable_management_api_sms_obfuscation"] = disableManagementAPISMSObfuscationDefault
 	}
 	m["enable_apis_section"] = flags.EnableAPIsSection
 	m["enable_dynamic_client_registration"] = flags.EnableDynamicClientRegistration
@@ -105,18 +116,6 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["disable_fields_map_fix"] = flags.DisableFieldsMapFix
 	m["mfa_show_factor_list_on_enrollment"] = flags.MFAShowFactorListOnEnrollment
 	m["remove_alg_from_jwks"] = flags.RemoveAlgFromJWKS
-
-	// Set explicitly on nil as backend and Go defaults differ.
-	if flags.EnablePipeline2 != nil {
-		m["enable_pipeline2"] = *flags.EnablePipeline2
-	} else {
-		m["enable_pipeline2"] = enablePipeline2Default
-	}
-	if flags.DisableManagementAPISMSObfuscation != nil {
-		m["disable_management_api_sms_obfuscation"] = *flags.DisableManagementAPISMSObfuscation
-	} else {
-		m["disable_management_api_sms_obfuscation"] = disableManagementAPISMSObfuscationDefault
-	}
 
 	return []interface{}{m}
 }

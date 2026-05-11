@@ -1,3 +1,21 @@
+## v1.46.0
+
+FEATURES:
+
+- `resource/auth0_event_stream` – Add support for configuring `status` field with `enabled`/`disabled` options ([#1568](https://github.com/auth0/terraform-provider-auth0/pull/1568))
+- `resource/auth0_client` – Add support for configuring `third_party_security_mode` and `redirection_policy` ([#1555](https://github.com/auth0/terraform-provider-auth0/pull/1555))
+- `resource/auth0_client_grant` – Add support for configuring `default_for` to specify default grants for third-party clients ([#1555](https://github.com/auth0/terraform-provider-auth0/pull/1555))
+- `resource/auth0_tenant` – Add support for configuring `dynamic_client_registration_security_mode` ([#1555](https://github.com/auth0/terraform-provider-auth0/pull/1555))
+- `resource/auth0_connection` – Add write support for `token_endpoint_jwtca_aud_format` for OIDC and Okta connections ([#1557](https://github.com/auth0/terraform-provider-auth0/pull/1557))
+- `resource/auth0_connection_directory` – Add support for configuring `synchronize_groups` for Inbound Groups Directory Provisioning in Google Workspaces (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+- `resource/auth0_connection_directory_synchronized_groups` – Add support for managing synchronized Google Workspace group IDs via directory provisioning (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+- `data-source/auth0_connection_directory_synchronized_groups` – Add support for retrieving synchronized group IDs for a connection's directory provisioning (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+- `resource/auth0_connection` – Add support for configuring `api_enable_groups` for Google Workspace connections (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+
+BUG FIXES:
+- `resource/auth0_resource_server` – Fix missing expand for `name` field ([#1566](https://github.com/auth0/terraform-provider-auth0/pull/1566))
+- `resource/auth0_tenant` – Fix default values for `ephemeral_session_lifetime`, `idle_ephemeral_session_lifetime`, `enable_pipeline2`, and `disable_management_api_sms_obfuscation` to align with API docs ([#1569](https://github.com/auth0/terraform-provider-auth0/pull/1569))
+
 ## v1.45.0
 
 FEATURES:

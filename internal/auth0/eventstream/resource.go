@@ -161,9 +161,11 @@ func NewResource() *schema.Resource {
 				Description: "The name of the event stream.",
 			},
 			"status": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The current status of the event stream.",
+				Type:         schema.TypeString,
+				Computed:     true,
+				Optional:     true,
+				ValidateFunc: validation.StringInSlice([]string{"enabled", "disabled"}, false),
+				Description:  "The current status of the event stream. Can be `enabled` or `disabled`.",
 			},
 			"subscriptions": {
 				Type:        schema.TypeList,

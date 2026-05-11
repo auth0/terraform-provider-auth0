@@ -22,11 +22,15 @@ import (
 )
 
 const (
-	idleSessionLifetimeDefault          = 72.00
-	sessionLifetimeDefault              = 168.00
-	ephemeralSessionLifetimeDefault     = 1.00 // 1 hour.
-	idleEphemeralSessionLifetimeDefault = 1.00 // 1 hour.
-	enableClientConnectionsDefault      = true
+	idleSessionLifetimeDefault                 = 72.00
+	sessionLifetimeDefault                     = 168.00
+	ephemeralSessionLifetimeDefault            = 72.00
+	idleEphemeralSessionLifetimeDefault        = 24.00
+	enableClientConnectionsDefault             = true
+	oidcLogoutPromptEnabledDefault             = true
+	rpLogoutEndSessionEndpointDiscoveryDefault = true
+	enablePipeline2Default                     = true
+	disableManagementAPISMSObfuscationDefault  = true
 )
 
 // NewResource will return a new auth0_tenant resource.
@@ -156,7 +160,7 @@ func NewResource() *schema.Resource {
 						"enable_pipeline2": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Computed:    true,
+							Default:     enablePipeline2Default,
 							Description: "Indicates whether advanced API Authorization scenarios are enabled.",
 						},
 						"enable_dynamic_client_registration": {
@@ -242,7 +246,7 @@ func NewResource() *schema.Resource {
 						"disable_management_api_sms_obfuscation": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Computed:    true,
+							Default:     disableManagementAPISMSObfuscationDefault,
 							Description: "If true, SMS phone numbers will not be obfuscated in Management API GET calls.",
 						},
 						"enable_adfs_waad_email_verification": {

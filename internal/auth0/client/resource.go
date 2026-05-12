@@ -418,8 +418,11 @@ func NewResource() *schema.Resource {
 			"initiate_login_uri": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
-				Description:  "Initiate login URI. Must be HTTPS or an empty string.",
+				ValidateFunc: internalValidation.IsHTTPSURLOrEmptyStringWithDynamicLoginURIPlaceholders,
+				Description: "Initiate login URI. Must be HTTPS or an empty string. May contain Auth0 dynamic login URI " +
+					"placeholders such as `{organization.metadata.public_login_host}` or " +
+					"`{custom_domain.metadata.public_app_host}`, which are resolved by Auth0 at request time. " +
+					"See https://auth0.com/docs/get-started/applications/application-settings.",
 			},
 			"native_social_login": {
 				Type:     schema.TypeList,

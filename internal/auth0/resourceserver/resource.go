@@ -82,6 +82,18 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Indicates whether refresh tokens can be issued for this resource server.",
 			},
+			"allow_online_access": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Indicates whether Online Refresh Tokens can be issued for this resource server. (EA Only)",
+			},
+			"allow_online_access_with_ephemeral_sessions": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "Indicates whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral. (EA Only)",
+			},
 			"token_lifetime": {
 				Type:     schema.TypeInt,
 				Optional: true,

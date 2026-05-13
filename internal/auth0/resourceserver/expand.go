@@ -36,6 +36,8 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.SigningAlgorithm = value.String(cfg.GetAttr("signing_alg"))
 		resourceServer.SigningSecret = value.String(cfg.GetAttr("signing_secret"))
 		resourceServer.AllowOfflineAccess = value.Bool(cfg.GetAttr("allow_offline_access"))
+		resourceServer.AllowOnlineAccess = value.Bool(cfg.GetAttr("allow_online_access"))
+		resourceServer.AllowOnlineAccessWithEphemeralSessions = value.Bool(cfg.GetAttr("allow_online_access_with_ephemeral_sessions"))
 		resourceServer.TokenLifetimeForWeb = value.Int(cfg.GetAttr("token_lifetime_for_web"))
 		resourceServer.EnforcePolicies = value.Bool(cfg.GetAttr("enforce_policies"))
 		resourceServer.TokenDialect = value.String(cfg.GetAttr("token_dialect"))

@@ -17,6 +17,8 @@ resource "auth0_resource_server" "my_resource_server" {
   signing_alg = "RS256"
 
   allow_offline_access                            = true
+  allow_online_access                             = true
+  allow_online_access_with_ephemeral_sessions     = false
   token_lifetime                                  = 8600
   skip_consent_for_verifiable_first_party_clients = true
   consent_policy                                  = "transactional-authorization-with-mfa"
@@ -86,6 +88,8 @@ resource "auth0_resource_server" "okta_oin_express_configuration_api" {
 ### Optional
 
 - `allow_offline_access` (Boolean) Indicates whether refresh tokens can be issued for this resource server.
+- `allow_online_access` (Boolean) Indicates whether Online Refresh Tokens can be issued for this resource server. (EA Only)
+- `allow_online_access_with_ephemeral_sessions` (Boolean) Indicates whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral. (EA Only)
 - `authorization_details` (Block List) Authorization details for this resource server. (see [below for nested schema](#nestedblock--authorization_details))
 - `authorization_policy` (Block List, Max: 1) Authorization policy for the resource server.(EA Only) (see [below for nested schema](#nestedblock--authorization_policy))
 - `consent_policy` (String) Consent policy for this resource server. Options include `transactional-authorization-with-mfa`, or `null` to disable.

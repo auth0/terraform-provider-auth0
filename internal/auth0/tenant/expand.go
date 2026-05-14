@@ -27,11 +27,9 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		SupportEmail:                         value.String(config.GetAttr("support_email")),
 		SupportURL:                           value.String(config.GetAttr("support_url")),
 		AllowedLogoutURLs:                    value.Strings(config.GetAttr("allowed_logout_urls")),
-		SessionLifetime:                      &sessionLifetime,
-		EphemeralSessionLifetime:             &ephemeralSessionLifetime,
 		SandboxVersion:                       value.String(config.GetAttr("sandbox_version")),
 		EnabledLocales:                       value.Strings(config.GetAttr("enabled_locales")),
-		Flags:                                expandTenantFlags(config.GetAttr("flags")),
+		Flags:                                expandTenantFlags(config.GetAttr("flags"), data),
 		SessionCookie:                        expandTenantSessionCookie(config.GetAttr("session_cookie")),
 		Sessions:                             expandTenantSessions(config.GetAttr("sessions")),
 		OIDCLogout:                           expandTenantOIDCLogout(config.GetAttr("oidc_logout")),
@@ -49,8 +47,14 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		DynamicClientRegistrationSecurityMode:          value.String(config.GetAttr("dynamic_client_registration_security_mode")),
 	}
 
+	if data.IsNewResource() || data.HasChange("session_lifetime") {
+		tenant.SessionLifetime = &sessionLifetime
+	}
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
 		tenant.IdleSessionLifetime = &idleSessionLifetime
+	}
+	if data.IsNewResource() || data.HasChange("ephemeral_session_lifetime") {
+		tenant.EphemeralSessionLifetime = &ephemeralSessionLifetime
 	}
 	if data.IsNewResource() || data.HasChange("idle_ephemeral_session_lifetime") {
 		tenant.IdleEphemeralSessionLifetime = &idleEphemeralSessionLifetime
@@ -59,7 +63,7 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 	return &tenant
 }
 
-func expandTenantFlags(config cty.Value) *management.TenantFlags {
+func expandTenantFlags(config cty.Value, data *schema.ResourceData) *management.TenantFlags {
 	var tenantFlags *management.TenantFlags
 
 	config.ForEachElement(func(_ cty.Value, flags cty.Value) (stop bool) {
@@ -69,7 +73,6 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 			EnablePipeline2:                    value.Bool(flags.GetAttr("enable_pipeline2")),
 			EnableDynamicClientRegistration:    value.Bool(flags.GetAttr("enable_dynamic_client_registration")),
 			EnableCustomDomainInEmails:         value.Bool(flags.GetAttr("enable_custom_domain_in_emails")),
-			EnableSSO:                          value.Bool(flags.GetAttr("enable_sso")),
 			EnableLegacyLogsSearchV2:           value.Bool(flags.GetAttr("enable_legacy_logs_search_v2")),
 			DisableClickjackProtectionHeaders:  value.Bool(flags.GetAttr("disable_clickjack_protection_headers")),
 			EnablePublicSignupUserExistsError:  value.Bool(flags.GetAttr("enable_public_signup_user_exists_error")),
@@ -88,6 +91,11 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 			DisableFieldsMapFix:                value.Bool(flags.GetAttr("disable_fields_map_fix")),
 			MFAShowFactorListOnEnrollment:      value.Bool(flags.GetAttr("mfa_show_factor_list_on_enrollment")),
 			RemoveAlgFromJWKS:                  value.Bool(flags.GetAttr("remove_alg_from_jwks")),
+		}
+
+		// Skip sending implicitly on all PATCH reqs.
+		if data.IsNewResource() || data.HasChange("flags.0.enable_sso") {
+			tenantFlags.EnableSSO = value.Bool(flags.GetAttr("enable_sso"))
 		}
 
 		return stop

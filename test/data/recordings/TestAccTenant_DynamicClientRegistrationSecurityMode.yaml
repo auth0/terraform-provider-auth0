@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 213
+        content_length: 215
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"friendly_name":"DCR Security Mode Test","session_lifetime":168,"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"dynamic_client_registration_security_mode":"strict"}
+            {"friendly_name":"DCR Security Mode Test","session_lifetime":168,"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"dynamic_client_registration_security_mode":"strict"}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: PATCH
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"strict"}'
+        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"strict"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 393.910375ms
+        duration: 489.853125ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -54,7 +54,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: PATCH
       response:
@@ -65,13 +65,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"strict"}'
+        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"strict"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 402.57775ms
+        duration: 530.692875ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -87,7 +87,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -98,13 +98,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"strict","sandbox_versions_available":["22","18"]}'
+        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"strict","sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 347.193583ms
+        duration: 464.860416ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -120,7 +120,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -131,13 +131,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"strict","sandbox_versions_available":["22","18"]}'
+        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"strict","sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 382.899917ms
+        duration: 494.105125ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -153,7 +153,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -164,32 +164,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"strict","sandbox_versions_available":["22","18"]}'
+        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"strict","sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 354.284333ms
+        duration: 435.947333ms
     - id: 5
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 154
+        content_length: 100
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"friendly_name":"DCR Security Mode Test","session_lifetime":168,"ephemeral_session_lifetime":1,"dynamic_client_registration_security_mode":"permissive"}
+            {"friendly_name":"DCR Security Mode Test","dynamic_client_registration_security_mode":"permissive"}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: PATCH
       response:
@@ -200,13 +200,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive"}'
+        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 420.847917ms
+        duration: 712.379333ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -222,7 +222,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -233,13 +233,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","sandbox_versions_available":["22","18"]}'
+        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 343.855833ms
+        duration: 484.909042ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -255,7 +255,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -266,13 +266,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","sandbox_versions_available":["22","18"]}'
+        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 340.128208ms
+        duration: 513.777792ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -288,7 +288,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -299,13 +299,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","sandbox_versions_available":["22","18"]}'
+        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 343.614917ms
+        duration: 718.760458ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -321,7 +321,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -332,10 +332,10 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","sandbox_versions_available":["22","18"]}'
+        body: '{"change_password":{"enabled":false},"default_directory":"Username-Password-Authentication","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"enable_dynamic_client_registration":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"friendly_name":"DCR Security Mode Test","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":false,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 347.645125ms
+        duration: 580.17775ms

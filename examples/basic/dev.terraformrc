@@ -1,0 +1,11 @@
+# Sample Terraform CLI configuration enabling dev_overrides for this provider.
+# Copy the contents to ~/.terraformrc (or merge if you already have one).
+provider_installation {
+  dev_overrides {
+    "auth0/auth0" = "/Users/rajat.bajaj/go/bin"
+  }
+
+  # Make all other providers behave normally.
+  direct {}
+}
+

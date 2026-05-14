@@ -1,98 +1,70 @@
-<div align="center">
-  <h1>Auth0 Terraform Provider</h1>
+# terraform-provider-auth0 v2
 
-[![GoDoc](https://pkg.go.dev/badge/github.com/auth0/terraform-provider-auth0.svg)](https://pkg.go.dev/github.com/auth0/terraform-provider-auth0)
-[![Go Report Card](https://goreportcard.com/badge/github.com/auth0/terraform-provider-auth0?style=flat-square)](https://goreportcard.com/report/github.com/auth0/terraform-provider-auth0)
-[![Release](https://img.shields.io/github/v/release/auth0/terraform-provider-auth0?logo=terraform&include_prereleases&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/releases)
-[![Codecov](https://img.shields.io/codecov/c/github/auth0/terraform-provider-auth0?logo=codecov&style=flat-square)](https://codecov.io/gh/auth0/terraform-provider-auth0)
-[![License](https://img.shields.io/github/license/auth0/terraform-provider-auth0.svg?logo=fossa&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/blob/main/LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/auth0/terraform-provider-auth0/main.yml?branch=main)](https://github.com/auth0/terraform-provider-auth0/actions?query=branch%3Amain)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/auth0/terraform-provider-auth0)
+> Plugin Framework rewrite of [`auth0/terraform-provider-auth0`](https://github.com/auth0/terraform-provider-auth0).
+> This is the **v2.x** line, built on top of [`go-auth0`](https://github.com/auth0/go-auth0) **v2**.
+> The legacy SDKv2 provider continues to live on the `v1` branch and is published as `auth0/auth0` `<= 1.x`.
 
-</div>
+## Status
 
--------------------------------------
+Early scaffolding. Currently implemented:
 
-The Auth0 Terraform Provider is the official plugin for managing Auth0 tenant configuration through the
-[Terraform](https://www.terraform.io/) tool.
+- [x] Provider configuration (domain, audience, client_id/secret, api_token, private-key JWT, debug)
+- [x] `auth0_client` resource (subset of fields — name, description, app_type, callbacks, allowed_logout_urls, allowed_origins, web_origins, grant_types, token_endpoint_auth_method, client_metadata, etc.)
+- [x] `auth0_organization` resource (name, display_name, branding, metadata)
 
-📚 [Documentation](#documentation) • 🚀 [Getting Started](#getting-started) • 💬 [Feedback](#feedback)
+More resources will follow incrementally.
 
--------------------------------------
+## Local development & testing
 
-## Documentation
+### 1. Build & install the binary
 
-- [Official Docs](https://registry.terraform.io/providers/auth0/auth0/latest/docs)
-- Guides
-  - [Quickstart](./docs/guides/quickstart.md)
-  - [List available triggers for actions](./docs/guides/action_triggers.md)
-  - [Zero downtime client credentials rotation](./docs/guides/client_secret_rotation.md)
+```sh
+make install
+```
 
-## Getting Started
+This compiles the provider into `$GOPATH/bin/terraform-provider-auth0`.
 
-### Requirements
+### 2. Configure a Terraform CLI dev override
 
-- [Terraform](https://www.terraform.io/downloads)
-- An [Auth0](https://auth0.com) account
+Add this to `~/.terraformrc` so Terraform picks up your locally-built binary
+instead of downloading from the registry:
 
-### Installation
-
-Terraform uses the [Terraform Registry](https://registry.terraform.io/) to download and install providers. To install
-this provider, copy and paste the following code into your Terraform configuration. Then, run `terraform init`.
-
-```terraform
-terraform {
-  required_providers {
-    auth0 = {
-      source  = "auth0/auth0"
-      version = ">= 1.0.0" # Refer to docs for latest version
-    }
+```hcl
+provider_installation {
+  dev_overrides {
+    "auth0/auth0" = "/Users/<you>/go/bin"
   }
+  direct {}
 }
-
-provider "auth0" {}
 ```
 
-```shell
-$ terraform init
+### 3. Run the example
+
+```sh
+cd examples/basic
+export AUTH0_DOMAIN="your-tenant.auth0.com"
+export AUTH0_CLIENT_ID="..."
+export AUTH0_CLIENT_SECRET="..."
+terraform plan
+terraform apply
 ```
 
-## Feedback
+> With dev overrides you do **not** run `terraform init`; Terraform will print a
+> warning about the override and use your local binary directly.
 
-### Contributing
+## Authentication
 
-We appreciate feedback and contribution to this repo! Before you get started, please see the following:
+The provider supports three authentication modes (auto-detected from config):
 
-- [Contribution Guide](./CONTRIBUTING.md)
-- [Auth0's General Contribution Guidelines](https://github.com/auth0/open-source-template/blob/master/GENERAL-CONTRIBUTING.md)
-- [Auth0's Code of Conduct Guidelines](https://github.com/auth0/open-source-template/blob/master/CODE-OF-CONDUCT.md)
+| Mode               | Required attributes / env vars                                                                |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| Static token       | `api_token` / `AUTH0_API_TOKEN`                                                               |
+| Client credentials | `client_id` + `client_secret` (`AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`)                      |
+| Private Key JWT    | `client_id` + `client_assertion_private_key` (+ optional `client_assertion_signing_alg`)      |
 
-### Raise an issue
+`api_token` takes precedence, then Private Key JWT, then client secret.
 
-To provide feedback or report a bug, [please raise an issue on our issue tracker](https://github.com/auth0/terraform-provider-auth0/issues).
+## License
 
-### Vulnerability reporting
+MIT — see [LICENSE](./LICENSE).
 
-Please do not report security vulnerabilities on the public GitHub issue tracker.
-The [Responsible Disclosure Program](https://auth0.com/responsible-disclosure-policy) details the procedure for disclosing security issues.
-
----
-
-<div align="center">
-  <picture>
-    <source media="(prefers-color-scheme: light)" srcset="https://cdn.auth0.com/website/sdks/logos/auth0_light_mode.png" width="150">
-    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.auth0.com/website/sdks/logos/auth0_dark_mode.png" width="150">
-    <img alt="Auth0 Logo" src="https://cdn.auth0.com/website/sdks/logos/auth0_light_mode.png" width="150">
-  </picture>
-</div>
-
-<div align="center">
-
-Auth0 is an easy to implement, adaptable authentication and authorization platform. To learn more checkout
-[Why Auth0?](https://auth0.com/why-auth0)
-
-This project is licensed under the MPL-2.0 license. See the [LICENSE](LICENSE) file for more info or
-[auth0-terraform-provider.pdf](https://www.okta.com/sites/default/files/2022-03/auth0-terraform-provider.pdf) for a full
-report.
-
-</div>

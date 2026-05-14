@@ -1,34 +1,31 @@
+// Package main is the entry point for the Auth0 Terraform provider (v2,
+// built on the Terraform Plugin Framework).
 package main
 
 import (
-	"os"
-	"strconv"
+	"context"
+	"flag"
+	"log"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 
-	"github.com/auth0/terraform-provider-auth0/internal/provider"
+	"github.com/auth0/terraform-provider-auth0/v2/internal/provider"
 )
 
-// Ensure the documentation is formatted properly.
-//go:generate terraform fmt -recursive ./examples/
-
-// Generate documentation.
-//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
+// version is set by GoReleaser at build time via ldflags.
+var version = "dev"
 
 func main() {
-	// Set descriptions to support Markdown syntax,
-	// this will be used in document generation.
-	schema.DescriptionKind = schema.StringMarkdown
+	var debug bool
+	flag.BoolVar(&debug, "debug", false, "set to true to run the provider with support for debuggers like delve")
+	flag.Parse()
 
-	debug := false
-
-	if debugEnv, err := strconv.ParseBool(os.Getenv("TF_PROVIDER_AUTH0_DEBUG")); err == nil {
-		debug = debugEnv
+	opts := providerserver.ServeOpts{
+		Address: "registry.terraform.io/auth0/auth0",
+		Debug:   debug,
 	}
 
-	plugin.Serve(&plugin.ServeOpts{
-		ProviderFunc: provider.New,
-		Debug:        debug,
-	})
+	if err := providerserver.Serve(context.Background(), provider.New(version), opts); err != nil {
+		log.Fatal(err.Error())
+	}
 }

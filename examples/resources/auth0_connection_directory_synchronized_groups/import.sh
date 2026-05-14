@@ -1,1 +1,0 @@
-terraform import auth0_connection_directory_synchronized_groups.my_groups "con_XXXXXXXXXXXXXX"

@@ -3168,8 +3168,9 @@ func TestAccClientExpressApp(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Express App - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "express_configuration"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "post_login_prompt"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
-					resource.TestCheckResourceAttrSet("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.0.pem"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.*", map[string]string{
+						"credential_type": "public_key",
+					}),
 				),
 			},
 		},

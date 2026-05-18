@@ -13,8 +13,8 @@ import (
 )
 
 func TestRateLimitLoggingTransport_RateLimitHit(t *testing.T) {
-	// Create a test server that returns 429
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// Create a test server that returns 429.
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("X-RateLimit-Limit", "1000")
 		w.Header().Set("X-RateLimit-Remaining", "0")
 		w.Header().Set("X-RateLimit-Reset", strconv.Itoa(int(time.Now().Add(5*time.Second).Unix())))
@@ -22,23 +22,19 @@ func TestRateLimitLoggingTransport_RateLimitHit(t *testing.T) {
 	}))
 	defer server.Close()
 
-	// Create transport with metrics
 	metrics := &rateLimitMetrics{minRemaining: -1}
 	transport := newRateLimitLoggingTransport(http.DefaultTransport, metrics)
 	client := &http.Client{Transport: transport}
 
-	// Make request
 	req, err := http.NewRequestWithContext(context.Background(), "GET", server.URL, nil)
 	require.NoError(t, err)
 
 	resp, err := client.Do(req)
 	require.NoError(t, err)
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
-	// Verify response
 	assert.Equal(t, http.StatusTooManyRequests, resp.StatusCode)
 
-	// Verify metrics were recorded
 	assert.Equal(t, 1, metrics.totalRequests)
 	assert.Equal(t, 1, metrics.rateLimitHits)
 	assert.True(t, metrics.totalWaitDuration > 0)
@@ -46,8 +42,7 @@ func TestRateLimitLoggingTransport_RateLimitHit(t *testing.T) {
 }
 
 func TestRateLimitLoggingTransport_ProximityWarning_5Percent(t *testing.T) {
-	// Create a test server with 5% remaining (50 of 1000)
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("X-RateLimit-Limit", "1000")
 		w.Header().Set("X-RateLimit-Remaining", "50")
 		w.WriteHeader(http.StatusOK)
@@ -63,20 +58,17 @@ func TestRateLimitLoggingTransport_ProximityWarning_5Percent(t *testing.T) {
 
 	resp, err := client.Do(req)
 	require.NoError(t, err)
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
-	// Verify response
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 
-	// Verify metrics
 	assert.Equal(t, 1, metrics.totalRequests)
 	assert.Equal(t, 0, metrics.rateLimitHits)
 	assert.Equal(t, 50, metrics.minRemaining)
 }
 
 func TestRateLimitLoggingTransport_ProximityWarning_10Percent(t *testing.T) {
-	// Create a test server with 10% remaining (100 of 1000)
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("X-RateLimit-Limit", "1000")
 		w.Header().Set("X-RateLimit-Remaining", "100")
 		w.WriteHeader(http.StatusOK)
@@ -92,15 +84,14 @@ func TestRateLimitLoggingTransport_ProximityWarning_10Percent(t *testing.T) {
 
 	resp, err := client.Do(req)
 	require.NoError(t, err)
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	assert.Equal(t, 100, metrics.minRemaining)
 }
 
 func TestRateLimitLoggingTransport_NoWarning_Healthy(t *testing.T) {
-	// Create a test server with healthy remaining (500 of 1000 = 50%)
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("X-RateLimit-Limit", "1000")
 		w.Header().Set("X-RateLimit-Remaining", "500")
 		w.WriteHeader(http.StatusOK)
@@ -116,7 +107,7 @@ func TestRateLimitLoggingTransport_NoWarning_Healthy(t *testing.T) {
 
 	resp, err := client.Do(req)
 	require.NoError(t, err)
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	assert.Equal(t, 500, metrics.minRemaining)
@@ -126,12 +117,12 @@ func TestRateLimitLoggingTransport_NoWarning_Healthy(t *testing.T) {
 func TestRateLimitMetrics_RecordMultipleRequests(t *testing.T) {
 	metrics := &rateLimitMetrics{minRemaining: -1}
 
-	// Record several requests with different remaining values
+	// Record several requests with different remaining values.
 	metrics.recordRequest(1000, false, 0)
 	metrics.recordRequest(950, false, 0)
 	metrics.recordRequest(900, false, 0)
-	metrics.recordRequest(50, false, 0)           // Lowest
-	metrics.recordRequest(0, true, 5*time.Second) // Rate limited
+	metrics.recordRequest(50, false, 0)           // Lowest.
+	metrics.recordRequest(0, true, 5*time.Second) // Rate limited.
 
 	assert.Equal(t, 5, metrics.totalRequests)
 	assert.Equal(t, 1, metrics.rateLimitHits)
@@ -192,21 +183,21 @@ func TestRateLimitMetrics_EfficiencyScore(t *testing.T) {
 }
 
 func TestRateLimitMetrics_Summary_EmptyMetrics(t *testing.T) {
-	// Test that summary handles empty metrics gracefully
+	// Test that summary handles empty metrics gracefully.
 	metrics := &rateLimitMetrics{minRemaining: -1}
 	ctx := context.Background()
 
-	// Should not panic with zero requests
+	// Should not panic with zero requests.
 	metrics.logSummary(ctx)
 
 	assert.Equal(t, 0, metrics.totalRequests)
 }
 
 func TestRateLimitMetrics_ConcurrentAccess(t *testing.T) {
-	// Test that metrics are safe for concurrent access
+	// Test that metrics are safe for concurrent access.
 	metrics := &rateLimitMetrics{minRemaining: -1}
 
-	// Simulate concurrent requests
+	// Simulate concurrent requests.
 	done := make(chan bool)
 	for i := 0; i < 10; i++ {
 		go func(remaining int) {
@@ -215,7 +206,7 @@ func TestRateLimitMetrics_ConcurrentAccess(t *testing.T) {
 		}(i * 100)
 	}
 
-	// Wait for all goroutines
+	// Wait for all goroutines.
 	for i := 0; i < 10; i++ {
 		<-done
 	}
@@ -225,9 +216,9 @@ func TestRateLimitMetrics_ConcurrentAccess(t *testing.T) {
 }
 
 func TestRateLimitLoggingTransport_Integration(t *testing.T) {
-	// Integration test: multiple requests with varying rate limit statuses
+	// Integration test: multiple requests with varying rate limit statuses.
 	callCount := 0
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		callCount++
 		remaining := 1000 - (callCount * 100)
 
@@ -247,16 +238,15 @@ func TestRateLimitLoggingTransport_Integration(t *testing.T) {
 	transport := newRateLimitLoggingTransport(http.DefaultTransport, metrics)
 	client := &http.Client{Transport: transport}
 
-	// Make multiple requests
+	// Make multiple requests.
 	for i := 0; i < 12; i++ {
 		req, _ := http.NewRequestWithContext(context.Background(), "GET", server.URL, nil)
 		resp, err := client.Do(req)
 		require.NoError(t, err)
-		resp.Body.Close()
+		_ = resp.Body.Close()
 	}
 
-	// Verify metrics
 	assert.Equal(t, 12, metrics.totalRequests)
-	assert.Greater(t, metrics.rateLimitHits, 0) // Should have hit rate limit
-	assert.Equal(t, 0, metrics.minRemaining)    // Should have reached 0
+	assert.Greater(t, metrics.rateLimitHits, 0) // Should have hit rate limit.
+	assert.Equal(t, 0, metrics.minRemaining)    // Should have reached 0.
 }

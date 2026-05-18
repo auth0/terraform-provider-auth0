@@ -148,14 +148,14 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 
 	data.SetId(foundOrganization.GetID())
 
-  var foundConnections []*managementv2.OrganizationAllConnectionPost
-  skipClientGrants := data.Get("skip_client_grants").(bool)
-  if !skipClientGrants {
-    foundConnections, err = fetchAllOrganizationConnectionsV2(ctx, apiv2, foundOrganization.GetID())
-    if err != nil {
-        return diag.FromErr(internalError.HandleAPIError(data, err))
-     }
-  }  
+	var foundConnections []*managementv2.OrganizationAllConnectionPost
+	skipClientGrants := data.Get("skip_client_grants").(bool)
+	if !skipClientGrants {
+		foundConnections, err = fetchAllOrganizationConnectionsV2(ctx, apiv2, foundOrganization.GetID())
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+	}
 
 	var foundMembers []management.OrganizationMember
 	skipMembers := data.Get("skip_members").(bool)
@@ -167,7 +167,7 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 	}
 
 	var foundClientGrants []*management.ClientGrant
-	skipClientGrants := data.Get("skip_client_grants").(bool)
+	skipClientGrants = data.Get("skip_client_grants").(bool)
 	if !skipClientGrants {
 		foundClientGrants, err = fetchAllOrganizationClientGrants(ctx, api, foundOrganization.GetID())
 		if err != nil {

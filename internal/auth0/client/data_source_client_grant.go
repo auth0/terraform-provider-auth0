@@ -26,6 +26,11 @@ func NewClientGrantsDataSource() *schema.Resource {
 				Optional:    true,
 				Description: "The audience to filter by.",
 			},
+			"default_for": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Filter by default_for value (e.g., `third_party_clients`).",
+			},
 			"client_grants": {
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -63,6 +68,11 @@ func NewClientGrantsDataSource() *schema.Resource {
 							Computed:    true,
 							Description: "When enabled, all scopes configured on the resource server are allowed for this client grant. EA Only.",
 						},
+						"default_for": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Indicates this grant is the default for a category of clients.",
+						},
 					},
 				},
 			},
@@ -88,6 +98,9 @@ func dataSourceClientGrantsRead(ctx context.Context, data *schema.ResourceData, 
 	}
 	if audience != "" {
 		options = append(options, management.Parameter("audience", audience))
+	}
+	if defaultFor := data.Get("default_for").(string); defaultFor != "" {
+		options = append(options, management.Parameter("default_for", defaultFor))
 	}
 
 	for {
@@ -118,6 +131,7 @@ func dataSourceClientGrantsRead(ctx context.Context, data *schema.ResourceData, 
 			"scope":            cg.GetScope(),
 			"subject_type":     cg.GetSubjectType(),
 			"allow_all_scopes": cg.GetAllowAllScopes(),
+			"default_for":      cg.GetDefaultFor(),
 		}
 		flattened = append(flattened, item)
 	}

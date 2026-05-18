@@ -133,6 +133,16 @@ var eventBridgeConfig = &schema.Resource{
 	},
 }
 
+var actionConfig = &schema.Resource{
+	Schema: map[string]*schema.Schema{
+		"action_id": {
+			Type:        schema.TypeString,
+			Required:    true,
+			Description: "The ID of the Auth0 Action to use as the event stream destination.",
+		},
+	},
+}
+
 // NewResource returns the auth0_event_stream resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -151,9 +161,11 @@ func NewResource() *schema.Resource {
 				Description: "The name of the event stream.",
 			},
 			"status": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The current status of the event stream.",
+				Type:         schema.TypeString,
+				Computed:     true,
+				Optional:     true,
+				ValidateFunc: validation.StringInSlice([]string{"enabled", "disabled"}, false),
+				Description:  "The current status of the event stream. Can be `enabled` or `disabled`.",
 			},
 			"subscriptions": {
 				Type:        schema.TypeList,
@@ -165,8 +177,8 @@ func NewResource() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				Description:  "The type of event stream destination (either 'eventbridge' or 'webhook').",
-				ValidateFunc: validation.StringInSlice([]string{"eventbridge", "webhook"}, false),
+				Description:  "The type of event stream destination. Possible values: `eventbridge`, `webhook`, or `action`.",
+				ValidateFunc: validation.StringInSlice([]string{"eventbridge", "webhook", "action"}, false),
 			},
 			"eventbridge_configuration": {
 				Type:     schema.TypeList,
@@ -177,7 +189,7 @@ func NewResource() *schema.Resource {
 					"This block is only applicable when `destination_type` is set to `eventbridge`. " +
 					"EventBridge configurations **cannot** be updated after creation. " +
 					"Any change to this block will force the resource to be recreated.",
-				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration"},
+				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration", "action_configuration"},
 				Elem:         eventBridgeConfig,
 			},
 			"webhook_configuration": {
@@ -188,8 +200,20 @@ func NewResource() *schema.Resource {
 					"This block is only applicable when `destination_type` is set to `webhook`. " +
 					"Webhook configurations **can** be updated after creation, including the " +
 					"endpoint and authorization fields.",
-				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration"},
+				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration", "action_configuration"},
 				Elem:         webhookConfig,
+			},
+			"action_configuration": {
+				Type:     schema.TypeList,
+				Optional: true,
+				ForceNew: true,
+				MaxItems: 1,
+				Description: "Configuration for the Action destination. " +
+					"This block is only applicable when `destination_type` is set to `action`. " +
+					"Action configurations **cannot** be updated after creation. " +
+					"Any change to this block will force the resource to be recreated.",
+				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration", "action_configuration"},
+				Elem:         actionConfig,
 			},
 			"created_at": {
 				Type:        schema.TypeString,

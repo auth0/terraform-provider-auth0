@@ -22,11 +22,15 @@ import (
 )
 
 const (
-	idleSessionLifetimeDefault          = 72.00
-	sessionLifetimeDefault              = 168.00
-	ephemeralSessionLifetimeDefault     = 1.00 // 1 hour.
-	idleEphemeralSessionLifetimeDefault = 1.00 // 1 hour.
-	enableClientConnectionsDefault      = true
+	idleSessionLifetimeDefault                 = 72.00
+	sessionLifetimeDefault                     = 168.00
+	ephemeralSessionLifetimeDefault            = 72.00
+	idleEphemeralSessionLifetimeDefault        = 24.00
+	enableClientConnectionsDefault             = true
+	oidcLogoutPromptEnabledDefault             = true
+	rpLogoutEndSessionEndpointDiscoveryDefault = true
+	enablePipeline2Default                     = true
+	disableManagementAPISMSObfuscationDefault  = true
 )
 
 // NewResource will return a new auth0_tenant resource.
@@ -156,7 +160,7 @@ func NewResource() *schema.Resource {
 						"enable_pipeline2": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Computed:    true,
+							Default:     enablePipeline2Default,
 							Description: "Indicates whether advanced API Authorization scenarios are enabled.",
 						},
 						"enable_dynamic_client_registration": {
@@ -242,7 +246,7 @@ func NewResource() *schema.Resource {
 						"disable_management_api_sms_obfuscation": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Computed:    true,
+							Default:     disableManagementAPISMSObfuscationDefault,
 							Description: "If true, SMS phone numbers will not be obfuscated in Management API GET calls.",
 						},
 						"enable_adfs_waad_email_verification": {
@@ -463,6 +467,30 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				Description: "When enabled, the tenant-level Phone Provider is used for Multi-Factor Authentication (MFA) and Passwordless phone notifications.",
+			},
+			"client_id_metadata_document_supported": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Whether the tenant supports Client ID Metadata Document (CIMD) for client registration.",
+			},
+			"resource_parameter_profile": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"audience", "compatibility"}, false),
+				Description: "Profile that determines how the protected resource identity is specified in OAuth " +
+					"endpoints. When set to `audience` (default), the `audience` parameter is used. When set " +
+					"to `compatibility`, the `resource` parameter is used as fallback if `audience` is not provided.",
+			},
+			"dynamic_client_registration_security_mode": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"strict", "permissive"}, false),
+				Description: "Sets the third_party_security_mode assigned to clients created via Dynamic Client Registration. " +
+					"Can only be configured by [customers with pre-existing third-party client usage before April 2026]" +
+					"(https://auth0.com/docs/get-started/applications/third-party-applications/permissive-mode#dynamic-client-registration-in-permissive-mode).",
 			},
 		},
 	}

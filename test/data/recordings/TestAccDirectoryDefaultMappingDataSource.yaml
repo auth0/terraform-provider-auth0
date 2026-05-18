@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 587
+        content_length: 612
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","display_name":"Acceptance-Test-Directory-TestAccDirectoryDefaultMappingDataSource","strategy":"google-apps","is_domain_connection":false,"show_as_button":false,"options":{"client_id":"","client_secret":"","domain":"example.com","tenant_domain":"example.com","ext_profile":true,"ext_groups":true,"api_enable_users":true,"set_user_root_attributes":"on_first_login","map_user_id_to_id":true,"domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+            {"name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","display_name":"Acceptance-Test-Directory-TestAccDirectoryDefaultMappingDataSource","strategy":"google-apps","is_domain_connection":false,"show_as_button":false,"options":{"client_id":"","client_secret":"","domain":"example.com","tenant_domain":"example.com","ext_profile":true,"ext_groups":true,"api_enable_users":true,"api_enable_groups":true,"set_user_root_attributes":"on_first_login","map_user_id_to_id":true,"domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.32.1
+                - Go-Auth0/1.39.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -28,15 +28,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 974
+        content_length: 998
         uncompressed: false
-        body: '{"id":"con_cwY9WGSvfgefPxWj","options":{"client_id":"","client_secret":"","domain":"example.com","tenant_domain":"example.com","ext_profile":true,"ext_groups":true,"api_enable_users":true,"set_user_root_attributes":"on_first_login","map_user_id_to_id":true,"domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"email":true,"profile":true,"scope":["email","profile"],"handle_login_from_social":true},"strategy":"google-apps","name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","provisioning_ticket_url":"https://login.eu.auth0.com/terraform-provider-auth0-dev/p/google-apps/6p7wdxBZ","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-Directory-TestAccDirectoryDefaultMappingDataSource","enabled_clients":[],"realms":["Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource"]}'
+        body: '{"id":"con_v1OIHa0yz0h7Cmp6","options":{"client_id":"","client_secret":"","domain":"example.com","tenant_domain":"example.com","ext_profile":true,"ext_groups":true,"api_enable_users":true,"api_enable_groups":true,"set_user_root_attributes":"on_first_login","map_user_id_to_id":true,"domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"email":true,"profile":true,"scope":["email","profile"],"handle_login_from_social":true},"strategy":"google-apps","name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","provisioning_ticket_url":"https://login.us.auth0.com/terraform-provider-auth0-dev/p/google-apps/54CP8WzB","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-Directory-TestAccDirectoryDefaultMappingDataSource","enabled_clients":[],"realms":["Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 365.308ms
+        duration: 486.583542ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -52,8 +52,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_cwY9WGSvfgefPxWj
+                - Go-Auth0/1.39.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v1OIHa0yz0h7Cmp6
         method: GET
       response:
         proto: HTTP/2.0
@@ -63,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_cwY9WGSvfgefPxWj","options":{"email":true,"scope":["email","profile"],"domain":"example.com","profile":true,"client_id":"","ext_groups":true,"ext_profile":true,"client_secret":"","tenant_domain":"example.com","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"map_user_id_to_id":true,"handle_login_from_social":true,"set_user_root_attributes":"on_first_login"},"strategy":"google-apps","name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","provisioning_ticket_url":"https://login.eu.auth0.com/terraform-provider-auth0-dev/p/google-apps/6p7wdxBZ","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-Directory-TestAccDirectoryDefaultMappingDataSource","enabled_clients":[],"realms":["Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource"]}'
+        body: '{"id":"con_v1OIHa0yz0h7Cmp6","options":{"email":true,"scope":["email","profile"],"domain":"example.com","profile":true,"client_id":"","ext_groups":true,"ext_profile":true,"client_secret":"","tenant_domain":"example.com","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"api_enable_groups":true,"map_user_id_to_id":true,"handle_login_from_social":true,"set_user_root_attributes":"on_first_login"},"strategy":"google-apps","name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","provisioning_ticket_url":"https://login.us.auth0.com/terraform-provider-auth0-dev/p/google-apps/54CP8WzB","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-Directory-TestAccDirectoryDefaultMappingDataSource","enabled_clients":[],"realms":["Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 366.03025ms
+        duration: 364.392833ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -86,7 +86,7 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_cwY9WGSvfgefPxWj/directory-provisioning
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v1OIHa0yz0h7Cmp6/directory-provisioning
         method: POST
       response:
         proto: HTTP/2.0
@@ -96,13 +96,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"connection_id":"con_cwY9WGSvfgefPxWj","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"app_metadata.external_id"},{"idp":"primaryEmail","auth0":"email"},{"idp":"primaryEmail","auth0":"primaryEmail"},{"idp":"name.fullName","auth0":"name"},{"idp":"name.givenName","auth0":"given_name"},{"idp":"name.familyName","auth0":"family_name"},{"idp":"isAdmin","auth0":"isAdmin"},{"idp":"isAdmin","auth0":"is_admin"},{"idp":"isDelegatedAdmin","auth0":"isDelegatedAdmin"},{"idp":"agreedToTerms","auth0":"agreedToTerms"},{"idp":"agreedToTerms","auth0":"tou_accepted"},{"idp":"suspended","auth0":"suspended"},{"idp":"suspended","auth0":"is_suspended"},{"idp":"suspended","auth0":"blocked"},{"idp":"suspensionReason","auth0":"suspensionReason"},{"idp":"archived","auth0":"archived"},{"idp":"ipWhitelisted","auth0":"ipWhitelisted"},{"idp":"ipWhitelisted","auth0":"is_ipWhitelisted"},{"idp":"kind","auth0":"kind"},{"idp":"etag","auth0":"etag"},{"idp":"customerId","auth0":"customerId"},{"idp":"orgUnitPath","auth0":"orgUnitPath"},{"idp":"emails","auth0":"emails"},{"idp":"phones","auth0":"phones"},{"idp":"externalIds","auth0":"externalIds"},{"idp":"aliases","auth0":"aliases"},{"idp":"addresses","auth0":"addresses"},{"idp":"organizations","auth0":"organizations"},{"idp":"nonEditableAliases","auth0":"nonEditableAliases"},{"idp":"relations","auth0":"relations"},{"idp":"languages","auth0":"languages"},{"idp":"posixAccounts","auth0":"posixAccounts"},{"idp":"notes","auth0":"notes"},{"idp":"websites","auth0":"websites"},{"idp":"locations","auth0":"locations"},{"idp":"keywords","auth0":"keywords"},{"idp":"gender","auth0":"gender"},{"idp":"ims","auth0":"ims"},{"idp":"creationTime","auth0":"creationTime"},{"idp":"lastLoginTime","auth0":"lastLoginTime"},{"idp":"changePasswordAtNextLogin","auth0":"changePasswordAtNextLogin"},{"idp":"isMailboxSetup","auth0":"isMailboxSetup"},{"idp":"includeInGlobalAddressList","auth0":"includeInGlobalAddressList"},{"idp":"thumbnailPhotoUrl","auth0":"thumbnailPhotoUrl"},{"idp":"thumbnailPhotoEtag","auth0":"thumbnailPhotoEtag"},{"idp":"isEnrolledIn2Sv","auth0":"isEnrolledIn2Sv"},{"idp":"isEnforcedIn2Sv","auth0":"isEnforcedIn2Sv"},{"idp":"recoveryEmail","auth0":"recoveryEmail"},{"idp":"recoveryPhone","auth0":"recoveryPhone"},{"idp":"sshPublicKeys","auth0":"sshPublicKeys"},{"idp":"customSchemas","auth0":"customSchemas"}],"synchronize_automatically":false,"created_at":"2025-12-22T07:39:36.084Z","updated_at":"2025-12-22T07:39:36.084Z"}'
+        body: '{"connection_id":"con_v1OIHa0yz0h7Cmp6","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"app_metadata.external_id"},{"idp":"primaryEmail","auth0":"email"},{"idp":"primaryEmail","auth0":"primaryEmail"},{"idp":"name.fullName","auth0":"name"},{"idp":"name.givenName","auth0":"given_name"},{"idp":"name.familyName","auth0":"family_name"},{"idp":"isAdmin","auth0":"isAdmin"},{"idp":"isAdmin","auth0":"is_admin"},{"idp":"isDelegatedAdmin","auth0":"isDelegatedAdmin"},{"idp":"agreedToTerms","auth0":"agreedToTerms"},{"idp":"agreedToTerms","auth0":"tou_accepted"},{"idp":"suspended","auth0":"suspended"},{"idp":"suspended","auth0":"is_suspended"},{"idp":"suspended","auth0":"blocked"},{"idp":"suspensionReason","auth0":"suspensionReason"},{"idp":"archived","auth0":"archived"},{"idp":"ipWhitelisted","auth0":"ipWhitelisted"},{"idp":"ipWhitelisted","auth0":"is_ipWhitelisted"},{"idp":"kind","auth0":"kind"},{"idp":"etag","auth0":"etag"},{"idp":"customerId","auth0":"customerId"},{"idp":"orgUnitPath","auth0":"orgUnitPath"},{"idp":"emails","auth0":"emails"},{"idp":"phones","auth0":"phones"},{"idp":"externalIds","auth0":"externalIds"},{"idp":"aliases","auth0":"aliases"},{"idp":"addresses","auth0":"addresses"},{"idp":"organizations","auth0":"organizations"},{"idp":"nonEditableAliases","auth0":"nonEditableAliases"},{"idp":"relations","auth0":"relations"},{"idp":"languages","auth0":"languages"},{"idp":"posixAccounts","auth0":"posixAccounts"},{"idp":"notes","auth0":"notes"},{"idp":"websites","auth0":"websites"},{"idp":"locations","auth0":"locations"},{"idp":"keywords","auth0":"keywords"},{"idp":"gender","auth0":"gender"},{"idp":"ims","auth0":"ims"},{"idp":"creationTime","auth0":"creationTime"},{"idp":"lastLoginTime","auth0":"lastLoginTime"},{"idp":"changePasswordAtNextLogin","auth0":"changePasswordAtNextLogin"},{"idp":"isMailboxSetup","auth0":"isMailboxSetup"},{"idp":"includeInGlobalAddressList","auth0":"includeInGlobalAddressList"},{"idp":"thumbnailPhotoUrl","auth0":"thumbnailPhotoUrl"},{"idp":"thumbnailPhotoEtag","auth0":"thumbnailPhotoEtag"},{"idp":"isEnrolledIn2Sv","auth0":"isEnrolledIn2Sv"},{"idp":"isEnforcedIn2Sv","auth0":"isEnforcedIn2Sv"},{"idp":"recoveryEmail","auth0":"recoveryEmail"},{"idp":"recoveryPhone","auth0":"recoveryPhone"},{"idp":"sshPublicKeys","auth0":"sshPublicKeys"},{"idp":"customSchemas","auth0":"customSchemas"}],"synchronize_automatically":false,"created_at":"2026-05-05T12:05:34.828Z","updated_at":"2026-05-05T12:05:34.828Z","synchronize_groups":"off"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 278.0095ms
+        duration: 421.135917ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -119,7 +119,7 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_cwY9WGSvfgefPxWj/directory-provisioning
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v1OIHa0yz0h7Cmp6/directory-provisioning
         method: GET
       response:
         proto: HTTP/2.0
@@ -129,13 +129,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"connection_id":"con_cwY9WGSvfgefPxWj","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"app_metadata.external_id"},{"idp":"primaryEmail","auth0":"email"},{"idp":"primaryEmail","auth0":"primaryEmail"},{"idp":"name.fullName","auth0":"name"},{"idp":"name.givenName","auth0":"given_name"},{"idp":"name.familyName","auth0":"family_name"},{"idp":"isAdmin","auth0":"isAdmin"},{"idp":"isAdmin","auth0":"is_admin"},{"idp":"isDelegatedAdmin","auth0":"isDelegatedAdmin"},{"idp":"agreedToTerms","auth0":"agreedToTerms"},{"idp":"agreedToTerms","auth0":"tou_accepted"},{"idp":"suspended","auth0":"suspended"},{"idp":"suspended","auth0":"is_suspended"},{"idp":"suspended","auth0":"blocked"},{"idp":"suspensionReason","auth0":"suspensionReason"},{"idp":"archived","auth0":"archived"},{"idp":"ipWhitelisted","auth0":"ipWhitelisted"},{"idp":"ipWhitelisted","auth0":"is_ipWhitelisted"},{"idp":"kind","auth0":"kind"},{"idp":"etag","auth0":"etag"},{"idp":"customerId","auth0":"customerId"},{"idp":"orgUnitPath","auth0":"orgUnitPath"},{"idp":"emails","auth0":"emails"},{"idp":"phones","auth0":"phones"},{"idp":"externalIds","auth0":"externalIds"},{"idp":"aliases","auth0":"aliases"},{"idp":"addresses","auth0":"addresses"},{"idp":"organizations","auth0":"organizations"},{"idp":"nonEditableAliases","auth0":"nonEditableAliases"},{"idp":"relations","auth0":"relations"},{"idp":"languages","auth0":"languages"},{"idp":"posixAccounts","auth0":"posixAccounts"},{"idp":"notes","auth0":"notes"},{"idp":"websites","auth0":"websites"},{"idp":"locations","auth0":"locations"},{"idp":"keywords","auth0":"keywords"},{"idp":"gender","auth0":"gender"},{"idp":"ims","auth0":"ims"},{"idp":"creationTime","auth0":"creationTime"},{"idp":"lastLoginTime","auth0":"lastLoginTime"},{"idp":"changePasswordAtNextLogin","auth0":"changePasswordAtNextLogin"},{"idp":"isMailboxSetup","auth0":"isMailboxSetup"},{"idp":"includeInGlobalAddressList","auth0":"includeInGlobalAddressList"},{"idp":"thumbnailPhotoUrl","auth0":"thumbnailPhotoUrl"},{"idp":"thumbnailPhotoEtag","auth0":"thumbnailPhotoEtag"},{"idp":"isEnrolledIn2Sv","auth0":"isEnrolledIn2Sv"},{"idp":"isEnforcedIn2Sv","auth0":"isEnforcedIn2Sv"},{"idp":"recoveryEmail","auth0":"recoveryEmail"},{"idp":"recoveryPhone","auth0":"recoveryPhone"},{"idp":"sshPublicKeys","auth0":"sshPublicKeys"},{"idp":"customSchemas","auth0":"customSchemas"}],"synchronize_automatically":false,"created_at":"2025-12-22T07:39:36.084Z","updated_at":"2025-12-22T07:39:36.084Z"}'
+        body: '{"connection_id":"con_v1OIHa0yz0h7Cmp6","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"app_metadata.external_id"},{"idp":"primaryEmail","auth0":"email"},{"idp":"primaryEmail","auth0":"primaryEmail"},{"idp":"name.fullName","auth0":"name"},{"idp":"name.givenName","auth0":"given_name"},{"idp":"name.familyName","auth0":"family_name"},{"idp":"isAdmin","auth0":"isAdmin"},{"idp":"isAdmin","auth0":"is_admin"},{"idp":"isDelegatedAdmin","auth0":"isDelegatedAdmin"},{"idp":"agreedToTerms","auth0":"agreedToTerms"},{"idp":"agreedToTerms","auth0":"tou_accepted"},{"idp":"suspended","auth0":"suspended"},{"idp":"suspended","auth0":"is_suspended"},{"idp":"suspended","auth0":"blocked"},{"idp":"suspensionReason","auth0":"suspensionReason"},{"idp":"archived","auth0":"archived"},{"idp":"ipWhitelisted","auth0":"ipWhitelisted"},{"idp":"ipWhitelisted","auth0":"is_ipWhitelisted"},{"idp":"kind","auth0":"kind"},{"idp":"etag","auth0":"etag"},{"idp":"customerId","auth0":"customerId"},{"idp":"orgUnitPath","auth0":"orgUnitPath"},{"idp":"emails","auth0":"emails"},{"idp":"phones","auth0":"phones"},{"idp":"externalIds","auth0":"externalIds"},{"idp":"aliases","auth0":"aliases"},{"idp":"addresses","auth0":"addresses"},{"idp":"organizations","auth0":"organizations"},{"idp":"nonEditableAliases","auth0":"nonEditableAliases"},{"idp":"relations","auth0":"relations"},{"idp":"languages","auth0":"languages"},{"idp":"posixAccounts","auth0":"posixAccounts"},{"idp":"notes","auth0":"notes"},{"idp":"websites","auth0":"websites"},{"idp":"locations","auth0":"locations"},{"idp":"keywords","auth0":"keywords"},{"idp":"gender","auth0":"gender"},{"idp":"ims","auth0":"ims"},{"idp":"creationTime","auth0":"creationTime"},{"idp":"lastLoginTime","auth0":"lastLoginTime"},{"idp":"changePasswordAtNextLogin","auth0":"changePasswordAtNextLogin"},{"idp":"isMailboxSetup","auth0":"isMailboxSetup"},{"idp":"includeInGlobalAddressList","auth0":"includeInGlobalAddressList"},{"idp":"thumbnailPhotoUrl","auth0":"thumbnailPhotoUrl"},{"idp":"thumbnailPhotoEtag","auth0":"thumbnailPhotoEtag"},{"idp":"isEnrolledIn2Sv","auth0":"isEnrolledIn2Sv"},{"idp":"isEnforcedIn2Sv","auth0":"isEnforcedIn2Sv"},{"idp":"recoveryEmail","auth0":"recoveryEmail"},{"idp":"recoveryPhone","auth0":"recoveryPhone"},{"idp":"sshPublicKeys","auth0":"sshPublicKeys"},{"idp":"customSchemas","auth0":"customSchemas"}],"synchronize_automatically":false,"created_at":"2026-05-05T12:05:34.828Z","updated_at":"2026-05-05T12:05:34.828Z","synchronize_groups":"off"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 254.797667ms
+        duration: 422.823ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -152,7 +152,7 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_cwY9WGSvfgefPxWj/directory-provisioning/default-mapping
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v1OIHa0yz0h7Cmp6/directory-provisioning/default-mapping
         method: GET
       response:
         proto: HTTP/2.0
@@ -168,7 +168,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 257.842542ms
+        duration: 388.965209ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -185,7 +185,7 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_cwY9WGSvfgefPxWj/directory-provisioning/default-mapping
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v1OIHa0yz0h7Cmp6/directory-provisioning/default-mapping
         method: GET
       response:
         proto: HTTP/2.0
@@ -201,7 +201,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 308.371166ms
+        duration: 370.029584ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -217,8 +217,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_cwY9WGSvfgefPxWj
+                - Go-Auth0/1.39.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v1OIHa0yz0h7Cmp6
         method: GET
       response:
         proto: HTTP/2.0
@@ -228,13 +228,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_cwY9WGSvfgefPxWj","options":{"email":true,"scope":["email","profile"],"domain":"example.com","profile":true,"client_id":"","ext_groups":true,"ext_profile":true,"client_secret":"","tenant_domain":"example.com","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"map_user_id_to_id":true,"handle_login_from_social":true,"set_user_root_attributes":"on_first_login"},"strategy":"google-apps","name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","provisioning_ticket_url":"https://login.eu.auth0.com/terraform-provider-auth0-dev/p/google-apps/6p7wdxBZ","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-Directory-TestAccDirectoryDefaultMappingDataSource","enabled_clients":[],"realms":["Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource"]}'
+        body: '{"id":"con_v1OIHa0yz0h7Cmp6","options":{"email":true,"scope":["email","profile"],"domain":"example.com","profile":true,"client_id":"","ext_groups":true,"ext_profile":true,"client_secret":"","tenant_domain":"example.com","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"api_enable_groups":true,"map_user_id_to_id":true,"handle_login_from_social":true,"set_user_root_attributes":"on_first_login"},"strategy":"google-apps","name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","provisioning_ticket_url":"https://login.us.auth0.com/terraform-provider-auth0-dev/p/google-apps/54CP8WzB","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-Directory-TestAccDirectoryDefaultMappingDataSource","enabled_clients":[],"realms":["Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 268.1775ms
+        duration: 358.848291ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -251,7 +251,7 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_cwY9WGSvfgefPxWj/directory-provisioning
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v1OIHa0yz0h7Cmp6/directory-provisioning
         method: GET
       response:
         proto: HTTP/2.0
@@ -261,13 +261,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"connection_id":"con_cwY9WGSvfgefPxWj","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"app_metadata.external_id"},{"idp":"primaryEmail","auth0":"email"},{"idp":"primaryEmail","auth0":"primaryEmail"},{"idp":"name.fullName","auth0":"name"},{"idp":"name.givenName","auth0":"given_name"},{"idp":"name.familyName","auth0":"family_name"},{"idp":"isAdmin","auth0":"isAdmin"},{"idp":"isAdmin","auth0":"is_admin"},{"idp":"isDelegatedAdmin","auth0":"isDelegatedAdmin"},{"idp":"agreedToTerms","auth0":"agreedToTerms"},{"idp":"agreedToTerms","auth0":"tou_accepted"},{"idp":"suspended","auth0":"suspended"},{"idp":"suspended","auth0":"is_suspended"},{"idp":"suspended","auth0":"blocked"},{"idp":"suspensionReason","auth0":"suspensionReason"},{"idp":"archived","auth0":"archived"},{"idp":"ipWhitelisted","auth0":"ipWhitelisted"},{"idp":"ipWhitelisted","auth0":"is_ipWhitelisted"},{"idp":"kind","auth0":"kind"},{"idp":"etag","auth0":"etag"},{"idp":"customerId","auth0":"customerId"},{"idp":"orgUnitPath","auth0":"orgUnitPath"},{"idp":"emails","auth0":"emails"},{"idp":"phones","auth0":"phones"},{"idp":"externalIds","auth0":"externalIds"},{"idp":"aliases","auth0":"aliases"},{"idp":"addresses","auth0":"addresses"},{"idp":"organizations","auth0":"organizations"},{"idp":"nonEditableAliases","auth0":"nonEditableAliases"},{"idp":"relations","auth0":"relations"},{"idp":"languages","auth0":"languages"},{"idp":"posixAccounts","auth0":"posixAccounts"},{"idp":"notes","auth0":"notes"},{"idp":"websites","auth0":"websites"},{"idp":"locations","auth0":"locations"},{"idp":"keywords","auth0":"keywords"},{"idp":"gender","auth0":"gender"},{"idp":"ims","auth0":"ims"},{"idp":"creationTime","auth0":"creationTime"},{"idp":"lastLoginTime","auth0":"lastLoginTime"},{"idp":"changePasswordAtNextLogin","auth0":"changePasswordAtNextLogin"},{"idp":"isMailboxSetup","auth0":"isMailboxSetup"},{"idp":"includeInGlobalAddressList","auth0":"includeInGlobalAddressList"},{"idp":"thumbnailPhotoUrl","auth0":"thumbnailPhotoUrl"},{"idp":"thumbnailPhotoEtag","auth0":"thumbnailPhotoEtag"},{"idp":"isEnrolledIn2Sv","auth0":"isEnrolledIn2Sv"},{"idp":"isEnforcedIn2Sv","auth0":"isEnforcedIn2Sv"},{"idp":"recoveryEmail","auth0":"recoveryEmail"},{"idp":"recoveryPhone","auth0":"recoveryPhone"},{"idp":"sshPublicKeys","auth0":"sshPublicKeys"},{"idp":"customSchemas","auth0":"customSchemas"}],"synchronize_automatically":false,"created_at":"2025-12-22T07:39:36.084Z","updated_at":"2025-12-22T07:39:36.084Z"}'
+        body: '{"connection_id":"con_v1OIHa0yz0h7Cmp6","connection_name":"Acceptance-Test-Directory-Connection-TestAccDirectoryDefaultMappingDataSource","strategy":"google-apps","mapping":[{"idp":"id","auth0":"app_metadata.external_id"},{"idp":"primaryEmail","auth0":"email"},{"idp":"primaryEmail","auth0":"primaryEmail"},{"idp":"name.fullName","auth0":"name"},{"idp":"name.givenName","auth0":"given_name"},{"idp":"name.familyName","auth0":"family_name"},{"idp":"isAdmin","auth0":"isAdmin"},{"idp":"isAdmin","auth0":"is_admin"},{"idp":"isDelegatedAdmin","auth0":"isDelegatedAdmin"},{"idp":"agreedToTerms","auth0":"agreedToTerms"},{"idp":"agreedToTerms","auth0":"tou_accepted"},{"idp":"suspended","auth0":"suspended"},{"idp":"suspended","auth0":"is_suspended"},{"idp":"suspended","auth0":"blocked"},{"idp":"suspensionReason","auth0":"suspensionReason"},{"idp":"archived","auth0":"archived"},{"idp":"ipWhitelisted","auth0":"ipWhitelisted"},{"idp":"ipWhitelisted","auth0":"is_ipWhitelisted"},{"idp":"kind","auth0":"kind"},{"idp":"etag","auth0":"etag"},{"idp":"customerId","auth0":"customerId"},{"idp":"orgUnitPath","auth0":"orgUnitPath"},{"idp":"emails","auth0":"emails"},{"idp":"phones","auth0":"phones"},{"idp":"externalIds","auth0":"externalIds"},{"idp":"aliases","auth0":"aliases"},{"idp":"addresses","auth0":"addresses"},{"idp":"organizations","auth0":"organizations"},{"idp":"nonEditableAliases","auth0":"nonEditableAliases"},{"idp":"relations","auth0":"relations"},{"idp":"languages","auth0":"languages"},{"idp":"posixAccounts","auth0":"posixAccounts"},{"idp":"notes","auth0":"notes"},{"idp":"websites","auth0":"websites"},{"idp":"locations","auth0":"locations"},{"idp":"keywords","auth0":"keywords"},{"idp":"gender","auth0":"gender"},{"idp":"ims","auth0":"ims"},{"idp":"creationTime","auth0":"creationTime"},{"idp":"lastLoginTime","auth0":"lastLoginTime"},{"idp":"changePasswordAtNextLogin","auth0":"changePasswordAtNextLogin"},{"idp":"isMailboxSetup","auth0":"isMailboxSetup"},{"idp":"includeInGlobalAddressList","auth0":"includeInGlobalAddressList"},{"idp":"thumbnailPhotoUrl","auth0":"thumbnailPhotoUrl"},{"idp":"thumbnailPhotoEtag","auth0":"thumbnailPhotoEtag"},{"idp":"isEnrolledIn2Sv","auth0":"isEnrolledIn2Sv"},{"idp":"isEnforcedIn2Sv","auth0":"isEnforcedIn2Sv"},{"idp":"recoveryEmail","auth0":"recoveryEmail"},{"idp":"recoveryPhone","auth0":"recoveryPhone"},{"idp":"sshPublicKeys","auth0":"sshPublicKeys"},{"idp":"customSchemas","auth0":"customSchemas"}],"synchronize_automatically":false,"created_at":"2026-05-05T12:05:34.828Z","updated_at":"2026-05-05T12:05:34.828Z","synchronize_groups":"off"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 246.431875ms
+        duration: 361.353833ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -284,7 +284,7 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_cwY9WGSvfgefPxWj/directory-provisioning/default-mapping
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v1OIHa0yz0h7Cmp6/directory-provisioning/default-mapping
         method: GET
       response:
         proto: HTTP/2.0
@@ -300,7 +300,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 236.414583ms
+        duration: 372.231708ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -317,7 +317,7 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_cwY9WGSvfgefPxWj/directory-provisioning
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v1OIHa0yz0h7Cmp6/directory-provisioning
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -333,7 +333,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 277.05125ms
+        duration: 385.453917ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -349,8 +349,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.32.1
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_cwY9WGSvfgefPxWj
+                - Go-Auth0/1.39.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v1OIHa0yz0h7Cmp6
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -360,10 +360,10 @@ interactions:
         trailer: {}
         content_length: 41
         uncompressed: false
-        body: '{"deleted_at":"2025-12-22T07:39:40.695Z"}'
+        body: '{"deleted_at":"2026-05-05T12:05:40.296Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 202 Accepted
         code: 202
-        duration: 287.364583ms
+        duration: 405.251208ms

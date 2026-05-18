@@ -17,6 +17,10 @@ func expandEventStream(data *schema.ResourceData) *management.EventStream {
 		Destination:   expandEventStreamDestination(data),
 	}
 
+	if status := cfg.GetAttr("status"); !status.IsNull() {
+		eventStream.Status = value.String(status)
+	}
+
 	return eventStream
 }
 
@@ -84,6 +88,19 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 			bridgeCfg := bridgeCfgList[0].(map[string]interface{})
 			configMap["aws_account_id"] = bridgeCfg["aws_account_id"]
 			configMap["aws_region"] = bridgeCfg["aws_region"]
+		}
+
+	case "action":
+		// Skip returning destination configuration for existing Action resources during updates
+		// since Action configuration cannot be updated.
+		// This prevents overwriting or reconfiguring the resource unintentionally.
+		if !data.IsNewResource() {
+			return nil
+		}
+		actionCfgList, ok := data.Get("action_configuration").([]interface{})
+		if ok && len(actionCfgList) > 0 {
+			actionCfg := actionCfgList[0].(map[string]interface{})
+			configMap["action_id"] = actionCfg["action_id"]
 		}
 	}
 

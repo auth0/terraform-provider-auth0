@@ -299,6 +299,48 @@ func flattenCustomPasswordHash(customPasswordHash *management.CustomPasswordHash
 	}
 }
 
+func flattenPasswordOptions(po *management.PasswordOptions) map[string]interface{} {
+	return map[string]interface{}{
+		"complexity":   []interface{}{flattenPasswordOptionsComplexity(po.GetComplexity())},
+		"profile_data": []interface{}{flattenPasswordOptionsProfileData(po.GetProfileData())},
+		"history":      []interface{}{flattenPasswordOptionsHistory(po.GetHistory())},
+		"dictionary":   []interface{}{flattenPasswordOptionsDictionary(po.GetDictionary())},
+	}
+}
+
+func flattenPasswordOptionsComplexity(c *management.PasswordOptionsComplexity) map[string]interface{} {
+	return map[string]interface{}{
+		"min_length":            c.GetMinLength(),
+		"character_types":       c.GetCharacterTypes(),
+		"character_type_rule":   c.GetCharacterTypeRule(),
+		"identical_characters":  c.GetIdenticalCharacters(),
+		"sequential_characters": c.GetSequentialCharacters(),
+		"max_length_exceeded":   c.GetMaxLengthExceeded(),
+	}
+}
+
+func flattenPasswordOptionsProfileData(p *management.PasswordOptionsProfileData) map[string]interface{} {
+	return map[string]interface{}{
+		"active":         p.GetActive(),
+		"blocked_fields": p.GetBlockedFields(),
+	}
+}
+
+func flattenPasswordOptionsHistory(h *management.PasswordOptionsHistory) map[string]interface{} {
+	return map[string]interface{}{
+		"active": h.GetActive(),
+		"size":   h.GetSize(),
+	}
+}
+
+func flattenPasswordOptionsDictionary(d *management.PasswordOptionsDictionary) map[string]interface{} {
+	return map[string]interface{}{
+		"active":  d.GetActive(),
+		"default": d.GetDefault(),
+		"custom":  d.GetCustom(),
+	}
+}
+
 func flattenAuthenticationMethodPasskey(passkeyAuthenticationMethod *management.PasskeyAuthenticationMethod) interface{} {
 	if passkeyAuthenticationMethod == nil {
 		return nil
@@ -468,6 +510,10 @@ func flattenConnectionOptionsAuth0(
 		optionsMap["custom_password_hash"] = []interface{}{flattenCustomPasswordHash(options.GetCustomPasswordHash())}
 	}
 
+	if options.PasswordOptions != nil {
+		optionsMap["password_options"] = []interface{}{flattenPasswordOptions(options.GetPasswordOptions())}
+	}
+
 	if options.PasswordComplexityOptions != nil {
 		optionsMap["password_complexity_options"] = []interface{}{options.PasswordComplexityOptions}
 	}
@@ -548,6 +594,7 @@ func flattenConnectionOptionsGoogleApps(
 		"domain":                   options.GetDomain(),
 		"tenant_domain":            options.GetTenantDomain(),
 		"api_enable_users":         options.GetEnableUsersAPI(),
+		"api_enable_groups":        options.GetEnableGroupsAPI(),
 		"scopes":                   options.Scopes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"domain_aliases":           options.GetDomainAliases(),
@@ -810,6 +857,8 @@ func flattenConnectionOptionsOIDC(
 		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
 		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
 		"dpop_signing_alg":                options.GetDPoPSigningAlg(),
+		"id_token_signed_response_algs":   options.GetIDTokenSignedResponseAlgs(),
+		"token_endpoint_jwtca_aud_format": options.GetTokenEndpointJwtcaAudFormat(),
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -870,6 +919,8 @@ func flattenConnectionOptionsOkta(
 		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
 		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
 		"dpop_signing_alg":                options.GetDPoPSigningAlg(),
+		"id_token_signed_response_algs":   options.GetIDTokenSignedResponseAlgs(),
+		"token_endpoint_jwtca_aud_format": options.GetTokenEndpointJwtcaAudFormat(),
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -1325,6 +1376,7 @@ func flattenDirectory(data *schema.ResourceData, directoryConfig *managementv2.G
 		data.Set("strategy", directoryConfig.GetStrategy()),
 		data.Set("mapping", flattenDirectoryMappings(directoryConfig.GetMapping())),
 		data.Set("synchronize_automatically", directoryConfig.GetSynchronizeAutomatically()),
+		data.Set("synchronize_groups", directoryConfig.GetSynchronizeGroups()),
 		data.Set("created_at", directoryConfig.GetCreatedAt().String()),
 		data.Set("updated_at", directoryConfig.GetUpdatedAt().String()),
 	)

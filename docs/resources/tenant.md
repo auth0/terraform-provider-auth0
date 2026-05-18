@@ -58,12 +58,14 @@ resource "auth0_tenant" "my_tenant" {
 - `acr_values_supported` (Set of String) List of supported ACR values.
 - `allow_organization_name_in_authentication_api` (Boolean) Whether to accept an organization name instead of an ID on auth endpoints.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
+- `client_id_metadata_document_supported` (Boolean) Whether the tenant supports Client ID Metadata Document (CIMD) for client registration.
 - `customize_mfa_in_postlogin_action` (Boolean) Whether to enable flexible factors for MFA in the PostLogin action.
 - `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
 - `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
 - `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
 - `default_token_quota` (Block List, Max: 1) Token Quota configuration. (see [below for nested schema](#nestedblock--default_token_quota))
 - `disable_acr_values_supported` (Boolean) Disable list of supported ACR values.
+- `dynamic_client_registration_security_mode` (String) Sets the third_party_security_mode assigned to clients created via Dynamic Client Registration. Can only be configured by [customers with pre-existing third-party client usage before April 2026](https://auth0.com/docs/get-started/applications/third-party-applications/permissive-mode#dynamic-client-registration-in-permissive-mode).
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
 - `ephemeral_session_lifetime` (Number) Number of hours an ephemeral (non-persistent) session will stay valid.
 - `error_page` (Block List, Max: 1) Configuration for the error page (see [below for nested schema](#nestedblock--error_page))
@@ -76,6 +78,7 @@ resource "auth0_tenant" "my_tenant" {
 - `phone_consolidated_experience` (Boolean) When enabled, the tenant-level Phone Provider is used for Multi-Factor Authentication (MFA) and Passwordless phone notifications.
 - `picture_url` (String) URL of logo to be shown for the tenant. Recommended size is 150px x 150px. If no URL is provided, the Auth0 logo will be used.
 - `pushed_authorization_requests_supported` (Boolean) Enable pushed authorization requests.
+- `resource_parameter_profile` (String) Profile that determines how the protected resource identity is specified in OAuth endpoints. When set to `audience` (default), the `audience` parameter is used. When set to `compatibility`, the `resource` parameter is used as fallback if `audience` is not provided.
 - `sandbox_version` (String) Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.
 - `session_cookie` (Block List, Max: 1) Alters behavior of tenant's session cookie. Contains a single `mode` property. (see [below for nested schema](#nestedblock--session_cookie))
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.

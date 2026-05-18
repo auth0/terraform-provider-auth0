@@ -46,13 +46,16 @@ resource "auth0_organization_connection" "my_org_conn" {
 ### Optional
 
 - `assign_membership_on_login` (Boolean) When `true`, all users that log in with this connection will be automatically granted membership in the organization. When `false`, users must be granted membership in the organization before logging in with this connection.
+- `is_enabled` (Boolean) Whether the connection is enabled for the organization.
 - `is_signup_enabled` (Boolean) Determines whether organization sign-up should be enabled for this organization connection. Only applicable for database connections. Note: `is_signup_enabled` can only be `true` if `assign_membership_on_login` is `true`.
-- `show_as_button` (Boolean) Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections.
+- `organization_access_level` (String) The access level for this organization connection. Can be `none`, `readonly`, `limited` or `full`.
+- `show_as_button` (Boolean) Determines whether a connection should be displayed on this organization's login prompt. Only applicable for enterprise connections.
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
 - `name` (String) The name of the enabled connection.
+- `organization_connection_name` (String) Name of the connection in the scope of this organization.
 - `strategy` (String) The strategy of the enabled connection.
 
 ## Import

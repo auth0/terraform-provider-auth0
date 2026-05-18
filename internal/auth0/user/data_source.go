@@ -40,31 +40,30 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "custom_domain_header")
 
-	dataSourceSchema["fetch_roles"] = &schema.Schema{
+	dataSourceSchema["skip_roles"] = &schema.Schema{
 		Type:     schema.TypeBool,
 		Optional: true,
 		Default:  false,
-		Description: "Whether to fetch user roles. Setting this to `true` will make additional " +
+		Description: "Whether to skip user roles. Setting this to `true` will skips " +
 			"paginated API calls to /api/v2/users/{id}/roles. Default: `false` to optimize " +
 			"performance and reduce rate limit consumption.",
 	}
 
-	dataSourceSchema["fetch_permissions"] = &schema.Schema{
+	dataSourceSchema["skip_permissions"] = &schema.Schema{
 		Type:     schema.TypeBool,
 		Optional: true,
 		Default:  false,
-		Description: "Whether to fetch user permissions. Setting this to `true` will make additional " +
+		Description: "Whether to skip user permissions. Setting this to `true` will skips " +
 			"paginated API calls to /api/v2/users/{id}/permissions. Default: `false` to optimize " +
 			"performance and reduce rate limit consumption.",
 	}
 
 	dataSourceSchema["permissions"] = &schema.Schema{
-		Type:        schema.TypeSet,
-		Computed:    true,
-		Description: "List of API permissions granted to the user. Only populated if " +
-			"`fetch_permissions` is `true`. When `fetch_permissions` is `false` (default), " +
-			"this will be an empty set to optimize performance and reduce rate limit consumption. " +
-			"Set `fetch_permissions = true` if you need to access this attribute.",
+		Type:     schema.TypeSet,
+		Computed: true,
+		Description: "List of API permissions granted to the user. Skips if " +
+			"`skip_permissions` is `true`. When `skip_permissions` is `true` (default), " +
+			"this will be an empty set to optimize performance and reduce rate limit consumption.",
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"name": {
@@ -97,10 +96,9 @@ func dataSourceSchema() map[string]*schema.Schema {
 		Elem: &schema.Schema{
 			Type: schema.TypeString,
 		},
-		Description: "Set of IDs of roles assigned to the user. Only populated if " +
-			"`fetch_roles` is `true`. When `fetch_roles` is `false` (default), " +
-			"this will be an empty set to optimize performance and reduce rate limit consumption. " +
-			"Set `fetch_roles = true` if you need to access this attribute.",
+		Description: "Set of IDs of roles assigned to the user. Skips if " +
+			"`skip_roles` is `true`. When `skip_roles` is `true` (default), " +
+			"this will be an empty set to optimize performance and reduce rate limit consumption.",
 	}
 
 	return dataSourceSchema
@@ -151,8 +149,8 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 
 	// Conditionally populate Roles for the retrieved User.
 	var roles []*management.Role
-	fetchRoles := data.Get("fetch_roles").(bool)
-	if fetchRoles {
+	skipRoles := data.Get("skip_roles").(bool)
+	if !skipRoles {
 		var rolesPage int
 		for {
 			roleList, err := api.User.Roles(ctx, user.GetID(), management.Page(rolesPage), management.PerPage(100))
@@ -172,8 +170,8 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 
 	// Conditionally populate Permissions for the retrieved User.
 	var permissions []*management.Permission
-	fetchPermissions := data.Get("fetch_permissions").(bool)
-	if fetchPermissions {
+	skipPermissions := data.Get("skip_permissions").(bool)
+	if !skipPermissions {
 		var permissionsPage int
 		for {
 			permissionList, err := api.User.Permissions(ctx, user.GetID(), management.Page(permissionsPage), management.PerPage(100))

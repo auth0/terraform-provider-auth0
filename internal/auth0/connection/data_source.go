@@ -33,11 +33,11 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema["name"].Description = "The name of the connection. If not provided, `connection_id` must be set."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"connection_id", "name"}
 
-	dataSourceSchema["fetch_enabled_clients"] = &schema.Schema{
+	dataSourceSchema["skip_enabled_clients"] = &schema.Schema{
 		Type:     schema.TypeBool,
 		Optional: true,
 		Default:  false,
-		Description: "Whether to fetch enabled clients for this connection. Setting this to `true` will make " +
+		Description: "Whether to skip enabled clients for this connection. Setting this to `true` will skip " +
 			"additional paginated API calls to /api/v2/connections/{id}/clients. Default: `false`.",
 	}
 
@@ -48,7 +48,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 		},
 		Computed: true,
 		Description: "IDs of the clients for which the connection is enabled. " +
-			"Only populated if `fetch_enabled_clients` is `true`.",
+			"Skips populating if `skip_enabled_clients` is `true`.",
 	}
 
 	return dataSourceSchema
@@ -67,8 +67,8 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 		data.SetId(connectionID)
 
 		var existingClients *management.ConnectionEnabledClientList
-		fetchEnabledClients := data.Get("fetch_enabled_clients").(bool)
-		if fetchEnabledClients {
+		skipEnabledClients := data.Get("skip_enabled_clients").(bool)
+		if !skipEnabledClients {
 			existingClients, err = GetAllEnabledClients(ctx, api, connection.GetID())
 			if err != nil {
 				return diag.FromErr(err)
@@ -100,8 +100,8 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 				data.SetId(connection.GetID())
 
 				var existingClients *management.ConnectionEnabledClientList
-				fetchEnabledClients := data.Get("fetch_enabled_clients").(bool)
-				if fetchEnabledClients {
+				skipEnabledClients := data.Get("skip_enabled_clients").(bool)
+				if !skipEnabledClients {
 					existingClients, err = GetAllEnabledClients(ctx, api, connection.GetID())
 					if err != nil {
 						return diag.FromErr(err)

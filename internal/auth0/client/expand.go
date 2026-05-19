@@ -1002,43 +1002,43 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 		}
 
 		if samlpAddon.DigestAlgorithm == nil {
-			samlpAddon.DigestAlgorithm = auth0.String("sha1")
+			samlpAddon.DigestAlgorithm = auth0.String(samlDefault.digestAlgorithm)
 		}
 
 		if samlpAddon.NameIdentifierFormat == nil {
-			samlpAddon.NameIdentifierFormat = auth0.String("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified")
+			samlpAddon.NameIdentifierFormat = auth0.String(samlDefault.nameIdentifierFormat)
 		}
 
 		if samlpAddon.SignatureAlgorithm == nil {
-			samlpAddon.SignatureAlgorithm = auth0.String("rsa-sha1")
+			samlpAddon.SignatureAlgorithm = auth0.String(samlDefault.signatureAlgorithm)
 		}
 
 		if samlpAddon.LifetimeInSeconds == nil {
-			samlpAddon.LifetimeInSeconds = auth0.Int(3600)
+			samlpAddon.LifetimeInSeconds = auth0.Int(samlDefault.lifetimeInSeconds)
 		}
 
 		if samlpAddon.CreateUPNClaim == nil {
-			samlpAddon.CreateUPNClaim = auth0.Bool(true)
+			samlpAddon.CreateUPNClaim = auth0.Bool(samlDefault.createUPNClaim)
 		}
 
 		if samlpAddon.IncludeAttributeNameFormat == nil {
-			samlpAddon.IncludeAttributeNameFormat = auth0.Bool(true)
+			samlpAddon.IncludeAttributeNameFormat = auth0.Bool(samlDefault.includeAttributeNameFormat)
 		}
 
 		if samlpAddon.MapIdentities == nil {
-			samlpAddon.MapIdentities = auth0.Bool(true)
+			samlpAddon.MapIdentities = auth0.Bool(samlDefault.mapIdentities)
 		}
 
 		if samlpAddon.MapUnknownClaimsAsIs == nil {
-			samlpAddon.MapUnknownClaimsAsIs = auth0.Bool(false)
+			samlpAddon.MapUnknownClaimsAsIs = auth0.Bool(samlDefault.mapUnknownClaimsAsIs)
 		}
 
 		if samlpAddon.PassthroughClaimsWithNoMapping == nil {
-			samlpAddon.PassthroughClaimsWithNoMapping = auth0.Bool(true)
+			samlpAddon.PassthroughClaimsWithNoMapping = auth0.Bool(samlDefault.passthroughClaimsWithNoMapping)
 		}
 
 		if samlpAddon.TypedAttributes == nil {
-			samlpAddon.TypedAttributes = auth0.Bool(true)
+			samlpAddon.TypedAttributes = auth0.Bool(samlDefault.typedAttributes)
 		}
 
 		return stop

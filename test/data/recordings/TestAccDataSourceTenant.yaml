@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 851
+        content_length: 853
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"default_audience":"","default_directory":"","flags":{"disable_clickjack_protection_headers":true,"enable_public_signup_user_exists_error":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"disable_management_api_sms_obfuscation":false,"disable_fields_map_fix":false},"friendly_name":"My Test Tenant","picture_url":"https://mycompany.org/logo.png","support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","allowed_logout_urls":["https://mycompany.org/logoutCallback"],"session_lifetime":720,"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"sandbox_version":"18","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"session_cookie":{"mode":"non-persistent"},"mtls":{"enable_endpoint_aliases":true}}
+            {"default_audience":"","default_directory":"","flags":{"disable_clickjack_protection_headers":true,"enable_public_signup_user_exists_error":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"disable_management_api_sms_obfuscation":false,"disable_fields_map_fix":false},"friendly_name":"My Test Tenant","picture_url":"https://mycompany.org/logo.png","support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","allowed_logout_urls":["https://mycompany.org/logoutCallback"],"session_lifetime":720,"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"18","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"session_cookie":{"mode":"non-persistent"},"mtls":{"enable_endpoint_aliases":true}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: PATCH
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"},"is_custom_theme_set":true,"is_custom_template_set":false,"identifier_first":true,"webauthn_platform_first_factor":false},"session_cookie":{"mode":"non-persistent"}}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"mtls":{"enable_endpoint_aliases":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 345.161542ms
+        duration: 417.990834ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -54,7 +54,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: PATCH
       response:
@@ -65,13 +65,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"},"is_custom_theme_set":true,"is_custom_template_set":false,"identifier_first":true,"webauthn_platform_first_factor":false},"session_cookie":{"mode":"non-persistent"}}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"mtls":{"enable_endpoint_aliases":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 331.040167ms
+        duration: 454.368083ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -87,7 +87,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -98,13 +98,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"mtls":{"enable_endpoint_aliases":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 362.526625ms
+        duration: 418.278875ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -120,7 +120,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -131,13 +131,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"mtls":{"enable_endpoint_aliases":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 370.722125ms
+        duration: 523.382959ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -153,7 +153,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -164,13 +164,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"mtls":{"enable_endpoint_aliases":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 420.185917ms
+        duration: 400.132417ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -186,7 +186,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -197,13 +197,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"mtls":{"enable_endpoint_aliases":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 305.049375ms
+        duration: 394.274416ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -219,7 +219,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -230,13 +230,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"mtls":{"enable_endpoint_aliases":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 320.590834ms
+        duration: 378.473ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -252,7 +252,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -263,32 +263,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"mtls":{"enable_endpoint_aliases":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 309.092959ms
+        duration: 408.129333ms
     - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 785
+        content_length: 731
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"default_audience":"","default_directory":"","flags":{"disable_clickjack_protection_headers":true,"enable_public_signup_user_exists_error":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"disable_management_api_sms_obfuscation":false,"disable_fields_map_fix":false},"friendly_name":"My Test Tenant","picture_url":"https://mycompany.org/logo.png","support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","allowed_logout_urls":["https://mycompany.org/logoutCallback"],"session_lifetime":720,"ephemeral_session_lifetime":1,"sandbox_version":"18","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"session_cookie":{"mode":"non-persistent"},"acr_values_supported":["bar","foo"]}
+            {"default_audience":"","default_directory":"","flags":{"disable_clickjack_protection_headers":true,"enable_public_signup_user_exists_error":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"disable_management_api_sms_obfuscation":false,"disable_fields_map_fix":false},"friendly_name":"My Test Tenant","picture_url":"https://mycompany.org/logo.png","support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","allowed_logout_urls":["https://mycompany.org/logoutCallback"],"sandbox_version":"18","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"session_cookie":{"mode":"non-persistent"},"acr_values_supported":["bar","foo"]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: PATCH
       response:
@@ -299,13 +299,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"},"is_custom_theme_set":true,"is_custom_template_set":false,"identifier_first":true,"webauthn_platform_first_factor":false},"session_cookie":{"mode":"non-persistent"}}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"mtls":{"enable_endpoint_aliases":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 336.475292ms
+        duration: 510.951125ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -323,7 +323,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: PATCH
       response:
@@ -334,13 +334,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"},"is_custom_theme_set":true,"is_custom_template_set":false,"identifier_first":true,"webauthn_platform_first_factor":false},"session_cookie":{"mode":"non-persistent"}}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 337.967625ms
+        duration: 434.313584ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -356,7 +356,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -367,13 +367,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 351.04075ms
+        duration: 410.476375ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -389,7 +389,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -400,13 +400,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 410.356084ms
+        duration: 486.232208ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -422,7 +422,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -433,13 +433,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 300.665916ms
+        duration: 516.228291ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -455,7 +455,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -466,13 +466,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 292.518958ms
+        duration: 372.281458ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -488,7 +488,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.33.0
+                - Go-Auth0/1.40.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -499,10 +499,10 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 356.454333ms
+        duration: 383.134917ms

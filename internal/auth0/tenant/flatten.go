@@ -40,6 +40,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("phone_consolidated_experience", tenant.GetPhoneConsolidatedExperience()),
 		data.Set("client_id_metadata_document_supported", tenant.GetClientIDMetadataDocumentSupported()),
 		data.Set("resource_parameter_profile", tenant.GetResourceParameterProfile()),
+		data.Set("dynamic_client_registration_security_mode", tenant.GetDynamicClientRegistrationSecurityMode()),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {
@@ -51,10 +52,10 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 	}
 
 	if tenant.GetIdleEphemeralSessionLifetime() == 0 {
-		result = multierror.Append(result, data.Set("idle_ephemeral_session_lifetime", idleSessionLifetimeDefault))
+		result = multierror.Append(result, data.Set("idle_ephemeral_session_lifetime", idleEphemeralSessionLifetimeDefault))
 	}
 	if tenant.GetEphemeralSessionLifetime() == 0 {
-		result = multierror.Append(result, data.Set("ephemeral_session_lifetime", sessionLifetimeDefault))
+		result = multierror.Append(result, data.Set("ephemeral_session_lifetime", ephemeralSessionLifetimeDefault))
 	}
 
 	if tenant.GetACRValuesSupported() == nil {
@@ -78,13 +79,23 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	}
 
 	m := make(map[string]interface{})
+	// Set explicitly on nil as backend and Go defaults differ.
 	if flags.EnableClientConnections != nil {
 		m["enable_client_connections"] = *flags.EnableClientConnections
 	} else {
 		m["enable_client_connections"] = enableClientConnectionsDefault
 	}
+	if flags.EnablePipeline2 != nil {
+		m["enable_pipeline2"] = *flags.EnablePipeline2
+	} else {
+		m["enable_pipeline2"] = enablePipeline2Default
+	}
+	if flags.DisableManagementAPISMSObfuscation != nil {
+		m["disable_management_api_sms_obfuscation"] = *flags.DisableManagementAPISMSObfuscation
+	} else {
+		m["disable_management_api_sms_obfuscation"] = disableManagementAPISMSObfuscationDefault
+	}
 	m["enable_apis_section"] = flags.EnableAPIsSection
-	m["enable_pipeline2"] = flags.EnablePipeline2
 	m["enable_dynamic_client_registration"] = flags.EnableDynamicClientRegistration
 	m["enable_custom_domain_in_emails"] = flags.EnableCustomDomainInEmails
 	m["enable_sso"] = flags.EnableSSO
@@ -98,7 +109,6 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["enable_legacy_profile"] = flags.EnableLegacyProfile
 	m["enable_idtoken_api2"] = flags.EnableIDTokenAPI2
 	m["no_disclose_enterprise_connections"] = flags.NoDisclosureEnterpriseConnections
-	m["disable_management_api_sms_obfuscation"] = flags.DisableManagementAPISMSObfuscation
 	m["enable_adfs_waad_email_verification"] = flags.EnableADFSWAADEmailVerification
 	m["revoke_refresh_token_grant"] = flags.RevokeRefreshTokenGrant
 	m["dashboard_log_streams_next"] = flags.DashboardLogStreams
@@ -119,14 +129,21 @@ func flattenTenantSessionCookie(sessionCookie *management.TenantSessionCookie) [
 
 func flattenTenantSessions(sessions *management.TenantSessions) []interface{} {
 	m := make(map[string]interface{})
-	m["oidc_logout_prompt_enabled"] = sessions.GetOIDCLogoutPromptEnabled()
-
+	if sessions != nil && sessions.OIDCLogoutPromptEnabled != nil {
+		m["oidc_logout_prompt_enabled"] = *sessions.OIDCLogoutPromptEnabled
+	} else {
+		m["oidc_logout_prompt_enabled"] = oidcLogoutPromptEnabledDefault
+	}
 	return []interface{}{m}
 }
 
 func flattenTenantOidcLogout(oidcLogout *management.TenantOIDCLogout) []interface{} {
 	m := make(map[string]interface{})
-	m["rp_logout_end_session_endpoint_discovery"] = oidcLogout.GetOIDCResourceProviderLogoutEndSessionEndpointDiscovery()
+	if oidcLogout != nil && oidcLogout.OIDCResourceProviderLogoutEndSessionEndpointDiscovery != nil {
+		m["rp_logout_end_session_endpoint_discovery"] = *oidcLogout.OIDCResourceProviderLogoutEndSessionEndpointDiscovery
+	} else {
+		m["rp_logout_end_session_endpoint_discovery"] = rpLogoutEndSessionEndpointDiscoveryDefault
+	}
 
 	return []interface{}{m}
 }

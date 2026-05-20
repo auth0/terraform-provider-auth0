@@ -62,6 +62,7 @@ data "auth0_client_grants" "filter_by_client_id_and_audience" {
 
 - `audience` (String) The audience to filter by.
 - `client_id` (String) The ID of the client to filter by.
+- `default_for` (String) Filter by default_for value (e.g., `third_party_clients`).
 
 ### Read-Only
 
@@ -76,6 +77,7 @@ Read-Only:
 - `allow_all_scopes` (Boolean)
 - `audience` (String)
 - `client_id` (String)
+- `default_for` (String)
 - `id` (String)
 - `scope` (List of String)
 - `subject_type` (String)

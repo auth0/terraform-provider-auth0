@@ -68,6 +68,7 @@ Read-Only:
 - `access_token_url` (String)
 - `adfs_server` (String)
 - `allowed_audiences` (Set of String)
+- `api_enable_groups` (Boolean)
 - `api_enable_users` (Boolean)
 - `app_id` (String)
 - `attribute_map` (List of Object) (see [below for nested schema](#nestedobjatt--options--attribute_map))

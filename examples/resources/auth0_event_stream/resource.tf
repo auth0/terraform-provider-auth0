@@ -13,10 +13,11 @@ resource "auth0_event_stream" "my_event_stream_event_bridge" {
   }
 }
 
-# Creates an event stream of type webhook
+# Creates an event stream of type webhook in a disabled state
 resource "auth0_event_stream" "my_event_stream_webhook" {
   name             = "my-webhook"
   destination_type = "webhook"
+  status           = "disabled"
   subscriptions = [
     "user.created",
     "user.updated"

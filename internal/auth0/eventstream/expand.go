@@ -17,6 +17,10 @@ func expandEventStream(data *schema.ResourceData) *management.EventStream {
 		Destination:   expandEventStreamDestination(data),
 	}
 
+	if status := cfg.GetAttr("status"); !status.IsNull() {
+		eventStream.Status = value.String(status)
+	}
+
 	return eventStream
 }
 

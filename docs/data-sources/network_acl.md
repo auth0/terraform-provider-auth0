@@ -59,8 +59,11 @@ Read-Only:
 Read-Only:
 
 - `asns` (List of Number)
+- `connecting_ipv4_cidrs` (List of String)
+- `connecting_ipv6_cidrs` (List of String)
 - `geo_country_codes` (List of String)
 - `geo_subdivision_codes` (List of String)
+- `hostnames` (List of String)
 - `ipv4_cidrs` (List of String)
 - `ipv6_cidrs` (List of String)
 - `ja3_fingerprints` (List of String)
@@ -74,8 +77,11 @@ Read-Only:
 Read-Only:
 
 - `asns` (List of Number)
+- `connecting_ipv4_cidrs` (List of String)
+- `connecting_ipv6_cidrs` (List of String)
 - `geo_country_codes` (List of String)
 - `geo_subdivision_codes` (List of String)
+- `hostnames` (List of String)
 - `ipv4_cidrs` (List of String)
 - `ipv6_cidrs` (List of String)
 - `ja3_fingerprints` (List of String)

@@ -123,6 +123,18 @@ func flattenNetworkACLRule(match *management.NetworkACLRuleMatch) []interface{} 
 		m["user_agents"] = *match.UserAgents
 	}
 
+	if match.Hostnames != nil && len(*match.Hostnames) > 0 {
+		m["hostnames"] = *match.Hostnames
+	}
+
+	if match.ConnectingIPv4Cidrs != nil && len(*match.ConnectingIPv4Cidrs) > 0 {
+		m["connecting_ipv4_cidrs"] = *match.ConnectingIPv4Cidrs
+	}
+
+	if match.ConnectingIPv6Cidrs != nil && len(*match.ConnectingIPv6Cidrs) > 0 {
+		m["connecting_ipv6_cidrs"] = *match.ConnectingIPv6Cidrs
+	}
+
 	// Only return a non-empty map.
 	if len(m) > 0 {
 		return []interface{}{m}

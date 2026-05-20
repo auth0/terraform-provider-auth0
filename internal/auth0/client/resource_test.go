@@ -3168,8 +3168,9 @@ func TestAccClientExpressApp(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Express App - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "express_configuration"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "post_login_prompt"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
-					resource.TestCheckResourceAttrSet("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.0.pem"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.*", map[string]string{
+						"credential_type": "public_key",
+					}),
 				),
 			},
 		},
@@ -3427,6 +3428,50 @@ func TestAccClientMyOrganizationConfiguration(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.1", "samlp"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.2", "oidc"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.connection_deletion_behavior", "allow_if_empty"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientThirdPartySecurityModeCreate = `
+resource "auth0_client" "my_client" {
+	name                      = "Acceptance Test - 3P Client - {{.testName}}"
+	is_first_party            = false
+	app_type                  = "regular_web"
+	third_party_security_mode = "strict"
+	redirection_policy        = "open_redirect_protection"
+	callbacks                 = ["https://example.com/callback"]
+}
+`
+
+const testAccClientThirdPartySecurityModeUpdate = `
+resource "auth0_client" "my_client" {
+	name                      = "Acceptance Test - 3P Client - {{.testName}}"
+	is_first_party            = false
+	app_type                  = "regular_web"
+	third_party_security_mode = "strict"
+	redirection_policy        = "allow_always"
+	callbacks                 = ["https://example.com/callback"]
+}
+`
+
+func TestAccClient_ThirdPartySecurityMode(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientThirdPartySecurityModeCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "third_party_security_mode", "strict"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "redirection_policy", "open_redirect_protection"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientThirdPartySecurityModeUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "third_party_security_mode", "strict"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "redirection_policy", "allow_always"),
 				),
 			},
 		},

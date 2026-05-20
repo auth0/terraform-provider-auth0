@@ -697,6 +697,7 @@ func expandConnectionOptionsGoogleApps(data *schema.ResourceData, config cty.Val
 		Domain:             value.String(config.GetAttr("domain")),
 		TenantDomain:       value.String(config.GetAttr("tenant_domain")),
 		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
+		EnableGroupsAPI:    value.Bool(config.GetAttr("api_enable_groups")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 		DomainAliases:      value.Strings(config.GetAttr("domain_aliases")),
 		LogoURL:            value.String(config.GetAttr("icon_url")),
@@ -1003,6 +1004,7 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
 		IDTokenSignedResponseAlgs:   value.Strings(config.GetAttr("id_token_signed_response_algs")),
 		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
+		TokenEndpointJwtcaAudFormat: value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
 	}
 
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
@@ -1053,6 +1055,7 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
 		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
 		IDTokenSignedResponseAlgs:   value.Strings(config.GetAttr("id_token_signed_response_algs")),
+		TokenEndpointJwtcaAudFormat: value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
 	}
 
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
@@ -1570,6 +1573,11 @@ func expandDirectory(data *schema.ResourceData) *managementv2.CreateDirectoryPro
 		directoryConfig.SetSynchronizeAutomatically(&syncAuto)
 	}
 
+	if !cfg.GetAttr("synchronize_groups").IsNull() {
+		syncGroups := managementv2.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
+		directoryConfig.SetSynchronizeGroups(&syncGroups)
+	}
+
 	return directoryConfig
 }
 
@@ -1585,6 +1593,11 @@ func expandDirectoryUpdate(data *schema.ResourceData) *managementv2.UpdateDirect
 	if !cfg.GetAttr("synchronize_automatically").IsNull() {
 		syncAuto := data.Get("synchronize_automatically").(bool)
 		directoryConfig.SetSynchronizeAutomatically(&syncAuto)
+	}
+
+	if !cfg.GetAttr("synchronize_groups").IsNull() {
+		syncGroups := managementv2.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
+		directoryConfig.SetSynchronizeGroups(&syncGroups)
 	}
 
 	return directoryConfig

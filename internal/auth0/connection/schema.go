@@ -452,6 +452,11 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "Enable API Access to users.",
 			},
+			"api_enable_groups": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Enable API Access to groups.",
+			},
 			"app_id": {
 				Type:        schema.TypeString,
 				Optional:    true,

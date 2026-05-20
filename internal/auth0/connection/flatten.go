@@ -594,6 +594,7 @@ func flattenConnectionOptionsGoogleApps(
 		"domain":                   options.GetDomain(),
 		"tenant_domain":            options.GetTenantDomain(),
 		"api_enable_users":         options.GetEnableUsersAPI(),
+		"api_enable_groups":        options.GetEnableGroupsAPI(),
 		"scopes":                   options.Scopes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"domain_aliases":           options.GetDomainAliases(),
@@ -857,6 +858,7 @@ func flattenConnectionOptionsOIDC(
 		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
 		"dpop_signing_alg":                options.GetDPoPSigningAlg(),
 		"id_token_signed_response_algs":   options.GetIDTokenSignedResponseAlgs(),
+		"token_endpoint_jwtca_aud_format": options.GetTokenEndpointJwtcaAudFormat(),
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -918,6 +920,7 @@ func flattenConnectionOptionsOkta(
 		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
 		"dpop_signing_alg":                options.GetDPoPSigningAlg(),
 		"id_token_signed_response_algs":   options.GetIDTokenSignedResponseAlgs(),
+		"token_endpoint_jwtca_aud_format": options.GetTokenEndpointJwtcaAudFormat(),
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -1373,6 +1376,7 @@ func flattenDirectory(data *schema.ResourceData, directoryConfig *managementv2.G
 		data.Set("strategy", directoryConfig.GetStrategy()),
 		data.Set("mapping", flattenDirectoryMappings(directoryConfig.GetMapping())),
 		data.Set("synchronize_automatically", directoryConfig.GetSynchronizeAutomatically()),
+		data.Set("synchronize_groups", directoryConfig.GetSynchronizeGroups()),
 		data.Set("created_at", directoryConfig.GetCreatedAt().String()),
 		data.Set("updated_at", directoryConfig.GetUpdatedAt().String()),
 	)

@@ -505,6 +505,52 @@ func TestAccTenantDefaultTokenQuota(t *testing.T) {
 	})
 }
 
+const testAccTenantDCRSecurityModeStrict = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name                                = "DCR Security Mode Test"
+	dynamic_client_registration_security_mode    = "strict"
+}
+`
+
+const testAccTenantDCRSecurityModePermissive = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name                                = "DCR Security Mode Test"
+	dynamic_client_registration_security_mode    = "permissive"
+}
+`
+
+const testAccTenantDCRSecurityModeRemoved = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "DCR Security Mode Test"
+}
+`
+
+func TestAccTenant_DynamicClientRegistrationSecurityMode(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTenantDCRSecurityModeStrict,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "friendly_name", "DCR Security Mode Test"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "dynamic_client_registration_security_mode", "strict"),
+				),
+			},
+			{
+				Config: testAccTenantDCRSecurityModePermissive,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "dynamic_client_registration_security_mode", "permissive"),
+				),
+			},
+			{
+				Config: testAccTenantDCRSecurityModeRemoved,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "friendly_name", "DCR Security Mode Test"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccTenantDefaults(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
 		// Only run with recorded HTTP requests because  normal E2E tests will naturally configure the tenant

@@ -34,6 +34,8 @@ data "auth0_user" "my_user" {
 
 - `custom_domain_header` (String) Sets the `Auth0-Custom-Domain` header on all requests for this resource. Global setting of provider takes precedence over resource specific param, if both are set.
 - `query` (String) Lucene Query for retrieving a user.
+- `skip_permissions` (Boolean) Whether to skip user permissions. Setting this to `true` will skips paginated API calls to /api/v2/users/{id}/permissions. Default: `false` to optimize performance and reduce rate limit consumption.
+- `skip_roles` (Boolean) Whether to skip user roles. Setting this to `true` will skips paginated API calls to /api/v2/users/{id}/roles. Default: `false` to optimize performance and reduce rate limit consumption.
 - `user_id` (String) ID of the user.
 
 ### Read-Only
@@ -49,11 +51,11 @@ data "auth0_user" "my_user" {
 - `name` (String) Name of the user. This value can only be updated if the connection is a database connection (using the Auth0 store), a passwordless connection (email or sms) or has disabled 'Sync user profile attributes at each login'. For more information, see: [Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).
 - `nickname` (String) Preferred nickname or alias of the user. This value can only be updated if the connection is a database connection (using the Auth0 store), a passwordless connection (email or sms) or has disabled 'Sync user profile attributes at each login'. For more information, see: [Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).
 - `password` (String) Initial password for this user. Required for non-passwordless connections (SMS and email).
-- `permissions` (Set of Object) List of API permissions granted to the user. (see [below for nested schema](#nestedatt--permissions))
+- `permissions` (Set of Object) List of API permissions granted to the user. Skips if `skip_permissions` is `true`. When `skip_permissions` is `true` (default), this will be an empty set to optimize performance and reduce rate limit consumption. (see [below for nested schema](#nestedatt--permissions))
 - `phone_number` (String) Phone number for the user; follows the E.164 recommendation. Used for SMS connections.
 - `phone_verified` (Boolean) Indicates whether the phone number has been verified.
 - `picture` (String) Picture of the user. This value can only be updated if the connection is a database connection (using the Auth0 store), a passwordless connection (email or sms) or has disabled 'Sync user profile attributes at each login'. For more information, see: [Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).
-- `roles` (Set of String) Set of IDs of roles assigned to the user.
+- `roles` (Set of String) Set of IDs of roles assigned to the user. Skips if `skip_roles` is `true`. When `skip_roles` is `true` (default), this will be an empty set to optimize performance and reduce rate limit consumption.
 - `user_metadata` (String) Custom fields that store info about the user that does not impact a user's core functionality. Examples include work address, home address, and user preferences.
 - `username` (String) Username of the user. Only valid if the connection requires a username.
 - `verify_email` (Boolean) Indicates whether the user will receive a verification email after creation. Overrides behavior of `email_verified` parameter.

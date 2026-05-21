@@ -955,6 +955,14 @@ func expandClientAddonSSOIntegration(ssoCfg cty.Value) *management.SSOIntegratio
 }
 
 func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
+	// When samlp is not configured but other addons (e.g. aws, sso_integration) are,
+	// Terraform still passes samlp as an empty list (length 0). Hence return nil.
+	// An explicitly configured empty samlp block (`samlp {}`) has length 1
+	// and is processed for backward compatibility.
+	if samlpCfg.LengthInt() == 0 {
+		return nil
+	}
+
 	var samlpAddon management.SAML2ClientAddon
 
 	samlpCfg.ForEachElement(func(_ cty.Value, samlpCfg cty.Value) (stop bool) {
@@ -1003,12 +1011,6 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 
 		return stop
 	})
-
-	// SAML2ClientAddon contains pointer fields, so unlike other addons we cannot
-	// compare against an empty struct literal. Use String() to detect an empty addon.
-	if samlpAddon.String() == "{}" {
-		return nil
-	}
 
 	return &samlpAddon
 }

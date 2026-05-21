@@ -1091,15 +1091,13 @@ resource "auth0_client" "my_client" {
 }
 `
 
-const testAccUpdateClientWithSAMLPNonEmpty = `
+const testAccUpdateClientWithSAMLPEmpty = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - SSO Integration - {{.testName}}"
 	app_type = "sso_integration"
 
 	addons {
-		samlp {
-			issuer = "https://test.domain.com/api/v1"
-		}
+		samlp {}
 	}
 }
 `
@@ -2052,7 +2050,7 @@ func TestAccClientAddons(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUpdateClientWithSAMLPNonEmpty, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateClientWithSAMLPEmpty, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
@@ -2085,7 +2083,7 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.concur.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.dropbox.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.wsfed.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.issuer", "https://test.domain.com/api/v1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.digest_algorithm", "sha1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_format", "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.create_upn_claim", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.passthrough_claims_with_no_mapping", "true"),

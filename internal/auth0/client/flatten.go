@@ -547,7 +547,9 @@ func flattenClientAddonSSOIntegration(addon *management.SSOIntegrationClientAddo
 }
 
 func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
-	if addon == nil || addon.String() == "{}" {
+	// Return nil when samlp is absent from the API response. An empty samlp
+	// addon (i.e. "samlp":{}) is still processed to avoid state drift.
+	if addon == nil {
 		return nil
 	}
 

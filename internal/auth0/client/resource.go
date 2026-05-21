@@ -33,20 +33,15 @@ var ValidTokenExchangeProfileTypes = []string{
 }
 
 var samlDefault = struct {
-	createUPNClaim, passthroughClaimsWithNoMapping, mapUnknownClaimsAsIs, mapIdentities, typedAttributes, includeAttributeNameFormat bool
-	lifetimeInSeconds                                                                                                                int
-	signatureAlgorithm, digestAlgorithm, nameIdentifierFormat                                                                        string
+	createUPNClaim, passthroughClaimsWithNoMapping, mapIdentities, typedAttributes, includeAttributeNameFormat bool
+	lifetimeInSeconds                                                                                          int
 }{
 	createUPNClaim:                 true,
 	passthroughClaimsWithNoMapping: true,
-	mapUnknownClaimsAsIs:           false,
 	mapIdentities:                  true,
 	typedAttributes:                true,
 	includeAttributeNameFormat:     true,
 	lifetimeInSeconds:              3600,
-	signatureAlgorithm:             "rsa-sha1",
-	digestAlgorithm:                "sha1",
-	nameIdentifierFormat:           "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
 }
 
 // NewResource will return a new auth0_client resource.
@@ -1266,10 +1261,9 @@ func NewResource() *schema.Resource {
 									"map_unknown_claims_as_is": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  samlDefault.mapUnknownClaimsAsIs,
 										Description: "Indicates whether to add a prefix of `http://schema.auth0.com` " +
 											"to any claims that are not mapped to the common profile when passed " +
-											"through in the output assertion. Defaults to `false`.",
+											"through in the output assertion.",
 									},
 									"map_identities": {
 										Type:     schema.TypeBool,
@@ -1282,16 +1276,14 @@ func NewResource() *schema.Resource {
 									"signature_algorithm": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  samlDefault.signatureAlgorithm,
 										Description: "Algorithm used to sign the SAML Assertion or response. " +
-											"Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.",
+											"Options include `rsa-sha1` and `rsa-sha256`.",
 									},
 									"digest_algorithm": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  samlDefault.digestAlgorithm,
 										Description: "Algorithm used to calculate the digest of the SAML Assertion " +
-											"or response. Options include `sha1` and `sha256`. Defaults to `sha1`.",
+											"or response. Options include `sha1` and `sha256`.",
 									},
 									"destination": {
 										Type:     schema.TypeString,
@@ -1314,11 +1306,9 @@ func NewResource() *schema.Resource {
 											"instead of the SAML Assertion.",
 									},
 									"name_identifier_format": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Default:  samlDefault.nameIdentifierFormat,
-										Description: "Format of the name identifier. " +
-											"Defaults to `" + samlDefault.nameIdentifierFormat + "`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Format of the name identifier.",
 									},
 									"name_identifier_probes": {
 										Type:     schema.TypeList,
@@ -1336,7 +1326,7 @@ func NewResource() *schema.Resource {
 									"typed_attributes": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  true,
+										Default:  samlDefault.typedAttributes,
 										Description: "Indicates whether or not we should infer the `xs:type` " +
 											"of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, " +
 											"and `xs:anyType`. When set to `false`, all `xs:type` are `xs:anyType`. " +
@@ -1345,7 +1335,7 @@ func NewResource() *schema.Resource {
 									"include_attribute_name_format": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  true,
+										Default:  samlDefault.includeAttributeNameFormat,
 										Description: "Indicates whether or not we should infer the NameFormat " +
 											"based on the attribute name. If set to `false`, the attribute " +
 											"NameFormat is not set in the assertion. Defaults to `true`.",

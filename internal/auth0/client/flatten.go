@@ -570,34 +570,63 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 		flexibleMappingsMap, _ = structure.FlattenJsonToString(addon.GetFlexibleMappings())
 	}
 
-	// The API response omits fields that weren't explicitly set, so nil pointer fields fall back to Go zero values instead of Auth0 defaults, causing drift on import.
-	// Hence manually apply defaults here when the field is absent using getNonNilValueOrDefault.
-	return []interface{}{
-		map[string]interface{}{
-			"mappings":                           addon.GetMappings(),
-			"flexible_mappings":                  flexibleMappingsMap,
-			"audience":                           addon.GetAudience(),
-			"recipient":                          addon.GetRecipient(),
-			"create_upn_claim":                   getNonNilValueOrDefault(addon.CreateUPNClaim, samlDefault.createUPNClaim),
-			"map_unknown_claims_as_is":           getNonNilValueOrDefault(addon.MapUnknownClaimsAsIs, samlDefault.mapUnknownClaimsAsIs),
-			"passthrough_claims_with_no_mapping": getNonNilValueOrDefault(addon.PassthroughClaimsWithNoMapping, samlDefault.passthroughClaimsWithNoMapping),
-			"map_identities":                     getNonNilValueOrDefault(addon.MapIdentities, samlDefault.mapIdentities),
-			"signature_algorithm":                getNonNilValueOrDefault(addon.SignatureAlgorithm, samlDefault.signatureAlgorithm),
-			"digest_algorithm":                   getNonNilValueOrDefault(addon.DigestAlgorithm, samlDefault.digestAlgorithm),
-			"issuer":                             addon.GetIssuer(),
-			"destination":                        addon.GetDestination(),
-			"lifetime_in_seconds":                getNonNilValueOrDefault(addon.LifetimeInSeconds, samlDefault.lifetimeInSeconds),
-			"sign_response":                      addon.GetSignResponse(),
-			"name_identifier_format":             getNonNilValueOrDefault(addon.NameIdentifierFormat, samlDefault.nameIdentifierFormat),
-			"name_identifier_probes":             addon.GetNameIdentifierProbes(),
-			"authn_context_class_ref":            addon.GetAuthnContextClassRef(),
-			"typed_attributes":                   getNonNilValueOrDefault(addon.TypedAttributes, samlDefault.typedAttributes),
-			"include_attribute_name_format":      getNonNilValueOrDefault(addon.IncludeAttributeNameFormat, samlDefault.includeAttributeNameFormat),
-			"binding":                            addon.GetBinding(),
-			"signing_cert":                       addon.GetSigningCert(),
-			"logout":                             logout,
-		},
+	flatSaml := map[string]interface{}{
+		"logout":            logout,
+		"mappings":          addon.GetMappings(),
+		"flexible_mappings": flexibleMappingsMap,
+		// Non-zero bool and int backend defaults must be populated when nil,
+		// else will be overwritten by Go defaults on imported resources.
+		"create_upn_claim":                   getNonNilValueOrDefault(addon.CreateUPNClaim, samlDefault.createUPNClaim),
+		"passthrough_claims_with_no_mapping": getNonNilValueOrDefault(addon.PassthroughClaimsWithNoMapping, samlDefault.passthroughClaimsWithNoMapping),
+		"map_identities":                     getNonNilValueOrDefault(addon.MapIdentities, samlDefault.mapIdentities),
+		"typed_attributes":                   getNonNilValueOrDefault(addon.TypedAttributes, samlDefault.typedAttributes),
+		"include_attribute_name_format":      getNonNilValueOrDefault(addon.IncludeAttributeNameFormat, samlDefault.includeAttributeNameFormat),
+		"lifetime_in_seconds":                getNonNilValueOrDefault(addon.LifetimeInSeconds, samlDefault.lifetimeInSeconds),
 	}
+
+	// String fields are only populated when non-nil; Terraform treats absent
+	// strings as null which matches the API's omission behavior in response.
+	if addon.Audience != nil {
+		flatSaml["audience"] = *addon.Audience
+	}
+	if addon.Issuer != nil {
+		flatSaml["issuer"] = *addon.Issuer
+	}
+	if addon.Destination != nil {
+		flatSaml["destination"] = *addon.Destination
+	}
+	if addon.AuthnContextClassRef != nil {
+		flatSaml["authn_context_class_ref"] = *addon.AuthnContextClassRef
+	}
+	if addon.Binding != nil {
+		flatSaml["binding"] = *addon.Binding
+	}
+	if addon.SigningCert != nil {
+		flatSaml["signing_cert"] = *addon.SigningCert
+	}
+	if addon.Recipient != nil {
+		flatSaml["recipient"] = *addon.Recipient
+	}
+	if addon.SignatureAlgorithm != nil {
+		flatSaml["signature_algorithm"] = *addon.SignatureAlgorithm
+	}
+	if addon.DigestAlgorithm != nil {
+		flatSaml["digest_algorithm"] = *addon.DigestAlgorithm
+	}
+	if addon.NameIdentifierFormat != nil {
+		flatSaml["name_identifier_format"] = *addon.NameIdentifierFormat
+	}
+	if addon.MapUnknownClaimsAsIs != nil {
+		flatSaml["map_unknown_claims_as_is"] = *addon.MapUnknownClaimsAsIs
+	}
+	if addon.SignResponse != nil {
+		flatSaml["sign_response"] = *addon.SignResponse
+	}
+	if addon.NameIdentifierProbes != nil {
+		flatSaml["name_identifier_probes"] = *addon.NameIdentifierProbes
+	}
+
+	return []interface{}{flatSaml}
 }
 
 // getNonNilValueOrDefault returns the dereferenced value if the pointer is non-nil, otherwise returns the provided default value.

@@ -23,21 +23,17 @@ func TestFlattenClientAddonSAML2_ForDefaultValues(t *testing.T) {
 	assert.Equal(t, "https://example.com/saml", flat["recipient"])
 	assert.Equal(t, "https://example.com/saml", flat["destination"])
 
-	// All omitted fields must reflect Auth0 defaults, not Go zero values.
+	// Bool/int fields with non-zero Auth0 defaults must be populated when nil.
 	assert.Equal(t, samlDefault.createUPNClaim, flat["create_upn_claim"], "create_upn_claim")
 	assert.Equal(t, samlDefault.passthroughClaimsWithNoMapping, flat["passthrough_claims_with_no_mapping"], "passthrough_claims_with_no_mapping")
-	assert.Equal(t, samlDefault.mapUnknownClaimsAsIs, flat["map_unknown_claims_as_is"], "map_unknown_claims_as_is")
 	assert.Equal(t, samlDefault.mapIdentities, flat["map_identities"], "map_identities")
 	assert.Equal(t, samlDefault.typedAttributes, flat["typed_attributes"], "typed_attributes")
 	assert.Equal(t, samlDefault.includeAttributeNameFormat, flat["include_attribute_name_format"], "include_attribute_name_format")
 	assert.Equal(t, samlDefault.lifetimeInSeconds, flat["lifetime_in_seconds"], "lifetime_in_seconds")
-	assert.Equal(t, samlDefault.signatureAlgorithm, flat["signature_algorithm"], "signature_algorithm")
-	assert.Equal(t, samlDefault.digestAlgorithm, flat["digest_algorithm"], "digest_algorithm")
-	assert.Equal(t, samlDefault.nameIdentifierFormat, flat["name_identifier_format"], "name_identifier_format")
 }
 
-// TestFlattenClientAddonSAML2_ExplicitValues verifies that explicitly set fields
-// are used as-is and are not overridden by samlDefault.
+// TestFlattenClientAddonSAML2_ForExplicitValues verifies that explicitly set fields
+// are used as-is and are present in the flattened map.
 func TestFlattenClientAddonSAML2_ForExplicitValues(t *testing.T) {
 	addon := &management.SAML2ClientAddon{
 		Recipient:                      auth0.String("https://example.com/saml"),

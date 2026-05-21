@@ -1004,6 +1004,12 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 		return stop
 	})
 
+	// SAML2ClientAddon contains pointer fields, so unlike other addons we cannot
+	// compare against an empty struct literal. Use String() to detect an empty addon.
+	if samlpAddon.String() == "{}" {
+		return nil
+	}
+
 	return &samlpAddon
 }
 

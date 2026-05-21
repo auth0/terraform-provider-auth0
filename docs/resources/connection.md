@@ -750,6 +750,7 @@ Optional:
 - `enabled_database_customization` (Boolean) Set to `true` to use a legacy user store.
 - `entity_id` (String) Custom Entity ID for the connection.
 - `fed_metadata_xml` (String) Federation Metadata for the ADFS connection.
+- `federated_connections_access_tokens` (Block List, Max: 1) Configuration for collecting access tokens and refresh tokens from federated connections. Only applicable for OIDC connections. (see [below for nested schema](#nestedblock--options--federated_connections_access_tokens))
 - `fields_map` (String) If you're configuring a SAML enterprise connection for a non-standard PingFederate Server, you must update the attribute mappings.
 - `forward_request_info` (Boolean) Specifies whether or not request info should be forwarded to sms gateway.
 - `from` (String) Address to use as the sender.
@@ -1050,6 +1051,14 @@ Required:
 
 - `cert` (String)
 - `key` (String)
+
+
+<a id="nestedblock--options--federated_connections_access_tokens"></a>
+### Nested Schema for `options.federated_connections_access_tokens`
+
+Optional:
+
+- `active` (Boolean) When enabled, Auth0 will collect and store access tokens and refresh tokens obtained from federated connections during authentication.
 
 
 <a id="nestedblock--options--gateway_authentication"></a>

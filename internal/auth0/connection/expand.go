@@ -1015,6 +1015,14 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 		return true
 	})
 
+	config.GetAttr("federated_connections_access_tokens").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		options.FederatedConnectionsAccessTokens = &management.ConnectionOptionsOIDCFederatedConnectionsAccessTokens{
+			Active: value.Bool(config.GetAttr("active")),
+		}
+
+		return true
+	})
+
 	var err error
 	config.GetAttr("attribute_map").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		options.AttributeMap = &management.ConnectionOptionsOIDCAttributeMap{

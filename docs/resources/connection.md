@@ -744,7 +744,7 @@ Optional:
 - `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.
 - `domain` (String) Domain name.
 - `domain_aliases` (Set of String) List of the domains that can be authenticated using the identity provider. Only needed for Identifier First authentication flows.
-- `dpop_signing_alg` (String) Signature method used to sign the request. EA Only
+- `dpop_signing_alg` (String) The algorithm used to sign the DPoP proof. Allowed values: ES256, ES384, ES512, Ed25519.
 - `email` (Boolean) Indicates whether to request the email scope. Used by some OAuth2 connections (e.g., LINE).
 - `enable_script_context` (Boolean) Set to `true` to inject context into custom DB scripts (warning: cannot be disabled once enabled).
 - `enabled_database_customization` (Boolean) Set to `true` to use a legacy user store.

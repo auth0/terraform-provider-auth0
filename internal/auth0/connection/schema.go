@@ -1,9 +1,14 @@
 package connection
 
 import (
+	"strings"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
+
+var allowedDPoPSigningAlgorithms = []string{"ES256", "ES384", "ES512", "Ed25519"}
+
 
 var resourceSchema = map[string]*schema.Schema{
 	"name": {
@@ -1438,8 +1443,8 @@ var optionsSchema = &schema.Schema{
 			"dpop_signing_alg": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: validation.StringInSlice([]string{"ES256", "Ed25519"}, false),
-				Description:  "Signature method used to sign the request. EA Only",
+				ValidateFunc: validation.StringInSlice(allowedDPoPSigningAlgorithms, false),
+				Description:  "The algorithm used to sign the DPoP proof. Allowed values: " + strings.Join(allowedDPoPSigningAlgorithms, ", ") + ".",
 			},
 			"password_options": {
 				Type:     schema.TypeList,

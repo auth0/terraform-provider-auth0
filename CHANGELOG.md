@@ -1,7 +1,14 @@
-## v1.47.0 (Unreleased)
+## v1.47.0
 
 ENHANCEMENTS:
-- `resource/auth0_client_credentials` – `private_key_jwt` credentials now use an unordered set instead of an ordered list, preventing unnecessary resource recreation when removing or reordering credentials. Adding, removing, or rotating individual credentials no longer destroys the entire resource — only the affected credential is created/deleted. Updating `expires_at` on an existing credential is now handled via in-place PATCH (when `parse_expiry_from_cert` is not enabled). ([#XXXX](https://github.com/auth0/terraform-provider-auth0/pull/XXXX))
+- `resource/auth0_network_acl` – Add support for configuring `hostnames`, `connecting_ipv4_cidrs` and `connecting_ipv6_cidrs` ([#1581](https://github.com/auth0/terraform-provider-auth0/pull/1581))
+- `data-source/auth0_network_acl` – Add support for retrieving `hostnames`, `connecting_ipv4_cidrs` and `connecting_ipv6_cidrs` ([#1581](https://github.com/auth0/terraform-provider-auth0/pull/1581))
+- `resource/auth0_client_credentials` – `private_key_jwt` credentials now use an unordered set instead of an ordered list, preventing unnecessary resource recreation when removing or reordering credentials. Adding, removing, or rotating individual credentials no longer destroys the entire resource — only the affected credential is created/deleted. Updating `expires_at` on an existing credential is now handled via in-place PATCH (when `parse_expiry_from_cert` is not enabled). ([#1570](https://github.com/auth0/terraform-provider-auth0/pull/1570))
+- `resource/auth0_connection` – Add support for configuring `federated_connections_access_tokens` for OIDC connections ([#1582](https://github.com/auth0/terraform-provider-auth0/pull/1582))
+- `data-source/auth0_connection` – Add opt-out option `skip_enabled_clients` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_role` – Add opt-out options `skip_permissions` and `skip_users` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_organization` – Add opt-out options `skip_client_grants`, `skip_connections` and `skip_members` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_user` – Add opt-out options `skip_permissions` and `skip_roles` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
 
 NOTES:
 - `resource/auth0_client_credentials` – State schema upgraded from v0 to v1 for `private_key_jwt` credentials (TypeList → TypeSet). Existing state will be migrated automatically on the next `terraform plan` or `terraform apply`.

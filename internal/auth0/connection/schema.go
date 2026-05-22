@@ -1011,6 +1011,23 @@ var optionsSchema = &schema.Schema{
 					},
 				},
 			},
+			"federated_connections_access_tokens": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Computed:    true,
+				Description: "Configuration for collecting access tokens and refresh tokens from federated connections. Only applicable for OIDC connections.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"active": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "When enabled, Auth0 will collect and store access tokens and refresh tokens obtained from federated connections during authentication.",
+						},
+					},
+				},
+			},
 			"attribute_map": {
 				Type:     schema.TypeList,
 				MaxItems: 1,

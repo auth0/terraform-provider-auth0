@@ -884,6 +884,14 @@ func flattenConnectionOptionsOIDC(
 		}
 	}
 
+	if options.FederatedConnectionsAccessTokens != nil {
+		optionsMap["federated_connections_access_tokens"] = []map[string]interface{}{
+			{
+				"active": options.GetFederatedConnectionsAccessTokens().GetActive(),
+			},
+		}
+	}
+
 	return optionsMap, nil
 }
 

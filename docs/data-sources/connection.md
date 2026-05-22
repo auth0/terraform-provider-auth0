@@ -104,6 +104,7 @@ Read-Only:
 - `enabled_database_customization` (Boolean)
 - `entity_id` (String)
 - `fed_metadata_xml` (String)
+- `federated_connections_access_tokens` (List of Object) (see [below for nested schema](#nestedobjatt--options--federated_connections_access_tokens))
 - `fields_map` (String)
 - `forward_request_info` (Boolean)
 - `from` (String)
@@ -401,6 +402,14 @@ Read-Only:
 
 - `cert` (String)
 - `key` (String)
+
+
+<a id="nestedobjatt--options--federated_connections_access_tokens"></a>
+### Nested Schema for `options.federated_connections_access_tokens`
+
+Read-Only:
+
+- `active` (Boolean)
 
 
 <a id="nestedobjatt--options--gateway_authentication"></a>

@@ -9,7 +9,6 @@ import (
 
 var allowedDPoPSigningAlgorithms = []string{"ES256", "ES384", "ES512", "Ed25519"}
 
-
 var resourceSchema = map[string]*schema.Schema{
 	"name": {
 		Type:     schema.TypeString,

@@ -114,10 +114,8 @@ func fetchAllConnectedAccounts(ctx context.Context, apiv2 *managementv2client.Ma
 	}
 	accounts = append(accounts, page.Results...)
 
-	for {
-		if page.RawResponse.Done {
-			break
-		}
+	for !page.RawResponse.Done {
+
 		page, err = page.GetNextPage(ctx)
 		if page == nil && err == nil {
 			break

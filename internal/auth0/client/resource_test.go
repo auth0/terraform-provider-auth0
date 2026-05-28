@@ -2093,6 +2093,18 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.sign_response", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.include_attribute_name_format", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signature_algorithm", ""),
+					resource.TestCheckResourceAttrWith("auth0_client.my_client", "addons.0.samlp.0.mappings.%", func(value string) error {
+						if value == "0" {
+							return fmt.Errorf("expected mappings to not be empty as per default")
+						}
+						return nil
+					}),
+					resource.TestCheckResourceAttrWith("auth0_client.my_client", "addons.0.samlp.0.name_identifier_probes.#", func(value string) error {
+						if value == "0" {
+							return fmt.Errorf("expected name_identifier_probes to not be empty as per default")
+						}
+						return nil
+					}),
 				),
 			},
 			{

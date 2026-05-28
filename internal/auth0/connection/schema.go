@@ -987,6 +987,16 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "Specifies the subject of the JWT used for global token revocation for the SAML connection.",
 			},
+			"destination_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The destination URL for the SAML assertion. Used when configuring a SAML connection for proxy gateways.",
+			},
+			"recipient_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The recipient URL for the SAML assertion. Used when configuring a SAML connection for proxy gateways.",
+			},
 			"auth_params": {
 				Type: schema.TypeMap,
 				Elem: &schema.Schema{

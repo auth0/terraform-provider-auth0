@@ -572,8 +572,11 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 
 	flatSaml := map[string]interface{}{
 		"logout":            logout,
-		"mappings":          addon.GetMappings(),
 		"flexible_mappings": flexibleMappingsMap,
+		// Scalar(non-block) list and set backend defaults must be populated when nil,
+		// else will be overwritten by [] and {}.
+		"mappings":               getNonNilValueOrDefault(addon.Mappings, samlDefault.mappings),
+		"name_identifier_probes": getNonNilValueOrDefault(addon.NameIdentifierProbes, samlDefault.nameIdentifierProbes),
 		// Non-zero bool and int backend defaults must be populated when nil,
 		// else will be overwritten by Go defaults on imported resources.
 		"create_upn_claim":                   getNonNilValueOrDefault(addon.CreateUPNClaim, samlDefault.createUPNClaim),
@@ -621,9 +624,6 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 	}
 	if addon.SignResponse != nil {
 		flatSaml["sign_response"] = *addon.SignResponse
-	}
-	if addon.NameIdentifierProbes != nil {
-		flatSaml["name_identifier_probes"] = *addon.NameIdentifierProbes
 	}
 
 	return []interface{}{flatSaml}

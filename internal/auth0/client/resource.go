@@ -32,9 +32,15 @@ var ValidTokenExchangeProfileTypes = []string{
 	"custom_authentication", "on_behalf_of_token_exchange",
 }
 
+// samlDefault holds Auth0 server-side defaults for SAML addon fields.
+// These are used only in flatten (not as schema Default) so that:
+// 1. Terraform doesn't force defaults onto existing API values when the field is absent from config.
+// 2. On import, nil fields get the correct Auth0 default instead of Go's zero value.
 var samlDefault = struct {
 	createUPNClaim, passthroughClaimsWithNoMapping, mapIdentities, typedAttributes, includeAttributeNameFormat bool
 	lifetimeInSeconds                                                                                          int
+	mappings                                                                                                   map[string]string
+	nameIdentifierProbes                                                                                       []string
 }{
 	createUPNClaim:                 true,
 	passthroughClaimsWithNoMapping: true,
@@ -42,6 +48,20 @@ var samlDefault = struct {
 	typedAttributes:                true,
 	includeAttributeNameFormat:     true,
 	lifetimeInSeconds:              3600,
+	mappings: map[string]string{
+		"user_id":     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+		"email":       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+		"name":        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+		"given_name":  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
+		"family_name": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname",
+		"upn":         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn",
+		"groups":      "http://schemas.xmlsoap.org/claims/Group",
+	},
+	nameIdentifierProbes: []string{
+		"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+		"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+		"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+	},
 }
 
 // NewResource will return a new auth0_client resource.
@@ -1227,6 +1247,7 @@ func NewResource() *schema.Resource {
 									"mappings": {
 										Type:          schema.TypeMap,
 										Optional:      true,
+										Computed:      true,
 										Elem:          schema.TypeString,
 										ConflictsWith: []string{"addons.0.samlp.0.flexible_mappings"},
 										Description: "Mappings between the Auth0 user profile property " +
@@ -1244,19 +1265,18 @@ func NewResource() *schema.Resource {
 											"It should only be used when needed to send a map with keys as slices.",
 									},
 									"create_upn_claim": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  samlDefault.createUPNClaim,
-										Description: "Indicates whether a UPN claim should be created. " +
-											"Defaults to `true`.",
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Indicates whether a UPN claim should be created.",
 									},
 									"passthrough_claims_with_no_mapping": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  samlDefault.passthroughClaimsWithNoMapping,
+										Computed: true,
 										Description: "Indicates whether or not to passthrough " +
 											"claims that are not mapped to the common profile " +
-											"in the output assertion. Defaults to `true`.",
+											"in the output assertion.",
 									},
 									"map_unknown_claims_as_is": {
 										Type:     schema.TypeBool,
@@ -1268,10 +1288,10 @@ func NewResource() *schema.Resource {
 									"map_identities": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  samlDefault.mapIdentities,
+										Computed: true,
 										Description: "Indicates whether or not to add additional identity " +
 											"information in the token, such as the provider used and the " +
-											"`access_token`, if available. Defaults to `true`.",
+											"`access_token`, if available.",
 									},
 									"signature_algorithm": {
 										Type:     schema.TypeString,
@@ -1293,11 +1313,10 @@ func NewResource() *schema.Resource {
 											"or callback URL if there was no SAMLRequest.",
 									},
 									"lifetime_in_seconds": {
-										Type:     schema.TypeInt,
-										Optional: true,
-										Default:  samlDefault.lifetimeInSeconds,
-										Description: "Number of seconds during which the token is valid. " +
-											"Defaults to `3600` seconds.",
+										Type:        schema.TypeInt,
+										Optional:    true,
+										Computed:    true,
+										Description: "Number of seconds during which the token is valid.",
 									},
 									"sign_response": {
 										Type:     schema.TypeBool,
@@ -1314,6 +1333,7 @@ func NewResource() *schema.Resource {
 										Type:     schema.TypeList,
 										Elem:     &schema.Schema{Type: schema.TypeString},
 										Optional: true,
+										Computed: true,
 										Description: "Attributes that can be used for Subject/NameID. " +
 											"Auth0 will try each of the attributes of this array in " +
 											"order and use the first value it finds.",
@@ -1326,19 +1346,18 @@ func NewResource() *schema.Resource {
 									"typed_attributes": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  samlDefault.typedAttributes,
+										Computed: true,
 										Description: "Indicates whether or not we should infer the `xs:type` " +
 											"of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, " +
-											"and `xs:anyType`. When set to `false`, all `xs:type` are `xs:anyType`. " +
-											"Defaults to `true`.",
+											"and `xs:anyType`. When set to `false`, all `xs:type` are `xs:anyType`.",
 									},
 									"include_attribute_name_format": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  samlDefault.includeAttributeNameFormat,
+										Computed: true,
 										Description: "Indicates whether or not we should infer the NameFormat " +
 											"based on the attribute name. If set to `false`, the attribute " +
-											"NameFormat is not set in the assertion. Defaults to `true`.",
+											"NameFormat is not set in the assertion.",
 									},
 									"logout": {
 										Type:        schema.TypeList,

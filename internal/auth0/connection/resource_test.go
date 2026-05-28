@@ -2569,6 +2569,8 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.0.cert", "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.destination_url", "https://example.com/saml/destination"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.recipient_url", "https://example.com/saml/recipient"),
 				),
 			},
 			{
@@ -2627,6 +2629,8 @@ resource "auth0_connection" "my_connection" {
 		digest_algorithm         = "sha256"
 		icon_url                 = "https://example.com/logo.svg"
 		set_user_root_attributes = "on_each_login"
+		destination_url          = "https://example.com/saml/destination"
+		recipient_url            = "https://example.com/saml/recipient"
 
 		fields_map = jsonencode({
 			"name": ["name", "nameidentifier"]

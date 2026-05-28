@@ -497,6 +497,8 @@ resource "auth0_connection" "samlp" {
     sign_out_endpoint               = "https://saml.provider/sign_out"
     global_token_revocation_jwt_iss = "issuer.example.com"
     global_token_revocation_jwt_sub = "user123"
+    destination_url                 = "https://example.com/saml/destination"
+    recipient_url                   = "https://example.com/saml/recipient"
     disable_sign_out                = true
     strategy_version                = 2
     tenant_domain                   = "example.com"
@@ -735,6 +737,7 @@ Optional:
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `decryption_key` (Block List, Max: 1) The key used to decrypt encrypted responses from the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively. (see [below for nested schema](#nestedblock--options--decryption_key))
+- `destination_url` (String) The destination URL for the SAML assertion. Used when configuring a SAML connection for proxy gateways.
 - `digest_algorithm` (String) Sign Request Algorithm Digest.
 - `disable_cache` (Boolean) Indicates whether to disable the cache or not.
 - `disable_self_service_change_password` (Boolean) Indicates whether to remove the forgot password link within the New Universal Login.
@@ -786,6 +789,7 @@ Optional:
 - `protocol_binding` (String) The SAML Response Binding: how the SAML token is received by Auth0 from the IdP.
 - `provider` (String) Defines the custom `sms_gateway` provider.
 - `realm_fallback` (Boolean) Allows configuration if connections_realm_fallback flag is enabled for the tenant
+- `recipient_url` (String) The recipient URL for the SAML assertion. Used when configuring a SAML connection for proxy gateways.
 - `request_template` (String) Template that formats the SAML request.
 - `request_token_url` (String) URL used to obtain an unauthorized request token.
 - `requires_username` (Boolean) Indicates whether the user is required to provide a username in addition to an email address.

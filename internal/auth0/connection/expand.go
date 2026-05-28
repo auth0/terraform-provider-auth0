@@ -1112,6 +1112,8 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 		StrategyVersion:             value.Int(config.GetAttr("strategy_version")),
 		GlobalTokenRevocationJWTIss: value.String(config.GetAttr("global_token_revocation_jwt_iss")),
 		GlobalTokenRevocationJWTSub: value.String(config.GetAttr("global_token_revocation_jwt_sub")),
+		DestinationURL:              value.String(config.GetAttr("destination_url")),
+		RecipientURL:                value.String(config.GetAttr("recipient_url")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))

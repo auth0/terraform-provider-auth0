@@ -26,10 +26,11 @@ resource "auth0_event_stream" "my_event_stream_event_bridge" {
   }
 }
 
-# Creates an event stream of type webhook
+# Creates an event stream of type webhook in a disabled state
 resource "auth0_event_stream" "my_event_stream_webhook" {
   name             = "my-webhook"
   destination_type = "webhook"
+  status           = "disabled"
   subscriptions = [
     "user.created",
     "user.updated"
@@ -102,13 +103,13 @@ resource "auth0_event_stream" "my_event_stream_action" {
 
 - `action_configuration` (Block List, Max: 1) Configuration for the Action destination. This block is only applicable when `destination_type` is set to `action`. Action configurations **cannot** be updated after creation. Any change to this block will force the resource to be recreated. (see [below for nested schema](#nestedblock--action_configuration))
 - `eventbridge_configuration` (Block List, Max: 1) Configuration for the EventBridge destination. This block is only applicable when `destination_type` is set to `eventbridge`. EventBridge configurations **cannot** be updated after creation. Any change to this block will force the resource to be recreated. (see [below for nested schema](#nestedblock--eventbridge_configuration))
+- `status` (String) The current status of the event stream. Can be `enabled` or `disabled`.
 - `webhook_configuration` (Block List, Max: 1) Configuration for the Webhook destination. This block is only applicable when `destination_type` is set to `webhook`. Webhook configurations **can** be updated after creation, including the endpoint and authorization fields. (see [below for nested schema](#nestedblock--webhook_configuration))
 
 ### Read-Only
 
 - `created_at` (String) The ISO 8601 timestamp when the stream was created.
 - `id` (String) The ID of this resource.
-- `status` (String) The current status of the event stream.
 - `updated_at` (String) The ISO 8601 timestamp when the stream was last updated.
 
 <a id="nestedblock--action_configuration"></a>

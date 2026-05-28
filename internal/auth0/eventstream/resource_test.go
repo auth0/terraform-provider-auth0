@@ -86,6 +86,40 @@ resource "auth0_event_stream" "my_event_stream_webhook" {
 }
 `
 
+const testEventStreamCreateWebhookDisabled = `
+resource "auth0_event_stream" "my_event_stream_webhook" {
+  name              = "{{.testName}}-my-webhook-disabled"
+  destination_type  = "webhook"
+  status            = "disabled"
+  subscriptions     = ["user.created"]
+
+  webhook_configuration {
+    webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
+    webhook_authorization {
+      method = "bearer"
+      token  = "123456789"
+    }
+  }
+}
+`
+
+const testEventStreamUpdateWebhookToEnabled = `
+resource "auth0_event_stream" "my_event_stream_webhook" {
+  name              = "{{.testName}}-my-webhook-disabled"
+  destination_type  = "webhook"
+  status            = "enabled"
+  subscriptions     = ["user.created"]
+
+  webhook_configuration {
+    webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
+    webhook_authorization {
+      method = "bearer"
+      token  = "123456789"
+    }
+  }
+}
+`
+
 const actionConfig = `
 resource "auth0_action" "my_action" {
 	name    = "Test Action {{.testName}}"
@@ -195,6 +229,29 @@ func TestAccEventStream(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.method", "bearer"),
 
 					resource.TestCheckNoResourceAttr("auth0_event_stream.my_event_stream_webhook", "webhook_configuration.0.webhook_authorization.0.token_wo"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccEventStreamStatus(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testEventStreamCreateWebhookDisabled, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "name", fmt.Sprintf("%s-my-webhook-disabled", t.Name())),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "destination_type", "webhook"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "status", "disabled"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testEventStreamUpdateWebhookToEnabled, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "name", fmt.Sprintf("%s-my-webhook-disabled", t.Name())),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "destination_type", "webhook"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_webhook", "status", "enabled"),
 				),
 			},
 		},

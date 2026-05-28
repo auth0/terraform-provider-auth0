@@ -31,10 +31,12 @@ func NewGrantResource() *schema.Resource {
 		CustomizeDiff: validateClientGrant,
 		Schema: map[string]*schema.Schema{
 			"client_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "ID of the client for this grant.",
+				Type:          schema.TypeString,
+				Optional:      true,
+				ForceNew:      true,
+				ConflictsWith: []string{"default_for"},
+				AtLeastOneOf:  []string{"client_id", "default_for"},
+				Description:   "ID of the client for this grant. Mutually exclusive with `default_for`.",
 			},
 			"audience": {
 				Type:        schema.TypeString,
@@ -90,6 +92,16 @@ func NewGrantResource() *schema.Resource {
 				Computed:    true,
 				Description: "Indicates whether this grant is a special grant created by Auth0. It cannot be modified or deleted directly.",
 			},
+			"default_for": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ForceNew:      true,
+				ValidateFunc:  validation.StringInSlice([]string{"third_party_clients"}, false),
+				ConflictsWith: []string{"client_id"},
+				AtLeastOneOf:  []string{"client_id", "default_for"},
+				Description: "Applies this client grant as the default for all clients in the specified group. " +
+					"The only accepted value is third_party_clients, which applies the grant to all third-party clients.",
+			},
 			"allow_all_scopes": {
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -103,18 +115,22 @@ func NewGrantResource() *schema.Resource {
 func createClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	grantList, err := api.ClientGrant.List(
-		ctx,
-		management.Parameter("audience", data.Get("audience").(string)),
-		management.Parameter("client_id", data.Get("client_id").(string)),
-	)
-	if err != nil {
-		return diag.FromErr(err)
-	}
+	// Only check for existing grants when client_id is specified.
+	// For default_for grants, the API enforces uniqueness (409 on duplicate).
+	if clientID := data.Get("client_id").(string); clientID != "" {
+		grantList, err := api.ClientGrant.List(
+			ctx,
+			management.Parameter("audience", data.Get("audience").(string)),
+			management.Parameter("client_id", clientID),
+		)
+		if err != nil {
+			return diag.FromErr(err)
+		}
 
-	if len(grantList.ClientGrants) != 0 {
-		data.SetId(grantList.ClientGrants[0].GetID())
-		return readClientGrant(ctx, data, meta)
+		if len(grantList.ClientGrants) != 0 {
+			data.SetId(grantList.ClientGrants[0].GetID())
+			return readClientGrant(ctx, data, meta)
+		}
 	}
 
 	clientGrant := expandClientGrant(data)

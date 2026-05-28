@@ -42,9 +42,34 @@ func dataSourceSchema() map[string]*schema.Schema {
 		"For performance, it is advised to use the `organization_id` as a lookup if possible."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"organization_id", "name"}
 
+	dataSourceSchema["skip_connections"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to skip organization connections. Setting this to `true` will skip " +
+			"paginated API calls to /api/v2/organizations/{id}/connections.",
+	}
+
+	dataSourceSchema["skip_members"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to skip organization members. Setting this to `true` will skip " +
+			"paginated API calls to /api/v2/organizations/{id}/members.",
+	}
+
+	dataSourceSchema["skip_client_grants"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to skip organization client grants. Setting this to `true` will skip " +
+			"API call to /api/v2/organizations/{id}/client-grants.",
+	}
+
 	dataSourceSchema["connections"] = &schema.Schema{
-		Type:     schema.TypeSet,
-		Computed: true,
+		Type:        schema.TypeSet,
+		Computed:    true,
+		Description: "Connections enabled for this organization. Skips populating if `skip_connections` is `true`.",
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"connection_id": {
@@ -97,7 +122,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 			Type: schema.TypeString,
 		},
 		Computed:    true,
-		Description: "User ID(s) that are members of the organization.",
+		Description: "User ID(s) that are members of the organization. Skips populating if `skip_members` is `true`.",
 	}
 
 	dataSourceSchema["client_grants"] = &schema.Schema{
@@ -106,7 +131,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 			Type: schema.TypeString,
 		},
 		Computed:    true,
-		Description: "Client Grant ID(s) that are associated to the organization.",
+		Description: "Client Grant ID(s) that are associated to the organization. Skips populating if `skip_client_grants` is `true`.",
 	}
 
 	return dataSourceSchema
@@ -123,19 +148,31 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 
 	data.SetId(foundOrganization.GetID())
 
-	foundConnections, err := fetchAllOrganizationConnectionsV2(ctx, apiv2, foundOrganization.GetID())
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	var foundConnections []*managementv2.OrganizationAllConnectionPost
+	skipClientGrants := data.Get("skip_client_grants").(bool)
+	if !skipClientGrants {
+		foundConnections, err = fetchAllOrganizationConnectionsV2(ctx, apiv2, foundOrganization.GetID())
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
 	}
 
-	foundMembers, err := fetchAllOrganizationMembers(ctx, api, foundOrganization.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var foundMembers []management.OrganizationMember
+	skipMembers := data.Get("skip_members").(bool)
+	if !skipMembers {
+		foundMembers, err = fetchAllOrganizationMembers(ctx, api, foundOrganization.GetID())
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
-	foundClientGrants, err := fetchAllOrganizationClientGrants(ctx, api, foundOrganization.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var foundClientGrants []*management.ClientGrant
+	skipClientGrants = data.Get("skip_client_grants").(bool)
+	if !skipClientGrants {
+		foundClientGrants, err = fetchAllOrganizationClientGrants(ctx, api, foundOrganization.GetID())
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers, foundClientGrants))

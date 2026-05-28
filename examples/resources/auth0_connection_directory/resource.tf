@@ -4,11 +4,11 @@ resource "auth0_connection" "google_workspace" {
   strategy     = "google-apps"
 
   options {
-    client_id        = "your-google-client-id"
-    client_secret    = "your-google-client-secret"
-    domain           = "example.com"
-    api_enable_users = true
-
+    client_id         = "your-google-client-id"
+    client_secret     = "your-google-client-secret"
+    domain            = "example.com"
+    api_enable_users  = true
+    api_enable_groups = true
   }
 }
 
@@ -41,5 +41,11 @@ resource "auth0_connection_directory" "custom" {
     auth0 = "external_id"
     idp   = "id"
   }
+}
+
+# Configure directory provisioning with selective group synchronization
+resource "auth0_connection_directory" "with_selected_groups" {
+  connection_id      = auth0_connection.google_workspace.id
+  synchronize_groups = "selected"
 }
 

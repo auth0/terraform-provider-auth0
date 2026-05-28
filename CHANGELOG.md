@@ -1,3 +1,36 @@
+## v1.47.0
+
+ENHANCEMENTS:
+- `resource/auth0_network_acl` – Add support for configuring `hostnames`, `connecting_ipv4_cidrs` and `connecting_ipv6_cidrs` ([#1581](https://github.com/auth0/terraform-provider-auth0/pull/1581))
+- `data-source/auth0_network_acl` – Add support for retrieving `hostnames`, `connecting_ipv4_cidrs` and `connecting_ipv6_cidrs` ([#1581](https://github.com/auth0/terraform-provider-auth0/pull/1581))
+- `resource/auth0_client_credentials` – `private_key_jwt` credentials now use an unordered set instead of an ordered list, preventing unnecessary resource recreation when removing or reordering credentials. Adding, removing, or rotating individual credentials no longer destroys the entire resource — only the affected credential is created/deleted. Updating `expires_at` on an existing credential is now handled via in-place PATCH (when `parse_expiry_from_cert` is not enabled). ([#1570](https://github.com/auth0/terraform-provider-auth0/pull/1570))
+- `resource/auth0_connection` – Add support for configuring `federated_connections_access_tokens` for OIDC connections ([#1582](https://github.com/auth0/terraform-provider-auth0/pull/1582))
+- `data-source/auth0_connection` – Add opt-out option `skip_enabled_clients` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_role` – Add opt-out options `skip_permissions` and `skip_users` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_organization` – Add opt-out options `skip_client_grants`, `skip_connections` and `skip_members` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_user` – Add opt-out options `skip_permissions` and `skip_roles` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+
+NOTES:
+- `resource/auth0_client_credentials` – State schema upgraded from v0 to v1 for `private_key_jwt` credentials (TypeList → TypeSet). Existing state will be migrated automatically on the next `terraform plan` or `terraform apply`.
+
+## v1.46.0
+
+FEATURES:
+
+- `resource/auth0_event_stream` – Add support for configuring `status` field with `enabled`/`disabled` options ([#1568](https://github.com/auth0/terraform-provider-auth0/pull/1568))
+- `resource/auth0_client` – Add support for configuring `third_party_security_mode` and `redirection_policy` ([#1555](https://github.com/auth0/terraform-provider-auth0/pull/1555))
+- `resource/auth0_client_grant` – Add support for configuring `default_for` to specify default grants for third-party clients ([#1555](https://github.com/auth0/terraform-provider-auth0/pull/1555))
+- `resource/auth0_tenant` – Add support for configuring `dynamic_client_registration_security_mode` ([#1555](https://github.com/auth0/terraform-provider-auth0/pull/1555))
+- `resource/auth0_connection` – Add write support for `token_endpoint_jwtca_aud_format` for OIDC and Okta connections ([#1557](https://github.com/auth0/terraform-provider-auth0/pull/1557))
+- `resource/auth0_connection_directory` – Add support for configuring `synchronize_groups` for Inbound Groups Directory Provisioning in Google Workspaces (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+- `resource/auth0_connection_directory_synchronized_groups` – Add support for managing synchronized Google Workspace group IDs via directory provisioning (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+- `data-source/auth0_connection_directory_synchronized_groups` – Add support for retrieving synchronized group IDs for a connection's directory provisioning (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+- `resource/auth0_connection` – Add support for configuring `api_enable_groups` for Google Workspace connections (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+
+BUG FIXES:
+- `resource/auth0_resource_server` – Fix missing expand for `name` field ([#1566](https://github.com/auth0/terraform-provider-auth0/pull/1566))
+- `resource/auth0_tenant` – Fix default values for `ephemeral_session_lifetime`, `idle_ephemeral_session_lifetime`, `enable_pipeline2`, and `disable_management_api_sms_obfuscation` to align with API docs ([#1569](https://github.com/auth0/terraform-provider-auth0/pull/1569))
+
 ## v1.45.0
 
 FEATURES:

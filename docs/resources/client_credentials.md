@@ -152,7 +152,7 @@ resource "auth0_client_credentials" "test" {
 
 Required:
 
-- `credentials` (Block List, Min: 1, Max: 2) Client credentials available for use when Private Key JWT is in use as the client authentication method. A maximum of 2 client credentials can be set. (see [below for nested schema](#nestedblock--private_key_jwt--credentials))
+- `credentials` (Block Set, Min: 1, Max: 2) Client credentials available for use when Private Key JWT is in use as the client authentication method. A maximum of 2 client credentials can be set. (see [below for nested schema](#nestedblock--private_key_jwt--credentials))
 
 <a id="nestedblock--private_key_jwt--credentials"></a>
 ### Nested Schema for `private_key_jwt.credentials`

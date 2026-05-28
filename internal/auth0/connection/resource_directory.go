@@ -2,6 +2,7 @@ package connection
 
 import (
 	"context"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -9,6 +10,10 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+)
+
+var (
+	syncGroupValidValues = []string{"off", "all", "selected"}
 )
 
 // NewDirectoryResource will return a new auth0_connection_directory (1:1) resource.
@@ -67,6 +72,14 @@ func NewDirectoryResource() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether periodic automatic synchronization is enabled. Defaults to false.",
+			},
+			"synchronize_groups": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice(syncGroupValidValues, false),
+				Description: "Group synchronization configuration. " +
+					"Valid values are: " + strings.Join(syncGroupValidValues, ", ") + ". (EA only)",
 			},
 			"created_at": {
 				Type:        schema.TypeString,

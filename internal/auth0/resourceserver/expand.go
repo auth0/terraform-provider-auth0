@@ -30,6 +30,8 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 	if !resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
 		if resourceServerIsAuth0MyAccountAPI(data.GetRawState()) {
 			resourceServer.Name = auth0.String(auth0MyAccountAPIName)
+		} else {
+			resourceServer.Name = value.String(cfg.GetAttr("name"))
 		}
 		resourceServer.SigningAlgorithm = value.String(cfg.GetAttr("signing_alg"))
 		resourceServer.SigningSecret = value.String(cfg.GetAttr("signing_secret"))

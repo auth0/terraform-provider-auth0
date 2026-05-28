@@ -86,11 +86,7 @@ func NewConnectedAccountsDataSource() *schema.Resource {
 	}
 }
 
-// Uses GetAPIV2 — v2 SDK is the permanent choice for connected accounts.
-// The ConnectedAccount struct is Fern-generated from the v2 spec; no migration to v1 is planned.
 func readUserConnectedAccountsForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	// Uses GetAPIV2 — v2 SDK is the permanent choice for connected accounts.
-	// The ConnectedAccount struct is Fern-generated from the v2 spec; no migration to v1 is planned.
 	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	userID := data.Get("user_id").(string)

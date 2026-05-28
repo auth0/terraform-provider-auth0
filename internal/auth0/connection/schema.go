@@ -1,9 +1,13 @@
 package connection
 
 import (
+	"strings"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
+
+var allowedDPoPSigningAlgorithms = []string{"ES256", "ES384", "ES512", "Ed25519"}
 
 var resourceSchema = map[string]*schema.Schema{
 	"name": {
@@ -1011,6 +1015,23 @@ var optionsSchema = &schema.Schema{
 					},
 				},
 			},
+			"federated_connections_access_tokens": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Computed:    true,
+				Description: "Configuration for collecting access tokens and refresh tokens from federated connections. Only applicable for OIDC connections.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"active": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "When enabled, Auth0 will collect and store access tokens and refresh tokens obtained from federated connections during authentication.",
+						},
+					},
+				},
+			},
 			"attribute_map": {
 				Type:     schema.TypeList,
 				MaxItems: 1,
@@ -1421,8 +1442,8 @@ var optionsSchema = &schema.Schema{
 			"dpop_signing_alg": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: validation.StringInSlice([]string{"ES256", "Ed25519"}, false),
-				Description:  "Signature method used to sign the request. EA Only",
+				ValidateFunc: validation.StringInSlice(allowedDPoPSigningAlgorithms, false),
+				Description:  "The algorithm used to sign the DPoP proof. Allowed values: " + strings.Join(allowedDPoPSigningAlgorithms, ", ") + ".",
 			},
 			"password_options": {
 				Type:     schema.TypeList,

@@ -3,6 +3,7 @@ package action
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -22,7 +23,9 @@ func NewResource() *schema.Resource {
 		ReadContext:   readAction,
 		UpdateContext: updateAction,
 		DeleteContext: deleteAction,
-		Timeouts:      &schema.ResourceTimeout{},
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(1 * time.Minute),
+		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -317,5 +320,31 @@ func deployAction(ctx context.Context, data *schema.ResourceData, meta interface
 		return err
 	}
 
+	if err := waitForActionDeployed(ctx, data, api); err != nil {
+		return err
+	}
+
 	return data.Set("version_id", actionVersion.GetID())
+}
+
+func waitForActionDeployed(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	err := retry.RetryContext(ctx, data.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
+		action, err := api.Action.Read(ctx, data.Id())
+		if err != nil {
+			return retry.NonRetryableError(err)
+		}
+
+		if action.GetDeployedVersion() == nil || !action.GetDeployedVersion().Deployed {
+			return retry.RetryableError(
+				fmt.Errorf("action %q not deployed yet", action.GetName()),
+			)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return fmt.Errorf("action %q deploy never completed: %w", data.Get("name").(string), err)
+	}
+
+	return nil
 }

@@ -186,3 +186,29 @@ func TestAccDataSourceUser(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataSourceUserConnectedAccountsTokenVault = `
+data "auth0_user_connected_accounts" "test" {
+	user_id = "auth0|6a1847248bf80353f712d717"
+}
+`
+
+func TestAccDataSourceUserConnectedAccountsTokenVault(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceUserConnectedAccountsTokenVault,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("data.auth0_user_connected_accounts.test", "connected_accounts.#"),
+					resource.TestCheckResourceAttrSet("data.auth0_user_connected_accounts.test", "connected_accounts.0.id"),
+					resource.TestCheckResourceAttrSet("data.auth0_user_connected_accounts.test", "connected_accounts.0.connection"),
+					resource.TestCheckResourceAttrSet("data.auth0_user_connected_accounts.test", "connected_accounts.0.connection_id"),
+					resource.TestCheckResourceAttrSet("data.auth0_user_connected_accounts.test", "connected_accounts.0.strategy"),
+					resource.TestCheckResourceAttrSet("data.auth0_user_connected_accounts.test", "connected_accounts.0.access_type"),
+					resource.TestCheckResourceAttrSet("data.auth0_user_connected_accounts.test", "connected_accounts.0.created_at"),
+					resource.TestCheckResourceAttr("data.auth0_user_connected_accounts.test", "user_id", "auth0|6a1847248bf80353f712d717"),
+				),
+			},
+		},
+	})
+}

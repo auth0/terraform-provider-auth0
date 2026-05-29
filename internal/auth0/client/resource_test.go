@@ -2083,8 +2083,8 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.concur.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.dropbox.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.wsfed.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.digest_algorithm", "sha1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_format", "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.digest_algorithm", ""),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_format", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.create_upn_claim", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.passthrough_claims_with_no_mapping", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_unknown_claims_as_is", "false"),
@@ -2092,7 +2092,19 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.typed_attributes", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.sign_response", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.include_attribute_name_format", "true"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signature_algorithm", "rsa-sha1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signature_algorithm", ""),
+					resource.TestCheckResourceAttrWith("auth0_client.my_client", "addons.0.samlp.0.mappings.%", func(value string) error {
+						if value == "0" {
+							return fmt.Errorf("expected mappings to not be empty as per default")
+						}
+						return nil
+					}),
+					resource.TestCheckResourceAttrWith("auth0_client.my_client", "addons.0.samlp.0.name_identifier_probes.#", func(value string) error {
+						if value == "0" {
+							return fmt.Errorf("expected name_identifier_probes to not be empty as per default")
+						}
+						return nil
+					}),
 				),
 			},
 			{

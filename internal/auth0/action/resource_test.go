@@ -217,3 +217,93 @@ func TestAccAction(t *testing.T) {
 		},
 	})
 }
+
+const testAccActionDeleteWithUnbindStep1 = `
+resource "auth0_action" "action_one" {
+	name    = "Test Action Unbind One {{.testName}}"
+	deploy  = true
+	runtime = "node18"
+	code    = "exports.onExecutePostLogin = async (event, api) => {};"
+
+	supported_triggers {
+		id      = "post-login"
+		version = "v3"
+	}
+}
+
+resource "auth0_action" "action_two" {
+	name    = "Test Action Unbind Two {{.testName}}"
+	deploy  = true
+	runtime = "node18"
+	code    = "exports.onExecutePostLogin = async (event, api) => {};"
+
+	supported_triggers {
+		id      = "post-login"
+		version = "v3"
+	}
+}
+
+resource "auth0_trigger_actions" "login_flow" {
+	trigger = "post-login"
+
+	actions {
+		id           = auth0_action.action_one.id
+		display_name = auth0_action.action_one.name
+	}
+
+	actions {
+		id           = auth0_action.action_two.id
+		display_name = auth0_action.action_two.name
+	}
+}
+`
+
+const testAccActionDeleteWithUnbindStep2 = `
+resource "auth0_action" "action_two" {
+	name    = "Test Action Unbind Two {{.testName}}"
+	deploy  = true
+	runtime = "node18"
+	code    = "exports.onExecutePostLogin = async (event, api) => {};"
+
+	supported_triggers {
+		id      = "post-login"
+		version = "v3"
+	}
+}
+
+resource "auth0_trigger_actions" "login_flow" {
+	trigger = "post-login"
+
+	actions {
+		id           = auth0_action.action_two.id
+		display_name = auth0_action.action_two.name
+	}
+}
+`
+
+// TestAccActionDeleteWithUnbind verifies that removing an action
+// from config while its trigger binding also updates does not produce a 409 Conflict.
+// Terraform's dependency graph does not guarantee ordering between the action destroy
+// and the trigger binding update, so deleteAction must unbind proactively.
+func TestAccActionDeleteWithUnbind(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccActionDeleteWithUnbindStep1, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_action.action_one", "name", fmt.Sprintf("Test Action Unbind One %s", t.Name())),
+					resource.TestCheckResourceAttrSet("auth0_action.action_one", "version_id"),
+					resource.TestCheckResourceAttr("auth0_action.action_two", "name", fmt.Sprintf("Test Action Unbind Two %s", t.Name())),
+					resource.TestCheckResourceAttrSet("auth0_action.action_two", "version_id"),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.#", "2"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccActionDeleteWithUnbindStep2, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.#", "1"),
+				),
+			},
+		},
+	})
+}

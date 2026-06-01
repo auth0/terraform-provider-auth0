@@ -2,6 +2,7 @@ package guardian
 
 import (
 	"context"
+	"errors"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -75,6 +76,11 @@ func updatePhoneFactor(ctx context.Context, data *schema.ResourceData, api *mana
 func configurePhone(ctx context.Context, config cty.Value, api *management.Management) error {
 	var err error
 
+	upeEnabled, err := unifiedPhoneExperienceEnabled(ctx, api)
+	if err != nil {
+		return err
+	}
+
 	config.GetAttr("phone").ForEachElement(func(_ cty.Value, phone cty.Value) (stop bool) {
 
 		messageTypes := &management.PhoneMessageTypes{
@@ -84,7 +90,13 @@ func configurePhone(ctx context.Context, config cty.Value, api *management.Manag
 			return true
 		}
 
-		if !phone.GetAttr("provider").IsNull() || !phone.GetAttr("options").IsNull() {
+		if !phone.GetAttr("provider").IsNull() || phone.GetAttr("options").LengthInt() != 0 {
+
+			if upeEnabled {
+				err = errors.New("provider or options cannot be specified when unified phone experience is enabled")
+				return true
+			}
+
 			mfaProvider := &management.MultiFactorProvider{
 				Provider: value.String(phone.GetAttr("provider")),
 			}

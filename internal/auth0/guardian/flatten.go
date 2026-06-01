@@ -38,7 +38,9 @@ func flattenPhone(ctx context.Context, enabled bool, api *management.Management)
 	if upeEnabled, err := unifiedPhoneExperienceEnabled(ctx, api); err != nil {
 		return nil, err
 	} else if upeEnabled {
-		// With the Unified Phone Experience enabled, the provider and options are managed in `auth0_phone_provider` resource.
+		// With the Unified Phone Experience enabled, the provider and options are not managed in this resource.
+		phoneData["provider"] = nil
+		phoneData["options"] = nil
 		return []interface{}{phoneData}, nil
 	}
 

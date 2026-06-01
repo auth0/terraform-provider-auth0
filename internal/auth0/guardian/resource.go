@@ -14,7 +14,8 @@ import (
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
-// TODO Update the migration guide link once it's available.
+// TODO: Update the migration guide link once it's available.
+
 // phoneProviderDeprecationMessage is shared by the deprecated phone-provider
 // fields that are superseded by the Unified Phone Experience.
 const phoneProviderDeprecationMessage = "This field is deprecated in favor of the Unified Phone Experience. " +
@@ -155,7 +156,8 @@ func NewResource() *schema.Resource {
 							Description: "Provider to use, one of `auth0`, `twilio` or `phone-message-hook`. " +
 								"Selecting `phone-message-hook` will require a " +
 								"Phone Message Action to be created before. " +
-								"[Learn how](https://auth0.com/docs/customize/actions/flows-and-triggers/send-phone-message-flow).",
+								"[Learn how](https://auth0.com/docs/customize/actions/flows-and-triggers/send-phone-message-flow). " +
+								"This field requires `phone_consolidated_experience` to be `false` on the `auth0_tenant`.",
 						},
 						"message_types": {
 							Type:     schema.TypeList,
@@ -167,12 +169,13 @@ func NewResource() *schema.Resource {
 								"Adding both to the array should enable the user to choose.",
 						},
 						"options": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Computed:    true,
-							MaxItems:    1,
-							Deprecated:  phoneProviderDeprecationMessage,
-							Description: "Options for the various providers.",
+							Type:       schema.TypeList,
+							Optional:   true,
+							Computed:   true,
+							MaxItems:   1,
+							Deprecated: phoneProviderDeprecationMessage,
+							Description: "Options for the various providers. " +
+								"This block requires `phone_consolidated_experience` to be `false` on the `auth0_tenant`.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"enrollment_message": {

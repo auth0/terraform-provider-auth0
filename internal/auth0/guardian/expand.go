@@ -76,30 +76,33 @@ func configurePhone(ctx context.Context, config cty.Value, api *management.Manag
 	var err error
 
 	config.GetAttr("phone").ForEachElement(func(_ cty.Value, phone cty.Value) (stop bool) {
-		mfaProvider := &management.MultiFactorProvider{
-			Provider: value.String(phone.GetAttr("provider")),
-		}
-		if err = api.Guardian.MultiFactor.Phone.UpdateProvider(ctx, mfaProvider); err != nil {
-			return true
-		}
-
-		options := phone.GetAttr("options")
-		switch mfaProvider.GetProvider() {
-		case "twilio":
-			if err = updateTwilioOptions(ctx, options, api); err != nil {
-				return true
-			}
-		case "auth0", "phone-message-hook":
-			if err = updateAuth0Options(ctx, options, api); err != nil {
-				return true
-			}
-		}
 
 		messageTypes := &management.PhoneMessageTypes{
 			MessageTypes: value.Strings(phone.GetAttr("message_types")),
 		}
 		if err = api.Guardian.MultiFactor.Phone.UpdateMessageTypes(ctx, messageTypes); err != nil {
 			return true
+		}
+
+		if !phone.GetAttr("provider").IsNull() || !phone.GetAttr("options").IsNull() {
+			mfaProvider := &management.MultiFactorProvider{
+				Provider: value.String(phone.GetAttr("provider")),
+			}
+			if err = api.Guardian.MultiFactor.Phone.UpdateProvider(ctx, mfaProvider); err != nil {
+				return true
+			}
+
+			options := phone.GetAttr("options")
+			switch mfaProvider.GetProvider() {
+			case "twilio":
+				if err = updateTwilioOptions(ctx, options, api); err != nil {
+					return true
+				}
+			case "auth0", "phone-message-hook":
+				if err = updateAuth0Options(ctx, options, api); err != nil {
+					return true
+				}
+			}
 		}
 
 		return stop

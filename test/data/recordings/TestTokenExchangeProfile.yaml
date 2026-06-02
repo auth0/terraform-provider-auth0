@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: 440
         uncompressed: false
-        body: '{"id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2025-01-17T05:58:40.834222847Z","updated_at":"2025-01-17T05:58:40.852381951Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node18","status":"pending","secrets":[],"all_changes_deployed":false}'
+        body: '{"id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2026-06-02T09:23:39.555512798Z","updated_at":"2026-06-02T09:23:39.561952195Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node22","status":"pending","secrets":[],"all_changes_deployed":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 422.972542ms
+        duration: 584.249917ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -51,11 +51,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/0d3e5e29-1b33-4a06-8229-18b340a9117a
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d110643-a54e-432b-a0b7-e58bbf1fae77
         method: GET
       response:
         proto: HTTP/2.0
@@ -65,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2025-01-17T05:58:40.834222847Z","updated_at":"2025-01-17T05:58:40.852381951Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node18","status":"built","secrets":[],"all_changes_deployed":false}'
+        body: '{"id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2026-06-02T09:23:39.555512798Z","updated_at":"2026-06-02T09:23:39.561952195Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"all_changes_deployed":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 389.946458ms
+        duration: 456.324916ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -86,11 +84,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/0d3e5e29-1b33-4a06-8229-18b340a9117a/deploy
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d110643-a54e-432b-a0b7-e58bbf1fae77/deploy
         method: POST
       response:
         proto: HTTP/2.0
@@ -100,13 +96,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","deployed":false,"number":1,"secrets":[],"status":"built","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.620126381Z","runtime":"node18","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"action":{"id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2025-01-17T05:58:40.834222847Z","updated_at":"2025-01-17T05:58:40.834222847Z","all_changes_deployed":false}}'
+        body: '{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"d56abe9a-1f74-449f-9750-c33432797bd7","deployed":false,"number":1,"secrets":[],"status":"built","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.606554840Z","runtime":"node22","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"action":{"id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2026-06-02T09:23:39.555512798Z","updated_at":"2026-06-02T09:23:39.555512798Z","all_changes_deployed":false}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 367.785375ms
+        duration: 599.552375ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -121,11 +117,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/0d3e5e29-1b33-4a06-8229-18b340a9117a
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d110643-a54e-432b-a0b7-e58bbf1fae77
         method: GET
       response:
         proto: HTTP/2.0
@@ -135,50 +129,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2025-01-17T05:58:40.834222847Z","updated_at":"2025-01-17T05:58:40.852381951Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node18","status":"built","secrets":[],"current_version":{"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node18","status":"BUILT","number":1,"build_time":"2025-01-17T05:58:41.684775435Z","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","deployed":true,"number":1,"built_at":"2025-01-17T05:58:41.684775435Z","secrets":[],"status":"built","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z","runtime":"node18","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
+        body: '{"id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2026-06-02T09:23:39.555512798Z","updated_at":"2026-06-02T09:23:39.561952195Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"current_version":{"id":"d56abe9a-1f74-449f-9750-c33432797bd7","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node22","status":"BUILT","number":1,"build_time":"2026-06-02T09:23:40.722622079Z","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"d56abe9a-1f74-449f-9750-c33432797bd7","deployed":true,"number":1,"built_at":"2026-06-02T09:23:40.722622079Z","secrets":[],"status":"built","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z","runtime":"node22","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 432.299459ms
+        duration: 542.169292ms
     - id: 4
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 179
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"name":"token-prof-TestTokenExchangeProfile","subject_token_type":"https://acme.com/cis-token","action_id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","type":"custom_authentication"}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles
-        method: POST
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 286
-        uncompressed: false
-        body: '{"id":"tep_bdN9eWKnMqg1RecL","name":"token-prof-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token","action_id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","created_at":"2025-01-17T05:58:42.538Z","updated_at":"2025-01-17T05:58:42.538Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 201 Created
-        code: 201
-        duration: 513.814583ms
-    - id: 5
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -192,11 +150,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_bdN9eWKnMqg1RecL
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d110643-a54e-432b-a0b7-e58bbf1fae77
         method: GET
       response:
         proto: HTTP/2.0
@@ -206,13 +162,49 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"tep_bdN9eWKnMqg1RecL","name":"token-prof-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token","action_id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","created_at":"2025-01-17T05:58:42.538Z","updated_at":"2025-01-17T05:58:42.538Z"}'
+        body: '{"id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2026-06-02T09:23:39.555512798Z","updated_at":"2026-06-02T09:23:39.561952195Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"current_version":{"id":"d56abe9a-1f74-449f-9750-c33432797bd7","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node22","status":"BUILT","number":1,"build_time":"2026-06-02T09:23:40.722622079Z","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"d56abe9a-1f74-449f-9750-c33432797bd7","deployed":true,"number":1,"built_at":"2026-06-02T09:23:40.722622079Z","secrets":[],"status":"built","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z","runtime":"node22","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 940.887959ms
+        duration: 580.294167ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 179
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"token-prof-TestTokenExchangeProfile","subject_token_type":"https://acme.com/cis-token","action_id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","type":"custom_authentication"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 286
+        uncompressed: false
+        body: '{"id":"tep_YGHxatF4SVyjeMyp","name":"token-prof-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token","action_id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","created_at":"2026-06-02T09:23:42.406Z","updated_at":"2026-06-02T09:23:42.406Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 615.215958ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -227,11 +219,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/0d3e5e29-1b33-4a06-8229-18b340a9117a
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_YGHxatF4SVyjeMyp
         method: GET
       response:
         proto: HTTP/2.0
@@ -241,13 +231,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2025-01-17T05:58:40.834222847Z","updated_at":"2025-01-17T05:58:40.852381951Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node18","status":"built","secrets":[],"current_version":{"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node18","status":"BUILT","number":1,"build_time":"2025-01-17T05:58:41.684775435Z","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","deployed":true,"number":1,"built_at":"2025-01-17T05:58:41.684775435Z","secrets":[],"status":"built","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z","runtime":"node18","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
+        body: '{"id":"tep_YGHxatF4SVyjeMyp","name":"token-prof-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token","action_id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","created_at":"2026-06-02T09:23:42.406Z","updated_at":"2026-06-02T09:23:42.406Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 366.128875ms
+        duration: 510.275916ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -262,11 +252,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_bdN9eWKnMqg1RecL
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d110643-a54e-432b-a0b7-e58bbf1fae77
         method: GET
       response:
         proto: HTTP/2.0
@@ -276,13 +264,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"tep_bdN9eWKnMqg1RecL","name":"token-prof-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token","action_id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","created_at":"2025-01-17T05:58:42.538Z","updated_at":"2025-01-17T05:58:42.538Z"}'
+        body: '{"id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2026-06-02T09:23:39.555512798Z","updated_at":"2026-06-02T09:23:39.561952195Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"current_version":{"id":"d56abe9a-1f74-449f-9750-c33432797bd7","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node22","status":"BUILT","number":1,"build_time":"2026-06-02T09:23:40.722622079Z","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"d56abe9a-1f74-449f-9750-c33432797bd7","deployed":true,"number":1,"built_at":"2026-06-02T09:23:40.722622079Z","secrets":[],"status":"built","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z","runtime":"node22","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 391.121167ms
+        duration: 619.752916ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -297,11 +285,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/0d3e5e29-1b33-4a06-8229-18b340a9117a
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_YGHxatF4SVyjeMyp
         method: GET
       response:
         proto: HTTP/2.0
@@ -311,13 +297,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2025-01-17T05:58:40.834222847Z","updated_at":"2025-01-17T05:58:40.852381951Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node18","status":"built","secrets":[],"current_version":{"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node18","status":"BUILT","number":1,"build_time":"2025-01-17T05:58:41.684775435Z","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","deployed":true,"number":1,"built_at":"2025-01-17T05:58:41.684775435Z","secrets":[],"status":"built","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z","runtime":"node18","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
+        body: '{"id":"tep_YGHxatF4SVyjeMyp","name":"token-prof-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token","action_id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","created_at":"2026-06-02T09:23:42.406Z","updated_at":"2026-06-02T09:23:42.406Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 373.245166ms
+        duration: 600.096458ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -332,11 +318,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_bdN9eWKnMqg1RecL
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d110643-a54e-432b-a0b7-e58bbf1fae77
         method: GET
       response:
         proto: HTTP/2.0
@@ -346,14 +330,47 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"tep_bdN9eWKnMqg1RecL","name":"token-prof-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token","action_id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","created_at":"2025-01-17T05:58:42.538Z","updated_at":"2025-01-17T05:58:42.538Z"}'
+        body: '{"id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2026-06-02T09:23:39.555512798Z","updated_at":"2026-06-02T09:23:39.561952195Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"current_version":{"id":"d56abe9a-1f74-449f-9750-c33432797bd7","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node22","status":"BUILT","number":1,"build_time":"2026-06-02T09:23:40.722622079Z","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"d56abe9a-1f74-449f-9750-c33432797bd7","deployed":true,"number":1,"built_at":"2026-06-02T09:23:40.722622079Z","secrets":[],"status":"built","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z","runtime":"node22","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 373.132458ms
+        duration: 628.801291ms
     - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_YGHxatF4SVyjeMyp
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"tep_YGHxatF4SVyjeMyp","name":"token-prof-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token","action_id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","created_at":"2026-06-02T09:23:42.406Z","updated_at":"2026-06-02T09:23:42.406Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 642.416917ms
+    - id: 11
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -371,8 +388,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_bdN9eWKnMqg1RecL
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_YGHxatF4SVyjeMyp
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -382,48 +399,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"tep_bdN9eWKnMqg1RecL","name":"token-prof-updated-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token-updated","action_id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","created_at":"2025-01-17T05:58:42.538Z","updated_at":"2025-01-17T05:58:47.327Z"}'
+        body: '{"id":"tep_YGHxatF4SVyjeMyp","name":"token-prof-updated-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token-updated","action_id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","created_at":"2026-06-02T09:23:42.406Z","updated_at":"2026-06-02T09:23:48.224Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 444.777791ms
-    - id: 11
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_bdN9eWKnMqg1RecL
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"tep_bdN9eWKnMqg1RecL","name":"token-prof-updated-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token-updated","action_id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","created_at":"2025-01-17T05:58:42.538Z","updated_at":"2025-01-17T05:58:47.327Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 402.488958ms
+        duration: 530.40025ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -438,11 +420,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/0d3e5e29-1b33-4a06-8229-18b340a9117a
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_YGHxatF4SVyjeMyp
         method: GET
       response:
         proto: HTTP/2.0
@@ -452,13 +432,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2025-01-17T05:58:40.834222847Z","updated_at":"2025-01-17T05:58:40.852381951Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node18","status":"built","secrets":[],"current_version":{"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node18","status":"BUILT","number":1,"build_time":"2025-01-17T05:58:41.684775435Z","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","deployed":true,"number":1,"built_at":"2025-01-17T05:58:41.684775435Z","secrets":[],"status":"built","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z","runtime":"node18","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
+        body: '{"id":"tep_YGHxatF4SVyjeMyp","name":"token-prof-updated-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token-updated","action_id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","created_at":"2026-06-02T09:23:42.406Z","updated_at":"2026-06-02T09:23:48.224Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 436.75275ms
+        duration: 349.837459ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -473,11 +453,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_bdN9eWKnMqg1RecL
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d110643-a54e-432b-a0b7-e58bbf1fae77
         method: GET
       response:
         proto: HTTP/2.0
@@ -487,13 +465,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"tep_bdN9eWKnMqg1RecL","name":"token-prof-updated-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token-updated","action_id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","created_at":"2025-01-17T05:58:42.538Z","updated_at":"2025-01-17T05:58:47.327Z"}'
+        body: '{"id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2026-06-02T09:23:39.555512798Z","updated_at":"2026-06-02T09:23:39.561952195Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"current_version":{"id":"d56abe9a-1f74-449f-9750-c33432797bd7","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node22","status":"BUILT","number":1,"build_time":"2026-06-02T09:23:40.722622079Z","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"d56abe9a-1f74-449f-9750-c33432797bd7","deployed":true,"number":1,"built_at":"2026-06-02T09:23:40.722622079Z","secrets":[],"status":"built","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z","runtime":"node22","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 373.985166ms
+        duration: 358.062583ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -508,11 +486,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_bdN9eWKnMqg1RecL
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_YGHxatF4SVyjeMyp
         method: GET
       response:
         proto: HTTP/2.0
@@ -522,13 +498,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"tep_bdN9eWKnMqg1RecL","name":"token-prof-updated-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token-updated","action_id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","created_at":"2025-01-17T05:58:42.538Z","updated_at":"2025-01-17T05:58:47.327Z"}'
+        body: '{"id":"tep_YGHxatF4SVyjeMyp","name":"token-prof-updated-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token-updated","action_id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","created_at":"2026-06-02T09:23:42.406Z","updated_at":"2026-06-02T09:23:48.224Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 408.98375ms
+        duration: 576.480542ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -543,11 +519,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/0d3e5e29-1b33-4a06-8229-18b340a9117a
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_YGHxatF4SVyjeMyp
         method: GET
       response:
         proto: HTTP/2.0
@@ -557,13 +531,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2025-01-17T05:58:40.834222847Z","updated_at":"2025-01-17T05:58:40.852381951Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node18","status":"built","secrets":[],"current_version":{"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node18","status":"BUILT","number":1,"build_time":"2025-01-17T05:58:41.684775435Z","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","deployed":true,"number":1,"built_at":"2025-01-17T05:58:41.684775435Z","secrets":[],"status":"built","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z","runtime":"node18","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
+        body: '{"id":"tep_YGHxatF4SVyjeMyp","name":"token-prof-updated-TestTokenExchangeProfile","type":"custom_authentication","subject_token_type":"https://acme.com/cis-token-updated","action_id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","created_at":"2026-06-02T09:23:42.406Z","updated_at":"2026-06-02T09:23:48.224Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 466.799333ms
+        duration: 440.344917ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -578,25 +552,25 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_bdN9eWKnMqg1RecL
-        method: DELETE
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d110643-a54e-432b-a0b7-e58bbf1fae77
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers: {}
-        status: 204 No Content
-        code: 204
-        duration: 508.932083ms
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2026-06-02T09:23:39.555512798Z","updated_at":"2026-06-02T09:23:39.561952195Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"current_version":{"id":"d56abe9a-1f74-449f-9750-c33432797bd7","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node22","status":"BUILT","number":1,"build_time":"2026-06-02T09:23:40.722622079Z","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"d56abe9a-1f74-449f-9750-c33432797bd7","deployed":true,"number":1,"built_at":"2026-06-02T09:23:40.722622079Z","secrets":[],"status":"built","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z","runtime":"node22","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 440.220708ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -611,27 +585,23 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/0d3e5e29-1b33-4a06-8229-18b340a9117a
-        method: GET
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/token-exchange-profiles/tep_YGHxatF4SVyjeMyp
+        method: DELETE
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"0d3e5e29-1b33-4a06-8229-18b340a9117a","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2025-01-17T05:58:40.834222847Z","updated_at":"2025-01-17T05:58:40.852381951Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node18","status":"built","secrets":[],"current_version":{"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node18","status":"BUILT","number":1,"build_time":"2025-01-17T05:58:41.684775435Z","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"b96bb2d9-e67d-4d99-a0dd-d7a93a4c3e77","deployed":true,"number":1,"built_at":"2025-01-17T05:58:41.684775435Z","secrets":[],"status":"built","created_at":"2025-01-17T05:58:41.620126381Z","updated_at":"2025-01-17T05:58:41.686007224Z","runtime":"node18","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 385.639333ms
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 817.628666ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -646,11 +616,75 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.14.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/0d3e5e29-1b33-4a06-8229-18b340a9117a
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d110643-a54e-432b-a0b7-e58bbf1fae77
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"5d110643-a54e-432b-a0b7-e58bbf1fae77","name":"TestTokenExchangeProfile-Action","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}],"created_at":"2026-06-02T09:23:39.555512798Z","updated_at":"2026-06-02T09:23:39.561952195Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node22","status":"built","secrets":[],"current_version":{"id":"d56abe9a-1f74-449f-9750-c33432797bd7","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node22","status":"BUILT","number":1,"build_time":"2026-06-02T09:23:40.722622079Z","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"d56abe9a-1f74-449f-9750-c33432797bd7","deployed":true,"number":1,"built_at":"2026-06-02T09:23:40.722622079Z","secrets":[],"status":"built","created_at":"2026-06-02T09:23:40.606554840Z","updated_at":"2026-06-02T09:23:40.724264101Z","runtime":"node22","supported_triggers":[{"id":"custom-token-exchange","version":"v1"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 377.773375ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/custom-token-exchange/bindings?page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 30
+        uncompressed: false
+        body: '{"bindings":[],"per_page":100}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 590.079083ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/5d110643-a54e-432b-a0b7-e58bbf1fae77
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -666,4 +700,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 452.389208ms
+        duration: 378.575583ms

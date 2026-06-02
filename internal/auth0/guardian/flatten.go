@@ -35,10 +35,10 @@ func flattenPhone(ctx context.Context, enabled bool, api *management.Management)
 	}
 	phoneData["message_types"] = phoneMessageTypes.GetMessageTypes()
 
-	if cpeEnabled, err := isConsolidatedPhoneExperienceEnabled(ctx, api); err != nil {
+	if pceEnabled, err := isPhoneConsolidatedExperienceEnabled(ctx, api); err != nil {
 		return nil, err
-	} else if cpeEnabled {
-		// With the Consolidated Phone Experience enabled, the provider and options are not managed in this resource.
+	} else if pceEnabled {
+		// With the Phone Consolidated Experience enabled, the provider and options are not managed in this resource.
 		phoneData["provider"] = nil
 		phoneData["options"] = nil
 		return []interface{}{phoneData}, nil
@@ -231,4 +231,3 @@ func flattenPush(ctx context.Context, data *schema.ResourceData, enabled bool, a
 
 	return []interface{}{pushData}, nil
 }
-

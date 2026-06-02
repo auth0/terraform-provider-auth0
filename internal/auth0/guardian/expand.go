@@ -76,13 +76,12 @@ func updatePhoneFactor(ctx context.Context, data *schema.ResourceData, api *mana
 func configurePhone(ctx context.Context, config cty.Value, api *management.Management) error {
 	var err error
 
-	cpeEnabled, err := isConsolidatedPhoneExperienceEnabled(ctx, api)
+	pceEnabled, err := isPhoneConsolidatedExperienceEnabled(ctx, api)
 	if err != nil {
 		return err
 	}
 
 	config.GetAttr("phone").ForEachElement(func(_ cty.Value, phone cty.Value) (stop bool) {
-
 		messageTypes := &management.PhoneMessageTypes{
 			MessageTypes: value.Strings(phone.GetAttr("message_types")),
 		}
@@ -90,30 +89,29 @@ func configurePhone(ctx context.Context, config cty.Value, api *management.Manag
 			return true
 		}
 
-		if !phone.GetAttr("provider").IsNull() || phone.GetAttr("options").LengthInt() != 0 {
+		if pceEnabled {
+			if !phone.GetAttr("provider").IsNull() || phone.GetAttr("options").LengthInt() != 0 {
+				err = errors.New("provider or options cannot be specified when phone consolidated experience is enabled for tenant")
+			}
+			return true
+		}
 
-			if cpeEnabled {
-				err = errors.New("provider or options cannot be specified when consolidated phone experience is enabled for tenant")
+		mfaProvider := &management.MultiFactorProvider{
+			Provider: value.String(phone.GetAttr("provider")),
+		}
+		if err = api.Guardian.MultiFactor.Phone.UpdateProvider(ctx, mfaProvider); err != nil {
+			return true
+		}
+
+		options := phone.GetAttr("options")
+		switch mfaProvider.GetProvider() {
+		case "twilio":
+			if err = updateTwilioOptions(ctx, options, api); err != nil {
 				return true
 			}
-
-			mfaProvider := &management.MultiFactorProvider{
-				Provider: value.String(phone.GetAttr("provider")),
-			}
-			if err = api.Guardian.MultiFactor.Phone.UpdateProvider(ctx, mfaProvider); err != nil {
+		case "auth0", "phone-message-hook":
+			if err = updateAuth0Options(ctx, options, api); err != nil {
 				return true
-			}
-
-			options := phone.GetAttr("options")
-			switch mfaProvider.GetProvider() {
-			case "twilio":
-				if err = updateTwilioOptions(ctx, options, api); err != nil {
-					return true
-				}
-			case "auth0", "phone-message-hook":
-				if err = updateAuth0Options(ctx, options, api); err != nil {
-					return true
-				}
 			}
 		}
 

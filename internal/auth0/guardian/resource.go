@@ -530,17 +530,16 @@ func deleteGuardian(ctx context.Context, _ *schema.ResourceData, meta interface{
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-// isConsolidatedPhoneExperienceEnabled returns true if the Consolidated Phone Experience is enabled for the tenant.
-func isConsolidatedPhoneExperienceEnabled(ctx context.Context, api *management.Management) (bool, error) {
+// isPhoneConsolidatedExperienceEnabled returns true if the Consolidated Phone Experience is enabled for the tenant.
+func isPhoneConsolidatedExperienceEnabled(ctx context.Context, api *management.Management) (bool, error) {
 	tenant, err := api.Tenant.Read(ctx)
 	if err != nil {
 		return false, err
 	}
 
-	// Enabled by default for new tenants; disabled only if explicitly set to false.
-	if upe := tenant.PhoneConsolidatedExperience; upe != nil && *upe == false {
-		return false, nil
+	// If not explisitly set, Enabled by default for new tenants.
+	if tenant.PhoneConsolidatedExperience == nil {
+		return true, nil
 	}
-
-	return true, nil
+	return *tenant.PhoneConsolidatedExperience, nil
 }

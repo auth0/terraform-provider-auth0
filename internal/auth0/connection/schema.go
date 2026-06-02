@@ -1403,7 +1403,7 @@ var optionsSchema = &schema.Schema{
 					}, false),
 				},
 				Optional:    true,
-				Description: "List of allowed algorithms for the ID token signature. If not set, RS256 will be applied at runtime. (Okta/OIDC Connections)",
+				Description: "List of allowed algorithms for the ID token signature. If not set or empty, default algorithm(s) will be applied at runtime. (Okta/OIDC Connections)",
 			},
 			"token_endpoint_jwtca_aud_format": {
 				Type:     schema.TypeString,

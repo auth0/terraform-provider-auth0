@@ -1190,6 +1190,12 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),       // Gets set to a default if not provided.
 				),
 			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionOIDCConfigEmptyIDTokenAlgs, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.#", "0"),
+				),
+			},
 		},
 	})
 }
@@ -1379,6 +1385,32 @@ resource "auth0_connection" "oidc" {
 }
 `
 
+const testAccConnectionOIDCConfigEmptyIDTokenAlgs = `
+resource "auth0_connection" "oidc" {
+	name     = "Acceptance-Test-OIDC-{{.testName}}"
+	display_name     = "Acceptance-Test-OIDC-{{.testName}}"
+	strategy = "oidc"
+	show_as_button = false
+	options {
+		client_id     = "1234567"
+		client_secret = "1234567"
+		domain_aliases = [
+			"example.com"
+		]
+		type                   = "front_channel"
+		issuer                 = "https://www.paypalobjects.com"
+		jwks_uri               = "https://api.paypal.com/v1/oauth2/certs"
+		discovery_url          = "https://www.paypalobjects.com/.well-known/openid-configuration"
+		token_endpoint         = "https://api.paypal.com/v1/oauth2/token"
+		userinfo_endpoint      = "https://api.paypal.com/v1/oauth2/token/userinfo"
+		authorization_endpoint = "https://www.paypal.com/signin/authorize"
+		scopes                 = [ "openid", "email" ]
+		set_user_root_attributes = "on_first_login"
+		id_token_signed_response_algs = []
+	}
+}
+`
+
 func TestAccConnectionOkta(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -1477,6 +1509,12 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/v2/logo.svg"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "1"), // Gets set to a default if not provided.
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),       // Gets set to a default if not provided.
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionOktaConfigEmptyIDTokenAlgs, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.#", "0"),
 				),
 			},
 		},
@@ -1588,6 +1626,31 @@ resource "auth0_connection" "okta" {
 		non_persistent_attrs     = [ "gender" ]
 		set_user_root_attributes = "on_first_login"
 		icon_url                 = "https://example.com/v2/logo.svg"
+	}
+}
+`
+
+const testAccConnectionOktaConfigEmptyIDTokenAlgs = `
+resource "auth0_connection" "okta" {
+	name           = "Acceptance-Test-Okta-{{.testName}}"
+	display_name   = "Acceptance-Test-Okta-{{.testName}}"
+	strategy       = "okta"
+	show_as_button = false
+	options {
+		client_id                = "123456"
+		client_secret            = "123456"
+		domain                   = "domain.okta.com"
+		domain_aliases           = [ "example.com" ]
+		issuer                   = "https://domain.okta.com"
+		jwks_uri                 = "https://domain.okta.com/oauth2/v2/keys"
+		token_endpoint           = "https://domain.okta.com/oauth2/v2/token"
+		userinfo_endpoint        = "https://domain.okta.com/oauth2/v2/userinfo"
+		authorization_endpoint   = "https://domain.okta.com/oauth2/v2/authorize"
+		scopes                   = [ "openid", "profile"]
+		non_persistent_attrs     = [ "gender" ]
+		set_user_root_attributes = "on_first_login"
+		icon_url                 = "https://example.com/v2/logo.svg"
+		id_token_signed_response_algs = []
 	}
 }
 `

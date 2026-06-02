@@ -1,3 +1,15 @@
+## v1.48.0
+
+FEATURES:
+- `data-source/auth0_user_connected_accounts` – Add support for retrieving connection accounts for a user ([#1589](https://github.com/auth0/terraform-provider-auth0/pull/1589))
+
+ENHANCEMENTS:
+
+- `resource/auth0_self_service_profile_custom_text` – Add validation for `language` and `page` attributes ([#1585](https://github.com/auth0/terraform-provider-auth0/pull/1585))
+- `resource/auth0_connection` – Add support to configure `destination_url` and `recipient_url` under connection options ([#1591](https://github.com/auth0/terraform-provider-auth0/pull/1591))
+- `resource/auth0_connection` – Add support for `ES384` and `ES512` as `dpop_signing_alg` ([#1584](https://github.com/auth0/terraform-provider-auth0/pull/1584))
+- `resource/auth0_client` – Improve handling for defaults on SAML addons ([#1497](https://github.com/auth0/terraform-provider-auth0/pull/1497))
+
 ## v1.47.0
 
 ENHANCEMENTS:

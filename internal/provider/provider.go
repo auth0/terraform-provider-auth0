@@ -271,6 +271,7 @@ func New() *schema.Provider {
 			"auth0_tenant":                                   tenant.NewDataSource(),
 			"auth0_token_exchange_profile":                   tokenexchangeprofile.NewDataSource(),
 			"auth0_user":                                     user.NewDataSource(),
+			"auth0_user_connected_accounts":                  user.NewConnectedAccountsDataSource(),
 			"auth0_user_attribute_profile":                   userattributeprofile.NewDataSource(),
 		},
 	}

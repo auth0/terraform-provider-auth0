@@ -1100,7 +1100,7 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 	return options, diag.FromErr(err)
 }
 
-// nonEmptyStrings returns nil for a null OR empty list
+// nonEmptyStrings returns nil for a null OR empty list.
 func nonEmptyStrings(v cty.Value) *[]string {
 	if v.IsNull() || v.LengthInt() == 0 {
 		return nil

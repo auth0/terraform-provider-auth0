@@ -35,10 +35,10 @@ func flattenPhone(ctx context.Context, enabled bool, api *management.Management)
 	}
 	phoneData["message_types"] = phoneMessageTypes.GetMessageTypes()
 
-	if upeEnabled, err := unifiedPhoneExperienceEnabled(ctx, api); err != nil {
+	if cpeEnabled, err := isConsolidatedPhoneExperienceEnabled(ctx, api); err != nil {
 		return nil, err
-	} else if upeEnabled {
-		// With the Unified Phone Experience enabled, the provider and options are not managed in this resource.
+	} else if cpeEnabled {
+		// With the Consolidated Phone Experience enabled, the provider and options are not managed in this resource.
 		phoneData["provider"] = nil
 		phoneData["options"] = nil
 		return []interface{}{phoneData}, nil
@@ -232,17 +232,3 @@ func flattenPush(ctx context.Context, data *schema.ResourceData, enabled bool, a
 	return []interface{}{pushData}, nil
 }
 
-// unifiedPhoneExperienceEnabled returns true if the Unified Phone Experience is enabled for the tenant.
-func unifiedPhoneExperienceEnabled(ctx context.Context, api *management.Management) (bool, error) {
-	tenant, err := api.Tenant.Read(ctx)
-	if err != nil {
-		return false, err
-	}
-
-	// Enabled by default for new tenants; disabled only if explicitly set to false.
-	if upe := tenant.PhoneConsolidatedExperience; upe != nil && *upe == false {
-		return false, nil
-	}
-
-	return true, nil
-}

@@ -76,7 +76,7 @@ func updatePhoneFactor(ctx context.Context, data *schema.ResourceData, api *mana
 func configurePhone(ctx context.Context, config cty.Value, api *management.Management) error {
 	var err error
 
-	upeEnabled, err := unifiedPhoneExperienceEnabled(ctx, api)
+	cpeEnabled, err := isConsolidatedPhoneExperienceEnabled(ctx, api)
 	if err != nil {
 		return err
 	}
@@ -92,8 +92,8 @@ func configurePhone(ctx context.Context, config cty.Value, api *management.Manag
 
 		if !phone.GetAttr("provider").IsNull() || phone.GetAttr("options").LengthInt() != 0 {
 
-			if upeEnabled {
-				err = errors.New("provider or options cannot be specified when unified phone experience is enabled")
+			if cpeEnabled {
+				err = errors.New("provider or options cannot be specified when consolidated phone experience is enabled for tenant")
 				return true
 			}
 

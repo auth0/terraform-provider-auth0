@@ -82,37 +82,38 @@ func configurePhone(ctx context.Context, config cty.Value, api *management.Manag
 	}
 
 	config.GetAttr("phone").ForEachElement(func(_ cty.Value, phone cty.Value) (stop bool) {
+		// Provider and options are only valid when the phone consolidated experience is disabled.
+		if pceEnabled {
+			if !phone.GetAttr("provider").IsNull() || phone.GetAttr("options").LengthInt() != 0 {
+				err = errors.New("provider or options cannot be specified when phone consolidated experience is enabled for tenant")
+				return true
+			}
+		} else {
+			mfaProvider := &management.MultiFactorProvider{
+				Provider: value.String(phone.GetAttr("provider")),
+			}
+			if err = api.Guardian.MultiFactor.Phone.UpdateProvider(ctx, mfaProvider); err != nil {
+				return true
+			}
+
+			options := phone.GetAttr("options")
+			switch mfaProvider.GetProvider() {
+			case "twilio":
+				if err = updateTwilioOptions(ctx, options, api); err != nil {
+					return true
+				}
+			case "auth0", "phone-message-hook":
+				if err = updateAuth0Options(ctx, options, api); err != nil {
+					return true
+				}
+			}
+		}
+
 		messageTypes := &management.PhoneMessageTypes{
 			MessageTypes: value.Strings(phone.GetAttr("message_types")),
 		}
 		if err = api.Guardian.MultiFactor.Phone.UpdateMessageTypes(ctx, messageTypes); err != nil {
 			return true
-		}
-
-		if pceEnabled {
-			if !phone.GetAttr("provider").IsNull() || phone.GetAttr("options").LengthInt() != 0 {
-				err = errors.New("provider or options cannot be specified when phone consolidated experience is enabled for tenant")
-			}
-			return true
-		}
-
-		mfaProvider := &management.MultiFactorProvider{
-			Provider: value.String(phone.GetAttr("provider")),
-		}
-		if err = api.Guardian.MultiFactor.Phone.UpdateProvider(ctx, mfaProvider); err != nil {
-			return true
-		}
-
-		options := phone.GetAttr("options")
-		switch mfaProvider.GetProvider() {
-		case "twilio":
-			if err = updateTwilioOptions(ctx, options, api); err != nil {
-				return true
-			}
-		case "auth0", "phone-message-hook":
-			if err = updateAuth0Options(ctx, options, api); err != nil {
-				return true
-			}
 		}
 
 		return stop

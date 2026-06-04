@@ -762,7 +762,7 @@ Optional:
 - `global_token_revocation_jwt_iss` (String) Specifies the issuer of the JWT used for global token revocation for the SAML connection.
 - `global_token_revocation_jwt_sub` (String) Specifies the subject of the JWT used for global token revocation for the SAML connection.
 - `icon_url` (String) Icon URL.
-- `id_token_signed_response_algs` (List of String) List of allowed algorithms for the ID token signature. If not set, RS256 will be applied at runtime. (Okta/OIDC Connections)
+- `id_token_signed_response_algs` (List of String) List of allowed algorithms for the ID token signature. If not set or empty, default algorithm(s) will be applied at runtime. (Okta/OIDC Connections)
 - `identity_api` (String) Azure AD Identity API. Available options are: `microsoft-identity-platform-v2.0` or `azure-active-directory-v1.0`.
 - `idp_initiated` (Block List, Max: 1) Configuration options for IDP Initiated Authentication. This is an object with the properties: `client_id`, `client_protocol`, and `client_authorize_query`. (see [below for nested schema](#nestedblock--options--idp_initiated))
 - `import_mode` (Boolean) Indicates whether you have a legacy user store and want to gradually migrate those users to the Auth0 user store.

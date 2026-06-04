@@ -1002,7 +1002,7 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 		NonPersistentAttrs:          value.Strings(config.GetAttr("non_persistent_attrs")),
 		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
 		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
-		IDTokenSignedResponseAlgs:   value.Strings(config.GetAttr("id_token_signed_response_algs")),
+		IDTokenSignedResponseAlgs:   nonEmptyStrings(config.GetAttr("id_token_signed_response_algs")),
 		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
 		TokenEndpointJwtcaAudFormat: value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
 	}
@@ -1062,7 +1062,7 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
 		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
 		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
-		IDTokenSignedResponseAlgs:   value.Strings(config.GetAttr("id_token_signed_response_algs")),
+		IDTokenSignedResponseAlgs:   nonEmptyStrings(config.GetAttr("id_token_signed_response_algs")),
 		TokenEndpointJwtcaAudFormat: value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
 	}
 
@@ -1098,6 +1098,15 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
+}
+
+// nonEmptyStrings returns nil for a null OR empty list.
+func nonEmptyStrings(v cty.Value) *[]string {
+	if v.IsNull() || v.LengthInt() == 0 {
+		return nil
+	}
+
+	return value.Strings(v)
 }
 
 func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {

@@ -21,6 +21,9 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
+// These defaults are used only in flatten, but not as schema default, so that:
+// 1. Terraform doesn't applying defaults to attributes present in the API response but missing in configuration.
+// 2. On import, missing attributes get the correct default instead of Go's zero value.
 const (
 	idleSessionLifetimeDefault                 = 72.00
 	sessionLifetimeDefault                     = 168.00
@@ -104,28 +107,28 @@ func NewResource() *schema.Resource {
 			"session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Default:      sessionLifetimeDefault,
+				Computed:     true,
 				ValidateFunc: validation.FloatAtLeast(0.01),
 				Description:  "Number of hours during which a session will stay valid.",
 			},
 			"idle_session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Default:      idleSessionLifetimeDefault,
+				Computed:     true,
 				ValidateFunc: validation.FloatAtLeast(0.01),
 				Description:  "Number of hours during which a session can be inactive before the user must log in again.",
 			},
 			"ephemeral_session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Default:      ephemeralSessionLifetimeDefault,
+				Computed:     true,
 				ValidateFunc: validation.FloatAtLeast(0.0167),
 				Description:  "Number of hours an ephemeral (non-persistent) session will stay valid.",
 			},
 			"idle_ephemeral_session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Default:      idleEphemeralSessionLifetimeDefault,
+				Computed:     true,
 				ValidateFunc: validation.FloatAtLeast(0.0167),
 				Description:  "Number of hours for which an ephemeral (non-persistent) session can be inactive before the user must log in again.",
 			},
@@ -148,8 +151,8 @@ func NewResource() *schema.Resource {
 						"enable_client_connections": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Default:     enableClientConnectionsDefault,
-							Description: "Indicates whether all current connections should be enabled when a new client is created. (Default: `true`)",
+							Computed:    true,
+							Description: "Indicates whether all current connections should be enabled when a new client is created.",
 						},
 						"enable_apis_section": {
 							Type:        schema.TypeBool,
@@ -160,7 +163,7 @@ func NewResource() *schema.Resource {
 						"enable_pipeline2": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Default:     enablePipeline2Default,
+							Computed:    true,
 							Description: "Indicates whether advanced API Authorization scenarios are enabled.",
 						},
 						"enable_dynamic_client_registration": {
@@ -246,7 +249,7 @@ func NewResource() *schema.Resource {
 						"disable_management_api_sms_obfuscation": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Default:     disableManagementAPISMSObfuscationDefault,
+							Computed:    true,
 							Description: "If true, SMS phone numbers will not be obfuscated in Management API GET calls.",
 						},
 						"enable_adfs_waad_email_verification": {

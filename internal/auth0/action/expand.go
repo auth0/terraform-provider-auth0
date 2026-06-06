@@ -30,6 +30,11 @@ func expandAction(data *schema.ResourceData) *management.Action {
 
 	if data.HasChange("secrets") {
 		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
+	} else if data.IsNewResource() || data.HasChange("secrets_wo_version") {
+		secretsWO := config.GetAttr("secrets_wo")
+		if !secretsWO.IsNull() && secretsWO.LengthInt() > 0 {
+			action.Secrets = expandActionSecretsWO(secretsWO)
+		}
 	}
 
 	if data.HasChange("modules") {
@@ -102,6 +107,20 @@ func expandActionSecrets(secrets cty.Value) *[]management.ActionSecret {
 	return &actionSecrets
 }
 
+func expandActionSecretsWO(secrets cty.Value) *[]management.ActionSecret {
+	actionSecrets := make([]management.ActionSecret, 0)
+
+	secrets.ForEachElement(func(_ cty.Value, secret cty.Value) (stop bool) {
+		actionSecrets = append(actionSecrets, management.ActionSecret{
+			Name:  value.String(secret.GetAttr("name")),
+			Value: value.String(secret.GetAttr("value")),
+		})
+		return stop
+	})
+
+	return &actionSecrets
+}
+
 func expandActionModules(modules cty.Value) *[]management.ActionModules {
 	if modules.IsNull() {
 		return nil
@@ -139,7 +158,7 @@ func expandTriggerBindings(config cty.Value) []*management.ActionBinding {
 }
 
 func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceData, api *management.Management) diag.Diagnostics {
-	if !data.HasChange("secrets") {
+	if !data.HasChange("secrets") && !data.HasChange("secrets_wo_version") {
 		return nil
 	}
 
@@ -148,21 +167,26 @@ func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceDa
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	// Extract changes to secrets from the resource data.
-	oldSecrets, newSecrets := data.GetChange("secrets")
-
-	// Stores the old and secrets from *schema.Set to slices of interface{}.
+	// Aggregate both old and new secret names across secrets and secrets_wo
+	// so we can detect any API-side secret that would be dropped by the update.
 	var secretsList []interface{}
 
-	if oldSecrets != nil {
-		secretsList = append(secretsList, oldSecrets.(*schema.Set).List()...)
+	if data.HasChange("secrets") {
+		oldSecrets, newSecrets := data.GetChange("secrets")
+		if oldSecrets != nil {
+			secretsList = append(secretsList, oldSecrets.(*schema.Set).List()...)
+		}
+		if newSecrets != nil {
+			secretsList = append(secretsList, newSecrets.(*schema.Set).List()...)
+		}
 	}
 
-	if newSecrets != nil {
-		secretsList = append(secretsList, newSecrets.(*schema.Set).List()...)
+	if data.HasChange("secrets_wo_version") {
+		if secretsWO, ok := data.GetOk("secrets_wo"); ok {
+			secretsList = append(secretsList, secretsWO.([]interface{})...)
+		}
 	}
 
-	// Pass allSecrets to check for unmanaged action secrets.
 	return checkForUnmanagedActionSecrets(secretsList, preUpdateAction.GetSecrets())
 }
 

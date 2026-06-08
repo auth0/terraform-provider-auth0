@@ -108,6 +108,18 @@ func flattenWebhookAuthorization(auth map[string]interface{}, data *schema.Resou
 		if version, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.token_wo_version"); ok {
 			authMap["token_wo_version"] = version
 		}
+	case "custom_header":
+		// header_key IS returned by the API — read directly from response.
+		if v, ok := auth["header_key"]; ok && v != "" {
+			authMap["header_key"] = v
+		}
+		// header_value is never returned by the API — preserve from prior state.
+		if v, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.header_value"); ok && v != "" {
+			authMap["header_value"] = v
+		}
+		if v, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.header_value_wo_version"); ok {
+			authMap["header_value_wo_version"] = v
+		}
 	}
 
 	return authMap

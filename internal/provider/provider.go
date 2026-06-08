@@ -6,6 +6,8 @@ import (
 	"os"
 
 	auth0client "github.com/auth0/terraform-provider-auth0/v2/internal/auth0"
+	actionres "github.com/auth0/terraform-provider-auth0/v2/internal/services/action/auth0_action"
+	triggerbindingsres "github.com/auth0/terraform-provider-auth0/v2/internal/services/action/auth0_trigger_bindings"
 	clientres "github.com/auth0/terraform-provider-auth0/v2/internal/services/client"
 	orgres "github.com/auth0/terraform-provider-auth0/v2/internal/services/organization"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -144,12 +146,16 @@ func (p *auth0Provider) Resources(_ context.Context) []func() resource.Resource 
 	return []func() resource.Resource{
 		clientres.NewResource,
 		orgres.NewResource,
+		actionres.NewResource,
+		triggerbindingsres.NewResource,
 	}
 }
 
 // DataSources returns every data source implemented by this provider.
 func (p *auth0Provider) DataSources(_ context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+	return []func() datasource.DataSource{
+		actionres.NewDataSource,
+	}
 }
 
 func firstNonEmpty(values ...string) string {

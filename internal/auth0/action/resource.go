@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
@@ -220,64 +219,8 @@ func updateAction(ctx context.Context, data *schema.ResourceData, meta interface
 func deleteAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if err := unbindActionFromTriggers(ctx, data, api); err != nil {
-		return diag.FromErr(err)
-	}
-
 	if err := api.Action.Delete(ctx, data.Id()); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
-	}
-
-	return nil
-}
-
-// unbindActionFromTriggers removes the action from any trigger bindings before deletion.
-// This is necessary because Terraform's dependency graph does not enforce ordering between
-// an orphaned action's destroy and the trigger binding update that would remove it.
-func unbindActionFromTriggers(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
-	action, err := api.Action.Read(ctx, data.Id())
-	if err != nil {
-		return internalError.HandleAPIError(data, err)
-	}
-
-	for _, trigger := range action.SupportedTriggers {
-		triggerID := trigger.GetID()
-
-		var allBindings []*management.ActionBinding
-		var page int
-		for {
-			bindingList, err := api.Action.Bindings(ctx, triggerID, management.Page(page), management.PerPage(100))
-			if err != nil {
-				return err
-			}
-			allBindings = append(allBindings, bindingList.Bindings...)
-			if !bindingList.HasNext() {
-				break
-			}
-			page++
-		}
-
-		// Rebuild the binding list without the action being deleted.
-		// Only Ref and DisplayName are needed, matches expandTriggerBindings() of auth0_trigger_actions.
-		var filtered []*management.ActionBinding
-		for _, binding := range allBindings {
-			if binding.GetAction().GetID() != data.Id() {
-				t := "action_id"
-				filtered = append(filtered, &management.ActionBinding{
-					Ref: &management.ActionBindingReference{
-						Type:  &t,
-						Value: auth0.String(binding.GetAction().GetID()),
-					},
-					DisplayName: binding.DisplayName,
-				})
-			}
-		}
-
-		if len(filtered) != len(allBindings) {
-			if err := api.Action.UpdateBindings(ctx, triggerID, filtered); err != nil {
-				return err
-			}
-		}
 	}
 
 	return nil

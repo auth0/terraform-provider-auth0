@@ -279,15 +279,13 @@ func NewResource() *schema.Resource {
 							Sensitive:     true,
 							ConflictsWith: []string{"sink.0.datadog_api_key"},
 							RequiredWith:  []string{"sink.0.datadog_api_key_wo_version"},
-							Description: "The Datadog API key (write-only). " +
-								"This value is only available during resource creation and update, and is **not** stored in Terraform state. " +
-								"To change the API key, update the `datadog_api_key_wo_version` attribute.",
+							Description:   "The Datadog API key (write-only). This value is **not** stored in Terraform state.",
 						},
 						"datadog_api_key_wo_version": {
 							Type:          schema.TypeInt,
 							Optional:      true,
 							ConflictsWith: []string{"sink.0.datadog_api_key"},
-							Description:   "Version number for `datadog_api_key_wo`. Increment this value to trigger an API key change when using `datadog_api_key_wo`.",
+							Description:   "Version number for `datadog_api_key_wo`. Must be a positive integer (starting at `1`). Increment this value to trigger an API key change when using `datadog_api_key_wo`.",
 						},
 						"splunk_domain": {
 							Type:        schema.TypeString,

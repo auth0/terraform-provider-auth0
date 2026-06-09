@@ -113,8 +113,8 @@ Optional:
 - `azure_resource_group` (String) The Azure EventGrid resource group which allows you to manage all Azure assets within one subscription.
 - `azure_subscription_id` (String) The unique alphanumeric string that identifies your Azure subscription.
 - `datadog_api_key` (String, Sensitive) The Datadog API key. **Note:** For better security, consider using `datadog_api_key_wo` instead.
-- `datadog_api_key_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The Datadog API key (write-only). This value is only available during resource creation and update, and is **not** stored in Terraform state. To change the API key, update the `datadog_api_key_wo_version` attribute.
-- `datadog_api_key_wo_version` (Number) Version number for `datadog_api_key_wo`. Update this value to trigger an API key change when using `datadog_api_key_wo`.
+- `datadog_api_key_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The Datadog API key (write-only). This value is **not** stored in Terraform state.
+- `datadog_api_key_wo_version` (Number) Version number for `datadog_api_key_wo`. Must be a positive integer (starting at `1`). Increment this value to trigger an API key change when using `datadog_api_key_wo`.
 - `datadog_region` (String) The Datadog region. Possible values: `us`, `eu`, `us3`, `us5`.
 - `http_authorization` (String, Sensitive) Sent in the HTTP "Authorization" header with each request.
 - `http_content_format` (String) The format of data sent over HTTP. Options are "JSONLINES", "JSONARRAY" or "JSONOBJECT"

@@ -2,7 +2,6 @@ package logstream
 
 import (
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -93,39 +92,13 @@ func flattenLogStreamSinkDatadog(data *schema.ResourceData, o *management.LogStr
 		"datadog_region": o.GetRegion(),
 	}
 
-	if datadogAPIKeyWOVersionSet(data) {
-		result["datadog_api_key_wo_version"] = data.Get("sink.0.datadog_api_key_wo_version")
+	if v, ok := data.GetOk("sink.0.datadog_api_key_wo_version"); ok {
+		result["datadog_api_key_wo_version"] = v
 	} else {
 		result["datadog_api_key"] = o.GetAPIKey()
 	}
 
 	return result
-}
-
-// datadogAPIKeyWOVersionSet reports whether sink.0.datadog_api_key_wo_version is present.
-// Presence is detected from the raw config (null vs. set) rather than via GetOk,
-// because GetOk treats zero value (0) as "unset" and would leak the key.
-func datadogAPIKeyWOVersionSet(data *schema.ResourceData) bool {
-	config := data.GetRawConfig()
-	if config.IsNull() {
-		return false
-	}
-
-	sink := config.GetAttr("sink")
-	if sink.IsNull() || sink.LengthInt() == 0 {
-		return false
-	}
-
-	set := false
-	sink.ForEachElement(func(_ cty.Value, sinkElem cty.Value) (stop bool) {
-		version := sinkElem.GetAttr("datadog_api_key_wo_version")
-		if !version.IsNull() {
-			set = true
-		}
-		return true // Only the first sink element matters (MaxItems: 1).
-	})
-
-	return set
 }
 
 func flattenLogStreamSinkSegment(o *management.LogStreamSinkSegment) interface{} {

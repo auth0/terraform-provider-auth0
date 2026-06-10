@@ -14,13 +14,11 @@ import (
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
-// TODO: Update the migration guide link once it's available.
-
 // phoneProviderDeprecationMessage is shared by the deprecated phone-provider
 // fields that are superseded by the Unified Phone Experience.
 const phoneProviderDeprecationMessage = "This field is deprecated in favor of the Unified Phone Experience. " +
-	"Configure your phone provider with the `auth0_phone_provider` resource instead. " +
-	"See the migration guide: https://auth0-feat-docs-5498.mintlify.app/docs/customize/phone-messages/unified-phone/migrate-to-unified-phone-experience-with-terraform."
+	"Use`auth0_phone_provider` resource instead. " +
+	"See the migration guide: https://auth0.com/docs/customize/phone-messages/unified-phone/migrate-to-unified-phone-experience-with-terraform."
 
 // NewResource will return a new auth0_guardian resource.
 func NewResource() *schema.Resource {

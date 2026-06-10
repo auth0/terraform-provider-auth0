@@ -8,11 +8,10 @@ description: |-
 
 Multi-Factor Authentication works by requiring additional factors during the login process to prevent unauthorized access. With this resource you can configure some options available for MFA.
 
-// TODO Update the migration guide link once it's available.
 !> **Phone provider configuration is moving to the Unified Phone Experience.** The `provider` attribute and the
 `options` block inside the `phone` block are deprecated in favor of the [`auth0_phone_provider`](./phone_provider.md)
 resource. The `phone` block's `enabled` and `message_types` attributes remain in use. See the
-[migration guide](https://auth0-feat-docs-5498.mintlify.app/docs/customize/phone-messages/unified-phone/migrate-to-unified-phone-experience-with-terraform)
+[migration guide](https://auth0.com/docs/customize/phone-messages/unified-phone/migrate-to-unified-phone-experience-with-terraform)
 for details.
 
 ## Example Usage

@@ -13,10 +13,9 @@ To avoid potential issues, it is recommended not to try creating multiple phone 
 
 !> If you are using the `auth0_phone_provider` resource to create a `custom` phone provider, you must ensure an action is created first with `custom-phone-provider` as the supported_triggers
 
-// TODO Update the migration guide link once it's available.
 -> This resource is the recommended replacement for configuring a phone provider inside the `auth0_guardian`
 `phone` block (the `provider` attribute and `options` block there are deprecated). See the
-[migration guide](https://auth0-feat-docs-5498.mintlify.app/docs/customize/phone-messages/unified-phone/migrate-to-unified-phone-experience-with-terraform)
+[migration guide](https://auth0.com/docs/customize/phone-messages/unified-phone/migrate-to-unified-phone-experience-with-terraform)
 for details.
 
 ## Example Usage

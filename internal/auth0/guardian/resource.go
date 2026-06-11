@@ -14,6 +14,12 @@ import (
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
+// phoneProviderDeprecationMessage is shared by the deprecated phone-provider
+// fields that are superseded by the Unified Phone Experience.
+const phoneProviderDeprecationMessage = "This field is deprecated in favor of the Unified Phone Experience. " +
+	"Use`auth0_phone_provider` resource instead. " +
+	"See the migration guide: https://auth0.com/docs/customize/phone-messages/unified-phone/migrate-to-unified-phone-experience-with-terraform."
+
 // NewResource will return a new auth0_guardian resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -144,10 +150,12 @@ func NewResource() *schema.Resource {
 								false,
 							),
 							RequiredWith: []string{"phone.0.message_types"},
+							Deprecated:   phoneProviderDeprecationMessage,
 							Description: "Provider to use, one of `auth0`, `twilio` or `phone-message-hook`. " +
 								"Selecting `phone-message-hook` will require a " +
 								"Phone Message Action to be created before. " +
-								"[Learn how](https://auth0.com/docs/customize/actions/flows-and-triggers/send-phone-message-flow).",
+								"[Learn how](https://auth0.com/docs/customize/actions/flows-and-triggers/send-phone-message-flow). " +
+								"This field requires `phone_consolidated_experience` to be `false` on the `auth0_tenant`.",
 						},
 						"message_types": {
 							Type:     schema.TypeList,
@@ -159,11 +167,13 @@ func NewResource() *schema.Resource {
 								"Adding both to the array should enable the user to choose.",
 						},
 						"options": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Computed:    true,
-							MaxItems:    1,
-							Description: "Options for the various providers.",
+							Type:       schema.TypeList,
+							Optional:   true,
+							Computed:   true,
+							MaxItems:   1,
+							Deprecated: phoneProviderDeprecationMessage,
+							Description: "Options for the various providers. " +
+								"This block requires `phone_consolidated_experience` to be `false` on the `auth0_tenant`.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"enrollment_message": {
@@ -516,4 +526,18 @@ func deleteGuardian(ctx context.Context, _ *schema.ResourceData, meta interface{
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
+}
+
+// isPhoneConsolidatedExperienceEnabled returns true if the Consolidated Phone Experience is enabled for the tenant.
+func isPhoneConsolidatedExperienceEnabled(ctx context.Context, api *management.Management) (bool, error) {
+	tenant, err := api.Tenant.Read(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	// If not explisitly set, Enabled by default for new tenants.
+	if tenant.PhoneConsolidatedExperience == nil {
+		return true, nil
+	}
+	return *tenant.PhoneConsolidatedExperience, nil
 }

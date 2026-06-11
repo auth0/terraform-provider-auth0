@@ -57,7 +57,7 @@ func expandLogStream(data *schema.ResourceData) *management.LogStream {
 		case management.LogStreamTypeHTTP:
 			logStream.Sink = expandLogStreamSinkHTTP(sink)
 		case management.LogStreamTypeDatadog:
-			logStream.Sink = expandLogStreamSinkDatadog(sink)
+			logStream.Sink = expandLogStreamSinkDatadog(data, sink)
 		case management.LogStreamTypeSplunk:
 			logStream.Sink = expandLogStreamSinkSplunk(sink)
 		case management.LogStreamTypeSumo:
@@ -116,11 +116,20 @@ func expandLogStreamSinkHTTP(config cty.Value) *management.LogStreamSinkHTTP {
 
 	return httpSink
 }
-func expandLogStreamSinkDatadog(config cty.Value) *management.LogStreamSinkDatadog {
-	return &management.LogStreamSinkDatadog{
+func expandLogStreamSinkDatadog(data *schema.ResourceData, config cty.Value) *management.LogStreamSinkDatadog {
+	sink := &management.LogStreamSinkDatadog{
 		Region: value.String(config.GetAttr("datadog_region")),
-		APIKey: value.String(config.GetAttr("datadog_api_key")),
 	}
+
+	apiKeyWO := config.GetAttr("datadog_api_key_wo")
+	if !apiKeyWO.IsNull() &&
+		(data.IsNewResource() || data.HasChange("sink.0.datadog_api_key_wo_version")) {
+		sink.APIKey = value.String(apiKeyWO)
+	} else {
+		sink.APIKey = value.String(config.GetAttr("datadog_api_key"))
+	}
+
+	return sink
 }
 func expandLogStreamSinkSegment(config cty.Value) *management.LogStreamSinkSegment {
 	return &management.LogStreamSinkSegment{

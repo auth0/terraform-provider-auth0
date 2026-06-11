@@ -79,6 +79,7 @@ resource "auth0_action" "my_action" {
 - `modules` (Block Set) List of action modules and their versions that this action depends on. (see [below for nested schema](#nestedblock--modules))
 - `runtime` (String) The Node runtime. Possible values are: `node12`, `node16` (not recommended), `node18`, `node22`
 - `secrets` (Block Set) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. If the secret block is edited, the whole object is re-provisioned. (see [below for nested schema](#nestedblock--secrets))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -124,6 +125,14 @@ Required:
 
 - `name` (String) Secret name.
 - `value` (String, Sensitive) Secret value.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String)
 
 ## Import
 

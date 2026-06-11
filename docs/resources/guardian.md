@@ -8,6 +8,12 @@ description: |-
 
 Multi-Factor Authentication works by requiring additional factors during the login process to prevent unauthorized access. With this resource you can configure some options available for MFA.
 
+!> **Phone provider configuration is moving to the Unified Phone Experience.** The `provider` attribute and the
+`options` block inside the `phone` block are deprecated in favor of the [`auth0_phone_provider`](./phone_provider.md)
+resource. The `phone` block's `enabled` and `message_types` attributes remain in use. See the
+[migration guide](https://auth0.com/docs/customize/phone-messages/unified-phone/migrate-to-unified-phone-experience-with-terraform)
+for details.
+
 ## Example Usage
 
 ```terraform
@@ -26,15 +32,11 @@ resource "auth0_guardian" "my_guardian" {
     user_verification = "required"
   }
 
+  # Phone MFA factor. Under the Unified Phone Experience, the provider is configured
+  # via the auth0_phone_provider resource and messages via auth0_branding_phone_notification_template.
   phone {
     enabled       = true
-    provider      = "auth0"
     message_types = ["sms", "voice"]
-
-    options {
-      enrollment_message   = "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment."
-      verification_message = "{{code}} is your verification code for {{tenant.friendly_name}}."
-    }
   }
 
   push {
@@ -111,8 +113,8 @@ Required:
 Optional:
 
 - `message_types` (List of String) Message types to use, array of `sms` and/or `voice`. Adding both to the array should enable the user to choose.
-- `options` (Block List, Max: 1) Options for the various providers. (see [below for nested schema](#nestedblock--phone--options))
-- `provider` (String) Provider to use, one of `auth0`, `twilio` or `phone-message-hook`. Selecting `phone-message-hook` will require a Phone Message Action to be created before. [Learn how](https://auth0.com/docs/customize/actions/flows-and-triggers/send-phone-message-flow).
+- `options` (Block List, Max: 1, Deprecated) Options for the various providers. This block requires `phone_consolidated_experience` to be `false` on the `auth0_tenant`. (see [below for nested schema](#nestedblock--phone--options))
+- `provider` (String, Deprecated) Provider to use, one of `auth0`, `twilio` or `phone-message-hook`. Selecting `phone-message-hook` will require a Phone Message Action to be created before. [Learn how](https://auth0.com/docs/customize/actions/flows-and-triggers/send-phone-message-flow). This field requires `phone_consolidated_experience` to be `false` on the `auth0_tenant`.
 
 <a id="nestedblock--phone--options"></a>
 ### Nested Schema for `phone.options`

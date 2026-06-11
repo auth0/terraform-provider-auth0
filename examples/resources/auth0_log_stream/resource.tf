@@ -38,3 +38,16 @@ resource "auth0_log_stream" "example_aws" {
     aws_region     = "us-east-2"
   }
 }
+
+# This is an example of a Datadog log stream using a write-only API key
+# (recommended for security). The key is never stored in Terraform state.
+resource "auth0_log_stream" "datadog_secure" {
+  name = "Datadog (write-only key)"
+  type = "datadog"
+
+  sink {
+    datadog_region             = "us"
+    datadog_api_key_wo         = "AKIAXXXXXXXXXXXXXXXX"
+    datadog_api_key_wo_version = 1
+  }
+}

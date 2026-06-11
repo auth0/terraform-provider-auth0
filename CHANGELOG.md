@@ -1,3 +1,9 @@
+## [Unreleased]
+
+### Added
+
+- `auth0_event_stream`: Added support for `custom_header` webhook authorization method, with `header_key`, `header_value`, `header_value_wo`, and `header_value_wo_version` fields ([#1528](https://github.com/auth0/terraform-provider-auth0/issues/1528))
+
 ## v1.48.0
 
 FEATURES:

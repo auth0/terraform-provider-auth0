@@ -13,11 +13,6 @@ import (
 func expandTenant(data *schema.ResourceData) *management.Tenant {
 	config := data.GetRawConfig()
 
-	sessionLifetime := data.Get("session_lifetime").(float64)                             // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
-	idleSessionLifetime := data.Get("idle_session_lifetime").(float64)                    // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
-	ephemeralSessionLifetime := data.Get("ephemeral_session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
-	idleEphemeralSessionLifetime := data.Get("idle_ephemeral_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
-
 	tenant := management.Tenant{
 		DefaultAudience:                      value.String(config.GetAttr("default_audience")),
 		DefaultDirectory:                     value.String(config.GetAttr("default_directory")),
@@ -27,6 +22,10 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		SupportEmail:                         value.String(config.GetAttr("support_email")),
 		SupportURL:                           value.String(config.GetAttr("support_url")),
 		AllowedLogoutURLs:                    value.Strings(config.GetAttr("allowed_logout_urls")),
+		SessionLifetime:                      value.Float64(config.GetAttr("session_lifetime")),
+		IdleSessionLifetime:                  value.Float64(config.GetAttr("idle_session_lifetime")),
+		EphemeralSessionLifetime:             value.Float64(config.GetAttr("ephemeral_session_lifetime")),
+		IdleEphemeralSessionLifetime:         value.Float64(config.GetAttr("idle_ephemeral_session_lifetime")),
 		SandboxVersion:                       value.String(config.GetAttr("sandbox_version")),
 		EnabledLocales:                       value.Strings(config.GetAttr("enabled_locales")),
 		Flags:                                expandTenantFlags(config.GetAttr("flags"), data),
@@ -45,19 +44,6 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		ClientIDMetadataDocumentSupported:              value.Bool(config.GetAttr("client_id_metadata_document_supported")),
 		ResourceParameterProfile:                       value.String(config.GetAttr("resource_parameter_profile")),
 		DynamicClientRegistrationSecurityMode:          value.String(config.GetAttr("dynamic_client_registration_security_mode")),
-	}
-
-	if data.IsNewResource() || data.HasChange("session_lifetime") {
-		tenant.SessionLifetime = &sessionLifetime
-	}
-	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
-		tenant.IdleSessionLifetime = &idleSessionLifetime
-	}
-	if data.IsNewResource() || data.HasChange("ephemeral_session_lifetime") {
-		tenant.EphemeralSessionLifetime = &ephemeralSessionLifetime
-	}
-	if data.IsNewResource() || data.HasChange("idle_ephemeral_session_lifetime") {
-		tenant.IdleEphemeralSessionLifetime = &idleEphemeralSessionLifetime
 	}
 
 	return &tenant

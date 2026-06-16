@@ -67,6 +67,10 @@ Read-Only:
 
 Read-Only:
 
+- `header_key` (String)
+- `header_value` (String)
+- `header_value_wo` (String)
+- `header_value_wo_version` (Number)
 - `method` (String)
 - `password` (String)
 - `password_wo` (String)

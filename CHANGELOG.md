@@ -1,7 +1,42 @@
-## v1.47.0 (Unreleased)
+## v1.49.0
 
 ENHANCEMENTS:
-- `resource/auth0_client_credentials` – `private_key_jwt` credentials now use an unordered set instead of an ordered list, preventing unnecessary resource recreation when removing or reordering credentials. Adding, removing, or rotating individual credentials no longer destroys the entire resource — only the affected credential is created/deleted. Updating `expires_at` on an existing credential is now handled via in-place PATCH (when `parse_expiry_from_cert` is not enabled). ([#XXXX](https://github.com/auth0/terraform-provider-auth0/pull/XXXX))
+- `resource/auth0_event_stream` – Add support for `custom_header` webhook authorization method, with `header_key`, `header_value`, `header_value_wo`, and `header_value_wo_version` fields ([#1600](https://github.com/auth0/terraform-provider-auth0/pull/1600))
+- `resource/auth0_log_stream` – Add support for a write-only Datadog API key via `datadog_api_key_wo` and `datadog_api_key_wo_version` ([#1601](https://github.com/auth0/terraform-provider-auth0/pull/1601))
+
+BUG FIXES:
+- `resource/auth0_action` – Fix `409 Conflict` race condition between action deploy and trigger binding by adding a create timeout and deployment wait logic ([#1590](https://github.com/auth0/terraform-provider-auth0/pull/1590))
+- `resource/auth0_tenant` – Prevent state drift for fields with server-side defaults (`session_lifetime`, `idle_session_lifetime`, `ephemeral_session_lifetime`, `idle_ephemeral_session_lifetime`, `enable_pipeline2`, `enable_client_connections`, and `disable_management_api_sms_obfuscation`) ([#1587](https://github.com/auth0/terraform-provider-auth0/pull/1587))
+- `resource/auth0_connection` – Handle empty `id_token_signed_response_algs` as unset for OIDC and Okta connections ([#1598](https://github.com/auth0/terraform-provider-auth0/pull/1598))
+
+NOTES:
+- `resource/auth0_guardian` – Deprecate the `provider` attribute and `options` block within the `phone` block in favor of the `auth0_phone_provider` resource (Unified Phone Experience) ([#1596](https://github.com/auth0/terraform-provider-auth0/pull/1596))
+- `resource/auth0_trigger_action` / `resource/auth0_trigger_actions` – Document newly supported trigger types (`password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`, `login-post-identifier`, and `signup-post-identifier`) ([#1605](https://github.com/auth0/terraform-provider-auth0/pull/1605))
+- `resource/auth0_attack_protection` – Update description for `bot_detection_level` ([#1595](https://github.com/auth0/terraform-provider-auth0/pull/1595))
+
+## v1.48.0
+
+FEATURES:
+- `data-source/auth0_user_connected_accounts` – Add support for retrieving connection accounts for a user ([#1589](https://github.com/auth0/terraform-provider-auth0/pull/1589))
+
+ENHANCEMENTS:
+
+- `resource/auth0_self_service_profile_custom_text` – Add validation for `language` and `page` attributes ([#1585](https://github.com/auth0/terraform-provider-auth0/pull/1585))
+- `resource/auth0_connection` – Add support to configure `destination_url` and `recipient_url` under connection options ([#1591](https://github.com/auth0/terraform-provider-auth0/pull/1591))
+- `resource/auth0_connection` – Add support for `ES384` and `ES512` as `dpop_signing_alg` ([#1584](https://github.com/auth0/terraform-provider-auth0/pull/1584))
+- `resource/auth0_client` – Improve handling for defaults on SAML addons ([#1497](https://github.com/auth0/terraform-provider-auth0/pull/1497))
+
+## v1.47.0
+
+ENHANCEMENTS:
+- `resource/auth0_network_acl` – Add support for configuring `hostnames`, `connecting_ipv4_cidrs` and `connecting_ipv6_cidrs` ([#1581](https://github.com/auth0/terraform-provider-auth0/pull/1581))
+- `data-source/auth0_network_acl` – Add support for retrieving `hostnames`, `connecting_ipv4_cidrs` and `connecting_ipv6_cidrs` ([#1581](https://github.com/auth0/terraform-provider-auth0/pull/1581))
+- `resource/auth0_client_credentials` – `private_key_jwt` credentials now use an unordered set instead of an ordered list, preventing unnecessary resource recreation when removing or reordering credentials. Adding, removing, or rotating individual credentials no longer destroys the entire resource — only the affected credential is created/deleted. Updating `expires_at` on an existing credential is now handled via in-place PATCH (when `parse_expiry_from_cert` is not enabled). ([#1570](https://github.com/auth0/terraform-provider-auth0/pull/1570))
+- `resource/auth0_connection` – Add support for configuring `federated_connections_access_tokens` for OIDC connections ([#1582](https://github.com/auth0/terraform-provider-auth0/pull/1582))
+- `data-source/auth0_connection` – Add opt-out option `skip_enabled_clients` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_role` – Add opt-out options `skip_permissions` and `skip_users` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_organization` – Add opt-out options `skip_client_grants`, `skip_connections` and `skip_members` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_user` – Add opt-out options `skip_permissions` and `skip_roles` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
 
 NOTES:
 - `resource/auth0_client_credentials` – State schema upgraded from v0 to v1 for `private_key_jwt` credentials (TypeList → TypeSet). Existing state will be migrated automatically on the next `terraform plan` or `terraform apply`.

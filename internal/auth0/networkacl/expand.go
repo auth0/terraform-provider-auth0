@@ -64,11 +64,6 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 		}
 	}
 
-	// Validate match and not_match.
-	if err := validateMatchAndNotMatch(rule); err != nil {
-		return nil, err
-	}
-
 	if match, ok := rule["match"].([]interface{}); ok && len(match) > 0 {
 		if matchElem := match[0]; matchElem != nil {
 			matchMap, ok := matchElem.(map[string]interface{})
@@ -146,6 +141,18 @@ func expandNetworkACLRuleMatch(m map[string]interface{}) *management.NetworkACLR
 		match.UserAgents = expandStringList(v)
 	}
 
+	if v, ok := m["hostnames"].([]interface{}); ok {
+		match.Hostnames = expandStringList(v)
+	}
+
+	if v, ok := m["connecting_ipv4_cidrs"].([]interface{}); ok {
+		match.ConnectingIPv4Cidrs = expandStringList(v)
+	}
+
+	if v, ok := m["connecting_ipv6_cidrs"].([]interface{}); ok {
+		match.ConnectingIPv6Cidrs = expandStringList(v)
+	}
+
 	return match
 }
 
@@ -161,25 +168,6 @@ func expandStringList(list []interface{}) *[]string {
 		}
 	}
 	return &result
-}
-
-func validateMatchAndNotMatch(rule map[string]interface{}) error {
-	matchExists := false
-	notMatchExists := false
-
-	if match, ok := rule["match"].([]interface{}); ok && len(match) > 0 {
-		matchExists = true
-	}
-
-	if notMatch, ok := rule["not_match"].([]interface{}); ok && len(notMatch) > 0 {
-		notMatchExists = true
-	}
-
-	if matchExists && notMatchExists {
-		return errors.New("a network ACL rule cannot specify both 'match' and 'not_match' simultaneously")
-	}
-
-	return nil
 }
 
 // Ensures Network ACL has a valid rule configuration - Auth0 requires this for proper ACL operation.

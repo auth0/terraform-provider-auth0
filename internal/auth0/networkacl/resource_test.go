@@ -88,6 +88,66 @@ resource "auth0_network_acl" "my_acl" {
 }
 `
 
+const testAccNetworkACLWithNewMatchFields = `
+resource "auth0_network_acl" "my_acl" {
+	description = "New Fields Match - {{.testName}}"
+	active = true
+	priority = 2
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match {
+			hostnames = ["testA-dev.us.auth0.com", "api.example.com"]
+			connecting_ipv4_cidrs = ["192.168.1.0/24", "10.0.0.1"]
+			connecting_ipv6_cidrs = ["2001:db8::/32", "::1"]
+		}
+	}
+}
+`
+
+const testAccNetworkACLWithNewNotMatchFields = `
+resource "auth0_network_acl" "my_acl" {
+	description = "New Fields NotMatch - {{.testName}}"
+	active = true
+	priority = 3
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		not_match {
+			hostnames = ["testB-dev.us.auth0.com"]
+			connecting_ipv4_cidrs = ["203.0.113.0/24"]
+			connecting_ipv6_cidrs = ["1001:d08::/32", "::1"]
+		}
+	}
+}
+`
+
+const testAccNetworkACLWithBothMatchAndNotMatch = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Both Match and NotMatch - {{.testName}}"
+	active = true
+	priority = 4
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match {
+			hostnames = ["testC-dev.us.auth0.com"]
+			connecting_ipv4_cidrs = ["10.0.0.0/8"]
+		}
+		not_match {
+			hostnames = ["testD-dev.us.auth0.com"]
+			connecting_ipv4_cidrs = ["20.0.0.0/8"]
+		}
+	}
+}
+`
+
 // checkNetworkACLExists verifies the resource exists in Auth0.
 func checkNetworkACLExists(resourceName string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
@@ -285,6 +345,65 @@ func TestAccNetworkACLValidation(t *testing.T) {
 			{
 				Config:      acctest.ParseTestName(testAccNetworkACLInvalidScope, t.Name()),
 				ExpectError: regexp.MustCompile("got invalid_scope"),
+			},
+		},
+	})
+}
+
+func TestAccNetworkACLNewFields(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLWithNewMatchFields, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLExists("auth0_network_acl.my_acl"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "description", fmt.Sprintf("New Fields Match - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "active", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "priority", "2"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.block", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.scope", "tenant"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.hostnames.#", "2"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.hostnames.0", "testA-dev.us.auth0.com"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.hostnames.1", "api.example.com"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.connecting_ipv4_cidrs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.connecting_ipv4_cidrs.0", "192.168.1.0/24"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.connecting_ipv4_cidrs.1", "10.0.0.1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.connecting_ipv6_cidrs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.connecting_ipv6_cidrs.0", "2001:db8::/32"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.connecting_ipv6_cidrs.1", "::1"),
+				),
+			},
+			{
+				ResourceName:      "auth0_network_acl.my_acl",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLWithNewNotMatchFields, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "description", fmt.Sprintf("New Fields NotMatch - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.hostnames.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.hostnames.0", "testB-dev.us.auth0.com"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.connecting_ipv4_cidrs.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.connecting_ipv4_cidrs.0", "203.0.113.0/24"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.connecting_ipv6_cidrs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.connecting_ipv6_cidrs.0", "1001:d08::/32"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.connecting_ipv6_cidrs.1", "::1"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLWithBothMatchAndNotMatch, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "description", fmt.Sprintf("Both Match and NotMatch - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.hostnames.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.hostnames.0", "testC-dev.us.auth0.com"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.connecting_ipv4_cidrs.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.connecting_ipv4_cidrs.0", "10.0.0.0/8"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.hostnames.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.hostnames.0", "testD-dev.us.auth0.com"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.connecting_ipv4_cidrs.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.connecting_ipv4_cidrs.0", "20.0.0.0/8"),
+				),
 			},
 		},
 	})

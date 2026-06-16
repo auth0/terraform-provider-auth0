@@ -116,6 +116,7 @@ resource "auth0_action" "my_secure_action" {
 - `secrets` (Block Set) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. If the secret block is edited, the whole object is re-provisioned. **Note:** Secret values are persisted in Terraform state as plain text. For better security, consider using `secrets_wo` instead, which supports write-only values and ephemeral variables. (see [below for nested schema](#nestedblock--secrets))
 - `secrets_wo` (Block List) List of secrets for the action (write-only). Secret values are only available during resource creation and update, and are **not** stored in Terraform state. To change the secrets, update the `secrets_wo_version` attribute. Conflicts with `secrets`. (see [below for nested schema](#nestedblock--secrets_wo))
 - `secrets_wo_version` (Number) Version number for `secrets_wo` changes. Update this value to trigger a secret update when using `secrets_wo`.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -172,6 +173,14 @@ Required:
 
 - `name` (String) Secret name.
 - `value` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Secret value (write-only). This value is never stored in Terraform state.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String)
 
 ## Import
 

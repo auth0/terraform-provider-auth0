@@ -497,6 +497,8 @@ resource "auth0_connection" "samlp" {
     sign_out_endpoint               = "https://saml.provider/sign_out"
     global_token_revocation_jwt_iss = "issuer.example.com"
     global_token_revocation_jwt_sub = "user123"
+    destination_url                 = "https://example.com/saml/destination"
+    recipient_url                   = "https://example.com/saml/recipient"
     disable_sign_out                = true
     strategy_version                = 2
     tenant_domain                   = "example.com"
@@ -736,6 +738,7 @@ Optional:
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `decryption_key` (Block List, Max: 1) The key used to decrypt encrypted responses from the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively. (see [below for nested schema](#nestedblock--options--decryption_key))
+- `destination_url` (String) The destination URL for the SAML assertion. Used when configuring a SAML connection for proxy gateways.
 - `digest_algorithm` (String) Sign Request Algorithm Digest.
 - `disable_cache` (Boolean) Indicates whether to disable the cache or not.
 - `disable_self_service_change_password` (Boolean) Indicates whether to remove the forgot password link within the New Universal Login.
@@ -744,12 +747,13 @@ Optional:
 - `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.
 - `domain` (String) Domain name.
 - `domain_aliases` (Set of String) List of the domains that can be authenticated using the identity provider. Only needed for Identifier First authentication flows.
-- `dpop_signing_alg` (String) Signature method used to sign the request. EA Only
+- `dpop_signing_alg` (String) The algorithm used to sign the DPoP proof. Allowed values: ES256, ES384, ES512, Ed25519.
 - `email` (Boolean) Indicates whether to request the email scope. Used by some OAuth2 connections (e.g., LINE).
 - `enable_script_context` (Boolean) Set to `true` to inject context into custom DB scripts (warning: cannot be disabled once enabled).
 - `enabled_database_customization` (Boolean) Set to `true` to use a legacy user store.
 - `entity_id` (String) Custom Entity ID for the connection.
 - `fed_metadata_xml` (String) Federation Metadata for the ADFS connection.
+- `federated_connections_access_tokens` (Block List, Max: 1) Configuration for collecting access tokens and refresh tokens from federated connections. Only applicable for OIDC connections. (see [below for nested schema](#nestedblock--options--federated_connections_access_tokens))
 - `fields_map` (String) If you're configuring a SAML enterprise connection for a non-standard PingFederate Server, you must update the attribute mappings.
 - `forward_request_info` (Boolean) Specifies whether or not request info should be forwarded to sms gateway.
 - `from` (String) Address to use as the sender.
@@ -758,7 +762,7 @@ Optional:
 - `global_token_revocation_jwt_iss` (String) Specifies the issuer of the JWT used for global token revocation for the SAML connection.
 - `global_token_revocation_jwt_sub` (String) Specifies the subject of the JWT used for global token revocation for the SAML connection.
 - `icon_url` (String) Icon URL.
-- `id_token_signed_response_algs` (List of String) List of allowed algorithms for the ID token signature. If not set, RS256 will be applied at runtime. (Okta/OIDC Connections)
+- `id_token_signed_response_algs` (List of String) List of allowed algorithms for the ID token signature. If not set or empty, default algorithm(s) will be applied at runtime. (Okta/OIDC Connections)
 - `identity_api` (String) Azure AD Identity API. Available options are: `microsoft-identity-platform-v2.0` or `azure-active-directory-v1.0`.
 - `idp_initiated` (Block List, Max: 1) Configuration options for IDP Initiated Authentication. This is an object with the properties: `client_id`, `client_protocol`, and `client_authorize_query`. (see [below for nested schema](#nestedblock--options--idp_initiated))
 - `import_mode` (Boolean) Indicates whether you have a legacy user store and want to gradually migrate those users to the Auth0 user store.
@@ -787,6 +791,7 @@ Optional:
 - `protocol_binding` (String) The SAML Response Binding: how the SAML token is received by Auth0 from the IdP.
 - `provider` (String) Defines the custom `sms_gateway` provider.
 - `realm_fallback` (Boolean) Allows configuration if connections_realm_fallback flag is enabled for the tenant
+- `recipient_url` (String) The recipient URL for the SAML assertion. Used when configuring a SAML connection for proxy gateways.
 - `request_template` (String) Template that formats the SAML request.
 - `request_token_url` (String) URL used to obtain an unauthorized request token.
 - `requires_username` (Boolean) Indicates whether the user is required to provide a username in addition to an email address.
@@ -1050,6 +1055,14 @@ Required:
 
 - `cert` (String)
 - `key` (String)
+
+
+<a id="nestedblock--options--federated_connections_access_tokens"></a>
+### Nested Schema for `options.federated_connections_access_tokens`
+
+Optional:
+
+- `active` (Boolean) When enabled, Auth0 will collect and store access tokens and refresh tokens obtained from federated connections during authentication.
 
 
 <a id="nestedblock--options--gateway_authentication"></a>

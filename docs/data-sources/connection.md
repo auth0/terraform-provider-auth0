@@ -29,13 +29,14 @@ data "auth0_connection" "some-connection-by-id" {
 
 - `connection_id` (String) The ID of the connection. If not provided, `name` must be set.
 - `name` (String) The name of the connection. If not provided, `connection_id` must be set.
+- `skip_enabled_clients` (Boolean) Whether to skip enabled clients for this connection. Setting this to `true` will skip additional paginated API calls to /api/v2/connections/{id}/clients. Default: `false`.
 
 ### Read-Only
 
 - `authentication` (List of Object) Configure the purpose of a connection to be used for authentication during login. (see [below for nested schema](#nestedatt--authentication))
 - `connected_accounts` (List of Object) Configure the purpose of a connection to be used for connected accounts and Token Vault. (see [below for nested schema](#nestedatt--connected_accounts))
 - `display_name` (String) Name used in login screen.
-- `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
+- `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled. Skips populating if `skip_enabled_clients` is `true`.
 - `id` (String) The ID of this resource.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
 - `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars).
@@ -89,6 +90,7 @@ Read-Only:
 - `custom_scripts` (Map of String)
 - `debug` (Boolean)
 - `decryption_key` (List of Object) (see [below for nested schema](#nestedobjatt--options--decryption_key))
+- `destination_url` (String)
 - `digest_algorithm` (String)
 - `disable_cache` (Boolean)
 - `disable_self_service_change_password` (Boolean)
@@ -103,6 +105,7 @@ Read-Only:
 - `enabled_database_customization` (Boolean)
 - `entity_id` (String)
 - `fed_metadata_xml` (String)
+- `federated_connections_access_tokens` (List of Object) (see [below for nested schema](#nestedobjatt--options--federated_connections_access_tokens))
 - `fields_map` (String)
 - `forward_request_info` (Boolean)
 - `from` (String)
@@ -140,6 +143,7 @@ Read-Only:
 - `protocol_binding` (String)
 - `provider` (String)
 - `realm_fallback` (Boolean)
+- `recipient_url` (String)
 - `request_template` (String)
 - `request_token_url` (String)
 - `requires_username` (Boolean)
@@ -400,6 +404,14 @@ Read-Only:
 
 - `cert` (String)
 - `key` (String)
+
+
+<a id="nestedobjatt--options--federated_connections_access_tokens"></a>
+### Nested Schema for `options.federated_connections_access_tokens`
+
+Read-Only:
+
+- `active` (Boolean)
 
 
 <a id="nestedobjatt--options--gateway_authentication"></a>

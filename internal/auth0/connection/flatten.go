@@ -884,6 +884,14 @@ func flattenConnectionOptionsOIDC(
 		}
 	}
 
+	if options.FederatedConnectionsAccessTokens != nil {
+		optionsMap["federated_connections_access_tokens"] = []map[string]interface{}{
+			{
+				"active": options.GetFederatedConnectionsAccessTokens().GetActive(),
+			},
+		}
+	}
+
 	return optionsMap, nil
 }
 
@@ -1163,6 +1171,8 @@ func flattenConnectionOptionsSAML(
 		"upstream_params":                 upstreamParams,
 		"global_token_revocation_jwt_iss": options.GetGlobalTokenRevocationJWTIss(),
 		"global_token_revocation_jwt_sub": options.GetGlobalTokenRevocationJWTSub(),
+		"destination_url":                 options.GetDestinationURL(),
+		"recipient_url":                   options.GetRecipientURL(),
 	}
 
 	if options.GetSetUserAttributes() == "" {

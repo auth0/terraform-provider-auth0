@@ -15,12 +15,14 @@ func TestCheckForUntrackedActionSecrets(t *testing.T) {
 		name                 string
 		givenSecretsInConfig []interface{}
 		givenActionSecrets   []management.ActionSecret
+		givenAttributePath   string
 		expectedDiagnostics  diag.Diagnostics
 	}{
 		{
 			name:                 "action has no secrets",
 			givenSecretsInConfig: []interface{}{},
 			givenActionSecrets:   []management.ActionSecret{},
+			givenAttributePath:   "secrets",
 			expectedDiagnostics:  diag.Diagnostics(nil),
 		},
 		{
@@ -35,6 +37,7 @@ func TestCheckForUntrackedActionSecrets(t *testing.T) {
 					Name: auth0.String("secretName"),
 				},
 			},
+			givenAttributePath:  "secrets",
 			expectedDiagnostics: diag.Diagnostics(nil),
 		},
 		{
@@ -52,6 +55,7 @@ func TestCheckForUntrackedActionSecrets(t *testing.T) {
 					Name: auth0.String("anotherSecretName"),
 				},
 			},
+			givenAttributePath: "secrets",
 			expectedDiagnostics: diag.Diagnostics{
 				{
 					Severity: diag.Error,
@@ -70,6 +74,7 @@ func TestCheckForUntrackedActionSecrets(t *testing.T) {
 			actualDiagnostics := checkForUnmanagedActionSecrets(
 				testCase.givenSecretsInConfig,
 				testCase.givenActionSecrets,
+				testCase.givenAttributePath,
 			)
 
 			assert.Equal(t, testCase.expectedDiagnostics, actualDiagnostics)
@@ -79,12 +84,13 @@ func TestCheckForUntrackedActionSecrets(t *testing.T) {
 
 // TestCheckForUntrackedActionSecretsWithSecretsWO verifies that the guard accepts
 // secrets_wo entries (which are shaped identically to secrets entries as map[string]interface{})
-// and does not flag API-side secrets whose names appear in the secrets_wo list.
+// and surfaces the secrets_wo attribute path on diagnostics.
 func TestCheckForUntrackedActionSecretsWithSecretsWO(t *testing.T) {
 	var testCases = []struct {
 		name                 string
 		givenSecretsInConfig []interface{}
 		givenActionSecrets   []management.ActionSecret
+		givenAttributePath   string
 		expectedDiagnostics  diag.Diagnostics
 	}{
 		{
@@ -98,6 +104,7 @@ func TestCheckForUntrackedActionSecretsWithSecretsWO(t *testing.T) {
 			givenActionSecrets: []management.ActionSecret{
 				{Name: auth0.String("apiKey")},
 			},
+			givenAttributePath:  "secrets_wo",
 			expectedDiagnostics: diag.Diagnostics(nil),
 		},
 		{
@@ -112,6 +119,7 @@ func TestCheckForUntrackedActionSecretsWithSecretsWO(t *testing.T) {
 				{Name: auth0.String("apiKey")},
 				{Name: auth0.String("unmanagedKey")},
 			},
+			givenAttributePath: "secrets_wo",
 			expectedDiagnostics: diag.Diagnostics{
 				{
 					Severity: diag.Error,
@@ -119,7 +127,7 @@ func TestCheckForUntrackedActionSecretsWithSecretsWO(t *testing.T) {
 					Detail: "Detected an action secret not managed though Terraform: unmanagedKey. " +
 						"If you proceed, this secret will get deleted. It is required to add this secret to " +
 						"your action configuration to prevent unintentionally destructive results.",
-					AttributePath: cty.Path{cty.GetAttrStep{Name: "secrets"}},
+					AttributePath: cty.Path{cty.GetAttrStep{Name: "secrets_wo"}},
 				},
 			},
 		},
@@ -130,6 +138,7 @@ func TestCheckForUntrackedActionSecretsWithSecretsWO(t *testing.T) {
 			actualDiagnostics := checkForUnmanagedActionSecrets(
 				testCase.givenSecretsInConfig,
 				testCase.givenActionSecrets,
+				testCase.givenAttributePath,
 			)
 
 			assert.Equal(t, testCase.expectedDiagnostics, actualDiagnostics)

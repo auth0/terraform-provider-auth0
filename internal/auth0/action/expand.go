@@ -30,10 +30,17 @@ func expandAction(data *schema.ResourceData) *management.Action {
 
 	if data.HasChange("secrets") {
 		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
-	} else if data.IsNewResource() || data.HasChange("secrets_wo_version") {
+	} else if data.HasChange("secrets_wo") || data.HasChange("secrets_wo_version") {
+		// secrets_wo names are tracked in state, so HasChange("secrets_wo") catches
+		// adds/renames/removals; secrets_wo_version catches value-only rotations.
 		secretsWO := config.GetAttr("secrets_wo")
-		if !secretsWO.IsNull() && secretsWO.LengthInt() > 0 {
-			action.Secrets = expandActionSecretsWO(secretsWO)
+		switch {
+		case !secretsWO.IsNull() && secretsWO.LengthInt() > 0:
+			action.Secrets = expandActionSecrets(secretsWO)
+		case data.HasChange("secrets_wo"):
+			// All secrets_wo entries were removed; send an empty slice so the API
+			// clears them instead of silently retaining orphaned secrets.
+			action.Secrets = &[]management.ActionSecret{}
 		}
 	}
 
@@ -107,20 +114,6 @@ func expandActionSecrets(secrets cty.Value) *[]management.ActionSecret {
 	return &actionSecrets
 }
 
-func expandActionSecretsWO(secrets cty.Value) *[]management.ActionSecret {
-	actionSecrets := make([]management.ActionSecret, 0)
-
-	secrets.ForEachElement(func(_ cty.Value, secret cty.Value) (stop bool) {
-		actionSecrets = append(actionSecrets, management.ActionSecret{
-			Name:  value.String(secret.GetAttr("name")),
-			Value: value.String(secret.GetAttr("value")),
-		})
-		return stop
-	})
-
-	return &actionSecrets
-}
-
 func expandActionModules(modules cty.Value) *[]management.ActionModules {
 	if modules.IsNull() {
 		return nil
@@ -158,7 +151,7 @@ func expandTriggerBindings(config cty.Value) []*management.ActionBinding {
 }
 
 func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceData, api *management.Management) diag.Diagnostics {
-	if !data.HasChange("secrets") && !data.HasChange("secrets_wo_version") {
+	if !data.HasChange("secrets") && !data.HasChange("secrets_wo") && !data.HasChange("secrets_wo_version") {
 		return nil
 	}
 
@@ -169,7 +162,13 @@ func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceDa
 
 	// Aggregate both old and new secret names across secrets and secrets_wo
 	// so we can detect any API-side secret that would be dropped by the update.
+	// Including the old names lets a user remove an entry without it being
+	// flagged as an unmanaged secret.
 	var secretsList []interface{}
+
+	// secrets and secrets_wo are mutually exclusive (ConflictsWith), so only one
+	// path drives the AttributePath surfaced in the diagnostic.
+	attributePath := "secrets"
 
 	if data.HasChange("secrets") {
 		oldSecrets, newSecrets := data.GetChange("secrets")
@@ -181,18 +180,24 @@ func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceDa
 		}
 	}
 
-	if data.HasChange("secrets_wo_version") {
-		if secretsWO, ok := data.GetOk("secrets_wo"); ok {
-			secretsList = append(secretsList, secretsWO.([]interface{})...)
+	if data.HasChange("secrets_wo") || data.HasChange("secrets_wo_version") {
+		attributePath = "secrets_wo"
+		oldSecretsWO, newSecretsWO := data.GetChange("secrets_wo")
+		if oldSecretsWO != nil {
+			secretsList = append(secretsList, oldSecretsWO.([]interface{})...)
+		}
+		if newSecretsWO != nil {
+			secretsList = append(secretsList, newSecretsWO.([]interface{})...)
 		}
 	}
 
-	return checkForUnmanagedActionSecrets(secretsList, preUpdateAction.GetSecrets())
+	return checkForUnmanagedActionSecrets(secretsList, preUpdateAction.GetSecrets(), attributePath)
 }
 
 func checkForUnmanagedActionSecrets(
 	secretsFromConfig []interface{},
 	secretsFromAPI []management.ActionSecret,
+	attributePath string,
 ) diag.Diagnostics {
 	secretKeysInConfigMap := make(map[string]bool, len(secretsFromConfig))
 	for _, secret := range secretsFromConfig {
@@ -234,7 +239,7 @@ func checkForUnmanagedActionSecrets(
 					"to prevent unintentionally destructive results.",
 					secret.GetName(),
 				),
-				AttributePath: cty.Path{cty.GetAttrStep{Name: "secrets"}},
+				AttributePath: cty.Path{cty.GetAttrStep{Name: attributePath}},
 			})
 		}
 	}

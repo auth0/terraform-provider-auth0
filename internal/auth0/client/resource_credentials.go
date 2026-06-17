@@ -661,11 +661,22 @@ func updateTokenEndpointAuthMethod(ctx context.Context, api *management.Manageme
 }
 
 func updateSecret(ctx context.Context, api *management.Management, data *schema.ResourceData) error {
+	clientID := data.Get("client_id").(string)
+
+	// Write-only values are not available via data.Get(); read them from the raw config.
+	secretWO := data.GetRawConfig().GetAttr("client_secret_wo")
+	if !secretWO.IsNull() && (data.IsNewResource() || data.HasChange("client_secret_wo_version")) {
+		clientSecret := secretWO.AsString()
+
+		return api.Client.Update(ctx, clientID, &management.Client{
+			ClientSecret: &clientSecret,
+		})
+	}
+
 	if !data.HasChange("client_secret") {
 		return nil
 	}
 
-	clientID := data.Get("client_id").(string)
 	clientSecret := data.Get("client_secret").(string)
 
 	return api.Client.Update(ctx, clientID, &management.Client{

@@ -849,6 +849,60 @@ func TestAccAllowUpdatingTheClientSecret(t *testing.T) {
 	})
 }
 
+const testAccClientSecretWriteOnlyVersion1 = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials Write-Only - {{.testName}}"
+	app_type = "non_interactive"
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id                = auth0_client.my_client.id
+	authentication_method    = "client_secret_post"
+	client_secret_wo         = "wo-secret-value-v1-683341"
+	client_secret_wo_version = 1
+}
+`
+
+const testAccClientSecretWriteOnlyVersion2 = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials Write-Only - {{.testName}}"
+	app_type = "non_interactive"
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id                = auth0_client.my_client.id
+	authentication_method    = "client_secret_post"
+	client_secret_wo         = "wo-secret-value-v2-998877"
+	client_secret_wo_version = 2
+}
+`
+
+func TestAccClientCredentialsWriteOnlySecret(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientSecretWriteOnlyVersion1, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "client_secret_post"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret_wo_version", "1"),
+					// The write-only secret must never be persisted to state.
+					resource.TestCheckNoResourceAttr("auth0_client_credentials.test", "client_secret_wo"),
+					// The legacy param stays empty on the write-only path.
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret", ""),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSecretWriteOnlyVersion2, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret_wo_version", "2"),
+					resource.TestCheckNoResourceAttr("auth0_client_credentials.test", "client_secret_wo"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret", ""),
+				),
+			},
+		},
+	})
+}
+
 const testAccThrowErrorWhenSignedRequestObjectNoCredentials = `
 resource "auth0_client" "my_client" {
 	name     = "Acceptance Test - Client Credentials - {{.testName}}"

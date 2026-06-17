@@ -615,6 +615,7 @@ Optional:
 - `allowed_strategies` (List of String) The list of connection strategies that are allowed when creating organizations for this client (e.g. "okta", "samlp").
 - `connection_deletion_behavior` (String) Controls the behavior when deleting connections associated with organizations for this client. Possible values: `allow`, `allow_if_empty`.
 - `connection_profile_id` (String) The ID of the connection profile to use when creating organizations for this client.
+- `invitation_landing_client_id` (String) The client ID used as the invitation landing page when creating invitations through the My Organization API. Requires the tenant to have member management enabled, and the referenced client must allow organizations.
 - `user_attribute_profile_id` (String) The ID of the user attribute profile to use when creating organizations for this client.
 
 

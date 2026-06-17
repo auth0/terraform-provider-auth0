@@ -3321,6 +3321,11 @@ resource "auth0_user_attribute_profile" "my_uap" {
 	}
 }
 
+resource "auth0_client" "invitation_landing" {
+	name               = "Acceptance Test - MyOrgConfig Landing - {{.testName}}"
+	organization_usage = "allow"
+}
+
 resource "auth0_client" "my_client" {
 	depends_on  = [auth0_user_attribute_profile.my_uap]
 	name        = "Acceptance Test - MyOrgConfig - {{.testName}}"
@@ -3331,6 +3336,7 @@ resource "auth0_client" "my_client" {
 		user_attribute_profile_id    = auth0_user_attribute_profile.my_uap.id
 		allowed_strategies           = ["pingfederate", "adfs", "waad", "google-apps", "okta", "oidc", "samlp"]
 		connection_deletion_behavior = "allow"
+		invitation_landing_client_id = auth0_client.invitation_landing.client_id
 	}
 }
 `
@@ -3370,6 +3376,11 @@ resource "auth0_user_attribute_profile" "my_uap" {
 	}
 }
 
+resource "auth0_client" "invitation_landing" {
+	name               = "Acceptance Test - MyOrgConfig Landing - {{.testName}}"
+	organization_usage = "allow"
+}
+
 resource "auth0_client" "my_client" {
 	depends_on  = [auth0_user_attribute_profile.my_uap]
 	name        = "Updated MyOrgConfig Client"
@@ -3380,6 +3391,7 @@ resource "auth0_client" "my_client" {
 		user_attribute_profile_id    = auth0_user_attribute_profile.my_uap.id
 		allowed_strategies           = ["okta", "samlp", "oidc"]
 		connection_deletion_behavior = "allow_if_empty"
+		invitation_landing_client_id = auth0_client.invitation_landing.client_id
 	}
 }
 `
@@ -3415,6 +3427,12 @@ func TestAccClientMyOrganizationConfiguration(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.5", "oidc"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.6", "samlp"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.connection_deletion_behavior", "allow"),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.invitation_landing_client_id",
+						"auth0_client.invitation_landing",
+						"client_id",
+					),
 				),
 			},
 			{
@@ -3440,6 +3458,12 @@ func TestAccClientMyOrganizationConfiguration(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.1", "samlp"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.2", "oidc"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.connection_deletion_behavior", "allow_if_empty"),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.invitation_landing_client_id",
+						"auth0_client.invitation_landing",
+						"client_id",
+					),
 				),
 			},
 		},

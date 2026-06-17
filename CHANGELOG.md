@@ -1,3 +1,9 @@
+## v1.50.0
+
+ENHANCEMENTS:
+- `resource/auth0_client` – Add support for configuring `invitation_landing_client_id` in the My Organization API ([#1609](https://github.com/auth0/terraform-provider-auth0/pull/1609))
+- `resource/auth0_client_credentials` – Add support for the PKCS#1 (`RSA PUBLIC KEY`) public key format when computing JWK thumbprints ([#1608](https://github.com/auth0/terraform-provider-auth0/pull/1608))
+
 ## v1.49.0
 
 ENHANCEMENTS:

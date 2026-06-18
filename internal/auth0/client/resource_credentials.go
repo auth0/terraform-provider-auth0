@@ -813,6 +813,12 @@ func jwkThumbprint(pemData string) string {
 		if !ok {
 			return ""
 		}
+	case "RSA PUBLIC KEY":
+		key, err := x509.ParsePKCS1PublicKey(block.Bytes)
+		if err != nil {
+			return ""
+		}
+		pub = key
 	default:
 		return ""
 	}

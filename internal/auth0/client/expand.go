@@ -1340,6 +1340,7 @@ func expandMyOrganizationConfiguration(data *schema.ResourceData) *management.My
 			ConnectionProfileID:        value.String(elem.GetAttr("connection_profile_id")),
 			UserAttributeProfileID:     value.String(elem.GetAttr("user_attribute_profile_id")),
 			ConnectionDeletionBehavior: value.String(elem.GetAttr("connection_deletion_behavior")),
+			InvitationLandingClientID:  value.String(elem.GetAttr("invitation_landing_client_id")),
 		}
 
 		allowedStrategiesAttr := elem.GetAttr("allowed_strategies")

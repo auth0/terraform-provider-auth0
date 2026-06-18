@@ -1126,6 +1126,7 @@ func flattenMyOrganizationConfiguration(moc *management.MyOrganizationConfigurat
 		"connection_profile_id":        moc.GetConnectionProfileID(),
 		"user_attribute_profile_id":    moc.GetUserAttributeProfileID(),
 		"connection_deletion_behavior": moc.GetConnectionDeletionBehavior(),
+		"invitation_landing_client_id": moc.GetInvitationLandingClientID(),
 	}
 
 	if strategies := moc.GetAllowedStrategies(); len(strategies) > 0 {

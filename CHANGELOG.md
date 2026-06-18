@@ -1,8 +1,24 @@
-## [Unreleased]
+## v1.50.0
 
-### Added
+ENHANCEMENTS:
+- `resource/auth0_client` – Add support for configuring `invitation_landing_client_id` in the My Organization API ([#1609](https://github.com/auth0/terraform-provider-auth0/pull/1609))
+- `resource/auth0_client_credentials` – Add support for the PKCS#1 (`RSA PUBLIC KEY`) public key format when computing JWK thumbprints ([#1608](https://github.com/auth0/terraform-provider-auth0/pull/1608))
 
-- `auth0_event_stream`: Added support for `custom_header` webhook authorization method, with `header_key`, `header_value`, `header_value_wo`, and `header_value_wo_version` fields ([#1528](https://github.com/auth0/terraform-provider-auth0/issues/1528))
+## v1.49.0
+
+ENHANCEMENTS:
+- `resource/auth0_event_stream` – Add support for `custom_header` webhook authorization method, with `header_key`, `header_value`, `header_value_wo`, and `header_value_wo_version` fields ([#1600](https://github.com/auth0/terraform-provider-auth0/pull/1600))
+- `resource/auth0_log_stream` – Add support for a write-only Datadog API key via `datadog_api_key_wo` and `datadog_api_key_wo_version` ([#1601](https://github.com/auth0/terraform-provider-auth0/pull/1601))
+
+BUG FIXES:
+- `resource/auth0_action` – Fix `409 Conflict` race condition between action deploy and trigger binding by adding a create timeout and deployment wait logic ([#1590](https://github.com/auth0/terraform-provider-auth0/pull/1590))
+- `resource/auth0_tenant` – Prevent state drift for fields with server-side defaults (`session_lifetime`, `idle_session_lifetime`, `ephemeral_session_lifetime`, `idle_ephemeral_session_lifetime`, `enable_pipeline2`, `enable_client_connections`, and `disable_management_api_sms_obfuscation`) ([#1587](https://github.com/auth0/terraform-provider-auth0/pull/1587))
+- `resource/auth0_connection` – Handle empty `id_token_signed_response_algs` as unset for OIDC and Okta connections ([#1598](https://github.com/auth0/terraform-provider-auth0/pull/1598))
+
+NOTES:
+- `resource/auth0_guardian` – Deprecate the `provider` attribute and `options` block within the `phone` block in favor of the `auth0_phone_provider` resource (Unified Phone Experience) ([#1596](https://github.com/auth0/terraform-provider-auth0/pull/1596))
+- `resource/auth0_trigger_action` / `resource/auth0_trigger_actions` – Document newly supported trigger types (`password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`, `login-post-identifier`, and `signup-post-identifier`) ([#1605](https://github.com/auth0/terraform-provider-auth0/pull/1605))
+- `resource/auth0_attack_protection` – Update description for `bot_detection_level` ([#1595](https://github.com/auth0/terraform-provider-auth0/pull/1595))
 
 ## v1.48.0
 

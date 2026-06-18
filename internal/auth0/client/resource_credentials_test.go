@@ -858,7 +858,7 @@ resource "auth0_client" "my_client" {
 resource "auth0_client_credentials" "test" {
 	client_id                = auth0_client.my_client.id
 	authentication_method    = "client_secret_post"
-	client_secret_wo         = "wo-secret-value-v1-683341"
+	client_secret_wo         = "wo-secret-value-v1-683341-LUFqPx+sRLjbL7peYRPFmFu-bbvE7u7og4YUNe_C345="
 	client_secret_wo_version = 1
 }
 `
@@ -872,7 +872,7 @@ resource "auth0_client" "my_client" {
 resource "auth0_client_credentials" "test" {
 	client_id                = auth0_client.my_client.id
 	authentication_method    = "client_secret_post"
-	client_secret_wo         = "wo-secret-value-v2-998877"
+	client_secret_wo         = "wo-secret-value-v2-998877-LUFqPx+sRLjbL7peYRPFmFu-bbvE7u7og4YUNe_C345="
 	client_secret_wo_version = 2
 }
 `
@@ -885,10 +885,8 @@ func TestAccClientCredentialsWriteOnlySecret(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "client_secret_post"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret_wo_version", "1"),
-					// The write-only secret must never be persisted to state.
 					resource.TestCheckNoResourceAttr("auth0_client_credentials.test", "client_secret_wo"),
-					// The legacy param stays empty on the write-only path.
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret", ""),
+					resource.TestCheckNoResourceAttr("auth0_client_credentials.test", "client_secret"),
 				),
 			},
 			{
@@ -896,7 +894,7 @@ func TestAccClientCredentialsWriteOnlySecret(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret_wo_version", "2"),
 					resource.TestCheckNoResourceAttr("auth0_client_credentials.test", "client_secret_wo"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret", ""),
+					resource.TestCheckNoResourceAttr("auth0_client_credentials.test", "client_secret"),
 				),
 			},
 		},

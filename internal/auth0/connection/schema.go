@@ -767,6 +767,7 @@ var optionsSchema = &schema.Schema{
 			"type": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 				Description: "The connection's communication channel type. For OIDC connections, accepted values are " +
 					"`back_channel` and `front_channel`; for Okta Workforce connections, " +
 					"only `back_channel` is accepted. " +

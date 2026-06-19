@@ -767,9 +767,11 @@ var optionsSchema = &schema.Schema{
 			"type": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Description: "Value can be `back_channel` or `front_channel`. " +
-					"Front Channel will use OIDC protocol with `response_mode=form_post` and `response_type=id_token`. " +
-					"Back Channel will use `response_type=code`.",
+				Description: "The connection's communication channel type. For OIDC connections, accepted values are " +
+					"`back_channel` and `front_channel`; for Okta Workforce connections, " +
+					"only `back_channel` is accepted. " +
+					"Front Channel uses the OIDC protocol with `response_mode=form_post` and `response_type=id_token`. " +
+					"Back Channel uses `response_type=code`.",
 			},
 			"send_back_channel_nonce": {
 				Type:     schema.TypeBool,

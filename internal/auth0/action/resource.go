@@ -23,7 +23,7 @@ func NewResource() *schema.Resource {
 		UpdateContext: updateAction,
 		DeleteContext: deleteAction,
 		Timeouts: &schema.ResourceTimeout{
-			Create: schema.DefaultTimeout(1 * time.Minute),
+			Create: schema.DefaultTimeout(5 * time.Minute),
 		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,

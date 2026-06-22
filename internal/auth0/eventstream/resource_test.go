@@ -258,6 +258,90 @@ func TestAccEventStreamStatus(t *testing.T) {
 	})
 }
 
+const testEventStreamCreateCustomHeader = `
+resource "auth0_event_stream" "my_event_stream_custom_header" {
+  name             = "{{.testName}}-my-custom-header"
+  destination_type = "webhook"
+  subscriptions    = ["user.created", "user.updated"]
+
+  webhook_configuration {
+    webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
+    webhook_authorization {
+      method       = "custom_header"
+      header_key   = "x-auth0-webhook-secret"
+      header_value = "initial-secret"
+    }
+  }
+}
+`
+
+const testEventStreamUpdateCustomHeader = `
+resource "auth0_event_stream" "my_event_stream_custom_header" {
+  name             = "{{.testName}}-my-custom-header"
+  destination_type = "webhook"
+  subscriptions    = ["user.created", "user.updated"]
+
+  webhook_configuration {
+    webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
+    webhook_authorization {
+      method       = "custom_header"
+      header_key   = "x-auth0-webhook-secret"
+      header_value = "rotated-secret"
+    }
+  }
+}
+`
+
+const testEventStreamCreateCustomHeaderWO = `
+resource "auth0_event_stream" "my_event_stream_custom_header" {
+  name             = "{{.testName}}-my-custom-header"
+  destination_type = "webhook"
+  subscriptions    = ["user.created", "user.updated"]
+
+  webhook_configuration {
+    webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
+    webhook_authorization {
+      method                   = "custom_header"
+      header_key               = "x-auth0-webhook-secret"
+      header_value_wo          = "secret-write-only"
+      header_value_wo_version  = 1
+    }
+  }
+}
+`
+
+func TestAccEventStreamCustomHeader(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testEventStreamCreateCustomHeader, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_custom_header", "destination_type", "webhook"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_custom_header", "webhook_configuration.0.webhook_authorization.0.method", "custom_header"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_custom_header", "webhook_configuration.0.webhook_authorization.0.header_key", "x-auth0-webhook-secret"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_custom_header", "webhook_configuration.0.webhook_authorization.0.header_value", "initial-secret"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testEventStreamUpdateCustomHeader, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_custom_header", "webhook_configuration.0.webhook_authorization.0.method", "custom_header"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_custom_header", "webhook_configuration.0.webhook_authorization.0.header_key", "x-auth0-webhook-secret"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_custom_header", "webhook_configuration.0.webhook_authorization.0.header_value", "rotated-secret"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testEventStreamCreateCustomHeaderWO, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_custom_header", "webhook_configuration.0.webhook_authorization.0.method", "custom_header"),
+					resource.TestCheckResourceAttr("auth0_event_stream.my_event_stream_custom_header", "webhook_configuration.0.webhook_authorization.0.header_key", "x-auth0-webhook-secret"),
+					resource.TestCheckNoResourceAttr("auth0_event_stream.my_event_stream_custom_header", "webhook_configuration.0.webhook_authorization.0.header_value_wo"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccEventStreamAction(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

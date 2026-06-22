@@ -1684,6 +1684,11 @@ func NewResource() *schema.Resource {
 							Description:  "Controls the behavior when deleting connections associated with organizations for this client. Possible values: `allow`, `allow_if_empty`.",
 							ValidateFunc: validation.StringInSlice([]string{"allow", "allow_if_empty"}, false),
 						},
+						"invitation_landing_client_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The client ID used as the invitation landing page when creating invitations through the My Organization API. Requires the tenant to have member management enabled, and the referenced client must allow organizations.",
+						},
 					},
 				},
 			},

@@ -13,15 +13,11 @@ resource "auth0_guardian" "my_guardian" {
     user_verification = "required"
   }
 
+  # Phone MFA factor. Under the Unified Phone Experience, the provider is configured
+  # via the auth0_phone_provider resource and messages via auth0_branding_phone_notification_template.
   phone {
     enabled       = true
-    provider      = "auth0"
     message_types = ["sms", "voice"]
-
-    options {
-      enrollment_message   = "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment."
-      verification_message = "{{code}} is your verification code for {{tenant.friendly_name}}."
-    }
   }
 
   push {

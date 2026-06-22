@@ -2,12 +2,19 @@ package acctest
 
 import (
 	"bytes"
+	"strings"
 	"text/template"
 )
 
+// templateFuncs defines custom functions available in test templates.
+// Example usage: {{.testName | toLower}} outputs the test name in lowercase.
+var templateFuncs = template.FuncMap{
+	"toLower": strings.ToLower,
+}
+
 // ParseTestName renders templates defined with {{.testName}} placeholders.
 func ParseTestName(rawTemplate, testName string) string {
-	t, err := template.New("tpl").Parse(rawTemplate)
+	t, err := template.New("tpl").Funcs(templateFuncs).Parse(rawTemplate)
 	if err != nil {
 		return ""
 	}

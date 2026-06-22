@@ -14,6 +14,10 @@ conjunction with the `auth0_trigger_action` resource when binding actions to the
 
 ~> The list of supported runtimes for a trigger are available via [Get triggers](https://auth0.com/docs/api/management/v2/actions/get-triggers)
 
+-> To delete an action along with its binding, use a two-step `terraform apply` to avoid a `409 Conflict` error (the API rejects deleting an action while it is still bound to a trigger). 
+First, remove the action's binding from this resource and run `terraform apply` to unbind it; 
+then remove the `auth0_action` resource and run `terraform apply` again to delete the action completely.
+
 
 ## Example Usage
 
@@ -69,7 +73,7 @@ resource "auth0_trigger_actions" "login_flow" {
 ### Required
 
 - `actions` (Block List, Min: 1) The list of actions bound to this trigger. (see [below for nested schema](#nestedblock--actions))
-- `trigger` (String) The ID of the trigger to bind with. Options include: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`.
+- `trigger` (String) The ID of the trigger to bind with. Options include: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`, `login-post-identifier`, `signup-post-identifier`.
 
 ### Read-Only
 

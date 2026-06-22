@@ -127,6 +127,7 @@ Read-Only:
 - `allowed_strategies` (List of String)
 - `connection_deletion_behavior` (String)
 - `connection_profile_id` (String)
+- `invitation_landing_client_id` (String)
 - `user_attribute_profile_id` (String)
 
 

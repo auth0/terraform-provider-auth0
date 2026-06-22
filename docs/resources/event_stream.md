@@ -140,7 +140,7 @@ Required:
 
 > **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
-- `webhook_authorization` (Block List, Min: 1, Max: 1) Authorization details for the webhook endpoint. Supports `basic` authentication using `username` and `password`, or `bearer` authentication using a `token`. The appropriate fields must be set based on the chosen method. (see [below for nested schema](#nestedblock--webhook_configuration--webhook_authorization))
+- `webhook_authorization` (Block List, Min: 1, Max: 1) Authorization details for the webhook endpoint. Supports `basic` authentication using `username` and `password`, `bearer` authentication using a `token`, or `custom_header` authentication using `header_key` and `header_value` (or `header_value_wo`). The appropriate fields must be set based on the chosen method. (see [below for nested schema](#nestedblock--webhook_configuration--webhook_authorization))
 - `webhook_endpoint` (String) The HTTPS endpoint that will receive the webhook events. Must be a valid, publicly accessible URL.
 
 <a id="nestedblock--webhook_configuration--webhook_authorization"></a>
@@ -148,12 +148,16 @@ Required:
 
 Required:
 
-- `method` (String) The authorization method used to secure the webhook endpoint. Can be either `basic` or `bearer`.
+- `method` (String) The authorization method used to secure the webhook endpoint. Can be `basic`, `bearer`, or `custom_header`.
 
 Optional:
 
 > **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
+- `header_key` (String) The name of the HTTP header used for `custom_header` authentication. Required when `method` is `custom_header`. Returned by the API and stored in state.
+- `header_value` (String, Sensitive) The secret value sent in the custom header. Required when `method` is `custom_header` and `header_value_wo` is not provided. **Note:** For better security, use `header_value_wo` to prevent storing the secret in state.
+- `header_value_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The secret value sent in the custom header (write-only). Not stored in Terraform state. Bump `header_value_wo_version` to rotate the secret.
+- `header_value_wo_version` (Number) Version number for secret rotation. Update to trigger a new `header_value_wo` to be sent.
 - `password` (String, Sensitive) The password for `basic` authentication. Required only when `method` is set to `basic`. **Note:** For better security, consider using `password_wo` instead to prevent storing the password in Terraform state.
 - `password_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The password for `basic` authentication (write-only). This value is only available during resource creation and update, and is **not** stored in Terraform state. To change the password, update the `password_wo_version` attribute. Required only when `method` is set to `basic` and `password` is not provided.
 - `password_wo_version` (Number) Version number for password changes. Update this value to trigger a password change when using `password_wo`.

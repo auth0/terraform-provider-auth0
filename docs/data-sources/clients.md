@@ -61,6 +61,7 @@ Read-Only:
 - `external_client_id` (String)
 - `external_metadata_created_by` (String)
 - `external_metadata_type` (String)
+- `fedcm_login` (List of Object) (see [below for nested schema](#nestedobjatt--clients--fedcm_login))
 - `grant_types` (List of String)
 - `is_first_party` (Boolean)
 - `is_token_endpoint_ip_header_trusted` (Boolean)
@@ -99,6 +100,22 @@ Read-Only:
 Read-Only:
 
 - `client_id` (String)
+
+
+
+<a id="nestedobjatt--clients--fedcm_login"></a>
+### Nested Schema for `clients.fedcm_login`
+
+Read-Only:
+
+- `google` (List of Object) (see [below for nested schema](#nestedobjatt--clients--fedcm_login--google))
+
+<a id="nestedobjatt--clients--fedcm_login--google"></a>
+### Nested Schema for `clients.fedcm_login.google`
+
+Read-Only:
+
+- `is_enabled` (Boolean)
 
 
 

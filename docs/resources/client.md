@@ -170,6 +170,7 @@ resource "auth0_client" "mcp_server" {
 - `description` (String) Description of the purpose of the client.
 - `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
 - `express_configuration` (Block List, Max: 1) Express Configuration settings for the client. Used with OIN Express Configuration. (see [below for nested schema](#nestedblock--express_configuration))
+- `fedcm_login` (Block List, Max: 1) Federated Credential Management (FedCM) configuration. (see [below for nested schema](#nestedblock--fedcm_login))
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
@@ -566,6 +567,22 @@ Read-Only:
 Optional:
 
 - `client_id` (String) The ID of the linked client.
+
+
+
+<a id="nestedblock--fedcm_login"></a>
+### Nested Schema for `fedcm_login`
+
+Required:
+
+- `google` (Block List, Min: 1, Max: 1) Google FedCM configuration. (see [below for nested schema](#nestedblock--fedcm_login--google))
+
+<a id="nestedblock--fedcm_login--google"></a>
+### Nested Schema for `fedcm_login.google`
+
+Required:
+
+- `is_enabled` (Boolean) Whether to show the Google FedCM prompt on Login.
 
 
 

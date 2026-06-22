@@ -1610,6 +1610,31 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"fedcm_login": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Federated Credential Management (FedCM) configuration.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"google": {
+							Type:        schema.TypeList,
+							Required:    true,
+							MaxItems:    1,
+							Description: "Google FedCM configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"is_enabled": {
+										Type:        schema.TypeBool,
+										Required:    true,
+										Description: "Whether to show the Google FedCM prompt on Login.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"token_quota": commons.TokenQuotaSchema(),
 			"skip_non_verifiable_callback_uri_confirmation_prompt": {
 				Type:         schema.TypeString,

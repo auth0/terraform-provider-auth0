@@ -228,7 +228,7 @@ func NewResource() *schema.Resource {
 								"medium",
 								"high",
 							}, false),
-							Description: "Bot detection level. Possible values: `low`, `medium`, `high`. Set to empty string to disable.",
+							Description: "Bot detection level. Possible values: `low`, `medium`, `high`.",
 						},
 						"challenge_password_policy": {
 							Type:     schema.TypeString,

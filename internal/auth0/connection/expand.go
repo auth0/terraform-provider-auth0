@@ -1002,7 +1002,7 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 		NonPersistentAttrs:          value.Strings(config.GetAttr("non_persistent_attrs")),
 		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
 		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
-		IDTokenSignedResponseAlgs:   value.Strings(config.GetAttr("id_token_signed_response_algs")),
+		IDTokenSignedResponseAlgs:   nonEmptyStrings(config.GetAttr("id_token_signed_response_algs")),
 		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
 		TokenEndpointJwtcaAudFormat: value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
 	}
@@ -1010,6 +1010,14 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		options.ConnectionSettings = &management.ConnectionOptionsOIDCConnectionSettings{
 			PKCE: value.String(config.GetAttr("pkce")),
+		}
+
+		return true
+	})
+
+	config.GetAttr("federated_connections_access_tokens").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		options.FederatedConnectionsAccessTokens = &management.ConnectionOptionsOIDCFederatedConnectionsAccessTokens{
+			Active: value.Bool(config.GetAttr("active")),
 		}
 
 		return true
@@ -1054,7 +1062,7 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
 		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
 		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
-		IDTokenSignedResponseAlgs:   value.Strings(config.GetAttr("id_token_signed_response_algs")),
+		IDTokenSignedResponseAlgs:   nonEmptyStrings(config.GetAttr("id_token_signed_response_algs")),
 		TokenEndpointJwtcaAudFormat: value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
 	}
 
@@ -1092,6 +1100,15 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 	return options, diag.FromErr(err)
 }
 
+// nonEmptyStrings returns nil for a null OR empty list.
+func nonEmptyStrings(v cty.Value) *[]string {
+	if v.IsNull() || v.LengthInt() == 0 {
+		return nil
+	}
+
+	return value.Strings(v)
+}
+
 func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSAML{
 		Debug:                       value.Bool(config.GetAttr("debug")),
@@ -1115,6 +1132,8 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 		StrategyVersion:             value.Int(config.GetAttr("strategy_version")),
 		GlobalTokenRevocationJWTIss: value.String(config.GetAttr("global_token_revocation_jwt_iss")),
 		GlobalTokenRevocationJWTSub: value.String(config.GetAttr("global_token_revocation_jwt_sub")),
+		DestinationURL:              value.String(config.GetAttr("destination_url")),
+		RecipientURL:                value.String(config.GetAttr("recipient_url")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))

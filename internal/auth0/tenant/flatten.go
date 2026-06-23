@@ -11,6 +11,27 @@ import (
 )
 
 func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
+	if tenant == nil {
+		return nil
+	}
+
+	sessionLifetime := sessionLifetimeDefault
+	if tenant.SessionLifetime != nil {
+		sessionLifetime = *tenant.SessionLifetime
+	}
+	idleSessionLifetime := idleSessionLifetimeDefault
+	if tenant.IdleSessionLifetime != nil {
+		idleSessionLifetime = *tenant.IdleSessionLifetime
+	}
+	ephemeralSessionLifetime := ephemeralSessionLifetimeDefault
+	if tenant.EphemeralSessionLifetime != nil {
+		ephemeralSessionLifetime = *tenant.EphemeralSessionLifetime
+	}
+	idleEphemeralSessionLifetime := idleEphemeralSessionLifetimeDefault
+	if tenant.IdleEphemeralSessionLifetime != nil {
+		idleEphemeralSessionLifetime = *tenant.IdleEphemeralSessionLifetime
+	}
+
 	result := multierror.Append(
 		data.Set("default_audience", tenant.GetDefaultAudience()),
 		data.Set("default_directory", tenant.GetDefaultDirectory()),
@@ -20,10 +41,10 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("support_email", tenant.GetSupportEmail()),
 		data.Set("support_url", tenant.GetSupportURL()),
 		data.Set("allowed_logout_urls", tenant.GetAllowedLogoutURLs()),
-		data.Set("session_lifetime", tenant.GetSessionLifetime()),
-		data.Set("idle_session_lifetime", tenant.GetIdleSessionLifetime()),
-		data.Set("ephemeral_session_lifetime", tenant.GetEphemeralSessionLifetime()),
-		data.Set("idle_ephemeral_session_lifetime", tenant.GetIdleEphemeralSessionLifetime()),
+		data.Set("session_lifetime", sessionLifetime),
+		data.Set("idle_session_lifetime", idleSessionLifetime),
+		data.Set("ephemeral_session_lifetime", ephemeralSessionLifetime),
+		data.Set("idle_ephemeral_session_lifetime", idleEphemeralSessionLifetime),
 		data.Set("sandbox_version", tenant.GetSandboxVersion()),
 		data.Set("enabled_locales", tenant.GetEnabledLocales()),
 		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
@@ -42,21 +63,6 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("resource_parameter_profile", tenant.GetResourceParameterProfile()),
 		data.Set("dynamic_client_registration_security_mode", tenant.GetDynamicClientRegistrationSecurityMode()),
 	)
-
-	if tenant.GetIdleSessionLifetime() == 0 {
-		result = multierror.Append(result, data.Set("idle_session_lifetime", idleSessionLifetimeDefault))
-	}
-
-	if tenant.GetSessionLifetime() == 0 {
-		result = multierror.Append(result, data.Set("session_lifetime", sessionLifetimeDefault))
-	}
-
-	if tenant.GetIdleEphemeralSessionLifetime() == 0 {
-		result = multierror.Append(result, data.Set("idle_ephemeral_session_lifetime", idleEphemeralSessionLifetimeDefault))
-	}
-	if tenant.GetEphemeralSessionLifetime() == 0 {
-		result = multierror.Append(result, data.Set("ephemeral_session_lifetime", ephemeralSessionLifetimeDefault))
-	}
 
 	if tenant.GetACRValuesSupported() == nil {
 		result = multierror.Append(result,

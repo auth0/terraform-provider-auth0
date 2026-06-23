@@ -1,9 +1,13 @@
 package connection
 
 import (
+	"strings"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
+
+var allowedDPoPSigningAlgorithms = []string{"ES256", "ES384", "ES512", "Ed25519"}
 
 var resourceSchema = map[string]*schema.Schema{
 	"name": {
@@ -983,6 +987,16 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "Specifies the subject of the JWT used for global token revocation for the SAML connection.",
 			},
+			"destination_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The destination URL for the SAML assertion. Used when configuring a SAML connection for proxy gateways.",
+			},
+			"recipient_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The recipient URL for the SAML assertion. Used when configuring a SAML connection for proxy gateways.",
+			},
 			"auth_params": {
 				Type: schema.TypeMap,
 				Elem: &schema.Schema{
@@ -1007,6 +1021,23 @@ var optionsSchema = &schema.Schema{
 							Description: "PKCE configuration. Possible values: `auto` (uses the strongest algorithm available), " +
 								"`S256` (uses the SHA-256 algorithm), `plain` (uses plaintext as described in the PKCE specification) " +
 								"or `disabled` (disables support for PKCE).",
+						},
+					},
+				},
+			},
+			"federated_connections_access_tokens": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Computed:    true,
+				Description: "Configuration for collecting access tokens and refresh tokens from federated connections. Only applicable for OIDC connections.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"active": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "When enabled, Auth0 will collect and store access tokens and refresh tokens obtained from federated connections during authentication.",
 						},
 					},
 				},
@@ -1372,7 +1403,7 @@ var optionsSchema = &schema.Schema{
 					}, false),
 				},
 				Optional:    true,
-				Description: "List of allowed algorithms for the ID token signature. If not set, RS256 will be applied at runtime. (Okta/OIDC Connections)",
+				Description: "List of allowed algorithms for the ID token signature. If not set or empty, default algorithm(s) will be applied at runtime. (Okta/OIDC Connections)",
 			},
 			"token_endpoint_jwtca_aud_format": {
 				Type:     schema.TypeString,
@@ -1421,8 +1452,8 @@ var optionsSchema = &schema.Schema{
 			"dpop_signing_alg": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: validation.StringInSlice([]string{"ES256", "Ed25519"}, false),
-				Description:  "Signature method used to sign the request. EA Only",
+				ValidateFunc: validation.StringInSlice(allowedDPoPSigningAlgorithms, false),
+				Description:  "The algorithm used to sign the DPoP proof. Allowed values: " + strings.Join(allowedDPoPSigningAlgorithms, ", ") + ".",
 			},
 			"password_options": {
 				Type:     schema.TypeList,

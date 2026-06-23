@@ -547,7 +547,9 @@ func flattenClientAddonSSOIntegration(addon *management.SSOIntegrationClientAddo
 }
 
 func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
-	if addon == nil || addon.String() == "{}" {
+	// Return nil when samlp is absent from the API response. An empty samlp
+	// addon (i.e. "samlp":{}) is still processed to avoid state drift.
+	if addon == nil {
 		return nil
 	}
 
@@ -568,32 +570,71 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 		flexibleMappingsMap, _ = structure.FlattenJsonToString(addon.GetFlexibleMappings())
 	}
 
-	return []interface{}{
-		map[string]interface{}{
-			"mappings":                           addon.GetMappings(),
-			"flexible_mappings":                  flexibleMappingsMap,
-			"audience":                           addon.GetAudience(),
-			"recipient":                          addon.GetRecipient(),
-			"create_upn_claim":                   addon.GetCreateUPNClaim(),
-			"map_unknown_claims_as_is":           addon.GetMapUnknownClaimsAsIs(),
-			"passthrough_claims_with_no_mapping": addon.GetPassthroughClaimsWithNoMapping(),
-			"map_identities":                     addon.GetMapIdentities(),
-			"signature_algorithm":                addon.GetSignatureAlgorithm(),
-			"digest_algorithm":                   addon.GetDigestAlgorithm(),
-			"issuer":                             addon.GetIssuer(),
-			"destination":                        addon.GetDestination(),
-			"lifetime_in_seconds":                addon.GetLifetimeInSeconds(),
-			"sign_response":                      addon.GetSignResponse(),
-			"name_identifier_format":             addon.GetNameIdentifierFormat(),
-			"name_identifier_probes":             addon.GetNameIdentifierProbes(),
-			"authn_context_class_ref":            addon.GetAuthnContextClassRef(),
-			"typed_attributes":                   addon.GetTypedAttributes(),
-			"include_attribute_name_format":      addon.GetIncludeAttributeNameFormat(),
-			"binding":                            addon.GetBinding(),
-			"signing_cert":                       addon.GetSigningCert(),
-			"logout":                             logout,
-		},
+	flatSaml := map[string]interface{}{
+		"logout":            logout,
+		"flexible_mappings": flexibleMappingsMap,
+		// Scalar(non-block) list and set backend defaults must be populated when nil,
+		// else will be overwritten by [] and {}.
+		"mappings":               getNonNilValueOrDefault(addon.Mappings, samlDefault.mappings),
+		"name_identifier_probes": getNonNilValueOrDefault(addon.NameIdentifierProbes, samlDefault.nameIdentifierProbes),
+		// Non-zero bool and int backend defaults must be populated when nil,
+		// else will be overwritten by Go defaults on imported resources.
+		"create_upn_claim":                   getNonNilValueOrDefault(addon.CreateUPNClaim, samlDefault.createUPNClaim),
+		"passthrough_claims_with_no_mapping": getNonNilValueOrDefault(addon.PassthroughClaimsWithNoMapping, samlDefault.passthroughClaimsWithNoMapping),
+		"map_identities":                     getNonNilValueOrDefault(addon.MapIdentities, samlDefault.mapIdentities),
+		"typed_attributes":                   getNonNilValueOrDefault(addon.TypedAttributes, samlDefault.typedAttributes),
+		"include_attribute_name_format":      getNonNilValueOrDefault(addon.IncludeAttributeNameFormat, samlDefault.includeAttributeNameFormat),
+		"lifetime_in_seconds":                getNonNilValueOrDefault(addon.LifetimeInSeconds, samlDefault.lifetimeInSeconds),
 	}
+
+	// String fields are only populated when non-nil; Terraform treats absent
+	// strings as null which matches the API's omission behavior in response.
+	if addon.Audience != nil {
+		flatSaml["audience"] = *addon.Audience
+	}
+	if addon.Issuer != nil {
+		flatSaml["issuer"] = *addon.Issuer
+	}
+	if addon.Destination != nil {
+		flatSaml["destination"] = *addon.Destination
+	}
+	if addon.AuthnContextClassRef != nil {
+		flatSaml["authn_context_class_ref"] = *addon.AuthnContextClassRef
+	}
+	if addon.Binding != nil {
+		flatSaml["binding"] = *addon.Binding
+	}
+	if addon.SigningCert != nil {
+		flatSaml["signing_cert"] = *addon.SigningCert
+	}
+	if addon.Recipient != nil {
+		flatSaml["recipient"] = *addon.Recipient
+	}
+	if addon.SignatureAlgorithm != nil {
+		flatSaml["signature_algorithm"] = *addon.SignatureAlgorithm
+	}
+	if addon.DigestAlgorithm != nil {
+		flatSaml["digest_algorithm"] = *addon.DigestAlgorithm
+	}
+	if addon.NameIdentifierFormat != nil {
+		flatSaml["name_identifier_format"] = *addon.NameIdentifierFormat
+	}
+	if addon.MapUnknownClaimsAsIs != nil {
+		flatSaml["map_unknown_claims_as_is"] = *addon.MapUnknownClaimsAsIs
+	}
+	if addon.SignResponse != nil {
+		flatSaml["sign_response"] = *addon.SignResponse
+	}
+
+	return []interface{}{flatSaml}
+}
+
+// getNonNilValueOrDefault returns the dereferenced value if the pointer is non-nil, otherwise returns the provided default value.
+func getNonNilValueOrDefault[T any](value *T, defaultValue T) T {
+	if value != nil {
+		return *value
+	}
+	return defaultValue
 }
 
 func flattenDefaultOrganization(defaultOrganization *management.ClientDefaultOrganization) []interface{} {
@@ -1080,6 +1121,7 @@ func flattenMyOrganizationConfiguration(moc *management.MyOrganizationConfigurat
 		"connection_profile_id":        moc.GetConnectionProfileID(),
 		"user_attribute_profile_id":    moc.GetUserAttributeProfileID(),
 		"connection_deletion_behavior": moc.GetConnectionDeletionBehavior(),
+		"invitation_landing_client_id": moc.GetInvitationLandingClientID(),
 	}
 
 	if strategies := moc.GetAllowedStrategies(); len(strategies) > 0 {

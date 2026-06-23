@@ -955,6 +955,14 @@ func expandClientAddonSSOIntegration(ssoCfg cty.Value) *management.SSOIntegratio
 }
 
 func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
+	// When samlp is not configured but other addons (e.g. aws, sso_integration) are,
+	// Terraform still passes samlp as an empty list (length 0). Hence return nil.
+	// An explicitly configured empty samlp block (`samlp {}`) has length 1
+	// and is processed for backward compatibility.
+	if samlpCfg.LengthInt() == 0 {
+		return nil
+	}
+
 	var samlpAddon management.SAML2ClientAddon
 
 	samlpCfg.ForEachElement(func(_ cty.Value, samlpCfg cty.Value) (stop bool) {
@@ -999,46 +1007,6 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 
 		if logout != (management.SAML2ClientAddonLogout{}) {
 			samlpAddon.Logout = &logout
-		}
-
-		if samlpAddon.DigestAlgorithm == nil {
-			samlpAddon.DigestAlgorithm = auth0.String("sha1")
-		}
-
-		if samlpAddon.NameIdentifierFormat == nil {
-			samlpAddon.NameIdentifierFormat = auth0.String("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified")
-		}
-
-		if samlpAddon.SignatureAlgorithm == nil {
-			samlpAddon.SignatureAlgorithm = auth0.String("rsa-sha1")
-		}
-
-		if samlpAddon.LifetimeInSeconds == nil {
-			samlpAddon.LifetimeInSeconds = auth0.Int(3600)
-		}
-
-		if samlpAddon.CreateUPNClaim == nil {
-			samlpAddon.CreateUPNClaim = auth0.Bool(true)
-		}
-
-		if samlpAddon.IncludeAttributeNameFormat == nil {
-			samlpAddon.IncludeAttributeNameFormat = auth0.Bool(true)
-		}
-
-		if samlpAddon.MapIdentities == nil {
-			samlpAddon.MapIdentities = auth0.Bool(true)
-		}
-
-		if samlpAddon.MapUnknownClaimsAsIs == nil {
-			samlpAddon.MapUnknownClaimsAsIs = auth0.Bool(false)
-		}
-
-		if samlpAddon.PassthroughClaimsWithNoMapping == nil {
-			samlpAddon.PassthroughClaimsWithNoMapping = auth0.Bool(true)
-		}
-
-		if samlpAddon.TypedAttributes == nil {
-			samlpAddon.TypedAttributes = auth0.Bool(true)
 		}
 
 		return stop
@@ -1372,6 +1340,7 @@ func expandMyOrganizationConfiguration(data *schema.ResourceData) *management.My
 			ConnectionProfileID:        value.String(elem.GetAttr("connection_profile_id")),
 			UserAttributeProfileID:     value.String(elem.GetAttr("user_attribute_profile_id")),
 			ConnectionDeletionBehavior: value.String(elem.GetAttr("connection_deletion_behavior")),
+			InvitationLandingClientID:  value.String(elem.GetAttr("invitation_landing_client_id")),
 		}
 
 		allowedStrategiesAttr := elem.GetAttr("allowed_strategies")

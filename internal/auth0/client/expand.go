@@ -1173,12 +1173,10 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 }
 
 // isSessionTransferDelegationNull reports whether the delegation sub-block was
-// just removed from an otherwise-still-present session_transfer block. That is
-// the only case that needs an explicit "delegation": null in the PATCH body to
-// clear it on the API — see fetchNullableFields.
+// just removed from an otherwise-still-present session_transfer block.
 func isSessionTransferDelegationNull(data *schema.ResourceData) bool {
 	sessionTransfer := data.GetRawConfig().GetAttr("session_transfer")
-	if sessionTransfer.IsNull() && !data.HasChange("session_transfer.0.delegation") {
+	if sessionTransfer.IsNull() || !data.HasChange("session_transfer.0.delegation") {
 		return false
 	}
 

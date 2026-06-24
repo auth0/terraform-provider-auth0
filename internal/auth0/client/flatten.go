@@ -738,10 +738,24 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 		"allow_refresh_token":               sessionTransfer.GetAllowRefreshToken(),
 		"enforce_online_refresh_tokens":     sessionTransfer.GetEnforceOnlineRefreshTokens(),
 		"enforce_cascade_revocation":        sessionTransfer.GetEnforceCascadeRevocation(),
+		"delegation":                        flattenSessionTransferDelegation(sessionTransfer.GetDelegation()),
 	}
 
 	return []interface{}{
 		t,
+	}
+}
+
+func flattenSessionTransferDelegation(delegation *management.SessionTransferDelegation) []interface{} {
+	if delegation == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"allow_delegated_access": delegation.GetAllowDelegatedAccess(),
+			"enforce_device_binding": delegation.GetEnforceDeviceBinding(),
+		},
 	}
 }
 

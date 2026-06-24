@@ -1117,6 +1117,17 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		enforceCascadeRevocation := data.Get("session_transfer.0.enforce_cascade_revocation").(bool)
 		sessionTransfer.EnforceCascadeRevocation = auth0.Bool(enforceCascadeRevocation)
 
+		delegationConfig := config.GetAttr("delegation")
+		if !delegationConfig.IsNull() && delegationConfig.LengthInt() > 0 {
+			delegationConfig.ForEachElement(func(_ cty.Value, dCfg cty.Value) (stopInner bool) {
+				sessionTransfer.Delegation = &management.SessionTransferDelegation{
+					AllowDelegatedAccess: value.Bool(dCfg.GetAttr("allow_delegated_access")),
+					EnforceDeviceBinding: value.String(dCfg.GetAttr("enforce_device_binding")),
+				}
+				return stopInner
+			})
+		}
+
 		return stop
 	})
 
@@ -1153,7 +1164,33 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		}
 	}
 
+	// If session_transfer.delegation was removed while session_transfer remains. Clear it via {"session_transfer":{"delegation":null}}.
+	if _, isSessionTransferNull := nullableMap["session_transfer"]; !isSessionTransferNull && isSessionTransferDelegationNull(data) {
+		nullableMap["session_transfer"] = map[string]interface{}{"delegation": nil}
+	}
+
 	return nullableMap
+}
+
+// isSessionTransferDelegationNull reports whether the delegation sub-block was
+// just removed from an otherwise-still-present session_transfer block. That is
+// the only case that needs an explicit "delegation": null in the PATCH body to
+// clear it on the API — see fetchNullableFields.
+func isSessionTransferDelegationNull(data *schema.ResourceData) bool {
+	sessionTransfer := data.GetRawConfig().GetAttr("session_transfer")
+	if sessionTransfer.IsNull() && !data.HasChange("session_transfer.0.delegation") {
+		return false
+	}
+
+	delegationExist := false
+	sessionTransfer.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		delegation := cfg.GetAttr("delegation")
+		if !delegation.IsNull() && delegation.LengthInt() > 0 {
+			delegationExist = true
+		}
+		return stop
+	})
+	return !delegationExist
 }
 
 func isDefaultOrgNull(data *schema.ResourceData) bool {
@@ -1233,10 +1270,12 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 		canCreate := cfg.GetAttr("can_create_session_transfer_token")
 		enforceBinding := cfg.GetAttr("enforce_device_binding")
 		allowedMethods := cfg.GetAttr("allowed_authentication_methods")
+		delegation := cfg.GetAttr("delegation")
 
 		if (!canCreate.IsNull() && canCreate.True()) ||
 			(!enforceBinding.IsNull() && enforceBinding.AsString() != "") ||
-			(!allowedMethods.IsNull() && allowedMethods.LengthInt() > 0) {
+			(!allowedMethods.IsNull() && allowedMethods.LengthInt() > 0) ||
+			(!delegation.IsNull() && delegation.LengthInt() > 0) {
 			empty = false
 		}
 

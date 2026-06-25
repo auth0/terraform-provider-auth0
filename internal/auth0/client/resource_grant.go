@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -201,7 +202,7 @@ func validateClientGrant(_ context.Context, diff *schema.ResourceDiff, _ interfa
 	scopes := rawConfig.GetAttr("scopes")
 	allowAllScopes := diff.Get("allow_all_scopes").(bool)
 
-	if allowAllScopes && !scopes.IsNull() {
+	if clientGrantScopesConflictWithAllowAll(allowAllScopes, scopes) {
 		return fmt.Errorf("`scopes` cannot be provided when `allow_all_scopes` is set to `true`")
 	}
 
@@ -210,4 +211,13 @@ func validateClientGrant(_ context.Context, diff *schema.ResourceDiff, _ interfa
 	}
 
 	return nil
+}
+
+// clientGrantScopesConflictWithAllowAll reports whether a non-empty scopes list
+// has been provided alongside allow_all_scopes=true. An explicit empty list
+// (scopes = []) is not considered a conflict: terraform plan -generate-config-out
+// always writes scopes = [] into generated configs for grants that have
+// allow_all_scopes=true, because the Auth0 API returns scope:[] in that case.
+func clientGrantScopesConflictWithAllowAll(allowAllScopes bool, scopes cty.Value) bool {
+	return allowAllScopes && !scopes.IsNull() && scopes.LengthInt() > 0
 }

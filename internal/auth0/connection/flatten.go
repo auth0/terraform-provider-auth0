@@ -155,7 +155,7 @@ func flattenConnectionOptions(data *schema.ResourceData, connection *management.
 }
 
 func flattenConnectionOptionsGitHub(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsGitHub)
@@ -170,7 +170,7 @@ func flattenConnectionOptionsGitHub(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
+		"client_secret":            data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"scopes":                   options.Scopes(),
@@ -181,7 +181,7 @@ func flattenConnectionOptionsGitHub(
 }
 
 func flattenConnectionOptionsWindowsLive(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsWindowsLive)
@@ -196,7 +196,7 @@ func flattenConnectionOptionsWindowsLive(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
+		"client_secret":            data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
@@ -548,7 +548,7 @@ func flattenConnectionOptionsAuth0(
 }
 
 func flattenConnectionOptionsGoogleOAuth2(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsGoogleOAuth2)
@@ -563,7 +563,7 @@ func flattenConnectionOptionsGoogleOAuth2(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
+		"client_secret":            data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"allowed_audiences":        options.GetAllowedAudiences(),
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
@@ -575,7 +575,7 @@ func flattenConnectionOptionsGoogleOAuth2(
 }
 
 func flattenConnectionOptionsGoogleApps(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsGoogleApps)
@@ -590,7 +590,7 @@ func flattenConnectionOptionsGoogleApps(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
+		"client_secret":            data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"domain":                   options.GetDomain(),
 		"tenant_domain":            options.GetTenantDomain(),
 		"api_enable_users":         options.GetEnableUsersAPI(),
@@ -612,7 +612,7 @@ func flattenConnectionOptionsGoogleApps(
 }
 
 func flattenConnectionOptionsOAuth2(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsOAuth2)
@@ -627,7 +627,7 @@ func flattenConnectionOptionsOAuth2(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
+		"client_secret":            data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"scopes":                   options.Scopes(),
 		"token_endpoint":           options.GetTokenURL(),
 		"authorization_endpoint":   options.GetAuthorizationURL(),
@@ -661,7 +661,7 @@ func flattenCustomHeaders(headers map[string]string) []map[string]string {
 }
 
 func flattenConnectionOptionsFacebook(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsFacebook)
@@ -676,7 +676,7 @@ func flattenConnectionOptionsFacebook(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
+		"client_secret":            data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
@@ -687,7 +687,7 @@ func flattenConnectionOptionsFacebook(
 }
 
 func flattenConnectionOptionsApple(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsApple)
@@ -702,7 +702,7 @@ func flattenConnectionOptionsApple(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
+		"client_secret":            data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"team_id":                  options.GetTeamID(),
 		"key_id":                   options.GetKeyID(),
 		"scopes":                   options.Scopes(),
@@ -715,7 +715,7 @@ func flattenConnectionOptionsApple(
 }
 
 func flattenConnectionOptionsLinkedin(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsLinkedin)
@@ -730,7 +730,7 @@ func flattenConnectionOptionsLinkedin(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
+		"client_secret":            data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"strategy_version":         options.GetStrategyVersion(),
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
@@ -742,7 +742,7 @@ func flattenConnectionOptionsLinkedin(
 }
 
 func flattenConnectionOptionsSalesforce(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsSalesforce)
@@ -757,7 +757,7 @@ func flattenConnectionOptionsSalesforce(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
+		"client_secret":            data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"community_base_url":       options.GetCommunityBaseURL(),
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
@@ -823,7 +823,7 @@ func flattenConnectionOptionsSMS(
 }
 
 func flattenConnectionOptionsOIDC(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsOIDC)
@@ -838,7 +838,7 @@ func flattenConnectionOptionsOIDC(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                       options.GetClientID(),
-		"client_secret":                   options.GetClientSecret(),
+		"client_secret":                   data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"icon_url":                        options.GetLogoURL(),
 		"tenant_domain":                   options.GetTenantDomain(),
 		"domain_aliases":                  options.GetDomainAliases(),
@@ -896,7 +896,7 @@ func flattenConnectionOptionsOIDC(
 }
 
 func flattenConnectionOptionsOkta(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsOkta)
@@ -911,7 +911,7 @@ func flattenConnectionOptionsOkta(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                       options.GetClientID(),
-		"client_secret":                   options.GetClientSecret(),
+		"client_secret":                   data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"domain":                          options.GetDomain(),
 		"domain_aliases":                  options.GetDomainAliases(),
 		"scopes":                          options.Scopes(),
@@ -1048,7 +1048,7 @@ func flattenConnectionOptionsAD(
 }
 
 func flattenConnectionOptionsAzureAD(
-	_ *schema.ResourceData,
+	data *schema.ResourceData,
 	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
 	options, ok := rawOptions.(*management.ConnectionOptionsAzureAD)
@@ -1063,7 +1063,7 @@ func flattenConnectionOptionsAzureAD(
 
 	optionsMap := map[string]interface{}{
 		"client_id":                              options.GetClientID(),
-		"client_secret":                          options.GetClientSecret(),
+		"client_secret":                          data.Get("options.0.client_secret").(string), // Value does not get read back.
 		"app_id":                                 options.GetAppID(),
 		"tenant_domain":                          options.GetTenantDomain(),
 		"domain":                                 options.GetDomain(),

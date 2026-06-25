@@ -44,7 +44,7 @@ func flattenLogStreamSink(data *schema.ResourceData, sink interface{}) []interfa
 	case *management.LogStreamSinkAzureEventGrid:
 		m = flattenLogStreamSinkAzureEventGrid(sinkType)
 	case *management.LogStreamSinkHTTP:
-		m = flattenLogStreamSinkHTTP(sinkType)
+		m = flattenLogStreamSinkHTTP(data, sinkType)
 	case *management.LogStreamSinkDatadog:
 		m = flattenLogStreamSinkDatadog(data, sinkType)
 	case *management.LogStreamSinkSplunk:
@@ -77,12 +77,12 @@ func flattenLogStreamSinkAzureEventGrid(o *management.LogStreamSinkAzureEventGri
 	}
 }
 
-func flattenLogStreamSinkHTTP(o *management.LogStreamSinkHTTP) interface{} {
+func flattenLogStreamSinkHTTP(data *schema.ResourceData, o *management.LogStreamSinkHTTP) interface{} {
 	return map[string]interface{}{
 		"http_endpoint":       o.GetEndpoint(),
 		"http_content_format": o.GetContentFormat(),
 		"http_content_type":   o.GetContentType(),
-		"http_authorization":  o.GetAuthorization(),
+		"http_authorization":  data.Get("sink.0.http_authorization").(string), // Value does not get read back.
 		"http_custom_headers": o.CustomHeaders,
 	}
 }

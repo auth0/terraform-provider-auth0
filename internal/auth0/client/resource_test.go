@@ -3513,3 +3513,78 @@ func TestAccClient_ThirdPartySecurityMode(t *testing.T) {
 		},
 	})
 }
+
+const testAccCreateClientWithFedCMLogin = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+	fedcm_login {
+		google {
+			is_enabled = true
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithFedCMLoginFalse = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+	fedcm_login {
+		google {
+			is_enabled = false
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithFedCMLoginTrue = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+	fedcm_login {
+		google {
+			is_enabled = true
+		}
+	}
+}
+`
+
+const testAccUpdateClientRemoveFedCMLogin = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+}
+`
+
+func TestAccClientFedCMLogin(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithFedCMLogin, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - FedCM Login - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.0.is_enabled", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithFedCMLoginFalse, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.0.is_enabled", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithFedCMLoginTrue, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.0.is_enabled", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientRemoveFedCMLogin, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "0"),
+				),
+			},
+		},
+	})
+}

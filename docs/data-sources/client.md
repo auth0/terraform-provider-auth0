@@ -55,6 +55,7 @@ data "auth0_client" "some-client-by-id" {
 - `external_client_id` (String) The URL of the Client ID Metadata Document. Only present for CIMD-registered clients.
 - `external_metadata_created_by` (String) Who created the external metadata client: `admin` (via Management API), `client` (self-registered), or `unknown`.
 - `external_metadata_type` (String) Type of external metadata. Value is `cimd` for CIMD-registered clients.
+- `fedcm_login` (List of Object) Federated Credential Management (FedCM) configuration. (EA only) (see [below for nested schema](#nestedatt--fedcm_login))
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `id` (String) The ID of this resource.
@@ -529,6 +530,22 @@ Read-Only:
 Read-Only:
 
 - `client_id` (String)
+
+
+
+<a id="nestedatt--fedcm_login"></a>
+### Nested Schema for `fedcm_login`
+
+Read-Only:
+
+- `google` (List of Object) (see [below for nested schema](#nestedobjatt--fedcm_login--google))
+
+<a id="nestedobjatt--fedcm_login--google"></a>
+### Nested Schema for `fedcm_login.google`
+
+Read-Only:
+
+- `is_enabled` (Boolean)
 
 
 

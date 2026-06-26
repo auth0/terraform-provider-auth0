@@ -55,6 +55,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		TokenExchange:            expandTokenExchange(data),
 		RequireProofOfPossession: value.Bool(config.GetAttr("require_proof_of_possession")),
 		SessionTransfer:          expandSessionTransfer(data),
+		FedCMLogin:               expandClientFedCMLogin(data),
 		ComplianceLevel:          value.String(config.GetAttr("compliance_level")),
 		ThirdPartySecurityMode:   value.String(config.GetAttr("third_party_security_mode")),
 		RedirectionPolicy:        value.String(config.GetAttr("redirection_policy")),
@@ -359,6 +360,38 @@ func expandClientNativeSocialLoginSupportEnabled(config cty.Value) *management.C
 	}
 
 	return &support
+}
+
+func expandClientFedCMLogin(data *schema.ResourceData) *management.FedCMLogin {
+	fedcmLoginConfig := data.GetRawConfig().GetAttr("fedcm_login")
+
+	if fedcmLoginConfig.IsNull() || fedcmLoginConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var fedcmLogin management.FedCMLogin
+
+	fedcmLoginConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		fedcmLogin.Google = expandClientFedCMLoginGoogle(config.GetAttr("google"))
+		return stop
+	})
+
+	return &fedcmLogin
+}
+
+func expandClientFedCMLoginGoogle(config cty.Value) *management.FedCMLoginGoogle {
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var google management.FedCMLoginGoogle
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		google.IsEnabled = value.Bool(config.GetAttr("is_enabled"))
+		return stop
+	})
+
+	return &google
 }
 
 func expandClientMobile(data *schema.ResourceData) *management.ClientMobile {
@@ -1109,6 +1142,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"organization_discovery_methods":                       isOrganizationDiscoveryMethodsNull,
 		"token_exchange":                                       isTokenExchangeNull,
 		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
+		"fedcm_login":                                          isFedCMLoginNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1210,6 +1244,15 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 	})
 
 	return empty
+}
+
+func isFedCMLoginNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("fedcm_login") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("fedcm_login")
+	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
 }
 
 func isOIDCLogoutNull(data *schema.ResourceData) bool {

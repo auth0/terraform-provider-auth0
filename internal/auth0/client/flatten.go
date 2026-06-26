@@ -706,6 +706,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("third_party_security_mode", client.GetThirdPartySecurityMode()),
 		data.Set("redirection_policy", client.GetRedirectionPolicy()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
+		data.Set("fedcm_login", flattenFedCMLogin(client.GetFedCMLogin())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
@@ -741,6 +742,30 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 
 	return []interface{}{
 		t,
+	}
+}
+
+func flattenFedCMLogin(fedcmLogin *management.FedCMLogin) []interface{} {
+	if fedcmLogin == nil {
+		return nil
+	}
+
+	m := map[string]interface{}{
+		"google": flattenFedCMLoginGoogle(fedcmLogin.GetGoogle()),
+	}
+
+	return []interface{}{m}
+}
+
+func flattenFedCMLoginGoogle(google *management.FedCMLoginGoogle) []interface{} {
+	if google == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"is_enabled": google.GetIsEnabled(),
+		},
 	}
 }
 

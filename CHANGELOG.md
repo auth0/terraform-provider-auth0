@@ -1,3 +1,8 @@
+## [Unreleased]
+
+BUG FIXES:
+- `resource/auth0_client_grant` – Fix validator incorrectly rejecting `scopes = []` alongside `allow_all_scopes = true`, which caused `terraform plan -generate-config-out` to generate an immediately invalid configuration ([#1616](https://github.com/auth0/terraform-provider-auth0/pull/1616))
+
 ## v1.50.0
 
 ENHANCEMENTS:

@@ -748,7 +748,6 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 	result := multierror.Append(
 		data.Set("client_id", clientGrant.GetClientID()),
 		data.Set("audience", clientGrant.GetAudience()),
-		data.Set("scopes", clientGrant.GetScope()),
 		data.Set("allow_any_organization", clientGrant.GetAllowAnyOrganization()),
 		data.Set("organization_usage", clientGrant.GetOrganizationUsage()),
 		data.Set("subject_type", clientGrant.GetSubjectType()),
@@ -757,6 +756,14 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 		data.Set("allow_all_scopes", clientGrant.GetAllowAllScopes()),
 		data.Set("default_for", clientGrant.GetDefaultFor()),
 	)
+
+	// Only persist scopes when allow_all_scopes is false. When true the Auth0
+	// API returns scope:[] which, if written to state, causes terraform
+	// plan -generate-config-out to emit scopes = [] alongside
+	// allow_all_scopes = true — a combination the validator correctly rejects.
+	if !clientGrant.GetAllowAllScopes() {
+		result = multierror.Append(result, data.Set("scopes", clientGrant.GetScope()))
+	}
 
 	return result.ErrorOrNil()
 }

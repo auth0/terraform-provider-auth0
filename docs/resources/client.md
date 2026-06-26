@@ -738,9 +738,19 @@ Optional:
 - `allow_refresh_token` (Boolean) Indicates whether the application is allowed to use a refresh token when using a session_transfer_token session.
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean) Indicates whether the application(Native app) can use the Token Exchange endpoint to create a session_transfer_token
+- `delegation` (Block List, Max: 1) Configuration for delegation (impersonation) access using Session Transfer Tokens. (EA Only) (see [below for nested schema](#nestedblock--session_transfer--delegation))
 - `enforce_cascade_revocation` (Boolean) Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities. Usually configured in the native application.
 - `enforce_device_binding` (String) Configures the level of device binding enforced when a session_transfer_token is consumed. Can be one of `ip`, `asn` or `none`.
 - `enforce_online_refresh_tokens` (Boolean) Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application.
+
+<a id="nestedblock--session_transfer--delegation"></a>
+### Nested Schema for `session_transfer.delegation`
+
+Optional:
+
+- `allow_delegated_access` (Boolean) Indicates whether delegation (impersonation) access is allowed using Session Transfer Tokens. Defaults to `false`. (EA Only)
+- `enforce_device_binding` (String) Indicates the device binding enforcement for delegation (impersonation) access. If set to 'ip', device binding is enforced by IP. If set to 'asn', device binding is enforced by ASN. Defaults to `ip`. (EA Only)
+
 
 
 <a id="nestedblock--token_exchange"></a>

@@ -923,6 +923,8 @@ func flattenConnectionOptionsOkta(
 		"non_persistent_attrs":            options.GetNonPersistentAttrs(),
 		"set_user_root_attributes":        options.GetSetUserAttributes(),
 		"icon_url":                        options.GetLogoURL(),
+		"type":                            options.GetType(),
+		"send_back_channel_nonce":         options.GetSendBackChannelNonce(),
 		"upstream_params":                 upstreamParams,
 		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
 		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),

@@ -12,6 +12,8 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 		data.Set("identifier", resourceServer.GetIdentifier()),
 		data.Set("token_lifetime", resourceServer.GetTokenLifetime()),
 		data.Set("allow_offline_access", resourceServer.GetAllowOfflineAccess()),
+		data.Set("allow_online_access", resourceServer.GetAllowOnlineAccess()),
+		data.Set("allow_online_access_with_ephemeral_sessions", resourceServer.GetAllowOnlineAccessWithEphemeralSessions()),
 		data.Set("token_lifetime_for_web", resourceServer.GetTokenLifetimeForWeb()),
 		data.Set("signing_alg", resourceServer.GetSigningAlgorithm()),
 		data.Set("signing_secret", resourceServer.GetSigningSecret()),

@@ -33,6 +33,8 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 ### Read-Only
 
 - `allow_offline_access` (Boolean) Indicates whether refresh tokens can be issued for this resource server.
+- `allow_online_access` (Boolean) Indicates whether Online Refresh Tokens can be issued for this resource server. (EA Only)
+- `allow_online_access_with_ephemeral_sessions` (Boolean) Indicates whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral. (EA Only)
 - `authorization_details` (List of Object) Authorization details for this resource server. (see [below for nested schema](#nestedatt--authorization_details))
 - `authorization_policy` (List of Object) Authorization policy for the resource server.(EA Only) (see [below for nested schema](#nestedatt--authorization_policy))
 - `client_id` (String) The ID of the client associated with this resource server. If a client has been created and linked to this resource server, this field will be populated with that client's ID.

@@ -69,6 +69,7 @@ func NewCredentialsResource() *schema.Resource {
 				Computed:  true,
 				Sensitive: true,
 				ConflictsWith: []string{
+					"client_secret_wo",
 					"private_key_jwt",
 					"tls_client_auth",
 					"self_signed_tls_client_auth",
@@ -77,7 +78,31 @@ func NewCredentialsResource() *schema.Resource {
 					"authentication method. Keep this private. To access this attribute you need to add either " +
 					"`read:client_keys` or `read:client_credentials` scope to the Terraform client. Otherwise, the attribute will contain an " +
 					"empty string. The attribute will also be an empty string in case `private_key_jwt` is selected " +
-					"as an authentication method.",
+					"as an authentication method. **Note:** For better security, consider using `client_secret_wo` instead.",
+			},
+			"client_secret_wo": {
+				Type:      schema.TypeString,
+				Optional:  true,
+				WriteOnly: true,
+				Sensitive: true,
+				ConflictsWith: []string{
+					"client_secret",
+					"private_key_jwt",
+					"tls_client_auth",
+					"self_signed_tls_client_auth",
+				},
+				RequiredWith: []string{"client_secret_wo_version"},
+				Description: "Secret for the client when using `client_secret_post` or `client_secret_basic` " +
+					"authentication method (write-only). This value is **not** stored in Terraform state. " +
+					"Bump `client_secret_wo_version` to rotate it. Requires Terraform 1.11+.",
+			},
+			"client_secret_wo_version": {
+				Type:         schema.TypeInt,
+				Optional:     true,
+				RequiredWith: []string{"client_secret_wo"},
+				ValidateFunc: validation.IntAtLeast(1),
+				Description: "Version counter for `client_secret_wo`. Must be a positive integer (starting at `1`). " +
+					"Increment this value to trigger a client secret change when using `client_secret_wo`.",
 			},
 			"private_key_jwt": {
 				Type:     schema.TypeList,

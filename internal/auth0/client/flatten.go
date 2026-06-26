@@ -807,9 +807,14 @@ func flattenClientCredentials(ctx context.Context, api *management.Management, d
 	result := multierror.Append(
 		err,
 		data.Set("client_id", client.GetClientID()),
-		data.Set("client_secret", client.GetClientSecret()),
 		data.Set("signed_request_object", signedRequestObject),
 	)
+
+	if v, ok := data.GetOk("client_secret_wo_version"); ok {
+		result = multierror.Append(result, data.Set("client_secret_wo_version", v))
+	} else {
+		result = multierror.Append(result, data.Set("client_secret", client.GetClientSecret()))
+	}
 
 	authenticationMethods, err := flattenClientAuthenticationMethods(ctx, api, data, true, client.GetClientAuthenticationMethods())
 	result = multierror.Append(result, err)

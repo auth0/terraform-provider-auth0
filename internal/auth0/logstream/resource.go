@@ -266,10 +266,26 @@ func NewResource() *schema.Resource {
 							Description: "The Datadog region. Possible values: `us`, `eu`, `us3`, `us5`.",
 						},
 						"datadog_api_key": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Sensitive:   true,
-							Description: "The Datadog API key.",
+							Type:      schema.TypeString,
+							Optional:  true,
+							Sensitive: true,
+							Description: "The Datadog API key. " +
+								"**Note:** For better security, consider using `datadog_api_key_wo` instead.",
+						},
+						"datadog_api_key_wo": {
+							Type:          schema.TypeString,
+							Optional:      true,
+							WriteOnly:     true,
+							Sensitive:     true,
+							ConflictsWith: []string{"sink.0.datadog_api_key"},
+							RequiredWith:  []string{"sink.0.datadog_api_key_wo_version"},
+							Description:   "The Datadog API key (write-only). This value is **not** stored in Terraform state.",
+						},
+						"datadog_api_key_wo_version": {
+							Type:          schema.TypeInt,
+							Optional:      true,
+							ConflictsWith: []string{"sink.0.datadog_api_key"},
+							Description:   "Version number for `datadog_api_key_wo`. Must be a positive integer (starting at `1`). Increment this value to trigger an API key change when using `datadog_api_key_wo`.",
 						},
 						"splunk_domain": {
 							Type:        schema.TypeString,

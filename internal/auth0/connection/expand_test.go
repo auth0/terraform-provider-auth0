@@ -1,8 +1,11 @@
 package connection
 
 import (
+	"encoding/json"
 	"testing"
 
+	"github.com/auth0/go-auth0"
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/stretchr/testify/assert"
@@ -61,4 +64,37 @@ func TestCheckForUnmanagedConfigurationSecrets(t *testing.T) {
 			assert.Equal(t, testCase.expectedDiagnostics, actualDiagnostics)
 		})
 	}
+}
+
+// TestConnectionOptionsTypeOmitsWhenNil guards against a regression where an unset
+// connection `type` was serialized as `"type":null`, which the Auth0 API rejects
+// with `"options.type" must be ...`. The field must be omitted entirely when nil,
+// and only sent when explicitly configured. This affects both the Okta and OIDC
+// strategies, which share the same `type` option.
+func TestConnectionOptionsTypeOmitsWhenNil(t *testing.T) {
+	t.Run("okta omits type when nil", func(t *testing.T) {
+		payload, err := json.Marshal(&management.ConnectionOptionsOkta{})
+		assert.NoError(t, err)
+		assert.NotContains(t, string(payload), "type")
+	})
+
+	t.Run("okta includes type when set", func(t *testing.T) {
+		options := &management.ConnectionOptionsOkta{Type: auth0.String("back_channel")}
+		payload, err := json.Marshal(options)
+		assert.NoError(t, err)
+		assert.Contains(t, string(payload), `"type":"back_channel"`)
+	})
+
+	t.Run("oidc omits type when nil", func(t *testing.T) {
+		payload, err := json.Marshal(&management.ConnectionOptionsOIDC{})
+		assert.NoError(t, err)
+		assert.NotContains(t, string(payload), "type")
+	})
+
+	t.Run("oidc includes type when set", func(t *testing.T) {
+		options := &management.ConnectionOptionsOIDC{Type: auth0.String("back_channel")}
+		payload, err := json.Marshal(options)
+		assert.NoError(t, err)
+		assert.Contains(t, string(payload), `"type":"back_channel"`)
+	})
 }

@@ -2,13 +2,19 @@ package organization
 
 import (
 	"context"
+	"errors"
 	"strings"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	managementv2 "github.com/auth0/go-auth0/v2/management"
+	managementv2client "github.com/auth0/go-auth0/v2/management/client"
+	"github.com/auth0/go-auth0/v2/management/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -36,9 +42,34 @@ func dataSourceSchema() map[string]*schema.Schema {
 		"For performance, it is advised to use the `organization_id` as a lookup if possible."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"organization_id", "name"}
 
+	dataSourceSchema["skip_connections"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to skip organization connections. Setting this to `true` will skip " +
+			"paginated API calls to /api/v2/organizations/{id}/connections.",
+	}
+
+	dataSourceSchema["skip_members"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to skip organization members. Setting this to `true` will skip " +
+			"paginated API calls to /api/v2/organizations/{id}/members.",
+	}
+
+	dataSourceSchema["skip_client_grants"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: "Whether to skip organization client grants. Setting this to `true` will skip " +
+			"API call to /api/v2/organizations/{id}/client-grants.",
+	}
+
 	dataSourceSchema["connections"] = &schema.Schema{
-		Type:     schema.TypeSet,
-		Computed: true,
+		Type:        schema.TypeSet,
+		Computed:    true,
+		Description: "Connections enabled for this organization. Skips populating if `skip_connections` is `true`.",
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"connection_id": {
@@ -63,8 +94,23 @@ func dataSourceSchema() map[string]*schema.Schema {
 				"show_as_button": {
 					Type:     schema.TypeBool,
 					Computed: true,
-					Description: "Determines whether a connection should be displayed on this organization’s " +
+					Description: "Determines whether a connection should be displayed on this organization's " +
 						"login prompt. Only applicable for enterprise connections.",
+				},
+				"is_enabled": {
+					Type:        schema.TypeBool,
+					Computed:    true,
+					Description: "Whether the connection is enabled for the organization.",
+				},
+				"organization_connection_name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Name of the connection in the scope of this organization.",
+				},
+				"organization_access_level": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The access level for this organization connection. Can be `none`, `readonly`, `limited`, or `full`.",
 				},
 			},
 		},
@@ -76,7 +122,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 			Type: schema.TypeString,
 		},
 		Computed:    true,
-		Description: "User ID(s) that are members of the organization.",
+		Description: "User ID(s) that are members of the organization. Skips populating if `skip_members` is `true`.",
 	}
 
 	dataSourceSchema["client_grants"] = &schema.Schema{
@@ -85,7 +131,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 			Type: schema.TypeString,
 		},
 		Computed:    true,
-		Description: "Client Grant ID(s) that are associated to the organization.",
+		Description: "Client Grant ID(s) that are associated to the organization. Skips populating if `skip_client_grants` is `true`.",
 	}
 
 	return dataSourceSchema
@@ -93,6 +139,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	apiv2 := meta.(*config.Config).GetAPIV2()
 
 	foundOrganization, err := findOrganizationByIDOrName(ctx, data, api)
 	if err != nil {
@@ -101,19 +148,31 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 
 	data.SetId(foundOrganization.GetID())
 
-	foundConnections, err := fetchAllOrganizationConnections(ctx, api, foundOrganization.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var foundConnections []*managementv2.OrganizationAllConnectionPost
+	skipClientGrants := data.Get("skip_client_grants").(bool)
+	if !skipClientGrants {
+		foundConnections, err = fetchAllOrganizationConnectionsV2(ctx, apiv2, foundOrganization.GetID())
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
 	}
 
-	foundMembers, err := fetchAllOrganizationMembers(ctx, api, foundOrganization.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var foundMembers []management.OrganizationMember
+	skipMembers := data.Get("skip_members").(bool)
+	if !skipMembers {
+		foundMembers, err = fetchAllOrganizationMembers(ctx, api, foundOrganization.GetID())
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
-	foundClientGrants, err := fetchAllOrganizationClientGrants(ctx, api, foundOrganization.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var foundClientGrants []*management.ClientGrant
+	skipClientGrants = data.Get("skip_client_grants").(bool)
+	if !skipClientGrants {
+		foundClientGrants, err = fetchAllOrganizationClientGrants(ctx, api, foundOrganization.GetID())
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers, foundClientGrants))
@@ -133,23 +192,23 @@ func findOrganizationByIDOrName(
 	return api.Organization.ReadByName(ctx, organizationName)
 }
 
-func fetchAllOrganizationConnections(ctx context.Context, api *management.Management, organizationID string) ([]*management.OrganizationConnection, error) {
-	var foundConnections []*management.OrganizationConnection
-	var page int
+func fetchAllOrganizationConnectionsV2(ctx context.Context, apiv2 *managementv2client.Management, organizationID string) ([]*managementv2.OrganizationAllConnectionPost, error) {
+	var foundConnections []*managementv2.OrganizationAllConnectionPost
 
+	page, err := apiv2.Organizations.Connections.List(ctx, organizationID, &managementv2.ListOrganizationAllConnectionsRequestParameters{IsEnabled: auth0.Bool(true)})
+	if err != nil {
+		return nil, err
+	}
+	foundConnections = append(foundConnections, page.Results...)
 	for {
-		connections, err := api.Organization.Connections(ctx, organizationID, management.Page(page), management.PerPage(100))
+		page, err = page.GetNextPage(ctx)
 		if err != nil {
+			if errors.Is(err, core.ErrNoPages) {
+				break
+			}
 			return nil, err
 		}
-
-		foundConnections = append(foundConnections, connections.OrganizationConnections...)
-
-		if !connections.HasNext() {
-			break
-		}
-
-		page++
+		foundConnections = append(foundConnections, page.Results...)
 	}
 
 	return foundConnections, nil

@@ -2083,8 +2083,8 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.concur.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.dropbox.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.wsfed.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.digest_algorithm", "sha1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_format", "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.digest_algorithm", ""),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_format", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.create_upn_claim", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.passthrough_claims_with_no_mapping", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_unknown_claims_as_is", "false"),
@@ -2092,7 +2092,19 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.typed_attributes", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.sign_response", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.include_attribute_name_format", "true"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signature_algorithm", "rsa-sha1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signature_algorithm", ""),
+					resource.TestCheckResourceAttrWith("auth0_client.my_client", "addons.0.samlp.0.mappings.%", func(value string) error {
+						if value == "0" {
+							return fmt.Errorf("expected mappings to not be empty as per default")
+						}
+						return nil
+					}),
+					resource.TestCheckResourceAttrWith("auth0_client.my_client", "addons.0.samlp.0.name_identifier_probes.#", func(value string) error {
+						if value == "0" {
+							return fmt.Errorf("expected name_identifier_probes to not be empty as per default")
+						}
+						return nil
+					}),
 				),
 			},
 			{
@@ -2834,6 +2846,99 @@ func TestAccClientResourceServer(t *testing.T) {
 	})
 }
 
+const testAccClientOnBehalfOfTokenExchange = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - On-Behalf-Of Token Exchange - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+
+resource "auth0_client" "my_client" {
+	depends_on = [auth0_resource_server.my_resource_server]
+
+	name                       = "Acceptance Test - On-Behalf-Of Token Exchange - {{.testName}}"
+	app_type                   = "resource_server"
+	oidc_conformant            = true
+	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+	token_exchange {
+		allow_any_profile_of_type = ["on_behalf_of_token_exchange"]
+	}
+}
+`
+
+func TestAccClientOnBehalfOfTokenExchange(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientOnBehalfOfTokenExchange, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - On-Behalf-Of Token Exchange - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "resource_server"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "on_behalf_of_token_exchange"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientMixedTokenExchangeProfiles = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - Mixed Token Exchange - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+
+resource "auth0_client" "my_client" {
+	depends_on = [auth0_resource_server.my_resource_server]
+
+	name                       = "Acceptance Test - Mixed Token Exchange - {{.testName}}"
+	app_type                   = "resource_server"
+	oidc_conformant            = true
+	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication", "on_behalf_of_token_exchange"]
+	}
+}
+`
+
+func TestAccClientMixedTokenExchangeProfiles(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientMixedTokenExchangeProfiles, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mixed Token Exchange - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "resource_server"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.#", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.1", "on_behalf_of_token_exchange"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccClientTokenExchangeValidationError(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		ProviderFactories: acctest.TestFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config: `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Invalid Token Exchange"
+	token_exchange {
+		allow_any_profile_of_type = ["invalid_profile_type"]
+	}
+}
+`,
+				ExpectError: regexp.MustCompile(`expected .+ to be one of`),
+			},
+		},
+	})
+}
+
 const testAccClientSkipPromptNullConfig = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
@@ -2946,7 +3051,7 @@ const testAccClientWithEmptyAsyncApprovalChannelsUpdate = `
 resource "auth0_client" "my_client" {
 	name     = "Acceptance Test - CIBA Async Approval - {{.testName}}"
 	app_type = "non_interactive"
-	
+
 	async_approval_notification_channels = []
 }
 `
@@ -3075,8 +3180,9 @@ func TestAccClientExpressApp(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Express App - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "express_configuration"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "post_login_prompt"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
-					resource.TestCheckResourceAttrSet("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.0.pem"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.client_creds", "private_key_jwt.0.credentials.*", map[string]string{
+						"credential_type": "public_key",
+					}),
 				),
 			},
 		},
@@ -3173,6 +3279,310 @@ func TestAccClientExpressAppConfiguration(t *testing.T) {
 						"auth0_user_attribute_profile.profile",
 						"id",
 					),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientMyOrganizationConfigurationCreate = `
+
+resource "auth0_connection_profile" "my_profile" {
+	name = "Test-Profile-Conn"
+	organization {
+		show_as_button            = "required"
+		assign_membership_on_login = "optional"
+	}
+	connection_name_prefix_template = "template1"
+	enabled_features = [
+		"scim",
+		"universal_logout"
+	]
+}
+
+resource "auth0_user_attribute_profile" "my_uap" {
+	name = "My-temp-UAP"
+	user_id {
+		oidc_mapping = "sub"
+		saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+		scim_mapping = "userName"
+	}
+	user_attributes {
+		name             = "email"
+		description      = "User's email address"
+		label            = "Email"
+		profile_required = true
+		auth0_mapping    = "email"
+		oidc_mapping {
+			mapping = "email"
+		}
+		saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+		scim_mapping = "emails[primary eq true].value"
+	}
+}
+
+resource "auth0_client" "invitation_landing" {
+	name               = "Acceptance Test - MyOrgConfig Landing - {{.testName}}"
+	organization_usage = "allow"
+}
+
+resource "auth0_client" "my_client" {
+	depends_on  = [auth0_user_attribute_profile.my_uap]
+	name        = "Acceptance Test - MyOrgConfig - {{.testName}}"
+	description = "Client with my_organization_configuration"
+
+	my_organization_configuration {
+		connection_profile_id        = auth0_connection_profile.my_profile.id
+		user_attribute_profile_id    = auth0_user_attribute_profile.my_uap.id
+		allowed_strategies           = ["pingfederate", "adfs", "waad", "google-apps", "okta", "oidc", "samlp"]
+		connection_deletion_behavior = "allow"
+		invitation_landing_client_id = auth0_client.invitation_landing.client_id
+	}
+}
+`
+
+const testAccClientMyOrganizationConfigurationUpdate = `
+resource "auth0_connection_profile" "my_profile" {
+	name = "Test-Profile-Conn"
+	organization {
+		show_as_button            = "required"
+		assign_membership_on_login = "optional"
+	}
+	connection_name_prefix_template = "template1"
+	enabled_features = [
+		"scim",
+		"universal_logout"
+	]
+}
+
+resource "auth0_user_attribute_profile" "my_uap" {
+	name = "My-temp-UAP"
+	user_id {
+		oidc_mapping = "sub"
+		saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+		scim_mapping = "userName"
+	}
+	user_attributes {
+		name             = "email"
+		description      = "User's email address"
+		label            = "Email"
+		profile_required = true
+		auth0_mapping    = "email"
+		oidc_mapping {
+			mapping = "email"
+		}
+		saml_mapping = ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+		scim_mapping = "emails[primary eq true].value"
+	}
+}
+
+resource "auth0_client" "invitation_landing" {
+	name               = "Acceptance Test - MyOrgConfig Landing - {{.testName}}"
+	organization_usage = "allow"
+}
+
+resource "auth0_client" "my_client" {
+	depends_on  = [auth0_user_attribute_profile.my_uap]
+	name        = "Updated MyOrgConfig Client"
+	description = "Client with updated my_organization_configuration."
+
+	my_organization_configuration {
+		connection_profile_id        = auth0_connection_profile.my_profile.id
+		user_attribute_profile_id    = auth0_user_attribute_profile.my_uap.id
+		allowed_strategies           = ["okta", "samlp", "oidc"]
+		connection_deletion_behavior = "allow_if_empty"
+		invitation_landing_client_id = auth0_client.invitation_landing.client_id
+	}
+}
+`
+
+func TestAccClientMyOrganizationConfiguration(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientMyOrganizationConfigurationCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - MyOrgConfig - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "description", "Client with my_organization_configuration"),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "my_organization_configuration.0.connection_profile_id"),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.user_attribute_profile_id",
+						"auth0_user_attribute_profile.my_uap",
+						"id",
+					),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.connection_profile_id",
+						"auth0_connection_profile.my_profile",
+						"id",
+					),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.#", "7"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.0", "pingfederate"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.1", "adfs"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.2", "waad"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.3", "google-apps"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.4", "okta"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.5", "oidc"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.6", "samlp"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.connection_deletion_behavior", "allow"),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.invitation_landing_client_id",
+						"auth0_client.invitation_landing",
+						"client_id",
+					),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMyOrganizationConfigurationUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", "Updated MyOrgConfig Client"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "description", "Client with updated my_organization_configuration."),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.user_attribute_profile_id",
+						"auth0_user_attribute_profile.my_uap",
+						"id",
+					),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.connection_profile_id",
+						"auth0_connection_profile.my_profile",
+						"id",
+					),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.#", "3"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.0", "okta"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.1", "samlp"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.allowed_strategies.2", "oidc"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.connection_deletion_behavior", "allow_if_empty"),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.my_client",
+						"my_organization_configuration.0.invitation_landing_client_id",
+						"auth0_client.invitation_landing",
+						"client_id",
+					),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientThirdPartySecurityModeCreate = `
+resource "auth0_client" "my_client" {
+	name                      = "Acceptance Test - 3P Client - {{.testName}}"
+	is_first_party            = false
+	app_type                  = "regular_web"
+	third_party_security_mode = "strict"
+	redirection_policy        = "open_redirect_protection"
+	callbacks                 = ["https://example.com/callback"]
+}
+`
+
+const testAccClientThirdPartySecurityModeUpdate = `
+resource "auth0_client" "my_client" {
+	name                      = "Acceptance Test - 3P Client - {{.testName}}"
+	is_first_party            = false
+	app_type                  = "regular_web"
+	third_party_security_mode = "strict"
+	redirection_policy        = "allow_always"
+	callbacks                 = ["https://example.com/callback"]
+}
+`
+
+func TestAccClient_ThirdPartySecurityMode(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientThirdPartySecurityModeCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "third_party_security_mode", "strict"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "redirection_policy", "open_redirect_protection"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientThirdPartySecurityModeUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "third_party_security_mode", "strict"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "redirection_policy", "allow_always"),
+				),
+			},
+		},
+	})
+}
+
+const testAccCreateClientWithFedCMLogin = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+	fedcm_login {
+		google {
+			is_enabled = true
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithFedCMLoginFalse = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+	fedcm_login {
+		google {
+			is_enabled = false
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithFedCMLoginTrue = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+	fedcm_login {
+		google {
+			is_enabled = true
+		}
+	}
+}
+`
+
+const testAccUpdateClientRemoveFedCMLogin = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+}
+`
+
+func TestAccClientFedCMLogin(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithFedCMLogin, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - FedCM Login - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.0.is_enabled", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithFedCMLoginFalse, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.0.is_enabled", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithFedCMLoginTrue, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.0.is_enabled", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientRemoveFedCMLogin, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "0"),
 				),
 			},
 		},

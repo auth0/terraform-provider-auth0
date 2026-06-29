@@ -2,6 +2,7 @@ package action_test
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -176,7 +177,7 @@ func TestAccActionModuleVersionsDataSource(t *testing.T) {
 
 const testAccActionModuleActionsDataSource = `
 resource "auth0_action_module" "my_module" {
-	name    = "Test Module {{.testName}}"
+	name    = "test-module-{{.testName | toLower}}"
 	publish = true
 	code    = <<-EOT
 		module.exports = {
@@ -220,7 +221,7 @@ func TestAccActionModuleActionsDataSource(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccActionModuleActionsDataSource, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_action_module.my_module", "name", fmt.Sprintf("Test Module %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action_module.my_module", "name", fmt.Sprintf("test-module-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "modules.#", "1"),
 					resource.TestCheckResourceAttrSet("data.auth0_action_module_actions.my_module_actions", "module_id"),

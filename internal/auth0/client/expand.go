@@ -17,32 +17,30 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 	config := data.GetRawConfig()
 
 	client := &management.Client{
-		Name:                               value.String(config.GetAttr("name")),
-		Description:                        value.String(config.GetAttr("description")),
-		AppType:                            value.String(config.GetAttr("app_type")),
-		LogoURI:                            value.String(config.GetAttr("logo_uri")),
-		IsFirstParty:                       value.Bool(config.GetAttr("is_first_party")),
-		OIDCConformant:                     value.Bool(config.GetAttr("oidc_conformant")),
-		ClientAliases:                      value.Strings(config.GetAttr("client_aliases")),
-		Callbacks:                          value.Strings(config.GetAttr("callbacks")),
-		AllowedLogoutURLs:                  value.Strings(config.GetAttr("allowed_logout_urls")),
-		AllowedOrigins:                     value.Strings(config.GetAttr("allowed_origins")),
-		AllowedClients:                     value.Strings(config.GetAttr("allowed_clients")),
-		GrantTypes:                         value.Strings(config.GetAttr("grant_types")),
-		OrganizationUsage:                  value.String(config.GetAttr("organization_usage")),
-		OrganizationRequireBehavior:        value.String(config.GetAttr("organization_require_behavior")),
-		WebOrigins:                         value.Strings(config.GetAttr("web_origins")),
-		RequirePushedAuthorizationRequests: value.Bool(config.GetAttr("require_pushed_authorization_requests")),
-		SSO:                                value.Bool(config.GetAttr("sso")),
-		SSODisabled:                        value.Bool(config.GetAttr("sso_disabled")),
-		CrossOriginAuth:                    value.Bool(config.GetAttr("cross_origin_auth")),
-		CrossOriginLocation:                value.String(config.GetAttr("cross_origin_loc")),
-		CustomLoginPageOn:                  value.Bool(config.GetAttr("custom_login_page_on")),
-		CustomLoginPage:                    value.String(config.GetAttr("custom_login_page")),
-		FormTemplate:                       value.String(config.GetAttr("form_template")),
-		InitiateLoginURI:                   value.String(config.GetAttr("initiate_login_uri")),
-		EncryptionKey:                      value.MapOfStrings(config.GetAttr("encryption_key")),
-		IsTokenEndpointIPHeaderTrusted:     value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
+		Name:                           value.String(config.GetAttr("name")),
+		Description:                    value.String(config.GetAttr("description")),
+		AppType:                        value.String(config.GetAttr("app_type")),
+		LogoURI:                        value.String(config.GetAttr("logo_uri")),
+		IsFirstParty:                   value.Bool(config.GetAttr("is_first_party")),
+		OIDCConformant:                 value.Bool(config.GetAttr("oidc_conformant")),
+		ClientAliases:                  value.Strings(config.GetAttr("client_aliases")),
+		Callbacks:                      value.Strings(config.GetAttr("callbacks")),
+		AllowedLogoutURLs:              value.Strings(config.GetAttr("allowed_logout_urls")),
+		AllowedOrigins:                 value.Strings(config.GetAttr("allowed_origins")),
+		AllowedClients:                 value.Strings(config.GetAttr("allowed_clients")),
+		GrantTypes:                     value.Strings(config.GetAttr("grant_types")),
+		OrganizationUsage:              value.String(config.GetAttr("organization_usage")),
+		OrganizationRequireBehavior:    value.String(config.GetAttr("organization_require_behavior")),
+		WebOrigins:                     value.Strings(config.GetAttr("web_origins")),
+		SSODisabled:                    value.Bool(config.GetAttr("sso_disabled")),
+		CrossOriginAuth:                value.Bool(config.GetAttr("cross_origin_auth")),
+		CrossOriginLocation:            value.String(config.GetAttr("cross_origin_loc")),
+		CustomLoginPageOn:              value.Bool(config.GetAttr("custom_login_page_on")),
+		CustomLoginPage:                value.String(config.GetAttr("custom_login_page")),
+		FormTemplate:                   value.String(config.GetAttr("form_template")),
+		InitiateLoginURI:               value.String(config.GetAttr("initiate_login_uri")),
+		EncryptionKey:                  value.MapOfStrings(config.GetAttr("encryption_key")),
+		IsTokenEndpointIPHeaderTrusted: value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
 		// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
 		//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
 		OIDCBackchannelLogout:    expandOIDCBackchannelLogout(data),
@@ -57,10 +55,21 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		TokenExchange:            expandTokenExchange(data),
 		RequireProofOfPossession: value.Bool(config.GetAttr("require_proof_of_possession")),
 		SessionTransfer:          expandSessionTransfer(data),
+		FedCMLogin:               expandClientFedCMLogin(data),
 		ComplianceLevel:          value.String(config.GetAttr("compliance_level")),
+		ThirdPartySecurityMode:   value.String(config.GetAttr("third_party_security_mode")),
+		RedirectionPolicy:        value.String(config.GetAttr("redirection_policy")),
 		TokenQuota:               commons.ExpandTokenQuota(config.GetAttr("token_quota")),
 		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 		ExpressConfiguration:                           expandExpressConfiguration(data),
+		MyOrganizationConfiguration:                    expandMyOrganizationConfiguration(data),
+	}
+
+	if data.IsNewResource() || data.HasChange("require_pushed_authorization_requests") {
+		client.RequirePushedAuthorizationRequests = value.Bool(config.GetAttr("require_pushed_authorization_requests"))
+	}
+	if data.IsNewResource() || data.HasChange("sso") {
+		client.SSO = value.Bool(config.GetAttr("sso"))
 	}
 
 	// Ignore empty array to prevent API errors.
@@ -286,13 +295,19 @@ func expandClientJWTConfiguration(data *schema.ResourceData) *management.ClientJ
 	}
 
 	var jwt management.ClientJWTConfiguration
+	isNewResource := data.IsNewResource()
 
 	jwtConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-		jwt.LifetimeInSeconds = value.Int(config.GetAttr("lifetime_in_seconds"))
 		jwt.Algorithm = value.String(config.GetAttr("alg"))
-		jwt.Scopes = value.MapOfStrings(config.GetAttr("scopes"))
+		if isNewResource || data.HasChange("jwt_configuration.0.lifetime_in_seconds") {
+			jwt.LifetimeInSeconds = value.Int(config.GetAttr("lifetime_in_seconds"))
+		}
 
-		if data.IsNewResource() {
+		if isNewResource || data.HasChange("jwt_configuration.0.scopes") {
+			jwt.Scopes = value.MapOfStrings(config.GetAttr("scopes"))
+		}
+
+		if isNewResource {
 			jwt.SecretEncoded = value.Bool(config.GetAttr("secret_encoded"))
 		}
 
@@ -345,6 +360,38 @@ func expandClientNativeSocialLoginSupportEnabled(config cty.Value) *management.C
 	}
 
 	return &support
+}
+
+func expandClientFedCMLogin(data *schema.ResourceData) *management.FedCMLogin {
+	fedcmLoginConfig := data.GetRawConfig().GetAttr("fedcm_login")
+
+	if fedcmLoginConfig.IsNull() || fedcmLoginConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var fedcmLogin management.FedCMLogin
+
+	fedcmLoginConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		fedcmLogin.Google = expandClientFedCMLoginGoogle(config.GetAttr("google"))
+		return stop
+	})
+
+	return &fedcmLogin
+}
+
+func expandClientFedCMLoginGoogle(config cty.Value) *management.FedCMLoginGoogle {
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var google management.FedCMLoginGoogle
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		google.IsEnabled = value.Bool(config.GetAttr("is_enabled"))
+		return stop
+	})
+
+	return &google
 }
 
 func expandClientMobile(data *schema.ResourceData) *management.ClientMobile {
@@ -941,6 +988,14 @@ func expandClientAddonSSOIntegration(ssoCfg cty.Value) *management.SSOIntegratio
 }
 
 func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
+	// When samlp is not configured but other addons (e.g. aws, sso_integration) are,
+	// Terraform still passes samlp as an empty list (length 0). Hence return nil.
+	// An explicitly configured empty samlp block (`samlp {}`) has length 1
+	// and is processed for backward compatibility.
+	if samlpCfg.LengthInt() == 0 {
+		return nil
+	}
+
 	var samlpAddon management.SAML2ClientAddon
 
 	samlpCfg.ForEachElement(func(_ cty.Value, samlpCfg cty.Value) (stop bool) {
@@ -987,46 +1042,6 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 			samlpAddon.Logout = &logout
 		}
 
-		if samlpAddon.DigestAlgorithm == nil {
-			samlpAddon.DigestAlgorithm = auth0.String("sha1")
-		}
-
-		if samlpAddon.NameIdentifierFormat == nil {
-			samlpAddon.NameIdentifierFormat = auth0.String("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified")
-		}
-
-		if samlpAddon.SignatureAlgorithm == nil {
-			samlpAddon.SignatureAlgorithm = auth0.String("rsa-sha1")
-		}
-
-		if samlpAddon.LifetimeInSeconds == nil {
-			samlpAddon.LifetimeInSeconds = auth0.Int(3600)
-		}
-
-		if samlpAddon.CreateUPNClaim == nil {
-			samlpAddon.CreateUPNClaim = auth0.Bool(true)
-		}
-
-		if samlpAddon.IncludeAttributeNameFormat == nil {
-			samlpAddon.IncludeAttributeNameFormat = auth0.Bool(true)
-		}
-
-		if samlpAddon.MapIdentities == nil {
-			samlpAddon.MapIdentities = auth0.Bool(true)
-		}
-
-		if samlpAddon.MapUnknownClaimsAsIs == nil {
-			samlpAddon.MapUnknownClaimsAsIs = auth0.Bool(false)
-		}
-
-		if samlpAddon.PassthroughClaimsWithNoMapping == nil {
-			samlpAddon.PassthroughClaimsWithNoMapping = auth0.Bool(true)
-		}
-
-		if samlpAddon.TypedAttributes == nil {
-			samlpAddon.TypedAttributes = auth0.Bool(true)
-		}
-
 		return stop
 	})
 
@@ -1046,6 +1061,7 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 		clientGrant.ClientID = value.String(cfg.GetAttr("client_id"))
 		clientGrant.Audience = value.String(cfg.GetAttr("audience"))
 		clientGrant.SubjectType = value.String(cfg.GetAttr("subject_type"))
+		clientGrant.DefaultFor = value.String(cfg.GetAttr("default_for"))
 	}
 
 	if data.IsNewResource() || data.HasChange("scopes") {
@@ -1126,6 +1142,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"organization_discovery_methods":                       isOrganizationDiscoveryMethodsNull,
 		"token_exchange":                                       isTokenExchangeNull,
 		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
+		"fedcm_login":                                          isFedCMLoginNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1227,6 +1244,15 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 	})
 
 	return empty
+}
+
+func isFedCMLoginNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("fedcm_login") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("fedcm_login")
+	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
 }
 
 func isOIDCLogoutNull(data *schema.ResourceData) bool {
@@ -1334,6 +1360,37 @@ func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressCo
 				return stop
 			})
 			result.LinkedClients = &linkedClients
+		}
+
+		return stop
+	})
+
+	return result
+}
+
+func expandMyOrganizationConfiguration(data *schema.ResourceData) *management.MyOrganizationConfiguration {
+	config := data.GetRawConfig()
+	myOrgConfig := config.GetAttr("my_organization_configuration")
+
+	if myOrgConfig.IsNull() || myOrgConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var result *management.MyOrganizationConfiguration
+
+	myOrgConfig.ForEachElement(func(_ cty.Value, elem cty.Value) (stop bool) {
+		result = &management.MyOrganizationConfiguration{
+			ConnectionProfileID:        value.String(elem.GetAttr("connection_profile_id")),
+			UserAttributeProfileID:     value.String(elem.GetAttr("user_attribute_profile_id")),
+			ConnectionDeletionBehavior: value.String(elem.GetAttr("connection_deletion_behavior")),
+			InvitationLandingClientID:  value.String(elem.GetAttr("invitation_landing_client_id")),
+		}
+
+		allowedStrategiesAttr := elem.GetAttr("allowed_strategies")
+		if !allowedStrategiesAttr.IsNull() && allowedStrategiesAttr.LengthInt() > 0 {
+			if strategies := value.Strings(allowedStrategiesAttr); strategies != nil && len(*strategies) > 0 {
+				result.AllowedStrategies = strategies
+			}
 		}
 
 		return stop

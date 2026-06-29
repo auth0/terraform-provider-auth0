@@ -1,3 +1,111 @@
+## v1.50.0
+
+ENHANCEMENTS:
+- `resource/auth0_client` – Add support for configuring `invitation_landing_client_id` in the My Organization API ([#1609](https://github.com/auth0/terraform-provider-auth0/pull/1609))
+- `resource/auth0_client_credentials` – Add support for the PKCS#1 (`RSA PUBLIC KEY`) public key format when computing JWK thumbprints ([#1608](https://github.com/auth0/terraform-provider-auth0/pull/1608))
+
+## v1.49.0
+
+ENHANCEMENTS:
+- `resource/auth0_event_stream` – Add support for `custom_header` webhook authorization method, with `header_key`, `header_value`, `header_value_wo`, and `header_value_wo_version` fields ([#1600](https://github.com/auth0/terraform-provider-auth0/pull/1600))
+- `resource/auth0_log_stream` – Add support for a write-only Datadog API key via `datadog_api_key_wo` and `datadog_api_key_wo_version` ([#1601](https://github.com/auth0/terraform-provider-auth0/pull/1601))
+
+BUG FIXES:
+- `resource/auth0_action` – Fix `409 Conflict` race condition between action deploy and trigger binding by adding a create timeout and deployment wait logic ([#1590](https://github.com/auth0/terraform-provider-auth0/pull/1590))
+- `resource/auth0_tenant` – Prevent state drift for fields with server-side defaults (`session_lifetime`, `idle_session_lifetime`, `ephemeral_session_lifetime`, `idle_ephemeral_session_lifetime`, `enable_pipeline2`, `enable_client_connections`, and `disable_management_api_sms_obfuscation`) ([#1587](https://github.com/auth0/terraform-provider-auth0/pull/1587))
+- `resource/auth0_connection` – Handle empty `id_token_signed_response_algs` as unset for OIDC and Okta connections ([#1598](https://github.com/auth0/terraform-provider-auth0/pull/1598))
+
+NOTES:
+- `resource/auth0_guardian` – Deprecate the `provider` attribute and `options` block within the `phone` block in favor of the `auth0_phone_provider` resource (Unified Phone Experience) ([#1596](https://github.com/auth0/terraform-provider-auth0/pull/1596))
+- `resource/auth0_trigger_action` / `resource/auth0_trigger_actions` – Document newly supported trigger types (`password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`, `login-post-identifier`, and `signup-post-identifier`) ([#1605](https://github.com/auth0/terraform-provider-auth0/pull/1605))
+- `resource/auth0_attack_protection` – Update description for `bot_detection_level` ([#1595](https://github.com/auth0/terraform-provider-auth0/pull/1595))
+
+## v1.48.0
+
+FEATURES:
+- `data-source/auth0_user_connected_accounts` – Add support for retrieving connection accounts for a user ([#1589](https://github.com/auth0/terraform-provider-auth0/pull/1589))
+
+ENHANCEMENTS:
+
+- `resource/auth0_self_service_profile_custom_text` – Add validation for `language` and `page` attributes ([#1585](https://github.com/auth0/terraform-provider-auth0/pull/1585))
+- `resource/auth0_connection` – Add support to configure `destination_url` and `recipient_url` under connection options ([#1591](https://github.com/auth0/terraform-provider-auth0/pull/1591))
+- `resource/auth0_connection` – Add support for `ES384` and `ES512` as `dpop_signing_alg` ([#1584](https://github.com/auth0/terraform-provider-auth0/pull/1584))
+- `resource/auth0_client` – Improve handling for defaults on SAML addons ([#1497](https://github.com/auth0/terraform-provider-auth0/pull/1497))
+
+## v1.47.0
+
+ENHANCEMENTS:
+- `resource/auth0_network_acl` – Add support for configuring `hostnames`, `connecting_ipv4_cidrs` and `connecting_ipv6_cidrs` ([#1581](https://github.com/auth0/terraform-provider-auth0/pull/1581))
+- `data-source/auth0_network_acl` – Add support for retrieving `hostnames`, `connecting_ipv4_cidrs` and `connecting_ipv6_cidrs` ([#1581](https://github.com/auth0/terraform-provider-auth0/pull/1581))
+- `resource/auth0_client_credentials` – `private_key_jwt` credentials now use an unordered set instead of an ordered list, preventing unnecessary resource recreation when removing or reordering credentials. Adding, removing, or rotating individual credentials no longer destroys the entire resource — only the affected credential is created/deleted. Updating `expires_at` on an existing credential is now handled via in-place PATCH (when `parse_expiry_from_cert` is not enabled). ([#1570](https://github.com/auth0/terraform-provider-auth0/pull/1570))
+- `resource/auth0_connection` – Add support for configuring `federated_connections_access_tokens` for OIDC connections ([#1582](https://github.com/auth0/terraform-provider-auth0/pull/1582))
+- `data-source/auth0_connection` – Add opt-out option `skip_enabled_clients` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_role` – Add opt-out options `skip_permissions` and `skip_users` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_organization` – Add opt-out options `skip_client_grants`, `skip_connections` and `skip_members` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+- `data-source/auth0_user` – Add opt-out options `skip_permissions` and `skip_roles` to avoid over-fetching of sub-resource data ([#1521](https://github.com/auth0/terraform-provider-auth0/pull/1521))
+
+NOTES:
+- `resource/auth0_client_credentials` – State schema upgraded from v0 to v1 for `private_key_jwt` credentials (TypeList → TypeSet). Existing state will be migrated automatically on the next `terraform plan` or `terraform apply`.
+
+## v1.46.0
+
+FEATURES:
+
+- `resource/auth0_event_stream` – Add support for configuring `status` field with `enabled`/`disabled` options ([#1568](https://github.com/auth0/terraform-provider-auth0/pull/1568))
+- `resource/auth0_client` – Add support for configuring `third_party_security_mode` and `redirection_policy` ([#1555](https://github.com/auth0/terraform-provider-auth0/pull/1555))
+- `resource/auth0_client_grant` – Add support for configuring `default_for` to specify default grants for third-party clients ([#1555](https://github.com/auth0/terraform-provider-auth0/pull/1555))
+- `resource/auth0_tenant` – Add support for configuring `dynamic_client_registration_security_mode` ([#1555](https://github.com/auth0/terraform-provider-auth0/pull/1555))
+- `resource/auth0_connection` – Add write support for `token_endpoint_jwtca_aud_format` for OIDC and Okta connections ([#1557](https://github.com/auth0/terraform-provider-auth0/pull/1557))
+- `resource/auth0_connection_directory` – Add support for configuring `synchronize_groups` for Inbound Groups Directory Provisioning in Google Workspaces (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+- `resource/auth0_connection_directory_synchronized_groups` – Add support for managing synchronized Google Workspace group IDs via directory provisioning (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+- `data-source/auth0_connection_directory_synchronized_groups` – Add support for retrieving synchronized group IDs for a connection's directory provisioning (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+- `resource/auth0_connection` – Add support for configuring `api_enable_groups` for Google Workspace connections (EA Only) ([#1561](https://github.com/auth0/terraform-provider-auth0/pull/1561))
+
+BUG FIXES:
+- `resource/auth0_resource_server` – Fix missing expand for `name` field ([#1566](https://github.com/auth0/terraform-provider-auth0/pull/1566))
+- `resource/auth0_tenant` – Fix default values for `ephemeral_session_lifetime`, `idle_ephemeral_session_lifetime`, `enable_pipeline2`, and `disable_management_api_sms_obfuscation` to align with API docs ([#1569](https://github.com/auth0/terraform-provider-auth0/pull/1569))
+
+## v1.45.0
+
+FEATURES:
+- `resource/auth0_resource_server` – Add support for Authentication Assurance (ACR) configuration (EA Only) ([#1545](https://github.com/auth0/terraform-provider-auth0/pull/1545))
+- `data-source/auth0_resource_server` – Expose Authentication Assurance (ACR) fields ([#1545](https://github.com/auth0/terraform-provider-auth0/pull/1545))
+- `resource/auth0_event_stream` – Add support for `action` destination type with `action_configuration`  from event streams ([#1501](https://github.com/auth0/terraform-provider-auth0/pull/1501))
+- `data-source/auth0_event_stream` – Expose `action_configuration` for action-type event streams ([#1501](https://github.com/auth0/terraform-provider-auth0/pull/1501))
+- `resource/auth0_connection` – Add support for the new unified `password_options` for `auth0` strategy connections ([#1544](https://github.com/auth0/terraform-provider-auth0/pull/1544))
+- `data-source/auth0_connection` – Expose `password_options` as read block  ([#1544](https://github.com/auth0/terraform-provider-auth0/pull/1544))
+- `resource/auth0_connection` – Add support for configuring `id_token_signed_response_algs` and `token_endpoint_jwtca_aud_format` ([#1553](https://github.com/auth0/terraform-provider-auth0/pull/1553))
+- `data-source/auth0_connection` – Expose `id_token_signed_response_algs` and `token_endpoint_jwtca_aud_format` as read only properties ([#1553](https://github.com/auth0/terraform-provider-auth0/pull/1553))
+
+## v1.44.0
+
+FEATURES:
+- `resource/auth0_client_cimd` – Add support for managing Client ID Metadata Document (CIMD) client registrations ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `resource/auth0_client` – Add support for configuring dedicated CIMD fields ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `resource/auth0_client` – Add support for configuring `my_organization_configuration` ([#1518](https://github.com/auth0/terraform-provider-auth0/pull/1518))
+- `resource/auth0_client` – Add support for the new `on_behalf_of_token_exchange` value on `token_exchange.allow_any_profile_of_type` ([#1535](https://github.com/auth0/terraform-provider-auth0/pull/1535))
+- `resource/auth0_tenant` – Add support for configuring `client_id_metadata_document_supported` and `resource_parameter_profile` ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `data-source/auth0_client` – Add support for retrieving CIMD fields ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+- `data-source/auth0_clients` – Add support for filtering by `external_client_id` for CIMD clients ([#1525](https://github.com/auth0/terraform-provider-auth0/pull/1525))
+
+ENHANCEMENTS:
+- `resource/auth0_organization_connection` – Migrate to the new Organization Connections endpoints in `go-auth0/v2` ([#1539](https://github.com/auth0/terraform-provider-auth0/pull/1539))
+- `resource/auth0_organization_connections` – Migrate to the new Organization Connections endpoints in `go-auth0/v2` ([#1539](https://github.com/auth0/terraform-provider-auth0/pull/1539))
+- `data-source/auth0_organization` – Expose `organization_connection_name` and `organization_access_level` for enabled connections ([#1539](https://github.com/auth0/terraform-provider-auth0/pull/1539))
+
+## v1.43.0
+
+FEATURES:
+- `resource/auth0_custom_domain_default` – Add support for setting the tenant's default custom domain ([#1512](https://github.com/auth0/terraform-provider-auth0/pull/1512))
+- `resource/auth0_custom_domain` – Add computed `is_default` attribute to custom domain resources and data sources ([#1512](https://github.com/auth0/terraform-provider-auth0/pull/1512))
+
+BUG FIXES:
+- `resource/auth0_action_module` – Fix provider crash when creating action modules with secrets missing `name` or `value` by marking both fields as required ([#1524](https://github.com/auth0/terraform-provider-auth0/pull/1524))
+
+NOTES:
+- `data-source/auth0_custom_domains` – Fix example documentation to use `query` instead of `q` ([#1523](https://github.com/auth0/terraform-provider-auth0/pull/1523))
+- Fix debug logging not being applied to management API clients by reordering SDK option calls ([#1526](https://github.com/auth0/terraform-provider-auth0/pull/1526))
+
 ## v1.42.0
 
 FEATURES:

@@ -49,3 +49,9 @@ resource "auth0_client_grant" "my_client_grant" {
   authorization_details_types = ["payment", "shipping"]
   allow_all_scopes            = false
 }
+
+resource "auth0_client_grant" "default_3p_grant" {
+  default_for = "third_party_clients"
+  audience    = auth0_resource_server.my_resource_server.identifier
+  scopes      = ["read:foo"]
+}

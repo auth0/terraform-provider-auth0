@@ -13,10 +13,11 @@ resource "auth0_event_stream" "my_event_stream_event_bridge" {
   }
 }
 
-# Creates an event stream of type webhook
+# Creates an event stream of type webhook in a disabled state
 resource "auth0_event_stream" "my_event_stream_webhook" {
   name             = "my-webhook"
   destination_type = "webhook"
+  status           = "disabled"
   subscriptions = [
     "user.created",
     "user.updated"
@@ -56,5 +57,19 @@ resource "auth0_event_stream" "my_event_stream_webhook_secure" {
       token_wo         = var.webhook_token
       token_wo_version = 1
     }
+  }
+}
+
+# Creates an event stream of type action
+resource "auth0_event_stream" "my_event_stream_action" {
+  name             = "my-action-stream"
+  destination_type = "action"
+  subscriptions = [
+    "user.created",
+    "user.updated"
+  ]
+
+  action_configuration {
+    action_id = auth0_action.my_action.id
   }
 }

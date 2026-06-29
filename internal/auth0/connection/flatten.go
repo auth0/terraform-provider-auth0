@@ -837,29 +837,34 @@ func flattenConnectionOptionsOIDC(
 	}
 
 	optionsMap := map[string]interface{}{
-		"client_id":                         options.GetClientID(),
-		"client_secret":                     options.GetClientSecret(),
-		"icon_url":                          options.GetLogoURL(),
-		"tenant_domain":                     options.GetTenantDomain(),
-		"domain_aliases":                    options.GetDomainAliases(),
-		"type":                              options.GetType(),
-		"send_back_channel_nonce":           options.GetSendBackChannelNonce(),
-		"scopes":                            options.Scopes(),
-		"issuer":                            options.GetIssuer(),
-		"jwks_uri":                          options.GetJWKSURI(),
-		"discovery_url":                     options.GetDiscoveryURL(),
-		"token_endpoint":                    options.GetTokenEndpoint(),
-		"userinfo_endpoint":                 options.GetUserInfoEndpoint(),
-		"authorization_endpoint":            options.GetAuthorizationEndpoint(),
-		"set_user_root_attributes":          options.GetSetUserAttributes(),
-		"non_persistent_attrs":              options.GetNonPersistentAttrs(),
-		"upstream_params":                   upstreamParams,
-		"token_endpoint_auth_method":        options.GetTokenEndpointAuthMethod(),
-		"token_endpoint_auth_signing_alg":   options.GetTokenEndpointAuthSigningAlg(),
-		"dpop_signing_alg":                  options.GetDPoPSigningAlg(),
-		"id_token_signed_response_algs":     options.GetIDTokenSignedResponseAlgs(),
-		"token_endpoint_jwtca_aud_format":   options.GetTokenEndpointJwtcaAudFormat(),
-		"id_token_session_expiry_supported": options.GetIDTokenSessionExpirySupported(),
+		"client_id":                       options.GetClientID(),
+		"client_secret":                   options.GetClientSecret(),
+		"icon_url":                        options.GetLogoURL(),
+		"tenant_domain":                   options.GetTenantDomain(),
+		"domain_aliases":                  options.GetDomainAliases(),
+		"type":                            options.GetType(),
+		"send_back_channel_nonce":         options.GetSendBackChannelNonce(),
+		"scopes":                          options.Scopes(),
+		"issuer":                          options.GetIssuer(),
+		"jwks_uri":                        options.GetJWKSURI(),
+		"discovery_url":                   options.GetDiscoveryURL(),
+		"token_endpoint":                  options.GetTokenEndpoint(),
+		"userinfo_endpoint":               options.GetUserInfoEndpoint(),
+		"authorization_endpoint":          options.GetAuthorizationEndpoint(),
+		"set_user_root_attributes":        options.GetSetUserAttributes(),
+		"non_persistent_attrs":            options.GetNonPersistentAttrs(),
+		"upstream_params":                 upstreamParams,
+		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
+		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
+		"dpop_signing_alg":                options.GetDPoPSigningAlg(),
+		"id_token_signed_response_algs":   options.GetIDTokenSignedResponseAlgs(),
+		"token_endpoint_jwtca_aud_format": options.GetTokenEndpointJwtcaAudFormat(),
+		// Pass the raw pointer rather than the getter (which coerces nil → false) so the SDK
+		// receives the true absence signal. Schema.TypeBool still collapses nil → false in state
+		// because it has no absent representation. This is acceptable: the API treats absent and
+		// false identically (omitting the field in a PATCH clears it server-side), so the plan
+		// correctly shows true → false when a user removes the field from their config.
+		"id_token_session_expiry_supported": options.IDTokenSessionExpirySupported,
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -911,28 +916,33 @@ func flattenConnectionOptionsOkta(
 	}
 
 	optionsMap := map[string]interface{}{
-		"client_id":                         options.GetClientID(),
-		"client_secret":                     options.GetClientSecret(),
-		"domain":                            options.GetDomain(),
-		"domain_aliases":                    options.GetDomainAliases(),
-		"scopes":                            options.Scopes(),
-		"issuer":                            options.GetIssuer(),
-		"jwks_uri":                          options.GetJWKSURI(),
-		"token_endpoint":                    options.GetTokenEndpoint(),
-		"userinfo_endpoint":                 options.GetUserInfoEndpoint(),
-		"authorization_endpoint":            options.GetAuthorizationEndpoint(),
-		"non_persistent_attrs":              options.GetNonPersistentAttrs(),
-		"set_user_root_attributes":          options.GetSetUserAttributes(),
-		"icon_url":                          options.GetLogoURL(),
-		"type":                              options.GetType(),
-		"send_back_channel_nonce":           options.GetSendBackChannelNonce(),
-		"upstream_params":                   upstreamParams,
-		"token_endpoint_auth_method":        options.GetTokenEndpointAuthMethod(),
-		"token_endpoint_auth_signing_alg":   options.GetTokenEndpointAuthSigningAlg(),
-		"dpop_signing_alg":                  options.GetDPoPSigningAlg(),
-		"id_token_signed_response_algs":     options.GetIDTokenSignedResponseAlgs(),
-		"token_endpoint_jwtca_aud_format":   options.GetTokenEndpointJwtcaAudFormat(),
-		"id_token_session_expiry_supported": options.GetIDTokenSessionExpirySupported(),
+		"client_id":                       options.GetClientID(),
+		"client_secret":                   options.GetClientSecret(),
+		"domain":                          options.GetDomain(),
+		"domain_aliases":                  options.GetDomainAliases(),
+		"scopes":                          options.Scopes(),
+		"issuer":                          options.GetIssuer(),
+		"jwks_uri":                        options.GetJWKSURI(),
+		"token_endpoint":                  options.GetTokenEndpoint(),
+		"userinfo_endpoint":               options.GetUserInfoEndpoint(),
+		"authorization_endpoint":          options.GetAuthorizationEndpoint(),
+		"non_persistent_attrs":            options.GetNonPersistentAttrs(),
+		"set_user_root_attributes":        options.GetSetUserAttributes(),
+		"icon_url":                        options.GetLogoURL(),
+		"type":                            options.GetType(),
+		"send_back_channel_nonce":         options.GetSendBackChannelNonce(),
+		"upstream_params":                 upstreamParams,
+		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
+		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
+		"dpop_signing_alg":                options.GetDPoPSigningAlg(),
+		"id_token_signed_response_algs":   options.GetIDTokenSignedResponseAlgs(),
+		"token_endpoint_jwtca_aud_format": options.GetTokenEndpointJwtcaAudFormat(),
+		// Pass the raw pointer rather than the getter (which coerces nil → false) so the SDK
+		// receives the true absence signal. Schema.TypeBool still collapses nil → false in state
+		// because it has no absent representation. This is acceptable: the API treats absent and
+		// false identically (omitting the field in a PATCH clears it server-side), so the plan
+		// correctly shows true → false when a user removes the field from their config.
+		"id_token_session_expiry_supported": options.IDTokenSessionExpirySupported,
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())

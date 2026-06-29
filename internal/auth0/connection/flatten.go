@@ -358,11 +358,21 @@ func flattenAuthenticationMethodPassword(passwordAuthenticationMethod *managemen
 		return nil
 	}
 
+	apiBehavior := passwordAuthenticationMethod.GetAPIBehavior()
+	if apiBehavior == "" {
+		apiBehavior = "required"
+	}
+
+	signupBehavior := passwordAuthenticationMethod.GetSignupBehavior()
+	if signupBehavior == "" {
+		signupBehavior = "allow"
+	}
+
 	return []map[string]interface{}{
 		{
 			"enabled":         passwordAuthenticationMethod.GetEnabled(),
-			"api_behavior":    passwordAuthenticationMethod.GetAPIBehavior(),
-			"signup_behavior": passwordAuthenticationMethod.GetSignupBehavior(),
+			"api_behavior":    apiBehavior,
+			"signup_behavior": signupBehavior,
 		},
 	}
 }

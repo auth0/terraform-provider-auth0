@@ -166,9 +166,19 @@ Read-Only:
 - `allow_refresh_token` (Boolean)
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean)
+- `delegation` (List of Object) (see [below for nested schema](#nestedobjatt--clients--session_transfer--delegation))
 - `enforce_cascade_revocation` (Boolean)
 - `enforce_device_binding` (String)
 - `enforce_online_refresh_tokens` (Boolean)
+
+<a id="nestedobjatt--clients--session_transfer--delegation"></a>
+### Nested Schema for `clients.session_transfer.delegation`
+
+Read-Only:
+
+- `allow_delegated_access` (Boolean)
+- `enforce_device_binding` (String)
+
 
 
 <a id="nestedobjatt--clients--token_exchange"></a>

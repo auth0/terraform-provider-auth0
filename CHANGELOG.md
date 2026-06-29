@@ -1,3 +1,9 @@
+## [Unreleased]
+
+BUG FIXES:
+- `resource/auth0_connection` – Prevent spurious diffs on `options.client_secret` caused by Auth0 API returning a redacted empty value; provider now preserves the value already in state ([#PLACEHOLDER](https://github.com/auth0/terraform-provider-auth0/pull/PLACEHOLDER))
+- `resource/auth0_log_stream` – Prevent spurious diffs on `sink.http_authorization` caused by Auth0 API returning a redacted empty value; provider now preserves the value already in state ([#PLACEHOLDER](https://github.com/auth0/terraform-provider-auth0/pull/PLACEHOLDER))
+
 ## v1.50.0
 
 ENHANCEMENTS:

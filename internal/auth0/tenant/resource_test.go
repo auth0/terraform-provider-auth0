@@ -379,6 +379,13 @@ func TestAccTenant_Main(t *testing.T) {
 				ExpectError: regexp.MustCompile(`only one of disable and enable_endpoint_aliases should be set in the mtls block`),
 			},
 			{
+				// Verifies that clearing default_redirection_uri generates a real diff.
+				// Before the fix (Computed:true), this step would show no changes.
+				Config:             testAccTenantConfigUpdate,
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: true,
+			},
+			{
 				Config: testAccTenantConfigUpdate,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "enabled_locales.0", "de"),
@@ -546,6 +553,92 @@ func TestAccTenant_DynamicClientRegistrationSecurityMode(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "friendly_name", "DCR Security Mode Test"),
 				),
+			},
+		},
+	})
+}
+
+const testAccTenantDefaultRedirectionURISet = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name           = "TF Test — redirection_uri"
+	default_redirection_uri = "https://example.com/login"
+}
+`
+
+const testAccTenantDefaultRedirectionURICleared = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name           = "TF Test — redirection_uri"
+	default_redirection_uri = ""
+}
+`
+
+const testAccTenantDefaultRedirectionURIOmitted = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "TF Test — redirection_uri"
+}
+`
+
+// TestAccTenant_DefaultRedirectionURI exercises the three clearing paths for
+// default_redirection_uri and verifies idempotence after each.
+//
+//   - set → plan clear: must generate a diff (regression guard — Computed:true would suppress this)
+//   - clear (= ""): cleared via the first PATCH in updateTenant
+//   - idempotence after clear: second plan must show no changes
+//   - re-set → plan omitted: must generate a diff (null-config path)
+//   - omitted: cleared via fetchNullableFields (second PATCH, sends "")
+//   - idempotence after omitted: second plan must show no changes
+func TestAccTenant_DefaultRedirectionURI(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTenantDefaultRedirectionURISet,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
+				),
+			},
+			{
+				// Regression guard: clearing to "" must produce a non-empty plan.
+				// Before the fix (Computed:true), this step would show no changes.
+				Config:             testAccTenantDefaultRedirectionURICleared,
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: true,
+			},
+			{
+				Config: testAccTenantDefaultRedirectionURICleared,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
+				),
+			},
+			{
+				// Idempotence: second apply of = "" must show no diff.
+				Config:             testAccTenantDefaultRedirectionURICleared,
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: false,
+			},
+			{
+				Config: testAccTenantDefaultRedirectionURISet,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
+				),
+			},
+			{
+				// Null-config path: omitting the field when remote value is set must generate a diff.
+				Config:             testAccTenantDefaultRedirectionURIOmitted,
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: true,
+			},
+			{
+				// FetchNullableFields fires second PATCH with {"default_redirection_uri":""}.
+				Config: testAccTenantDefaultRedirectionURIOmitted,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
+				),
+			},
+			{
+				// Idempotence: second plan with field omitted must show no infrastructure diff.
+				Config:             testAccTenantDefaultRedirectionURIOmitted,
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: false,
 			},
 		},
 	})

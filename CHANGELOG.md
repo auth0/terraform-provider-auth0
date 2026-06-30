@@ -12,6 +12,7 @@ ENHANCEMENTS:
 
 BUG FIXES:
 - `resource/auth0_action` – Increase the HTTP timeout to 6 minutes to avoid timeouts on slow action builds ([#1616](https://github.com/auth0/terraform-provider-auth0/pull/1616))
+- `resource/auth0_action` – Add explicit handling for action-module dependency during code updates ([#1631](https://github.com/auth0/terraform-provider-auth0/pull/1631))
 
 ## v1.50.0
 

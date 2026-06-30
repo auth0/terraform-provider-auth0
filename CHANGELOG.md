@@ -1,5 +1,13 @@
 ## [Unreleased]
 
+BREAKING CHANGES:
+
+* `auth0_tenant`: The `default_redirection_uri` field is no longer `Computed`. Users who
+  omit this field from their configuration but have a non-empty value set on the remote
+  tenant will see a plan diff on the next `terraform plan`. To prevent an unintended clear,
+  explicitly add `default_redirection_uri = "<current value>"` to your configuration before
+  upgrading.
+
 ## v1.51.0
 
 ENHANCEMENTS:

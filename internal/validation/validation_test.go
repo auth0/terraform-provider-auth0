@@ -107,6 +107,23 @@ func TestIsHTTPSURLOrEmptyStringWithDynamicLoginURIPlaceholders(t *testing.T) {
 			expectedErrors: nil,
 		},
 		{
+			name:           "uppercase PUBLIC_ prefix is accepted",
+			inputURL:       "https://{organization.metadata.PUBLIC_login_host}/login",
+			expectedErrors: nil,
+		},
+		{
+			name:           "uppercase PUBLIC_ prefix on custom_domain is accepted",
+			inputURL:       "https://{custom_domain.metadata.PUBLIC_app_host}",
+			expectedErrors: nil,
+		},
+		{
+			inputURL: "https://{organization.metadata.Public_login_host}",
+			name:     "mixed-case prefix is rejected",
+			expectedErrors: []string{
+				"expected \"theTestURL\" to be a valid url, got https://{organization.metadata.Public_login_host}: parse \"https://{organization.metadata.Public_login_host}\": invalid character \"{\" in host name",
+			},
+		},
+		{
 			name:           "both placeholder types combined",
 			inputURL:       "https://{custom_domain.metadata.public_app_host}/o/{organization.metadata.public_login_host}",
 			expectedErrors: nil,

@@ -9,10 +9,9 @@ import (
 
 // dynamicLoginURIPlaceholderRegex matches the Auth0-documented placeholder
 // syntax allowed in initiate_login_uri for tenants using Organizations or
-// Multiple Custom Domains. Metadata keys must start with `public_`.
-// See https://auth0.com/docs/get-started/applications/application-settings
-// (section "Dynamic login URIs with metadata placeholders").
-var dynamicLoginURIPlaceholderRegex = regexp.MustCompile(`\{(organization|custom_domain)\.metadata\.public_[A-Za-z0-9_]+\}`)
+// Multiple Custom Domains. Metadata keys must start with `public_` or `PUBLIC_`
+// See https://auth0.com/docs/get-started/applications/wildcards-for-subdomains#validation-rules.
+var dynamicLoginURIPlaceholderRegex = regexp.MustCompile(`\{(organization|custom_domain)\.metadata\.(public_|PUBLIC_)[A-Za-z0-9_]+\}`)
 
 // IsURLWithHTTPSorEmptyString is a validation func that checks
 // that the given rawURL is a https url or is an empty string.

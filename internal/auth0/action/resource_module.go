@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
@@ -20,6 +21,14 @@ func NewModuleResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		CustomizeDiff: customdiff.All(
+			customdiff.ComputedIf("version_id", func(_ context.Context, d *schema.ResourceDiff, _ interface{}) bool {
+				if !d.Get("publish").(bool) {
+					return false
+				}
+				return d.HasChange("code") || d.HasChange("dependencies") || d.HasChange("secrets") || d.HasChange("publish")
+			}),
+		),
 		Description: "Action Modules are reusable code packages that can be shared across multiple actions. " +
 			"They allow you to write common functionality once and use it in any action that needs it.",
 		Schema: map[string]*schema.Schema{

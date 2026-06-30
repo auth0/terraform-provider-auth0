@@ -1,3 +1,8 @@
+## [Unreleased]
+
+ENHANCEMENTS:
+- `resource/auth0_connection` – Add `id_token_session_expiry_supported` field to OIDC and Okta connection options, enabling IPSIE session expiry claim support ([#XXXX](https://github.com/auth0/terraform-provider-auth0/pull/XXXX))
+
 ## v1.50.0
 
 ENHANCEMENTS:

@@ -1417,6 +1417,14 @@ var optionsSchema = &schema.Schema{
 				}, false),
 				Description: "Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC Connections)",
 			},
+			"id_token_session_expiry_supported": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: "Indicates whether the identity provider supports session expiry via " +
+					"the id_token. When true, Auth0 will use the session_expiry claim from the " +
+					"upstream IdP's ID token to determine the maximum session lifetime. Only " +
+					"applicable for Okta and OIDC connections.",
+			},
 			"consumer_key": {
 				Type:        schema.TypeString,
 				Optional:    true,

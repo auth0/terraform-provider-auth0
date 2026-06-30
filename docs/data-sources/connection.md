@@ -114,6 +114,7 @@ Read-Only:
 - `global_token_revocation_jwt_iss` (String)
 - `global_token_revocation_jwt_sub` (String)
 - `icon_url` (String)
+- `id_token_session_expiry_supported` (Boolean)
 - `id_token_signed_response_algs` (List of String)
 - `identity_api` (String)
 - `idp_initiated` (List of Object) (see [below for nested schema](#nestedobjatt--options--idp_initiated))

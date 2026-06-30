@@ -1115,6 +1115,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.mapping_mode", "bind_all"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.dpop_signing_alg", "ES256"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_session_expiry_supported", "true"),
 				),
 			},
 			{
@@ -1150,6 +1151,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.userinfo_scope", "openid email profile groups"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.attributes", "{\"email\":\"${context.tokenset.email}\",\"email_verified\":\"${context.tokenset.email_verified}\",\"family_name\":\"${context.tokenset.family_name}\",\"given_name\":\"${context.tokenset.given_name}\",\"name\":\"${context.tokenset.name}\",\"nickname\":\"${context.tokenset.nickname}\",\"picture\":\"${context.tokenset.picture}\"}"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.dpop_signing_alg", "Ed25519"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_session_expiry_supported", "false"),
 				),
 			},
 			{
@@ -1241,6 +1243,7 @@ resource "auth0_connection" "oidc" {
 			mapping_mode = "bind_all"
 		}
 		dpop_signing_alg = "ES256"
+		id_token_session_expiry_supported = true
 	}
 }
 `
@@ -1450,6 +1453,7 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.0.pkce", "disabled"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_session_expiry_supported", "true"),
 				),
 			},
 			{
@@ -1487,6 +1491,7 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.userinfo_scope", "openid email profile groups"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.attributes", "{\"email\":\"${context.tokenset.email}\",\"email_verified\":\"${context.tokenset.email_verified}\",\"family_name\":\"${context.tokenset.family_name}\",\"given_name\":\"${context.tokenset.given_name}\",\"name\":\"${context.tokenset.name}\",\"nickname\":\"${context.tokenset.nickname}\",\"picture\":\"${context.tokenset.picture}\"}"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_session_expiry_supported", "false"),
 				),
 			},
 			{
@@ -1563,6 +1568,7 @@ resource "auth0_connection" "okta" {
 		attribute_map {
 			mapping_mode = "basic_profile"
 		}
+		id_token_session_expiry_supported = true
 	}
 }
 `

@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -16,6 +17,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+	"github.com/auth0/terraform-provider-auth0/internal/prefetch"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
@@ -1805,9 +1807,20 @@ func createClient(ctx context.Context, data *schema.ResourceData, meta interface
 }
 
 func readClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
+	cfg := meta.(*config.Config)
+	api := cfg.GetAPI()
 
-	client, err := api.Client.Read(ctx, data.Id())
+	var (
+		client *management.Client
+		err    error
+	)
+
+	if cache := cfg.GetPrefetchCache(); cache != nil {
+		client, err = prefetch.GetClient(ctx, cache, api, data.Id())
+	} else {
+		client, err = api.Client.Read(ctx, data.Id())
+	}
+
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}

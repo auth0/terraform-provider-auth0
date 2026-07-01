@@ -89,7 +89,7 @@ func TestPlanCredentialRotation_InterleavesSwaps(t *testing.T) {
 
 	assert.Equal(t, detachAndDelete, steps[2].kind)
 	assert.Equal(t, "old-2", steps[2].credentialID)
-	
+
 	assert.Equal(t, createAndAttach, steps[3].kind)
 	assert.Equal(t, "new-2", steps[3].newCredential["name"])
 }
@@ -161,7 +161,7 @@ func TestPlanCredentialRotation_HandlesUnevenAndPureChanges(t *testing.T) {
 			map[string]interface{}{"id": "old-1"},
 		},
 		toAdd: []interface{}{
-			map[string]interface{}{"name": "new-1"}, 
+			map[string]interface{}{"name": "new-1"},
 			map[string]interface{}{"name": "new-2"},
 		},
 	})

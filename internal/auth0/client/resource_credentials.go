@@ -234,21 +234,21 @@ type credentialDiff struct {
 	expiryUpdates []expiryUpdate
 }
 
-// rotationStepKind holds type of rotation step
+// rotationStepKind holds the type of a rotation step.
 type rotationStepKind int
 
 const (
-	// detachAndDelete detaches a credential from the client, then deletes it.
+	// Detaches a credential from the client, then deletes it.
 	detachAndDelete rotationStepKind = iota
-	// createAndAttach creates a credential, then attaches it to the client.
+	// Creates a credential, then attaches it to the client.
 	createAndAttach
 )
 
 // rotationStep is a single ordered action in a credential rotation.
 type rotationStep struct {
 	kind          rotationStepKind
-	credentialID  string                 // set when kind == detachAndDelete
-	newCredential map[string]interface{} // set when kind == createAndAttach
+	credentialID  string                 // Set when kind == detachAndDelete.
+	newCredential map[string]interface{} // Set when kind == createAndAttach.
 }
 
 // planCredentialRotation orders a credential change into interleaved steps,

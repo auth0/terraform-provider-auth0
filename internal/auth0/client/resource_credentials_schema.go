@@ -119,10 +119,12 @@ func NewCredentialsResource() *schema.Resource {
 						"credentials": {
 							Type:     schema.TypeSet,
 							Set:      privateKeyJWTCredentialSetHash,
-							MaxItems: 2,
+							MaxItems: 4,
 							Required: true,
 							Description: "Client credentials available for use when Private Key JWT is in use as " +
-								"the client authentication method. A maximum of 2 client credentials can be set.",
+								"the client authentication method. A maximum of 2 client credentials can be set by default; " +
+								"tenants entitled to Advanced Identity Security (AIS) can set up to 4. Configuring more " +
+								"than the tenant allows results in an API error during apply.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"id": {

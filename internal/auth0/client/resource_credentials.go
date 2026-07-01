@@ -234,6 +234,57 @@ type credentialDiff struct {
 	expiryUpdates []expiryUpdate
 }
 
+// rotationStepKind holds the type of a rotation step.
+type rotationStepKind int
+
+const (
+	// Detaches a credential from the client, then deletes it.
+	detachAndDelete rotationStepKind = iota
+	// Creates a credential, then attaches it to the client.
+	createAndAttach
+)
+
+// rotationStep is a single ordered action in a credential rotation.
+type rotationStep struct {
+	kind          rotationStepKind
+	credentialID  string                 // Set when kind == detachAndDelete.
+	newCredential map[string]interface{} // Set when kind == createAndAttach.
+}
+
+// planCredentialRotation orders a credential change into interleaved steps,
+// pairing each removal with an addition so the credential count never overshoots
+// the target.
+func planCredentialRotation(diff credentialDiff) []rotationStep {
+	rotationSteps := make([]rotationStep, 0, len(diff.toRemove)+len(diff.toAdd))
+
+	appendRemoval := func(entry interface{}) {
+		credMap, _ := entry.(map[string]interface{})
+		id, _ := credMap["id"].(string)
+		if id != "" {
+			rotationSteps = append(rotationSteps, rotationStep{kind: detachAndDelete, credentialID: id})
+		}
+	}
+	appendAddition := func(entry interface{}) {
+		credMap, _ := entry.(map[string]interface{})
+		rotationSteps = append(rotationSteps, rotationStep{kind: createAndAttach, newCredential: credMap})
+	}
+
+	pairs := min(len(diff.toAdd), len(diff.toRemove))
+
+	for i := range pairs {
+		appendRemoval(diff.toRemove[i])
+		appendAddition(diff.toAdd[i])
+	}
+	for _, removed := range diff.toRemove[pairs:] {
+		appendRemoval(removed)
+	}
+	for _, added := range diff.toAdd[pairs:] {
+		appendAddition(added)
+	}
+
+	return rotationSteps
+}
+
 func classifyCredentialChanges(toAdd, toRemove []interface{}) credentialDiff {
 	var expiryUpdates []expiryUpdate
 	remainingAdd := make([]interface{}, 0, len(toAdd))
@@ -310,66 +361,48 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 
 	toAdd, toRemove := value.Difference(data, credentialsKey)
 	diff := classifyCredentialChanges(toAdd, toRemove)
+	rotationSteps := planCredentialRotation(diff)
 
 	var result *multierror.Error
 
-	// Create new credentials first to avoid availability gaps.
-	for _, addedCred := range diff.toAdd {
-		credMap := addedCred.(map[string]interface{})
-		credential := expandClientCredentialFromMap(credMap)
-
-		if err := api.Client.CreateCredential(ctx, clientID, credential); err != nil {
-			return diag.FromErr(err)
-		}
-	}
-
-	// Collect IDs of credentials being removed so we can exclude them from re-attach.
-	removedIDs := make(map[string]bool)
-	for _, removedCred := range diff.toRemove {
-		credMap := removedCred.(map[string]interface{})
-		credentialID, _ := credMap["id"].(string)
-		if credentialID != "" {
-			removedIDs[credentialID] = true
-		}
-	}
-
-	// Re-attach credentials (excluding removed ones) BEFORE deleting, because
-	// the API rejects deletion of credentials still associated with a client.
-	if len(diff.toAdd) > 0 || len(diff.toRemove) > 0 {
-		existingCredentials, err := api.Client.ListCredentials(ctx, clientID)
+	if len(rotationSteps) > 0 {
+		// Snapshot the currently attached credentials so we can mutate the set incrementally,
+		// one slot at a time, without ever exceeding the max allowed creds.
+		existingCreds, err := api.Client.ListCredentials(ctx, clientID)
 		if err != nil {
 			return diag.FromErr(err)
 		}
 
-		allCredentials := make([]management.Credential, 0, len(existingCredentials))
-		for _, cred := range existingCredentials {
-			if !removedIDs[cred.GetID()] {
-				allCredentials = append(allCredentials, management.Credential{ID: cred.ID})
+		attachedCreds := make([]management.Credential, 0, len(existingCreds))
+		for _, cred := range existingCreds {
+			attachedCreds = append(attachedCreds, management.Credential{ID: cred.ID})
+		}
+
+		for _, step := range rotationSteps {
+			switch step.kind {
+			case detachAndDelete:
+				attachedCreds = removeAttachedCredential(attachedCreds, step.credentialID)
+				if err := attachAuthenticationMethodCredentials(ctx, api, clientID, "private_key_jwt", attachedCreds); err != nil {
+					return diag.FromErr(err)
+				}
+				if err := deleteCredentialIgnoringNotFound(ctx, api, clientID, step.credentialID); err != nil {
+					result = multierror.Append(result, err)
+				}
+			case createAndAttach:
+				credential := expandClientCredentialFromMap(step.newCredential)
+				if err := api.Client.CreateCredential(ctx, clientID, credential); err != nil {
+					return diag.FromErr(err)
+				}
+				attachedCreds = append(attachedCreds, management.Credential{ID: credential.ID})
+				if err := attachAuthenticationMethodCredentials(ctx, api, clientID, "private_key_jwt", attachedCreds); err != nil {
+					return diag.FromErr(err)
+				}
 			}
 		}
 
-		if err := attachAuthenticationMethodCredentials(ctx, api, clientID, "private_key_jwt", allCredentials); err != nil {
-			return diag.FromErr(err)
+		if result.ErrorOrNil() != nil {
+			return diag.FromErr(result.ErrorOrNil())
 		}
-	}
-
-	// Delete removed credentials (now detached from the client).
-	for _, removedCred := range diff.toRemove {
-		credMap := removedCred.(map[string]interface{})
-		credentialID, _ := credMap["id"].(string)
-		if credentialID == "" {
-			continue
-		}
-
-		err := api.Client.DeleteCredential(ctx, clientID, credentialID)
-		if internalError.IsStatusNotFound(err) {
-			err = nil
-		}
-		result = multierror.Append(result, err)
-	}
-
-	if result.ErrorOrNil() != nil {
-		return diag.FromErr(result.ErrorOrNil())
 	}
 
 	// Apply expires_at PATCH updates for credentials that only changed expiry.
@@ -390,6 +423,26 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 	}
 
 	return diag.FromErr(result.ErrorOrNil())
+}
+
+// removeAttachedCredential returns creds without the entry matching id.
+func removeAttachedCredential(creds []management.Credential, id string) []management.Credential {
+	filtered := make([]management.Credential, 0, len(creds))
+	for _, cred := range creds {
+		if cred.GetID() != id {
+			filtered = append(filtered, cred)
+		}
+	}
+	return filtered
+}
+
+// deleteCredentialIgnoringNotFound deletes a credential, treats a 404 as success.
+func deleteCredentialIgnoringNotFound(ctx context.Context, api *management.Management, clientID, credentialID string) error {
+	err := api.Client.DeleteCredential(ctx, clientID, credentialID)
+	if internalError.IsStatusNotFound(err) {
+		return nil
+	}
+	return err
 }
 
 // modifyListBasedCredentials handles update for tls_client_auth and self_signed_tls_client_auth

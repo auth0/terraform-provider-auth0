@@ -98,11 +98,14 @@ func NewResource() *schema.Resource {
 				Description: "The Node runtime. Possible values are: `node12`, `node16` (not recommended), `node18`, `node22`",
 			},
 			"secrets": {
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:          schema.TypeSet,
+				Optional:      true,
+				ConflictsWith: []string{"secrets_wo"},
 				Description: "List of secrets that are included in an action or a version of an action. " +
 					"Partial management of secrets is not supported. If the secret block is edited, the whole object is " +
-					"re-provisioned.",
+					"re-provisioned. " +
+					"**Note:** Secret values are persisted in Terraform state as plain text. For better security, " +
+					"consider using `secrets_wo` instead, which supports write-only values and ephemeral variables.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -118,6 +121,39 @@ func NewResource() *schema.Resource {
 						},
 					},
 				},
+			},
+			"secrets_wo": {
+				Type:          schema.TypeList,
+				Optional:      true,
+				ConflictsWith: []string{"secrets"},
+				RequiredWith:  []string{"secrets_wo_version"},
+				Description: "List of secrets for the action (write-only). " +
+					"Secret values are only available during resource creation and update, and are **not** stored in Terraform state. " +
+					"To change the secrets, update the `secrets_wo_version` attribute. " +
+					"Conflicts with `secrets`.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"name": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Secret name.",
+						},
+						"value": {
+							Type:        schema.TypeString,
+							Required:    true,
+							WriteOnly:   true,
+							Sensitive:   true,
+							Description: "Secret value (write-only). This value is never stored in Terraform state.",
+						},
+					},
+				},
+			},
+			"secrets_wo_version": {
+				Type:         schema.TypeInt,
+				Optional:     true,
+				RequiredWith: []string{"secrets_wo"},
+				Description: "Version number for `secrets_wo` changes. " +
+					"Update this value to trigger a secret update when using `secrets_wo`.",
 			},
 			"deploy": {
 				Type:     schema.TypeBool,

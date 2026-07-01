@@ -30,6 +30,18 @@ func expandAction(data *schema.ResourceData) *management.Action {
 
 	if data.HasChange("secrets") {
 		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
+	} else if data.HasChange("secrets_wo") || data.HasChange("secrets_wo_version") {
+		// secrets_wo names are tracked in state, so HasChange("secrets_wo") catches
+		// adds/renames/removals; secrets_wo_version catches value-only rotations.
+		secretsWO := config.GetAttr("secrets_wo")
+		switch {
+		case !secretsWO.IsNull() && secretsWO.LengthInt() > 0:
+			action.Secrets = expandActionSecrets(secretsWO)
+		case data.HasChange("secrets_wo"):
+			// All secrets_wo entries were removed; send an empty slice so the API
+			// clears them instead of silently retaining orphaned secrets.
+			action.Secrets = &[]management.ActionSecret{}
+		}
 	}
 
 	if data.HasChange("modules") {
@@ -139,7 +151,7 @@ func expandTriggerBindings(config cty.Value) []*management.ActionBinding {
 }
 
 func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceData, api *management.Management) diag.Diagnostics {
-	if !data.HasChange("secrets") {
+	if !data.HasChange("secrets") && !data.HasChange("secrets_wo") && !data.HasChange("secrets_wo_version") {
 		return nil
 	}
 
@@ -148,27 +160,44 @@ func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceDa
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	// Extract changes to secrets from the resource data.
-	oldSecrets, newSecrets := data.GetChange("secrets")
-
-	// Stores the old and secrets from *schema.Set to slices of interface{}.
+	// Aggregate both old and new secret names across secrets and secrets_wo
+	// so we can detect any API-side secret that would be dropped by the update.
+	// Including the old names lets a user remove an entry without it being
+	// flagged as an unmanaged secret.
 	var secretsList []interface{}
 
-	if oldSecrets != nil {
-		secretsList = append(secretsList, oldSecrets.(*schema.Set).List()...)
+	// secrets and secrets_wo are mutually exclusive (ConflictsWith), so only one
+	// path drives the AttributePath surfaced in the diagnostic.
+	attributePath := "secrets"
+
+	if data.HasChange("secrets") {
+		oldSecrets, newSecrets := data.GetChange("secrets")
+		if oldSecrets != nil {
+			secretsList = append(secretsList, oldSecrets.(*schema.Set).List()...)
+		}
+		if newSecrets != nil {
+			secretsList = append(secretsList, newSecrets.(*schema.Set).List()...)
+		}
 	}
 
-	if newSecrets != nil {
-		secretsList = append(secretsList, newSecrets.(*schema.Set).List()...)
+	if data.HasChange("secrets_wo") || data.HasChange("secrets_wo_version") {
+		attributePath = "secrets_wo"
+		oldSecretsWO, newSecretsWO := data.GetChange("secrets_wo")
+		if oldSecretsWO != nil {
+			secretsList = append(secretsList, oldSecretsWO.([]interface{})...)
+		}
+		if newSecretsWO != nil {
+			secretsList = append(secretsList, newSecretsWO.([]interface{})...)
+		}
 	}
 
-	// Pass allSecrets to check for unmanaged action secrets.
-	return checkForUnmanagedActionSecrets(secretsList, preUpdateAction.GetSecrets())
+	return checkForUnmanagedActionSecrets(secretsList, preUpdateAction.GetSecrets(), attributePath)
 }
 
 func checkForUnmanagedActionSecrets(
 	secretsFromConfig []interface{},
 	secretsFromAPI []management.ActionSecret,
+	attributePath string,
 ) diag.Diagnostics {
 	secretKeysInConfigMap := make(map[string]bool, len(secretsFromConfig))
 	for _, secret := range secretsFromConfig {
@@ -210,7 +239,7 @@ func checkForUnmanagedActionSecrets(
 					"to prevent unintentionally destructive results.",
 					secret.GetName(),
 				),
-				AttributePath: cty.Path{cty.GetAttrStep{Name: "secrets"}},
+				AttributePath: cty.Path{cty.GetAttrStep{Name: attributePath}},
 			})
 		}
 	}

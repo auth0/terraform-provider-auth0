@@ -59,7 +59,7 @@ data "auth0_client" "some-client-by-id" {
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `id` (String) The ID of this resource.
-- `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
+- `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string. May contain Auth0 dynamic login URI placeholders such as `{organization.metadata.public_login_host}` or `{custom_domain.metadata.public_app_host}`, which are resolved by Auth0 at request time. See https://auth0.com/docs/get-started/applications/application-settings.
 - `is_first_party` (Boolean) Indicates whether this client is a first-party client.
 - `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. Requires the authentication method to be set to `client_secret_post` or `client_secret_basic`. Setting this property when creating the resource, will default the authentication method to `client_secret_post`. To change the authentication method to `client_secret_basic` use the `auth0_client_credentials` resource.
 - `jwks_uri` (String) URL for the JSON Web Key Set (JWKS) containing the public keys used for `private_key_jwt` authentication. Only present for CIMD clients using `private_key_jwt` authentication.

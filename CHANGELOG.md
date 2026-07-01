@@ -1,7 +1,18 @@
 ## [Unreleased]
 
+## v1.51.0
+
 ENHANCEMENTS:
-- `resource/auth0_connection` – Add `id_token_session_expiry_supported` field to OIDC and Okta connection options, enabling IPSIE session expiry claim support ([#XXXX](https://github.com/auth0/terraform-provider-auth0/pull/XXXX))
+- `resource/auth0_connection` – Add `id_token_session_expiry_supported` field to OIDC and Okta connection options, enabling IPSIE session expiry claim support ([#1628](https://github.com/auth0/terraform-provider-auth0/pull/1628))
+- `resource/auth0_client` – Add support for configuring `session_transfer.delegation` (`allow_delegated_access`, `enforce_device_binding`) for Custom Token Exchange and impersonation via Session Transfer (EA only) ([#1618](https://github.com/auth0/terraform-provider-auth0/pull/1618))
+- `resource/auth0_client` – Add support for configuring `fedcm_login` to enable Google One Tap (FedCM) sign-in on the New Universal Login page (EA only) ([#1617](https://github.com/auth0/terraform-provider-auth0/pull/1617))
+- `resource/auth0_connection` – Add support for configuring `type` and `send_back_channel_nonce` options for Okta Workforce connections ([#1615](https://github.com/auth0/terraform-provider-auth0/pull/1615))
+- `resource/auth0_client_credentials` – Add support for a write-only `client_secret` via `client_secret_wo` and `client_secret_wo_version` ([#1613](https://github.com/auth0/terraform-provider-auth0/pull/1613))
+- `resource/auth0_resource_server` – Add support for configuring `allow_online_access` and `allow_online_access_with_ephemeral_sessions` for Online Refresh Tokens (EA only) ([#1576](https://github.com/auth0/terraform-provider-auth0/pull/1576))
+
+BUG FIXES:
+- `resource/auth0_action` – Increase the HTTP timeout to 6 minutes to avoid timeouts on slow action builds ([#1616](https://github.com/auth0/terraform-provider-auth0/pull/1616))
+- `resource/auth0_action` – Add explicit handling for action-module dependency during code updates ([#1631](https://github.com/auth0/terraform-provider-auth0/pull/1631))
 
 ## v1.50.0
 

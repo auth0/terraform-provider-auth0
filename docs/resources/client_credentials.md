@@ -168,7 +168,7 @@ resource "auth0_client_credentials" "test" {
 
 Required:
 
-- `credentials` (Block Set, Min: 1, Max: 4) Client credentials available for use when Private Key JWT is in use as the client authentication method. A maximum of 2 client credentials can be set by default; tenants entitled to Advanced Identity Security (AIS) can set up to 4. Configuring more than the tenant allows results in an API error during apply. (see [below for nested schema](#nestedblock--private_key_jwt--credentials))
+- `credentials` (Block Set, Min: 1, Max: 2) Client credentials available for use when Private Key JWT is in use as the client authentication method. A maximum of 2 client credentials can be set. (see [below for nested schema](#nestedblock--private_key_jwt--credentials))
 
 <a id="nestedblock--private_key_jwt--credentials"></a>
 ### Nested Schema for `private_key_jwt.credentials`

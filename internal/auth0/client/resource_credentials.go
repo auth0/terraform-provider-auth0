@@ -251,35 +251,63 @@ type rotationStep struct {
 	newCredential map[string]interface{} // Set when kind == createAndAttach.
 }
 
+// minCredentialCap is the smallest per-client credential limit Auth0 enforces
+// on any tenant. The cap is not queryable, but every tenant allows at least
+// this many, so holding this many attached credentials transiently is always
+// safe.
+const minCredentialCap = 2
+
 // planCredentialRotation orders a credential change into interleaved steps,
-// pairing each removal with an addition so the credential count never overshoots
-// the target.
-func planCredentialRotation(diff credentialDiff) []rotationStep {
+// pairing each removal with an addition. Within a pair it chooses the order
+// from the live attached count: with headroom below minCredentialCap it adds
+// first (keeping a credential attached for zero downtime); at or above the cap
+// it removes first (so the count never overshoots the tenant limit).
+func planCredentialRotation(diff credentialDiff, attachedCount int) []rotationStep {
 	rotationSteps := make([]rotationStep, 0, len(diff.toRemove)+len(diff.toAdd))
 
-	appendRemoval := func(entry interface{}) {
+	newRemoval := func(entry interface{}) (rotationStep, bool) {
 		credMap, _ := entry.(map[string]interface{})
 		id, _ := credMap["id"].(string)
-		if id != "" {
-			rotationSteps = append(rotationSteps, rotationStep{kind: detachAndDelete, credentialID: id})
-		}
+		return rotationStep{kind: detachAndDelete, credentialID: id}, id != ""
 	}
-	appendAddition := func(entry interface{}) {
+	newAddition := func(entry interface{}) rotationStep {
 		credMap, _ := entry.(map[string]interface{})
-		rotationSteps = append(rotationSteps, rotationStep{kind: createAndAttach, newCredential: credMap})
+		return rotationStep{kind: createAndAttach, newCredential: credMap}
 	}
 
 	pairs := min(len(diff.toAdd), len(diff.toRemove))
 
 	for i := range pairs {
-		appendRemoval(diff.toRemove[i])
-		appendAddition(diff.toAdd[i])
+		removal, hasID := newRemoval(diff.toRemove[i])
+		addition := newAddition(diff.toAdd[i])
+
+		if attachedCount < minCredentialCap {
+			// Headroom: add first so a valid credential stays attached.
+			rotationSteps = append(rotationSteps, addition)
+			attachedCount++
+			if hasID {
+				rotationSteps = append(rotationSteps, removal)
+				attachedCount--
+			}
+		} else {
+			// At capacity: remove first so the count never overshoots.
+			if hasID {
+				rotationSteps = append(rotationSteps, removal)
+				attachedCount--
+			}
+			rotationSteps = append(rotationSteps, addition)
+			attachedCount++
+		}
 	}
 	for _, removed := range diff.toRemove[pairs:] {
-		appendRemoval(removed)
+		if removal, hasID := newRemoval(removed); hasID {
+			rotationSteps = append(rotationSteps, removal)
+			attachedCount--
+		}
 	}
 	for _, added := range diff.toAdd[pairs:] {
-		appendAddition(added)
+		rotationSteps = append(rotationSteps, newAddition(added))
+		attachedCount++
 	}
 
 	return rotationSteps
@@ -361,13 +389,13 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 
 	toAdd, toRemove := value.Difference(data, credentialsKey)
 	diff := classifyCredentialChanges(toAdd, toRemove)
-	rotationSteps := planCredentialRotation(diff)
 
 	var result *multierror.Error
 
-	if len(rotationSteps) > 0 {
-		// Snapshot the currently attached credentials so we can mutate the set incrementally,
-		// one slot at a time, without ever exceeding the max allowed creds.
+	if len(diff.toAdd) > 0 || len(diff.toRemove) > 0 {
+		// Snapshot the currently attached credentials so we can mutate the set
+		// incrementally, one slot at a time, without ever exceeding the cap. The
+		// live count also drives the per-pair add-first vs remove-first ordering.
 		existingCreds, err := api.Client.ListCredentials(ctx, clientID)
 		if err != nil {
 			return diag.FromErr(err)
@@ -378,7 +406,7 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 			attachedCreds = append(attachedCreds, management.Credential{ID: cred.ID})
 		}
 
-		for _, step := range rotationSteps {
+		for _, step := range planCredentialRotation(diff, len(attachedCreds)) {
 			switch step.kind {
 			case detachAndDelete:
 				attachedCreds = removeAttachedCredential(attachedCreds, step.credentialID)
@@ -386,7 +414,7 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 					return diag.FromErr(err)
 				}
 				if err := deleteCredentialIgnoringNotFound(ctx, api, clientID, step.credentialID); err != nil {
-					result = multierror.Append(result, err)
+					return diag.FromErr(err)
 				}
 			case createAndAttach:
 				credential := expandClientCredentialFromMap(step.newCredential)
@@ -395,13 +423,12 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 				}
 				attachedCreds = append(attachedCreds, management.Credential{ID: credential.ID})
 				if err := attachAuthenticationMethodCredentials(ctx, api, clientID, "private_key_jwt", attachedCreds); err != nil {
+					// Roll back the just-created credential so it does not linger
+					// unattached and consume a cap slot on the next apply.
+					_ = deleteCredentialIgnoringNotFound(ctx, api, clientID, credential.GetID())
 					return diag.FromErr(err)
 				}
 			}
-		}
-
-		if result.ErrorOrNil() != nil {
-			return diag.FromErr(result.ErrorOrNil())
 		}
 	}
 

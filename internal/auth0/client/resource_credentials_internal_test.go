@@ -66,97 +66,114 @@ func TestJWKThumbprint_UnsupportedInputReturnsEmpty(t *testing.T) {
 		"unsupported block type returns empty")
 }
 
-func TestPlanCredentialRotation_InterleavesSwaps(t *testing.T) {
-	diff := credentialDiff{
-		toRemove: []interface{}{
-			map[string]interface{}{"id": "old-1"},
-			map[string]interface{}{"id": "old-2"},
-		},
-		toAdd: []interface{}{
-			map[string]interface{}{"name": "new-1"},
-			map[string]interface{}{"name": "new-2"},
-		},
-	}
-
-	steps := planCredentialRotation(diff)
-
-	require.Len(t, steps, 4)
-	assert.Equal(t, detachAndDelete, steps[0].kind)
-	assert.Equal(t, "old-1", steps[0].credentialID)
-
-	assert.Equal(t, createAndAttach, steps[1].kind)
-	assert.Equal(t, "new-1", steps[1].newCredential["name"])
-
-	assert.Equal(t, detachAndDelete, steps[2].kind)
-	assert.Equal(t, "old-2", steps[2].credentialID)
-
-	assert.Equal(t, createAndAttach, steps[3].kind)
-	assert.Equal(t, "new-2", steps[3].newCredential["name"])
-}
-
-func TestPlanCredentialRotation_NeverExceedsStartingCountForBalancedSwap(t *testing.T) {
-	diff := credentialDiff{
-		toRemove: []interface{}{
-			map[string]interface{}{"id": "old-1"},
-			map[string]interface{}{"id": "old-2"},
-		},
-		toAdd: []interface{}{
-			map[string]interface{}{"name": "new-1"},
-			map[string]interface{}{"name": "new-2"},
-		},
-	}
-
-	steps := planCredentialRotation(diff)
-
-	// Simulate the credential-collection count as the steps execute. A
-	// detach+delete frees a slot (-1) before a create fills one (+1), so the
-	// collection count must never rise above the starting count of 2 — this
-	// is what keeps us within the tenant's (unknown) credential cap.
-	const start = 2
-	count, peak := start, start
-	for _, step := range steps {
+// simulateAttachedCount replays the rotation steps against a starting attached
+// count and returns the lowest and highest attached count seen at any step
+// boundary.
+func simulateAttachedCount(rotationSteps []rotationStep, startingAttachedCount int) (lowestAttachedCount, highestAttachedCount int) {
+	currentAttachedCount := startingAttachedCount
+	lowestAttachedCount, highestAttachedCount = startingAttachedCount, startingAttachedCount
+	for _, step := range rotationSteps {
 		switch step.kind {
 		case detachAndDelete:
-			count--
+			currentAttachedCount--
 		case createAndAttach:
-			count++
+			currentAttachedCount++
 		}
-		if count > peak {
-			peak = count
+		if currentAttachedCount < lowestAttachedCount {
+			lowestAttachedCount = currentAttachedCount
+		}
+		if currentAttachedCount > highestAttachedCount {
+			highestAttachedCount = currentAttachedCount
 		}
 	}
-	assert.Equal(t, start, peak, "collection count must never exceed the starting count during a balanced swap")
-	assert.Equal(t, start, count, "collection must return to the starting count after a balanced swap")
+	return lowestAttachedCount, highestAttachedCount
+}
+
+func TestPlanCredentialRotation_AtCapacityRemovesFirst(t *testing.T) {
+	// A full 2-for-2 swap starting at the cap: each pair must remove before it
+	// adds so the count never overshoots 2.
+	diff := credentialDiff{
+		toRemove: []interface{}{
+			map[string]interface{}{"id": "old-1"},
+			map[string]interface{}{"id": "old-2"},
+		},
+		toAdd: []interface{}{
+			map[string]interface{}{"name": "new-1"},
+			map[string]interface{}{"name": "new-2"},
+		},
+	}
+
+	const startingAttachedCount = 2
+	rotationSteps := planCredentialRotation(diff, startingAttachedCount)
+
+	require.Len(t, rotationSteps, 4)
+	assert.Equal(t, detachAndDelete, rotationSteps[0].kind)
+	assert.Equal(t, "old-1", rotationSteps[0].credentialID)
+	assert.Equal(t, createAndAttach, rotationSteps[1].kind)
+	assert.Equal(t, "new-1", rotationSteps[1].newCredential["name"])
+	assert.Equal(t, detachAndDelete, rotationSteps[2].kind)
+	assert.Equal(t, "old-2", rotationSteps[2].credentialID)
+	assert.Equal(t, createAndAttach, rotationSteps[3].kind)
+	assert.Equal(t, "new-2", rotationSteps[3].newCredential["name"])
+
+	lowestAttachedCount, highestAttachedCount := simulateAttachedCount(rotationSteps, startingAttachedCount)
+	assert.Equal(t, 2, highestAttachedCount, "count must never exceed the cap during a swap at capacity")
+	assert.Equal(t, 1, lowestAttachedCount, "at least one credential stays attached throughout")
+}
+
+func TestPlanCredentialRotation_WithHeadroomAddsFirst(t *testing.T) {
+	// A 1-for-1 swap on a client holding a single credential. With headroom
+	// below the minimum cap the new credential must be added before the old one
+	// is removed, so the client is never left with zero attached credentials.
+	diff := credentialDiff{
+		toRemove: []interface{}{map[string]interface{}{"id": "old-1"}},
+		toAdd:    []interface{}{map[string]interface{}{"name": "new-1"}},
+	}
+
+	const startingAttachedCount = 1
+	rotationSteps := planCredentialRotation(diff, startingAttachedCount)
+
+	require.Len(t, rotationSteps, 2)
+	assert.Equal(t, createAndAttach, rotationSteps[0].kind)
+	assert.Equal(t, "new-1", rotationSteps[0].newCredential["name"])
+	assert.Equal(t, detachAndDelete, rotationSteps[1].kind)
+	assert.Equal(t, "old-1", rotationSteps[1].credentialID)
+
+	lowestAttachedCount, highestAttachedCount := simulateAttachedCount(rotationSteps, startingAttachedCount)
+	assert.GreaterOrEqual(t, lowestAttachedCount, 1, "a valid credential must stay attached throughout a 1-for-1 rotation")
+	assert.Equal(t, 2, highestAttachedCount, "adding first briefly holds 2, which every tenant allows")
 }
 
 func TestPlanCredentialRotation_HandlesUnevenAndPureChanges(t *testing.T) {
-	add := planCredentialRotation(credentialDiff{
+	pureAdditionSteps := planCredentialRotation(credentialDiff{
 		toAdd: []interface{}{map[string]interface{}{"name": "new-1"}},
-	})
-	require.Len(t, add, 1)
-	assert.Equal(t, createAndAttach, add[0].kind)
+	}, 0)
+	require.Len(t, pureAdditionSteps, 1)
+	assert.Equal(t, createAndAttach, pureAdditionSteps[0].kind)
 
-	remove := planCredentialRotation(credentialDiff{
+	pureRemovalSteps := planCredentialRotation(credentialDiff{
 		toRemove: []interface{}{map[string]interface{}{"id": "old-1"}},
-	})
-	require.Len(t, remove, 1)
-	assert.Equal(t, detachAndDelete, remove[0].kind)
+	}, 1)
+	require.Len(t, pureRemovalSteps, 1)
+	assert.Equal(t, detachAndDelete, pureRemovalSteps[0].kind)
 
-	// More removals than additions: one interleaved pair, then a trailing removal.
-	uneven1 := planCredentialRotation(credentialDiff{
+	// More removals than additions, starting at capacity: one interleaved pair
+	// (remove-first), then a trailing removal.
+	moreRemovalsThanAdditionsSteps := planCredentialRotation(credentialDiff{
 		toRemove: []interface{}{
 			map[string]interface{}{"id": "old-1"},
 			map[string]interface{}{"id": "old-2"},
 		},
 		toAdd: []interface{}{map[string]interface{}{"name": "new-1"}},
-	})
-	require.Len(t, uneven1, 3)
-	assert.Equal(t, detachAndDelete, uneven1[0].kind)
-	assert.Equal(t, createAndAttach, uneven1[1].kind)
-	assert.Equal(t, detachAndDelete, uneven1[2].kind)
+	}, 2)
+	require.Len(t, moreRemovalsThanAdditionsSteps, 3)
+	assert.Equal(t, detachAndDelete, moreRemovalsThanAdditionsSteps[0].kind)
+	assert.Equal(t, createAndAttach, moreRemovalsThanAdditionsSteps[1].kind)
+	assert.Equal(t, detachAndDelete, moreRemovalsThanAdditionsSteps[2].kind)
 
-	// More additions than removals: one interleaved pair, then a trailing addition.
-	uneven2 := planCredentialRotation(credentialDiff{
+	// More additions than removals, starting with headroom: the pair adds first,
+	// then a trailing addition.
+	moreAdditionsThanRemovalsSteps := planCredentialRotation(credentialDiff{
 		toRemove: []interface{}{
 			map[string]interface{}{"id": "old-1"},
 		},
@@ -164,26 +181,26 @@ func TestPlanCredentialRotation_HandlesUnevenAndPureChanges(t *testing.T) {
 			map[string]interface{}{"name": "new-1"},
 			map[string]interface{}{"name": "new-2"},
 		},
-	})
-	require.Len(t, uneven2, 3)
-	assert.Equal(t, detachAndDelete, uneven2[0].kind)
-	assert.Equal(t, createAndAttach, uneven2[1].kind)
-	assert.Equal(t, createAndAttach, uneven2[2].kind)
+	}, 1)
+	require.Len(t, moreAdditionsThanRemovalsSteps, 3)
+	assert.Equal(t, createAndAttach, moreAdditionsThanRemovalsSteps[0].kind)
+	assert.Equal(t, detachAndDelete, moreAdditionsThanRemovalsSteps[1].kind)
+	assert.Equal(t, createAndAttach, moreAdditionsThanRemovalsSteps[2].kind)
 }
 
 func TestPlanCredentialRotation_SkipsRemovalsWithoutID(t *testing.T) {
-	steps := planCredentialRotation(credentialDiff{
+	rotationSteps := planCredentialRotation(credentialDiff{
 		toRemove: []interface{}{map[string]interface{}{"id": ""}},
-	})
-	assert.Empty(t, steps)
+	}, 1)
+	assert.Empty(t, rotationSteps)
 }
 
 func TestRemoveAttachedCredential(t *testing.T) {
-	id1, id2 := "cred-1", "cred-2"
-	creds := []management.Credential{{ID: &id1}, {ID: &id2}}
+	firstCredentialID, secondCredentialID := "cred-1", "cred-2"
+	attachedCredentials := []management.Credential{{ID: &firstCredentialID}, {ID: &secondCredentialID}}
 
-	result := removeAttachedCredential(creds, "cred-1")
+	remainingCredentials := removeAttachedCredential(attachedCredentials, "cred-1")
 
-	require.Len(t, result, 1)
-	assert.Equal(t, "cred-2", result[0].GetID())
+	require.Len(t, remainingCredentials, 1)
+	assert.Equal(t, "cred-2", remainingCredentials[0].GetID())
 }

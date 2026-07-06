@@ -1,6 +1,8 @@
 package ratelimitpolicy
 
 import (
+	"encoding/json"
+
 	"github.com/auth0/go-auth0/v2/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -23,25 +25,45 @@ func flattenRateLimitPolicy(data *schema.ResourceData, policy *management.GetRat
 }
 
 func flattenRateLimitPolicyConfiguration(cfg *management.RateLimitPolicyConfiguration) []interface{} {
-	if cfg == nil {
+	// The SDK's oneOf deserialization always matches the allow (Zero) variant for every response,
+	// because encoding/json ignores the unknown fields that would otherwise distinguish the
+	// block/log/redirect variants. So `action` is read from the Zero variant, while `limit` and
+	// `redirect_uri` (present for block/log/redirect) land in its extra properties.
+	zero := cfg.GetRateLimitPolicyConfigurationZero()
+	if zero == nil {
 		return nil
 	}
 
-	m := map[string]interface{}{}
-	switch {
-	case cfg.RateLimitPolicyConfigurationZero != nil:
-		m["action"] = string(cfg.RateLimitPolicyConfigurationZero.GetAction())
-	case cfg.RateLimitPolicyConfigurationOne != nil:
-		m["action"] = string(cfg.RateLimitPolicyConfigurationOne.GetAction())
-		m["limit"] = cfg.RateLimitPolicyConfigurationOne.GetLimit()
-	case cfg.RateLimitPolicyConfigurationAction != nil:
-		m["action"] = string(cfg.RateLimitPolicyConfigurationAction.GetAction())
-		m["limit"] = cfg.RateLimitPolicyConfigurationAction.GetLimit()
-		m["redirect_uri"] = cfg.RateLimitPolicyConfigurationAction.GetRedirectURI()
-	default:
-		return nil
+	m := map[string]interface{}{
+		"action": string(zero.GetAction()),
 	}
+
+	extra := zero.GetExtraProperties()
+	if limit, ok := extraInt(extra, "limit"); ok {
+		m["limit"] = limit
+	}
+	if uri, ok := extra["redirect_uri"].(string); ok {
+		m["redirect_uri"] = uri
+	}
+
 	return []interface{}{m}
+}
+
+// extraInt reads an integer from an extra-properties map, coping with the numeric types
+// encoding/json produces when deserializing into interface{} (float64) or json.Number.
+func extraInt(extra map[string]interface{}, key string) (int, bool) {
+	switch n := extra[key].(type) {
+	case float64:
+		return int(n), true
+	case int:
+		return n, true
+	case json.Number:
+		if i, err := n.Int64(); err == nil {
+			return int(i), true
+		}
+	}
+
+	return 0, false
 }
 
 // flattenRateLimitPolicyList converts a list of policies (from the List endpoint) into the

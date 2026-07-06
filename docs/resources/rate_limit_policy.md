@@ -49,8 +49,8 @@ Required:
 
 Optional:
 
-- `limit` (Number) Maximum number of requests allowed in a single window (0-10000). Required for `block`, `log`, and `redirect` actions. (EA only)
-- `redirect_uri` (String) HTTPS URI to redirect to when the rate limit is exceeded. Required (and only valid) for the `redirect` action. (EA only)
+- `limit` (Number) Maximum number of requests allowed in a single window (0-10000). Required and only valid for the `block`, `log`, and `redirect` actions. (EA only)
+- `redirect_uri` (String) HTTPS URI to redirect to when the rate limit is exceeded. Required and only valid for the `redirect` action. (EA only)
 
 ## Import
 

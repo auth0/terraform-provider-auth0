@@ -44,70 +44,65 @@ func readConfiguration(list cty.Value) (action string, limit *int, redirectURI *
 }
 
 // expandConfigurationUnion routes the configured fields into the SDK's configuration union. The
-// variant is chosen by which fields the user set: redirect_uri => redirect variant, else limit =>
-// block/log variant, else the allow variant. The action string is forwarded verbatim. Field-level
-// validity (e.g. redirect requires limit, allow forbids limit) is enforced at plan time by
-// validateRateLimitPolicyConfiguration, so limit is guaranteed present here whenever it is
-// dereferenced.
+// variant is chosen by `action`, and only the fields valid for that action are emitted. So fields
+// that do not apply (e.g. a generated `limit = 0` on an `allow` policy) are dropped rather than
+// sent to the API. Required fields are guaranteed present by validateRateLimitPolicyConfiguration,
+// so the dereferences below are safe.
 func expandConfigurationUnion(action string, limit *int, redirectURI *string) *management.RateLimitPolicyConfiguration {
-	if action == "" && limit == nil && redirectURI == nil {
-		return nil
-	}
-
-	if redirectURI != nil && limit != nil {
+	switch action {
+	case string(management.RateLimitPolicyConfigurationZeroActionAllow):
 		return &management.RateLimitPolicyConfiguration{
-			RateLimitPolicyConfigurationAction: &management.RateLimitPolicyConfigurationAction{
-				Action:      management.RateLimitPolicyConfigurationActionAction(action),
-				Limit:       *limit,
-				RedirectURI: *redirectURI,
+			RateLimitPolicyConfigurationZero: &management.RateLimitPolicyConfigurationZero{
+				Action: management.RateLimitPolicyConfigurationZeroActionAllow,
 			},
 		}
-	}
-
-	if limit != nil {
+	case string(management.RateLimitPolicyConfigurationOneActionBlock),
+		string(management.RateLimitPolicyConfigurationOneActionLog):
 		return &management.RateLimitPolicyConfiguration{
 			RateLimitPolicyConfigurationOne: &management.RateLimitPolicyConfigurationOne{
 				Action: management.RateLimitPolicyConfigurationOneAction(action),
 				Limit:  *limit,
 			},
 		}
-	}
-
-	return &management.RateLimitPolicyConfiguration{
-		RateLimitPolicyConfigurationZero: &management.RateLimitPolicyConfigurationZero{
-			Action: management.RateLimitPolicyConfigurationZeroAction(action),
-		},
+	case string(management.RateLimitPolicyConfigurationActionActionRedirect):
+		return &management.RateLimitPolicyConfiguration{
+			RateLimitPolicyConfigurationAction: &management.RateLimitPolicyConfigurationAction{
+				Action:      management.RateLimitPolicyConfigurationActionActionRedirect,
+				Limit:       *limit,
+				RedirectURI: *redirectURI,
+			},
+		}
+	default:
+		return nil
 	}
 }
 
 // expandPatchConfigurationUnion mirrors expandConfigurationUnion for the PATCH-only union type.
 func expandPatchConfigurationUnion(action string, limit *int, redirectURI *string) *management.PatchRateLimitPolicyConfigurationRequestContent {
-	if action == "" && limit == nil && redirectURI == nil {
-		return nil
-	}
-
-	if redirectURI != nil && limit != nil {
+	switch action {
+	case string(management.PatchRateLimitPolicyConfigurationRequestContentZeroActionAllow):
 		return &management.PatchRateLimitPolicyConfigurationRequestContent{
-			PatchRateLimitPolicyConfigurationRequestContentAction: &management.PatchRateLimitPolicyConfigurationRequestContentAction{
-				Action:      management.PatchRateLimitPolicyConfigurationRequestContentActionAction(action),
-				Limit:       *limit,
-				RedirectURI: *redirectURI,
+			PatchRateLimitPolicyConfigurationRequestContentZero: &management.PatchRateLimitPolicyConfigurationRequestContentZero{
+				Action: management.PatchRateLimitPolicyConfigurationRequestContentZeroActionAllow,
 			},
 		}
-	}
-
-	if limit != nil {
+	case string(management.PatchRateLimitPolicyConfigurationRequestContentOneActionBlock),
+		string(management.PatchRateLimitPolicyConfigurationRequestContentOneActionLog):
 		return &management.PatchRateLimitPolicyConfigurationRequestContent{
 			PatchRateLimitPolicyConfigurationRequestContentOne: &management.PatchRateLimitPolicyConfigurationRequestContentOne{
 				Action: management.PatchRateLimitPolicyConfigurationRequestContentOneAction(action),
 				Limit:  *limit,
 			},
 		}
-	}
-
-	return &management.PatchRateLimitPolicyConfigurationRequestContent{
-		PatchRateLimitPolicyConfigurationRequestContentZero: &management.PatchRateLimitPolicyConfigurationRequestContentZero{
-			Action: management.PatchRateLimitPolicyConfigurationRequestContentZeroAction(action),
-		},
+	case string(management.PatchRateLimitPolicyConfigurationRequestContentActionActionRedirect):
+		return &management.PatchRateLimitPolicyConfigurationRequestContent{
+			PatchRateLimitPolicyConfigurationRequestContentAction: &management.PatchRateLimitPolicyConfigurationRequestContentAction{
+				Action:      management.PatchRateLimitPolicyConfigurationRequestContentActionActionRedirect,
+				Limit:       *limit,
+				RedirectURI: *redirectURI,
+			},
+		}
+	default:
+		return nil
 	}
 }

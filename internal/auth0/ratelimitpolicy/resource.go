@@ -68,14 +68,14 @@ func NewResource() *schema.Resource {
 							Optional:     true,
 							ValidateFunc: validation.IntBetween(0, 10000),
 							Description: "Maximum number of requests allowed in a single window (0-10000). " +
-								"Required for `block`, `log`, and `redirect` actions. (EA only)",
+								"Required and only valid for the `block`, `log`, and `redirect` actions. (EA only)",
 						},
 						"redirect_uri": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							ValidateFunc: validation.IsURLWithHTTPS,
 							Description: "HTTPS URI to redirect to when the rate limit is exceeded. " +
-								"Required (and only valid) for the `redirect` action. (EA only)",
+								"Required and only valid for the `redirect` action. (EA only)",
 						},
 					},
 				},
@@ -114,23 +114,16 @@ func validateRateLimitPolicyConfiguration(_ context.Context, diff *schema.Resour
 }
 
 // checkRateLimitPolicyConfiguration is the pure validation core, split out so it can be unit
-// tested without constructing a schema.ResourceDiff.
+// tested without constructing a schema.ResourceDiff. It only enforces which fields are *required*
+// for each action; fields that are not applicable to an action (e.g. `limit` on `allow`) are
+// ignored rather than rejected, so that Terraform config generation, which cannot omit an
+// optional `TypeInt` and always emits `limit = 0` round-trips cleanly.
 func checkRateLimitPolicyConfiguration(action string, limit *int, redirectURI *string) error {
 	switch action {
-	case string(management.RateLimitPolicyConfigurationZeroActionAllow):
-		if limit != nil {
-			return fmt.Errorf("`limit` must not be set when `action` is %q", action)
-		}
-		if redirectURI != nil {
-			return fmt.Errorf("`redirect_uri` must not be set when `action` is %q", action)
-		}
 	case string(management.RateLimitPolicyConfigurationOneActionBlock),
 		string(management.RateLimitPolicyConfigurationOneActionLog):
 		if limit == nil {
 			return fmt.Errorf("`limit` is required when `action` is %q", action)
-		}
-		if redirectURI != nil {
-			return fmt.Errorf("`redirect_uri` must not be set when `action` is %q", action)
 		}
 	case string(management.RateLimitPolicyConfigurationActionActionRedirect):
 		if limit == nil {

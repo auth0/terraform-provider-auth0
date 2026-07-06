@@ -102,6 +102,17 @@ func Time(rawValue cty.Value) *time.Time {
 	return &value
 }
 
+// FormatTime renders a time.Time as a normalized UTC RFC3339 string, matching the format Auth0
+// APIs use for date-time fields. A zero time (an absent timestamp) becomes an empty string rather
+// than the RFC3339 zero value.
+func FormatTime(t time.Time) string {
+	if t.IsZero() {
+		return ""
+	}
+
+	return t.UTC().Format(time.RFC3339)
+}
+
 // Strings evaluates the typed value of the value
 // and coerces to a pointer of a slice of strings.
 func Strings(rawValues cty.Value) *[]string {

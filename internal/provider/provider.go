@@ -35,6 +35,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/page"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/ratelimitpolicy"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/riskassessment"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
@@ -208,6 +209,7 @@ func New() *schema.Provider {
 			"auth0_prompt_screen_partial":                    prompt.NewScreenPartialResource(),
 			"auth0_prompt_screen_partials":                   prompt.NewScreenPartialsResource(),
 			"auth0_prompt_screen_renderer":                   prompt.NewPromptScreenRenderResource(),
+			"auth0_rate_limit_policy":                        ratelimitpolicy.NewResource(),
 			"auth0_resource_server":                          resourceserver.NewResource(),
 			"auth0_resource_server_scope":                    resourceserver.NewScopeResource(),
 			"auth0_resource_server_scopes":                   resourceserver.NewScopesResource(),

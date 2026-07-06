@@ -4,6 +4,8 @@ import (
 	mgmtv2 "github.com/auth0/go-auth0/v2/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 func flattenCIMDClient(data *schema.ResourceData, client *mgmtv2.GetClientResponseContent, validation *mgmtv2.CimdValidationResult) error {
@@ -24,7 +26,7 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv2.GetClientRespon
 		data.Set("web_origins", client.GetWebOrigins()),
 		data.Set("grant_types", client.GetGrantTypes()),
 		data.Set("oidc_conformant", client.GetOidcConformant()),
-		data.Set("organization_discovery_methods", enumSliceToStrings(client.OrganizationDiscoveryMethods)),
+		data.Set("organization_discovery_methods", internalSchema.ToStrSlice(client.OrganizationDiscoveryMethods...)),
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt", client.GetSkipNonVerifiableCallbackURIConfirmationPrompt()),
 		data.Set("third_party_security_mode", string(client.GetThirdPartySecurityMode())),
@@ -80,7 +82,7 @@ func flattenCIMDDefaultOrganization(do *mgmtv2.ClientDefaultOrganization) []inte
 
 	m := map[string]interface{}{
 		"organization_id": do.GetOrganizationID(),
-		"flows":           enumSliceToStrings(do.GetFlows()),
+		"flows":           internalSchema.ToStrSlice(do.GetFlows()...),
 	}
 
 	return []interface{}{m}
@@ -144,15 +146,4 @@ func flattenCIMDValidation(v *mgmtv2.CimdValidationResult) []interface{} {
 			"warnings":   v.GetWarnings(),
 		},
 	}
-}
-
-func enumSliceToStrings[T ~string](s []T) []string {
-	if s == nil {
-		return nil
-	}
-	result := make([]string, len(s))
-	for i, v := range s {
-		result[i] = string(v)
-	}
-	return result
 }

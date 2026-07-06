@@ -266,6 +266,8 @@ func New() *schema.Provider {
 			"auth0_phone_notification_template":              branding.NewPhoneNotificationTemplateDataSource(),
 			"auth0_prompt_screen_partials":                   prompt.NewPromptScreenPartialsDataSource(),
 			"auth0_prompt_screen_renderer":                   prompt.NewPromptScreenRenderDataSource(),
+			"auth0_rate_limit_policies":                      ratelimitpolicy.NewRateLimitPoliciesDataSource(),
+			"auth0_rate_limit_policy":                        ratelimitpolicy.NewDataSource(),
 			"auth0_resource_server":                          resourceserver.NewDataSource(),
 			"auth0_role":                                     role.NewDataSource(),
 			"auth0_self_service_profile":                     selfserviceprofile.NewDataSource(),

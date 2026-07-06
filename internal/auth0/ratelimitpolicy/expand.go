@@ -22,7 +22,7 @@ func expandRateLimitPolicyCreate(data *schema.ResourceData) *management.CreateRa
 func expandRateLimitPolicyPatch(data *schema.ResourceData) *management.PatchRateLimitPolicyRequestContent {
 	patch := &management.PatchRateLimitPolicyRequestContent{}
 
-	// Configuration is the only updatable field; only send it when it actually changed.
+	// Configuration is the only updatable field.
 	if data.HasChange("configuration") {
 		action, limit, redirectURI := readConfiguration(data.GetRawConfig().GetAttr("configuration"))
 		patch.Configuration = expandPatchConfigurationUnion(action, limit, redirectURI)
@@ -31,9 +31,7 @@ func expandRateLimitPolicyPatch(data *schema.ResourceData) *management.PatchRate
 	return patch
 }
 
-// readConfiguration extracts the configuration block as configured. Limit and redirectURI are
-// nil when the user did not set them (distinct from limit = 0), so callers can forward exactly
-// what was configured.
+// readConfiguration returns nil limit/redirectURI when unset, keeping that distinct from limit = 0.
 func readConfiguration(list cty.Value) (action string, limit *int, redirectURI *string) {
 	if list.IsNull() || list.LengthInt() == 0 {
 		return "", nil, nil
@@ -43,11 +41,9 @@ func readConfiguration(list cty.Value) (action string, limit *int, redirectURI *
 	return cfg.GetAttr("action").AsString(), value.Int(cfg.GetAttr("limit")), value.String(cfg.GetAttr("redirect_uri"))
 }
 
-// expandConfigurationUnion routes the configured fields into the SDK's configuration union. The
-// variant is chosen by `action`, and only the fields valid for that action are emitted. So fields
-// that do not apply (e.g. a generated `limit = 0` on an `allow` policy) are dropped rather than
-// sent to the API. Required fields are guaranteed present by validateRateLimitPolicyConfiguration,
-// so the dereferences below are safe.
+// expandConfigurationUnion selects the union variant by action, emitting only that action's fields
+// (so a generated `limit = 0` on an `allow` policy is dropped, not sent). Required fields are
+// guaranteed by validateRateLimitPolicyConfiguration, so the dereferences below are safe.
 func expandConfigurationUnion(action string, limit *int, redirectURI *string) *management.RateLimitPolicyConfiguration {
 	switch action {
 	case string(management.RateLimitPolicyConfigurationZeroActionAllow):

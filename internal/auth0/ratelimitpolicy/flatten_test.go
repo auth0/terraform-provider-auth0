@@ -18,10 +18,8 @@ func TestFlattenConfiguration(t *testing.T) {
 	})
 }
 
-// TestFlattenConfigurationFromAPIResponse exercises the real deserialization path: the SDK's oneOf
-// unmarshalling greedily matches the allow (Zero) variant for every response and drops the
-// block/log/redirect fields into extra properties. Flatten must still recover limit and
-// redirect_uri from there so they are not lost from state.
+// TestFlattenConfigurationFromAPIResponse goes through the real json.Unmarshal path, where the SDK
+// oneOf bug forces every variant into Zero, to prove limit/redirect_uri are recovered from extras.
 func TestFlattenConfigurationFromAPIResponse(t *testing.T) {
 	unmarshal := func(t *testing.T, raw string) *management.RateLimitPolicyConfiguration {
 		t.Helper()

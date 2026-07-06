@@ -47,9 +47,6 @@ func NewRateLimitPoliciesDataSource() *schema.Resource {
 	}
 }
 
-// rateLimitPolicyListElemSchema reuses the resource schema (all attributes Computed) and adds
-// an `id` attribute, since each list element exposes the policy's own ID (the resource schema
-// itself has no `id` attribute — a resource's ID is implicit via data.SetId).
 func rateLimitPolicyListElemSchema() map[string]*schema.Schema {
 	elem := internalSchema.TransformResourceToDataSource(NewResource().Schema)
 	elem["id"] = &schema.Schema{

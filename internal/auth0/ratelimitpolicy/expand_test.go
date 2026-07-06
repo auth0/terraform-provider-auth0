@@ -17,8 +17,7 @@ func TestExpandConfigurationUnion_Create(t *testing.T) {
 	})
 
 	t.Run("allow ignores a generated limit=0", func(t *testing.T) {
-		// Config generation cannot omit an optional TypeInt, so it emits limit = 0 for an allow
-		// policy. The action drives the variant, so the limit is dropped rather than sent.
+		// Generated config emits limit = 0 for allow; the action drives the variant, so it's dropped.
 		cfg := expandConfigurationUnion("allow", auth0.Int(0), nil)
 		assert.NotNil(t, cfg.RateLimitPolicyConfigurationZero)
 		assert.Nil(t, cfg.RateLimitPolicyConfigurationOne)
@@ -77,8 +76,7 @@ func TestExpandPatchConfigurationUnion(t *testing.T) {
 
 func TestCheckRateLimitPolicyConfiguration(t *testing.T) {
 	t.Run("allow is valid regardless of limit or uri", func(t *testing.T) {
-		// Non-applicable fields are ignored for allow (not rejected), so a generated limit=0 or a
-		// stray redirect_uri does not fail the plan.
+		// Inapplicable fields are ignored for allow, not rejected, so generated config still plans.
 		assert.NoError(t, checkRateLimitPolicyConfiguration("allow", nil, nil))
 		assert.NoError(t, checkRateLimitPolicyConfiguration("allow", auth0.Int(0), nil))
 		assert.NoError(t, checkRateLimitPolicyConfiguration("allow", auth0.Int(100), auth0.String("https://example.com")))

@@ -94,8 +94,7 @@ func NewResource() *schema.Resource {
 	}
 }
 
-// rateLimitPolicyActions returns the valid `configuration.action` values.
-// They live across multiple SDK union types, so each group is converted separately.
+// rateLimitPolicyActions returns the valid `action` values, which span multiple SDK union types.
 func rateLimitPolicyActions() []string {
 	actions := internalSchema.ToStrSlice(management.RateLimitPolicyConfigurationZeroActionAllow)
 	actions = append(actions, internalSchema.ToStrSlice(management.RateLimitPolicyConfigurationOneActionBlock, management.RateLimitPolicyConfigurationOneActionLog)...)
@@ -104,20 +103,14 @@ func rateLimitPolicyActions() []string {
 	return actions
 }
 
-// validateRateLimitPolicyConfiguration enforces the spec's `configuration` oneOf field
-// requirements at plan time, so an invalid combination fails before an API call rather than
-// being silently coerced (e.g. a missing `limit` defaulting to 0).
 func validateRateLimitPolicyConfiguration(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
 	action, limit, redirectURI := readConfiguration(diff.GetRawConfig().GetAttr("configuration"))
 
 	return checkRateLimitPolicyConfiguration(action, limit, redirectURI)
 }
 
-// checkRateLimitPolicyConfiguration is the pure validation core, split out so it can be unit
-// tested without constructing a schema.ResourceDiff. It only enforces which fields are *required*
-// for each action; fields that are not applicable to an action (e.g. `limit` on `allow`) are
-// ignored rather than rejected, so that Terraform config generation, which cannot omit an
-// optional `TypeInt` and always emits `limit = 0` round-trips cleanly.
+// checkRateLimitPolicyConfiguration enforces only the fields each action *requires*. Inapplicable
+// fields are ignored, not rejected, so generated config (which always emits `limit = 0`) round-trips.
 func checkRateLimitPolicyConfiguration(action string, limit *int, redirectURI *string) error {
 	switch action {
 	case string(management.RateLimitPolicyConfigurationOneActionBlock),

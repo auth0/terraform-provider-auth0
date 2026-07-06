@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/hashicorp/go-cty/cty"
@@ -495,6 +496,35 @@ func NewResource() *schema.Resource {
 				Description: "Sets the third_party_security_mode assigned to clients created via Dynamic Client Registration. " +
 					"Can only be configured by [customers with pre-existing third-party client usage before April 2026]" +
 					"(https://auth0.com/docs/get-started/applications/third-party-applications/permissive-mode#dynamic-client-registration-in-permissive-mode).",
+			},
+			"country_codes": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configuration for phone identifier country code filtering. Remove this block to disable filtering. Requires the country codes feature flag to be enabled on the tenant.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"list": {
+							Type:        schema.TypeSet,
+							Required:    true,
+							MinItems:    1,
+							Description: "List of ISO 3166-1 alpha-2 country codes.",
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+								ValidateFunc: validation.StringMatch(
+									regexp.MustCompile(`^[A-Z]{2}$`),
+									"must be an uppercase ISO 3166-1 alpha-2 country code (e.g. \"US\", \"GB\")",
+								),
+							},
+						},
+						"mode": {
+							Type:         schema.TypeString,
+							Required:     true,
+							ValidateFunc: validation.StringInSlice([]string{"allow", "deny"}, false),
+							Description:  "Whether the list is an allow-list or deny-list. Available options: `allow`, `deny`.",
+						},
+					},
+				},
 			},
 		},
 	}

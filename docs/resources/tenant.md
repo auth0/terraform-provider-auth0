@@ -47,6 +47,13 @@ resource "auth0_tenant" "my_tenant" {
     show_log_link = false
     url           = "https://example.com/error"
   }
+
+  # Requires the country codes feature flag to be enabled on the tenant.
+  # Remove this block entirely to disable filtering.
+  country_codes {
+    list = ["US", "CA"]
+    mode = "allow"
+  }
 }
 ```
 
@@ -59,6 +66,7 @@ resource "auth0_tenant" "my_tenant" {
 - `allow_organization_name_in_authentication_api` (Boolean) Whether to accept an organization name instead of an ID on auth endpoints.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `client_id_metadata_document_supported` (Boolean) Whether the tenant supports Client ID Metadata Document (CIMD) for client registration.
+- `country_codes` (Block List, Max: 1) Configuration for phone identifier country code filtering. Remove this block to disable filtering. Requires the country codes feature flag to be enabled on the tenant. (see [below for nested schema](#nestedblock--country_codes))
 - `customize_mfa_in_postlogin_action` (Boolean) Whether to enable flexible factors for MFA in the PostLogin action.
 - `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
 - `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
@@ -90,6 +98,15 @@ resource "auth0_tenant" "my_tenant" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+
+<a id="nestedblock--country_codes"></a>
+### Nested Schema for `country_codes`
+
+Required:
+
+- `list` (Set of String) List of ISO 3166-1 alpha-2 country codes.
+- `mode` (String) Whether the list is an allow-list or deny-list. Available options: `allow`, `deny`.
+
 
 <a id="nestedblock--default_token_quota"></a>
 ### Nested Schema for `default_token_quota`

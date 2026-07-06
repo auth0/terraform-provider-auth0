@@ -109,6 +109,17 @@ resource "auth0_branding_theme" "my_theme" {
     logo_url              = "https://google.com/logo.png"
     social_buttons_layout = "top"
   }
+
+  # Requires the identifier input feature flag to be enabled on the tenant.
+  identifiers {
+    login_display    = "unified"
+    otp_autocomplete = true
+
+    phone_display {
+      formatting = "international"
+      masking    = "mask_digits"
+    }
+  }
 }
 ```
 
@@ -126,6 +137,7 @@ resource "auth0_branding_theme" "my_theme" {
 ### Optional
 
 - `display_name` (String) The display name for the branding theme.
+- `identifiers` (Block List, Max: 1) Configuration for identifier input display settings. Requires the identifier input feature flag to be enabled on the tenant. (see [below for nested schema](#nestedblock--identifiers))
 
 ### Read-Only
 
@@ -266,6 +278,24 @@ Optional:
 - `logo_position` (String) Logo position. Available options: `center`, `left`, `right`, `none`. Defaults to `center`.
 - `logo_url` (String) Logo url. Defaults to an empty string.
 - `social_buttons_layout` (String) Social buttons layout. Available options: `bottom`, `top`. Defaults to `bottom`.
+
+
+<a id="nestedblock--identifiers"></a>
+### Nested Schema for `identifiers`
+
+Required:
+
+- `login_display` (String) Login display style. Available options: `unified`, `separate`.
+- `otp_autocomplete` (Boolean) Whether OTP autocomplete is enabled.
+- `phone_display` (Block List, Min: 1, Max: 1) Phone number display settings. (see [below for nested schema](#nestedblock--identifiers--phone_display))
+
+<a id="nestedblock--identifiers--phone_display"></a>
+### Nested Schema for `identifiers.phone_display`
+
+Required:
+
+- `formatting` (String) Phone number formatting. Available options: `international`, `regional`.
+- `masking` (String) Phone number masking. Available options: `mask_digits`, `hide_country_code`, `show_all`.
 
 ## Import
 

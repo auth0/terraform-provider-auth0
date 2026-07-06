@@ -24,6 +24,7 @@ data "auth0_branding_theme" "my_branding_theme" {}
 - `display_name` (String) The display name for the branding theme.
 - `fonts` (List of Object) (see [below for nested schema](#nestedatt--fonts))
 - `id` (String) The ID of this resource.
+- `identifiers` (List of Object) Configuration for identifier input display settings. Requires the identifier input feature flag to be enabled on the tenant. (see [below for nested schema](#nestedatt--identifiers))
 - `page_background` (List of Object) (see [below for nested schema](#nestedatt--page_background))
 - `widget` (List of Object) (see [below for nested schema](#nestedatt--widget))
 
@@ -136,6 +137,25 @@ Read-Only:
 
 - `bold` (Boolean)
 - `size` (Number)
+
+
+
+<a id="nestedatt--identifiers"></a>
+### Nested Schema for `identifiers`
+
+Read-Only:
+
+- `login_display` (String)
+- `otp_autocomplete` (Boolean)
+- `phone_display` (List of Object) (see [below for nested schema](#nestedobjatt--identifiers--phone_display))
+
+<a id="nestedobjatt--identifiers--phone_display"></a>
+### Nested Schema for `identifiers.phone_display`
+
+Read-Only:
+
+- `formatting` (String)
+- `masking` (String)
 
 
 

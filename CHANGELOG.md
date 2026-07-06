@@ -3,6 +3,9 @@
 BREAKING CHANGES:
 
 * `auth0_tenant`: The `default_redirection_uri` field is no longer `Computed`. Users who omit this field from their configuration but have a non-empty value set on the remote tenant will see a plan diff on the next `terraform plan`. To prevent an unintended clear, explicitly add `default_redirection_uri = "<current value>"` to your configuration before upgrading.
+ENHANCEMENTS:
+- `resource/auth0_branding_theme` – Add `identifiers` block for configuring identifier input display settings (`login_display`, `otp_autocomplete`, `phone_display`). Requires the identifier input feature flag to be enabled on the tenant; when the flag is first enabled, existing themes will reflect the API's default values in state on the next refresh with no plan diff.
+- `resource/auth0_tenant` – Add `country_codes` block for configuring phone identifier country code allow/deny filtering (`list`, `mode`). Requires the country codes feature flag to be enabled on the tenant; remove the block to disable filtering.
 
 ## v1.51.0
 

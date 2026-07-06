@@ -111,7 +111,24 @@ func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
 		SocialButtonsLayout: data.Get("widget.0.social_buttons_layout").(string),
 	}
 
+	brandingTheme.Identifiers = expandBrandingThemeIdentifiers(data)
+
 	return brandingTheme
+}
+
+func expandBrandingThemeIdentifiers(data *schema.ResourceData) *management.BrandingThemeIdentifiers {
+	if len(data.Get("identifiers").([]interface{})) == 0 {
+		return nil
+	}
+
+	return &management.BrandingThemeIdentifiers{
+		LoginDisplay:    data.Get("identifiers.0.login_display").(string),
+		OTPAutocomplete: data.Get("identifiers.0.otp_autocomplete").(bool),
+		PhoneDisplay: management.BrandingThemePhoneDisplay{
+			Formatting: data.Get("identifiers.0.phone_display.0.formatting").(string),
+			Masking:    data.Get("identifiers.0.phone_display.0.masking").(string),
+		},
+	}
 }
 
 func expandBrandingColors(config cty.Value) *management.BrandingColors {

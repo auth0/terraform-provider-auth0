@@ -1,6 +1,7 @@
 package branding_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -401,6 +402,103 @@ func TestAccBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.logo_position", "center"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.logo_url", "https://google.com/logo.png"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.social_buttons_layout", "top"),
+				),
+			},
+		},
+	})
+}
+
+// testAccPreCheckFeatureIdentifierInput skips the test unless
+// AUTH0_FEATURE_IDENTIFIER_INPUT is set, since the identifiers block on
+// auth0_branding_theme requires a tenant with the identifier input feature
+// flag enabled.
+func testAccPreCheckFeatureIdentifierInput(t *testing.T) {
+	t.Helper()
+
+	if os.Getenv("AUTH0_FEATURE_IDENTIFIER_INPUT") == "" {
+		t.Skip("AUTH0_FEATURE_IDENTIFIER_INPUT must be set for this acceptance test to run")
+	}
+}
+
+const testAccBrandingThemeIdentifiersCreate = `
+resource "auth0_branding_theme" "my_theme" {
+	borders {}
+	colors {}
+	fonts {
+		title {}
+		subtitle {}
+		links {}
+		input_labels {}
+		buttons_text {}
+		body_text {}
+	}
+	page_background {}
+	widget {}
+
+	identifiers {
+		login_display    = "unified"
+		otp_autocomplete = true
+
+		phone_display {
+			formatting = "international"
+			masking    = "mask_digits"
+		}
+	}
+}
+`
+
+const testAccBrandingThemeIdentifiersUpdate = `
+resource "auth0_branding_theme" "my_theme" {
+	borders {}
+	colors {}
+	fonts {
+		title {}
+		subtitle {}
+		links {}
+		input_labels {}
+		buttons_text {}
+		body_text {}
+	}
+	page_background {}
+	widget {}
+
+	identifiers {
+		login_display    = "separate"
+		otp_autocomplete = false
+
+		phone_display {
+			formatting = "regional"
+			masking    = "show_all"
+		}
+	}
+}
+`
+
+func TestAccBrandingThemeIdentifiers(t *testing.T) {
+	testAccPreCheckFeatureIdentifierInput(t)
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccBrandingThemeIdentifiersCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.0.login_display", "unified"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.0.otp_autocomplete", "true"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.0.phone_display.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.0.phone_display.0.formatting", "international"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.0.phone_display.0.masking", "mask_digits"),
+				),
+			},
+			{
+				Config: testAccBrandingThemeIdentifiersUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.0.login_display", "separate"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.0.otp_autocomplete", "false"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.0.phone_display.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.0.phone_display.0.formatting", "regional"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "identifiers.0.phone_display.0.masking", "show_all"),
 				),
 			},
 		},

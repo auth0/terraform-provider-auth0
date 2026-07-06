@@ -44,6 +44,7 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		ClientIDMetadataDocumentSupported:              value.Bool(config.GetAttr("client_id_metadata_document_supported")),
 		ResourceParameterProfile:                       value.String(config.GetAttr("resource_parameter_profile")),
 		DynamicClientRegistrationSecurityMode:          value.String(config.GetAttr("dynamic_client_registration_security_mode")),
+		CountryCodes:                                   expandTenantCountryCodes(data),
 	}
 
 	return &tenant
@@ -271,6 +272,40 @@ func expandDefaultTokenQuota(data *schema.ResourceData) *management.TenantDefaul
 	return &tokenQuota
 }
 
+func isCountryCodesNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("country_codes") {
+		return false
+	}
+
+	config := data.GetRawConfig().GetAttr("country_codes")
+	if config.IsNull() {
+		return true
+	}
+
+	return config.LengthInt() == 0
+}
+
+func expandTenantCountryCodes(data *schema.ResourceData) *management.TenantCountryCodes {
+	config := data.GetRawConfig().GetAttr("country_codes")
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	cfg := config.AsValueSlice()[0]
+
+	var countryCodes management.TenantCountryCodes
+	countryCodes.Mode = cfg.GetAttr("mode").AsString()
+	if list := value.Strings(cfg.GetAttr("list")); list != nil {
+		countryCodes.List = *list
+	}
+
+	if countryCodes.Mode == "" {
+		return nil
+	}
+
+	return &countryCodes
+}
+
 func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 	type nullCheckFunc func(*schema.ResourceData) bool
 
@@ -280,6 +315,7 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 		"mtls":                 isMTLSConfigurationNull,
 		"error_page":           isErrorPageConfigurationNull,
 		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
+		"country_codes": isCountryCodesNull,
 	}
 
 	nullableMap := make(map[string]interface{})

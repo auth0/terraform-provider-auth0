@@ -339,8 +339,7 @@ func expandConnectionOptionsEmailAttribute(config cty.Value, isNew bool) *manage
 				VerificationMethod: (*management.ConnectionOptionsEmailAttributeVerificationMethod)(value.String(email.GetAttr("verification_method"))),
 				Signup:             expandConnectionOptionsAttributeSignup(email),
 			}
-			// Unique is a create-only property; including it in a PATCH request
-			// returns a 400 from the Auth0 Management API.
+			// Unique is a create-only property; including it only in a PATCH request.
 			if isNew {
 				coea.Unique = value.Bool(email.GetAttr("unique"))
 			}

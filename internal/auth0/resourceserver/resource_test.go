@@ -570,3 +570,42 @@ func TestAccResourceServer_ACR(t *testing.T) {
 		},
 	})
 }
+
+const testAccResourceServerOnlineAccessCreate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                                        = "Acceptance Test - {{.testName}}"
+	identifier                                  = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	allow_online_access                         = true
+	allow_online_access_with_ephemeral_sessions = true
+}
+`
+
+const testAccResourceServerOnlineAccessUpdate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                                        = "Acceptance Test - {{.testName}}"
+	identifier                                  = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	allow_online_access                         = false
+	allow_online_access_with_ephemeral_sessions = false
+}
+`
+
+func TestAccResourceServerOnlineAccess(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccResourceServerOnlineAccessCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_online_access", "true"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_online_access_with_ephemeral_sessions", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerOnlineAccessUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_online_access", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_online_access_with_ephemeral_sessions", "false"),
+				),
+			},
+		},
+	})
+}

@@ -2746,6 +2746,44 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccClientSessionTransferDelegation = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+		can_create_session_transfer_token = true
+		delegation {
+			allow_delegated_access = true
+			enforce_device_binding = "asn"
+		}
+	}
+}
+`
+
+const testAccClientSessionTransferDelegationUpdate = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+		can_create_session_transfer_token = true
+		delegation {
+			allow_delegated_access = false
+			enforce_device_binding = "ip"
+		}
+	}
+}
+`
+
+const testAccClientSessionTransferDelegationRemoved = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+		can_create_session_transfer_token = true
+	}
+}
+`
+
 func TestAccClientSessionTransfer(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -2810,6 +2848,55 @@ func TestAccClientSessionTransfer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_online_refresh_tokens", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_cascade_revocation", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSessionTransferDelegation, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.delegation.0.allow_delegated_access", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.delegation.0.enforce_device_binding", "asn"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSessionTransferDelegationUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.delegation.0.allow_delegated_access", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.delegation.0.enforce_device_binding", "ip"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSessionTransferDelegation, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					// Re-establish delegation so the next two steps exercise removal.
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.delegation.0.allow_delegated_access", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.delegation.0.enforce_device_binding", "asn"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSessionTransferDelegationRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					// Removing only the delegation block while keeping session_transfer
+					// sends an explicit {session_transfer:{delegation:null}} PATCH,
+					// clearing delegation on the API while siblings persist.
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.delegation.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientSessionTransferDelegation, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					// Set delegation again, then remove the whole session_transfer block
+					// in the next step to verify the block (with delegation) is cleared.
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.delegation.0.allow_delegated_access", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransfer3, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					// Removing the entire session_transfer block (which contained a
+					// delegation sub-block) is handled by isSessionTransferNull; the
+					// delegation-null guard must not double-fire. The whole block goes.
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.#", "0"),
 				),
 			},
 		},
@@ -3508,6 +3595,81 @@ func TestAccClient_ThirdPartySecurityMode(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "third_party_security_mode", "strict"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "redirection_policy", "allow_always"),
+				),
+			},
+		},
+	})
+}
+
+const testAccCreateClientWithFedCMLogin = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+	fedcm_login {
+		google {
+			is_enabled = true
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithFedCMLoginFalse = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+	fedcm_login {
+		google {
+			is_enabled = false
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithFedCMLoginTrue = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+	fedcm_login {
+		google {
+			is_enabled = true
+		}
+	}
+}
+`
+
+const testAccUpdateClientRemoveFedCMLogin = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - FedCM Login - {{.testName}}"
+}
+`
+
+func TestAccClientFedCMLogin(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithFedCMLogin, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - FedCM Login - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.0.is_enabled", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithFedCMLoginFalse, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.0.is_enabled", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithFedCMLoginTrue, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.0.google.0.is_enabled", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientRemoveFedCMLogin, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "fedcm_login.#", "0"),
 				),
 			},
 		},

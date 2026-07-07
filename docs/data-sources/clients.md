@@ -61,6 +61,7 @@ Read-Only:
 - `external_client_id` (String)
 - `external_metadata_created_by` (String)
 - `external_metadata_type` (String)
+- `fedcm_login` (List of Object) (see [below for nested schema](#nestedobjatt--clients--fedcm_login))
 - `grant_types` (List of String)
 - `is_first_party` (Boolean)
 - `is_token_endpoint_ip_header_trusted` (Boolean)
@@ -99,6 +100,22 @@ Read-Only:
 Read-Only:
 
 - `client_id` (String)
+
+
+
+<a id="nestedobjatt--clients--fedcm_login"></a>
+### Nested Schema for `clients.fedcm_login`
+
+Read-Only:
+
+- `google` (List of Object) (see [below for nested schema](#nestedobjatt--clients--fedcm_login--google))
+
+<a id="nestedobjatt--clients--fedcm_login--google"></a>
+### Nested Schema for `clients.fedcm_login.google`
+
+Read-Only:
+
+- `is_enabled` (Boolean)
 
 
 
@@ -149,9 +166,19 @@ Read-Only:
 - `allow_refresh_token` (Boolean)
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean)
+- `delegation` (List of Object) (see [below for nested schema](#nestedobjatt--clients--session_transfer--delegation))
 - `enforce_cascade_revocation` (Boolean)
 - `enforce_device_binding` (String)
 - `enforce_online_refresh_tokens` (Boolean)
+
+<a id="nestedobjatt--clients--session_transfer--delegation"></a>
+### Nested Schema for `clients.session_transfer.delegation`
+
+Read-Only:
+
+- `allow_delegated_access` (Boolean)
+- `enforce_device_binding` (String)
+
 
 
 <a id="nestedobjatt--clients--token_exchange"></a>

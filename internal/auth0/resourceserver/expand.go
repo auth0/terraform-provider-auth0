@@ -44,6 +44,13 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.TokenEncryption = expandTokenEncryption(data)
 		resourceServer.ConsentPolicy = expandConsentPolicy(data)
 		resourceServer.ProofOfPossession = expandProofOfPossession(data)
+		// Skip sending EA params implicitly on all PATCH calls.
+		if data.IsNewResource() || data.HasChange("allow_online_access") {
+			resourceServer.AllowOnlineAccess = value.Bool(cfg.GetAttr("allow_online_access"))
+		}
+		if data.IsNewResource() || data.HasChange("allow_online_access_with_ephemeral_sessions") {
+			resourceServer.AllowOnlineAccessWithEphemeralSessions = value.Bool(cfg.GetAttr("allow_online_access_with_ephemeral_sessions"))
+		}
 	}
 	return resourceServer
 }

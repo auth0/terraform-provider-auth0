@@ -112,4 +112,3 @@ func TestFlattenConnectionOptionsGitHub_ClientSecretFallback(t *testing.T) {
 		t.Errorf("client_secret = %q, want %q", got, priorSecret)
 	}
 }
-

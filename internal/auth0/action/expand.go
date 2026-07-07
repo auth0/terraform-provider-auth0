@@ -31,8 +31,8 @@ func expandAction(data *schema.ResourceData) *management.Action {
 	if data.HasChange("secrets") {
 		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
 	} else if data.HasChange("secrets_wo") || data.HasChange("secrets_wo_version") {
-		// secrets_wo names are tracked in state, so HasChange("secrets_wo") catches
-		// adds/renames/removals; secrets_wo_version catches value-only rotations.
+		// The secrets_wo names are tracked in state, so HasChange("secrets_wo")
+		// catches adds/renames/removals; secrets_wo_version catches value-only rotations.
 		secretsWO := config.GetAttr("secrets_wo")
 		switch {
 		case !secretsWO.IsNull() && secretsWO.LengthInt() > 0:
@@ -166,8 +166,8 @@ func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceDa
 	// flagged as an unmanaged secret.
 	var secretsList []interface{}
 
-	// secrets and secrets_wo are mutually exclusive (ConflictsWith), so only one
-	// path drives the AttributePath surfaced in the diagnostic.
+	// The secrets and secrets_wo blocks are mutually exclusive (ConflictsWith), so
+	// only one path drives the AttributePath surfaced in the diagnostic.
 	attributePath := "secrets"
 
 	if data.HasChange("secrets") {

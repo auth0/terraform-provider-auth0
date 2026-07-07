@@ -129,7 +129,10 @@ func NewResource() *schema.Resource {
 				RequiredWith:  []string{"secrets_wo_version"},
 				Description: "List of secrets for the action (write-only). " +
 					"Secret values are only available during resource creation and update, and are **not** stored in Terraform state. " +
-					"To change the secrets, update the `secrets_wo_version` attribute. " +
+					"Adding, renaming, or removing an entry is applied automatically; to change only the value of an existing " +
+					"secret, bump the `secrets_wo_version` attribute. " +
+					"To remove all secrets, delete the `secrets_wo` blocks together with the `secrets_wo_version` attribute. " +
+					"This is an ordered list, so reordering the blocks is treated as a change. " +
 					"Conflicts with `secrets`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -153,7 +156,9 @@ func NewResource() *schema.Resource {
 				Optional:     true,
 				RequiredWith: []string{"secrets_wo"},
 				Description: "Version number for `secrets_wo` changes. " +
-					"Update this value to trigger a secret update when using `secrets_wo`.",
+					"Adding, renaming, or removing a `secrets_wo` entry is detected automatically, but changing only the " +
+					"**value** of an existing secret is not (write-only values are not tracked in state). " +
+					"Increment this value to push value-only changes to the API.",
 			},
 			"deploy": {
 				Type:     schema.TypeBool,

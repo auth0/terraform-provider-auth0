@@ -92,7 +92,7 @@ func TestFlattenClientGrant_ScopesOmittedWhenAllowAllScopes(t *testing.T) {
 
 	assert.Equal(t, true, resourceData.Get("allow_all_scopes"), "allow_all_scopes should be set")
 
-	// scopes must not be written when allow_all_scopes is true — it should
+	// Scopes must not be written when allow_all_scopes is true — it should
 	// remain at its zero value (length 0) so it does not appear as a
 	// non-empty value in generated configs.
 	assert.Equal(t, 0, resourceData.Get("scopes.#"), "scopes should not be set when allow_all_scopes is true")
@@ -134,10 +134,10 @@ func TestClientGrantScopesConflictWithAllowAll(t *testing.T) {
 	nonEmptyList := cty.ListVal([]cty.Value{cty.StringVal("read:foo")})
 
 	tests := []struct {
-		name            string
-		allowAllScopes  bool
-		scopes          cty.Value
-		wantConflict    bool
+		name           string
+		allowAllScopes bool
+		scopes         cty.Value
+		wantConflict   bool
 	}{
 		{
 			name:           "allow_all_scopes=true, scopes omitted (null) — valid",

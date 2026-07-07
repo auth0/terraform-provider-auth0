@@ -278,11 +278,7 @@ func isCountryCodesNull(data *schema.ResourceData) bool {
 	}
 
 	config := data.GetRawConfig().GetAttr("country_codes")
-	if config.IsNull() {
-		return true
-	}
-
-	return config.LengthInt() == 0
+	return config.IsNull() || config.LengthInt() == 0
 }
 
 func expandTenantCountryCodes(data *schema.ResourceData) *management.TenantCountryCodes {
@@ -297,10 +293,6 @@ func expandTenantCountryCodes(data *schema.ResourceData) *management.TenantCount
 	countryCodes.Mode = cfg.GetAttr("mode").AsString()
 	if list := value.Strings(cfg.GetAttr("list")); list != nil {
 		countryCodes.List = *list
-	}
-
-	if countryCodes.Mode == "" {
-		return nil
 	}
 
 	return &countryCodes

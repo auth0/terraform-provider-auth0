@@ -467,7 +467,7 @@ func NewThemeResource() *schema.Resource {
 				MaxItems:    1,
 				Optional:    true,
 				Computed:    true,
-				Description: "Configuration for identifier input display settings. Requires the identifier input feature flag to be enabled on the tenant.",
+				Description: "Configuration for identifier input display settings. Requires the identifier input feature flag to be enabled on the tenant. Once added, identifiers can only be updated but not removed",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"login_display": {

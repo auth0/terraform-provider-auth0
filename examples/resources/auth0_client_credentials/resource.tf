@@ -21,6 +21,18 @@ resource "auth0_client_credentials" "test" {
   authentication_method = "client_secret_basic"
 }
 
+# Configuring a write-only client secret.
+# NOTE: Write-only arguments are supported in Terraform 1.11 and later.
+# The secret is never stored in Terraform state. Increment
+# client_secret_wo_version to rotate the secret.
+resource "auth0_client_credentials" "test" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method    = "client_secret_post"
+  client_secret_wo         = "LUFqPx+sRLjbL7peYRPFmFu-bbvE7u7og4YUNe_C345=683341"
+  client_secret_wo_version = 1
+}
+
 # Configuring none as an authentication method.
 resource "auth0_client_credentials" "test" {
   client_id = auth0_client.my_client.id

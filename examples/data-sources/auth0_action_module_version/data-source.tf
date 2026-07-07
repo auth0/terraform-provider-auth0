@@ -13,15 +13,12 @@ resource "auth0_action_module" "my_module" {
   EOT
 }
 
-# Get all versions to find the version ID
-data "auth0_action_module_versions" "my_module_versions" {
-  module_id = auth0_action_module.my_module.id
-}
 
-# Retrieve a specific version by its ID
+
+# Retrieve the latest published version using the module's version_id directly
 data "auth0_action_module_version" "my_module_version" {
   module_id  = auth0_action_module.my_module.id
-  version_id = data.auth0_action_module_versions.my_module_versions.versions.0.id
+  version_id = auth0_action_module.my_module.version_id
 }
 
 # Output the version details
@@ -36,4 +33,3 @@ output "version_code" {
 output "version_created_at" {
   value = data.auth0_action_module_version.my_module_version.created_at
 }
-

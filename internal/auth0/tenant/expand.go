@@ -272,46 +272,25 @@ func expandDefaultTokenQuota(data *schema.ResourceData) *management.TenantDefaul
 }
 
 func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
-	type nullCheckFunc func(*schema.ResourceData) (bool, interface{})
+	type nullCheckFunc func(*schema.ResourceData) bool
 
 	checks := map[string]nullCheckFunc{
-		"default_token_quota": func(d *schema.ResourceData) (bool, interface{}) {
-			return isDefaultTokenQuotaNull(d), nil
-		},
-		"acr_values_supported": func(d *schema.ResourceData) (bool, interface{}) {
-			return isACRValuesSupportedNull(d), nil
-		},
-		"mtls": func(d *schema.ResourceData) (bool, interface{}) {
-			return isMTLSConfigurationNull(d), nil
-		},
-		"error_page": func(d *schema.ResourceData) (bool, interface{}) {
-			return isErrorPageConfigurationNull(d), nil
-		},
-		"skip_non_verifiable_callback_uri_confirmation_prompt": func(d *schema.ResourceData) (bool, interface{}) {
-			return isSkipNonVerifiableCallbackURIConfirmationPromptNull(d), nil
-		},
-		"default_redirection_uri": func(d *schema.ResourceData) (bool, interface{}) {
-			return isDefaultRedirectionURINull(d), ""
-		},
+		"default_token_quota":  isDefaultTokenQuotaNull,
+		"acr_values_supported": isACRValuesSupportedNull,
+		"mtls":                 isMTLSConfigurationNull,
+		"error_page":           isErrorPageConfigurationNull,
+		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
 	}
 
 	nullableMap := make(map[string]interface{})
 
 	for field, checkFunc := range checks {
-		if isNull, value := checkFunc(data); isNull {
-			nullableMap[field] = value
+		if checkFunc(data) {
+			nullableMap[field] = nil
 		}
 	}
 
 	return nullableMap
-}
-
-func isDefaultRedirectionURINull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("default_redirection_uri") {
-		return false
-	}
-	raw := data.GetRawConfig().GetAttr("default_redirection_uri")
-	return raw.IsNull()
 }
 
 func isDefaultTokenQuotaNull(data *schema.ResourceData) bool {

@@ -572,12 +572,6 @@ resource "auth0_tenant" "my_tenant" {
 }
 `
 
-const testAccTenantDefaultRedirectionURIOmitted = `
-resource "auth0_tenant" "my_tenant" {
-	friendly_name = "TF Test — redirection_uri"
-}
-`
-
 // TestAccTenant_DefaultRedirectionURI exercises the three clearing paths for
 // default_redirection_uri and verifies idempotence after each.
 //
@@ -620,25 +614,6 @@ func TestAccTenant_DefaultRedirectionURI(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
 				),
-			},
-			{
-				// Null-config path: omitting the field when remote value is set must generate a diff.
-				Config:             testAccTenantDefaultRedirectionURIOmitted,
-				PlanOnly:           true,
-				ExpectNonEmptyPlan: true,
-			},
-			{
-				// FetchNullableFields fires second PATCH with {"default_redirection_uri":""}.
-				Config: testAccTenantDefaultRedirectionURIOmitted,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
-				),
-			},
-			{
-				// Idempotence: second plan with field omitted must show no infrastructure diff.
-				Config:             testAccTenantDefaultRedirectionURIOmitted,
-				PlanOnly:           true,
-				ExpectNonEmptyPlan: false,
 			},
 		},
 	})

@@ -55,10 +55,11 @@ data "auth0_client" "some-client-by-id" {
 - `external_client_id` (String) The URL of the Client ID Metadata Document. Only present for CIMD-registered clients.
 - `external_metadata_created_by` (String) Who created the external metadata client: `admin` (via Management API), `client` (self-registered), or `unknown`.
 - `external_metadata_type` (String) Type of external metadata. Value is `cimd` for CIMD-registered clients.
+- `fedcm_login` (List of Object) Federated Credential Management (FedCM) configuration. (EA only) (see [below for nested schema](#nestedatt--fedcm_login))
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `id` (String) The ID of this resource.
-- `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
+- `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string. May contain Auth0 dynamic login URI placeholders such as `{organization.metadata.public_login_host}` or `{custom_domain.metadata.public_app_host}`, which are resolved by Auth0 at request time. See https://auth0.com/docs/get-started/applications/application-settings.
 - `is_first_party` (Boolean) Indicates whether this client is a first-party client.
 - `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. Requires the authentication method to be set to `client_secret_post` or `client_secret_basic`. Setting this property when creating the resource, will default the authentication method to `client_secret_post`. To change the authentication method to `client_secret_basic` use the `auth0_client_credentials` resource.
 - `jwks_uri` (String) URL for the JSON Web Key Set (JWKS) containing the public keys used for `private_key_jwt` authentication. Only present for CIMD clients using `private_key_jwt` authentication.
@@ -532,6 +533,22 @@ Read-Only:
 
 
 
+<a id="nestedatt--fedcm_login"></a>
+### Nested Schema for `fedcm_login`
+
+Read-Only:
+
+- `google` (List of Object) (see [below for nested schema](#nestedobjatt--fedcm_login--google))
+
+<a id="nestedobjatt--fedcm_login--google"></a>
+### Nested Schema for `fedcm_login.google`
+
+Read-Only:
+
+- `is_enabled` (Boolean)
+
+
+
 <a id="nestedatt--jwt_configuration"></a>
 ### Nested Schema for `jwt_configuration`
 
@@ -578,6 +595,7 @@ Read-Only:
 - `allowed_strategies` (List of String)
 - `connection_deletion_behavior` (String)
 - `connection_profile_id` (String)
+- `invitation_landing_client_id` (String)
 - `user_attribute_profile_id` (String)
 
 
@@ -674,9 +692,19 @@ Read-Only:
 - `allow_refresh_token` (Boolean)
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean)
+- `delegation` (List of Object) (see [below for nested schema](#nestedobjatt--session_transfer--delegation))
 - `enforce_cascade_revocation` (Boolean)
 - `enforce_device_binding` (String)
 - `enforce_online_refresh_tokens` (Boolean)
+
+<a id="nestedobjatt--session_transfer--delegation"></a>
+### Nested Schema for `session_transfer.delegation`
+
+Read-Only:
+
+- `allow_delegated_access` (Boolean)
+- `enforce_device_binding` (String)
+
 
 
 <a id="nestedatt--signed_request_object"></a>

@@ -450,8 +450,11 @@ func NewResource() *schema.Resource {
 			"initiate_login_uri": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
-				Description:  "Initiate login URI. Must be HTTPS or an empty string.",
+				ValidateFunc: internalValidation.IsHTTPSURLOrEmptyStringWithDynamicLoginURIPlaceholders,
+				Description: "Initiate login URI. Must be HTTPS or an empty string. May contain Auth0 dynamic login URI " +
+					"placeholders such as `{organization.metadata.public_login_host}` or " +
+					"`{custom_domain.metadata.public_app_host}`, which are resolved by Auth0 at request time. " +
+					"See https://auth0.com/docs/get-started/applications/application-settings.",
 			},
 			"native_social_login": {
 				Type:     schema.TypeList,
@@ -1607,6 +1610,54 @@ func NewResource() *schema.Resource {
 							Default:     true,
 							Description: "Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application.",
 						},
+						"delegation": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Configuration for delegation (impersonation) access using Session Transfer Tokens. (EA Only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"allow_delegated_access": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Indicates whether delegation (impersonation) access is allowed using Session Transfer Tokens. Defaults to `false`. (EA Only)",
+									},
+									"enforce_device_binding": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										Computed:     true,
+										ValidateFunc: validation.StringInSlice([]string{"ip", "asn"}, false),
+										Description:  "Indicates the device binding enforcement for delegation (impersonation) access. If set to 'ip', device binding is enforced by IP. If set to 'asn', device binding is enforced by ASN. Defaults to `ip`. (EA Only)",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"fedcm_login": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Federated Credential Management (FedCM) configuration. (EA only)",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"google": {
+							Type:        schema.TypeList,
+							Required:    true,
+							MaxItems:    1,
+							Description: "Google FedCM configuration. (EA only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"is_enabled": {
+										Type:        schema.TypeBool,
+										Required:    true,
+										Description: "Whether to show the Google FedCM prompt on Login. (EA only)",
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -1658,6 +1709,11 @@ func NewResource() *schema.Resource {
 							Optional:     true,
 							Description:  "Controls the behavior when deleting connections associated with organizations for this client. Possible values: `allow`, `allow_if_empty`.",
 							ValidateFunc: validation.StringInSlice([]string{"allow", "allow_if_empty"}, false),
+						},
+						"invitation_landing_client_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The client ID used as the invitation landing page when creating invitations through the My Organization API. Requires the tenant to have member management enabled, and the referenced client must allow organizations.",
 						},
 					},
 				},

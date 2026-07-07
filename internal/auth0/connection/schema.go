@@ -767,9 +767,12 @@ var optionsSchema = &schema.Schema{
 			"type": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Description: "Value can be `back_channel` or `front_channel`. " +
-					"Front Channel will use OIDC protocol with `response_mode=form_post` and `response_type=id_token`. " +
-					"Back Channel will use `response_type=code`.",
+				Computed: true,
+				Description: "The connection's communication channel type. For OIDC connections, accepted values are " +
+					"`back_channel` and `front_channel`; for Okta Workforce connections, " +
+					"only `back_channel` is accepted. " +
+					"Front Channel uses the OIDC protocol with `response_mode=form_post` and `response_type=id_token`. " +
+					"Back Channel uses `response_type=code`.",
 			},
 			"send_back_channel_nonce": {
 				Type:     schema.TypeBool,
@@ -1413,6 +1416,14 @@ var optionsSchema = &schema.Schema{
 					"token_endpoint",
 				}, false),
 				Description: "Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC Connections)",
+			},
+			"id_token_session_expiry_supported": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: "Indicates whether the identity provider supports session expiry via " +
+					"the id_token. When true, Auth0 will use the session_expiry claim from the " +
+					"upstream IdP's ID token to determine the maximum session lifetime. Only " +
+					"applicable for Okta and OIDC connections.",
 			},
 			"consumer_key": {
 				Type:        schema.TypeString,

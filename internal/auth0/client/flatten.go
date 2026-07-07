@@ -706,6 +706,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("third_party_security_mode", client.GetThirdPartySecurityMode()),
 		data.Set("redirection_policy", client.GetRedirectionPolicy()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
+		data.Set("fedcm_login", flattenFedCMLogin(client.GetFedCMLogin())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
@@ -737,10 +738,48 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 		"allow_refresh_token":               sessionTransfer.GetAllowRefreshToken(),
 		"enforce_online_refresh_tokens":     sessionTransfer.GetEnforceOnlineRefreshTokens(),
 		"enforce_cascade_revocation":        sessionTransfer.GetEnforceCascadeRevocation(),
+		"delegation":                        flattenSessionTransferDelegation(sessionTransfer.GetDelegation()),
 	}
 
 	return []interface{}{
 		t,
+	}
+}
+
+func flattenSessionTransferDelegation(delegation *management.SessionTransferDelegation) []interface{} {
+	if delegation == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"allow_delegated_access": delegation.GetAllowDelegatedAccess(),
+			"enforce_device_binding": delegation.GetEnforceDeviceBinding(),
+		},
+	}
+}
+
+func flattenFedCMLogin(fedcmLogin *management.FedCMLogin) []interface{} {
+	if fedcmLogin == nil {
+		return nil
+	}
+
+	m := map[string]interface{}{
+		"google": flattenFedCMLoginGoogle(fedcmLogin.GetGoogle()),
+	}
+
+	return []interface{}{m}
+}
+
+func flattenFedCMLoginGoogle(google *management.FedCMLoginGoogle) []interface{} {
+	if google == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"is_enabled": google.GetIsEnabled(),
+		},
 	}
 }
 
@@ -782,9 +821,14 @@ func flattenClientCredentials(ctx context.Context, api *management.Management, d
 	result := multierror.Append(
 		err,
 		data.Set("client_id", client.GetClientID()),
-		data.Set("client_secret", client.GetClientSecret()),
 		data.Set("signed_request_object", signedRequestObject),
 	)
+
+	if v, ok := data.GetOk("client_secret_wo_version"); ok {
+		result = multierror.Append(result, data.Set("client_secret_wo_version", v))
+	} else {
+		result = multierror.Append(result, data.Set("client_secret", client.GetClientSecret()))
+	}
 
 	authenticationMethods, err := flattenClientAuthenticationMethods(ctx, api, data, true, client.GetClientAuthenticationMethods())
 	result = multierror.Append(result, err)
@@ -1121,6 +1165,7 @@ func flattenMyOrganizationConfiguration(moc *management.MyOrganizationConfigurat
 		"connection_profile_id":        moc.GetConnectionProfileID(),
 		"user_attribute_profile_id":    moc.GetUserAttributeProfileID(),
 		"connection_deletion_behavior": moc.GetConnectionDeletionBehavior(),
+		"invitation_landing_client_id": moc.GetInvitationLandingClientID(),
 	}
 
 	if strategies := moc.GetAllowedStrategies(); len(strategies) > 0 {

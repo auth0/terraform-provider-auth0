@@ -170,9 +170,10 @@ resource "auth0_client" "mcp_server" {
 - `description` (String) Description of the purpose of the client.
 - `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
 - `express_configuration` (Block List, Max: 1) Express Configuration settings for the client. Used with OIN Express Configuration. (see [below for nested schema](#nestedblock--express_configuration))
+- `fedcm_login` (Block List, Max: 1) Federated Credential Management (FedCM) configuration. (EA only) (see [below for nested schema](#nestedblock--fedcm_login))
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
-- `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
+- `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string. May contain Auth0 dynamic login URI placeholders such as `{organization.metadata.public_login_host}` or `{custom_domain.metadata.public_app_host}`, which are resolved by Auth0 at request time. See https://auth0.com/docs/get-started/applications/application-settings.
 - `is_first_party` (Boolean) Indicates whether this client is a first-party client.
 - `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. Requires the authentication method to be set to `client_secret_post` or `client_secret_basic`. Setting this property when creating the resource, will default the authentication method to `client_secret_post`. To change the authentication method to `client_secret_basic` use the `auth0_client_credentials` resource.
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
@@ -569,6 +570,22 @@ Optional:
 
 
 
+<a id="nestedblock--fedcm_login"></a>
+### Nested Schema for `fedcm_login`
+
+Required:
+
+- `google` (Block List, Min: 1, Max: 1) Google FedCM configuration. (EA only) (see [below for nested schema](#nestedblock--fedcm_login--google))
+
+<a id="nestedblock--fedcm_login--google"></a>
+### Nested Schema for `fedcm_login.google`
+
+Required:
+
+- `is_enabled` (Boolean) Whether to show the Google FedCM prompt on Login. (EA only)
+
+
+
 <a id="nestedblock--jwt_configuration"></a>
 ### Nested Schema for `jwt_configuration`
 
@@ -615,6 +632,7 @@ Optional:
 - `allowed_strategies` (List of String) The list of connection strategies that are allowed when creating organizations for this client (e.g. "okta", "samlp").
 - `connection_deletion_behavior` (String) Controls the behavior when deleting connections associated with organizations for this client. Possible values: `allow`, `allow_if_empty`.
 - `connection_profile_id` (String) The ID of the connection profile to use when creating organizations for this client.
+- `invitation_landing_client_id` (String) The client ID used as the invitation landing page when creating invitations through the My Organization API. Requires the tenant to have member management enabled, and the referenced client must allow organizations.
 - `user_attribute_profile_id` (String) The ID of the user attribute profile to use when creating organizations for this client.
 
 
@@ -720,9 +738,19 @@ Optional:
 - `allow_refresh_token` (Boolean) Indicates whether the application is allowed to use a refresh token when using a session_transfer_token session.
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean) Indicates whether the application(Native app) can use the Token Exchange endpoint to create a session_transfer_token
+- `delegation` (Block List, Max: 1) Configuration for delegation (impersonation) access using Session Transfer Tokens. (EA Only) (see [below for nested schema](#nestedblock--session_transfer--delegation))
 - `enforce_cascade_revocation` (Boolean) Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities. Usually configured in the native application.
 - `enforce_device_binding` (String) Configures the level of device binding enforced when a session_transfer_token is consumed. Can be one of `ip`, `asn` or `none`.
 - `enforce_online_refresh_tokens` (Boolean) Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application.
+
+<a id="nestedblock--session_transfer--delegation"></a>
+### Nested Schema for `session_transfer.delegation`
+
+Optional:
+
+- `allow_delegated_access` (Boolean) Indicates whether delegation (impersonation) access is allowed using Session Transfer Tokens. Defaults to `false`. (EA Only)
+- `enforce_device_binding` (String) Indicates the device binding enforcement for delegation (impersonation) access. If set to 'ip', device binding is enforced by IP. If set to 'asn', device binding is enforced by ASN. Defaults to `ip`. (EA Only)
+
 
 
 <a id="nestedblock--token_exchange"></a>

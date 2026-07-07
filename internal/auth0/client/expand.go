@@ -55,6 +55,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		TokenExchange:            expandTokenExchange(data),
 		RequireProofOfPossession: value.Bool(config.GetAttr("require_proof_of_possession")),
 		SessionTransfer:          expandSessionTransfer(data),
+		FedCMLogin:               expandClientFedCMLogin(data),
 		ComplianceLevel:          value.String(config.GetAttr("compliance_level")),
 		ThirdPartySecurityMode:   value.String(config.GetAttr("third_party_security_mode")),
 		RedirectionPolicy:        value.String(config.GetAttr("redirection_policy")),
@@ -359,6 +360,38 @@ func expandClientNativeSocialLoginSupportEnabled(config cty.Value) *management.C
 	}
 
 	return &support
+}
+
+func expandClientFedCMLogin(data *schema.ResourceData) *management.FedCMLogin {
+	fedcmLoginConfig := data.GetRawConfig().GetAttr("fedcm_login")
+
+	if fedcmLoginConfig.IsNull() || fedcmLoginConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var fedcmLogin management.FedCMLogin
+
+	fedcmLoginConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		fedcmLogin.Google = expandClientFedCMLoginGoogle(config.GetAttr("google"))
+		return stop
+	})
+
+	return &fedcmLogin
+}
+
+func expandClientFedCMLoginGoogle(config cty.Value) *management.FedCMLoginGoogle {
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var google management.FedCMLoginGoogle
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		google.IsEnabled = value.Bool(config.GetAttr("is_enabled"))
+		return stop
+	})
+
+	return &google
 }
 
 func expandClientMobile(data *schema.ResourceData) *management.ClientMobile {
@@ -1084,6 +1117,17 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		enforceCascadeRevocation := data.Get("session_transfer.0.enforce_cascade_revocation").(bool)
 		sessionTransfer.EnforceCascadeRevocation = auth0.Bool(enforceCascadeRevocation)
 
+		delegationConfig := config.GetAttr("delegation")
+		if !delegationConfig.IsNull() && delegationConfig.LengthInt() > 0 {
+			delegationConfig.ForEachElement(func(_ cty.Value, dCfg cty.Value) (stopInner bool) {
+				sessionTransfer.Delegation = &management.SessionTransferDelegation{
+					AllowDelegatedAccess: value.Bool(dCfg.GetAttr("allow_delegated_access")),
+					EnforceDeviceBinding: value.String(dCfg.GetAttr("enforce_device_binding")),
+				}
+				return stopInner
+			})
+		}
+
 		return stop
 	})
 
@@ -1109,6 +1153,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"organization_discovery_methods":                       isOrganizationDiscoveryMethodsNull,
 		"token_exchange":                                       isTokenExchangeNull,
 		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
+		"fedcm_login":                                          isFedCMLoginNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1119,7 +1164,31 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		}
 	}
 
+	// If session_transfer.delegation was removed while session_transfer remains. Clear it via {"session_transfer":{"delegation":null}}.
+	if _, isSessionTransferNull := nullableMap["session_transfer"]; !isSessionTransferNull && isSessionTransferDelegationNull(data) {
+		nullableMap["session_transfer"] = map[string]interface{}{"delegation": nil}
+	}
+
 	return nullableMap
+}
+
+// isSessionTransferDelegationNull reports whether the delegation sub-block was
+// just removed from an otherwise-still-present session_transfer block.
+func isSessionTransferDelegationNull(data *schema.ResourceData) bool {
+	sessionTransfer := data.GetRawConfig().GetAttr("session_transfer")
+	if sessionTransfer.IsNull() || !data.HasChange("session_transfer.0.delegation") {
+		return false
+	}
+
+	delegationExist := false
+	sessionTransfer.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		delegation := cfg.GetAttr("delegation")
+		if !delegation.IsNull() && delegation.LengthInt() > 0 {
+			delegationExist = true
+		}
+		return stop
+	})
+	return !delegationExist
 }
 
 func isDefaultOrgNull(data *schema.ResourceData) bool {
@@ -1199,10 +1268,12 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 		canCreate := cfg.GetAttr("can_create_session_transfer_token")
 		enforceBinding := cfg.GetAttr("enforce_device_binding")
 		allowedMethods := cfg.GetAttr("allowed_authentication_methods")
+		delegation := cfg.GetAttr("delegation")
 
 		if (!canCreate.IsNull() && canCreate.True()) ||
 			(!enforceBinding.IsNull() && enforceBinding.AsString() != "") ||
-			(!allowedMethods.IsNull() && allowedMethods.LengthInt() > 0) {
+			(!allowedMethods.IsNull() && allowedMethods.LengthInt() > 0) ||
+			(!delegation.IsNull() && delegation.LengthInt() > 0) {
 			empty = false
 		}
 
@@ -1210,6 +1281,15 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 	})
 
 	return empty
+}
+
+func isFedCMLoginNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("fedcm_login") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("fedcm_login")
+	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
 }
 
 func isOIDCLogoutNull(data *schema.ResourceData) bool {
@@ -1340,6 +1420,7 @@ func expandMyOrganizationConfiguration(data *schema.ResourceData) *management.My
 			ConnectionProfileID:        value.String(elem.GetAttr("connection_profile_id")),
 			UserAttributeProfileID:     value.String(elem.GetAttr("user_attribute_profile_id")),
 			ConnectionDeletionBehavior: value.String(elem.GetAttr("connection_deletion_behavior")),
+			InvitationLandingClientID:  value.String(elem.GetAttr("invitation_landing_client_id")),
 		}
 
 		allowedStrategiesAttr := elem.GetAttr("allowed_strategies")

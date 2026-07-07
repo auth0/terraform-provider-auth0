@@ -24,7 +24,7 @@ data "auth0_branding_theme" "my_branding_theme" {}
 - `display_name` (String) The display name for the branding theme.
 - `fonts` (List of Object) (see [below for nested schema](#nestedatt--fonts))
 - `id` (String) The ID of this resource.
-- `identifiers` (List of Object) Configuration for identifier input display settings. Requires the identifier input feature flag to be enabled on the tenant. (see [below for nested schema](#nestedatt--identifiers))
+- `identifiers` (List of Object) Configuration for identifier input display settings. Requires the identifier input feature flag to be enabled on the tenant. Once added, identifiers can only be updated but not removed (see [below for nested schema](#nestedatt--identifiers))
 - `page_background` (List of Object) (see [below for nested schema](#nestedatt--page_background))
 - `widget` (List of Object) (see [below for nested schema](#nestedatt--widget))
 

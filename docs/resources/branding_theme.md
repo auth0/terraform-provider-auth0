@@ -137,7 +137,7 @@ resource "auth0_branding_theme" "my_theme" {
 ### Optional
 
 - `display_name` (String) The display name for the branding theme.
-- `identifiers` (Block List, Max: 1) Configuration for identifier input display settings. Requires the identifier input feature flag to be enabled on the tenant. (see [below for nested schema](#nestedblock--identifiers))
+- `identifiers` (Block List, Max: 1) Configuration for identifier input display settings. Requires the identifier input feature flag to be enabled on the tenant. Once added, identifiers can only be updated but not removed (see [below for nested schema](#nestedblock--identifiers))
 
 ### Read-Only
 

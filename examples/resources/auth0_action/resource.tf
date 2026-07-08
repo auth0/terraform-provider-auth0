@@ -39,3 +39,35 @@ resource "auth0_action" "my_action" {
     value = "Bar"
   }
 }
+
+# Creates an action with write-only secrets (recommended for security).
+# Secret values are never stored in Terraform state. They can be supplied via
+# regular sensitive variables or via ephemeral variables/resources.
+variable "action_api_key" {
+  description = "API key passed to the post-login action."
+  type        = string
+  sensitive   = true
+}
+
+resource "auth0_action" "my_secure_action" {
+  name    = format("Secure Action %s", timestamp())
+  runtime = "node22"
+  deploy  = true
+  code    = <<-EOT
+   exports.onExecutePostLogin = async (event, api) => {
+     console.log(event);
+   };
+  EOT
+
+  supported_triggers {
+    id      = "post-login"
+    version = "v3"
+  }
+
+  secrets_wo {
+    name  = "API_KEY"
+    value = var.action_api_key
+  }
+
+  secrets_wo_version = 1
+}

@@ -307,7 +307,6 @@ func NewResource() *schema.Resource {
 			"default_redirection_uri": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Computed:     true,
 				ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
 				Description:  "The default absolute redirection URI. Must be HTTPS or an empty string.",
 			},

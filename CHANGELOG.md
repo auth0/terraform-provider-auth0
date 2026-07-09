@@ -1,10 +1,24 @@
 ## [Unreleased]
 
-BUG FIXES:
-- `resource/auth0_client_grant` – Fix validator incorrectly rejecting `scopes = []` alongside `allow_all_scopes = true`, which caused `terraform plan -generate-config-out` to generate an immediately invalid configuration ([#1616](https://github.com/auth0/terraform-provider-auth0/pull/1616))
+## v1.52.0
 
-BREAKING CHANGES:
-- `resource/auth0_tenant`: The `default_redirection_uri` field is no longer `Computed`. Users who omit this field from their configuration but have a non-empty value set on the remote tenant will see a plan diff on the next `terraform plan`. To prevent an unintended clear, explicitly add `default_redirection_uri = "<current value>"` to your configuration before upgrading.
+FEATURES:
+- `resource/auth0_rate_limit_policy` – Add support for managing per-application rate limit policies, with `allow`, `block`, `log`, and `redirect` action blocks (EA only) ([#1597](https://github.com/auth0/terraform-provider-auth0/pull/1597))
+- `data-source/auth0_rate_limit_policy` – Add support for retrieving per-application rate limit policies (EA only) ([#1597](https://github.com/auth0/terraform-provider-auth0/pull/1597))
+- `data-source/auth0_rate_limit_policies` – Add support for retrieving all per-application rate limit policies (EA only) ([#1597](https://github.com/auth0/terraform-provider-auth0/pull/1597))
+
+ENHANCEMENTS:
+- `resource/auth0_action` – Add support for write-only `secrets_wo` and `secrets_wo_version` attributes for managing action secrets without persisting values in state; updates are triggered by incrementing the version ([#1541](https://github.com/auth0/terraform-provider-auth0/pull/1541))
+- `resource/auth0_tenant` – Add support for `{organization.metadata.public_*}` placeholder syntax in `login_uri`, while maintaining HTTPS-only URL validation ([#1575](https://github.com/auth0/terraform-provider-auth0/pull/1575))
+
+BUG FIXES:
+- `resource/auth0_client_grant` – Fix validator incorrectly rejecting `scopes = []` alongside `allow_all_scopes = true`, which caused `terraform plan -generate-config-out` to generate an immediately invalid configuration ([#1623](https://github.com/auth0/terraform-provider-auth0/pull/1623))
+- `resource/auth0_client_credentials` – Implement interleaved rotation strategy for `private_key_jwt` credentials to avoid exceeding the tenant credential limit; improve error handling for partial failures ([#1636](https://github.com/auth0/terraform-provider-auth0/pull/1636))
+- `resource/auth0_connection` – Prevent state drift for `api_behavior` and `signup_behavior` when the Auth0 API omits these fields from the password authentication method ([#1630](https://github.com/auth0/terraform-provider-auth0/pull/1630))
+- `resource/auth0_email_template` – Send only modified fields on update (PATCH), preserving out-of-band changes and respecting `lifecycle ignore_changes` directives ([#1612](https://github.com/auth0/terraform-provider-auth0/pull/1612))
+- `resource/auth0_connection` – Prevent sending empty `precedence` arrays to the API, which caused 400 errors when no precedence values were configured ([#1637](https://github.com/auth0/terraform-provider-auth0/pull/1637))
+- `resource/auth0_connection` – Fix `options` to only send the `unique` property from email attributes during POST calls ([#1639](https://github.com/auth0/terraform-provider-auth0/pull/1639))
+- `resource/auth0_tenant` – Fix `default_redirection_uri` to be a nullable, non-computed field; setting it to `""` or omitting it from configuration will now clear the value on the remote tenant ([#1634](https://github.com/auth0/terraform-provider-auth0/pull/1634))
 
 ## v1.51.0
 

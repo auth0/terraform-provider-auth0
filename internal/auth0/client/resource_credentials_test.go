@@ -394,6 +394,131 @@ func TestAccClientAuthenticationMethodsPrivateKeyJWT(t *testing.T) {
 	})
 }
 
+const testAccCreateTwoClientCredentialsUsingPrivateKeyJWT = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "private_key_jwt"
+
+	private_key_jwt {
+		credentials {
+			name                   = "Testing Credentials 1"
+			credential_type        = "public_key"
+			algorithm              = "RS256"
+			parse_expiry_from_cert = true
+			pem                    = <<EOF
+%s
+EOF
+		}
+		credentials {
+			name                   = "Testing Credentials 2"
+			credential_type        = "public_key"
+			algorithm              = "RS256"
+			parse_expiry_from_cert = true
+			pem                    = <<EOF
+%s
+EOF
+		}
+	}
+}
+`
+
+const testAccReplaceBothClientCredentialsUsingPrivateKeyJWT = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "private_key_jwt"
+
+	private_key_jwt {
+		credentials {
+			name                   = "Testing Credentials 3"
+			credential_type        = "public_key"
+			algorithm              = "RS256"
+			parse_expiry_from_cert = true
+			pem                    = <<EOF
+%s
+EOF
+		}
+		credentials {
+			name                   = "Testing Credentials 4"
+			credential_type        = "public_key"
+			algorithm              = "RS256"
+			parse_expiry_from_cert = true
+			pem                    = <<EOF
+%s
+EOF
+		}
+	}
+}
+`
+
+func TestAccClientCredentialsPrivateKeyJWTFullRotation(t *testing.T) {
+	credsCert1, err := os.ReadFile("./../../../test/data/creds-cert-1.pem")
+	require.NoError(t, err)
+
+	credsCert2, err := os.ReadFile("./../../../test/data/creds-cert-2.pem")
+	require.NoError(t, err)
+
+	credsCert3, err := os.ReadFile("./../../../test/data/creds-cert-3.pem")
+	require.NoError(t, err)
+
+	credsCert4, err := os.ReadFile("./../../../test/data/creds-cert-4.pem")
+	require.NoError(t, err)
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccCreateTwoClientCredentialsUsingPrivateKeyJWT, t.Name()), credsCert1, credsCert2),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "private_key_jwt"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "private_key_jwt.0.credentials.*", map[string]string{
+						"name": "Testing Credentials 1",
+					}),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "private_key_jwt.0.credentials.*", map[string]string{
+						"name": "Testing Credentials 2",
+					}),
+				),
+			},
+			{
+				// Replace both credentials in a single apply.
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccReplaceBothClientCredentialsUsingPrivateKeyJWT, t.Name()), credsCert3, credsCert4),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("auth0_client_credentials.test", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "private_key_jwt"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "private_key_jwt.0.credentials.*", map[string]string{
+						"name": "Testing Credentials 3",
+					}),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "private_key_jwt.0.credentials.*", map[string]string{
+						"name": "Testing Credentials 4",
+					}),
+				),
+			},
+		},
+	})
+}
+
 const testAccThrowErrorWhenTLSClientAuthNoCredentials = `
 resource "auth0_client" "my_client" {
 	name     = "Acceptance Test - Client Credentials - {{.testName}}"

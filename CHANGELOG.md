@@ -1,6 +1,7 @@
 ## [Unreleased]
 
-BREAKING CHANGES:
+BUG FIXES:
+- `resource/auth0_client_grant` – Fix validator incorrectly rejecting `scopes = []` alongside `allow_all_scopes = true`, which caused `terraform plan -generate-config-out` to generate an immediately invalid configuration ([#1616](https://github.com/auth0/terraform-provider-auth0/pull/1616))
 
 * `auth0_tenant`: The `default_redirection_uri` field is no longer `Computed`. Users who omit this field from their configuration but have a non-empty value set on the remote tenant will see a plan diff on the next `terraform plan`. To prevent an unintended clear, explicitly add `default_redirection_uri = "<current value>"` to your configuration before upgrading.
 ENHANCEMENTS:

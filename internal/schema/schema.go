@@ -76,3 +76,14 @@ func Clone[M ~map[K]V, K comparable, V any](m M) M {
 
 	return result
 }
+
+// ToStrSlice converts one or more string-like values (e.g. SDK enum constants) into a []string,
+// handy for building validation.StringInSlice allowlists.
+func ToStrSlice[T ~string](values ...T) []string {
+	result := make([]string, len(values))
+	for i, v := range values {
+		result[i] = string(v)
+	}
+
+	return result
+}

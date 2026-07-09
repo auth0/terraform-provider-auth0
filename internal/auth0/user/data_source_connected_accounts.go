@@ -3,7 +3,6 @@ package user
 import (
 	"context"
 	"errors"
-	"time"
 
 	managementv2 "github.com/auth0/go-auth0/v2/management"
 	managementv2client "github.com/auth0/go-auth0/v2/management/client"
@@ -12,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewConnectedAccountsDataSource will return a new auth0_user_connected_accounts data source.
@@ -131,21 +131,9 @@ func flattenConnectedAccounts(accounts []*managementv2.ConnectedAccount) []inter
 	result := make([]interface{}, 0, len(accounts))
 
 	for _, a := range accounts {
-		expiresAt := ""
-		if a.ExpiresAt != nil {
-			expiresAt = a.ExpiresAt.UTC().Format(time.RFC3339)
-		}
-
 		orgID := ""
 		if a.OrganizationID != nil {
 			orgID = *a.OrganizationID
-		}
-
-		scopes := a.GetScopes()
-
-		createdAt := ""
-		if t := a.GetCreatedAt(); !t.IsZero() {
-			createdAt = t.UTC().Format(time.RFC3339)
 		}
 
 		result = append(result, map[string]interface{}{
@@ -154,9 +142,9 @@ func flattenConnectedAccounts(accounts []*managementv2.ConnectedAccount) []inter
 			"connection_id":   a.GetConnectionID(),
 			"strategy":        a.GetStrategy(),
 			"access_type":     string(a.GetAccessType()),
-			"scopes":          scopes,
-			"created_at":      createdAt,
-			"expires_at":      expiresAt,
+			"scopes":          a.GetScopes(),
+			"created_at":      value.FormatTime(a.GetCreatedAt()),
+			"expires_at":      value.FormatTime(a.GetExpiresAt()),
 			"organization_id": orgID,
 		})
 	}

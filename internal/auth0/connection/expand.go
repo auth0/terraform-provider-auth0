@@ -468,10 +468,13 @@ func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (
 		RequiresUsername:                 value.Bool(config.GetAttr("requires_username")),
 		CustomScripts:                    value.MapOfStrings(config.GetAttr("custom_scripts")),
 		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
-		Precedence:                       value.Strings(config.GetAttr("precedence")),
 		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes"), data.IsNewResource()),
 		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 		RealmFallback:                    value.Bool(config.GetAttr("realm_fallback")),
+	}
+
+	if precedence := value.Strings(config.GetAttr("precedence")); precedence != nil && len(*precedence) > 0 {
+		options.Precedence = precedence
 	}
 
 	config.GetAttr("validation").ForEachElement(

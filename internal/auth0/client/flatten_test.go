@@ -5,6 +5,8 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -68,4 +70,112 @@ func TestFlattenClientAddonSAML2_ForExplicitValues(t *testing.T) {
 	assert.Equal(t, "rsa-sha256", flat["signature_algorithm"], "signature_algorithm")
 	assert.Equal(t, "sha256", flat["digest_algorithm"], "digest_algorithm")
 	assert.Equal(t, "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent", flat["name_identifier_format"], "name_identifier_format")
+}
+
+// TestFlattenClientGrant_ScopesOmittedWhenAllowAllScopes verifies that
+// flattenClientGrant does not write "scopes" into state when allow_all_scopes
+// is true. The Auth0 API returns scope:[] in that case; if we wrote that into
+// state, terraform plan -generate-config-out would emit scopes = [] alongside
+// allow_all_scopes = true — a combination the validator correctly rejects.
+func TestFlattenClientGrant_ScopesOmittedWhenAllowAllScopes(t *testing.T) {
+	resourceData := schema.TestResourceDataRaw(t, NewGrantResource().Schema, map[string]interface{}{})
+
+	grant := &management.ClientGrant{
+		ClientID:       auth0.String("test-client-id"),
+		Audience:       auth0.String("https://api.example.com"),
+		Scope:          &[]string{},
+		AllowAllScopes: auth0.Bool(true),
+	}
+
+	err := flattenClientGrant(resourceData, grant)
+	assert.NoError(t, err)
+
+	assert.Equal(t, true, resourceData.Get("allow_all_scopes"), "allow_all_scopes should be set")
+
+	// Scopes must not be written when allow_all_scopes is true — it should
+	// remain at its zero value (length 0) so it does not appear as a
+	// non-empty value in generated configs.
+	assert.Equal(t, 0, resourceData.Get("scopes.#"), "scopes should not be set when allow_all_scopes is true")
+}
+
+// TestFlattenClientGrant_ScopesSetWhenAllowAllScopesFalse verifies that
+// flattenClientGrant writes scopes into state normally when allow_all_scopes
+// is false.
+func TestFlattenClientGrant_ScopesSetWhenAllowAllScopesFalse(t *testing.T) {
+	resourceData := schema.TestResourceDataRaw(t, NewGrantResource().Schema, map[string]interface{}{})
+
+	grant := &management.ClientGrant{
+		ClientID:       auth0.String("test-client-id"),
+		Audience:       auth0.String("https://api.example.com"),
+		Scope:          &[]string{"read:data", "write:data"},
+		AllowAllScopes: auth0.Bool(false),
+	}
+
+	err := flattenClientGrant(resourceData, grant)
+	assert.NoError(t, err)
+
+	assert.Equal(t, false, resourceData.Get("allow_all_scopes"))
+	assert.Equal(t, 2, resourceData.Get("scopes.#"))
+}
+
+// TestClientGrantScopesConflictWithAllowAll exercises the extracted predicate
+// that backs validateClientGrant. The five cases cover the full truth table:
+//
+//   - allow_all_scopes=true  + scopes=null        → no conflict (valid: omit scopes)
+//   - allow_all_scopes=true  + scopes=[]           → no conflict (valid: generated config)
+//   - allow_all_scopes=true  + scopes=["read:foo"] → conflict   (invalid)
+//   - allow_all_scopes=false + scopes=null         → no conflict (handled by separate guard)
+//   - allow_all_scopes=false + scopes=["read:foo"] → no conflict (valid: explicit scopes)
+func TestClientGrantScopesConflictWithAllowAll(t *testing.T) {
+	t.Parallel()
+
+	nullList := cty.NullVal(cty.List(cty.String))
+	emptyList := cty.ListValEmpty(cty.String)
+	nonEmptyList := cty.ListVal([]cty.Value{cty.StringVal("read:foo")})
+
+	tests := []struct {
+		name           string
+		allowAllScopes bool
+		scopes         cty.Value
+		wantConflict   bool
+	}{
+		{
+			name:           "allow_all_scopes=true, scopes omitted (null) — valid",
+			allowAllScopes: true,
+			scopes:         nullList,
+			wantConflict:   false,
+		},
+		{
+			name:           "allow_all_scopes=true, scopes=[] (empty list) — valid (generated config case)",
+			allowAllScopes: true,
+			scopes:         emptyList,
+			wantConflict:   false,
+		},
+		{
+			name:           "allow_all_scopes=true, scopes=[\"read:foo\"] — conflict",
+			allowAllScopes: true,
+			scopes:         nonEmptyList,
+			wantConflict:   true,
+		},
+		{
+			name:           "allow_all_scopes=false, scopes omitted (null) — no conflict",
+			allowAllScopes: false,
+			scopes:         nullList,
+			wantConflict:   false,
+		},
+		{
+			name:           "allow_all_scopes=false, scopes=[\"read:foo\"] — no conflict",
+			allowAllScopes: false,
+			scopes:         nonEmptyList,
+			wantConflict:   false,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			got := clientGrantScopesConflictWithAllowAll(tc.allowAllScopes, tc.scopes)
+			assert.Equal(t, tc.wantConflict, got)
+		})
+	}
 }

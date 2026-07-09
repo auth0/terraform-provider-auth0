@@ -18,7 +18,7 @@ BUG FIXES:
 - `resource/auth0_email_template` – Send only modified fields on update (PATCH), preserving out-of-band changes and respecting `lifecycle ignore_changes` directives ([#1612](https://github.com/auth0/terraform-provider-auth0/pull/1612))
 - `resource/auth0_connection` – Prevent sending empty `precedence` arrays to the API, which caused 400 errors when no precedence values were configured ([#1637](https://github.com/auth0/terraform-provider-auth0/pull/1637))
 - `resource/auth0_connection` – Fix `options` to only send the `unique` property from email attributes during POST calls ([#1639](https://github.com/auth0/terraform-provider-auth0/pull/1639))
-- `resource/auth0_tenant` – Fix `default_redirection_uri` to be a nullable, non-computed field; setting it to `""` or omitting it from configuration will now clear the value on the remote tenant ([#1634](https://github.com/auth0/terraform-provider-auth0/pull/1634))
+- `resource/auth0_tenant` – Fix `default_redirection_uri` to be a nullable, non-computed field; setting it to `""` will now clear the value on the remote tenant ([#1634](https://github.com/auth0/terraform-provider-auth0/pull/1634))
 
 ## v1.51.0
 

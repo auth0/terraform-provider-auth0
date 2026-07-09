@@ -425,7 +425,9 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 				if err := attachAuthenticationMethodCredentials(ctx, api, clientID, "private_key_jwt", attachedCreds); err != nil {
 					// Roll back the just-created credential so it does not linger
 					// unattached and consume a cap slot on the next apply.
-					_ = deleteCredentialIgnoringNotFound(ctx, api, clientID, credential.GetID())
+					if deleteErr := deleteCredentialIgnoringNotFound(ctx, api, clientID, credential.GetID()); deleteErr != nil {
+						return diag.Errorf("failed to attach credential (rollback delete also failed: %v): %v", deleteErr, err)
+					}
 					return diag.FromErr(err)
 				}
 			}

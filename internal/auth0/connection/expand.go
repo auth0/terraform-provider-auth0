@@ -315,12 +315,12 @@ func expandConnectionOptionsCustomPasswordHash(config cty.Value) *management.Cus
 	return customPasswordHash
 }
 
-func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
+func expandConnectionOptionsAttributes(config cty.Value, isNew bool) *management.ConnectionOptionsAttributes {
 	var coa *management.ConnectionOptionsAttributes
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
 			coa = &management.ConnectionOptionsAttributes{
-				Email:       expandConnectionOptionsEmailAttribute(attributes),
+				Email:       expandConnectionOptionsEmailAttribute(attributes, isNew),
 				Username:    expandConnectionOptionsUsernameAttribute(attributes),
 				PhoneNumber: expandConnectionOptionsPhoneNumberAttribute(attributes),
 			}
@@ -329,7 +329,7 @@ func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionO
 	return coa
 }
 
-func expandConnectionOptionsEmailAttribute(config cty.Value) *management.ConnectionOptionsEmailAttribute {
+func expandConnectionOptionsEmailAttribute(config cty.Value, isNew bool) *management.ConnectionOptionsEmailAttribute {
 	var coea *management.ConnectionOptionsEmailAttribute
 	config.GetAttr("email").ForEachElement(
 		func(_ cty.Value, email cty.Value) (stop bool) {
@@ -338,7 +338,10 @@ func expandConnectionOptionsEmailAttribute(config cty.Value) *management.Connect
 				ProfileRequired:    value.Bool(email.GetAttr("profile_required")),
 				VerificationMethod: (*management.ConnectionOptionsEmailAttributeVerificationMethod)(value.String(email.GetAttr("verification_method"))),
 				Signup:             expandConnectionOptionsAttributeSignup(email),
-				Unique:             value.Bool(email.GetAttr("unique")),
+			}
+			// Unique is a create-only property; including it only in a POST request.
+			if isNew {
+				coea.Unique = value.Bool(email.GetAttr("unique"))
 			}
 			return stop
 		})
@@ -451,7 +454,7 @@ func expandConnectionOptionsAttributeAllowedTypes(config cty.Value) *management.
 	return coaat
 }
 
-func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
+func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -465,7 +468,7 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		RequiresUsername:                 value.Bool(config.GetAttr("requires_username")),
 		CustomScripts:                    value.MapOfStrings(config.GetAttr("custom_scripts")),
 		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
-		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
+		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes"), data.IsNewResource()),
 		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 		RealmFallback:                    value.Bool(config.GetAttr("realm_fallback")),
 	}

@@ -13,6 +13,7 @@ func flattenOrganization(data *schema.ResourceData, organization *management.Org
 	result := multierror.Append(
 		data.Set("name", organization.GetName()),
 		data.Set("display_name", organization.GetDisplayName()),
+		data.Set("third_party_client_access", organization.GetThirdPartyClientAccess()),
 		data.Set("branding", flattenOrganizationBranding(organization.GetBranding())),
 		data.Set("metadata", organization.GetMetadata()),
 		data.Set("token_quota", commons.FlattenTokenQuota(organization.GetTokenQuota())),

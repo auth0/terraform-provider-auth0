@@ -15,10 +15,11 @@ func expandOrganization(data *schema.ResourceData) *management.Organization {
 	cfg := data.GetRawConfig()
 
 	organization := &management.Organization{
-		Name:        value.String(cfg.GetAttr("name")),
-		DisplayName: value.String(cfg.GetAttr("display_name")),
-		Branding:    expandOrganizationBranding(cfg.GetAttr("branding")),
-		TokenQuota:  commons.ExpandTokenQuota(cfg.GetAttr("token_quota")),
+		Name:                   value.String(cfg.GetAttr("name")),
+		DisplayName:            value.String(cfg.GetAttr("display_name")),
+		ThirdPartyClientAccess: value.String(cfg.GetAttr("third_party_client_access")),
+		Branding:               expandOrganizationBranding(cfg.GetAttr("branding")),
+		TokenQuota:             commons.ExpandTokenQuota(cfg.GetAttr("token_quota")),
 	}
 
 	if data.HasChange("metadata") {

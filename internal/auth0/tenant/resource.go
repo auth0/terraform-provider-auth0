@@ -199,10 +199,11 @@ func NewResource() *schema.Resource {
 							Description: "Indicates whether classic Universal Login prompts include additional security headers to prevent clickjacking.",
 						},
 						"enable_public_signup_user_exists_error": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Computed:    true,
-							Description: "Indicates whether the public sign up process shows a `user_exists` error if the user already exists.",
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+							Description: "Indicates whether the public sign up process shows a `user_exists` error if the user already exists. " +
+								"Note: the Auth0 Dashboard toggle **Use a generic response in public signup API error message** shows the inverse of this value.",
 						},
 						"use_scope_descriptions_for_consent": {
 							Type:        schema.TypeBool,
@@ -241,10 +242,11 @@ func NewResource() *schema.Resource {
 							Description: "Whether ID tokens can be used to authorize some types of requests to API v2 (true) or not (false).",
 						},
 						"no_disclose_enterprise_connections": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Computed:    true,
-							Description: "Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file.",
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+							Description: "Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file. " +
+								"Note: the Auth0 Dashboard toggle **Enable Publishing of Enterprise Connections Information with IdP domains** shows the inverse of this value.",
 						},
 						"disable_management_api_sms_obfuscation": {
 							Type:        schema.TypeBool,

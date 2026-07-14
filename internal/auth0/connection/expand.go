@@ -73,11 +73,12 @@ func expandConnection(
 	config := data.GetRawConfig()
 
 	connection := &management.Connection{
-		DisplayName:        value.String(config.GetAttr("display_name")),
-		IsDomainConnection: value.Bool(config.GetAttr("is_domain_connection")),
-		Metadata:           value.MapOfStrings(config.GetAttr("metadata")),
-		Authentication:     expandConnectionAuthentication(data),
-		ConnectedAccounts:  expandConnectionConnectedAccounts(data),
+		DisplayName:                 value.String(config.GetAttr("display_name")),
+		IsDomainConnection:          value.Bool(config.GetAttr("is_domain_connection")),
+		Metadata:                    value.MapOfStrings(config.GetAttr("metadata")),
+		Authentication:              expandConnectionAuthentication(data),
+		ConnectedAccounts:           expandConnectionConnectedAccounts(data),
+		CrossAppAccessRequestingApp: expandConnectionCrossAppAccessRequestingApp(data),
 	}
 
 	strategy := data.Get("strategy").(string)
@@ -129,9 +130,14 @@ func expandConnectionAuthentication(data *schema.ResourceData) *management.Authe
 		return nil
 	}
 
+	rawConfig := data.GetRawConfig().GetAttr("authentication")
+	if rawConfig.IsNull() || !rawConfig.Type().IsListType() || rawConfig.LengthInt() == 0 {
+		return nil
+	}
+
 	var authentication management.Authentication
 
-	data.GetRawConfig().GetAttr("authentication").ForEachElement(func(_, config cty.Value) (stop bool) {
+	rawConfig.ForEachElement(func(_, config cty.Value) (stop bool) {
 		authentication.Active = value.Bool(config.GetAttr("active"))
 		return stop
 	})
@@ -144,15 +150,41 @@ func expandConnectionConnectedAccounts(data *schema.ResourceData) *management.Co
 		return nil
 	}
 
+	rawConfig := data.GetRawConfig().GetAttr("connected_accounts")
+	if rawConfig.IsNull() || !rawConfig.Type().IsListType() || rawConfig.LengthInt() == 0 {
+		return nil
+	}
+
 	var connectedAccounts management.ConnectedAccounts
 
-	data.GetRawConfig().GetAttr("connected_accounts").ForEachElement(func(_, config cty.Value) (stop bool) {
+	rawConfig.ForEachElement(func(_, config cty.Value) (stop bool) {
 		connectedAccounts.Active = value.Bool(config.GetAttr("active"))
 
 		return stop
 	})
 
 	return &connectedAccounts
+}
+
+func expandConnectionCrossAppAccessRequestingApp(data *schema.ResourceData) *management.CrossAppAccessRequestingApp {
+	if !data.HasChange("cross_app_access_requesting_app") {
+		return nil
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("cross_app_access_requesting_app")
+	if rawConfig.IsNull() || !rawConfig.Type().IsListType() || rawConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var crossAppAccessRequestingApp management.CrossAppAccessRequestingApp
+
+	rawConfig.ForEachElement(func(_, config cty.Value) (stop bool) {
+		crossAppAccessRequestingApp.Active = value.Bool(config.GetAttr("active"))
+
+		return stop
+	})
+
+	return &crossAppAccessRequestingApp
 }
 
 func connectionIsEnterprise(strategy string) bool {

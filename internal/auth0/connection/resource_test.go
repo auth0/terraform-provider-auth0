@@ -72,7 +72,6 @@ func TestAccConnection(t *testing.T) {
 	})
 }
 
-// TODO : Add another testcase that handles connected_accounts.
 const testAccConnectionConfig = `
 resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.testName}}"
@@ -1410,6 +1409,272 @@ resource "auth0_connection" "oidc" {
 		scopes                 = [ "openid", "email" ]
 		set_user_root_attributes = "on_first_login"
 		id_token_signed_response_algs = []
+	}
+}
+`
+
+func TestAccConnectionCrossAppAccessRequestingApp(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				// Create with cross_app_access_requesting_app active = true.
+				Config: acctest.ParseTestName(testAccConnectionXAAConfigCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "strategy", "oidc"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_requesting_app.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_requesting_app.0.active", "true"),
+				),
+			},
+			{
+				// Update to active = false.
+				Config: acctest.ParseTestName(testAccConnectionXAAConfigUpdateFalse, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_requesting_app.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_requesting_app.0.active", "false"),
+				),
+			},
+			{
+				// Unrelated update (display_name) preserves the sticky value.
+				Config: acctest.ParseTestName(testAccConnectionXAAConfigUnrelatedUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "display_name", "XAA-Renamed"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_requesting_app.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_requesting_app.0.active", "false"),
+				),
+			},
+			{
+				// Removing the block is a no-op: the last-known value stays in state.
+				Config: acctest.ParseTestName(testAccConnectionXAAConfigRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_requesting_app.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_requesting_app.0.active", "false"),
+				),
+			},
+			{
+				// Confirm the data source inherits the field from the resource schema.
+				Config: acctest.ParseTestName(testAccConnectionXAAConfigDataSource, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_connection.oidc", "cross_app_access_requesting_app.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_connection.oidc", "cross_app_access_requesting_app.0.active", "false"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccConnectionCrossAppAccessRequestingAppNegative(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				// cross_app_access_requesting_app is only supported on oidc/okta strategies.
+				// The API rejects other strategies (operation_not_supported); assert the error passes
+				// through cleanly rather than being masked or pre-validated client-side.
+				Config:      acctest.ParseTestName(testAccConnectionXAAConfigNonOIDC, t.Name()),
+				ExpectError: regexp.MustCompile("Cross App Access Requesting App is not supported for this connection"),
+			},
+		},
+	})
+}
+
+const testAccConnectionXAAConfigCreate = `
+resource "auth0_connection" "oidc" {
+	name           = "Acceptance-Test-XAA-{{.testName}}"
+	display_name   = "Acceptance-Test-XAA-{{.testName}}"
+	strategy       = "oidc"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		type                   = "back_channel"
+		issuer                 = "https://api.login.yahoo.com"
+		jwks_uri               = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url          = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		token_endpoint         = "https://api.login.yahoo.com/oauth2/get_token"
+		userinfo_endpoint      = "https://api.login.yahoo.com/openid/v1/userinfo"
+		authorization_endpoint = "https://api.login.yahoo.com/oauth2/request_auth"
+		scopes                 = [ "openid", "email", "profile" ]
+	}
+	cross_app_access_requesting_app {
+		active = true
+	}
+}
+`
+
+const testAccConnectionXAAConfigUpdateFalse = `
+resource "auth0_connection" "oidc" {
+	name           = "Acceptance-Test-XAA-{{.testName}}"
+	display_name   = "Acceptance-Test-XAA-{{.testName}}"
+	strategy       = "oidc"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		type                   = "back_channel"
+		issuer                 = "https://api.login.yahoo.com"
+		jwks_uri               = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url          = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		token_endpoint         = "https://api.login.yahoo.com/oauth2/get_token"
+		userinfo_endpoint      = "https://api.login.yahoo.com/openid/v1/userinfo"
+		authorization_endpoint = "https://api.login.yahoo.com/oauth2/request_auth"
+		scopes                 = [ "openid", "email", "profile" ]
+	}
+	cross_app_access_requesting_app {
+		active = false
+	}
+}
+`
+
+const testAccConnectionXAAConfigUnrelatedUpdate = `
+resource "auth0_connection" "oidc" {
+	name           = "Acceptance-Test-XAA-{{.testName}}"
+	display_name   = "XAA-Renamed"
+	strategy       = "oidc"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		type                   = "back_channel"
+		issuer                 = "https://api.login.yahoo.com"
+		jwks_uri               = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url          = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		token_endpoint         = "https://api.login.yahoo.com/oauth2/get_token"
+		userinfo_endpoint      = "https://api.login.yahoo.com/openid/v1/userinfo"
+		authorization_endpoint = "https://api.login.yahoo.com/oauth2/request_auth"
+		scopes                 = [ "openid", "email", "profile" ]
+	}
+	cross_app_access_requesting_app {
+		active = false
+	}
+}
+`
+
+const testAccConnectionXAAConfigRemoved = `
+resource "auth0_connection" "oidc" {
+	name           = "Acceptance-Test-XAA-{{.testName}}"
+	display_name   = "XAA-Renamed"
+	strategy       = "oidc"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		type                   = "back_channel"
+		issuer                 = "https://api.login.yahoo.com"
+		jwks_uri               = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url          = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		token_endpoint         = "https://api.login.yahoo.com/oauth2/get_token"
+		userinfo_endpoint      = "https://api.login.yahoo.com/openid/v1/userinfo"
+		authorization_endpoint = "https://api.login.yahoo.com/oauth2/request_auth"
+		scopes                 = [ "openid", "email", "profile" ]
+	}
+}
+`
+
+const testAccConnectionXAAConfigDataSource = testAccConnectionXAAConfigRemoved + `
+data "auth0_connection" "oidc" {
+	connection_id = auth0_connection.oidc.id
+}
+`
+
+const testAccConnectionXAAConfigNonOIDC = `
+resource "auth0_connection" "auth0" {
+	name     = "Acceptance-Test-XAA-Negative-{{.testName}}"
+	strategy = "auth0"
+	cross_app_access_requesting_app {
+		active = true
+	}
+}
+`
+
+func TestAccConnectionConnectedAccounts(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				// Create with connected_accounts active = true.
+				Config: acctest.ParseTestName(testAccConnectionConnectedAccountsConfigCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "strategy", "oidc"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "connected_accounts.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "connected_accounts.0.active", "true"),
+				),
+			},
+			{
+				// Update to active = false.
+				Config: acctest.ParseTestName(testAccConnectionConnectedAccountsConfigUpdateFalse, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "connected_accounts.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "connected_accounts.0.active", "false"),
+				),
+			},
+			{
+				// Removing the block is a no-op: the last-known value stays in state (proves the R9 guard).
+				Config: acctest.ParseTestName(testAccConnectionConnectedAccountsConfigRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "connected_accounts.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "connected_accounts.0.active", "false"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionConnectedAccountsConfigCreate = `
+resource "auth0_connection" "oidc" {
+	name           = "Acceptance-Test-CA-{{.testName}}"
+	display_name   = "Acceptance-Test-CA-{{.testName}}"
+	strategy       = "oidc"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		type                   = "back_channel"
+		issuer                 = "https://api.login.yahoo.com"
+		jwks_uri               = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url          = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		token_endpoint         = "https://api.login.yahoo.com/oauth2/get_token"
+		userinfo_endpoint      = "https://api.login.yahoo.com/openid/v1/userinfo"
+		authorization_endpoint = "https://api.login.yahoo.com/oauth2/request_auth"
+		scopes                 = [ "openid", "email", "profile" ]
+	}
+	connected_accounts {
+		active = true
+	}
+}
+`
+
+const testAccConnectionConnectedAccountsConfigUpdateFalse = `
+resource "auth0_connection" "oidc" {
+	name           = "Acceptance-Test-CA-{{.testName}}"
+	display_name   = "Acceptance-Test-CA-{{.testName}}"
+	strategy       = "oidc"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		type                   = "back_channel"
+		issuer                 = "https://api.login.yahoo.com"
+		jwks_uri               = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url          = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		token_endpoint         = "https://api.login.yahoo.com/oauth2/get_token"
+		userinfo_endpoint      = "https://api.login.yahoo.com/openid/v1/userinfo"
+		authorization_endpoint = "https://api.login.yahoo.com/oauth2/request_auth"
+		scopes                 = [ "openid", "email", "profile" ]
+	}
+	connected_accounts {
+		active = false
+	}
+}
+`
+
+const testAccConnectionConnectedAccountsConfigRemoved = `
+resource "auth0_connection" "oidc" {
+	name           = "Acceptance-Test-CA-{{.testName}}"
+	display_name   = "Acceptance-Test-CA-{{.testName}}"
+	strategy       = "oidc"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		type                   = "back_channel"
+		issuer                 = "https://api.login.yahoo.com"
+		jwks_uri               = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url          = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		token_endpoint         = "https://api.login.yahoo.com/oauth2/get_token"
+		userinfo_endpoint      = "https://api.login.yahoo.com/openid/v1/userinfo"
+		authorization_endpoint = "https://api.login.yahoo.com/oauth2/request_auth"
+		scopes                 = [ "openid", "email", "profile" ]
 	}
 }
 `

@@ -76,9 +76,10 @@ var resourceSchema = map[string]*schema.Schema{
 		Optional:    true,
 		Description: "Display connection as a button. Only available on enterprise connections.",
 	},
-	"options":            optionsSchema,
-	"authentication":     authenticationSchema,
-	"connected_accounts": connectedAccountsSchema,
+	"options":                         optionsSchema,
+	"authentication":                  authenticationSchema,
+	"connected_accounts":              connectedAccountsSchema,
+	"cross_app_access_requesting_app": crossAppAccessRequestingAppSchema,
 }
 
 var optionsSchema = &schema.Schema{
@@ -1656,6 +1657,27 @@ var connectedAccountsSchema = &schema.Schema{
 	Computed:    true,
 	MaxItems:    1,
 	Description: "Configure the purpose of a connection to be used for connected accounts and Token Vault.",
+	Elem: &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"active": {
+				Type:     schema.TypeBool,
+				Required: true,
+			},
+		},
+	},
+}
+
+var crossAppAccessRequestingAppSchema = &schema.Schema{
+	Type:     schema.TypeList,
+	Optional: true,
+	Computed: true,
+	MaxItems: 1,
+	Description: "Configure the purpose of a connection to be used as a requesting application " +
+		"authorization server for Cross-App Access (XAA). This is an Early Access feature and " +
+		"requires the `token_vault_xaa` flag to be enabled on your tenant. Only supported on " +
+		"`oidc` and `okta` strategy connections. " +
+		"**Note:** Once configured, removing this block from your configuration is a no-op and will " +
+		"not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it.",
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"active": {

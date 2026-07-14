@@ -77,6 +77,7 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		data.Set("metadata", connection.GetMetadata()),
 		data.Set("authentication", flattenConnectionAuthentication(connection.GetAuthentication())),
 		data.Set("connected_accounts", flattenConnectionConnectedAccounts(connection.GetConnectedAccounts())),
+		data.Set("cross_app_access_requesting_app", flattenConnectionCrossAppAccessRequestingApp(connection.GetCrossAppAccessRequestingApp())),
 	)
 
 	if connectionIsEnterprise(connection.GetStrategy()) {
@@ -121,6 +122,20 @@ func flattenConnectionConnectedAccounts(connectedAccounts *management.ConnectedA
 
 	flattened := map[string]interface{}{
 		"active": connectedAccounts.GetActive(),
+	}
+
+	return []interface{}{
+		flattened,
+	}
+}
+
+func flattenConnectionCrossAppAccessRequestingApp(crossAppAccessRequestingApp *management.CrossAppAccessRequestingApp) []interface{} {
+	if crossAppAccessRequestingApp == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"active": crossAppAccessRequestingApp.GetActive(),
 	}
 
 	return []interface{}{

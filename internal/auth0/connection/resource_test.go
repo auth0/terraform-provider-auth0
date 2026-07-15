@@ -1466,7 +1466,7 @@ func TestAccConnectionCrossAppAccessRequestingAppNegative(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				// cross_app_access_requesting_app is only supported on oidc/okta strategies.
+				// Cross_app_access_requesting_app is only supported on oidc/okta strategies.
 				// The API rejects other strategies (operation_not_supported); assert the error passes
 				// through cleanly rather than being masked or pre-validated client-side.
 				Config:      acctest.ParseTestName(testAccConnectionXAAConfigNonOIDC, t.Name()),

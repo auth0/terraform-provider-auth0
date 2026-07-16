@@ -128,16 +128,17 @@ func createClientGrant(ctx context.Context, data *schema.ResourceData, meta inte
 			return diag.FromErr(err)
 		}
 
-	// Auth0 supports multiple client grants for the same (client_id, audience)
-	// differentiated by subject_type (e.g. one grant for "client" access and another
-	// for "user" access). We must therefore adopt an existing grant only when its
-	// subject_type matches the one in configuration; otherwise we fall through and
-	// create a new grant.
-	desiredSubjectType := normalizeSubjectType(data.Get("subject_type").(string))
-	for _, existingGrant := range grantList.ClientGrants {
-		if normalizeSubjectType(existingGrant.GetSubjectType()) == desiredSubjectType {
-			data.SetId(existingGrant.GetID())
-			return readClientGrant(ctx, data, meta)
+		// Auth0 supports multiple client grants for the same (client_id, audience)
+		// differentiated by subject_type (e.g. one grant for "client" access and another
+		// for "user" access). We must therefore adopt an existing grant only when its
+		// subject_type matches the one in configuration; otherwise we fall through and
+		// create a new grant.
+		desiredSubjectType := normalizeSubjectType(data.Get("subject_type").(string))
+		for _, existingGrant := range grantList.ClientGrants {
+			if normalizeSubjectType(existingGrant.GetSubjectType()) == desiredSubjectType {
+				data.SetId(existingGrant.GetID())
+				return readClientGrant(ctx, data, meta)
+			}
 		}
 	}
 

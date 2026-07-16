@@ -2,7 +2,9 @@ package client
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
@@ -25,6 +27,43 @@ var ValidAppTypes = []string{
 	"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom", "express_configuration",
 }
 
+// ValidTokenExchangeProfileTypes contains all valid values for token_exchange.allow_any_profile_of_type.
+var ValidTokenExchangeProfileTypes = []string{
+	"custom_authentication", "on_behalf_of_token_exchange",
+}
+
+// samlDefault holds Auth0 server-side defaults for SAML addon fields.
+// These are used only in flatten (not as schema Default) so that:
+// 1. Terraform doesn't force defaults onto existing API values when the field is absent from config.
+// 2. On import, nil fields get the correct Auth0 default instead of Go's zero value.
+var samlDefault = struct {
+	createUPNClaim, passthroughClaimsWithNoMapping, mapIdentities, typedAttributes, includeAttributeNameFormat bool
+	lifetimeInSeconds                                                                                          int
+	mappings                                                                                                   map[string]string
+	nameIdentifierProbes                                                                                       []string
+}{
+	createUPNClaim:                 true,
+	passthroughClaimsWithNoMapping: true,
+	mapIdentities:                  true,
+	typedAttributes:                true,
+	includeAttributeNameFormat:     true,
+	lifetimeInSeconds:              3600,
+	mappings: map[string]string{
+		"user_id":     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+		"email":       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+		"name":        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+		"given_name":  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
+		"family_name": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname",
+		"upn":         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn",
+		"groups":      "http://schemas.xmlsoap.org/claims/Group",
+	},
+	nameIdentifierProbes: []string{
+		"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+		"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+		"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+	},
+}
+
 // NewResource will return a new auth0_client resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -33,7 +72,7 @@ func NewResource() *schema.Resource {
 		UpdateContext: updateClient,
 		DeleteContext: deleteClient,
 		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
+			StateContext: importClient,
 		},
 		Description: "With this resource, you can set up applications that use Auth0 for authentication " +
 			"and configure allowed callback URLs and secrets for these applications.",
@@ -53,6 +92,28 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "The ID of the client.",
+			},
+			"external_client_id": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The URL of the Client ID Metadata Document. Only present for CIMD-registered clients.",
+			},
+			"external_metadata_type": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Type of external metadata. Value is `cimd` for CIMD-registered clients.",
+			},
+			"external_metadata_created_by": {
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: "Who created the external metadata client: `admin` (via Management API), " +
+					"`client` (self-registered), or `unknown`.",
+			},
+			"jwks_uri": {
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: "URL for the JSON Web Key Set (JWKS) containing the public keys used for " +
+					"`private_key_jwt` authentication. Only present for CIMD clients using `private_key_jwt` authentication.",
 			},
 			"client_aliases": {
 				Type: schema.TypeList,
@@ -79,11 +140,26 @@ func NewResource() *schema.Resource {
 					"If none is set, the default badge for the application type will be shown.",
 			},
 			"is_first_party": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Computed: true,
-				Description: "Indicates whether this client is a first-party client." +
-					"Defaults to true from the API",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Indicates whether this client is a first-party client.",
+			},
+			"third_party_security_mode": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"strict", "permissive"}, false),
+				Description: "Security mode for third-party clients. " +
+					"Allowed values: `strict` or `permissive`.",
+			},
+			"redirection_policy": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"allow_always", "open_redirect_protection"}, false),
+				Description: "Controls whether Auth0 redirects users to the application's callback URL on authentication errors or in email verification flows." +
+					"Allowed values: `allow_always` or `open_redirect_protection`.",
 			},
 			"is_token_endpoint_ip_header_trusted": {
 				Type:     schema.TypeBool,
@@ -374,8 +450,11 @@ func NewResource() *schema.Resource {
 			"initiate_login_uri": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
-				Description:  "Initiate login URI. Must be HTTPS or an empty string.",
+				ValidateFunc: internalValidation.IsHTTPSURLOrEmptyStringWithDynamicLoginURIPlaceholders,
+				Description: "Initiate login URI. Must be HTTPS or an empty string. May contain Auth0 dynamic login URI " +
+					"placeholders such as `{organization.metadata.public_login_host}` or " +
+					"`{custom_domain.metadata.public_app_host}`, which are resolved by Auth0 at request time. " +
+					"See https://auth0.com/docs/get-started/applications/application-settings.",
 			},
 			"native_social_login": {
 				Type:     schema.TypeList,
@@ -1171,6 +1250,7 @@ func NewResource() *schema.Resource {
 									"mappings": {
 										Type:          schema.TypeMap,
 										Optional:      true,
+										Computed:      true,
 										Elem:          schema.TypeString,
 										ConflictsWith: []string{"addons.0.samlp.0.flexible_mappings"},
 										Description: "Mappings between the Auth0 user profile property " +
@@ -1188,49 +1268,45 @@ func NewResource() *schema.Resource {
 											"It should only be used when needed to send a map with keys as slices.",
 									},
 									"create_upn_claim": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether a UPN claim should be created. " +
-											"Defaults to `true`.",
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Indicates whether a UPN claim should be created.",
 									},
 									"passthrough_claims_with_no_mapping": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  true,
+										Computed: true,
 										Description: "Indicates whether or not to passthrough " +
 											"claims that are not mapped to the common profile " +
-											"in the output assertion. Defaults to `true`.",
+											"in the output assertion.",
 									},
 									"map_unknown_claims_as_is": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  false,
 										Description: "Indicates whether to add a prefix of `http://schema.auth0.com` " +
 											"to any claims that are not mapped to the common profile when passed " +
-											"through in the output assertion. Defaults to `false`.",
+											"through in the output assertion.",
 									},
 									"map_identities": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  true,
+										Computed: true,
 										Description: "Indicates whether or not to add additional identity " +
 											"information in the token, such as the provider used and the " +
-											"`access_token`, if available. Defaults to `true`.",
+											"`access_token`, if available.",
 									},
 									"signature_algorithm": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "rsa-sha1",
 										Description: "Algorithm used to sign the SAML Assertion or response. " +
-											"Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.",
+											"Options include `rsa-sha1` and `rsa-sha256`.",
 									},
 									"digest_algorithm": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "sha1",
 										Description: "Algorithm used to calculate the digest of the SAML Assertion " +
-											"or response. Options include `sha1` and `sha256`. Defaults to `sha1`.",
+											"or response. Options include `sha1` and `sha256`.",
 									},
 									"destination": {
 										Type:     schema.TypeString,
@@ -1240,11 +1316,10 @@ func NewResource() *schema.Resource {
 											"or callback URL if there was no SAMLRequest.",
 									},
 									"lifetime_in_seconds": {
-										Type:     schema.TypeInt,
-										Optional: true,
-										Default:  3600,
-										Description: "Number of seconds during which the token is valid. " +
-											"Defaults to `3600` seconds.",
+										Type:        schema.TypeInt,
+										Optional:    true,
+										Computed:    true,
+										Description: "Number of seconds during which the token is valid.",
 									},
 									"sign_response": {
 										Type:     schema.TypeBool,
@@ -1253,16 +1328,15 @@ func NewResource() *schema.Resource {
 											"instead of the SAML Assertion.",
 									},
 									"name_identifier_format": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Default:  "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-										Description: "Format of the name identifier. " +
-											"Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Format of the name identifier.",
 									},
 									"name_identifier_probes": {
 										Type:     schema.TypeList,
 										Elem:     &schema.Schema{Type: schema.TypeString},
 										Optional: true,
+										Computed: true,
 										Description: "Attributes that can be used for Subject/NameID. " +
 											"Auth0 will try each of the attributes of this array in " +
 											"order and use the first value it finds.",
@@ -1275,19 +1349,18 @@ func NewResource() *schema.Resource {
 									"typed_attributes": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  true,
+										Computed: true,
 										Description: "Indicates whether or not we should infer the `xs:type` " +
 											"of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, " +
-											"and `xs:anyType`. When set to `false`, all `xs:type` are `xs:anyType`. " +
-											"Defaults to `true`.",
+											"and `xs:anyType`. When set to `false`, all `xs:type` are `xs:anyType`.",
 									},
 									"include_attribute_name_format": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  true,
+										Computed: true,
 										Description: "Indicates whether or not we should infer the NameFormat " +
 											"based on the attribute name. If set to `false`, the attribute " +
-											"NameFormat is not set in the assertion. Defaults to `true`.",
+											"NameFormat is not set in the assertion.",
 									},
 									"logout": {
 										Type:        schema.TypeList,
@@ -1407,10 +1480,14 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"allow_any_profile_of_type": {
-							Required:    true,
-							Type:        schema.TypeList,
-							Elem:        &schema.Schema{Type: schema.TypeString},
-							Description: "List of allowed profile types for token exchange",
+							Required: true,
+							Type:     schema.TypeList,
+							Elem: &schema.Schema{
+								Type:         schema.TypeString,
+								ValidateFunc: validation.StringInSlice(ValidTokenExchangeProfileTypes, false),
+							},
+							Description: "List of allowed profile types for token exchange. " +
+								"Supported values include: " + strings.Join(ValidTokenExchangeProfileTypes, ", ") + ".",
 						},
 					},
 				},
@@ -1533,6 +1610,54 @@ func NewResource() *schema.Resource {
 							Default:     true,
 							Description: "Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application.",
 						},
+						"delegation": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Configuration for delegation (impersonation) access using Session Transfer Tokens. (EA Only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"allow_delegated_access": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Indicates whether delegation (impersonation) access is allowed using Session Transfer Tokens. Defaults to `false`. (EA Only)",
+									},
+									"enforce_device_binding": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										Computed:     true,
+										ValidateFunc: validation.StringInSlice([]string{"ip", "asn"}, false),
+										Description:  "Indicates the device binding enforcement for delegation (impersonation) access. If set to 'ip', device binding is enforced by IP. If set to 'asn', device binding is enforced by ASN. Defaults to `ip`. (EA Only)",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"fedcm_login": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Federated Credential Management (FedCM) configuration. (EA only)",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"google": {
+							Type:        schema.TypeList,
+							Required:    true,
+							MaxItems:    1,
+							Description: "Google FedCM configuration. (EA only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"is_enabled": {
+										Type:        schema.TypeBool,
+										Required:    true,
+										Description: "Whether to show the Google FedCM prompt on Login. (EA only)",
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -1552,6 +1677,46 @@ func NewResource() *schema.Resource {
 				Description: "The identifier of a resource server that client is associated with" +
 					"This property can be sent only when app_type=resource_server." +
 					"This property can not be changed, once the client is created.",
+			},
+			"my_organization_configuration": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration for self-service organization features, controlling how organizations are created and managed for this client.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"connection_profile_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The ID of the connection profile to use when creating organizations for this client.",
+						},
+						"user_attribute_profile_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The ID of the user attribute profile to use when creating organizations for this client.",
+						},
+						"allowed_strategies": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+							Description: "The list of connection strategies that are allowed when creating organizations for this client (e.g. \"okta\", \"samlp\").",
+						},
+						"connection_deletion_behavior": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Description:  "Controls the behavior when deleting connections associated with organizations for this client. Possible values: `allow`, `allow_if_empty`.",
+							ValidateFunc: validation.StringInSlice([]string{"allow", "allow_if_empty"}, false),
+						},
+						"invitation_landing_client_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "The client ID used as the invitation landing page when creating invitations through the My Organization API. Requires the tenant to have member management enabled, and the referenced client must allow organizations.",
+						},
+					},
+				},
 			},
 			"express_configuration": {
 				Type:        schema.TypeList,
@@ -1686,4 +1851,28 @@ func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface
 	}
 
 	return nil
+}
+
+// importClient validates the client is not a CIMD client before allowing
+// import. Prevents users from accidentally importing a CIMD client into
+// auth0_client (which would cause unexpected PATCH errors or data loss).
+func importClient(ctx context.Context, data *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	api := meta.(*config.Config).GetAPI()
+
+	client, err := api.Client.Read(ctx, data.Id())
+	if err != nil {
+		return nil, err
+	}
+
+	if client.GetExternalMetadataType() == "cimd" {
+		return nil, fmt.Errorf(
+			"client %q is a CIMD client. "+
+				"Use the auth0_client_cimd resource to manage CIMD clients",
+			data.Id(),
+		)
+	}
+
+	data.SetId(client.GetClientID())
+
+	return []*schema.ResourceData{data}, nil
 }

@@ -69,6 +69,14 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 		if err := data.Set("webhook_configuration", []interface{}{webhookCfg}); err != nil {
 			return err
 		}
+
+	case "action":
+		actionCfg := map[string]interface{}{
+			"action_id": config["action_id"],
+		}
+		if err := data.Set("action_configuration", []interface{}{actionCfg}); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -99,6 +107,18 @@ func flattenWebhookAuthorization(auth map[string]interface{}, data *schema.Resou
 		}
 		if version, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.token_wo_version"); ok {
 			authMap["token_wo_version"] = version
+		}
+	case "custom_header":
+		// Header_key IS returned by the API — read directly from response.
+		if v, ok := auth["header_key"]; ok && v != "" {
+			authMap["header_key"] = v
+		}
+		// Header_value is never returned by the API — preserve from prior state.
+		if v, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.header_value"); ok && v != "" {
+			authMap["header_value"] = v
+		}
+		if v, ok := data.GetOk("webhook_configuration.0.webhook_authorization.0.header_value_wo_version"); ok {
+			authMap["header_value_wo_version"] = v
 		}
 	}
 

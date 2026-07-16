@@ -3,6 +3,7 @@ package action
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -21,6 +22,9 @@ func NewResource() *schema.Resource {
 		ReadContext:   readAction,
 		UpdateContext: updateAction,
 		DeleteContext: deleteAction,
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(6 * time.Minute),
+		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -94,11 +98,14 @@ func NewResource() *schema.Resource {
 				Description: "The Node runtime. Possible values are: `node12`, `node16` (not recommended), `node18`, `node22`",
 			},
 			"secrets": {
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:          schema.TypeSet,
+				Optional:      true,
+				ConflictsWith: []string{"secrets_wo"},
 				Description: "List of secrets that are included in an action or a version of an action. " +
 					"Partial management of secrets is not supported. If the secret block is edited, the whole object is " +
-					"re-provisioned.",
+					"re-provisioned. " +
+					"**Note:** Secret values are persisted in Terraform state as plain text. For better security, " +
+					"consider using `secrets_wo` instead, which supports write-only values and ephemeral variables.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -114,6 +121,44 @@ func NewResource() *schema.Resource {
 						},
 					},
 				},
+			},
+			"secrets_wo": {
+				Type:          schema.TypeList,
+				Optional:      true,
+				ConflictsWith: []string{"secrets"},
+				RequiredWith:  []string{"secrets_wo_version"},
+				Description: "List of secrets for the action (write-only). " +
+					"Secret values are only available during resource creation and update, and are **not** stored in Terraform state. " +
+					"Adding, renaming, or removing an entry is applied automatically; to change only the value of an existing " +
+					"secret, bump the `secrets_wo_version` attribute. " +
+					"To remove all secrets, delete the `secrets_wo` blocks together with the `secrets_wo_version` attribute. " +
+					"This is an ordered list, so reordering the blocks is treated as a change. " +
+					"Conflicts with `secrets`.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"name": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Secret name.",
+						},
+						"value": {
+							Type:        schema.TypeString,
+							Required:    true,
+							WriteOnly:   true,
+							Sensitive:   true,
+							Description: "Secret value (write-only). This value is never stored in Terraform state.",
+						},
+					},
+				},
+			},
+			"secrets_wo_version": {
+				Type:         schema.TypeInt,
+				Optional:     true,
+				RequiredWith: []string{"secrets_wo"},
+				Description: "Version number for `secrets_wo` changes. " +
+					"Adding, renaming, or removing a `secrets_wo` entry is detected automatically, but changing only the " +
+					"**value** of an existing secret is not (write-only values are not tracked in state). " +
+					"Increment this value to push value-only changes to the API.",
 			},
 			"deploy": {
 				Type:     schema.TypeBool,
@@ -259,5 +304,31 @@ func deployAction(ctx context.Context, data *schema.ResourceData, meta interface
 		return err
 	}
 
+	if err := waitForActionDeployed(ctx, data, api); err != nil {
+		return err
+	}
+
 	return data.Set("version_id", actionVersion.GetID())
+}
+
+func waitForActionDeployed(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	err := retry.RetryContext(ctx, data.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
+		action, err := api.Action.Read(ctx, data.Id())
+		if err != nil {
+			return retry.NonRetryableError(err)
+		}
+
+		if action.GetDeployedVersion() == nil || !action.GetDeployedVersion().Deployed {
+			return retry.RetryableError(
+				fmt.Errorf("action %q not deployed yet", action.GetName()),
+			)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return fmt.Errorf("action %q deploy never completed: %w", data.Get("name").(string), err)
+	}
+
+	return nil
 }

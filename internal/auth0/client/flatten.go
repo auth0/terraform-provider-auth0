@@ -14,6 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+const timeRFC3339WithMilliseconds = "2006-01-02T15:04:05.000Z07:00"
+
 func flattenCustomSocialConfiguration(customSocial *management.ClientNativeSocialLogin) []interface{} {
 	if customSocial == nil {
 		return nil
@@ -545,7 +547,9 @@ func flattenClientAddonSSOIntegration(addon *management.SSOIntegrationClientAddo
 }
 
 func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
-	if addon == nil || addon.String() == "{}" {
+	// Return nil when samlp is absent from the API response. An empty samlp
+	// addon (i.e. "samlp":{}) is still processed to avoid state drift.
+	if addon == nil {
 		return nil
 	}
 
@@ -566,32 +570,71 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 		flexibleMappingsMap, _ = structure.FlattenJsonToString(addon.GetFlexibleMappings())
 	}
 
-	return []interface{}{
-		map[string]interface{}{
-			"mappings":                           addon.GetMappings(),
-			"flexible_mappings":                  flexibleMappingsMap,
-			"audience":                           addon.GetAudience(),
-			"recipient":                          addon.GetRecipient(),
-			"create_upn_claim":                   addon.GetCreateUPNClaim(),
-			"map_unknown_claims_as_is":           addon.GetMapUnknownClaimsAsIs(),
-			"passthrough_claims_with_no_mapping": addon.GetPassthroughClaimsWithNoMapping(),
-			"map_identities":                     addon.GetMapIdentities(),
-			"signature_algorithm":                addon.GetSignatureAlgorithm(),
-			"digest_algorithm":                   addon.GetDigestAlgorithm(),
-			"issuer":                             addon.GetIssuer(),
-			"destination":                        addon.GetDestination(),
-			"lifetime_in_seconds":                addon.GetLifetimeInSeconds(),
-			"sign_response":                      addon.GetSignResponse(),
-			"name_identifier_format":             addon.GetNameIdentifierFormat(),
-			"name_identifier_probes":             addon.GetNameIdentifierProbes(),
-			"authn_context_class_ref":            addon.GetAuthnContextClassRef(),
-			"typed_attributes":                   addon.GetTypedAttributes(),
-			"include_attribute_name_format":      addon.GetIncludeAttributeNameFormat(),
-			"binding":                            addon.GetBinding(),
-			"signing_cert":                       addon.GetSigningCert(),
-			"logout":                             logout,
-		},
+	flatSaml := map[string]interface{}{
+		"logout":            logout,
+		"flexible_mappings": flexibleMappingsMap,
+		// Scalar(non-block) list and set backend defaults must be populated when nil,
+		// else will be overwritten by [] and {}.
+		"mappings":               getNonNilValueOrDefault(addon.Mappings, samlDefault.mappings),
+		"name_identifier_probes": getNonNilValueOrDefault(addon.NameIdentifierProbes, samlDefault.nameIdentifierProbes),
+		// Non-zero bool and int backend defaults must be populated when nil,
+		// else will be overwritten by Go defaults on imported resources.
+		"create_upn_claim":                   getNonNilValueOrDefault(addon.CreateUPNClaim, samlDefault.createUPNClaim),
+		"passthrough_claims_with_no_mapping": getNonNilValueOrDefault(addon.PassthroughClaimsWithNoMapping, samlDefault.passthroughClaimsWithNoMapping),
+		"map_identities":                     getNonNilValueOrDefault(addon.MapIdentities, samlDefault.mapIdentities),
+		"typed_attributes":                   getNonNilValueOrDefault(addon.TypedAttributes, samlDefault.typedAttributes),
+		"include_attribute_name_format":      getNonNilValueOrDefault(addon.IncludeAttributeNameFormat, samlDefault.includeAttributeNameFormat),
+		"lifetime_in_seconds":                getNonNilValueOrDefault(addon.LifetimeInSeconds, samlDefault.lifetimeInSeconds),
 	}
+
+	// String fields are only populated when non-nil; Terraform treats absent
+	// strings as null which matches the API's omission behavior in response.
+	if addon.Audience != nil {
+		flatSaml["audience"] = *addon.Audience
+	}
+	if addon.Issuer != nil {
+		flatSaml["issuer"] = *addon.Issuer
+	}
+	if addon.Destination != nil {
+		flatSaml["destination"] = *addon.Destination
+	}
+	if addon.AuthnContextClassRef != nil {
+		flatSaml["authn_context_class_ref"] = *addon.AuthnContextClassRef
+	}
+	if addon.Binding != nil {
+		flatSaml["binding"] = *addon.Binding
+	}
+	if addon.SigningCert != nil {
+		flatSaml["signing_cert"] = *addon.SigningCert
+	}
+	if addon.Recipient != nil {
+		flatSaml["recipient"] = *addon.Recipient
+	}
+	if addon.SignatureAlgorithm != nil {
+		flatSaml["signature_algorithm"] = *addon.SignatureAlgorithm
+	}
+	if addon.DigestAlgorithm != nil {
+		flatSaml["digest_algorithm"] = *addon.DigestAlgorithm
+	}
+	if addon.NameIdentifierFormat != nil {
+		flatSaml["name_identifier_format"] = *addon.NameIdentifierFormat
+	}
+	if addon.MapUnknownClaimsAsIs != nil {
+		flatSaml["map_unknown_claims_as_is"] = *addon.MapUnknownClaimsAsIs
+	}
+	if addon.SignResponse != nil {
+		flatSaml["sign_response"] = *addon.SignResponse
+	}
+
+	return []interface{}{flatSaml}
+}
+
+// getNonNilValueOrDefault returns the dereferenced value if the pointer is non-nil, otherwise returns the provided default value.
+func getNonNilValueOrDefault[T any](value *T, defaultValue T) T {
+	if value != nil {
+		return *value
+	}
+	return defaultValue
 }
 
 func flattenDefaultOrganization(defaultOrganization *management.ClientDefaultOrganization) []interface{} {
@@ -660,12 +703,20 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("token_exchange", flattenTokenExchange(client.GetTokenExchange())),
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
 		data.Set("compliance_level", client.GetComplianceLevel()),
+		data.Set("third_party_security_mode", client.GetThirdPartySecurityMode()),
+		data.Set("redirection_policy", client.GetRedirectionPolicy()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
+		data.Set("fedcm_login", flattenFedCMLogin(client.GetFedCMLogin())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
 			value.BoolPtrToString(client.SkipNonVerifiableCallbackURIConfirmationPrompt)),
 		data.Set("express_configuration", flattenExpressConfiguration(client.GetExpressConfiguration())),
+		data.Set("external_client_id", client.GetExternalClientID()),
+		data.Set("external_metadata_type", client.GetExternalMetadataType()),
+		data.Set("external_metadata_created_by", client.GetExternalMetadataCreatedBy()),
+		data.Set("jwks_uri", client.GetJwksURI()),
+		data.Set("my_organization_configuration", flattenMyOrganizationConfiguration(client.GetMyOrganizationConfiguration())),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
@@ -687,6 +738,7 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 		"allow_refresh_token":               sessionTransfer.GetAllowRefreshToken(),
 		"enforce_online_refresh_tokens":     sessionTransfer.GetEnforceOnlineRefreshTokens(),
 		"enforce_cascade_revocation":        sessionTransfer.GetEnforceCascadeRevocation(),
+		"delegation":                        flattenSessionTransferDelegation(sessionTransfer.GetDelegation()),
 	}
 
 	return []interface{}{
@@ -694,18 +746,63 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 	}
 }
 
+func flattenSessionTransferDelegation(delegation *management.SessionTransferDelegation) []interface{} {
+	if delegation == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"allow_delegated_access": delegation.GetAllowDelegatedAccess(),
+			"enforce_device_binding": delegation.GetEnforceDeviceBinding(),
+		},
+	}
+}
+
+func flattenFedCMLogin(fedcmLogin *management.FedCMLogin) []interface{} {
+	if fedcmLogin == nil {
+		return nil
+	}
+
+	m := map[string]interface{}{
+		"google": flattenFedCMLoginGoogle(fedcmLogin.GetGoogle()),
+	}
+
+	return []interface{}{m}
+}
+
+func flattenFedCMLoginGoogle(google *management.FedCMLoginGoogle) []interface{} {
+	if google == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"is_enabled": google.GetIsEnabled(),
+		},
+	}
+}
+
 func flattenClientGrant(data *schema.ResourceData, clientGrant *management.ClientGrant) error {
 	result := multierror.Append(
 		data.Set("client_id", clientGrant.GetClientID()),
 		data.Set("audience", clientGrant.GetAudience()),
-		data.Set("scopes", clientGrant.GetScope()),
 		data.Set("allow_any_organization", clientGrant.GetAllowAnyOrganization()),
 		data.Set("organization_usage", clientGrant.GetOrganizationUsage()),
 		data.Set("subject_type", clientGrant.GetSubjectType()),
 		data.Set("authorization_details_types", clientGrant.GetAuthorizationDetailsTypes()),
 		data.Set("is_system", clientGrant.GetIsSystem()),
 		data.Set("allow_all_scopes", clientGrant.GetAllowAllScopes()),
+		data.Set("default_for", clientGrant.GetDefaultFor()),
 	)
+
+	// Only persist scopes when allow_all_scopes is false. When true the Auth0
+	// API returns scope:[] which, if written to state, causes terraform
+	// plan -generate-config-out to emit scopes = [] alongside
+	// allow_all_scopes = true — a combination the validator correctly rejects.
+	if !clientGrant.GetAllowAllScopes() {
+		result = multierror.Append(result, data.Set("scopes", clientGrant.GetScope()))
+	}
 
 	return result.ErrorOrNil()
 }
@@ -731,9 +828,14 @@ func flattenClientCredentials(ctx context.Context, api *management.Management, d
 	result := multierror.Append(
 		err,
 		data.Set("client_id", client.GetClientID()),
-		data.Set("client_secret", client.GetClientSecret()),
 		data.Set("signed_request_object", signedRequestObject),
 	)
+
+	if v, ok := data.GetOk("client_secret_wo_version"); ok {
+		result = multierror.Append(result, data.Set("client_secret_wo_version", v))
+	} else {
+		result = multierror.Append(result, data.Set("client_secret", client.GetClientSecret()))
+	}
 
 	authenticationMethods, err := flattenClientAuthenticationMethods(ctx, api, data, true, client.GetClientAuthenticationMethods())
 	result = multierror.Append(result, err)
@@ -877,8 +979,6 @@ func flattenCredentials(
 		return nil, nil
 	}
 
-	const timeRFC3339WithMilliseconds = "2006-01-02T15:04:05.000Z07:00"
-
 	stateCredentials := make([]interface{}, 0)
 	for index, cred := range credentials {
 		credential, err := api.Client.GetCredential(ctx, data.Id(), cred.GetID())
@@ -901,8 +1001,21 @@ func flattenCredentials(
 			stateCredential["algorithm"] = credential.GetAlgorithm()
 			stateCredential["key_id"] = credential.GetKeyID()
 
-			if isResource {
-				// These ones don't get read back, so we have to get them from the state.
+			if isResource && attribute == "private_key_jwt" {
+				statePEM, parseExpiry := findCredentialInState(data, attribute, credential.GetID())
+				if statePEM == "" {
+					statePEM, parseExpiry = findCredentialInStateByName(data, attribute, credential.GetName())
+				}
+				// Detect external key rotation: if the PEM in state no longer
+				// matches the API-returned key_id, clear it so Terraform sees drift.
+				if statePEM != "" && credential.GetKeyID() != "" {
+					if jwkThumbprint(statePEM) != credential.GetKeyID() {
+						statePEM = ""
+					}
+				}
+				stateCredential["pem"] = statePEM
+				stateCredential["parse_expiry_from_cert"] = parseExpiry
+			} else if isResource {
 				stateCredential["pem"] = data.Get(
 					fmt.Sprintf("%s.0.credentials.%d.pem", attribute, index),
 				)
@@ -914,14 +1027,12 @@ func flattenCredentials(
 			stateCredential["subject_dn"] = credential.GetSubjectDN()
 
 			if isResource {
-				// This one doesn't get read back, so we have to get it from the state.
 				stateCredential["pem"] = data.Get(
 					fmt.Sprintf("%s.0.credentials.%d.pem", attribute, index),
 				)
 			}
 		case "x509_cert":
 			if isResource {
-				// This one doesn't get read back, so we have to get it from the state.
 				stateCredential["pem"] = data.Get(
 					fmt.Sprintf("%s.0.credentials.%d.pem", attribute, index),
 				)
@@ -932,6 +1043,65 @@ func flattenCredentials(
 	}
 
 	return stateCredentials, nil
+}
+
+// findCredentialInState looks up a credential's PEM and parse_expiry_from_cert
+// from the current state by matching on credential ID. This avoids positional
+// index issues when credentials is a TypeSet.
+func findCredentialInState(data *schema.ResourceData, attribute string, credentialID string) (string, bool) {
+	credentialsRaw := data.Get(fmt.Sprintf("%s.0.credentials", attribute))
+	if credentialsRaw == nil {
+		return "", false
+	}
+
+	credSet, ok := credentialsRaw.(*schema.Set)
+	if !ok {
+		return "", false
+	}
+
+	for _, item := range credSet.List() {
+		credMap, ok := item.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		if id, _ := credMap["id"].(string); id == credentialID {
+			pem, _ := credMap["pem"].(string)
+			parseExpiry, _ := credMap["parse_expiry_from_cert"].(bool)
+			return pem, parseExpiry
+		}
+	}
+
+	return "", false
+}
+
+// findCredentialInStateByName searches all credentials in the planned state by
+// name. Used as a fallback for newly created credentials whose IDs aren't in
+// state yet but whose name matches the API response.
+func findCredentialInStateByName(data *schema.ResourceData, attribute string, name string) (string, bool) {
+	credentialsRaw := data.Get(fmt.Sprintf("%s.0.credentials", attribute))
+	if credentialsRaw == nil {
+		return "", false
+	}
+
+	credSet, ok := credentialsRaw.(*schema.Set)
+	if !ok {
+		return "", false
+	}
+
+	for _, item := range credSet.List() {
+		credMap, ok := item.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		n, _ := credMap["name"].(string)
+		if n == name {
+			pem, _ := credMap["pem"].(string)
+			parseExpiry, _ := credMap["parse_expiry_from_cert"].(bool)
+			return pem, parseExpiry
+		}
+	}
+
+	return "", false
 }
 
 func flattenClientList(data *schema.ResourceData, clients []*management.Client) error {
@@ -988,6 +1158,25 @@ func flattenExpressConfiguration(ec *management.ExpressConfiguration) []interfac
 			}
 		}
 		result["linked_clients"] = linkedClientsList
+	}
+
+	return []interface{}{result}
+}
+
+func flattenMyOrganizationConfiguration(moc *management.MyOrganizationConfiguration) []interface{} {
+	if moc == nil {
+		return nil
+	}
+
+	result := map[string]interface{}{
+		"connection_profile_id":        moc.GetConnectionProfileID(),
+		"user_attribute_profile_id":    moc.GetUserAttributeProfileID(),
+		"connection_deletion_behavior": moc.GetConnectionDeletionBehavior(),
+		"invitation_landing_client_id": moc.GetInvitationLandingClientID(),
+	}
+
+	if strategies := moc.GetAllowedStrategies(); len(strategies) > 0 {
+		result["allowed_strategies"] = strategies
 	}
 
 	return []interface{}{result}

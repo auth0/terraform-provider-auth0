@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -31,10 +32,12 @@ func NewGrantResource() *schema.Resource {
 		CustomizeDiff: validateClientGrant,
 		Schema: map[string]*schema.Schema{
 			"client_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "ID of the client for this grant.",
+				Type:          schema.TypeString,
+				Optional:      true,
+				ForceNew:      true,
+				ConflictsWith: []string{"default_for"},
+				AtLeastOneOf:  []string{"client_id", "default_for"},
+				Description:   "ID of the client for this grant. Mutually exclusive with `default_for`.",
 			},
 			"audience": {
 				Type:        schema.TypeString,
@@ -90,6 +93,16 @@ func NewGrantResource() *schema.Resource {
 				Computed:    true,
 				Description: "Indicates whether this grant is a special grant created by Auth0. It cannot be modified or deleted directly.",
 			},
+			"default_for": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ForceNew:      true,
+				ValidateFunc:  validation.StringInSlice([]string{"third_party_clients"}, false),
+				ConflictsWith: []string{"client_id"},
+				AtLeastOneOf:  []string{"client_id", "default_for"},
+				Description: "Applies this client grant as the default for all clients in the specified group. " +
+					"The only accepted value is third_party_clients, which applies the grant to all third-party clients.",
+			},
 			"allow_all_scopes": {
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -103,14 +116,17 @@ func NewGrantResource() *schema.Resource {
 func createClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	grantList, err := api.ClientGrant.List(
-		ctx,
-		management.Parameter("audience", data.Get("audience").(string)),
-		management.Parameter("client_id", data.Get("client_id").(string)),
-	)
-	if err != nil {
-		return diag.FromErr(err)
-	}
+	// Only check for existing grants when client_id is specified.
+	// For default_for grants, the API enforces uniqueness (409 on duplicate).
+	if clientID := data.Get("client_id").(string); clientID != "" {
+		grantList, err := api.ClientGrant.List(
+			ctx,
+			management.Parameter("audience", data.Get("audience").(string)),
+			management.Parameter("client_id", clientID),
+		)
+		if err != nil {
+			return diag.FromErr(err)
+		}
 
 	// Auth0 supports multiple client grants for the same (client_id, audience)
 	// differentiated by subject_type (e.g. one grant for "client" access and another
@@ -203,7 +219,7 @@ func validateClientGrant(_ context.Context, diff *schema.ResourceDiff, _ interfa
 	scopes := rawConfig.GetAttr("scopes")
 	allowAllScopes := diff.Get("allow_all_scopes").(bool)
 
-	if allowAllScopes && !scopes.IsNull() {
+	if clientGrantScopesConflictWithAllowAll(allowAllScopes, scopes) {
 		return fmt.Errorf("`scopes` cannot be provided when `allow_all_scopes` is set to `true`")
 	}
 
@@ -212,4 +228,13 @@ func validateClientGrant(_ context.Context, diff *schema.ResourceDiff, _ interfa
 	}
 
 	return nil
+}
+
+// clientGrantScopesConflictWithAllowAll reports whether a non-empty scopes list
+// has been provided alongside allow_all_scopes=true. An explicit empty list
+// (scopes = []) is not considered a conflict: terraform plan -generate-config-out
+// always writes scopes = [] into generated configs for grants that have
+// allow_all_scopes=true, because the Auth0 API returns scope:[] in that case.
+func clientGrantScopesConflictWithAllowAll(allowAllScopes bool, scopes cty.Value) bool {
+	return allowAllScopes && !scopes.IsNull() && scopes.LengthInt() > 0
 }

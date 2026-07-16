@@ -24,6 +24,13 @@ func flattenAction(data *schema.ResourceData, action *management.Action) error {
 		result = multierror.Append(result, data.Set("version_id", action.GetDeployedVersion().GetID()))
 	}
 
+	// Persist secrets_wo names from config so that the unmanaged secrets guard
+	// can inspect them on subsequent updates. The value field is WriteOnly and
+	// is automatically stripped by the SDK.
+	if secretsWO, ok := data.GetOk("secrets_wo"); ok {
+		result = multierror.Append(result, data.Set("secrets_wo", secretsWO))
+	}
+
 	return result.ErrorOrNil()
 }
 

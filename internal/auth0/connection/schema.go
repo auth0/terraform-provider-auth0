@@ -1,9 +1,13 @@
 package connection
 
 import (
+	"strings"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
+
+var allowedDPoPSigningAlgorithms = []string{"ES256", "ES384", "ES512", "Ed25519"}
 
 var resourceSchema = map[string]*schema.Schema{
 	"name": {
@@ -452,6 +456,11 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "Enable API Access to users.",
 			},
+			"api_enable_groups": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Enable API Access to groups.",
+			},
 			"app_id": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -758,9 +767,12 @@ var optionsSchema = &schema.Schema{
 			"type": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Description: "Value can be `back_channel` or `front_channel`. " +
-					"Front Channel will use OIDC protocol with `response_mode=form_post` and `response_type=id_token`. " +
-					"Back Channel will use `response_type=code`.",
+				Computed: true,
+				Description: "The connection's communication channel type. For OIDC connections, accepted values are " +
+					"`back_channel` and `front_channel`; for Okta Workforce connections, " +
+					"only `back_channel` is accepted. " +
+					"Front Channel uses the OIDC protocol with `response_mode=form_post` and `response_type=id_token`. " +
+					"Back Channel uses `response_type=code`.",
 			},
 			"send_back_channel_nonce": {
 				Type:     schema.TypeBool,
@@ -978,6 +990,16 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "Specifies the subject of the JWT used for global token revocation for the SAML connection.",
 			},
+			"destination_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The destination URL for the SAML assertion. Used when configuring a SAML connection for proxy gateways.",
+			},
+			"recipient_url": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The recipient URL for the SAML assertion. Used when configuring a SAML connection for proxy gateways.",
+			},
 			"auth_params": {
 				Type: schema.TypeMap,
 				Elem: &schema.Schema{
@@ -1002,6 +1024,23 @@ var optionsSchema = &schema.Schema{
 							Description: "PKCE configuration. Possible values: `auto` (uses the strongest algorithm available), " +
 								"`S256` (uses the SHA-256 algorithm), `plain` (uses plaintext as described in the PKCE specification) " +
 								"or `disabled` (disables support for PKCE).",
+						},
+					},
+				},
+			},
+			"federated_connections_access_tokens": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Computed:    true,
+				Description: "Configuration for collecting access tokens and refresh tokens from federated connections. Only applicable for OIDC connections.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"active": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "When enabled, Auth0 will collect and store access tokens and refresh tokens obtained from federated connections during authentication.",
 						},
 					},
 				},
@@ -1347,9 +1386,44 @@ var optionsSchema = &schema.Schema{
 				Description: "Specifies the authentication method for the token endpoint. (Okta/OIDC Connections)",
 			},
 			"token_endpoint_auth_signing_alg": {
-				Type:        schema.TypeString,
-				Optional:    true,
+				Type:     schema.TypeString,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"RS256", "RS384", "RS512",
+					"PS256", "PS384",
+					"ES256", "ES384",
+				}, false),
 				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)",
+			},
+			"id_token_signed_response_algs": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"RS256", "RS384", "RS512",
+						"PS256", "PS384",
+						"ES256", "ES384",
+					}, false),
+				},
+				Optional:    true,
+				Description: "List of allowed algorithms for the ID token signature. If not set or empty, default algorithm(s) will be applied at runtime. (Okta/OIDC Connections)",
+			},
+			"token_endpoint_jwtca_aud_format": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"issuer",
+					"token_endpoint",
+				}, false),
+				Description: "Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC Connections)",
+			},
+			"id_token_session_expiry_supported": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: "Indicates whether the identity provider supports session expiry via " +
+					"the id_token. When true, Auth0 will use the session_expiry claim from the " +
+					"upstream IdP's ID token to determine the maximum session lifetime. Only " +
+					"applicable for Okta and OIDC connections.",
 			},
 			"consumer_key": {
 				Type:        schema.TypeString,
@@ -1389,8 +1463,172 @@ var optionsSchema = &schema.Schema{
 			"dpop_signing_alg": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: validation.StringInSlice([]string{"ES256", "Ed25519"}, false),
-				Description:  "Signature method used to sign the request. EA Only",
+				ValidateFunc: validation.StringInSlice(allowedDPoPSigningAlgorithms, false),
+				Description:  "The algorithm used to sign the DPoP proof. Allowed values: " + strings.Join(allowedDPoPSigningAlgorithms, ", ") + ".",
+			},
+			"password_options": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "Flexible password policy configuration. Only available for `auth0` strategy connections. " +
+					"Cannot be set together with legacy password policy fields (`password_policy`, `password_complexity_options`, " +
+					"`password_history`, `password_no_personal_info`, `password_dictionary`).",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"complexity": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Password complexity requirements.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"min_length": {
+										Type:         schema.TypeInt,
+										Optional:     true,
+										Computed:     true,
+										ValidateFunc: validation.IntBetween(1, 72),
+										Description:  "Minimum password length. Must be between 1 and 72. Default: 15.",
+									},
+									"character_types": {
+										Type:     schema.TypeSet,
+										Optional: true,
+										Computed: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+											ValidateFunc: validation.StringInSlice([]string{
+												"uppercase", "lowercase", "number", "special",
+											}, false),
+										},
+										Description: "Required character types. Valid values: `uppercase`, `lowercase`, `number`, `special`.",
+									},
+									"character_type_rule": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"all", "three_of_four",
+										}, false),
+										Description: "When all 4 character types are specified, determines if all or 3 of 4 are required. " +
+											"Possible values: `all`, `three_of_four`. Default: `all`.",
+									},
+									"identical_characters": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"allow", "block",
+										}, false),
+										Description: "Controls whether 3+ consecutive identical characters are allowed. " +
+											"Possible values: `allow`, `block`. Default: `allow`.",
+									},
+									"sequential_characters": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"allow", "block",
+										}, false),
+										Description: "Controls whether sequential characters (abc, 123, etc.) are allowed. " +
+											"Possible values: `allow`, `block`. Default: `allow`.",
+									},
+									"max_length_exceeded": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"truncate", "error",
+										}, false),
+										Description: "Controls behavior when the password exceeds 72 bytes. " +
+											"Possible values: `truncate`, `error`. Default: `error`.",
+									},
+								},
+							},
+						},
+						"profile_data": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Personal information restriction policy.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"active": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Prevents users from including profile data in passwords.",
+									},
+									"blocked_fields": {
+										Type:        schema.TypeSet,
+										Optional:    true,
+										Computed:    true,
+										Elem:        &schema.Schema{Type: schema.TypeString},
+										Description: "User profile fields to block from passwords. Maximum 12 items, each max 100 characters.",
+									},
+								},
+							},
+						},
+						"history": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Password history enforcement.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"active": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Enables password history checking.",
+									},
+									"size": {
+										Type:         schema.TypeInt,
+										Optional:     true,
+										Computed:     true,
+										ValidateFunc: validation.IntBetween(1, 24),
+										Description:  "Number of previous passwords to check against. Must be between 1 and 24. Default: 3.",
+									},
+								},
+							},
+						},
+						"dictionary": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Dictionary-based password validation.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"active": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Enables dictionary checking.",
+									},
+									"default": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"en_10k", "en_100k",
+										}, false),
+										Description: "Default dictionary to use. Possible values: `en_10k`, `en_100k`. Default: `en_100k`.",
+									},
+									"custom": {
+										Type:        schema.TypeSet,
+										Optional:    true,
+										Computed:    true,
+										Elem:        &schema.Schema{Type: schema.TypeString},
+										Description: "Custom list of disallowed terms.",
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	},

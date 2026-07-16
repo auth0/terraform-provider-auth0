@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: PUT
       response:
@@ -28,15 +28,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 20
+        uncompressed: false
         body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 83.512667ms
+        duration: 344.689708ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -55,7 +55,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
         method: PUT
       response:
@@ -72,28 +72,25 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 129.930916ms
+        duration: 372.790708ms
     - id: 2
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 34
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"provider":"phone-message-hook"}
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
-        method: PUT
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -102,13 +99,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"provider":"phone-message-hook"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 108.950167ms
+        duration: 365.955209ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -127,7 +124,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: PUT
       response:
@@ -136,34 +133,31 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 25
+        uncompressed: false
         body: '{"message_types":["sms"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 126.139334ms
+        duration: 398.453583ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: GET
       response:
@@ -172,34 +166,31 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 20
+        uncompressed: false
         body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 97.851125ms
+        duration: 348.645042ms
     - id: 5
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
@@ -216,26 +207,23 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 118.335166ms
+        duration: 356.184375ms
     - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: GET
       response:
@@ -244,35 +232,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 25
+        uncompressed: false
         body: '{"message_types":["sms"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 113.940792ms
+        duration: 357.786458ms
     - id: 7
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -282,33 +267,30 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"provider":"phone-message-hook"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 138.571833ms
+        duration: 341.71675ms
     - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: GET
       response:
         proto: HTTP/2.0
@@ -316,35 +298,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
+        content_length: 20
+        uncompressed: false
+        body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 107.645541ms
+        duration: 339.649583ms
     - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
         proto: HTTP/2.0
@@ -354,33 +333,30 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '["all-applications"]'
+        body: '[{"name":"sms","enabled":true,"trial_expired":false},{"name":"push-notification","enabled":false,"trial_expired":false},{"name":"otp","enabled":false,"trial_expired":false},{"name":"email","enabled":false,"trial_expired":false},{"name":"duo","enabled":false,"trial_expired":false},{"name":"webauthn-roaming","enabled":false,"trial_expired":false},{"name":"webauthn-platform","enabled":false,"trial_expired":false},{"name":"recovery-code","enabled":false,"trial_expired":false}]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 85.86575ms
+        duration: 343.084916ms
     - id: 10
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: GET
       response:
         proto: HTTP/2.0
@@ -388,35 +364,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '[{"name":"sms","enabled":true,"trial_expired":false},{"name":"push-notification","enabled":false,"trial_expired":false},{"name":"otp","enabled":false,"trial_expired":false},{"name":"email","enabled":false,"trial_expired":false},{"name":"duo","enabled":false,"trial_expired":false},{"name":"webauthn-roaming","enabled":false,"trial_expired":false},{"name":"webauthn-platform","enabled":false,"trial_expired":false},{"name":"recovery-code","enabled":false,"trial_expired":false}]'
+        content_length: 25
+        uncompressed: false
+        body: '{"message_types":["sms"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 219.68925ms
+        duration: 362.357208ms
     - id: 11
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -426,33 +399,30 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"message_types":["sms"]}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 121.273541ms
+        duration: 380.016083ms
     - id: 12
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: GET
       response:
         proto: HTTP/2.0
@@ -460,35 +430,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"provider":"phone-message-hook"}'
+        content_length: 20
+        uncompressed: false
+        body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 111.548333ms
+        duration: 342.812333ms
     - id: 13
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
         proto: HTTP/2.0
@@ -498,33 +465,30 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
+        body: '[{"name":"sms","enabled":true,"trial_expired":false},{"name":"push-notification","enabled":false,"trial_expired":false},{"name":"otp","enabled":false,"trial_expired":false},{"name":"email","enabled":false,"trial_expired":false},{"name":"duo","enabled":false,"trial_expired":false},{"name":"webauthn-roaming","enabled":false,"trial_expired":false},{"name":"webauthn-platform","enabled":false,"trial_expired":false},{"name":"recovery-code","enabled":false,"trial_expired":false}]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 93.8285ms
+        duration: 353.967167ms
     - id: 14
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: GET
       response:
         proto: HTTP/2.0
@@ -532,35 +496,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '["all-applications"]'
+        content_length: 25
+        uncompressed: false
+        body: '{"message_types":["sms"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 107.968292ms
+        duration: 357.306083ms
     - id: 15
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -570,482 +531,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '[{"name":"sms","enabled":true,"trial_expired":false},{"name":"push-notification","enabled":false,"trial_expired":false},{"name":"otp","enabled":false,"trial_expired":false},{"name":"email","enabled":false,"trial_expired":false},{"name":"duo","enabled":false,"trial_expired":false},{"name":"webauthn-roaming","enabled":false,"trial_expired":false},{"name":"webauthn-platform","enabled":false,"trial_expired":false},{"name":"recovery-code","enabled":false,"trial_expired":false}]'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 105.245375ms
+        duration: 362.4755ms
     - id: 16
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"message_types":["sms"]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 106.949584ms
-    - id: 17
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"provider":"phone-message-hook"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 149.629292ms
-    - id: 18
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 157.75675ms
-    - id: 19
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '["all-applications"]'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 91.244459ms
-    - id: 20
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '[{"name":"sms","enabled":true,"trial_expired":false},{"name":"push-notification","enabled":false,"trial_expired":false},{"name":"otp","enabled":false,"trial_expired":false},{"name":"email","enabled":false,"trial_expired":false},{"name":"duo","enabled":false,"trial_expired":false},{"name":"webauthn-roaming","enabled":false,"trial_expired":false},{"name":"webauthn-platform","enabled":false,"trial_expired":false},{"name":"recovery-code","enabled":false,"trial_expired":false}]'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 132.709875ms
-    - id: 21
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"message_types":["sms"]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 141.15225ms
-    - id: 22
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"provider":"phone-message-hook"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 108.470834ms
-    - id: 23
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 184.57675ms
-    - id: 24
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '["all-applications"]'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 89.637ms
-    - id: 25
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '[{"name":"sms","enabled":true,"trial_expired":false},{"name":"push-notification","enabled":false,"trial_expired":false},{"name":"otp","enabled":false,"trial_expired":false},{"name":"email","enabled":false,"trial_expired":false},{"name":"duo","enabled":false,"trial_expired":false},{"name":"webauthn-roaming","enabled":false,"trial_expired":false},{"name":"webauthn-platform","enabled":false,"trial_expired":false},{"name":"recovery-code","enabled":false,"trial_expired":false}]'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 104.198542ms
-    - id: 26
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"message_types":["sms"]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 128.180916ms
-    - id: 27
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"provider":"phone-message-hook"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 192.478042ms
-    - id: 28
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 107.926833ms
-    - id: 29
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1063,7 +556,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
         method: PUT
       response:
@@ -1080,28 +573,25 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 136.029834ms
-    - id: 30
+        duration: 366.759708ms
+    - id: 17
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 21
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"provider":"auth0"}
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
-        method: PUT
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -1110,50 +600,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"provider":"auth0"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 132.900334ms
-    - id: 31
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 72
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"enrollment_message":"enroll foo","verification_message":"verify foo"}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: PUT
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 218.623917ms
-    - id: 32
+        duration: 362.852333ms
+    - id: 18
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1171,7 +625,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: PUT
       response:
@@ -1180,34 +634,31 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 27
+        uncompressed: false
         body: '{"message_types":["voice"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 220.7265ms
-    - id: 33
+        duration: 398.403833ms
+    - id: 19
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: GET
       response:
@@ -1216,34 +667,31 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 20
+        uncompressed: false
         body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 91.361ms
-    - id: 34
+        duration: 367.409875ms
+    - id: 20
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
@@ -1260,26 +708,23 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 111.728875ms
-    - id: 35
+        duration: 359.365458ms
+    - id: 21
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: GET
       response:
@@ -1288,35 +733,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 27
+        uncompressed: false
         body: '{"message_types":["voice"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 107.751625ms
-    - id: 36
+        duration: 356.886166ms
+    - id: 22
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -1326,68 +768,29 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"provider":"auth0"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 99.052625ms
-    - id: 37
+        duration: 364.12575ms
+    - id: 23
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 104.865959ms
-    - id: 38
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: GET
       response:
@@ -1396,34 +799,31 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 20
+        uncompressed: false
         body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 84.004625ms
-    - id: 39
+        duration: 521.52ms
+    - id: 24
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
@@ -1440,26 +840,23 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 127.473875ms
-    - id: 40
+        duration: 372.342334ms
+    - id: 25
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: GET
       response:
@@ -1468,35 +865,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 27
+        uncompressed: false
         body: '{"message_types":["voice"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 105.430916ms
-    - id: 41
+        duration: 360.977417ms
+    - id: 26
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -1506,68 +900,29 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"provider":"auth0"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 146.722708ms
-    - id: 42
+        duration: 351.96575ms
+    - id: 27
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 126.797417ms
-    - id: 43
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: GET
       response:
@@ -1576,34 +931,31 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 20
+        uncompressed: false
         body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 143.596417ms
-    - id: 44
+        duration: 342.174542ms
+    - id: 28
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
@@ -1620,26 +972,23 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 125.743833ms
-    - id: 45
+        duration: 385.876916ms
+    - id: 29
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: GET
       response:
@@ -1648,35 +997,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 27
+        uncompressed: false
         body: '{"message_types":["voice"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 104.2255ms
-    - id: 46
+        duration: 369.283125ms
+    - id: 30
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -1686,50 +1032,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"provider":"auth0"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 112.331834ms
-    - id: 47
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 120.373209ms
-    - id: 48
+        duration: 351.223459ms
+    - id: 31
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1747,7 +1057,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
         method: PUT
       response:
@@ -1764,171 +1074,24 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 127.980208ms
-    - id: 49
+        duration: 353.400666ms
+    - id: 32
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 22
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"provider":"twilio"}
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
-        method: PUT
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"provider":"twilio"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 109.990792ms
-    - id: 50
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 81
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"from":"from bar","messaging_service_sid":"foo","auth_token":"bar","sid":"foo"}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
-        method: PUT
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"from":"from bar","messaging_service_sid":"foo","auth_token":"bar","sid":"foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 135.363959ms
-    - id: 51
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 72
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"enrollment_message":"enroll foo","verification_message":"verify foo"}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: PUT
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 118.240084ms
-    - id: 52
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 26
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"message_types":["sms"]}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
-        method: PUT
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"message_types":["sms"]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 129.843417ms
-    - id: 53
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -1938,32 +1101,98 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '["all-applications"]'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 83.451042ms
-    - id: 54
+        duration: 358.12425ms
+    - id: 33
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 34
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            null
+            {"message_types":["sms","voice"]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
+        method: PUT
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 33
+        uncompressed: false
+        body: '{"message_types":["sms","voice"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 462.092083ms
+    - id: 34
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 20
+        uncompressed: false
+        body: '["all-applications"]'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 353.555458ms
+    - id: 35
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
@@ -1980,26 +1209,23 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.235875ms
-    - id: 55
+        duration: 391.533ms
+    - id: 36
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: GET
       response:
@@ -2008,35 +1234,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"message_types":["sms"]}'
+        content_length: 33
+        uncompressed: false
+        body: '{"message_types":["sms","voice"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 98.028ms
-    - id: 56
+        duration: 363.727834ms
+    - id: 37
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -2046,104 +1269,29 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"provider":"twilio"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 115.851083ms
-    - id: 57
+        duration: 372.211334ms
+    - id: 38
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 197.106458ms
-    - id: 58
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"auth_token":"bar","sid":"foo","from":"from bar","messaging_service_sid":"foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 128.144792ms
-    - id: 59
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: GET
       response:
@@ -2152,34 +1300,31 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 20
+        uncompressed: false
         body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 96.137084ms
-    - id: 60
+        duration: 351.798417ms
+    - id: 39
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
@@ -2196,26 +1341,23 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 106.1065ms
-    - id: 61
+        duration: 375.135417ms
+    - id: 40
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: GET
       response:
@@ -2224,35 +1366,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"message_types":["sms"]}'
+        content_length: 33
+        uncompressed: false
+        body: '{"message_types":["sms","voice"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 99.305333ms
-    - id: 62
+        duration: 415.366917ms
+    - id: 41
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -2262,104 +1401,29 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"provider":"twilio"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 124.790709ms
-    - id: 63
+        duration: 382.109125ms
+    - id: 42
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 121.238125ms
-    - id: 64
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"auth_token":"bar","sid":"foo","from":"from bar","messaging_service_sid":"foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 136.435ms
-    - id: 65
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: GET
       response:
@@ -2368,34 +1432,31 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 20
+        uncompressed: false
         body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 82.079875ms
-    - id: 66
+        duration: 370.04725ms
+    - id: 43
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
@@ -2412,26 +1473,23 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 133.153208ms
-    - id: 67
+        duration: 376.553583ms
+    - id: 44
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
         method: GET
       response:
@@ -2440,35 +1498,32 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"message_types":["sms"]}'
+        content_length: 33
+        uncompressed: false
+        body: '{"message_types":["sms","voice"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 106.684709ms
-    - id: 68
+        duration: 415.599084ms
+    - id: 45
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
+                - Go-Auth0/1.42.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -2478,86 +1533,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"provider":"twilio"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"change_password":{"enabled":false},"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"allow_legacy_delegation_grant_types":true,"allow_legacy_ro_grant_types":true,"allow_other_legacy_grant_types":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_dynamic_client_registration":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"resource_parameter_profile":"audience","phone_consolidated_experience":true,"client_id_metadata_document_supported":true,"dynamic_client_registration_security_mode":"permissive","session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 111.64175ms
-    - id: 69
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"enrollment_message":"enroll foo","verification_message":"verify foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 112.188417ms
-    - id: 70
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"auth_token":"bar","sid":"foo","from":"from bar","messaging_service_sid":"foo"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 127.402625ms
-    - id: 71
+        duration: 354.847667ms
+    - id: 46
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2575,7 +1558,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
         method: PUT
       response:
@@ -2592,26 +1575,23 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 101.717583ms
-    - id: 72
+        duration: 379.341334ms
+    - id: 47
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: GET
       response:
@@ -2620,34 +1600,31 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 20
+        uncompressed: false
         body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 99.680416ms
-    - id: 73
+        duration: 341.784792ms
+    - id: 48
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
@@ -2664,26 +1641,23 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 106.415667ms
-    - id: 74
+        duration: 366.878417ms
+    - id: 49
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: GET
       response:
@@ -2692,34 +1666,31 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 20
+        uncompressed: false
         body: '["all-applications"]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 153.720458ms
-    - id: 75
+        duration: 380.552167ms
+    - id: 50
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
         method: GET
       response:
@@ -2736,8 +1707,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 118.17225ms
-    - id: 76
+        duration: 384.537667ms
+    - id: 51
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2755,7 +1726,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
         method: PUT
       response:
@@ -2772,8 +1743,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 90.660458ms
-    - id: 77
+        duration: 340.290709ms
+    - id: 52
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2791,7 +1762,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
         method: PUT
       response:
@@ -2808,8 +1779,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 118.613833ms
-    - id: 78
+        duration: 434.54925ms
+    - id: 53
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2827,7 +1798,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/email
         method: PUT
       response:
@@ -2844,8 +1815,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 119.136209ms
-    - id: 79
+        duration: 398.593958ms
+    - id: 54
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2863,7 +1834,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/otp
         method: PUT
       response:
@@ -2880,8 +1851,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 104.744625ms
-    - id: 80
+        duration: 625.947875ms
+    - id: 55
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2899,7 +1870,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/recovery-code
         method: PUT
       response:
@@ -2916,8 +1887,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 138.765792ms
-    - id: 81
+        duration: 377.468083ms
+    - id: 56
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2935,7 +1906,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
         method: PUT
       response:
@@ -2952,8 +1923,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 101.4775ms
-    - id: 82
+        duration: 643.419584ms
+    - id: 57
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2971,7 +1942,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
         method: PUT
       response:
@@ -2988,8 +1959,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 113.095667ms
-    - id: 83
+        duration: 471.68475ms
+    - id: 58
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -3007,7 +1978,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/duo
         method: PUT
       response:
@@ -3024,8 +1995,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 109.531584ms
-    - id: 84
+        duration: 354.046917ms
+    - id: 59
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -3043,7 +2014,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.15.0
+                - Go-Auth0/1.42.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/push-notification
         method: PUT
       response:
@@ -3060,4 +2031,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 112.611042ms
+        duration: 367.937833ms

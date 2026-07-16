@@ -1,6 +1,7 @@
 package resourceserver
 
 import (
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -24,9 +25,14 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 
 	// Allow updating SubjectTypeAuthorization for Auth0 Management API as well as non-management API.
 	resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(data)
+	resourceServer.AuthorizationPolicy = expandAuthorizationPolicy(data)
 
 	if !resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
-		resourceServer.Name = value.String(cfg.GetAttr("name"))
+		if resourceServerIsAuth0MyAccountAPI(data.GetRawState()) {
+			resourceServer.Name = auth0.String(auth0MyAccountAPIName)
+		} else {
+			resourceServer.Name = value.String(cfg.GetAttr("name"))
+		}
 		resourceServer.SigningAlgorithm = value.String(cfg.GetAttr("signing_alg"))
 		resourceServer.SigningSecret = value.String(cfg.GetAttr("signing_secret"))
 		resourceServer.AllowOfflineAccess = value.Bool(cfg.GetAttr("allow_offline_access"))
@@ -38,8 +44,73 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.TokenEncryption = expandTokenEncryption(data)
 		resourceServer.ConsentPolicy = expandConsentPolicy(data)
 		resourceServer.ProofOfPossession = expandProofOfPossession(data)
+		// Skip sending EA params implicitly on all PATCH calls.
+		if data.IsNewResource() || data.HasChange("allow_online_access") {
+			resourceServer.AllowOnlineAccess = value.Bool(cfg.GetAttr("allow_online_access"))
+		}
+		if data.IsNewResource() || data.HasChange("allow_online_access_with_ephemeral_sessions") {
+			resourceServer.AllowOnlineAccessWithEphemeralSessions = value.Bool(cfg.GetAttr("allow_online_access_with_ephemeral_sessions"))
+		}
 	}
 	return resourceServer
+}
+
+func expandAuthorizationPolicy(data *schema.ResourceData) *management.ResourceServerAuthorizationPolicy {
+	if !data.IsNewResource() && !data.HasChange("authorization_policy") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("authorization_policy")
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var policy management.ResourceServerAuthorizationPolicy
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		policy.PolicyID = value.String(cfg.GetAttr("policy_id"))
+		return stop
+	})
+
+	if policy == (management.ResourceServerAuthorizationPolicy{}) {
+		return nil
+	}
+
+	return &policy
+}
+
+func isAuthorizationPolicyNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("authorization_policy") {
+		return false
+	}
+	return data.GetRawConfig().IsNull() ||
+		data.GetRawConfig().GetAttr("authorization_policy").IsNull() ||
+		data.GetRawConfig().GetAttr("authorization_policy").LengthInt() == 0
+}
+
+// fetchNullableFields returns a map of fields that need to be explicitly set
+// to null on the resource server via a follow-up PATCH request, since the
+// regular Update call uses `omitempty` and cannot transmit nil values.
+func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
+	type nullCheckFunc func(*schema.ResourceData) bool
+
+	checks := map[string]nullCheckFunc{
+		"consent_policy":        isConsentPolicyNull,
+		"authorization_details": isAuthorizationDetailsNull,
+		"token_encryption":      isTokenEncryptionNull,
+		"proof_of_possession":   isProofOfPossessionNull,
+		"authorization_policy":  isAuthorizationPolicyNull,
+	}
+
+	nullableMap := make(map[string]interface{})
+
+	for field, checkFunc := range checks {
+		if checkFunc(data) {
+			nullableMap[field] = nil
+		}
+	}
+
+	return nullableMap
 }
 
 func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.ResourceServerSubjectTypeAuthorization {
@@ -311,4 +382,12 @@ func resourceServerIsAuth0ManagementAPI(state cty.Value) bool {
 	}
 
 	return state.GetAttr("name").AsString() == auth0ManagementAPIName
+}
+
+func resourceServerIsAuth0MyAccountAPI(state cty.Value) bool {
+	if state.IsNull() {
+		return false
+	}
+
+	return state.GetAttr("name").AsString() == auth0MyAccountAPIName
 }

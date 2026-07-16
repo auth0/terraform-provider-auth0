@@ -11,6 +11,27 @@ import (
 )
 
 func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
+	if tenant == nil {
+		return nil
+	}
+
+	sessionLifetime := sessionLifetimeDefault
+	if tenant.SessionLifetime != nil {
+		sessionLifetime = *tenant.SessionLifetime
+	}
+	idleSessionLifetime := idleSessionLifetimeDefault
+	if tenant.IdleSessionLifetime != nil {
+		idleSessionLifetime = *tenant.IdleSessionLifetime
+	}
+	ephemeralSessionLifetime := ephemeralSessionLifetimeDefault
+	if tenant.EphemeralSessionLifetime != nil {
+		ephemeralSessionLifetime = *tenant.EphemeralSessionLifetime
+	}
+	idleEphemeralSessionLifetime := idleEphemeralSessionLifetimeDefault
+	if tenant.IdleEphemeralSessionLifetime != nil {
+		idleEphemeralSessionLifetime = *tenant.IdleEphemeralSessionLifetime
+	}
+
 	result := multierror.Append(
 		data.Set("default_audience", tenant.GetDefaultAudience()),
 		data.Set("default_directory", tenant.GetDefaultDirectory()),
@@ -20,10 +41,10 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("support_email", tenant.GetSupportEmail()),
 		data.Set("support_url", tenant.GetSupportURL()),
 		data.Set("allowed_logout_urls", tenant.GetAllowedLogoutURLs()),
-		data.Set("session_lifetime", tenant.GetSessionLifetime()),
-		data.Set("idle_session_lifetime", tenant.GetIdleSessionLifetime()),
-		data.Set("ephemeral_session_lifetime", tenant.GetEphemeralSessionLifetime()),
-		data.Set("idle_ephemeral_session_lifetime", tenant.GetIdleEphemeralSessionLifetime()),
+		data.Set("session_lifetime", sessionLifetime),
+		data.Set("idle_session_lifetime", idleSessionLifetime),
+		data.Set("ephemeral_session_lifetime", ephemeralSessionLifetime),
+		data.Set("idle_ephemeral_session_lifetime", idleEphemeralSessionLifetime),
 		data.Set("sandbox_version", tenant.GetSandboxVersion()),
 		data.Set("enabled_locales", tenant.GetEnabledLocales()),
 		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
@@ -38,22 +59,10 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("default_token_quota", flattenDefaultTokenQuota(tenant.GetDefaultTokenQuota())),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt", value.BoolPtrToString(tenant.SkipNonVerifiableCallbackURIConfirmationPrompt)),
 		data.Set("phone_consolidated_experience", tenant.GetPhoneConsolidatedExperience()),
+		data.Set("client_id_metadata_document_supported", tenant.GetClientIDMetadataDocumentSupported()),
+		data.Set("resource_parameter_profile", tenant.GetResourceParameterProfile()),
+		data.Set("dynamic_client_registration_security_mode", tenant.GetDynamicClientRegistrationSecurityMode()),
 	)
-
-	if tenant.GetIdleSessionLifetime() == 0 {
-		result = multierror.Append(result, data.Set("idle_session_lifetime", idleSessionLifetimeDefault))
-	}
-
-	if tenant.GetSessionLifetime() == 0 {
-		result = multierror.Append(result, data.Set("session_lifetime", sessionLifetimeDefault))
-	}
-
-	if tenant.GetIdleEphemeralSessionLifetime() == 0 {
-		result = multierror.Append(result, data.Set("idle_ephemeral_session_lifetime", idleSessionLifetimeDefault))
-	}
-	if tenant.GetEphemeralSessionLifetime() == 0 {
-		result = multierror.Append(result, data.Set("ephemeral_session_lifetime", sessionLifetimeDefault))
-	}
 
 	if tenant.GetACRValuesSupported() == nil {
 		result = multierror.Append(result,
@@ -76,13 +85,23 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	}
 
 	m := make(map[string]interface{})
+	// Set explicitly on nil as backend and Go defaults differ.
 	if flags.EnableClientConnections != nil {
 		m["enable_client_connections"] = *flags.EnableClientConnections
 	} else {
 		m["enable_client_connections"] = enableClientConnectionsDefault
 	}
+	if flags.EnablePipeline2 != nil {
+		m["enable_pipeline2"] = *flags.EnablePipeline2
+	} else {
+		m["enable_pipeline2"] = enablePipeline2Default
+	}
+	if flags.DisableManagementAPISMSObfuscation != nil {
+		m["disable_management_api_sms_obfuscation"] = *flags.DisableManagementAPISMSObfuscation
+	} else {
+		m["disable_management_api_sms_obfuscation"] = disableManagementAPISMSObfuscationDefault
+	}
 	m["enable_apis_section"] = flags.EnableAPIsSection
-	m["enable_pipeline2"] = flags.EnablePipeline2
 	m["enable_dynamic_client_registration"] = flags.EnableDynamicClientRegistration
 	m["enable_custom_domain_in_emails"] = flags.EnableCustomDomainInEmails
 	m["enable_sso"] = flags.EnableSSO
@@ -96,7 +115,6 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["enable_legacy_profile"] = flags.EnableLegacyProfile
 	m["enable_idtoken_api2"] = flags.EnableIDTokenAPI2
 	m["no_disclose_enterprise_connections"] = flags.NoDisclosureEnterpriseConnections
-	m["disable_management_api_sms_obfuscation"] = flags.DisableManagementAPISMSObfuscation
 	m["enable_adfs_waad_email_verification"] = flags.EnableADFSWAADEmailVerification
 	m["revoke_refresh_token_grant"] = flags.RevokeRefreshTokenGrant
 	m["dashboard_log_streams_next"] = flags.DashboardLogStreams
@@ -117,14 +135,21 @@ func flattenTenantSessionCookie(sessionCookie *management.TenantSessionCookie) [
 
 func flattenTenantSessions(sessions *management.TenantSessions) []interface{} {
 	m := make(map[string]interface{})
-	m["oidc_logout_prompt_enabled"] = sessions.GetOIDCLogoutPromptEnabled()
-
+	if sessions != nil && sessions.OIDCLogoutPromptEnabled != nil {
+		m["oidc_logout_prompt_enabled"] = *sessions.OIDCLogoutPromptEnabled
+	} else {
+		m["oidc_logout_prompt_enabled"] = oidcLogoutPromptEnabledDefault
+	}
 	return []interface{}{m}
 }
 
 func flattenTenantOidcLogout(oidcLogout *management.TenantOIDCLogout) []interface{} {
 	m := make(map[string]interface{})
-	m["rp_logout_end_session_endpoint_discovery"] = oidcLogout.GetOIDCResourceProviderLogoutEndSessionEndpointDiscovery()
+	if oidcLogout != nil && oidcLogout.OIDCResourceProviderLogoutEndSessionEndpointDiscovery != nil {
+		m["rp_logout_end_session_endpoint_discovery"] = *oidcLogout.OIDCResourceProviderLogoutEndSessionEndpointDiscovery
+	} else {
+		m["rp_logout_end_session_endpoint_discovery"] = rpLogoutEndSessionEndpointDiscoveryDefault
+	}
 
 	return []interface{}{m}
 }

@@ -37,6 +37,18 @@ resource "auth0_client_credentials" "test" {
   authentication_method = "client_secret_basic"
 }
 
+# Configuring a write-only client secret.
+# NOTE: Write-only arguments are supported in Terraform 1.11 and later.
+# The secret is never stored in Terraform state. Increment
+# client_secret_wo_version to rotate the secret.
+resource "auth0_client_credentials" "test" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method    = "client_secret_post"
+  client_secret_wo         = "LUFqPx+sRLjbL7peYRPFmFu-bbvE7u7og4YUNe_C345=683341"
+  client_secret_wo_version = 1
+}
+
 # Configuring none as an authentication method.
 resource "auth0_client_credentials" "test" {
   client_id = auth0_client.my_client.id
@@ -136,8 +148,12 @@ resource "auth0_client_credentials" "test" {
 
 ### Optional
 
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
 - `authentication_method` (String) Configure the method to use when making requests to any endpoint that requires this client to authenticate. Options include `none` (public client without a client secret), `client_secret_post` (confidential client using HTTP POST parameters), `client_secret_basic` (confidential client using HTTP Basic), `private_key_jwt` (confidential client using a Private Key JWT), `tls_client_auth` (confidential client using CA-based mTLS authentication), `self_signed_tls_client_auth` (confidential client using mTLS authentication utilizing a self-signed certificate).
-- `client_secret` (String, Sensitive) Secret for the client when using `client_secret_post` or `client_secret_basic` authentication method. Keep this private. To access this attribute you need to add either `read:client_keys` or `read:client_credentials` scope to the Terraform client. Otherwise, the attribute will contain an empty string. The attribute will also be an empty string in case `private_key_jwt` is selected as an authentication method.
+- `client_secret` (String, Sensitive) Secret for the client when using `client_secret_post` or `client_secret_basic` authentication method. Keep this private. To access this attribute you need to add either `read:client_keys` or `read:client_credentials` scope to the Terraform client. Otherwise, the attribute will contain an empty string. The attribute will also be an empty string in case `private_key_jwt` is selected as an authentication method. **Note:** For better security, consider using `client_secret_wo` instead.
+- `client_secret_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Secret for the client when using `client_secret_post` or `client_secret_basic` authentication method (write-only). This value is **not** stored in Terraform state. Bump `client_secret_wo_version` to rotate it. Requires Terraform 1.11+.
+- `client_secret_wo_version` (Number) Version counter for `client_secret_wo`. Must be a positive integer (starting at `1`). Increment this value to trigger a client secret change when using `client_secret_wo`.
 - `private_key_jwt` (Block List, Max: 1) Defines `private_key_jwt` client authentication method. (see [below for nested schema](#nestedblock--private_key_jwt))
 - `self_signed_tls_client_auth` (Block List, Max: 1) Defines `tls_client_auth` client authentication method. (see [below for nested schema](#nestedblock--self_signed_tls_client_auth))
 - `signed_request_object` (Block List, Max: 1) Configuration for JWT-secured Authorization Requests(JAR). (see [below for nested schema](#nestedblock--signed_request_object))
@@ -152,7 +168,7 @@ resource "auth0_client_credentials" "test" {
 
 Required:
 
-- `credentials` (Block List, Min: 1, Max: 2) Client credentials available for use when Private Key JWT is in use as the client authentication method. A maximum of 2 client credentials can be set. (see [below for nested schema](#nestedblock--private_key_jwt--credentials))
+- `credentials` (Block Set, Min: 1, Max: 2) Client credentials available for use when Private Key JWT is in use as the client authentication method. A maximum of 2 client credentials can be set. (see [below for nested schema](#nestedblock--private_key_jwt--credentials))
 
 <a id="nestedblock--private_key_jwt--credentials"></a>
 ### Nested Schema for `private_key_jwt.credentials`

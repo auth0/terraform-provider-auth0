@@ -99,6 +99,85 @@ resource "auth0_action" "my_action" {
 }
 `
 
+const testAccActionConfigCreateWithSecretsWO = `
+resource "auth0_action" "my_action" {
+	name = "Test Action {{.testName}}"
+	code = "exports.onExecutePostLogin = async (event, api) => {};"
+
+	supported_triggers {
+		id      = "post-login"
+		version = "v3"
+	}
+
+	secrets_wo {
+		name  = "foo"
+		value = "wo_value_1"
+	}
+
+	secrets_wo_version = 1
+}
+`
+
+const testAccActionConfigUpdateSecretsWOVersion = `
+resource "auth0_action" "my_action" {
+	name = "Test Action {{.testName}}"
+	code = "exports.onExecutePostLogin = async (event, api) => {};"
+
+	supported_triggers {
+		id      = "post-login"
+		version = "v3"
+	}
+
+	secrets_wo {
+		name  = "foo"
+		value = "wo_value_2"
+	}
+
+	secrets_wo_version = 2
+}
+`
+
+const testAccActionConfigSecretsWOConflictsWithSecrets = `
+resource "auth0_action" "my_action" {
+	name = "Test Action {{.testName}}"
+	code = "exports.onExecutePostLogin = async (event, api) => {};"
+
+	supported_triggers {
+		id      = "post-login"
+		version = "v3"
+	}
+
+	secrets {
+		name  = "foo"
+		value = "plain_value"
+	}
+
+	secrets_wo {
+		name  = "foo"
+		value = "wo_value"
+	}
+
+	secrets_wo_version = 1
+}
+`
+
+const testAccActionConfigSecretsWORequiresVersion = `
+resource "auth0_action" "my_action" {
+	name = "Test Action {{.testName}}"
+	code = "exports.onExecutePostLogin = async (event, api) => {};"
+
+	supported_triggers {
+		id      = "post-login"
+		version = "v3"
+	}
+
+	secrets_wo {
+		name  = "foo"
+		value = "wo_value"
+	}
+}
+`
+
 // This config makes use of a crypto dependency definition that causes the
 // action build to fail.  This is because the crypto package has been
 // deprecated https://www.npmjs.com/package/crypto.
@@ -108,7 +187,7 @@ resource "auth0_action" "my_action" {
 const testAccActionConfigCreateWithFailedBuild = `
 resource "auth0_action" "my_action" {
 	name    = "Test Action {{.testName}}"
-	runtime = "node16"
+	runtime = "node22"
 	deploy  = true
 	code    = <<-EOT
 		exports.onContinuePostLogin = async (event, api) => {
@@ -138,7 +217,7 @@ func TestAccAction(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onExecutePostLogin = async (event, api) => {};"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "0"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node18"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node22"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "deploy", "false"),
 					resource.TestCheckNoResourceAttr("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.#", "1"),
@@ -213,6 +292,56 @@ func TestAccAction(t *testing.T) {
 						t.Name(),
 					),
 				),
+			},
+		},
+	})
+}
+
+func TestAccActionWithSecretsWO(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccActionConfigCreateWithSecretsWO, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo.0.name", "foo"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo_version", "1"),
+					resource.TestCheckNoResourceAttr("auth0_action.my_action", "secrets_wo.0.value"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccActionConfigUpdateSecretsWOVersion, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo.0.name", "foo"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo_version", "2"),
+					resource.TestCheckNoResourceAttr("auth0_action.my_action", "secrets_wo.0.value"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccActionSecretsWOConflictsWithSecrets(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccActionConfigSecretsWOConflictsWithSecrets, t.Name()),
+				ExpectError: regexp.MustCompile(`"secrets": conflicts with secrets_wo|"secrets_wo": conflicts with secrets`),
+			},
+		},
+	})
+}
+
+func TestAccActionSecretsWORequiresVersion(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccActionConfigSecretsWORequiresVersion, t.Name()),
+				ExpectError: regexp.MustCompile(`"secrets_wo":\s+all of|secrets_wo_version`),
 			},
 		},
 	})

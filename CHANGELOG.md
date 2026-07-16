@@ -1,5 +1,16 @@
 ## [Unreleased]
 
+## v1.53.0
+
+ENHANCEMENTS:
+- `resource/auth0_organization` – Add support for the `third_party_client_access` attribute to control whether an organization can be used in user flows with third-party clients (`allow` or `block`, defaults to `block`) ([#1643](https://github.com/auth0/terraform-provider-auth0/pull/1643))
+
+BUG FIXES:
+- `resource/auth0_client_grant` – Respect `subject_type` when adopting an existing grant, so two grants targeting the same client and audience with different `subject_type` values are no longer collapsed onto a single grant ([#1534](https://github.com/auth0/terraform-provider-auth0/pull/1534))
+
+NOTES:
+- `resource/auth0_tenant` – Clarify in the schema descriptions that the Auth0 Dashboard toggles for `enable_public_signup_user_exists_error` and `no_disclose_enterprise_connections` display the inverse of the raw API flag value managed by Terraform ([#1647](https://github.com/auth0/terraform-provider-auth0/pull/1647))
+
 ## v1.52.0
 
 FEATURES:

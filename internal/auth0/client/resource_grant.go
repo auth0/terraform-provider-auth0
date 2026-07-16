@@ -13,6 +13,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+	"github.com/auth0/terraform-provider-auth0/internal/prefetch"
 )
 
 // NewGrantResource will return a new auth0_client_grant resource.
@@ -146,9 +147,20 @@ func createClientGrant(ctx context.Context, data *schema.ResourceData, meta inte
 }
 
 func readClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
+	cfg := meta.(*config.Config)
+	api := cfg.GetAPI()
 
-	clientGrant, err := api.ClientGrant.Read(ctx, data.Id())
+	var (
+		clientGrant *management.ClientGrant
+		err         error
+	)
+
+	if cache := cfg.GetPrefetchCache(); cache != nil {
+		clientGrant, err = prefetch.GetClientGrant(ctx, cache, api, data.Id())
+	} else {
+		clientGrant, err = api.ClientGrant.Read(ctx, data.Id())
+	}
+
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}

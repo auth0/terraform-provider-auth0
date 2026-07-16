@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
@@ -40,6 +41,14 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Friendly name of this organization.",
+			},
+			"third_party_client_access": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"allow", "block"}, false),
+				Description: "Controls whether this organization can be used in user flows with third-party clients. " +
+					"Available values are `allow` or `block`. Defaults to `block`.",
 			},
 			"branding": {
 				Type:        schema.TypeList,

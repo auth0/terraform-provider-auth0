@@ -42,6 +42,7 @@ data "auth0_organization" "some-organization-by-id" {
 - `id` (String) The ID of this resource.
 - `members` (Set of String) User ID(s) that are members of the organization. Skips populating if `skip_members` is `true`.
 - `metadata` (Map of String) Metadata associated with the organization. Maximum of 10 metadata properties allowed.
+- `third_party_client_access` (String) Controls whether this organization can be used in user flows with third-party clients. Available values are `allow` or `block`. Defaults to `block`.
 - `token_quota` (List of Object) The token quota configuration. (see [below for nested schema](#nestedatt--token_quota))
 
 <a id="nestedatt--branding"></a>

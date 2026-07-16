@@ -21,19 +21,12 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-// These defaults are used only in flatten, but not as schema default, so that:
-// 1. Terraform doesn't applying defaults to attributes present in the API response but missing in configuration.
-// 2. On import, missing attributes get the correct default instead of Go's zero value.
 const (
-	idleSessionLifetimeDefault                 = 72.00
-	sessionLifetimeDefault                     = 168.00
-	ephemeralSessionLifetimeDefault            = 72.00
-	idleEphemeralSessionLifetimeDefault        = 24.00
-	enableClientConnectionsDefault             = true
-	oidcLogoutPromptEnabledDefault             = true
-	rpLogoutEndSessionEndpointDiscoveryDefault = true
-	enablePipeline2Default                     = true
-	disableManagementAPISMSObfuscationDefault  = true
+	idleSessionLifetimeDefault          = 72.00
+	sessionLifetimeDefault              = 168.00
+	ephemeralSessionLifetimeDefault     = 1.00 // 1 hour.
+	idleEphemeralSessionLifetimeDefault = 1.00 // 1 hour.
+	enableClientConnectionsDefault      = true
 )
 
 // NewResource will return a new auth0_tenant resource.
@@ -107,28 +100,28 @@ func NewResource() *schema.Resource {
 			"session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Computed:     true,
+				Default:      sessionLifetimeDefault,
 				ValidateFunc: validation.FloatAtLeast(0.01),
 				Description:  "Number of hours during which a session will stay valid.",
 			},
 			"idle_session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Computed:     true,
+				Default:      idleSessionLifetimeDefault,
 				ValidateFunc: validation.FloatAtLeast(0.01),
 				Description:  "Number of hours during which a session can be inactive before the user must log in again.",
 			},
 			"ephemeral_session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Computed:     true,
+				Default:      ephemeralSessionLifetimeDefault,
 				ValidateFunc: validation.FloatAtLeast(0.0167),
 				Description:  "Number of hours an ephemeral (non-persistent) session will stay valid.",
 			},
 			"idle_ephemeral_session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Computed:     true,
+				Default:      idleEphemeralSessionLifetimeDefault,
 				ValidateFunc: validation.FloatAtLeast(0.0167),
 				Description:  "Number of hours for which an ephemeral (non-persistent) session can be inactive before the user must log in again.",
 			},
@@ -151,8 +144,8 @@ func NewResource() *schema.Resource {
 						"enable_client_connections": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Computed:    true,
-							Description: "Indicates whether all current connections should be enabled when a new client is created.",
+							Default:     enableClientConnectionsDefault,
+							Description: "Indicates whether all current connections should be enabled when a new client is created. (Default: `true`)",
 						},
 						"enable_apis_section": {
 							Type:        schema.TypeBool,
@@ -199,11 +192,10 @@ func NewResource() *schema.Resource {
 							Description: "Indicates whether classic Universal Login prompts include additional security headers to prevent clickjacking.",
 						},
 						"enable_public_signup_user_exists_error": {
-							Type:     schema.TypeBool,
-							Optional: true,
-							Computed: true,
-							Description: "Indicates whether the public sign up process shows a `user_exists` error if the user already exists. " +
-								"Note: the Auth0 Dashboard toggle **Use a generic response in public signup API error message** shows the inverse of this value.",
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Indicates whether the public sign up process shows a `user_exists` error if the user already exists.",
 						},
 						"use_scope_descriptions_for_consent": {
 							Type:        schema.TypeBool,
@@ -242,11 +234,10 @@ func NewResource() *schema.Resource {
 							Description: "Whether ID tokens can be used to authorize some types of requests to API v2 (true) or not (false).",
 						},
 						"no_disclose_enterprise_connections": {
-							Type:     schema.TypeBool,
-							Optional: true,
-							Computed: true,
-							Description: "Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file. " +
-								"Note: the Auth0 Dashboard toggle **Enable Publishing of Enterprise Connections Information with IdP domains** shows the inverse of this value.",
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file.",
 						},
 						"disable_management_api_sms_obfuscation": {
 							Type:        schema.TypeBool,
@@ -309,6 +300,7 @@ func NewResource() *schema.Resource {
 			"default_redirection_uri": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Computed:     true,
 				ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
 				Description:  "The default absolute redirection URI. Must be HTTPS or an empty string.",
 			},
@@ -471,30 +463,6 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				Description: "When enabled, the tenant-level Phone Provider is used for Multi-Factor Authentication (MFA) and Passwordless phone notifications.",
-			},
-			"client_id_metadata_document_supported": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Computed:    true,
-				Description: "Whether the tenant supports Client ID Metadata Document (CIMD) for client registration.",
-			},
-			"resource_parameter_profile": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Computed:     true,
-				ValidateFunc: validation.StringInSlice([]string{"audience", "compatibility"}, false),
-				Description: "Profile that determines how the protected resource identity is specified in OAuth " +
-					"endpoints. When set to `audience` (default), the `audience` parameter is used. When set " +
-					"to `compatibility`, the `resource` parameter is used as fallback if `audience` is not provided.",
-			},
-			"dynamic_client_registration_security_mode": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Computed:     true,
-				ValidateFunc: validation.StringInSlice([]string{"strict", "permissive"}, false),
-				Description: "Sets the third_party_security_mode assigned to clients created via Dynamic Client Registration. " +
-					"Can only be configured by [customers with pre-existing third-party client usage before April 2026]" +
-					"(https://auth0.com/docs/get-started/applications/third-party-applications/permissive-mode#dynamic-client-registration-in-permissive-mode).",
 			},
 		},
 	}

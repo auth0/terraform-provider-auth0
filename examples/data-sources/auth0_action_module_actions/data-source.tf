@@ -13,8 +13,12 @@ resource "auth0_action_module" "my_module" {
   EOT
 }
 
-# Create an action that uses the module.
-# Use version_id directly from the module resource — no data source needed.
+# Get the published versions of the module
+data "auth0_action_module_versions" "my_module_versions" {
+  module_id = auth0_action_module.my_module.id
+}
+
+# Create an action that uses the module
 resource "auth0_action" "my_action_1" {
   name   = "My Action Using Module 1"
   deploy = true
@@ -32,7 +36,7 @@ resource "auth0_action" "my_action_1" {
 
   modules {
     module_id         = auth0_action_module.my_module.id
-    module_version_id = auth0_action_module.my_module.version_id
+    module_version_id = data.auth0_action_module_versions.my_module_versions.versions[0].id
   }
 }
 
@@ -54,7 +58,7 @@ resource "auth0_action" "my_action_2" {
 
   modules {
     module_id         = auth0_action_module.my_module.id
-    module_version_id = auth0_action_module.my_module.version_id
+    module_version_id = data.auth0_action_module_versions.my_module_versions.versions[0].id
   }
 }
 
@@ -73,3 +77,4 @@ output "actions_using_module" {
 output "action_names" {
   value = [for action in data.auth0_action_module_actions.my_module_actions.actions : action.action_name]
 }
+

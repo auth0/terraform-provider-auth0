@@ -102,32 +102,62 @@ func TestAccGuardian(t *testing.T) {
 	})
 }
 
-const testAccGuardianPhoneWithMessageTypeSms = `
+const testAccGuardianPhoneWithCustomProviderAndNoOptions = `
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
 	phone {
 		enabled       = true
+		provider      = "phone-message-hook"
 		message_types = ["sms"]
 	}
 }
 `
 
-const testAccGuardianPhoneWithMessageTypeVoice = `
+const testAccGuardianPhoneWithCustomProviderAndOptions = `
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
 	phone {
 		enabled       = true
-		message_types = ["voice"]
+		provider      = "phone-message-hook"
+		message_types = ["sms"]
+		options {
+			enrollment_message   = "enroll foo"
+			verification_message = "verify foo"
+		}
 	}
 }
 `
 
-const testAccGuardianPhoneWithMessageTypeSmsAndVoice = `
+const testAccGuardianPhoneWithAuth0Provider = `
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
 	phone {
 		enabled       = true
-		message_types = ["sms", "voice"]
+		provider      = "auth0"
+		message_types = ["voice"]
+		options {
+			enrollment_message   = "enroll foo"
+			verification_message = "verify foo"
+		}
+	}
+}
+`
+
+const testAccGuardianPhoneWithTwilioProvider = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	phone {
+		enabled       = true
+		provider      = "twilio"
+		message_types = ["sms"]
+		options {
+			enrollment_message    = "enroll foo"
+			verification_message  = "verify foo"
+			from                  = "from bar"
+			messaging_service_sid = "foo"
+			auth_token            = "bar"
+			sid                   = "foo"
+		}
 	}
 }
 `
@@ -145,30 +175,57 @@ func TestAccGuardianPhone(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: testAccGuardianPhoneWithMessageTypeSms,
+				Config: testAccGuardianPhoneWithCustomProviderAndNoOptions,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.message_types.0", "sms"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.provider", "phone-message-hook"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.#", "1"),
 				),
 			},
 			{
-				Config: testAccGuardianPhoneWithMessageTypeVoice,
+				Config: testAccGuardianPhoneWithCustomProviderAndOptions,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.message_types.0", "sms"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.provider", "phone-message-hook"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.enrollment_message", "enroll foo"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.verification_message", "verify foo"),
+				),
+			},
+			{
+				Config: testAccGuardianPhoneWithAuth0Provider,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.message_types.0", "voice"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.provider", "auth0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.enrollment_message", "enroll foo"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.verification_message", "verify foo"),
 				),
 			},
 			{
-				Config: testAccGuardianPhoneWithMessageTypeSmsAndVoice,
+				Config: testAccGuardianPhoneWithTwilioProvider,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.enabled", "true"),
-					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.message_types.#", "2"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.message_types.0", "sms"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.provider", "twilio"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.enrollment_message", "enroll foo"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.verification_message", "verify foo"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.from", "from bar"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.messaging_service_sid", "foo"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.auth_token", "bar"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.sid", "foo"),
 				),
 			},
 			{
@@ -178,6 +235,8 @@ func TestAccGuardianPhone(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.message_types.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.provider", ""),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.#", "0"),
 				),
 			},
 		},

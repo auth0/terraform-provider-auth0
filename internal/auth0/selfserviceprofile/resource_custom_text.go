@@ -33,16 +33,14 @@ func NewCustomTextResource() *schema.Resource {
 				Description: "The id of the self-service profile",
 			},
 			"language": {
-				Type:         schema.TypeString,
-				Required:     true,
-				Description:  "The language of the custom text. Options include: `en`",
-				ValidateFunc: validation.StringInSlice([]string{"en"}, false),
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The language of the custom text",
 			},
 			"page": {
-				Type:         schema.TypeString,
-				Required:     true,
-				Description:  "The page where the custom text is shown. Options include: `get-started`",
-				ValidateFunc: validation.StringInSlice([]string{"get-started"}, false),
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The page where the custom text is shown",
 			},
 			"body": {
 				Type:             schema.TypeString,

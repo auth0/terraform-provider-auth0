@@ -1105,17 +1105,11 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.token_endpoint_auth_signing_alg", "RS256"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.token_endpoint_jwtca_aud_format", "issuer"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.0", "RS256"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.1", "ES256"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.0.pkce", "disabled"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.mapping_mode", "bind_all"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.dpop_signing_alg", "ES256"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_session_expiry_supported", "true"),
 				),
 			},
 			{
@@ -1138,12 +1132,6 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", ""),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.token_endpoint_auth_signing_alg", "RS384"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.#", "3"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.0", "RS256"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.1", "RS384"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.2", "ES256"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.token_endpoint_jwtca_aud_format", "token_endpoint"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.0.pkce", "auto"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
@@ -1151,21 +1139,6 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.userinfo_scope", "openid email profile groups"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.attributes", "{\"email\":\"${context.tokenset.email}\",\"email_verified\":\"${context.tokenset.email_verified}\",\"family_name\":\"${context.tokenset.family_name}\",\"given_name\":\"${context.tokenset.given_name}\",\"name\":\"${context.tokenset.name}\",\"nickname\":\"${context.tokenset.nickname}\",\"picture\":\"${context.tokenset.picture}\"}"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.dpop_signing_alg", "Ed25519"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_session_expiry_supported", "false"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccConnectionOIDCConfigUpdateES384, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.type", "back_channel"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.dpop_signing_alg", "ES384"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccConnectionOIDCConfigUpdateES512, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.type", "back_channel"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.dpop_signing_alg", "ES512"),
 				),
 			},
 			{
@@ -1190,12 +1163,6 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"), // Gets set to a default if not provided.
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),       // Gets set to a default if not provided.
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccConnectionOIDCConfigEmptyIDTokenAlgs, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.id_token_signed_response_algs.#", "0"),
 				),
 			},
 		},
@@ -1226,9 +1193,6 @@ resource "auth0_connection" "oidc" {
 		scopes                   = [ "openid", "email", "profile" ]
 		set_user_root_attributes = "on_each_login"
 		non_persistent_attrs     = ["gender","hair_color"]
-		token_endpoint_auth_signing_alg = "RS256"
-		token_endpoint_jwtca_aud_format = "issuer"
-		id_token_signed_response_algs = ["RS256", "ES256"]
 		upstream_params          = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"
@@ -1243,7 +1207,6 @@ resource "auth0_connection" "oidc" {
 			mapping_mode = "bind_all"
 		}
 		dpop_signing_alg = "ES256"
-		id_token_session_expiry_supported = true
 	}
 }
 `
@@ -1269,9 +1232,6 @@ resource "auth0_connection" "oidc" {
 		authorization_endpoint = "https://www.paypal.com/signin/authorize"
 		scopes                 = [ "openid", "email" ]
 		set_user_root_attributes = "on_first_login"
-		token_endpoint_auth_signing_alg = "RS384"
-		token_endpoint_jwtca_aud_format = "token_endpoint"
-		id_token_signed_response_algs = ["RS256", "RS384", "ES256"]
 
 		connection_settings {
 			pkce = "auto"
@@ -1291,74 +1251,6 @@ resource "auth0_connection" "oidc" {
 		  	})
 		}
 		dpop_signing_alg = "Ed25519"
-	}
-}
-`
-
-const testAccConnectionOIDCConfigUpdateES384 = `
-resource "auth0_connection" "oidc" {
-	name     = "Acceptance-Test-OIDC-{{.testName}}"
-	display_name     = "Acceptance-Test-OIDC-{{.testName}}"
-	strategy = "oidc"
-	show_as_button = false
-	options {
-		client_id     = "1234567"
-		client_secret = "1234567"
-		domain_aliases = [
-			"example.com"
-		]
-		type                   = "back_channel"
-		issuer                 = "https://www.paypalobjects.com"
-		jwks_uri               = "https://api.paypal.com/v1/oauth2/certs"
-		discovery_url          = "https://www.paypalobjects.com/.well-known/openid-configuration"
-		token_endpoint         = "https://api.paypal.com/v1/oauth2/token"
-		userinfo_endpoint      = "https://api.paypal.com/v1/oauth2/token/userinfo"
-		authorization_endpoint = "https://www.paypal.com/signin/authorize"
-		scopes                 = [ "openid", "email" ]
-		set_user_root_attributes = "on_first_login"
-
-		connection_settings {
-			pkce = "auto"
-		}
-
-		attribute_map {
-			mapping_mode = "bind_all"
-		}
-		dpop_signing_alg = "ES384"
-	}
-}
-`
-
-const testAccConnectionOIDCConfigUpdateES512 = `
-resource "auth0_connection" "oidc" {
-	name     = "Acceptance-Test-OIDC-{{.testName}}"
-	display_name     = "Acceptance-Test-OIDC-{{.testName}}"
-	strategy = "oidc"
-	show_as_button = false
-	options {
-		client_id     = "1234567"
-		client_secret = "1234567"
-		domain_aliases = [
-			"example.com"
-		]
-		type                   = "back_channel"
-		issuer                 = "https://www.paypalobjects.com"
-		jwks_uri               = "https://api.paypal.com/v1/oauth2/certs"
-		discovery_url          = "https://www.paypalobjects.com/.well-known/openid-configuration"
-		token_endpoint         = "https://api.paypal.com/v1/oauth2/token"
-		userinfo_endpoint      = "https://api.paypal.com/v1/oauth2/token/userinfo"
-		authorization_endpoint = "https://www.paypal.com/signin/authorize"
-		scopes                 = [ "openid", "email" ]
-		set_user_root_attributes = "on_first_login"
-
-		connection_settings {
-			pkce = "auto"
-		}
-
-		attribute_map {
-			mapping_mode = "bind_all"
-		}
-		dpop_signing_alg = "ES512"
 	}
 }
 `
@@ -1388,32 +1280,6 @@ resource "auth0_connection" "oidc" {
 }
 `
 
-const testAccConnectionOIDCConfigEmptyIDTokenAlgs = `
-resource "auth0_connection" "oidc" {
-	name     = "Acceptance-Test-OIDC-{{.testName}}"
-	display_name     = "Acceptance-Test-OIDC-{{.testName}}"
-	strategy = "oidc"
-	show_as_button = false
-	options {
-		client_id     = "1234567"
-		client_secret = "1234567"
-		domain_aliases = [
-			"example.com"
-		]
-		type                   = "front_channel"
-		issuer                 = "https://www.paypalobjects.com"
-		jwks_uri               = "https://api.paypal.com/v1/oauth2/certs"
-		discovery_url          = "https://www.paypalobjects.com/.well-known/openid-configuration"
-		token_endpoint         = "https://api.paypal.com/v1/oauth2/token"
-		userinfo_endpoint      = "https://api.paypal.com/v1/oauth2/token/userinfo"
-		authorization_endpoint = "https://www.paypal.com/signin/authorize"
-		scopes                 = [ "openid", "email" ]
-		set_user_root_attributes = "on_first_login"
-		id_token_signed_response_algs = []
-	}
-}
-`
-
 func TestAccConnectionOkta(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -1428,8 +1294,6 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.domain_aliases.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.domain_aliases.*", "example.com"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.domain_aliases.*", "api.example.com"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.type", "back_channel"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.send_back_channel_nonce", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.issuer", "https://domain.okta.com"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.jwks_uri", "https://domain.okta.com/oauth2/v1/keys"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint", "https://domain.okta.com/oauth2/v1/token"),
@@ -1444,16 +1308,11 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", `{"screen_name":{"alias":"login_hint"}}`),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/logo.svg"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint_auth_signing_alg", "PS256"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint_jwtca_aud_format", "issuer"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.0", "RS256"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.1", "PS256"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.0.pkce", "disabled"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_session_expiry_supported", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.dpop_signing_alg", "ES256"),
 				),
 			},
 			{
@@ -1466,8 +1325,6 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.client_secret", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.domain_aliases.#", "1"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.domain_aliases.*", "example.com"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.type", "back_channel"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.send_back_channel_nonce", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.issuer", "https://domain.okta.com"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.jwks_uri", "https://domain.okta.com/oauth2/v2/keys"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint", "https://domain.okta.com/oauth2/v2/token"),
@@ -1480,18 +1337,13 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/v2/logo.svg"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint_auth_signing_alg", "RS384"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint_jwtca_aud_format", "token_endpoint"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.0.pkce", "auto"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.0", "PS384"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.1", "ES384"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.userinfo_scope", "openid email profile groups"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.attributes", "{\"email\":\"${context.tokenset.email}\",\"email_verified\":\"${context.tokenset.email_verified}\",\"family_name\":\"${context.tokenset.family_name}\",\"given_name\":\"${context.tokenset.given_name}\",\"name\":\"${context.tokenset.name}\",\"nickname\":\"${context.tokenset.nickname}\",\"picture\":\"${context.tokenset.picture}\"}"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_session_expiry_supported", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.dpop_signing_alg", "Ed25519"),
 				),
 			},
 			{
@@ -1520,12 +1372,6 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),       // Gets set to a default if not provided.
 				),
 			},
-			{
-				Config: acctest.ParseTestName(testAccConnectionOktaConfigEmptyIDTokenAlgs, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.id_token_signed_response_algs.#", "0"),
-				),
-			},
 		},
 	})
 }
@@ -1541,8 +1387,6 @@ resource "auth0_connection" "okta" {
 		client_secret            = "123456"
 		domain                   = "domain.okta.com"
 		domain_aliases           = [ "example.com", "api.example.com" ]
-		type                     = "back_channel"
-		send_back_channel_nonce  = true
 		issuer                   = "https://domain.okta.com"
 		jwks_uri                 = "https://domain.okta.com/oauth2/v1/keys"
 		token_endpoint           = "https://domain.okta.com/oauth2/v1/token"
@@ -1552,9 +1396,6 @@ resource "auth0_connection" "okta" {
 		non_persistent_attrs     = [ "gender", "hair_color" ]
 		set_user_root_attributes = "on_each_login"
 		icon_url                 = "https://example.com/logo.svg"
-		token_endpoint_auth_signing_alg = "PS256"
-		token_endpoint_jwtca_aud_format = "issuer"
-		id_token_signed_response_algs = ["RS256", "PS256"]
 		upstream_params = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"
@@ -1568,7 +1409,7 @@ resource "auth0_connection" "okta" {
 		attribute_map {
 			mapping_mode = "basic_profile"
 		}
-		id_token_session_expiry_supported = true
+		dpop_signing_alg = "ES256"
 	}
 }
 `
@@ -1584,8 +1425,6 @@ resource "auth0_connection" "okta" {
 		client_secret            = "123456"
 		domain                   = "domain.okta.com"
 		domain_aliases           = [ "example.com" ]
-		type                     = "back_channel"
-		send_back_channel_nonce  = true
 		issuer                   = "https://domain.okta.com"
 		jwks_uri                 = "https://domain.okta.com/oauth2/v2/keys"
 		token_endpoint           = "https://domain.okta.com/oauth2/v2/token"
@@ -1595,9 +1434,6 @@ resource "auth0_connection" "okta" {
 		non_persistent_attrs     = [ "gender" ]
 		set_user_root_attributes = "on_first_login"
 		icon_url                 = "https://example.com/v2/logo.svg"
-		id_token_signed_response_algs = ["PS384", "ES384"]
-		token_endpoint_auth_signing_alg = "RS384"
-		token_endpoint_jwtca_aud_format = "token_endpoint"
 
 		connection_settings {
 			pkce = "auto"
@@ -1616,6 +1452,7 @@ resource "auth0_connection" "okta" {
 				"family_name": "$${context.tokenset.family_name}"
 		  	})
 		}
+		dpop_signing_alg = "Ed25519"
 	}
 }
 `
@@ -1631,8 +1468,6 @@ resource "auth0_connection" "okta" {
 		client_secret            = "123456"
 		domain                   = "domain.okta.com"
 		domain_aliases           = [ "example.com" ]
-		type                     = "back_channel"
-		send_back_channel_nonce  = true
 		issuer                   = "https://domain.okta.com"
 		jwks_uri                 = "https://domain.okta.com/oauth2/v2/keys"
 		token_endpoint           = "https://domain.okta.com/oauth2/v2/token"
@@ -1642,33 +1477,6 @@ resource "auth0_connection" "okta" {
 		non_persistent_attrs     = [ "gender" ]
 		set_user_root_attributes = "on_first_login"
 		icon_url                 = "https://example.com/v2/logo.svg"
-	}
-}
-`
-
-const testAccConnectionOktaConfigEmptyIDTokenAlgs = `
-resource "auth0_connection" "okta" {
-	name           = "Acceptance-Test-Okta-{{.testName}}"
-	display_name   = "Acceptance-Test-Okta-{{.testName}}"
-	strategy       = "okta"
-	show_as_button = false
-	options {
-		client_id                = "123456"
-		client_secret            = "123456"
-		domain                   = "domain.okta.com"
-		domain_aliases           = [ "example.com" ]
-		type                     = "back_channel"
-		send_back_channel_nonce  = true
-		issuer                   = "https://domain.okta.com"
-		jwks_uri                 = "https://domain.okta.com/oauth2/v2/keys"
-		token_endpoint           = "https://domain.okta.com/oauth2/v2/token"
-		userinfo_endpoint        = "https://domain.okta.com/oauth2/v2/userinfo"
-		authorization_endpoint   = "https://domain.okta.com/oauth2/v2/authorize"
-		scopes                   = [ "openid", "profile"]
-		non_persistent_attrs     = [ "gender" ]
-		set_user_root_attributes = "on_first_login"
-		icon_url                 = "https://example.com/v2/logo.svg"
-		id_token_signed_response_algs = []
 	}
 }
 `
@@ -2746,8 +2554,6 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.0.cert", "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_each_login"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.destination_url", "https://example.com/saml/destination"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.recipient_url", "https://example.com/saml/recipient"),
 				),
 			},
 			{
@@ -2806,8 +2612,6 @@ resource "auth0_connection" "my_connection" {
 		digest_algorithm         = "sha256"
 		icon_url                 = "https://example.com/logo.svg"
 		set_user_root_attributes = "on_each_login"
-		destination_url          = "https://example.com/saml/destination"
-		recipient_url            = "https://example.com/saml/recipient"
 
 		fields_map = jsonencode({
 			"name": ["name", "nameidentifier"]
@@ -3162,121 +2966,6 @@ resource "auth0_connection" "PasswordHash" {
 	options {
 		custom_password_hash {
 			action_id = auth0_action.action_hash.id
-		}
-	}
-}
-`
-
-func TestAccConnectionPasswordOptions(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config: acctest.ParseTestName(testAccConnectionPasswordOptionsCreate, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "true"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.#", "1"),
-					// Complexity.
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.min_length", "12"),
-					// Profile_data.
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.profile_data.0.active", "true"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.profile_data.0.blocked_fields.#", "4"),
-					// History.
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.active", "true"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.size", "5"),
-					// Dictionary.
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.active", "true"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.default", "en_100k"),
-				),
-			},
-			{
-				// Update an unrelated field while populating every password_options
-				// sub-field to verify the PATCH round-trips all values.
-				Config: acctest.ParseTestName(testAccConnectionPasswordOptionsUpdate, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "false"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.#", "1"),
-					// Complexity (all fields).
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.min_length", "14"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.character_types.#", "4"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.character_type_rule", "three_of_four"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.identical_characters", "block"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.sequential_characters", "block"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.complexity.0.max_length_exceeded", "truncate"),
-					// Profile_data.
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.profile_data.0.active", "true"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.profile_data.0.blocked_fields.#", "4"),
-					// History.
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.active", "true"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.history.0.size", "8"),
-					// Dictionary.
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.active", "true"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.default", "en_10k"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_options.0.dictionary.0.custom.#", "2"),
-				),
-			},
-		},
-	})
-}
-
-const testAccConnectionPasswordOptionsCreate = `
-resource "auth0_connection" "my_connection" {
-	name     = "Acceptance-Test-Connection-{{.testName}}"
-	strategy = "auth0"
-
-	options {
-		brute_force_protection = true
-		password_options {
-			profile_data {
-				active = true
-				blocked_fields = ["name","username","nickname","email"]
-			}
-			complexity {
-				min_length = 12
-			}
-			history {
-				active = true
-				size   = 5
-			}
-			dictionary {
-				active = true
-				default = "en_100k"
-			}
-		}
-	}
-}
-`
-
-const testAccConnectionPasswordOptionsUpdate = `
-resource "auth0_connection" "my_connection" {
-	name     = "Acceptance-Test-Connection-{{.testName}}"
-	strategy = "auth0"
-
-	options {
-		brute_force_protection = false
-		password_options {
-			complexity {
-				min_length            = 14
-				character_types       = ["uppercase", "lowercase", "number", "special"]
-				character_type_rule   = "three_of_four"
-				identical_characters  = "block"
-				sequential_characters = "block"
-				max_length_exceeded   = "truncate"
-			}
-			profile_data {
-				active         = true
-				blocked_fields = ["name", "username", "nickname", "email"]
-			}
-			history {
-				active = true
-				size   = 8
-			}
-			dictionary {
-				active  = true
-				default = "en_10k"
-				custom  = ["company-name", "product-name"]
-			}
 		}
 	}
 }

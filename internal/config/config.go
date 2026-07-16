@@ -15,7 +15,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/PuerkitoBio/rehttp"
@@ -23,7 +22,6 @@ import (
 	"github.com/auth0/go-auth0/management"
 	managementv2 "github.com/auth0/go-auth0/v2/management/client"
 	"github.com/auth0/go-auth0/v2/management/option"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
@@ -423,206 +421,12 @@ func authenticationOptionV2(cfg ProviderConfig) option.RequestOption {
 	}
 }
 
-// rateLimitMetrics tracks API usage and rate limit encounters throughout execution.
-type rateLimitMetrics struct {
-	mu                sync.Mutex
-	totalRequests     int
-	rateLimitHits     int
-	totalWaitDuration time.Duration
-	minRemaining      int
-	maxRemaining      int
-	firstRequest      time.Time
-	lastRequest       time.Time
-}
-
-// Global metrics instance (per provider configuration).
-var globalMetrics = &rateLimitMetrics{
-	minRemaining: -1, // -1 means not yet set.
-}
-
-func (m *rateLimitMetrics) recordRequest(remaining int, wasRateLimited bool, waitDuration time.Duration) {
-	m.mu.Lock()
-	defer m.mu.Unlock()
-
-	now := time.Now()
-	if m.totalRequests == 0 {
-		m.firstRequest = now
-	}
-	m.lastRequest = now
-
-	m.totalRequests++
-
-	if wasRateLimited {
-		m.rateLimitHits++
-		m.totalWaitDuration += waitDuration
-	}
-
-	// Track min/max remaining.
-	if remaining >= 0 {
-		if m.minRemaining == -1 || remaining < m.minRemaining {
-			m.minRemaining = remaining
-		}
-		if remaining > m.maxRemaining {
-			m.maxRemaining = remaining
-		}
-	}
-}
-
-func (m *rateLimitMetrics) logSummary(ctx context.Context) {
-	m.mu.Lock()
-	defer m.mu.Unlock()
-
-	if m.totalRequests == 0 {
-		return
-	}
-
-	efficiencyScore := 100.0
-	if m.totalRequests > 0 {
-		efficiencyScore = 100.0 - (float64(m.rateLimitHits)/float64(m.totalRequests))*100.0
-	}
-
-	tflog.Info(ctx, "Auth0 API Usage Summary",
-		map[string]interface{}{
-			"total_requests":      m.totalRequests,
-			"rate_limit_hits":     m.rateLimitHits,
-			"total_wait_duration": m.totalWaitDuration.String(),
-			"min_remaining":       m.minRemaining,
-			"max_remaining":       m.maxRemaining,
-			"efficiency_score":    fmt.Sprintf("%.1f%%", efficiencyScore),
-			"execution_duration":  m.lastRequest.Sub(m.firstRequest).String(),
-		},
-	)
-}
-
-// rateLimitLoggingTransport wraps an http.RoundTripper to provide diagnostic
-// logging and metrics tracking for rate limits.
-type rateLimitLoggingTransport struct {
-	transport http.RoundTripper
-	metrics   *rateLimitMetrics
-}
-
-func (t *rateLimitLoggingTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	ctx := req.Context()
-
-	resp, err := t.transport.RoundTrip(req)
-	if err != nil {
-		return resp, err
-	}
-
-	// Extract rate limit headers.
-	remaining := resp.Header.Get("X-RateLimit-Remaining")
-	limit := resp.Header.Get("X-RateLimit-Limit")
-	resetAt := resp.Header.Get("X-RateLimit-Reset")
-
-	// Parse remaining for metrics.
-	remainingInt := -1
-	if remaining != "" {
-		remainingInt, _ = strconv.Atoi(remaining)
-	}
-
-	wasRateLimited := resp.StatusCode == http.StatusTooManyRequests
-	var waitDuration time.Duration
-
-	if wasRateLimited {
-		resetAtUnix, _ := strconv.ParseInt(resetAt, 10, 64)
-		resetTime := time.Unix(resetAtUnix, 0)
-		waitDuration = time.Until(resetTime)
-
-		// Log rate limit encounter with details.
-		tflog.Warn(ctx, "Auth0 rate limit exceeded, waiting for reset",
-			map[string]interface{}{
-				"rate_limit":            limit,
-				"rate_limit_remaining":  remaining,
-				"rate_limit_reset_at":   resetTime.Format(time.RFC3339),
-				"wait_duration":         waitDuration.String(),
-				"wait_duration_seconds": int(waitDuration.Seconds()),
-			},
-		)
-
-		tflog.Info(ctx,
-			"The provider will automatically retry after the rate limit resets. "+
-				"To reduce rate limit consumption in the future, consider: "+
-				"(1) Using fetch_* parameters (fetch_roles, fetch_permissions, etc.) to disable unnecessary API calls, "+
-				"(2) Reducing the number of data source lookups, "+
-				"(3) Using 'terraform plan -target' for specific resources.",
-		)
-	}
-
-	if t.metrics != nil {
-		t.metrics.recordRequest(remainingInt, wasRateLimited, waitDuration)
-	}
-
-	if wasRateLimited {
-		return resp, err
-	}
-
-	// Provide proximity warnings before hitting rate limits.
-	if remaining != "" && limit != "" {
-		remainingInt, errRemaining := strconv.Atoi(remaining)
-		limitInt, errLimit := strconv.Atoi(limit)
-
-		if errRemaining == nil && errLimit == nil && limitInt > 0 {
-			percentRemaining := float64(remainingInt) / float64(limitInt) * 100
-
-			switch {
-			case percentRemaining <= 5 && percentRemaining > 0:
-				tflog.Error(ctx, "Critical: Very close to rate limit",
-					map[string]interface{}{
-						"rate_limit_remaining": remaining,
-						"rate_limit_total":     limit,
-						"percent_remaining":    fmt.Sprintf("%.1f%%", percentRemaining),
-					},
-				)
-				tflog.Info(ctx,
-					"Less than 5% of rate limit remaining. "+
-						"Execution may be significantly delayed if rate limit is exceeded. "+
-						"Strongly recommend: Set fetch_roles=false and fetch_permissions=false on "+
-						"auth0_user data sources, and similar fetch_* parameters on other data sources.",
-				)
-			case percentRemaining <= 10 && percentRemaining > 5:
-				tflog.Warn(ctx, "Approaching rate limit",
-					map[string]interface{}{
-						"rate_limit_remaining": remaining,
-						"rate_limit_total":     limit,
-						"percent_remaining":    fmt.Sprintf("%.1f%%", percentRemaining),
-					},
-				)
-				tflog.Info(ctx,
-					"Less than 10% of rate limit remaining. "+
-						"Consider using fetch_* parameters on data sources to reduce API calls. "+
-						"For example: fetch_roles=false, fetch_permissions=false on auth0_user.",
-				)
-			case percentRemaining <= 25 && percentRemaining > 10:
-				tflog.Debug(ctx, "Rate limit consumption",
-					map[string]interface{}{
-						"rate_limit_remaining": remaining,
-						"rate_limit_total":     limit,
-						"percent_remaining":    fmt.Sprintf("%.1f%%", percentRemaining),
-					},
-				)
-			}
-		}
-	}
-
-	return resp, err
-}
-
-func newRateLimitLoggingTransport(tripper http.RoundTripper, metrics *rateLimitMetrics) http.RoundTripper {
-	return &rateLimitLoggingTransport{
-		transport: tripper,
-		metrics:   metrics,
-	}
-}
-
 func customClientWithRetries() *http.Client {
 	client := &http.Client{
-		Transport: newRateLimitLoggingTransport(
-			rateLimitTransport(
-				retryableErrorTransport(
-					http.DefaultTransport,
-				),
+		Transport: rateLimitTransport(
+			retryableErrorTransport(
+				http.DefaultTransport,
 			),
-			globalMetrics, // Pass metrics tracker.
 		),
 	}
 

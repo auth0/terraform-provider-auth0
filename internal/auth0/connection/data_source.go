@@ -33,22 +33,13 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema["name"].Description = "The name of the connection. If not provided, `connection_id` must be set."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"connection_id", "name"}
 
-	dataSourceSchema["skip_enabled_clients"] = &schema.Schema{
-		Type:     schema.TypeBool,
-		Optional: true,
-		Default:  false,
-		Description: "Whether to skip enabled clients for this connection. Setting this to `true` will skip " +
-			"additional paginated API calls to /api/v2/connections/{id}/clients. Default: `false`.",
-	}
-
 	dataSourceSchema["enabled_clients"] = &schema.Schema{
 		Type: schema.TypeSet,
 		Elem: &schema.Schema{
 			Type: schema.TypeString,
 		},
-		Computed: true,
-		Description: "IDs of the clients for which the connection is enabled. " +
-			"Skips populating if `skip_enabled_clients` is `true`.",
+		Computed:    true,
+		Description: "IDs of the clients for which the connection is enabled.",
 	}
 
 	return dataSourceSchema
@@ -66,13 +57,9 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 
 		data.SetId(connectionID)
 
-		var existingClients *management.ConnectionEnabledClientList
-		skipEnabledClients := data.Get("skip_enabled_clients").(bool)
-		if !skipEnabledClients {
-			existingClients, err = GetAllEnabledClients(ctx, api, connection.GetID())
-			if err != nil {
-				return diag.FromErr(err)
-			}
+		existingClients, err := GetAllEnabledClients(ctx, api, connection.GetID())
+		if err != nil {
+			return diag.FromErr(err)
 		}
 
 		return flattenConnectionForDataSource(data, connection, existingClients)
@@ -98,14 +85,9 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 		for _, connection := range connections.Connections {
 			if connection.GetName() == name {
 				data.SetId(connection.GetID())
-
-				var existingClients *management.ConnectionEnabledClientList
-				skipEnabledClients := data.Get("skip_enabled_clients").(bool)
-				if !skipEnabledClients {
-					existingClients, err = GetAllEnabledClients(ctx, api, connection.GetID())
-					if err != nil {
-						return diag.FromErr(err)
-					}
+				existingClients, err := GetAllEnabledClients(ctx, api, connection.GetID())
+				if err != nil {
+					return diag.FromErr(err)
 				}
 
 				return flattenConnectionForDataSource(data, connection, existingClients)

@@ -29,7 +29,6 @@ resource "auth0_connection" "my_connection" {
 		tenant_domain = "example.com"
 		domain_aliases = [ "example.com", "api.example.com" ]
 		api_enable_users = true
-		api_enable_groups = true
 		set_user_root_attributes = "on_first_login"
 		map_user_id_to_id = true
 		scopes = [ "ext_profile", "ext_groups" ]
@@ -83,33 +82,6 @@ resource "auth0_connection_directory" "my_directory" {
 }
 `
 
-const testAccDirectoryWithSyncGroupsOff = testAccDirectoryGivenAConnection + `
-resource "auth0_connection_directory" "my_directory" {
-	connection_id = auth0_connection.my_connection.id
-	synchronize_groups = "off"
-}
-`
-
-const testAccDirectoryWithSyncGroupsAll = testAccDirectoryGivenAConnection + `
-resource "auth0_connection_directory" "my_directory" {
-	connection_id = auth0_connection.my_connection.id
-	synchronize_groups = "all"
-}
-`
-
-const testAccDirectoryWithSyncGroupsSelected = testAccDirectoryGivenAConnection + `
-resource "auth0_connection_directory" "my_directory" {
-	connection_id = auth0_connection.my_connection.id
-	synchronize_groups = "selected"
-}
-`
-
-const testAccDirectoryDefaultSyncGroup = testAccDirectoryGivenAConnection + `
-resource "auth0_connection_directory" "my_directory" {
-	connection_id = auth0_connection.my_connection.id
-}
-`
-
 func TestAccDirectoryProvisioning(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -139,46 +111,6 @@ func TestAccDirectoryProvisioning(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection_directory.my_directory", "synchronize_automatically", "false"),
 					resource.TestCheckResourceAttr("auth0_connection_directory.my_directory", "mapping.#", "3"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccDirectoryDelete, t.Name()),
-			},
-		},
-	})
-}
-
-func TestAccDirectorySynchronizeGroups(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config: acctest.ParseTestName(testAccDirectoryWithSyncGroupsOff, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection_directory.my_directory", "synchronize_groups", "off"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccDirectoryWithSyncGroupsAll, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection_directory.my_directory", "synchronize_groups", "all"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccDirectoryWithSyncGroupsSelected, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection_directory.my_directory", "synchronize_groups", "selected"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccDirectoryWithSyncGroupsOff, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection_directory.my_directory", "synchronize_groups", "off"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccDirectoryDefaultSyncGroup, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection_directory.my_directory", "synchronize_groups", "off"),
 				),
 			},
 			{

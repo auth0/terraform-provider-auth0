@@ -29,8 +29,8 @@ resource "auth0_self_service_profile_custom_text" "sso_custom_text" {
 ### Required
 
 - `body` (String) The list of text keys and values to customize the self-service SSO page. Values can be plain text or rich HTML content limited to basic styling tags and hyperlinks
-- `language` (String) The language of the custom text. Options include: `en`
-- `page` (String) The page where the custom text is shown. Options include: `get-started`
+- `language` (String) The language of the custom text
+- `page` (String) The page where the custom text is shown
 - `sso_id` (String) The id of the self-service profile
 
 ### Read-Only

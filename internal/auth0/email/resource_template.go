@@ -105,7 +105,7 @@ func NewTemplateResource() *schema.Resource {
 func createEmailTemplate(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	email := expandEmailTemplate(data)
+	email := expandEmailTemplate(data.GetRawConfig())
 
 	// The email template resource doesn't allow deleting templates, so in order
 	// to avoid conflicts, we first attempt to read the template. If it exists
@@ -152,7 +152,7 @@ func readEmailTemplate(ctx context.Context, data *schema.ResourceData, meta inte
 func updateEmailTemplate(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	email := expandEmailTemplate(data)
+	email := expandEmailTemplate(data.GetRawConfig())
 
 	if err := api.EmailTemplate.Update(ctx, data.Id(), email); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

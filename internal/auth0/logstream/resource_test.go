@@ -370,28 +370,6 @@ resource "auth0_log_stream" "my_log_stream" {
 	}
 }
 `
-const logStreamDatadogConfigWriteOnly = `
-resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-datadog-{{.testName}}"
-	type = "datadog"
-	sink {
-	  datadog_region             = "us"
-	  datadog_api_key_wo         = "wo-secret-key-v1"
-	  datadog_api_key_wo_version = 1
-	}
-}
-`
-const logStreamDatadogConfigWriteOnlyUpdate = `
-resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-datadog-{{.testName}}"
-	type = "datadog"
-	sink {
-	  datadog_region             = "eu"
-	  datadog_api_key_wo         = "wo-secret-key-v2"
-	  datadog_api_key_wo_version = 2
-	}
-}
-`
 
 func TestAccLogStreamDatadog(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
@@ -427,27 +405,6 @@ func TestAccLogStreamDatadog(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_region", "eu"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_api_key", "1212331234556667"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "pii_config.#", "0"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(logStreamDatadogConfigWriteOnly, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "datadog"),
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_region", "us"),
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_api_key_wo_version", "1"),
-					// The write-only key is never stored in state.
-					resource.TestCheckNoResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_api_key_wo"),
-					// The legacy key must remain empty when the write-only path is used.
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_api_key", ""),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(logStreamDatadogConfigWriteOnlyUpdate, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "datadog"),
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_region", "eu"),
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_api_key_wo_version", "2"),
-					resource.TestCheckNoResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_api_key_wo"),
 				),
 			},
 		},

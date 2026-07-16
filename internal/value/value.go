@@ -102,16 +102,6 @@ func Time(rawValue cty.Value) *time.Time {
 	return &value
 }
 
-// FormatTime renders a time.Time as a UTC RFC3339 string (the Auth0 date-time format), or an empty
-// string for the zero time.
-func FormatTime(t time.Time) string {
-	if t.IsZero() {
-		return ""
-	}
-
-	return t.UTC().Format(time.RFC3339)
-}
-
 // Strings evaluates the typed value of the value
 // and coerces to a pointer of a slice of strings.
 func Strings(rawValues cty.Value) *[]string {

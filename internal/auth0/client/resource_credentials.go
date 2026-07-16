@@ -2,28 +2,407 @@ package client
 
 import (
 	"context"
-	"crypto/rsa"
-	"crypto/sha256"
-	"crypto/x509"
-	"encoding/base64"
-	"encoding/json"
-	"encoding/pem"
 	"fmt"
 	"io"
-	"math/big"
 	"net/http"
 	"time"
 
+	"encoding/json"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
+
+// NewCredentialsResource will return a new auth0_client_credentials resource.
+func NewCredentialsResource() *schema.Resource {
+	return &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"client_id": {
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "The ID of the client for which to configure the authentication method.",
+			},
+			"authentication_method": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"none",
+					"client_secret_post",
+					"client_secret_basic",
+					"private_key_jwt",
+					"tls_client_auth",
+					"self_signed_tls_client_auth",
+				}, false),
+				Description: "Configure the method to use when making requests to " +
+					"any endpoint that requires this client to authenticate. " +
+					"Options include `none` (public client without a client secret), " +
+					"`client_secret_post` (confidential client using HTTP POST parameters), " +
+					"`client_secret_basic` (confidential client using HTTP Basic), " +
+					"`private_key_jwt` (confidential client using a Private Key JWT), " +
+					"`tls_client_auth` (confidential client using CA-based mTLS authentication), " +
+					"`self_signed_tls_client_auth` (confidential client using mTLS authentication utilizing a self-signed certificate).",
+			},
+			"client_secret": {
+				Type:      schema.TypeString,
+				Optional:  true,
+				Computed:  true,
+				Sensitive: true,
+				ConflictsWith: []string{
+					"private_key_jwt",
+					"tls_client_auth",
+					"self_signed_tls_client_auth",
+				},
+				Description: "Secret for the client when using `client_secret_post` or `client_secret_basic` " +
+					"authentication method. Keep this private. To access this attribute you need to add either " +
+					"`read:client_keys` or `read:client_credentials` scope to the Terraform client. Otherwise, the attribute will contain an " +
+					"empty string. The attribute will also be an empty string in case `private_key_jwt` is selected " +
+					"as an authentication method.",
+			},
+			"private_key_jwt": {
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				ConflictsWith: []string{
+					"client_secret",
+					"tls_client_auth",
+					"self_signed_tls_client_auth",
+				},
+				Description: "Defines `private_key_jwt` client authentication method.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"credentials": {
+							Type:     schema.TypeList,
+							MaxItems: 2,
+							Required: true,
+							Description: "Client credentials available for use when Private Key JWT is in use as " +
+								"the client authentication method. A maximum of 2 client credentials can be set.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ID of the client credential.",
+									},
+									"name": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										ForceNew:    true,
+										Description: "Friendly name for a credential.",
+									},
+									"key_id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The key identifier of the credential, generated on creation.",
+									},
+									"credential_type": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringInSlice([]string{"public_key"}, false),
+										Description:  "Credential type. Supported types: `public_key`.",
+									},
+									"pem": {
+										Type:     schema.TypeString,
+										Required: true,
+										ForceNew: true,
+										Description: "PEM-formatted public key (SPKI and PKCS1) or X509 certificate. " +
+											"Must be JSON escaped.",
+									},
+									"algorithm": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringInSlice([]string{"RS256", "RS384", "PS256"}, false),
+										Default:      "RS256",
+										Description: "Algorithm which will be used with the credential. " +
+											"Can be one of `RS256`, `RS384`, `PS256`. If not specified, " +
+											"`RS256` will be used.",
+									},
+									"parse_expiry_from_cert": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										ForceNew: true,
+										Description: "Parse expiry from x509 certificate. " +
+											"If true, attempts to parse the expiry date from the provided PEM. " +
+											"If also the `expires_at` is set the credential expiry will be set to " +
+											"the explicit `expires_at` value.",
+									},
+									"created_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was created.",
+									},
+									"updated_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was updated.",
+									},
+									"expires_at": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										Computed:     true,
+										ValidateFunc: validation.IsRFC3339Time,
+										Description: "The ISO 8601 formatted date representing " +
+											"the expiration of the credential. It is not possible to set this to " +
+											"never expire after it has been set. Recreate the certificate if needed.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"tls_client_auth": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				ConflictsWith: []string{
+					"client_secret",
+					"private_key_jwt",
+					"self_signed_tls_client_auth",
+				},
+				Description: "Defines `tls_client_auth` client authentication method.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"credentials": {
+							Type:        schema.TypeList,
+							Required:    true,
+							Description: "Credentials that will be enabled on the client for CA-based mTLS authentication.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ID of the client credential.",
+									},
+									"name": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Friendly name for a credential.",
+									},
+									"credential_type": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringInSlice([]string{"cert_subject_dn"}, false),
+										Description:  "Credential type. Supported types: `cert_subject_dn`.",
+									},
+									"subject_dn": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										ForceNew:     true,
+										Computed:     true,
+										ValidateFunc: validation.StringLenBetween(1, 256),
+										Description:  "Subject Distinguished Name. Mutually exlusive with `pem` property.",
+									},
+									"pem": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringLenBetween(1, 4096),
+										Description: "PEM-formatted X509 certificate. Must be JSON escaped. " +
+											"Mutually exlusive with `subject_dn` property.",
+									},
+									"created_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was created.",
+									},
+									"updated_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was updated.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"self_signed_tls_client_auth": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				ConflictsWith: []string{
+					"client_secret",
+					"private_key_jwt",
+					"tls_client_auth",
+				},
+				Description: "Defines `tls_client_auth` client authentication method.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"credentials": {
+							Type:     schema.TypeList,
+							Required: true,
+							Description: "Credentials that will be enabled on the client for mTLS " +
+								"authentication utilizing self-signed certificates.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ID of the client credential.",
+									},
+									"name": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Friendly name for a credential.",
+									},
+									"credential_type": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringInSlice([]string{"x509_cert"}, false),
+										Description:  "Credential type. Supported types: `x509_cert`.",
+									},
+									"pem": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringLenBetween(1, 4096),
+										Description:  "PEM-formatted X509 certificate. Must be JSON escaped. ",
+									},
+									"thumbprint_sha256": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The X509 certificate's SHA256 thumbprint.",
+									},
+									"created_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was created.",
+									},
+									"updated_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was updated.",
+									},
+									"expires_at": {
+										Type:     schema.TypeString,
+										Computed: true,
+										Description: "The ISO 8601 formatted date representing " +
+											"the expiration of the credential.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"signed_request_object": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Description: "Configuration for JWT-secured Authorization Requests(JAR).",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"required": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Require JWT-secured authorization requests.",
+						},
+						"credentials": {
+							Type:        schema.TypeList,
+							Required:    true,
+							Description: "Client credentials for use with JWT-secured authorization requests.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ID of the client credential.",
+									},
+									"name": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										ForceNew:    true,
+										Description: "Friendly name for a credential.",
+									},
+									"key_id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The key identifier of the credential, generated on creation.",
+									},
+									"credential_type": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringInSlice([]string{"public_key"}, false),
+										Description:  "Credential type. Supported types: `public_key`.",
+									},
+									"pem": {
+										Type:     schema.TypeString,
+										Required: true,
+										ForceNew: true,
+										Description: "PEM-formatted public key (SPKI and PKCS1) or X509 certificate. " +
+											"Must be JSON escaped.",
+									},
+									"algorithm": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringInSlice([]string{"RS256", "RS384", "PS256"}, false),
+										Default:      "RS256",
+										Description: "Algorithm which will be used with the credential. " +
+											"Can be one of `RS256`, `RS384`, `PS256`. If not specified, " +
+											"`RS256` will be used.",
+									},
+									"parse_expiry_from_cert": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										ForceNew: true,
+										Description: "Parse expiry from x509 certificate. " +
+											"If true, attempts to parse the expiry date from the provided PEM. " +
+											"If also the `expires_at` is set the credential expiry will be set to " +
+											"the explicit `expires_at` value.",
+									},
+									"created_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was created.",
+									},
+									"updated_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was updated.",
+									},
+									"expires_at": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										Computed:     true,
+										ValidateFunc: validation.IsRFC3339Time,
+										Description: "The ISO 8601 formatted date representing " +
+											"the expiration of the credential. It is not possible to set this to " +
+											"never expire after it has been set. Recreate the certificate if needed.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		CreateContext: createClientCredentials,
+		ReadContext:   readClientCredentials,
+		UpdateContext: updateClientCredentials,
+		DeleteContext: deleteClientCredentials,
+		Importer: &schema.ResourceImporter{
+			StateContext: schema.ImportStatePassthroughContext,
+		},
+		Description: "With this resource, you can configure the method to use when making requests to any endpoint " +
+			"that requires this client to authenticate.",
+	}
+}
 
 func createClientCredentials(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
@@ -85,35 +464,6 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	// Check that client exists.
 	if _, err := api.Client.Read(ctx, data.Id(), management.IncludeFields("client_id")); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
-	}
-
-	// When switching away from a credential-based auth method, detach and
-	// delete existing credentials before changing the auth method.
-	if data.HasChange("authentication_method") {
-		oldVal, _ := data.GetChange("authentication_method")
-		oldMethod, _ := oldVal.(string)
-		newMethod := data.Get("authentication_method").(string)
-
-		isOldCredentialBased := oldMethod == "private_key_jwt" || oldMethod == "tls_client_auth" || oldMethod == "self_signed_tls_client_auth"
-		isNewCredentialBased := newMethod == "private_key_jwt" || newMethod == "tls_client_auth" || newMethod == "self_signed_tls_client_auth"
-
-		if isOldCredentialBased && !isNewCredentialBased {
-			clientID := data.Get("client_id").(string)
-			credentials, err := api.Client.ListCredentials(ctx, clientID)
-			if err != nil {
-				return diag.FromErr(err)
-			}
-			if len(credentials) > 0 {
-				if err := detachClientCredentials(ctx, api, clientID, newMethod); err != nil {
-					return diag.FromErr(err)
-				}
-				for _, cred := range credentials {
-					if err := api.Client.DeleteCredential(ctx, clientID, cred.GetID()); err != nil {
-						return diag.FromErr(err)
-					}
-				}
-			}
-		}
 	}
 
 	authenticationMethod := data.Get("authentication_method").(string)
@@ -216,267 +566,6 @@ func createAuthenticationMethodCredentials(ctx context.Context, api *management.
 }
 
 func modifyAuthenticationMethodCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData, authenticationMethod string) diag.Diagnostics {
-	if authenticationMethod == "private_key_jwt" {
-		return modifyPrivateKeyJWTCredentials(ctx, api, data)
-	}
-
-	return modifyListBasedCredentials(ctx, api, data, authenticationMethod)
-}
-
-type expiryUpdate struct {
-	credentialID string
-	expiresAt    string
-}
-
-type credentialDiff struct {
-	toAdd         []interface{}
-	toRemove      []interface{}
-	expiryUpdates []expiryUpdate
-}
-
-// rotationStepKind holds the type of a rotation step.
-type rotationStepKind int
-
-const (
-	// Detaches a credential from the client, then deletes it.
-	detachAndDelete rotationStepKind = iota
-	// Creates a credential, then attaches it to the client.
-	createAndAttach
-)
-
-// rotationStep is a single ordered action in a credential rotation.
-type rotationStep struct {
-	kind          rotationStepKind
-	credentialID  string                 // Set when kind == detachAndDelete.
-	newCredential map[string]interface{} // Set when kind == createAndAttach.
-}
-
-// minCredentialCap is the smallest per-client credential limit Auth0 enforces
-// on any tenant. The cap is not queryable, but every tenant allows at least
-// this many, so holding this many attached credentials transiently is always
-// safe.
-const minCredentialCap = 2
-
-// planCredentialRotation orders a credential change into interleaved steps,
-// pairing each removal with an addition. Within a pair it chooses the order
-// from the live attached count: with headroom below minCredentialCap it adds
-// first (keeping a credential attached for zero downtime); at or above the cap
-// it removes first (so the count never overshoots the tenant limit).
-func planCredentialRotation(diff credentialDiff, attachedCount int) []rotationStep {
-	rotationSteps := make([]rotationStep, 0, len(diff.toRemove)+len(diff.toAdd))
-
-	newRemoval := func(entry interface{}) (rotationStep, bool) {
-		credMap, _ := entry.(map[string]interface{})
-		id, _ := credMap["id"].(string)
-		return rotationStep{kind: detachAndDelete, credentialID: id}, id != ""
-	}
-	newAddition := func(entry interface{}) rotationStep {
-		credMap, _ := entry.(map[string]interface{})
-		return rotationStep{kind: createAndAttach, newCredential: credMap}
-	}
-
-	pairs := min(len(diff.toAdd), len(diff.toRemove))
-
-	for i := range pairs {
-		removal, hasID := newRemoval(diff.toRemove[i])
-		addition := newAddition(diff.toAdd[i])
-
-		if attachedCount < minCredentialCap {
-			// Headroom: add first so a valid credential stays attached.
-			rotationSteps = append(rotationSteps, addition)
-			attachedCount++
-			if hasID {
-				rotationSteps = append(rotationSteps, removal)
-				attachedCount--
-			}
-		} else {
-			// At capacity: remove first so the count never overshoots.
-			if hasID {
-				rotationSteps = append(rotationSteps, removal)
-				attachedCount--
-			}
-			rotationSteps = append(rotationSteps, addition)
-			attachedCount++
-		}
-	}
-	for _, removed := range diff.toRemove[pairs:] {
-		if removal, hasID := newRemoval(removed); hasID {
-			rotationSteps = append(rotationSteps, removal)
-			attachedCount--
-		}
-	}
-	for _, added := range diff.toAdd[pairs:] {
-		rotationSteps = append(rotationSteps, newAddition(added))
-		attachedCount++
-	}
-
-	return rotationSteps
-}
-
-func classifyCredentialChanges(toAdd, toRemove []interface{}) credentialDiff {
-	var expiryUpdates []expiryUpdate
-	remainingAdd := make([]interface{}, 0, len(toAdd))
-	remainingRemove := make([]interface{}, 0, len(toRemove))
-
-	usedRemoveIndexes := make(map[int]bool)
-	for _, addedCred := range toAdd {
-		addMap := addedCred.(map[string]interface{})
-		addPEM, _ := addMap["pem"].(string)
-		addAlgo, _ := addMap["algorithm"].(string)
-		addExpiry, _ := addMap["expires_at"].(string)
-
-		matched := false
-		for i, removedCred := range toRemove {
-			if usedRemoveIndexes[i] {
-				continue
-			}
-			rmMap := removedCred.(map[string]interface{})
-			rmPEM, _ := rmMap["pem"].(string)
-			rmAlgo, _ := rmMap["algorithm"].(string)
-			rmID, _ := rmMap["id"].(string)
-			rmKeyID, _ := rmMap["key_id"].(string)
-
-			if rmID == "" {
-				continue
-			}
-
-			var pemMatch bool
-			if rmPEM == addPEM {
-				pemMatch = true
-			} else if rmPEM == "" && rmKeyID != "" && addPEM != "" {
-				pemMatch = jwkThumbprint(addPEM) == rmKeyID
-			}
-
-			if pemMatch && rmAlgo == addAlgo {
-				rmParseExpiry, _ := rmMap["parse_expiry_from_cert"].(bool)
-				if rmParseExpiry && rmPEM != "" {
-					continue
-				}
-
-				rmExpiry, _ := rmMap["expires_at"].(string)
-				if addExpiry != "" && addExpiry != rmExpiry && !rmParseExpiry {
-					expiryUpdates = append(expiryUpdates, expiryUpdate{
-						credentialID: rmID,
-						expiresAt:    addExpiry,
-					})
-				}
-
-				usedRemoveIndexes[i] = true
-				matched = true
-				break
-			}
-		}
-		if !matched {
-			remainingAdd = append(remainingAdd, addedCred)
-		}
-	}
-	for i, removedCred := range toRemove {
-		if !usedRemoveIndexes[i] {
-			remainingRemove = append(remainingRemove, removedCred)
-		}
-	}
-
-	return credentialDiff{
-		toAdd:         remainingAdd,
-		toRemove:      remainingRemove,
-		expiryUpdates: expiryUpdates,
-	}
-}
-
-func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
-	clientID := data.Get("client_id").(string)
-	credentialsKey := "private_key_jwt.0.credentials" //nolint:gosec // This is a Terraform schema key, not a credential.
-
-	toAdd, toRemove := value.Difference(data, credentialsKey)
-	diff := classifyCredentialChanges(toAdd, toRemove)
-
-	var result *multierror.Error
-
-	if len(diff.toAdd) > 0 || len(diff.toRemove) > 0 {
-		// Snapshot the currently attached credentials so we can mutate the set
-		// incrementally, one slot at a time, without ever exceeding the cap. The
-		// live count also drives the per-pair add-first vs remove-first ordering.
-		existingCreds, err := api.Client.ListCredentials(ctx, clientID)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-
-		attachedCreds := make([]management.Credential, 0, len(existingCreds))
-		for _, cred := range existingCreds {
-			attachedCreds = append(attachedCreds, management.Credential{ID: cred.ID})
-		}
-
-		for _, step := range planCredentialRotation(diff, len(attachedCreds)) {
-			switch step.kind {
-			case detachAndDelete:
-				attachedCreds = removeAttachedCredential(attachedCreds, step.credentialID)
-				if err := attachAuthenticationMethodCredentials(ctx, api, clientID, "private_key_jwt", attachedCreds); err != nil {
-					return diag.FromErr(err)
-				}
-				if err := deleteCredentialIgnoringNotFound(ctx, api, clientID, step.credentialID); err != nil {
-					return diag.FromErr(err)
-				}
-			case createAndAttach:
-				credential := expandClientCredentialFromMap(step.newCredential)
-				if err := api.Client.CreateCredential(ctx, clientID, credential); err != nil {
-					return diag.FromErr(err)
-				}
-				attachedCreds = append(attachedCreds, management.Credential{ID: credential.ID})
-				if err := attachAuthenticationMethodCredentials(ctx, api, clientID, "private_key_jwt", attachedCreds); err != nil {
-					// Roll back the just-created credential so it does not linger
-					// unattached and consume a cap slot on the next apply.
-					if deleteErr := deleteCredentialIgnoringNotFound(ctx, api, clientID, credential.GetID()); deleteErr != nil {
-						return diag.Errorf("failed to attach credential (rollback delete also failed: %v): %v", deleteErr, err)
-					}
-					return diag.FromErr(err)
-				}
-			}
-		}
-	}
-
-	// Apply expires_at PATCH updates for credentials that only changed expiry.
-	for _, update := range diff.expiryUpdates {
-		t, parseErr := time.Parse(time.RFC3339, update.expiresAt)
-		if parseErr != nil {
-			t, parseErr = time.Parse(timeRFC3339WithMilliseconds, update.expiresAt)
-			if parseErr != nil {
-				continue
-			}
-		}
-
-		if err := api.Client.UpdateCredential(ctx, clientID, update.credentialID, &management.Credential{
-			ExpiresAt: &t,
-		}); err != nil {
-			result = multierror.Append(result, err)
-		}
-	}
-
-	return diag.FromErr(result.ErrorOrNil())
-}
-
-// removeAttachedCredential returns creds without the entry matching id.
-func removeAttachedCredential(creds []management.Credential, id string) []management.Credential {
-	filtered := make([]management.Credential, 0, len(creds))
-	for _, cred := range creds {
-		if cred.GetID() != id {
-			filtered = append(filtered, cred)
-		}
-	}
-	return filtered
-}
-
-// deleteCredentialIgnoringNotFound deletes a credential, treats a 404 as success.
-func deleteCredentialIgnoringNotFound(ctx context.Context, api *management.Management, clientID, credentialID string) error {
-	err := api.Client.DeleteCredential(ctx, clientID, credentialID)
-	if internalError.IsStatusNotFound(err) {
-		return nil
-	}
-	return err
-}
-
-// modifyListBasedCredentials handles update for tls_client_auth and self_signed_tls_client_auth
-// which still use TypeList.
-func modifyListBasedCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData, authenticationMethod string) diag.Diagnostics {
 	credentials, diagnostics := expandAuthenticationMethodCredentials(data.GetRawConfig(), authenticationMethod)
 	if diagnostics.HasError() {
 		return diagnostics
@@ -496,46 +585,17 @@ func modifyListBasedCredentials(ctx context.Context, api *management.Management,
 			continue
 		}
 
+		// The error can be ignored, the schema validates the type.
 		expiresAt, _ := time.Parse(time.RFC3339, stateExpiresAt)
 		credential.ExpiresAt = &expiresAt
 
+		// Limitation: Unable to update the credential to never expire. Needs to get deleted and recreated if needed.
 		if err := api.Client.UpdateCredential(ctx, clientID, credentialID, credential); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	return nil
-}
-
-func expandClientCredentialFromMap(m map[string]interface{}) *management.Credential {
-	credentialType, _ := m["credential_type"].(string)
-	credential := &management.Credential{
-		CredentialType: &credentialType,
-	}
-
-	if name, ok := m["name"].(string); ok && name != "" {
-		credential.Name = &name
-	}
-
-	if credentialType == "public_key" {
-		if pem, ok := m["pem"].(string); ok && pem != "" {
-			credential.PEM = &pem
-		}
-		if algo, ok := m["algorithm"].(string); ok && algo != "" {
-			credential.Algorithm = &algo
-		}
-		if parseExpiry, ok := m["parse_expiry_from_cert"].(bool); ok {
-			credential.ParseExpiryFromCert = &parseExpiry
-		}
-		if expiresAt, ok := m["expires_at"].(string); ok && expiresAt != "" {
-			t, err := time.Parse(time.RFC3339, expiresAt)
-			if err == nil {
-				credential.ExpiresAt = &t
-			}
-		}
-	}
-
-	return credential
 }
 
 func createSignedRequestObject(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
@@ -743,22 +803,11 @@ func updateTokenEndpointAuthMethod(ctx context.Context, api *management.Manageme
 }
 
 func updateSecret(ctx context.Context, api *management.Management, data *schema.ResourceData) error {
-	clientID := data.Get("client_id").(string)
-
-	// Write-only values are not available via data.Get(); read them from the raw config.
-	secretWO := data.GetRawConfig().GetAttr("client_secret_wo")
-	if !secretWO.IsNull() && (data.IsNewResource() || data.HasChange("client_secret_wo_version")) {
-		clientSecret := secretWO.AsString()
-
-		return api.Client.Update(ctx, clientID, &management.Client{
-			ClientSecret: &clientSecret,
-		})
-	}
-
 	if !data.HasChange("client_secret") {
 		return nil
 	}
 
+	clientID := data.Get("client_id").(string)
 	clientSecret := data.Get("client_secret").(string)
 
 	return api.Client.Update(ctx, clientID, &management.Client{
@@ -861,54 +910,4 @@ func expandClientCredential(rawConfig cty.Value) *management.Credential {
 	}
 
 	return &clientCredential
-}
-
-// jwkThumbprint computes the RFC 7638 JWK thumbprint from a PEM-encoded
-// certificate or public key. Returns empty string if the PEM cannot be parsed
-// or the key type is not RSA.
-func jwkThumbprint(pemData string) string {
-	block, _ := pem.Decode([]byte(pemData))
-	if block == nil {
-		return ""
-	}
-
-	var pub *rsa.PublicKey
-
-	switch block.Type {
-	case "CERTIFICATE":
-		cert, err := x509.ParseCertificate(block.Bytes)
-		if err != nil {
-			return ""
-		}
-		var ok bool
-		pub, ok = cert.PublicKey.(*rsa.PublicKey)
-		if !ok {
-			return ""
-		}
-	case "PUBLIC KEY":
-		key, err := x509.ParsePKIXPublicKey(block.Bytes)
-		if err != nil {
-			return ""
-		}
-		var ok bool
-		pub, ok = key.(*rsa.PublicKey)
-		if !ok {
-			return ""
-		}
-	case "RSA PUBLIC KEY":
-		key, err := x509.ParsePKCS1PublicKey(block.Bytes)
-		if err != nil {
-			return ""
-		}
-		pub = key
-	default:
-		return ""
-	}
-
-	e := base64.RawURLEncoding.EncodeToString(big.NewInt(int64(pub.E)).Bytes())
-	n := base64.RawURLEncoding.EncodeToString(pub.N.Bytes())
-	canonical := fmt.Sprintf(`{"e":"%s","kty":"RSA","n":"%s"}`, e, n)
-
-	h := sha256.Sum256([]byte(canonical))
-	return base64.RawURLEncoding.EncodeToString(h[:])
 }

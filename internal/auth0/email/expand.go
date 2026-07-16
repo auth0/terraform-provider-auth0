@@ -174,36 +174,17 @@ func expandEmailProviderMS365(config cty.Value, data *schema.ResourceData, email
 	}
 }
 
-func expandEmailTemplate(data *schema.ResourceData) *management.EmailTemplate {
-	config := data.GetRawConfig()
-
+func expandEmailTemplate(config cty.Value) *management.EmailTemplate {
 	emailTemplate := &management.EmailTemplate{
-		Template: value.String(config.GetAttr("template")),
-	}
-
-	if data.IsNewResource() || data.HasChange("body") {
-		emailTemplate.Body = value.String(config.GetAttr("body"))
-	}
-	if data.IsNewResource() || data.HasChange("from") {
-		emailTemplate.From = value.String(config.GetAttr("from"))
-	}
-	if data.IsNewResource() || data.HasChange("result_url") {
-		emailTemplate.ResultURL = value.String(config.GetAttr("result_url"))
-	}
-	if data.IsNewResource() || data.HasChange("subject") {
-		emailTemplate.Subject = value.String(config.GetAttr("subject"))
-	}
-	if data.IsNewResource() || data.HasChange("syntax") {
-		emailTemplate.Syntax = value.String(config.GetAttr("syntax"))
-	}
-	if data.IsNewResource() || data.HasChange("url_lifetime_in_seconds") {
-		emailTemplate.URLLifetimeInSecoonds = value.Int(config.GetAttr("url_lifetime_in_seconds"))
-	}
-	if data.IsNewResource() || data.HasChange("enabled") {
-		emailTemplate.Enabled = value.Bool(config.GetAttr("enabled"))
-	}
-	if data.IsNewResource() || data.HasChange("include_email_in_redirect") {
-		emailTemplate.IncludeEmailInRedirect = value.Bool(config.GetAttr("include_email_in_redirect"))
+		Template:               value.String(config.GetAttr("template")),
+		Body:                   value.String(config.GetAttr("body")),
+		From:                   value.String(config.GetAttr("from")),
+		ResultURL:              value.String(config.GetAttr("result_url")),
+		Subject:                value.String(config.GetAttr("subject")),
+		Syntax:                 value.String(config.GetAttr("syntax")),
+		URLLifetimeInSecoonds:  value.Int(config.GetAttr("url_lifetime_in_seconds")),
+		Enabled:                value.Bool(config.GetAttr("enabled")),
+		IncludeEmailInRedirect: value.Bool(config.GetAttr("include_email_in_redirect")),
 	}
 
 	return emailTemplate

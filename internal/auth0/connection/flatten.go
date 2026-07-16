@@ -299,48 +299,6 @@ func flattenCustomPasswordHash(customPasswordHash *management.CustomPasswordHash
 	}
 }
 
-func flattenPasswordOptions(po *management.PasswordOptions) map[string]interface{} {
-	return map[string]interface{}{
-		"complexity":   []interface{}{flattenPasswordOptionsComplexity(po.GetComplexity())},
-		"profile_data": []interface{}{flattenPasswordOptionsProfileData(po.GetProfileData())},
-		"history":      []interface{}{flattenPasswordOptionsHistory(po.GetHistory())},
-		"dictionary":   []interface{}{flattenPasswordOptionsDictionary(po.GetDictionary())},
-	}
-}
-
-func flattenPasswordOptionsComplexity(c *management.PasswordOptionsComplexity) map[string]interface{} {
-	return map[string]interface{}{
-		"min_length":            c.GetMinLength(),
-		"character_types":       c.GetCharacterTypes(),
-		"character_type_rule":   c.GetCharacterTypeRule(),
-		"identical_characters":  c.GetIdenticalCharacters(),
-		"sequential_characters": c.GetSequentialCharacters(),
-		"max_length_exceeded":   c.GetMaxLengthExceeded(),
-	}
-}
-
-func flattenPasswordOptionsProfileData(p *management.PasswordOptionsProfileData) map[string]interface{} {
-	return map[string]interface{}{
-		"active":         p.GetActive(),
-		"blocked_fields": p.GetBlockedFields(),
-	}
-}
-
-func flattenPasswordOptionsHistory(h *management.PasswordOptionsHistory) map[string]interface{} {
-	return map[string]interface{}{
-		"active": h.GetActive(),
-		"size":   h.GetSize(),
-	}
-}
-
-func flattenPasswordOptionsDictionary(d *management.PasswordOptionsDictionary) map[string]interface{} {
-	return map[string]interface{}{
-		"active":  d.GetActive(),
-		"default": d.GetDefault(),
-		"custom":  d.GetCustom(),
-	}
-}
-
 func flattenAuthenticationMethodPasskey(passkeyAuthenticationMethod *management.PasskeyAuthenticationMethod) interface{} {
 	if passkeyAuthenticationMethod == nil {
 		return nil
@@ -358,21 +316,11 @@ func flattenAuthenticationMethodPassword(passwordAuthenticationMethod *managemen
 		return nil
 	}
 
-	apiBehavior := passwordAuthenticationMethod.GetAPIBehavior()
-	if apiBehavior == "" {
-		apiBehavior = "required"
-	}
-
-	signupBehavior := passwordAuthenticationMethod.GetSignupBehavior()
-	if signupBehavior == "" {
-		signupBehavior = "allow"
-	}
-
 	return []map[string]interface{}{
 		{
 			"enabled":         passwordAuthenticationMethod.GetEnabled(),
-			"api_behavior":    apiBehavior,
-			"signup_behavior": signupBehavior,
+			"api_behavior":    passwordAuthenticationMethod.GetAPIBehavior(),
+			"signup_behavior": passwordAuthenticationMethod.GetSignupBehavior(),
 		},
 	}
 }
@@ -520,10 +468,6 @@ func flattenConnectionOptionsAuth0(
 		optionsMap["custom_password_hash"] = []interface{}{flattenCustomPasswordHash(options.GetCustomPasswordHash())}
 	}
 
-	if options.PasswordOptions != nil {
-		optionsMap["password_options"] = []interface{}{flattenPasswordOptions(options.GetPasswordOptions())}
-	}
-
 	if options.PasswordComplexityOptions != nil {
 		optionsMap["password_complexity_options"] = []interface{}{options.PasswordComplexityOptions}
 	}
@@ -604,7 +548,6 @@ func flattenConnectionOptionsGoogleApps(
 		"domain":                   options.GetDomain(),
 		"tenant_domain":            options.GetTenantDomain(),
 		"api_enable_users":         options.GetEnableUsersAPI(),
-		"api_enable_groups":        options.GetEnableGroupsAPI(),
 		"scopes":                   options.Scopes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"domain_aliases":           options.GetDomainAliases(),
@@ -847,29 +790,26 @@ func flattenConnectionOptionsOIDC(
 	}
 
 	optionsMap := map[string]interface{}{
-		"client_id":                         options.GetClientID(),
-		"client_secret":                     options.GetClientSecret(),
-		"icon_url":                          options.GetLogoURL(),
-		"tenant_domain":                     options.GetTenantDomain(),
-		"domain_aliases":                    options.GetDomainAliases(),
-		"type":                              options.GetType(),
-		"send_back_channel_nonce":           options.GetSendBackChannelNonce(),
-		"scopes":                            options.Scopes(),
-		"issuer":                            options.GetIssuer(),
-		"jwks_uri":                          options.GetJWKSURI(),
-		"discovery_url":                     options.GetDiscoveryURL(),
-		"token_endpoint":                    options.GetTokenEndpoint(),
-		"userinfo_endpoint":                 options.GetUserInfoEndpoint(),
-		"authorization_endpoint":            options.GetAuthorizationEndpoint(),
-		"set_user_root_attributes":          options.GetSetUserAttributes(),
-		"non_persistent_attrs":              options.GetNonPersistentAttrs(),
-		"upstream_params":                   upstreamParams,
-		"token_endpoint_auth_method":        options.GetTokenEndpointAuthMethod(),
-		"token_endpoint_auth_signing_alg":   options.GetTokenEndpointAuthSigningAlg(),
-		"dpop_signing_alg":                  options.GetDPoPSigningAlg(),
-		"id_token_signed_response_algs":     options.GetIDTokenSignedResponseAlgs(),
-		"token_endpoint_jwtca_aud_format":   options.GetTokenEndpointJwtcaAudFormat(),
-		"id_token_session_expiry_supported": options.GetIDTokenSessionExpirySupported(),
+		"client_id":                       options.GetClientID(),
+		"client_secret":                   options.GetClientSecret(),
+		"icon_url":                        options.GetLogoURL(),
+		"tenant_domain":                   options.GetTenantDomain(),
+		"domain_aliases":                  options.GetDomainAliases(),
+		"type":                            options.GetType(),
+		"send_back_channel_nonce":         options.GetSendBackChannelNonce(),
+		"scopes":                          options.Scopes(),
+		"issuer":                          options.GetIssuer(),
+		"jwks_uri":                        options.GetJWKSURI(),
+		"discovery_url":                   options.GetDiscoveryURL(),
+		"token_endpoint":                  options.GetTokenEndpoint(),
+		"userinfo_endpoint":               options.GetUserInfoEndpoint(),
+		"authorization_endpoint":          options.GetAuthorizationEndpoint(),
+		"set_user_root_attributes":        options.GetSetUserAttributes(),
+		"non_persistent_attrs":            options.GetNonPersistentAttrs(),
+		"upstream_params":                 upstreamParams,
+		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
+		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
+		"dpop_signing_alg":                options.GetDPoPSigningAlg(),
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -895,14 +835,6 @@ func flattenConnectionOptionsOIDC(
 		}
 	}
 
-	if options.FederatedConnectionsAccessTokens != nil {
-		optionsMap["federated_connections_access_tokens"] = []map[string]interface{}{
-			{
-				"active": options.GetFederatedConnectionsAccessTokens().GetActive(),
-			},
-		}
-	}
-
 	return optionsMap, nil
 }
 
@@ -921,28 +853,23 @@ func flattenConnectionOptionsOkta(
 	}
 
 	optionsMap := map[string]interface{}{
-		"client_id":                         options.GetClientID(),
-		"client_secret":                     options.GetClientSecret(),
-		"domain":                            options.GetDomain(),
-		"domain_aliases":                    options.GetDomainAliases(),
-		"scopes":                            options.Scopes(),
-		"issuer":                            options.GetIssuer(),
-		"jwks_uri":                          options.GetJWKSURI(),
-		"token_endpoint":                    options.GetTokenEndpoint(),
-		"userinfo_endpoint":                 options.GetUserInfoEndpoint(),
-		"authorization_endpoint":            options.GetAuthorizationEndpoint(),
-		"non_persistent_attrs":              options.GetNonPersistentAttrs(),
-		"set_user_root_attributes":          options.GetSetUserAttributes(),
-		"icon_url":                          options.GetLogoURL(),
-		"type":                              options.GetType(),
-		"send_back_channel_nonce":           options.GetSendBackChannelNonce(),
-		"upstream_params":                   upstreamParams,
-		"token_endpoint_auth_method":        options.GetTokenEndpointAuthMethod(),
-		"token_endpoint_auth_signing_alg":   options.GetTokenEndpointAuthSigningAlg(),
-		"dpop_signing_alg":                  options.GetDPoPSigningAlg(),
-		"id_token_signed_response_algs":     options.GetIDTokenSignedResponseAlgs(),
-		"token_endpoint_jwtca_aud_format":   options.GetTokenEndpointJwtcaAudFormat(),
-		"id_token_session_expiry_supported": options.GetIDTokenSessionExpirySupported(),
+		"client_id":                       options.GetClientID(),
+		"client_secret":                   options.GetClientSecret(),
+		"domain":                          options.GetDomain(),
+		"domain_aliases":                  options.GetDomainAliases(),
+		"scopes":                          options.Scopes(),
+		"issuer":                          options.GetIssuer(),
+		"jwks_uri":                        options.GetJWKSURI(),
+		"token_endpoint":                  options.GetTokenEndpoint(),
+		"userinfo_endpoint":               options.GetUserInfoEndpoint(),
+		"authorization_endpoint":          options.GetAuthorizationEndpoint(),
+		"non_persistent_attrs":            options.GetNonPersistentAttrs(),
+		"set_user_root_attributes":        options.GetSetUserAttributes(),
+		"icon_url":                        options.GetLogoURL(),
+		"upstream_params":                 upstreamParams,
+		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
+		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
+		"dpop_signing_alg":                options.GetDPoPSigningAlg(),
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -1185,8 +1112,6 @@ func flattenConnectionOptionsSAML(
 		"upstream_params":                 upstreamParams,
 		"global_token_revocation_jwt_iss": options.GetGlobalTokenRevocationJWTIss(),
 		"global_token_revocation_jwt_sub": options.GetGlobalTokenRevocationJWTSub(),
-		"destination_url":                 options.GetDestinationURL(),
-		"recipient_url":                   options.GetRecipientURL(),
 	}
 
 	if options.GetSetUserAttributes() == "" {
@@ -1400,7 +1325,6 @@ func flattenDirectory(data *schema.ResourceData, directoryConfig *managementv2.G
 		data.Set("strategy", directoryConfig.GetStrategy()),
 		data.Set("mapping", flattenDirectoryMappings(directoryConfig.GetMapping())),
 		data.Set("synchronize_automatically", directoryConfig.GetSynchronizeAutomatically()),
-		data.Set("synchronize_groups", directoryConfig.GetSynchronizeGroups()),
 		data.Set("created_at", directoryConfig.GetCreatedAt().String()),
 		data.Set("updated_at", directoryConfig.GetUpdatedAt().String()),
 	)

@@ -2,19 +2,13 @@ package organization
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"strconv"
-	"strings"
 
-	"github.com/auth0/go-auth0"
-	managementv2 "github.com/auth0/go-auth0/v2/management"
-	"github.com/auth0/go-auth0/v2/management/core"
+	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
@@ -33,7 +27,6 @@ func NewConnectionsResource() *schema.Resource {
 			},
 			"enabled_connections": {
 				Type: schema.TypeSet,
-				Set:  organizationConnectionSetHash,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_id": {
@@ -61,28 +54,8 @@ func NewConnectionsResource() *schema.Resource {
 							Type:     schema.TypeBool,
 							Optional: true,
 							Default:  true,
-							Description: "Determines whether a connection should be displayed on this organization's " +
+							Description: "Determines whether a connection should be displayed on this organization’s " +
 								"login prompt. Only applicable for enterprise connections.",
-						},
-						"is_enabled": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Default:     true,
-							Description: "Whether the connection is enabled for the organization.",
-						},
-						"organization_connection_name": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: "Name of the connection in the scope of this organization.",
-						},
-						"organization_access_level": {
-							Type:     schema.TypeString,
-							Optional: true,
-							Computed: true,
-							ValidateFunc: validation.StringInSlice([]string{
-								"none", "readonly", "limited", "full",
-							}, false),
-							Description: "The access level for this organization connection. Can be `none`, `readonly`, `limited`, or `full`.",
 						},
 					},
 				},
@@ -101,53 +74,36 @@ func NewConnectionsResource() *schema.Resource {
 	}
 }
 
-// organizationConnectionSetHash computes the set hash using only fields that
-// have deterministic values at plan time (i.e. Required or have a Default).
-// The fields organization_access_level (Optional+Computed) and
-// organization_connection_name (Optional) are excluded because their values
-// may differ between the config and the API response, which would cause the
-// set hash to change on every read and produce perpetual diffs.
-func organizationConnectionSetHash(v interface{}) int {
-	m := v.(map[string]interface{})
-
-	var buf strings.Builder
-	buf.WriteString(m["connection_id"].(string))
-	buf.WriteString(strconv.FormatBool(m["assign_membership_on_login"].(bool)))
-	buf.WriteString(strconv.FormatBool(m["is_signup_enabled"].(bool)))
-	buf.WriteString(strconv.FormatBool(m["show_as_button"].(bool)))
-	buf.WriteString(strconv.FormatBool(m["is_enabled"].(bool)))
-
-	return schema.HashString(buf.String())
-}
-
 func createOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
 
-	var alreadyEnabledConnections []*managementv2.OrganizationAllConnectionPost
-	page, err := apiv2.Organizations.Connections.List(ctx,
-		organizationID,
-		&managementv2.ListOrganizationAllConnectionsRequestParameters{IsEnabled: auth0.Bool(true)},
-	)
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
-	}
-	alreadyEnabledConnections = append(alreadyEnabledConnections, page.Results...)
+	var alreadyEnabledConnections []*management.OrganizationConnection
+	var page int
 	for {
-		page, err = page.GetNextPage(ctx)
+		connectionList, err := api.Organization.Connections(
+			ctx,
+			organizationID,
+			management.Page(page),
+			management.PerPage(100),
+		)
 		if err != nil {
-			if errors.Is(err, core.ErrNoPages) {
-				break
-			}
 			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
-		alreadyEnabledConnections = append(alreadyEnabledConnections, page.Results...)
+
+		alreadyEnabledConnections = append(alreadyEnabledConnections, connectionList.OrganizationConnections...)
+
+		if !connectionList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
 	data.SetId(organizationID)
 
-	connectionsToAdd := expandOrganizationConnectionsCreate(data.GetRawConfig().GetAttr("enabled_connections"))
+	connectionsToAdd := expandOrganizationConnections(data.GetRawConfig().GetAttr("enabled_connections"))
 
 	if diagnostics := guardAgainstErasingUnwantedConnections(
 		organizationID,
@@ -162,7 +118,7 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 		var result *multierror.Error
 
 		for _, connection := range connectionsToAdd {
-			_, err := apiv2.Organizations.Connections.Create(ctx, organizationID, connection)
+			err := api.Organization.AddConnection(ctx, organizationID, connection)
 			result = multierror.Append(result, err)
 		}
 
@@ -175,42 +131,43 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 }
 
 func readOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	api := meta.(*config.Config).GetAPI()
 
-	var connections []*managementv2.OrganizationAllConnectionPost
-	page, err := apiv2.Organizations.Connections.List(ctx,
-		data.Id(),
-		&managementv2.ListOrganizationAllConnectionsRequestParameters{IsEnabled: auth0.Bool(true)},
-	)
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
-	}
-	connections = append(connections, page.Results...)
+	var connections []*management.OrganizationConnection
+	var page int
 	for {
-		page, err = page.GetNextPage(ctx)
+		connectionList, err := api.Organization.Connections(
+			ctx,
+			data.Id(),
+			management.Page(page),
+			management.PerPage(100),
+		)
 		if err != nil {
-			if errors.Is(err, core.ErrNoPages) {
-				break
-			}
 			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
-		connections = append(connections, page.Results...)
+
+		connections = append(connections, connectionList.OrganizationConnections...)
+
+		if !connectionList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
 	return diag.FromErr(flattenOrganizationConnections(data, connections))
 }
 
 func updateOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Id()
 
-	// We use expandOrganizationConnectionsCreate (not value.Difference) to preserve
-	// the full typed struct. Value.Difference gives us untyped maps for delete/add.
-	connections := expandOrganizationConnectionsCreate(data.GetRawConfig().GetAttr("enabled_connections"))
-	connectionMap := make(map[string]*managementv2.CreateOrganizationAllConnectionRequestParameters)
+	// We are using the data from expandOrganizations and not value.Difference to preserver the nilness of the data.
+	connections := expandOrganizationConnections(data.GetRawConfig().GetAttr("enabled_connections"))
+	connectionMap := make(map[string]*management.OrganizationConnection)
 	for _, connection := range connections {
-		connectionMap[connection.ConnectionID] = connection
+		connectionMap[connection.GetConnectionID()] = connection
 	}
 
 	toAdd, toRemove := value.Difference(data, "enabled_connections")
@@ -220,7 +177,7 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 		connection := rmConnection.(map[string]interface{})
 		connectionID := connection["connection_id"].(string)
 
-		err := apiv2.Organizations.Connections.Delete(ctx, organizationID, connectionID)
+		err := api.Organization.DeleteConnection(ctx, organizationID, connectionID)
 		if internalError.IsStatusNotFound(err) {
 			err = nil
 		}
@@ -232,7 +189,7 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 		connection := addConnection.(map[string]interface{})
 		connectionID := connection["connection_id"].(string)
 
-		_, err := apiv2.Organizations.Connections.Create(ctx, organizationID, connectionMap[connectionID])
+		err := api.Organization.AddConnection(ctx, organizationID, connectionMap[connectionID])
 		result = multierror.Append(result, err)
 	}
 
@@ -244,13 +201,13 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 }
 
 func deleteOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	api := meta.(*config.Config).GetAPI()
 
-	connections := expandOrganizationConnectionsCreate(data.GetRawState().GetAttr("enabled_connections"))
+	connections := expandOrganizationConnections(data.GetRawState().GetAttr("enabled_connections"))
 	var result *multierror.Error
 
 	for _, conn := range connections {
-		err := apiv2.Organizations.Connections.Delete(ctx, data.Id(), conn.ConnectionID)
+		err := api.Organization.DeleteConnection(ctx, data.Id(), conn.GetConnectionID())
 		if internalError.IsStatusNotFound(err) {
 			err = nil
 		}
@@ -263,8 +220,8 @@ func deleteOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 func guardAgainstErasingUnwantedConnections(
 	organizationID string,
-	alreadyEnabledConnections []*managementv2.OrganizationAllConnectionPost,
-	connectionsToAdd []*managementv2.CreateOrganizationAllConnectionRequestParameters,
+	alreadyEnabledConnections []*management.OrganizationConnection,
+	connectionsToAdd []*management.OrganizationConnection,
 ) diag.Diagnostics {
 	if len(alreadyEnabledConnections) == 0 {
 		return nil
@@ -277,7 +234,7 @@ func guardAgainstErasingUnwantedConnections(
 
 	connectionIDsToAdd := make([]string, 0)
 	for _, conn := range connectionsToAdd {
-		connectionIDsToAdd = append(connectionIDsToAdd, conn.ConnectionID)
+		connectionIDsToAdd = append(connectionIDsToAdd, conn.GetConnectionID())
 	}
 
 	if cmp.Equal(connectionIDsToAdd, alreadyEnabledConnectionsIDs) {

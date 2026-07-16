@@ -2,7 +2,6 @@ package guardian
 
 import (
 	"context"
-	"errors"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -76,36 +75,23 @@ func updatePhoneFactor(ctx context.Context, data *schema.ResourceData, api *mana
 func configurePhone(ctx context.Context, config cty.Value, api *management.Management) error {
 	var err error
 
-	pceEnabled, err := isPhoneConsolidatedExperienceEnabled(ctx, api)
-	if err != nil {
-		return err
-	}
-
 	config.GetAttr("phone").ForEachElement(func(_ cty.Value, phone cty.Value) (stop bool) {
-		// Provider and options are only valid when the phone consolidated experience is disabled.
-		if pceEnabled {
-			if !phone.GetAttr("provider").IsNull() || phone.GetAttr("options").LengthInt() != 0 {
-				err = errors.New("provider or options cannot be specified when phone consolidated experience is enabled for tenant")
-				return true
-			}
-		} else {
-			mfaProvider := &management.MultiFactorProvider{
-				Provider: value.String(phone.GetAttr("provider")),
-			}
-			if err = api.Guardian.MultiFactor.Phone.UpdateProvider(ctx, mfaProvider); err != nil {
-				return true
-			}
+		mfaProvider := &management.MultiFactorProvider{
+			Provider: value.String(phone.GetAttr("provider")),
+		}
+		if err = api.Guardian.MultiFactor.Phone.UpdateProvider(ctx, mfaProvider); err != nil {
+			return true
+		}
 
-			options := phone.GetAttr("options")
-			switch mfaProvider.GetProvider() {
-			case "twilio":
-				if err = updateTwilioOptions(ctx, options, api); err != nil {
-					return true
-				}
-			case "auth0", "phone-message-hook":
-				if err = updateAuth0Options(ctx, options, api); err != nil {
-					return true
-				}
+		options := phone.GetAttr("options")
+		switch mfaProvider.GetProvider() {
+		case "twilio":
+			if err = updateTwilioOptions(ctx, options, api); err != nil {
+				return true
+			}
+		case "auth0", "phone-message-hook":
+			if err = updateAuth0Options(ctx, options, api); err != nil {
+				return true
 			}
 		}
 

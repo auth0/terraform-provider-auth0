@@ -11,8 +11,6 @@ resource "auth0_connection" "samlp" {
     sign_out_endpoint               = "https://saml.provider/sign_out"
     global_token_revocation_jwt_iss = "issuer.example.com"
     global_token_revocation_jwt_sub = "user123"
-    destination_url                 = "https://example.com/saml/destination"
-    recipient_url                   = "https://example.com/saml/recipient"
     disable_sign_out                = true
     strategy_version                = 2
     tenant_domain                   = "example.com"

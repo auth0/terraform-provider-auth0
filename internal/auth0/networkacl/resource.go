@@ -143,24 +143,6 @@ var networkACLRuleMatchSchema = &schema.Schema{
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "User Agents. Must contain between 1 and 10 unique items.",
 			},
-			"hostnames": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "Hostnames. Must contain between 1 and 20 unique items.",
-			},
-			"connecting_ipv4_cidrs": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "Connecting IPv4 CIDRs. Must contain between 1 and 20 unique items. Can be IPv4 addresses or CIDR blocks.",
-			},
-			"connecting_ipv6_cidrs": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "Connecting IPv6 CIDRs. Must contain between 1 and 20 unique items. Can be IPv6 addresses or CIDR blocks.",
-			},
 		},
 	},
 }

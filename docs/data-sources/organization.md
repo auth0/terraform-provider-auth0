@@ -29,20 +29,16 @@ data "auth0_organization" "some-organization-by-id" {
 
 - `name` (String) The name of the organization. If not provided, `organization_id` must be set. For performance, it is advised to use the `organization_id` as a lookup if possible.
 - `organization_id` (String) The ID of the organization. If not provided, `name` must be set.
-- `skip_client_grants` (Boolean) Whether to skip organization client grants. Setting this to `true` will skip API call to /api/v2/organizations/{id}/client-grants.
-- `skip_connections` (Boolean) Whether to skip organization connections. Setting this to `true` will skip paginated API calls to /api/v2/organizations/{id}/connections.
-- `skip_members` (Boolean) Whether to skip organization members. Setting this to `true` will skip paginated API calls to /api/v2/organizations/{id}/members.
 
 ### Read-Only
 
 - `branding` (List of Object) Defines how to style the login pages. (see [below for nested schema](#nestedatt--branding))
-- `client_grants` (Set of String) Client Grant ID(s) that are associated to the organization. Skips populating if `skip_client_grants` is `true`.
-- `connections` (Set of Object) Connections enabled for this organization. Skips populating if `skip_connections` is `true`. (see [below for nested schema](#nestedatt--connections))
+- `client_grants` (Set of String) Client Grant ID(s) that are associated to the organization.
+- `connections` (Set of Object) (see [below for nested schema](#nestedatt--connections))
 - `display_name` (String) Friendly name of this organization.
 - `id` (String) The ID of this resource.
-- `members` (Set of String) User ID(s) that are members of the organization. Skips populating if `skip_members` is `true`.
+- `members` (Set of String) User ID(s) that are members of the organization.
 - `metadata` (Map of String) Metadata associated with the organization. Maximum of 10 metadata properties allowed.
-- `third_party_client_access` (String) Controls whether this organization can be used in user flows with third-party clients. Available values are `allow` or `block`. Defaults to `block`.
 - `token_quota` (List of Object) The token quota configuration. (see [below for nested schema](#nestedatt--token_quota))
 
 <a id="nestedatt--branding"></a>
@@ -61,10 +57,7 @@ Read-Only:
 
 - `assign_membership_on_login` (Boolean)
 - `connection_id` (String)
-- `is_enabled` (Boolean)
 - `is_signup_enabled` (Boolean)
-- `organization_access_level` (String)
-- `organization_connection_name` (String)
 - `show_as_button` (Boolean)
 
 

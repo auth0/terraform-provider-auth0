@@ -4,8 +4,6 @@ resource "auth0_resource_server" "my_resource_server" {
   signing_alg = "RS256"
 
   allow_offline_access                            = true
-  allow_online_access                             = true
-  allow_online_access_with_ephemeral_sessions     = false
   token_lifetime                                  = 8600
   skip_consent_for_verifiable_first_party_clients = true
   consent_policy                                  = "transactional-authorization-with-mfa"

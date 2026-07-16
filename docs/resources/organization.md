@@ -24,8 +24,6 @@ resource "auth0_organization" "my_organization" {
   name         = "auth0-inc"
   display_name = "Auth0 Inc."
 
-  third_party_client_access = "block"
-
   branding {
     logo_url = "https://example.com/assets/icons/icon.png"
     colors = {
@@ -48,7 +46,6 @@ resource "auth0_organization" "my_organization" {
 - `branding` (Block List, Max: 1) Defines how to style the login pages. (see [below for nested schema](#nestedblock--branding))
 - `display_name` (String) Friendly name of this organization.
 - `metadata` (Map of String) Metadata associated with the organization. Maximum of 10 metadata properties allowed.
-- `third_party_client_access` (String) Controls whether this organization can be used in user flows with third-party clients. Available values are `allow` or `block`. Defaults to `block`.
 - `token_quota` (Block List, Max: 1) The token quota configuration. (see [below for nested schema](#nestedblock--token_quota))
 
 ### Read-Only

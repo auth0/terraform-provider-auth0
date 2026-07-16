@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 121
+        content_length: 119
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"session_lifetime":168,"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24}
+            {"session_lifetime":168,"idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: PATCH
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"},"is_custom_theme_set":true,"is_custom_template_set":false,"identifier_first":true,"webauthn_platform_first_factor":false},"session_cookie":{"mode":"persistent"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 406.919584ms
+        duration: 458.2035ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -54,7 +54,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: PATCH
       response:
@@ -65,13 +65,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility"}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"},"is_custom_theme_set":true,"is_custom_template_set":false,"identifier_first":true,"webauthn_platform_first_factor":false},"session_cookie":{"mode":"persistent"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 410.028292ms
+        duration: 420.622333ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -87,7 +87,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -98,13 +98,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 386.237625ms
+        duration: 355.413041ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -120,7 +120,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -131,13 +131,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 375.689917ms
+        duration: 394.311083ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -153,7 +153,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
@@ -164,13 +164,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":2}'
+        body: '{"keys":[{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":3}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 440.090417ms
+        duration: 599.696875ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -189,7 +189,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption
         method: POST
       response:
@@ -200,13 +200,13 @@ interactions:
         trailer: {}
         content_length: 223
         uncompressed: false
-        body: '{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:22.388Z","parent_kid":null,"public_key":null}'
+        body: '{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:41.596Z","parent_kid":null,"public_key":null}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 430.370583ms
+        duration: 428.491917ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -222,8 +222,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/ed5ba386-413d-4d08-89f3-70fd3616e149
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/420ff04e-de3c-4288-8a5a-5caf1f035af7
         method: GET
       response:
         proto: HTTP/2.0
@@ -233,13 +233,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:22.388Z","parent_kid":null,"public_key":null}'
+        body: '{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:41.596Z","parent_kid":null,"public_key":null}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 384.077958ms
+        duration: 360.310959ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -255,8 +255,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/ed5ba386-413d-4d08-89f3-70fd3616e149/wrapping-key
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/420ff04e-de3c-4288-8a5a-5caf1f035af7/wrapping-key
         method: POST
       response:
         proto: HTTP/2.0
@@ -266,13 +266,13 @@ interactions:
         trailer: {}
         content_length: 688
         uncompressed: false
-        body: '{"public_key":"-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEA+vtfYkj45uIw/cP8NlcG\n1kMBmZxwXYvZ2IFUOoFJiHdaXkoZTZ8dMrdR3h10jL3EZSqA5uE7TMVAhnpxHSb2\nMrMCK7sghN2wPzQ/NuCXo3QmpIGFysfYQUItduPEAOUztOxijD7HfLn7FQVOy/E0\n19KPWZ43jaBktFu9AljFzERCHhvzMUdF0J3BgIw7ahANnR3L1E+w2r9s6lEw5BaF\n4YITkI8cIu2ytuYtxELJA5BXyXkL0zbNLtc9ErHIl4oCuU4zITd4uq9t7pVzAdXc\nxn9CYM/lwnOSvHN4KZLFX9SO8rzWu/vOZyPMffvqj/oozWUWPpLuPUfAa8wZI1Ms\nJeAEwSlSercHbhO0Hm6YRu5fxW/4g+g16d0UkV5fvJnvk3daqO33T4I/Xno7KRY/\nwmHIzCXSlV0sRbS8xa3MhfF9S+vikxbh1FnmgYlCB6KCBHFrALd8ThcCYOcdqZA6\nowMKVxgLwFqpD9/57sSi72ZML03ddfGByG5Zjmrg4BLxAgMBAAE=\n-----END PUBLIC KEY-----\n","algorithm":"CKM_RSA_AES_KEY_WRAP"}'
+        body: '{"public_key":"-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAvGKPUrf1HZtB1Lj9oEzU\njahZlXi8Pjc5H7K4UApL5u8Jc+VVFmkpzNncaNbCb2EwF3tyhmtVFjK93q002303\nAzoHpzpsrJEDrzhxMCjuFR0W8Ty12C6ZlFrIBipkxZNDmeKyVxbXwuWStpMYkbgA\nLh3VOZpExBY+nnp8PhOM22yQW93Ibd9vahb+/tcNZwS1QFG1JeKE3X/4VF/LvcJo\nMOdCxWRn4T+XHq6jA028QmQlIVCOaJbJT0lkAHs/8tOLYNkmGiE1TqyCFoOECbhb\nMdXtNdLWtqlnPF9u3M4t0uibgzExzricTVYr/HjcUVexWHf7Dyy/Iyh+nllYYlrb\n0rGhj2LqYy53wjrcXutPj0tkHtqItPEo9AV/96UC/r2NjPbhnByMz0FXviDLKuuk\ncROSYlenvNF1LUYw7R3RZ6Sl9gtl+Qp8T/Iqn745SCui+YrYVtDaVg/BWtO7vRUZ\nMse9/MXc4cW287QSnDMO3uMg6M9c4EiMTjLqIzudrf/hAgMBAAE=\n-----END PUBLIC KEY-----\n","algorithm":"CKM_RSA_AES_KEY_WRAP"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 866.183041ms
+        duration: 1.096412667s
     - id: 8
       request:
         proto: HTTP/1.1
@@ -288,7 +288,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
@@ -299,13 +299,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:22.388Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":3}'
+        body: '{"keys":[{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:41.596Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":4}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 396.731417ms
+        duration: 300.981666ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -321,8 +321,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -332,13 +332,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:22.388Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":3}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 386.054792ms
+        duration: 357.352375ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -354,8 +354,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -365,13 +365,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:41.596Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":4}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 391.550542ms
+        duration: 407.870042ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -387,8 +387,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -398,13 +398,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:41.596Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":4}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 381.330667ms
+        duration: 301.847042ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -420,8 +420,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -431,13 +431,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:22.388Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":3}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 391.931709ms
+        duration: 404.41425ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -453,8 +453,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -464,13 +464,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:22.388Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":3}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 395.200375ms
+        duration: 312.617584ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -486,8 +486,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -497,13 +497,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:41.596Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":4}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 408.397542ms
+        duration: 352.217625ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -519,8 +519,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -530,13 +530,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:41.596Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":4}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 538.448667ms
+        duration: 302.429709ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -552,8 +552,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -563,13 +563,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:22.388Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":3}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 553.542875ms
+        duration: 403.416375ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -585,8 +585,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/ed5ba386-413d-4d08-89f3-70fd3616e149
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/420ff04e-de3c-4288-8a5a-5caf1f035af7
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -602,7 +602,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 418.050375ms
+        duration: 356.124875ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -618,8 +618,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/ed5ba386-413d-4d08-89f3-70fd3616e149
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/420ff04e-de3c-4288-8a5a-5caf1f035af7
         method: GET
       response:
         proto: HTTP/2.0
@@ -629,13 +629,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null}'
+        body: '{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 375.128834ms
+        duration: 434.665167ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -651,7 +651,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
@@ -662,13 +662,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":3}'
+        body: '{"keys":[{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":4}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 402.128125ms
+        duration: 324.896459ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -684,8 +684,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -695,13 +695,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":3}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 427.055167ms
+        duration: 294.783958ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -717,8 +717,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -728,13 +728,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":4}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 427.054583ms
+        duration: 371.35525ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -750,7 +750,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -761,13 +761,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 374.937958ms
+        duration: 402.448625ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -783,7 +783,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
@@ -794,13 +794,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":3}'
+        body: '{"keys":[{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":4}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 382.210416ms
+        duration: 431.866333ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -819,7 +819,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption
         method: POST
       response:
@@ -830,13 +830,13 @@ interactions:
         trailer: {}
         content_length: 223
         uncompressed: false
-        body: '{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:33.432Z","parent_kid":null,"public_key":null}'
+        body: '{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:06:52.496Z","parent_kid":null,"public_key":null}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 399.722084ms
+        duration: 371.557917ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -852,8 +852,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/afc2c589-9569-41c2-bc3d-8c1e613cf94e
         method: GET
       response:
         proto: HTTP/2.0
@@ -863,13 +863,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:33.432Z","parent_kid":null,"public_key":null}'
+        body: '{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:06:52.496Z","parent_kid":null,"public_key":null}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 385.1955ms
+        duration: 435.895ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -885,8 +885,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd/wrapping-key
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/afc2c589-9569-41c2-bc3d-8c1e613cf94e/wrapping-key
         method: POST
       response:
         proto: HTTP/2.0
@@ -896,13 +896,13 @@ interactions:
         trailer: {}
         content_length: 688
         uncompressed: false
-        body: '{"public_key":"-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAt9Wd7wR/4KISXA04wyF5\n3G1IHgWZeX1zBHwAdsTth3jM/fCeYhghWP64jN0T0dgxlC8GviqgM7wP0+qQdgD6\n+2XazMd8cQZB07wHbkVmJivuzWcAEkXAUXOUla8dHwzNUBXJbFx3tjo482yBJhxN\nkdZLECDcH00AOB23vGmap6BkirboCsukHSaHmoOP28CJM3IYflUa6j5goLT3lOjI\nWrnptWxJ9q6gLMF/p4k6JEagSgGq/TcQq8lhmcPXPaus/zHdFC4xprH8uA88ZCO7\n3gfFiu9tjZFymIBQMOix/2EOtaNwktIDvZBGHtpMNG0PG4n9NSLpFOBuDJwVvZpj\n7vYRWNN63k+jfQeXPF1jGd59vy3pAk8802hgaB3o7lC3OGFmg1bw1r+i0MFOKLsf\nNSd7Ycra78LIsaZyU0wiPKW6nLv2uM9Syy3cLQRv3SdrGSaXokaZkxYSwuAHU7bk\nsLwLCvW7jcVMAQAKA4OfOtVdfIaxn4vZI3clNo2tytmNAgMBAAE=\n-----END PUBLIC KEY-----\n","algorithm":"CKM_RSA_AES_KEY_WRAP"}'
+        body: '{"public_key":"-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAmtX2ZxBOBMuDZevYPNUp\n9IWnGVhucGN0NYm6JBmWY3VoYxcqOfWmMaztCnR+2isKCshM+vrcrKRhRFZ+66j0\n+1MS8LgbL4RC2GAc/Mbkka4mDwYeQO0IYkXmpekJ17v47FGObmUbMmjD9RAj9VPA\nZgRTffXlFNRgbP1qgYdE8dHseNr3kUbZefgHODmHereOae9/rGO+5JWn+jbnwbj+\nOs77PpV4Ej9slTsQT/IqzQJXOxLOewWIYzemkyZ5XipOvGWHrT+qklzBY9qlDs3p\nNR01kbC/MIROHxIeTlGHRxy4LMghNeo3t6yHFuRuHl5vijywb+ZsEWm0iCIbVgg7\n8RnSwPt3u8hzAk4tYGQ5MvPD6CjIT53Dsk8q7jg/P2rGQO7W678XyjUINjeLJ2Ol\naXKyNBepXBsmBSfNnGWPThVS0DOfDq7r4m26Hdmbz/zErxWTVwltUqTwrS/y+N0y\nd2EcokxdUpZaZBU4MXZOsYcCPwy0+688jy5CkBwzAwvbAgMBAAE=\n-----END PUBLIC KEY-----\n","algorithm":"CKM_RSA_AES_KEY_WRAP"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 700.336584ms
+        duration: 1.134937416s
     - id: 27
       request:
         proto: HTTP/1.1
@@ -918,7 +918,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
@@ -929,13 +929,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:33.432Z","parent_kid":null,"public_key":null},{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":4}'
+        body: '{"keys":[{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:06:52.496Z","parent_kid":null,"public_key":null},{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":5}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 412.987833ms
+        duration: 373.02775ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -951,8 +951,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -962,13 +962,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:33.432Z","parent_kid":null,"public_key":null},{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":4}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 408.91175ms
+        duration: 301.769334ms
     - id: 29
       request:
         proto: HTTP/1.1
@@ -984,8 +984,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -995,13 +995,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:06:52.496Z","parent_kid":null,"public_key":null},{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":5}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 408.891667ms
+        duration: 362.703042ms
     - id: 30
       request:
         proto: HTTP/1.1
@@ -1017,8 +1017,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -1028,13 +1028,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:33.432Z","parent_kid":null,"public_key":null},{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":4}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 373.19125ms
+        duration: 306.854417ms
     - id: 31
       request:
         proto: HTTP/1.1
@@ -1050,8 +1050,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -1061,13 +1061,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:06:52.496Z","parent_kid":null,"public_key":null},{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":5}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 399.285167ms
+        duration: 449.780667ms
     - id: 32
       request:
         proto: HTTP/1.1
@@ -1083,7 +1083,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
@@ -1094,13 +1094,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:33.432Z","parent_kid":null,"public_key":null},{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":4}'
+        body: '{"keys":[{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:06:52.496Z","parent_kid":null,"public_key":null},{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":5}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 374.358459ms
+        duration: 302.24075ms
     - id: 33
       request:
         proto: HTTP/1.1
@@ -1116,7 +1116,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -1127,13 +1127,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 376.2715ms
+        duration: 309.583916ms
     - id: 34
       request:
         proto: HTTP/1.1
@@ -1149,8 +1149,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -1160,13 +1160,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:33.432Z","parent_kid":null,"public_key":null},{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":4}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 388.349958ms
+        duration: 448.165292ms
     - id: 35
       request:
         proto: HTTP/1.1
@@ -1182,8 +1182,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -1193,13 +1193,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:06:52.496Z","parent_kid":null,"public_key":null},{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":5}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 389.124334ms
+        duration: 464.333917ms
     - id: 36
       request:
         proto: HTTP/1.1
@@ -1218,8 +1218,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/afc2c589-9569-41c2-bc3d-8c1e613cf94e
         method: POST
       response:
         proto: HTTP/2.0
@@ -1235,7 +1235,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 400 Bad Request
         code: 400
-        duration: 460.044708ms
+        duration: 434.731041ms
     - id: 37
       request:
         proto: HTTP/1.1
@@ -1251,8 +1251,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -1262,13 +1262,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:06:52.496Z","parent_kid":null,"public_key":null},{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"active","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2025-07-03T16:11:56.445Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"active","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2024-07-04T13:37:35.593Z","parent_kid":null,"public_key":null},{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":0,"limit":5,"total":5}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 369.492083ms
+        duration: 353.504292ms
     - id: 38
       request:
         proto: HTTP/1.1
@@ -1284,8 +1284,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -1295,13 +1295,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"pre-activation","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:33.432Z","parent_kid":null,"public_key":null},{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"active","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T08:33:31.025Z","parent_kid":"766957ee-f428-44ff-bc53-de8aab907b97","public_key":null}],"start":0,"limit":5,"total":4}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 398.78675ms
+        duration: 357.284333ms
     - id: 39
       request:
         proto: HTTP/1.1
@@ -1314,14 +1314,14 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"wrapped_key":"IS6KZN54F7x5/+EMMcTMcQYQqBeePqtN4h9kvwXwXQPuawR9YyfnVgLXAUMLK3QGZx7ZFF9GqW8cfedvWJz963F4nAliREJ7tDiWE52j6o1S7NFsDCZveh1tQUffPXrHTRG/zXFUFfXXAHrS2u099i2ZzC/NaXcEo7iE4VOzhv1QvetQEuQr4Vd1kpY80nqmPdq1ZhN9L1s9Ow2cNaeLdpg5LmEdLya14gHQInlnCVR4EynKF/0CQxxK8Y3CrLczCRKJHZACzsK25mH2oGw+6gFk+7GCafW5e9pKI0JDNVwt1YpXTcell6tZ0qybZPx0G3nay9LScsWrxOv363vyKtvjZazhcqieWG59uty+TBrS1rqUnzxF0u6nvLr4ep0zwhfJpwT/IAmMETlvpsIoM9GBVHZgr/nRQ1j/3ggo61sPuRee5Zh4DVD/d0xxZSpKXM+548VLX5NRIWQd8I1poLocWrMD9Kp6CLQeNnAbcg7nVskxa9WFFW3xa3ecooyOp4jXwzUT4uTYKDQOQotrPFrwvXKeel/xlgsLIpvhKSBZ31jY5psVdQ=="}
+            {"wrapped_key":"AfM9TD9Hwbhf7+s6mJt7dHocxD4yF5vRnuudIvOVqSamId7S8KLufNUynoQOGzcb/rU8ft0CZdh1bHUPqFPcaWrjVOhUFCCLjj/TnDpmT9lAAo24Yj8EPQ6A8SfkeiOvF/hmJ9zj4WZcdk1gd8O9kNYBl8G7NYXbPJHxjxwL/pufjVEo+LmUJSUq2+BUdS1/qfjf2fQwBscOrwpGYsynYkT8PukG8Vb/hhHvvtfJ3fjqZh/2P4Jrny2+ZWUqzCOJ7qXGUWTfonNHgZxU6NR5E1bvxQCAoJVe/lYs/dMG0uXsvAhacYHpFqJ+wzIhmAKjWPIXrHCXhgZzIoteQbCHb7xK5CNI5Yp84Q0V641A7Tzt5sUsFZLBhj1eqnVK3zczAsuIYHVS+PUTtRshspJqg3w8S7CP6qapYJNYSOLDKYMJpcAWxNuup1ZtvWWY33uW2XCulXX2wXfe0O+RiXwpBeEUUOmG/sRxSaQQlLwUnGYIPQV3Vfqy1NVQeOfPRhGbvrSPDw4JmWUJqX2g2bRg1py9uZ8gDhrfJ8PvzBSJaOUMS57EM4Pvlw=="}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/afc2c589-9569-41c2-bc3d-8c1e613cf94e
         method: POST
       response:
         proto: HTTP/2.0
@@ -1331,13 +1331,13 @@ interactions:
         trailer: {}
         content_length: 197
         uncompressed: false
-        body: '{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"active","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:45.260Z","parent_kid":null}'
+        body: '{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"active","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:07:05.009Z","parent_kid":null}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 3.536513125s
+        duration: 3.889923917s
     - id: 40
       request:
         proto: HTTP/1.1
@@ -1353,8 +1353,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/afc2c589-9569-41c2-bc3d-8c1e613cf94e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1364,13 +1364,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"active","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:45.260Z","parent_kid":null,"public_key":null}'
+        body: '{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"active","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:07:05.009Z","parent_kid":null,"public_key":null}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 561.940667ms
+        duration: 423.553875ms
     - id: 41
       request:
         proto: HTTP/1.1
@@ -1386,7 +1386,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
@@ -1397,13 +1397,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"202a72ef-7d41-4660-803a-b77ddcbe3d90","type":"tenant-master-key","state":"active","created_at":"2026-05-11T09:05:45.278Z","updated_at":"2026-05-11T09:05:45.278Z","parent_kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","public_key":null},{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"active","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:45.260Z","parent_kid":null,"public_key":null},{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"destroyed","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T09:05:45.311Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"destroyed","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T09:05:45.311Z","parent_kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","public_key":null}],"start":0,"limit":5,"total":5}'
+        body: '{"keys":[{"kid":"83297e36-fb87-4b54-8d75-db9715e42e32","type":"tenant-master-key","state":"active","created_at":"2026-02-19T06:07:05.038Z","updated_at":"2026-02-19T06:07:05.038Z","parent_kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","public_key":null},{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"active","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:07:05.009Z","parent_kid":null,"public_key":null},{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"destroyed","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2026-02-19T06:07:05.115Z","parent_kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2026-02-19T06:07:05.115Z","parent_kid":null,"public_key":null}],"start":0,"limit":5,"total":6}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 1.116715125s
+        duration: 472.129959ms
     - id: 42
       request:
         proto: HTTP/1.1
@@ -1419,8 +1419,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=1&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -1430,13 +1430,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":5,"limit":5,"total":6}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 383.161208ms
+        duration: 735.24125ms
     - id: 43
       request:
         proto: HTTP/1.1
@@ -1452,7 +1452,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
@@ -1463,13 +1463,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"202a72ef-7d41-4660-803a-b77ddcbe3d90","type":"tenant-master-key","state":"active","created_at":"2026-05-11T09:05:45.278Z","updated_at":"2026-05-11T09:05:45.278Z","parent_kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","public_key":null},{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"active","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:45.260Z","parent_kid":null,"public_key":null},{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"destroyed","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T09:05:45.311Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"destroyed","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T09:05:45.311Z","parent_kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","public_key":null}],"start":0,"limit":5,"total":5}'
+        body: '{"keys":[{"kid":"83297e36-fb87-4b54-8d75-db9715e42e32","type":"tenant-master-key","state":"active","created_at":"2026-02-19T06:07:05.038Z","updated_at":"2026-02-19T06:07:05.038Z","parent_kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","public_key":null},{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"active","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:07:05.009Z","parent_kid":null,"public_key":null},{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"destroyed","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2026-02-19T06:07:05.115Z","parent_kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2026-02-19T06:07:05.115Z","parent_kid":null,"public_key":null}],"start":0,"limit":5,"total":6}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 383.507542ms
+        duration: 327.835208ms
     - id: 44
       request:
         proto: HTTP/1.1
@@ -1485,8 +1485,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
         proto: HTTP/2.0
@@ -1496,13 +1496,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"202a72ef-7d41-4660-803a-b77ddcbe3d90","type":"tenant-master-key","state":"active","created_at":"2026-05-11T09:05:45.278Z","updated_at":"2026-05-11T09:05:45.278Z","parent_kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","public_key":null},{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"active","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:45.260Z","parent_kid":null,"public_key":null},{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"destroyed","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T09:05:45.311Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"destroyed","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T09:05:45.311Z","parent_kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","public_key":null}],"start":0,"limit":5,"total":5}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 398.78825ms
+        duration: 364.615292ms
     - id: 45
       request:
         proto: HTTP/1.1
@@ -1518,8 +1518,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=1&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -1529,13 +1529,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"keys":[{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":5,"limit":5,"total":6}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 398.697583ms
+        duration: 563.652791ms
     - id: 46
       request:
         proto: HTTP/1.1
@@ -1551,7 +1551,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
@@ -1562,13 +1562,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"keys":[{"kid":"202a72ef-7d41-4660-803a-b77ddcbe3d90","type":"tenant-master-key","state":"active","created_at":"2026-05-11T09:05:45.278Z","updated_at":"2026-05-11T09:05:45.278Z","parent_kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","public_key":null},{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"active","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:45.260Z","parent_kid":null,"public_key":null},{"kid":"ed5ba386-413d-4d08-89f3-70fd3616e149","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:22.388Z","updated_at":"2026-05-11T09:05:29.606Z","parent_kid":null,"public_key":null},{"kid":"766957ee-f428-44ff-bc53-de8aab907b97","type":"environment-root-key","state":"destroyed","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T09:05:45.311Z","parent_kid":null,"public_key":null},{"kid":"863938eb-3e1f-49e4-9602-c4d6a569e699","type":"tenant-master-key","state":"destroyed","created_at":"2026-05-11T08:33:31.025Z","updated_at":"2026-05-11T09:05:45.311Z","parent_kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","public_key":null}],"start":0,"limit":5,"total":5}'
+        body: '{"keys":[{"kid":"83297e36-fb87-4b54-8d75-db9715e42e32","type":"tenant-master-key","state":"active","created_at":"2026-02-19T06:07:05.038Z","updated_at":"2026-02-19T06:07:05.038Z","parent_kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","public_key":null},{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"active","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:07:05.009Z","parent_kid":null,"public_key":null},{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"destroyed","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2026-02-19T06:07:05.115Z","parent_kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2026-02-19T06:07:05.115Z","parent_kid":null,"public_key":null}],"start":0,"limit":5,"total":6}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 455.04725ms
+        duration: 306.009916ms
     - id: 47
       request:
         proto: HTTP/1.1
@@ -1584,7 +1584,7 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
+                - Go-Auth0/1.33.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
         method: GET
       response:
@@ -1595,13 +1595,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"ephemeral_session_lifetime":72,"idle_ephemeral_session_lifetime":24,"sandbox_version":"22","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"resource_parameter_profile":"compatibility","sandbox_versions_available":["22","18"],"client_id_metadata_document_supported":false}'
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 455.014292ms
+        duration: 356.084834ms
     - id: 48
       request:
         proto: HTTP/1.1
@@ -1617,24 +1617,24 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd
-        method: DELETE
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=1&per_page=5
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
+        content_length: -1
+        uncompressed: true
+        body: '{"keys":[{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":5,"limit":5,"total":6}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 705.562125ms
+        status: 200 OK
+        code: 200
+        duration: 438.984791ms
     - id: 49
       request:
         proto: HTTP/1.1
@@ -1650,8 +1650,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.40.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=0&per_page=5
         method: GET
       response:
         proto: HTTP/2.0
@@ -1661,10 +1661,142 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"kid":"b3cf2a61-38a5-4eeb-bcd6-c8d69efe23cd","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-05-11T09:05:33.432Z","updated_at":"2026-05-11T09:05:51.871Z","parent_kid":null,"public_key":null}'
+        body: '{"keys":[{"kid":"83297e36-fb87-4b54-8d75-db9715e42e32","type":"tenant-master-key","state":"active","created_at":"2026-02-19T06:07:05.038Z","updated_at":"2026-02-19T06:07:05.038Z","parent_kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","public_key":null},{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"active","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:07:05.009Z","parent_kid":null,"public_key":null},{"kid":"420ff04e-de3c-4288-8a5a-5caf1f035af7","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:41.596Z","updated_at":"2026-02-19T06:06:48.597Z","parent_kid":null,"public_key":null},{"kid":"3a1bdb7e-f6ae-4444-ab98-7fbd1463f4c1","type":"tenant-master-key","state":"destroyed","created_at":"2025-07-03T16:11:56.445Z","updated_at":"2026-02-19T06:07:05.115Z","parent_kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","public_key":null},{"kid":"aded915b-6272-4042-951a-7bf9a0550285","type":"environment-root-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2026-02-19T06:07:05.115Z","parent_kid":null,"public_key":null}],"start":0,"limit":5,"total":6}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 420.120708ms
+        duration: 358.901833ms
+    - id: 50
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":[],"acr_values_supported":[],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_client_connections":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"dashboard_new_onboarding":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","idle_session_lifetime":72,"ephemeral_session_lifetime":1,"idle_ephemeral_session_lifetime":1,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"18","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":false},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"colors":{"page_background":"#000000","primary":"#0059d6"}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["22","18"],"resource_parameter_profile":"audience"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 420.017042ms
+    - id: 51
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption?include_totals=true&page=1&per_page=5
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"keys":[{"kid":"77a17bdc-ea2f-459c-9e6b-661bef01a7eb","type":"tenant-master-key","state":"destroyed","created_at":"2024-07-04T13:37:35.593Z","updated_at":"2025-07-03T16:11:56.476Z","parent_kid":"aded915b-6272-4042-951a-7bf9a0550285","public_key":null}],"start":5,"limit":5,"total":6}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 324.383125ms
+    - id: 52
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/afc2c589-9569-41c2-bc3d-8c1e613cf94e
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 798.652875ms
+    - id: 53
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.33.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/encryption/afc2c589-9569-41c2-bc3d-8c1e613cf94e
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"kid":"afc2c589-9569-41c2-bc3d-8c1e613cf94e","type":"customer-provided-root-key","state":"destroyed","created_at":"2026-02-19T06:06:52.496Z","updated_at":"2026-02-19T06:07:12.650Z","parent_kid":null,"public_key":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 2.269029667s

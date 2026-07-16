@@ -33,10 +33,7 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 ### Read-Only
 
 - `allow_offline_access` (Boolean) Indicates whether refresh tokens can be issued for this resource server.
-- `allow_online_access` (Boolean) Indicates whether Online Refresh Tokens can be issued for this resource server. (EA Only)
-- `allow_online_access_with_ephemeral_sessions` (Boolean) Indicates whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral. (EA Only)
 - `authorization_details` (List of Object) Authorization details for this resource server. (see [below for nested schema](#nestedatt--authorization_details))
-- `authorization_policy` (List of Object) Authorization policy for the resource server.(EA Only) (see [below for nested schema](#nestedatt--authorization_policy))
 - `client_id` (String) The ID of the client associated with this resource server. If a client has been created and linked to this resource server, this field will be populated with that client's ID.
 - `consent_policy` (String) Consent policy for this resource server. Options include `transactional-authorization-with-mfa`, or `null` to disable.
 - `enforce_policies` (Boolean) If this setting is enabled, RBAC authorization policies will be enforced for this API. Role and permission assignments will be evaluated during the login transaction.
@@ -62,14 +59,6 @@ Read-Only:
 
 - `disable` (Boolean)
 - `type` (String)
-
-
-<a id="nestedatt--authorization_policy"></a>
-### Nested Schema for `authorization_policy`
-
-Read-Only:
-
-- `policy_id` (String)
 
 
 <a id="nestedatt--proof_of_possession"></a>

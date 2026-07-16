@@ -164,6 +164,7 @@ func convertToInterfaceMap(rawValue cty.Value) *map[string]interface{} {
 		return nil
 	}
 
+	m := make(map[string]interface{})
 	m, err := structure.ExpandJsonFromString(rawValue.AsString())
 	if err != nil {
 		return &m

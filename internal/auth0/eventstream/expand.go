@@ -17,10 +17,6 @@ func expandEventStream(data *schema.ResourceData) *management.EventStream {
 		Destination:   expandEventStreamDestination(data),
 	}
 
-	if status := cfg.GetAttr("status"); !status.IsNull() {
-		eventStream.Status = value.String(status)
-	}
-
 	return eventStream
 }
 
@@ -89,19 +85,6 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 			configMap["aws_account_id"] = bridgeCfg["aws_account_id"]
 			configMap["aws_region"] = bridgeCfg["aws_region"]
 		}
-
-	case "action":
-		// Skip returning destination configuration for existing Action resources during updates
-		// since Action configuration cannot be updated.
-		// This prevents overwriting or reconfiguring the resource unintentionally.
-		if !data.IsNewResource() {
-			return nil
-		}
-		actionCfgList, ok := data.Get("action_configuration").([]interface{})
-		if ok && len(actionCfgList) > 0 {
-			actionCfg := actionCfgList[0].(map[string]interface{})
-			configMap["action_id"] = actionCfg["action_id"]
-		}
 	}
 
 	destination.EventStreamDestinationConfiguration = configMap
@@ -133,16 +116,6 @@ func extractWebhookAuth(authCfgRaw cty.Value, data *schema.ResourceData) map[str
 		} else if token := authCfgRaw.GetAttr("token"); !nullOrEmptyString(token) {
 			authMap["token"] = token.AsString()
 		}
-	case "custom_header":
-		if headerKey := authCfgRaw.GetAttr("header_key"); !nullOrEmptyString(headerKey) {
-			authMap["header_key"] = headerKey.AsString()
-		}
-		headerValueWO := authCfgRaw.GetAttr("header_value_wo")
-		if !nullOrEmptyString(headerValueWO) && (data.IsNewResource() || hasHeaderValueWOVersionChanged(data)) {
-			authMap["header_value"] = headerValueWO.AsString()
-		} else if headerValue := authCfgRaw.GetAttr("header_value"); !nullOrEmptyString(headerValue) {
-			authMap["header_value"] = headerValue.AsString()
-		}
 	}
 	return authMap
 }
@@ -153,10 +126,6 @@ func hasTokenWOVersionChanged(data *schema.ResourceData) bool {
 
 func hasPasswordWOVersionChanged(data *schema.ResourceData) bool {
 	return data.HasChange("webhook_configuration.0.webhook_authorization.0.password_wo_version")
-}
-
-func hasHeaderValueWOVersionChanged(data *schema.ResourceData) bool {
-	return data.HasChange("webhook_configuration.0.webhook_authorization.0.header_value_wo_version")
 }
 
 func nullOrEmptyString(s cty.Value) bool {

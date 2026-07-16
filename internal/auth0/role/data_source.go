@@ -33,27 +33,10 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema["name"].Description = "The name of the role. If not provided, `role_id` must be set."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"role_id", "name"}
 
-	dataSourceSchema["skip_permissions"] = &schema.Schema{
-		Type:     schema.TypeBool,
-		Optional: true,
-		Default:  false,
-		Description: "Whether to skip role permissions. Setting this to `true` will skip " +
-			"paginated API calls to /api/v2/roles/{id}/permissions.",
-	}
-
-	dataSourceSchema["skip_users"] = &schema.Schema{
-		Type:     schema.TypeBool,
-		Optional: true,
-		Default:  false,
-		Description: "Whether to skip users assigned to this role (max 1000). Setting this to `true` " +
-			"will skip paginated API calls to /api/v2/roles/{id}/users.",
-	}
-
 	dataSourceSchema["permissions"] = &schema.Schema{
-		Type:     schema.TypeSet,
-		Computed: true,
-		Description: "Configuration settings for permissions (scopes) attached to the role. " +
-			"Skips populating if `skip_permissions` is `true`.",
+		Type:        schema.TypeSet,
+		Computed:    true,
+		Description: "Configuration settings for permissions (scopes) attached to the role.",
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"name": {
@@ -85,9 +68,8 @@ func dataSourceSchema() map[string]*schema.Schema {
 		Elem: &schema.Schema{
 			Type: schema.TypeString,
 		},
-		Computed: true,
-		Description: "List of user IDs assigned to this role. Retrieves a maximum of 1000 user IDs. " +
-			"Skips populating if `skip_users` is `true`.",
+		Computed:    true,
+		Description: "List of user IDs assigned to this role. Retrieves a maximum of 1000 user IDs.",
 	}
 
 	return dataSourceSchema
@@ -117,22 +99,14 @@ func readRoleByID(
 		return diag.FromErr(err)
 	}
 
-	var permissions []*management.Permission
-	skipPermissions := data.Get("skip_permissions").(bool)
-	if !skipPermissions {
-		permissions, err = getAllRolePermissions(ctx, api, roleID)
-		if err != nil {
-			return diag.FromErr(err)
-		}
+	permissions, err := getAllRolePermissions(ctx, api, roleID)
+	if err != nil {
+		return diag.FromErr(err)
 	}
 
-	var users []*management.User
-	skipUsers := data.Get("skip_users").(bool)
-	if !skipUsers {
-		users, err = getAllRoleUsers(ctx, api, role.GetID())
-		if err != nil {
-			return diag.FromErr(err)
-		}
+	users, err := getAllRoleUsers(ctx, api, role.GetID())
+	if err != nil {
+		return diag.FromErr(err)
 	}
 
 	return diag.FromErr(flattenRoleForDataSource(data, role, permissions, users))
@@ -160,22 +134,14 @@ func readRoleByName(
 			if role.GetName() == roleName {
 				data.SetId(role.GetID())
 
-				var permissions []*management.Permission
-				skipPermissions := data.Get("skip_permissions").(bool)
-				if !skipPermissions {
-					permissions, err = getAllRolePermissions(ctx, api, role.GetID())
-					if err != nil {
-						return diag.FromErr(err)
-					}
+				permissions, err := getAllRolePermissions(ctx, api, role.GetID())
+				if err != nil {
+					return diag.FromErr(err)
 				}
 
-				var users []*management.User
-				skipUsers := data.Get("skip_users").(bool)
-				if !skipUsers {
-					users, err = getAllRoleUsers(ctx, api, role.GetID())
-					if err != nil {
-						return diag.FromErr(err)
-					}
+				users, err := getAllRoleUsers(ctx, api, role.GetID())
+				if err != nil {
+					return diag.FromErr(err)
 				}
 
 				return diag.FromErr(flattenRoleForDataSource(data, role, permissions, users))

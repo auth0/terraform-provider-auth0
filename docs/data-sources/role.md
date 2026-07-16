@@ -29,15 +29,13 @@ data "auth0_role" "some-role-by-id" {
 
 - `name` (String) The name of the role. If not provided, `role_id` must be set.
 - `role_id` (String) The ID of the role. If not provided, `name` must be set.
-- `skip_permissions` (Boolean) Whether to skip role permissions. Setting this to `true` will skip paginated API calls to /api/v2/roles/{id}/permissions.
-- `skip_users` (Boolean) Whether to skip users assigned to this role (max 1000). Setting this to `true` will skip paginated API calls to /api/v2/roles/{id}/users.
 
 ### Read-Only
 
 - `description` (String) The description of the role.
 - `id` (String) The ID of this resource.
-- `permissions` (Set of Object) Configuration settings for permissions (scopes) attached to the role. Skips populating if `skip_permissions` is `true`. (see [below for nested schema](#nestedatt--permissions))
-- `users` (Set of String) List of user IDs assigned to this role. Retrieves a maximum of 1000 user IDs. Skips populating if `skip_users` is `true`.
+- `permissions` (Set of Object) Configuration settings for permissions (scopes) attached to the role. (see [below for nested schema](#nestedatt--permissions))
+- `users` (Set of String) List of user IDs assigned to this role. Retrieves a maximum of 1000 user IDs.
 
 <a id="nestedatt--permissions"></a>
 ### Nested Schema for `permissions`

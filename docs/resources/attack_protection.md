@@ -220,7 +220,7 @@ variable "arkose_secret" {
 Optional:
 
 - `allowlist` (Set of String) List of IP addresses or ranges that will not trigger bot detection.
-- `bot_detection_level` (String) Bot detection level. Possible values: `low`, `medium`, `high`.
+- `bot_detection_level` (String) Bot detection level. Possible values: `low`, `medium`, `high`. Set to empty string to disable.
 - `challenge_password_policy` (String) Challenge policy for password flow. Possible values: `never`, `when_risky`, `always`.
 - `challenge_password_reset_policy` (String) Challenge policy for password reset flow. Possible values: `never`, `when_risky`, `always`.
 - `challenge_passwordless_policy` (String) Challenge policy for passwordless flow. Possible values: `never`, `when_risky`, `always`.

@@ -40,30 +40,10 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "custom_domain_header")
 
-	dataSourceSchema["skip_roles"] = &schema.Schema{
-		Type:     schema.TypeBool,
-		Optional: true,
-		Default:  false,
-		Description: "Whether to skip user roles. Setting this to `true` will skips " +
-			"paginated API calls to /api/v2/users/{id}/roles. Default: `false` to optimize " +
-			"performance and reduce rate limit consumption.",
-	}
-
-	dataSourceSchema["skip_permissions"] = &schema.Schema{
-		Type:     schema.TypeBool,
-		Optional: true,
-		Default:  false,
-		Description: "Whether to skip user permissions. Setting this to `true` will skips " +
-			"paginated API calls to /api/v2/users/{id}/permissions. Default: `false` to optimize " +
-			"performance and reduce rate limit consumption.",
-	}
-
 	dataSourceSchema["permissions"] = &schema.Schema{
-		Type:     schema.TypeSet,
-		Computed: true,
-		Description: "List of API permissions granted to the user. Skips if " +
-			"`skip_permissions` is `true`. When `skip_permissions` is `true` (default), " +
-			"this will be an empty set to optimize performance and reduce rate limit consumption.",
+		Type:        schema.TypeSet,
+		Computed:    true,
+		Description: "List of API permissions granted to the user.",
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"name": {
@@ -96,9 +76,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 		Elem: &schema.Schema{
 			Type: schema.TypeString,
 		},
-		Description: "Set of IDs of roles assigned to the user. Skips if " +
-			"`skip_roles` is `true`. When `skip_roles` is `true` (default), " +
-			"this will be an empty set to optimize performance and reduce rate limit consumption.",
+		Description: "Set of IDs of roles assigned to the user.",
 	}
 
 	return dataSourceSchema
@@ -147,46 +125,40 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 		}
 	}
 
-	// Conditionally populate Roles for the retrieved User.
+	// Populate Roles for the retrieved User.
 	var roles []*management.Role
-	skipRoles := data.Get("skip_roles").(bool)
-	if !skipRoles {
-		var rolesPage int
-		for {
-			roleList, err := api.User.Roles(ctx, user.GetID(), management.Page(rolesPage), management.PerPage(100))
-			if err != nil {
-				return diag.FromErr(err)
-			}
-
-			roles = append(roles, roleList.Roles...)
-
-			if !roleList.HasNext() {
-				break
-			}
-
-			rolesPage++
+	var rolesPage int
+	for {
+		roleList, err := api.User.Roles(ctx, user.GetID(), management.Page(rolesPage), management.PerPage(100))
+		if err != nil {
+			return diag.FromErr(err)
 		}
+
+		roles = append(roles, roleList.Roles...)
+
+		if !roleList.HasNext() {
+			break
+		}
+
+		rolesPage++
 	}
 
-	// Conditionally populate Permissions for the retrieved User.
+	// Populate Permissions for the retrieved User.
 	var permissions []*management.Permission
-	skipPermissions := data.Get("skip_permissions").(bool)
-	if !skipPermissions {
-		var permissionsPage int
-		for {
-			permissionList, err := api.User.Permissions(ctx, user.GetID(), management.Page(permissionsPage), management.PerPage(100))
-			if err != nil {
-				return diag.FromErr(err)
-			}
-
-			permissions = append(permissions, permissionList.Permissions...)
-
-			if !permissionList.HasNext() {
-				break
-			}
-
-			permissionsPage++
+	var permissionsPage int
+	for {
+		permissionList, err := api.User.Permissions(ctx, user.GetID(), management.Page(permissionsPage), management.PerPage(100))
+		if err != nil {
+			return diag.FromErr(err)
 		}
+
+		permissions = append(permissions, permissionList.Permissions...)
+
+		if !permissionList.HasNext() {
+			break
+		}
+
+		permissionsPage++
 	}
 
 	return diag.FromErr(flattenUserForDataSource(data, user, roles, permissions))

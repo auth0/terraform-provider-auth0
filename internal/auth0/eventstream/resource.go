@@ -23,9 +23,8 @@ var webhookConfig = &schema.Resource{
 			Type:     schema.TypeList,
 			Required: true,
 			Description: "Authorization details for the webhook endpoint. " +
-				"Supports `basic` authentication using `username` and `password`, " +
-				"`bearer` authentication using a `token`, or " +
-				"`custom_header` authentication using `header_key` and `header_value` (or `header_value_wo`). " +
+				"Supports `basic` authentication using `username` and `password`, or " +
+				"`bearer` authentication using a `token`. " +
 				"The appropriate fields must be set based on the chosen method.",
 			MaxItems: 1,
 			Elem: &schema.Resource{
@@ -33,8 +32,8 @@ var webhookConfig = &schema.Resource{
 					"method": {
 						Type:         schema.TypeString,
 						Required:     true,
-						ValidateFunc: validation.StringInSlice([]string{"basic", "bearer", "custom_header"}, false),
-						Description:  "The authorization method used to secure the webhook endpoint. Can be `basic`, `bearer`, or `custom_header`.",
+						ValidateFunc: validation.StringInSlice([]string{"basic", "bearer"}, false),
+						Description:  "The authorization method used to secure the webhook endpoint. Can be either `basic` or `bearer`.",
 					},
 					"username": {
 						Type:        schema.TypeString,
@@ -44,7 +43,6 @@ var webhookConfig = &schema.Resource{
 							"webhook_configuration.0.webhook_authorization.0.username",
 							"webhook_configuration.0.webhook_authorization.0.token",
 							"webhook_configuration.0.webhook_authorization.0.token_wo",
-							"webhook_configuration.0.webhook_authorization.0.header_key",
 						},
 					},
 					"password": {
@@ -83,7 +81,6 @@ var webhookConfig = &schema.Resource{
 							"webhook_configuration.0.webhook_authorization.0.username",
 							"webhook_configuration.0.webhook_authorization.0.token",
 							"webhook_configuration.0.webhook_authorization.0.token_wo",
-							"webhook_configuration.0.webhook_authorization.0.header_key",
 						},
 						Description: "The token used for `bearer` authentication. Required only when `method` is set to `bearer`. " +
 							"**Note:** For better security, consider using `token_wo` instead to prevent storing the token in Terraform state.",
@@ -98,7 +95,6 @@ var webhookConfig = &schema.Resource{
 							"webhook_configuration.0.webhook_authorization.0.username",
 							"webhook_configuration.0.webhook_authorization.0.token",
 							"webhook_configuration.0.webhook_authorization.0.token_wo",
-							"webhook_configuration.0.webhook_authorization.0.header_key",
 						},
 						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.token_wo_version"},
 						Description: "The token used for `bearer` authentication (write-only). " +
@@ -111,51 +107,6 @@ var webhookConfig = &schema.Resource{
 						Optional:     true,
 						Description:  "Version number for token changes. Update this value to trigger a token change when using `token_wo`.",
 						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.token_wo"},
-					},
-					"header_key": {
-						Type:     schema.TypeString,
-						Optional: true,
-						ExactlyOneOf: []string{
-							"webhook_configuration.0.webhook_authorization.0.username",
-							"webhook_configuration.0.webhook_authorization.0.token",
-							"webhook_configuration.0.webhook_authorization.0.token_wo",
-							"webhook_configuration.0.webhook_authorization.0.header_key",
-						},
-						Description: "The name of the HTTP header used for `custom_header` authentication. " +
-							"Required when `method` is `custom_header`. Returned by the API and stored in state.",
-					},
-					"header_value": {
-						Type:      schema.TypeString,
-						Optional:  true,
-						Sensitive: true,
-						ConflictsWith: []string{
-							"webhook_configuration.0.webhook_authorization.0.header_value_wo",
-						},
-						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.header_key"},
-						Description: "The secret value sent in the custom header. Required when `method` is `custom_header` " +
-							"and `header_value_wo` is not provided. " +
-							"**Note:** For better security, use `header_value_wo` to prevent storing the secret in state.",
-					},
-					"header_value_wo": {
-						Type:      schema.TypeString,
-						Optional:  true,
-						WriteOnly: true,
-						Sensitive: true,
-						ConflictsWith: []string{
-							"webhook_configuration.0.webhook_authorization.0.header_value",
-						},
-						RequiredWith: []string{
-							"webhook_configuration.0.webhook_authorization.0.header_key",
-							"webhook_configuration.0.webhook_authorization.0.header_value_wo_version",
-						},
-						Description: "The secret value sent in the custom header (write-only). Not stored in Terraform state. " +
-							"Bump `header_value_wo_version` to rotate the secret.",
-					},
-					"header_value_wo_version": {
-						Type:         schema.TypeInt,
-						Optional:     true,
-						RequiredWith: []string{"webhook_configuration.0.webhook_authorization.0.header_value_wo"},
-						Description:  "Version number for secret rotation. Update to trigger a new `header_value_wo` to be sent.",
 					},
 				},
 			},
@@ -182,16 +133,6 @@ var eventBridgeConfig = &schema.Resource{
 	},
 }
 
-var actionConfig = &schema.Resource{
-	Schema: map[string]*schema.Schema{
-		"action_id": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "The ID of the Auth0 Action to use as the event stream destination.",
-		},
-	},
-}
-
 // NewResource returns the auth0_event_stream resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -210,11 +151,9 @@ func NewResource() *schema.Resource {
 				Description: "The name of the event stream.",
 			},
 			"status": {
-				Type:         schema.TypeString,
-				Computed:     true,
-				Optional:     true,
-				ValidateFunc: validation.StringInSlice([]string{"enabled", "disabled"}, false),
-				Description:  "The current status of the event stream. Can be `enabled` or `disabled`.",
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The current status of the event stream.",
 			},
 			"subscriptions": {
 				Type:        schema.TypeList,
@@ -226,8 +165,8 @@ func NewResource() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				Description:  "The type of event stream destination. Possible values: `eventbridge`, `webhook`, or `action`.",
-				ValidateFunc: validation.StringInSlice([]string{"eventbridge", "webhook", "action"}, false),
+				Description:  "The type of event stream destination (either 'eventbridge' or 'webhook').",
+				ValidateFunc: validation.StringInSlice([]string{"eventbridge", "webhook"}, false),
 			},
 			"eventbridge_configuration": {
 				Type:     schema.TypeList,
@@ -238,7 +177,7 @@ func NewResource() *schema.Resource {
 					"This block is only applicable when `destination_type` is set to `eventbridge`. " +
 					"EventBridge configurations **cannot** be updated after creation. " +
 					"Any change to this block will force the resource to be recreated.",
-				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration", "action_configuration"},
+				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration"},
 				Elem:         eventBridgeConfig,
 			},
 			"webhook_configuration": {
@@ -249,20 +188,8 @@ func NewResource() *schema.Resource {
 					"This block is only applicable when `destination_type` is set to `webhook`. " +
 					"Webhook configurations **can** be updated after creation, including the " +
 					"endpoint and authorization fields.",
-				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration", "action_configuration"},
+				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration"},
 				Elem:         webhookConfig,
-			},
-			"action_configuration": {
-				Type:     schema.TypeList,
-				Optional: true,
-				ForceNew: true,
-				MaxItems: 1,
-				Description: "Configuration for the Action destination. " +
-					"This block is only applicable when `destination_type` is set to `action`. " +
-					"Action configurations **cannot** be updated after creation. " +
-					"Any change to this block will force the resource to be recreated.",
-				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration", "action_configuration"},
-				Elem:         actionConfig,
 			},
 			"created_at": {
 				Type:        schema.TypeString,

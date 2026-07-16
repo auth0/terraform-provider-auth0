@@ -2,8 +2,6 @@ resource "auth0_organization" "my_organization" {
   name         = "auth0-inc"
   display_name = "Auth0 Inc."
 
-  third_party_client_access = "block"
-
   branding {
     logo_url = "https://example.com/assets/icons/icon.png"
     colors = {

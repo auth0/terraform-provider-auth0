@@ -34,7 +34,6 @@ data "auth0_connection_directory" "my_directory_config" {
 - `mapping` (Set of Object) Mapping between Auth0 attributes and IDP user attributes. Defaults to default mapping for the connection type if not specified. (see [below for nested schema](#nestedatt--mapping))
 - `strategy` (String) Strategy of the connection for this directory provisioning configuration.
 - `synchronize_automatically` (Boolean) Whether periodic automatic synchronization is enabled. Defaults to false.
-- `synchronize_groups` (String) Group synchronization configuration. Valid values are: off, all, selected. (EA only)
 - `updated_at` (String) The timestamp at which the directory provisioning configuration was last updated.
 
 <a id="nestedatt--mapping"></a>

@@ -315,12 +315,12 @@ func expandConnectionOptionsCustomPasswordHash(config cty.Value) *management.Cus
 	return customPasswordHash
 }
 
-func expandConnectionOptionsAttributes(config cty.Value, isNew bool) *management.ConnectionOptionsAttributes {
+func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
 	var coa *management.ConnectionOptionsAttributes
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
 			coa = &management.ConnectionOptionsAttributes{
-				Email:       expandConnectionOptionsEmailAttribute(attributes, isNew),
+				Email:       expandConnectionOptionsEmailAttribute(attributes),
 				Username:    expandConnectionOptionsUsernameAttribute(attributes),
 				PhoneNumber: expandConnectionOptionsPhoneNumberAttribute(attributes),
 			}
@@ -329,7 +329,7 @@ func expandConnectionOptionsAttributes(config cty.Value, isNew bool) *management
 	return coa
 }
 
-func expandConnectionOptionsEmailAttribute(config cty.Value, isNew bool) *management.ConnectionOptionsEmailAttribute {
+func expandConnectionOptionsEmailAttribute(config cty.Value) *management.ConnectionOptionsEmailAttribute {
 	var coea *management.ConnectionOptionsEmailAttribute
 	config.GetAttr("email").ForEachElement(
 		func(_ cty.Value, email cty.Value) (stop bool) {
@@ -338,10 +338,7 @@ func expandConnectionOptionsEmailAttribute(config cty.Value, isNew bool) *manage
 				ProfileRequired:    value.Bool(email.GetAttr("profile_required")),
 				VerificationMethod: (*management.ConnectionOptionsEmailAttributeVerificationMethod)(value.String(email.GetAttr("verification_method"))),
 				Signup:             expandConnectionOptionsAttributeSignup(email),
-			}
-			// Unique is a create-only property; including it only in a POST request.
-			if isNew {
-				coea.Unique = value.Bool(email.GetAttr("unique"))
+				Unique:             value.Bool(email.GetAttr("unique")),
 			}
 			return stop
 		})
@@ -454,7 +451,7 @@ func expandConnectionOptionsAttributeAllowedTypes(config cty.Value) *management.
 	return coaat
 }
 
-func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
+func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -468,13 +465,10 @@ func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (
 		RequiresUsername:                 value.Bool(config.GetAttr("requires_username")),
 		CustomScripts:                    value.MapOfStrings(config.GetAttr("custom_scripts")),
 		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
-		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes"), data.IsNewResource()),
+		Precedence:                       value.Strings(config.GetAttr("precedence")),
+		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
 		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 		RealmFallback:                    value.Bool(config.GetAttr("realm_fallback")),
-	}
-
-	if precedence := value.Strings(config.GetAttr("precedence")); precedence != nil && len(*precedence) > 0 {
-		options.Precedence = precedence
 	}
 
 	config.GetAttr("validation").ForEachElement(
@@ -602,81 +596,10 @@ func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (
 		options.CustomPasswordHash = expandConnectionOptionsCustomPasswordHash(config.GetAttr("custom_password_hash"))
 	}
 
-	if config.Type().HasAttribute("password_options") && !config.GetAttr("password_options").IsNull() {
-		options.PasswordOptions = expandConnectionOptionsPasswordOptions(config.GetAttr("password_options"))
-	}
-
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsPasswordOptions(config cty.Value) *management.PasswordOptions {
-	var po *management.PasswordOptions
-	config.ForEachElement(func(_ cty.Value, attrs cty.Value) (stop bool) {
-		po = &management.PasswordOptions{
-			Complexity:  expandPasswordOptionsComplexity(attrs.GetAttr("complexity")),
-			ProfileData: expandPasswordOptionsProfileData(attrs.GetAttr("profile_data")),
-			History:     expandPasswordOptionsHistory(attrs.GetAttr("history")),
-			Dictionary:  expandPasswordOptionsDictionary(attrs.GetAttr("dictionary")),
-		}
-		return stop
-	})
-	return po
-}
-
-func expandPasswordOptionsComplexity(config cty.Value) *management.PasswordOptionsComplexity {
-	var c *management.PasswordOptionsComplexity
-	config.ForEachElement(func(_ cty.Value, attrs cty.Value) (stop bool) {
-		c = &management.PasswordOptionsComplexity{
-			MinLength:            value.Int(attrs.GetAttr("min_length")),
-			CharacterTypes:       value.Strings(attrs.GetAttr("character_types")),
-			CharacterTypeRule:    value.String(attrs.GetAttr("character_type_rule")),
-			IdenticalCharacters:  value.String(attrs.GetAttr("identical_characters")),
-			SequentialCharacters: value.String(attrs.GetAttr("sequential_characters")),
-			MaxLengthExceeded:    value.String(attrs.GetAttr("max_length_exceeded")),
-		}
-		return stop
-	})
-	return c
-}
-
-func expandPasswordOptionsProfileData(config cty.Value) *management.PasswordOptionsProfileData {
-	var p *management.PasswordOptionsProfileData
-	config.ForEachElement(func(_ cty.Value, attrs cty.Value) (stop bool) {
-		p = &management.PasswordOptionsProfileData{
-			Active:        value.Bool(attrs.GetAttr("active")),
-			BlockedFields: value.Strings(attrs.GetAttr("blocked_fields")),
-		}
-		return stop
-	})
-	return p
-}
-
-func expandPasswordOptionsHistory(config cty.Value) *management.PasswordOptionsHistory {
-	var h *management.PasswordOptionsHistory
-	config.ForEachElement(func(_ cty.Value, attrs cty.Value) (stop bool) {
-		h = &management.PasswordOptionsHistory{
-			Active: value.Bool(attrs.GetAttr("active")),
-			Size:   value.Int(attrs.GetAttr("size")),
-		}
-		return stop
-	})
-	return h
-}
-
-func expandPasswordOptionsDictionary(config cty.Value) *management.PasswordOptionsDictionary {
-	var d *management.PasswordOptionsDictionary
-	config.ForEachElement(func(_ cty.Value, attrs cty.Value) (stop bool) {
-		d = &management.PasswordOptionsDictionary{
-			Active:  value.Bool(attrs.GetAttr("active")),
-			Default: value.String(attrs.GetAttr("default")),
-			Custom:  value.Strings(attrs.GetAttr("custom")),
-		}
-		return stop
-	})
-	return d
 }
 
 func expandConnectionOptionsGoogleOAuth2(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
@@ -703,7 +626,6 @@ func expandConnectionOptionsGoogleApps(data *schema.ResourceData, config cty.Val
 		Domain:             value.String(config.GetAttr("domain")),
 		TenantDomain:       value.String(config.GetAttr("tenant_domain")),
 		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
-		EnableGroupsAPI:    value.Bool(config.GetAttr("api_enable_groups")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 		DomainAliases:      value.Strings(config.GetAttr("domain_aliases")),
 		LogoURL:            value.String(config.GetAttr("icon_url")),
@@ -991,40 +913,29 @@ func expandConnectionOptionsAzureAD(data *schema.ResourceData, config cty.Value)
 
 func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOIDC{
-		ClientID:                      value.String(config.GetAttr("client_id")),
-		ClientSecret:                  value.String(config.GetAttr("client_secret")),
-		TenantDomain:                  value.String(config.GetAttr("tenant_domain")),
-		DomainAliases:                 value.Strings(config.GetAttr("domain_aliases")),
-		LogoURL:                       value.String(config.GetAttr("icon_url")),
-		DiscoveryURL:                  value.String(config.GetAttr("discovery_url")),
-		AuthorizationEndpoint:         value.String(config.GetAttr("authorization_endpoint")),
-		Issuer:                        value.String(config.GetAttr("issuer")),
-		JWKSURI:                       value.String(config.GetAttr("jwks_uri")),
-		Type:                          value.String(config.GetAttr("type")),
-		SendBackChannelNonce:          value.Bool(config.GetAttr("send_back_channel_nonce")),
-		UserInfoEndpoint:              value.String(config.GetAttr("userinfo_endpoint")),
-		TokenEndpoint:                 value.String(config.GetAttr("token_endpoint")),
-		SetUserAttributes:             value.String(config.GetAttr("set_user_root_attributes")),
-		NonPersistentAttrs:            value.Strings(config.GetAttr("non_persistent_attrs")),
-		TokenEndpointAuthMethod:       value.String(config.GetAttr("token_endpoint_auth_method")),
-		TokenEndpointAuthSigningAlg:   value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
-		IDTokenSignedResponseAlgs:     nonEmptyStrings(config.GetAttr("id_token_signed_response_algs")),
-		DPoPSigningAlg:                value.String(config.GetAttr("dpop_signing_alg")),
-		TokenEndpointJwtcaAudFormat:   value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
-		IDTokenSessionExpirySupported: value.Bool(config.GetAttr("id_token_session_expiry_supported")),
+		ClientID:                    value.String(config.GetAttr("client_id")),
+		ClientSecret:                value.String(config.GetAttr("client_secret")),
+		TenantDomain:                value.String(config.GetAttr("tenant_domain")),
+		DomainAliases:               value.Strings(config.GetAttr("domain_aliases")),
+		LogoURL:                     value.String(config.GetAttr("icon_url")),
+		DiscoveryURL:                value.String(config.GetAttr("discovery_url")),
+		AuthorizationEndpoint:       value.String(config.GetAttr("authorization_endpoint")),
+		Issuer:                      value.String(config.GetAttr("issuer")),
+		JWKSURI:                     value.String(config.GetAttr("jwks_uri")),
+		Type:                        value.String(config.GetAttr("type")),
+		SendBackChannelNonce:        value.Bool(config.GetAttr("send_back_channel_nonce")),
+		UserInfoEndpoint:            value.String(config.GetAttr("userinfo_endpoint")),
+		TokenEndpoint:               value.String(config.GetAttr("token_endpoint")),
+		SetUserAttributes:           value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs:          value.Strings(config.GetAttr("non_persistent_attrs")),
+		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
+		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
+		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
 	}
 
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		options.ConnectionSettings = &management.ConnectionOptionsOIDCConnectionSettings{
 			PKCE: value.String(config.GetAttr("pkce")),
-		}
-
-		return true
-	})
-
-	config.GetAttr("federated_connections_access_tokens").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-		options.FederatedConnectionsAccessTokens = &management.ConnectionOptionsOIDCFederatedConnectionsAccessTokens{
-			Active: value.Bool(config.GetAttr("active")),
 		}
 
 		return true
@@ -1054,26 +965,21 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 
 func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOkta{
-		ClientID:                      value.String(config.GetAttr("client_id")),
-		ClientSecret:                  value.String(config.GetAttr("client_secret")),
-		Domain:                        value.String(config.GetAttr("domain")),
-		DomainAliases:                 value.Strings(config.GetAttr("domain_aliases")),
-		AuthorizationEndpoint:         value.String(config.GetAttr("authorization_endpoint")),
-		Issuer:                        value.String(config.GetAttr("issuer")),
-		JWKSURI:                       value.String(config.GetAttr("jwks_uri")),
-		UserInfoEndpoint:              value.String(config.GetAttr("userinfo_endpoint")),
-		TokenEndpoint:                 value.String(config.GetAttr("token_endpoint")),
-		Type:                          value.String(config.GetAttr("type")),
-		NonPersistentAttrs:            value.Strings(config.GetAttr("non_persistent_attrs")),
-		SetUserAttributes:             value.String(config.GetAttr("set_user_root_attributes")),
-		LogoURL:                       value.String(config.GetAttr("icon_url")),
-		SendBackChannelNonce:          value.Bool(config.GetAttr("send_back_channel_nonce")),
-		TokenEndpointAuthMethod:       value.String(config.GetAttr("token_endpoint_auth_method")),
-		TokenEndpointAuthSigningAlg:   value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
-		DPoPSigningAlg:                value.String(config.GetAttr("dpop_signing_alg")),
-		IDTokenSignedResponseAlgs:     nonEmptyStrings(config.GetAttr("id_token_signed_response_algs")),
-		TokenEndpointJwtcaAudFormat:   value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
-		IDTokenSessionExpirySupported: value.Bool(config.GetAttr("id_token_session_expiry_supported")),
+		ClientID:                    value.String(config.GetAttr("client_id")),
+		ClientSecret:                value.String(config.GetAttr("client_secret")),
+		Domain:                      value.String(config.GetAttr("domain")),
+		DomainAliases:               value.Strings(config.GetAttr("domain_aliases")),
+		AuthorizationEndpoint:       value.String(config.GetAttr("authorization_endpoint")),
+		Issuer:                      value.String(config.GetAttr("issuer")),
+		JWKSURI:                     value.String(config.GetAttr("jwks_uri")),
+		UserInfoEndpoint:            value.String(config.GetAttr("userinfo_endpoint")),
+		TokenEndpoint:               value.String(config.GetAttr("token_endpoint")),
+		NonPersistentAttrs:          value.Strings(config.GetAttr("non_persistent_attrs")),
+		SetUserAttributes:           value.String(config.GetAttr("set_user_root_attributes")),
+		LogoURL:                     value.String(config.GetAttr("icon_url")),
+		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
+		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
+		DPoPSigningAlg:              value.String(config.GetAttr("dpop_signing_alg")),
 	}
 
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
@@ -1110,15 +1016,6 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 	return options, diag.FromErr(err)
 }
 
-// nonEmptyStrings returns nil for a null OR empty list.
-func nonEmptyStrings(v cty.Value) *[]string {
-	if v.IsNull() || v.LengthInt() == 0 {
-		return nil
-	}
-
-	return value.Strings(v)
-}
-
 func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSAML{
 		Debug:                       value.Bool(config.GetAttr("debug")),
@@ -1142,8 +1039,6 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 		StrategyVersion:             value.Int(config.GetAttr("strategy_version")),
 		GlobalTokenRevocationJWTIss: value.String(config.GetAttr("global_token_revocation_jwt_iss")),
 		GlobalTokenRevocationJWTSub: value.String(config.GetAttr("global_token_revocation_jwt_sub")),
-		DestinationURL:              value.String(config.GetAttr("destination_url")),
-		RecipientURL:                value.String(config.GetAttr("recipient_url")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -1602,11 +1497,6 @@ func expandDirectory(data *schema.ResourceData) *managementv2.CreateDirectoryPro
 		directoryConfig.SetSynchronizeAutomatically(&syncAuto)
 	}
 
-	if !cfg.GetAttr("synchronize_groups").IsNull() {
-		syncGroups := managementv2.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
-		directoryConfig.SetSynchronizeGroups(&syncGroups)
-	}
-
 	return directoryConfig
 }
 
@@ -1622,11 +1512,6 @@ func expandDirectoryUpdate(data *schema.ResourceData) *managementv2.UpdateDirect
 	if !cfg.GetAttr("synchronize_automatically").IsNull() {
 		syncAuto := data.Get("synchronize_automatically").(bool)
 		directoryConfig.SetSynchronizeAutomatically(&syncAuto)
-	}
-
-	if !cfg.GetAttr("synchronize_groups").IsNull() {
-		syncGroups := managementv2.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
-		directoryConfig.SetSynchronizeGroups(&syncGroups)
 	}
 
 	return directoryConfig

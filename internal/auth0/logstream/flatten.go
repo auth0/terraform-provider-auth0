@@ -46,7 +46,7 @@ func flattenLogStreamSink(data *schema.ResourceData, sink interface{}) []interfa
 	case *management.LogStreamSinkHTTP:
 		m = flattenLogStreamSinkHTTP(sinkType)
 	case *management.LogStreamSinkDatadog:
-		m = flattenLogStreamSinkDatadog(data, sinkType)
+		m = flattenLogStreamSinkDatadog(sinkType)
 	case *management.LogStreamSinkSplunk:
 		m = flattenLogStreamSinkSplunk(sinkType)
 	case *management.LogStreamSinkSumo:
@@ -87,18 +87,11 @@ func flattenLogStreamSinkHTTP(o *management.LogStreamSinkHTTP) interface{} {
 	}
 }
 
-func flattenLogStreamSinkDatadog(data *schema.ResourceData, o *management.LogStreamSinkDatadog) interface{} {
-	result := map[string]interface{}{
-		"datadog_region": o.GetRegion(),
+func flattenLogStreamSinkDatadog(o *management.LogStreamSinkDatadog) interface{} {
+	return map[string]interface{}{
+		"datadog_region":  o.GetRegion(),
+		"datadog_api_key": o.GetAPIKey(),
 	}
-
-	if v, ok := data.GetOk("sink.0.datadog_api_key_wo_version"); ok {
-		result["datadog_api_key_wo_version"] = v
-	} else {
-		result["datadog_api_key"] = o.GetAPIKey()
-	}
-
-	return result
 }
 
 func flattenLogStreamSinkSegment(o *management.LogStreamSinkSegment) interface{} {

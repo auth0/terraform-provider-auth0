@@ -28,6 +28,7 @@ data "auth0_client" "some-client-by-id" {
 ### Optional
 
 - `client_id` (String) The ID of the client. If not provided, `name` must be set.
+- `hide_client_secret` (Boolean) Set this to avoid persisting the sensitive `client_secret` value into state, in which case `client_secret` will contain an empty string.
 - `name` (String) The name of the client. If not provided, `client_id` must be set.
 
 ### Read-Only
@@ -42,7 +43,7 @@ data "auth0_client" "some-client-by-id" {
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
 - `client_authentication_methods` (Set of Object) Defines client authentication methods. (see [below for nested schema](#nestedatt--client_authentication_methods))
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
-- `client_secret` (String, Sensitive) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.
+- `client_secret` (String, Sensitive) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string. Set `hide_client_secret` to `true` to avoid persisting this value into Terraform state.
 - `compliance_level` (String) Defines the compliance level for this client, which may restrict it's capabilities. Can be one of `none`, `fapi1_adv_pkj_par`, `fapi1_adv_mtls_par`.
 - `cross_origin_auth` (Boolean) Whether this client can be used to make cross-origin authentication requests (`true`) or it is not allowed to make such requests (`false`).
 - `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing authentication in your own domain instead of Auth0 Universal Login page.

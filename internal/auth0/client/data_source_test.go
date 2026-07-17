@@ -73,6 +73,33 @@ func TestAccDataClientById(t *testing.T) {
 	})
 }
 
+const testAccDataClientConfigHideSecret = `
+data "auth0_client" "test" {
+	depends_on = [ auth0_client.my_client ]
+
+	client_id          = auth0_client.my_client.client_id
+	hide_client_secret = true
+}
+`
+
+func TestAccDataClientHideClientSecret(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccGivenAClient+testAccDataClientConfigHideSecret, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("data.auth0_client.test", "id"),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "hide_client_secret", "true"),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "client_secret", ""),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "name", fmt.Sprintf("Acceptance Test - %v", t.Name())),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "app_type", "non_interactive"),
+				),
+			},
+		},
+	})
+}
+
 const testAccDataSourceClientNonexistentID = `
 data "auth0_client" "test" {
 	client_id = "this-client-does-not-exist"

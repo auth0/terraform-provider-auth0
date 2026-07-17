@@ -808,9 +808,14 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 }
 
 func flattenClientForDataSource(ctx context.Context, api *management.Management, data *schema.ResourceData, client *management.Client) error {
+	clientSecret := client.GetClientSecret()
+	if data.Get("hide_client_secret").(bool) {
+		clientSecret = ""
+	}
+
 	result := multierror.Append(
 		flattenClient(data, client),
-		data.Set("client_secret", client.GetClientSecret()),
+		data.Set("client_secret", clientSecret),
 		data.Set("token_endpoint_auth_method", client.GetTokenEndpointAuthMethod()),
 	)
 
@@ -1104,16 +1109,21 @@ func findCredentialInStateByName(data *schema.ResourceData, attribute string, na
 	return "", false
 }
 
-func flattenClientList(data *schema.ResourceData, clients []*management.Client) error {
+func flattenClientList(data *schema.ResourceData, clients []*management.Client, hideClientSecret bool) error {
 	if clients == nil {
 		return data.Set("clients", make([]map[string]interface{}, 0))
 	}
 
 	clientList := make([]map[string]interface{}, 0, len(clients))
 	for _, client := range clients {
+		clientSecret := client.GetClientSecret()
+		if hideClientSecret {
+			clientSecret = ""
+		}
+
 		clientMap := map[string]interface{}{
 			"client_id":                           client.GetClientID(),
-			"client_secret":                       client.GetClientSecret(),
+			"client_secret":                       clientSecret,
 			"name":                                client.GetName(),
 			"description":                         client.GetDescription(),
 			"app_type":                            client.GetAppType(),

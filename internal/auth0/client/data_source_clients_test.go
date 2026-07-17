@@ -35,7 +35,8 @@ data "auth0_clients" "test" {
         auth0_client.my_client_2
     ]
 
-		name_filter = "{{.testName}}"
+		name_filter        = "{{.testName}}"
+		hide_client_secret = true
 }
 `
 
@@ -90,17 +91,20 @@ func TestAccDataClients(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithNameFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_clients.test", "hide_client_secret", "true"),
 					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_clients.test", "clients.*", map[string]string{
 						"name":           fmt.Sprintf("Acceptance Test 1 - %s", t.Name()),
 						"app_type":       "non_interactive",
 						"is_first_party": "true",
 						"description":    fmt.Sprintf("Description for client 1 %s", t.Name()),
+						"client_secret":  "",
 					}),
 					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_clients.test", "clients.*", map[string]string{
 						"name":           fmt.Sprintf("Acceptance Test 2 - %s", t.Name()),
 						"app_type":       "spa",
 						"is_first_party": "false",
 						"description":    fmt.Sprintf("Description for client 2 %s", t.Name()),
+						"client_secret":  "",
 					}),
 				),
 			},

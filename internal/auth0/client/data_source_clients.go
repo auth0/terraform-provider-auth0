@@ -44,6 +44,12 @@ func NewClientsDataSource() *schema.Resource {
 				Optional:    true,
 				Description: "Filter clients by CIMD external client ID URL.",
 			},
+			"hide_client_secret": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: "Set this to avoid persisting the sensitive `client_secret` value of each client " +
+					"into state, in which case `client_secret` will contain an empty string.",
+			},
 			"clients": {
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -89,6 +95,7 @@ func coreClientDataSourceSchema() map[string]*schema.Schema {
 		"token_endpoint_auth_method",
 		"signed_request_object",
 		"client_authentication_methods",
+		"hide_client_secret",
 	}
 
 	for _, field := range fieldsToRemove {
@@ -155,7 +162,7 @@ func readClientsForDataSource(ctx context.Context, data *schema.ResourceData, me
 	filterID := generateFilterID(nameFilter, appTypes, isFirstParty, externalClientID)
 	data.SetId(filterID)
 
-	if err := flattenClientList(data, clients); err != nil {
+	if err := flattenClientList(data, clients, data.Get("hide_client_secret").(bool)); err != nil {
 		return diag.FromErr(err)
 	}
 

@@ -91,6 +91,54 @@ data "auth0_network_acl" "complex_acl" {
 }
 `
 
+const testAccGivenAnAuth0ManagedNetworkACL = `
+resource "auth0_network_acl" "auth0_managed_acl" {
+	description = "Auth0 Managed DS - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.icloud_relay_proxy"]
+		}
+	}
+}
+`
+
+const testAccDataNetworkACLConfigWithAuth0Managed = testAccGivenAnAuth0ManagedNetworkACL + `
+data "auth0_network_acl" "auth0_managed_acl" {
+	depends_on = [resource.auth0_network_acl.auth0_managed_acl]
+	id = resource.auth0_network_acl.auth0_managed_acl.id
+}
+`
+
+// TestAccNetworkACLDataSourceAuth0Managed asserts the Early Access auth0_managed
+// curated blocklists field is surfaced through the auto-derived data source
+// (Approach F: the field flows through the shared flattenNetworkACLRule with no
+// data-source-specific code).
+func TestAccNetworkACLDataSourceAuth0Managed(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataNetworkACLConfigWithAuth0Managed, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLDataSourceExists("data.auth0_network_acl.auth0_managed_acl"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_acl", "description", fmt.Sprintf("Auth0 Managed DS - %s", t.Name())),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_acl", "active", "true"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_acl", "priority", "7"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_acl", "rule.0.action.0.block", "true"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_acl", "rule.0.scope", "authentication"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_acl", "rule.0.match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_acl", "rule.0.match.0.auth0_managed.0", "auth0.icloud_relay_proxy"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccNetworkACLDataSource(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

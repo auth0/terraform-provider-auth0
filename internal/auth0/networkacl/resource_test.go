@@ -409,6 +409,132 @@ func TestAccNetworkACLNewFields(t *testing.T) {
 	})
 }
 
+const testAccNetworkACLWithAuth0Managed = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.icloud_relay_proxy"]
+		}
+	}
+}
+`
+
+const testAccNetworkACLWithAuth0ManagedNotMatch = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed NotMatch - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			allow = true
+		}
+		scope = "authentication"
+		not_match {
+			auth0_managed = ["auth0.low_reputation"]
+		}
+	}
+}
+`
+
+// TestAccNetworkACLAuth0Managed exercises a create/update round-trip of the
+// Early Access auth0_managed curated blocklists field on both match and
+// not_match.
+func TestAccNetworkACLAuth0Managed(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLWithAuth0Managed, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLExists("auth0_network_acl.my_acl"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "description", fmt.Sprintf("Auth0 Managed - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "active", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "priority", "7"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.block", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.scope", "authentication"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.0", "auth0.icloud_relay_proxy"),
+				),
+			},
+			{
+				ResourceName:      "auth0_network_acl.my_acl",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLWithAuth0ManagedNotMatch, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "description", fmt.Sprintf("Auth0 Managed NotMatch - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.allow", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.0", "auth0.low_reputation"),
+				),
+			},
+		},
+	})
+}
+
+const testAccNetworkACLAuth0ManagedInvalidPattern = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Invalid - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["not_a_valid_identifier"]
+		}
+	}
+}
+`
+
+const testAccNetworkACLAuth0ManagedMutualExclusivity = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Mutual Exclusivity - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.icloud_relay_proxy"]
+		}
+		not_match {
+			auth0_managed = ["auth0.low_reputation"]
+		}
+	}
+}
+`
+
+// TestAccNetworkACLAuth0ManagedValidation covers the client-side validation for
+// the auth0_managed field: the identifier pattern and the mutual-exclusivity
+// invariant between match and not_match. Neither case reaches the API.
+func TestAccNetworkACLAuth0ManagedValidation(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccNetworkACLAuth0ManagedInvalidPattern, t.Name()),
+				ExpectError: regexp.MustCompile("must be an Auth0-curated blocklist identifier"),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccNetworkACLAuth0ManagedMutualExclusivity, t.Name()),
+				ExpectError: regexp.MustCompile("'auth0_managed' can only be set on one of 'match' or 'not_match'"),
+			},
+		},
+	})
+}
+
 // Test for edge cases and maximum values.
 func TestAccNetworkACLEdgeCases(t *testing.T) {
 	acctest.Test(t, resource.TestCase{

@@ -2,7 +2,11 @@ package networkacl
 
 import (
 	"context"
+	"fmt"
+	"net/http"
+	"regexp"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -95,6 +99,21 @@ var networkACLRuleMatchSchema = &schema.Schema{
 	Description: "The configuration for the Network ACL Rule",
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"auth0_managed": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateDiagFunc: validation.ToDiagFunc(validation.StringMatch(
+						regexp.MustCompile(`^auth0\.[^\.\s]+$`),
+						"must be an Auth0-curated blocklist identifier of the form 'auth0.<name>' (for example, 'auth0.icloud_relay_proxy')",
+					)),
+				},
+				Description: "Auth0-curated blocklists to match against (for example, `auth0.icloud_relay_proxy`). " +
+					"Early Access: requires the `advanced-breached-password-detection` entitlement and the " +
+					"`tenant_acl_curated_blocklists` feature flag to be enabled on the tenant. May be set on only one of " +
+					"`match` or `not_match` within a rule.",
+			},
 			"asns": {
 				Type:        schema.TypeList,
 				Optional:    true,
@@ -205,6 +224,42 @@ var networkACLRuleActionSchema = &schema.Schema{
 	},
 }
 
+// enrichAuth0ManagedError augments a 403 from the Management API with a hint
+// naming both gates required for the Early Access auth0_managed curated
+// blocklists, when the rule being sent actually uses that field.
+func enrichAuth0ManagedError(networkACL *management.NetworkACL, err error) error {
+	if err == nil {
+		return nil
+	}
+
+	if !ruleUsesAuth0Managed(networkACL) {
+		return err
+	}
+
+	if mErr, ok := err.(management.Error); !ok || mErr.Status() != http.StatusForbidden {
+		return err
+	}
+
+	return fmt.Errorf(
+		"%w\n\nThe 'auth0_managed' curated blocklists are an Early Access feature. Ensure the tenant has the "+
+			"'advanced-breached-password-detection' entitlement and the 'tenant_acl_curated_blocklists' feature flag enabled",
+		err,
+	)
+}
+
+// ruleUsesAuth0Managed reports whether the rule's match or not_match sets auth0_managed.
+func ruleUsesAuth0Managed(networkACL *management.NetworkACL) bool {
+	if networkACL == nil || networkACL.Rule == nil {
+		return false
+	}
+
+	hasValues := func(m *management.NetworkACLRuleMatch) bool {
+		return m != nil && m.Auth0Managed != nil && len(*m.Auth0Managed) > 0
+	}
+
+	return hasValues(networkACL.Rule.Match) || hasValues(networkACL.Rule.NotMatch)
+}
+
 func createNetworkACL(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
@@ -214,7 +269,7 @@ func createNetworkACL(ctx context.Context, data *schema.ResourceData, meta inter
 	}
 
 	if err := api.NetworkACL.Create(ctx, networkACL); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(enrichAuth0ManagedError(networkACL, err))
 	}
 
 	data.SetId(networkACL.GetID())
@@ -242,7 +297,7 @@ func updateNetworkACL(ctx context.Context, data *schema.ResourceData, meta inter
 	}
 
 	if err := api.NetworkACL.Update(ctx, data.Id(), networkACL); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(enrichAuth0ManagedError(networkACL, internalError.HandleAPIError(data, err)))
 	}
 
 	return readNetworkACL(ctx, data, meta)

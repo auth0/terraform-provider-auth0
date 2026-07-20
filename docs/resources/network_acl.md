@@ -48,6 +48,45 @@ resource "auth0_network_acl" "my_network_acl_not_match" {
   }
 }
 
+# Example of auth0_network_acl using Auth0-curated blocklists (Early Access).
+#
+# The `auth0_managed` field requires the `advanced-breached-password-detection`
+# entitlement and the `tenant_acl_curated_blocklists` feature flag on the tenant.
+# It may be set on only one of `match` or `not_match` within a rule.
+resource "auth0_network_acl" "block_icloud_relay" {
+  description = "Block iCloud Private Relay egress proxies"
+  active      = true
+  priority    = 7
+  rule {
+    action {
+      block = true
+    }
+    scope = "authentication"
+    # Block requests matching the curated iCloud Private Relay proxy list.
+    match {
+      auth0_managed = ["auth0.icloud_relay_proxy"]
+    }
+  }
+}
+
+# Example using `not_match` to allow all traffic *unless* it comes from a
+# low-reputation curated blocklist. `auth0_managed` may live on only one of
+# `match` / `not_match`, so this demonstrates the mutual-exclusivity boundary.
+resource "auth0_network_acl" "allow_unless_low_reputation" {
+  description = "Allow traffic unless it is on the low-reputation blocklist"
+  active      = true
+  priority    = 8
+  rule {
+    action {
+      allow = true
+    }
+    scope = "authentication"
+    not_match {
+      auth0_managed = ["auth0.low_reputation"]
+    }
+  }
+}
+
 # Example of auth0_network_acl with hostname and connecting IP restrictions
 resource "auth0_network_acl" "block_canonical" {
   description = "Block canonical domain except from proxy"
@@ -115,6 +154,7 @@ Optional:
 Optional:
 
 - `asns` (List of Number) ASNs. Must contain between 1 and 10 unique items.
+- `auth0_managed` (List of String) Auth0-curated blocklists to match against (for example, `auth0.icloud_relay_proxy`). Early Access: requires the `advanced-breached-password-detection` entitlement and the `tenant_acl_curated_blocklists` feature flag to be enabled on the tenant. May be set on only one of `match` or `not_match` within a rule.
 - `connecting_ipv4_cidrs` (List of String) Connecting IPv4 CIDRs. Must contain between 1 and 20 unique items. Can be IPv4 addresses or CIDR blocks.
 - `connecting_ipv6_cidrs` (List of String) Connecting IPv6 CIDRs. Must contain between 1 and 20 unique items. Can be IPv6 addresses or CIDR blocks.
 - `geo_country_codes` (List of String) Geo Country Codes. Must contain between 1 and 10 unique items.
@@ -133,6 +173,7 @@ Optional:
 Optional:
 
 - `asns` (List of Number) ASNs. Must contain between 1 and 10 unique items.
+- `auth0_managed` (List of String) Auth0-curated blocklists to match against (for example, `auth0.icloud_relay_proxy`). Early Access: requires the `advanced-breached-password-detection` entitlement and the `tenant_acl_curated_blocklists` feature flag to be enabled on the tenant. May be set on only one of `match` or `not_match` within a rule.
 - `connecting_ipv4_cidrs` (List of String) Connecting IPv4 CIDRs. Must contain between 1 and 20 unique items. Can be IPv4 addresses or CIDR blocks.
 - `connecting_ipv6_cidrs` (List of String) Connecting IPv6 CIDRs. Must contain between 1 and 20 unique items. Can be IPv6 addresses or CIDR blocks.
 - `geo_country_codes` (List of String) Geo Country Codes. Must contain between 1 and 10 unique items.

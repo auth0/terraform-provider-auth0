@@ -59,6 +59,7 @@ Read-Only:
 Read-Only:
 
 - `asns` (List of Number)
+- `auth0_managed` (List of String)
 - `connecting_ipv4_cidrs` (List of String)
 - `connecting_ipv6_cidrs` (List of String)
 - `geo_country_codes` (List of String)
@@ -77,6 +78,7 @@ Read-Only:
 Read-Only:
 
 - `asns` (List of Number)
+- `auth0_managed` (List of String)
 - `connecting_ipv4_cidrs` (List of String)
 - `connecting_ipv6_cidrs` (List of String)
 - `geo_country_codes` (List of String)

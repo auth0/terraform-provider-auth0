@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+FEATURES:
+- `resource/auth0_network_acl` – Add support for the `auth0_managed` attribute on rule `match`/`not_match` blocks to match against Auth0-curated blocklists such as `auth0.icloud_relay_proxy` (Early Access; requires the `advanced-breached-password-detection` entitlement and the `tenant_acl_curated_blocklists` feature flag)
+- `data-source/auth0_network_acl` – Expose the `auth0_managed` attribute on rule `match`/`not_match` blocks
+
 ## v1.53.0
 
 ENHANCEMENTS:

@@ -95,6 +95,10 @@ func flattenNetworkACLRule(match *management.NetworkACLRuleMatch) []interface{} 
 	}
 
 	// Handle string slices - only set if not nil and not empty.
+	if match.Auth0Managed != nil && len(*match.Auth0Managed) > 0 {
+		m["auth0_managed"] = *match.Auth0Managed
+	}
+
 	if match.GeoCountryCodes != nil && len(*match.GeoCountryCodes) > 0 {
 		m["geo_country_codes"] = *match.GeoCountryCodes
 	}

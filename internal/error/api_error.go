@@ -39,7 +39,7 @@ func HandleReadAPIError(resourceType string, data *schema.ResourceData, err erro
 				"The %s resource with ID %q was not found in Auth0 (the API returned 404) and has "+
 					"been removed from the Terraform state automatically. It was most likely deleted "+
 					"outside of Terraform.\n\n"+
-					"If this was expected, no action is needed — the next plan will reconcile the "+
+					"If this was expected, no action is needed. The next plan will reconcile the "+
 					"state. To recreate the resource, run `terraform apply`. To drop it from state "+
 					"manually instead, run `terraform state rm %s.<name>`, using the resource name "+
 					"shown in the address above.",

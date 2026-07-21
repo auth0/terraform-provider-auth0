@@ -63,7 +63,7 @@ func readUserRoles(ctx context.Context, data *schema.ResourceData, meta interfac
 	for {
 		roleList, err := api.User.Roles(ctx, data.Id(), management.Page(page), management.PerPage(100))
 		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
+			return internalError.HandleReadAPIError("auth0_user_roles", data, err)
 		}
 
 		roles = append(roles, roleList.Roles...)

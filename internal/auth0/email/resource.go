@@ -230,7 +230,7 @@ func readEmailProvider(ctx context.Context, data *schema.ResourceData, meta inte
 
 	emailProviderConfigs, err := api.EmailProvider.Read(ctx)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_email_provider", data, err)
 	}
 
 	return diag.FromErr(flattenEmailProvider(data, emailProviderConfigs))

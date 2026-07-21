@@ -133,7 +133,7 @@ func readConnectionKeys(ctx context.Context, data *schema.ResourceData, meta int
 
 	keys, err := api.Connection.ReadKeys(ctx, connectionID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_connection_keys", data, err)
 	}
 
 	for _, key := range keys {

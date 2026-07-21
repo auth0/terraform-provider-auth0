@@ -120,7 +120,7 @@ func readUserPermissions(ctx context.Context, data *schema.ResourceData, meta in
 	for {
 		permissionList, err := api.User.Permissions(ctx, data.Id(), management.Page(page), management.PerPage(100))
 		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
+			return internalError.HandleReadAPIError("auth0_user_permissions", data, err)
 		}
 
 		permissions = append(permissions, permissionList.Permissions...)

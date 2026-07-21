@@ -285,7 +285,7 @@ func readUserAttributeProfile(ctx context.Context, data *schema.ResourceData, me
 
 	userAttributeProfile, err := api.UserAttributeProfile.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_user_attribute_profile", data, err)
 	}
 
 	return diag.FromErr(flattenUserAttributeProfile(data, userAttributeProfile))

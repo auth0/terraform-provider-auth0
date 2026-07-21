@@ -92,7 +92,7 @@ func readResourceServerScopes(ctx context.Context, data *schema.ResourceData, me
 
 	resourceServer, err := api.ResourceServer.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_resource_server_scopes", data, err)
 	}
 
 	return diag.FromErr(flattenResourceServerScopes(data, resourceServer))

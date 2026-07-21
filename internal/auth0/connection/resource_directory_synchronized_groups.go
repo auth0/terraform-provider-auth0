@@ -65,7 +65,7 @@ func readDirectorySynchronizedGroups(ctx context.Context, data *schema.ResourceD
 
 	groupIDs, err := getAllSynchronizedGroups(ctx, apiv2, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_connection_directory_synchronized_groups", data, err)
 	}
 
 	result := multierror.Append(

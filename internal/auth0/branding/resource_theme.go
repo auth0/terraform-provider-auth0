@@ -489,7 +489,7 @@ func readBrandingTheme(ctx context.Context, data *schema.ResourceData, meta inte
 
 	brandingTheme, err := api.BrandingTheme.Default(ctx)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_branding_theme", data, err)
 	}
 
 	data.SetId(brandingTheme.GetID())

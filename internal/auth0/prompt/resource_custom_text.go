@@ -152,7 +152,7 @@ func readPromptCustomText(ctx context.Context, data *schema.ResourceData, meta i
 
 	customText, err := api.Prompt.CustomText(ctx, data.Get("prompt").(string), data.Get("language").(string))
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_prompt_custom_text", data, err)
 	}
 
 	return diag.FromErr(flattenPromptCustomText(data, customText))

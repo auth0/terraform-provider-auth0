@@ -62,7 +62,7 @@ func readRuleConfig(ctx context.Context, data *schema.ResourceData, meta interfa
 
 	ruleConfig, err := api.RuleConfig.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_rule_config", data, err)
 	}
 
 	return diag.FromErr(data.Set("key", ruleConfig.GetKey()))

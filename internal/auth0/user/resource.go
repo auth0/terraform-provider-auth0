@@ -189,7 +189,7 @@ func readUser(ctx context.Context, data *schema.ResourceData, meta interface{}) 
 	}
 	user, err := api.User.Read(ctx, data.Id(), reqOptions...)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_user", data, err)
 	}
 
 	return diag.FromErr(flattenUser(data, user))

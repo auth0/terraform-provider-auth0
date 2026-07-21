@@ -25,7 +25,7 @@ func HandleAPIError(data *schema.ResourceData, err error) error {
 // warning explaining that the resource no longer exists in Auth0 and how to proceed,
 // so the removal is not silent. All other errors are returned as-is.
 //
-// resourceType is the Terraform type of the resource being read (e.g. "auth0_action")
+// The resourceType is the Terraform type of the resource being read (e.g. "auth0_action")
 // and is used to render an actionable `terraform state rm` command in the warning.
 func HandleReadAPIError(resourceType string, data *schema.ResourceData, err error) diag.Diagnostics {
 	if IsStatusNotFound(err) {

@@ -99,7 +99,7 @@ func readTriggerBinding(ctx context.Context, data *schema.ResourceData, meta int
 			management.PerPage(100),
 		)
 		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
+			return internalError.HandleReadAPIError("auth0_trigger_actions", data, err)
 		}
 
 		triggerBindings = append(triggerBindings, triggerBindingList.Bindings...)

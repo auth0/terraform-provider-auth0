@@ -144,7 +144,7 @@ func readForm(ctx context.Context, data *schema.ResourceData, meta interface{}) 
 
 	form, err := api.Form.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_form", data, err)
 	}
 
 	return diag.FromErr(flattenForm(data, form))

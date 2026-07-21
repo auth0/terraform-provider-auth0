@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+ENHANCEMENTS:
+- `provider` – When a managed resource is read and the Auth0 API returns a 404 (deleted outside of Terraform), the provider now emits a warning explaining that the resource was removed from state and how to proceed (e.g. `terraform apply` to recreate, or `terraform state rm` to clean up), instead of removing it silently
+
 ## v1.52.0
 
 FEATURES:

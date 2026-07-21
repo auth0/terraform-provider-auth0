@@ -73,7 +73,7 @@ func readClientCredentials(ctx context.Context, data *schema.ResourceData, meta 
 
 	client, err := api.Client.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_client_credentials", data, err)
 	}
 
 	return diag.FromErr(flattenClientCredentials(ctx, api, data, client))

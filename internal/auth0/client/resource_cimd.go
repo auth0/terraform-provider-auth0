@@ -413,7 +413,7 @@ func readCIMDClient(ctx context.Context, data *schema.ResourceData, meta interfa
 
 	client, err := apiv2.Clients.Get(ctx, data.Id(), &mgmtv2.GetClientRequestParameters{})
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_client_cimd", data, err)
 	}
 
 	preview, err := apiv2.Clients.PreviewCimdMetadata(ctx, &mgmtv2.PreviewCimdMetadataRequestContent{

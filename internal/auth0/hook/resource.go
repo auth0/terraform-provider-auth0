@@ -104,7 +104,7 @@ func readHook(ctx context.Context, data *schema.ResourceData, meta interface{}) 
 
 	hook, err := api.Hook.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_hook", data, err)
 	}
 
 	hookSecrets, err := api.Hook.Secrets(ctx, data.Id())

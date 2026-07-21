@@ -112,7 +112,7 @@ func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, 
 
 	organizationConnection, err := apiv2.Organizations.Connections.Get(ctx, organizationID, connectionID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_organization_connection", data, err)
 	}
 
 	return diag.FromErr(flattenOrganizationConnection(data, organizationConnection))

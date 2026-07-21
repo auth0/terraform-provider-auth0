@@ -62,7 +62,7 @@ func readFlow(ctx context.Context, data *schema.ResourceData, meta interface{}) 
 
 	flow, err := api.Flow.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_flow", data, err)
 	}
 
 	return diag.FromErr(flattenFlow(data, flow))

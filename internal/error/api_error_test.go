@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stretchr/testify/assert"
 )
@@ -68,4 +69,34 @@ func TestHandleAPIError(t *testing.T) {
 			assert.Empty(t, data.Id())
 		})
 	}
+}
+
+func TestHandleReadAPIError(t *testing.T) {
+	t.Run("it removes the resource from state and returns a warning if the error is a 404", func(t *testing.T) {
+		data := schema.TestResourceDataRaw(t, nil, nil)
+		data.SetId("id")
+
+		diags := HandleReadAPIError("auth0_action", data, testManagementError{
+			StatusCode: http.StatusNotFound,
+		})
+
+		assert.Empty(t, data.Id())
+		assert.Len(t, diags, 1)
+		assert.False(t, diags.HasError())
+		assert.Equal(t, diag.Warning, diags[0].Severity)
+		assert.Contains(t, diags[0].Detail, "auth0_action")
+		assert.Contains(t, diags[0].Detail, "terraform state rm auth0_action.<name>")
+	})
+
+	t.Run("it returns the error and keeps the resource in state if the error is not a 404", func(t *testing.T) {
+		data := schema.TestResourceDataRaw(t, nil, nil)
+		data.SetId("id")
+
+		diags := HandleReadAPIError("auth0_action", data, testManagementError{
+			StatusCode: http.StatusBadRequest,
+		})
+
+		assert.Equal(t, "id", data.Id())
+		assert.True(t, diags.HasError())
+	})
 }

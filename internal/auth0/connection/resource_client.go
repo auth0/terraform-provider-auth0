@@ -102,7 +102,7 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 
 	connection, err := api.Connection.Read(ctx, connectionID, management.IncludeFields("strategy", "name"))
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_connection_client", data, err)
 	}
 
 	return diag.FromErr(flattenConnectionClient(data, connection))

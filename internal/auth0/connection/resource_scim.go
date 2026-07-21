@@ -111,7 +111,7 @@ func readSCIMConfiguration(ctx context.Context, data *schema.ResourceData, meta 
 
 	scimConfiguration, err := api.Connection.ReadSCIMConfiguration(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_connection_scim_configuration", data, err)
 	}
 
 	return flattenSCIMConfiguration(data, scimConfiguration)

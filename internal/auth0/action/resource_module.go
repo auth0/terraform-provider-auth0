@@ -210,7 +210,7 @@ func readActionModule(ctx context.Context, data *schema.ResourceData, meta inter
 
 	module, err := apiv2.Actions.Modules.Get(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_action_module", data, err)
 	}
 
 	return diag.FromErr(flattenActionModule(data, module))

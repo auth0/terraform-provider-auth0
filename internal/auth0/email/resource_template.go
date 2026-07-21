@@ -131,7 +131,7 @@ func readEmailTemplate(ctx context.Context, data *schema.ResourceData, meta inte
 
 	email, err := api.EmailTemplate.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_email_template", data, err)
 	}
 
 	result := multierror.Append(

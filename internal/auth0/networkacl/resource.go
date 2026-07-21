@@ -227,7 +227,7 @@ func readNetworkACL(ctx context.Context, data *schema.ResourceData, meta interfa
 
 	networkACL, err := api.NetworkACL.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_network_acl", data, err)
 	}
 
 	return diag.FromErr(flattenNetworkACL(data, networkACL))

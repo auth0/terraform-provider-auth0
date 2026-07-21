@@ -75,7 +75,7 @@ func readUserRole(ctx context.Context, data *schema.ResourceData, meta interface
 
 	rolesList, err := api.User.Roles(ctx, userID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_user_role", data, err)
 	}
 
 	roleID := data.Get("role_id").(string)

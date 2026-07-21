@@ -96,7 +96,7 @@ func readSCIMToken(ctx context.Context, data *schema.ResourceData, meta interfac
 	// List all tokens for the connection and find the one we're looking for.
 	scimTokens, err := api.Connection.ListSCIMToken(ctx, connectionID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_connection_scim_token", data, err)
 	}
 
 	var foundToken *management.SCIMToken

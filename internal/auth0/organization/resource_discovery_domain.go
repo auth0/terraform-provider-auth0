@@ -94,7 +94,7 @@ func readOrganizationDiscoveryDomain(ctx context.Context, data *schema.ResourceD
 
 	discoveryDomain, err := api.Organization.DiscoveryDomain(ctx, organizationID, domainID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_organization_discovery_domain", data, err)
 	}
 
 	return diag.FromErr(flattenOrganizationDiscoveryDomain(data, discoveryDomain, organizationID))

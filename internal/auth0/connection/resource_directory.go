@@ -143,7 +143,7 @@ func readDirectory(ctx context.Context, data *schema.ResourceData, meta interfac
 
 	directoryConfig, err := apiv2.Connections.DirectoryProvisioning.Get(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_connection_directory", data, err)
 	}
 
 	return flattenDirectory(data, directoryConfig)

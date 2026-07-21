@@ -85,7 +85,7 @@ func readUserPermission(ctx context.Context, data *schema.ResourceData, meta int
 
 	existingPermissions, err := api.User.Permissions(ctx, userID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_user_permission", data, err)
 	}
 
 	for _, permission := range existingPermissions.Permissions {

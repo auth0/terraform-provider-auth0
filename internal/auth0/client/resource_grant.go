@@ -168,7 +168,7 @@ func readClientGrant(ctx context.Context, data *schema.ResourceData, meta interf
 
 	clientGrant, err := api.ClientGrant.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_client_grant", data, err)
 	}
 
 	return diag.FromErr(flattenClientGrant(data, clientGrant))

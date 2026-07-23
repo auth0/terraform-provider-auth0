@@ -35,6 +35,7 @@ data "auth0_connection" "some-connection-by-id" {
 
 - `authentication` (List of Object) Configure the purpose of a connection to be used for authentication during login. (see [below for nested schema](#nestedatt--authentication))
 - `connected_accounts` (List of Object) Configure the purpose of a connection to be used for connected accounts and Token Vault. (see [below for nested schema](#nestedatt--connected_accounts))
+- `cross_app_access_requesting_app` (List of Object) Configure the purpose of a connection to be used as a requesting application authorization server for Cross-App Access (XAA). This is an Early Access feature and requires the `token_vault_xaa` flag to be enabled on your tenant. Only supported on `oidc` and `okta` strategy connections. **Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (see [below for nested schema](#nestedatt--cross_app_access_requesting_app))
 - `display_name` (String) Name used in login screen.
 - `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled. Skips populating if `skip_enabled_clients` is `true`.
 - `id` (String) The ID of this resource.
@@ -55,6 +56,14 @@ Read-Only:
 
 <a id="nestedatt--connected_accounts"></a>
 ### Nested Schema for `connected_accounts`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+<a id="nestedatt--cross_app_access_requesting_app"></a>
+### Nested Schema for `cross_app_access_requesting_app`
 
 Read-Only:
 

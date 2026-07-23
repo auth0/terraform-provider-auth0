@@ -462,6 +462,50 @@ func NewThemeResource() *schema.Resource {
 					},
 				},
 			},
+			"identifiers": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Computed:    true,
+				Description: "Configuration for identifier input display settings. Requires the identifier input feature flag to be enabled on the tenant. Once added, identifiers can only be updated but not removed",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"login_display": {
+							Type:         schema.TypeString,
+							Required:     true,
+							ValidateFunc: validation.StringInSlice([]string{"unified", "separate"}, false),
+							Description:  "Login display style. Available options: `unified`, `separate`.",
+						},
+						"otp_autocomplete": {
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: "Whether OTP autocomplete is enabled.",
+						},
+						"phone_display": {
+							Type:        schema.TypeList,
+							MaxItems:    1,
+							Required:    true,
+							Description: "Phone number display settings.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"formatting": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ValidateFunc: validation.StringInSlice([]string{"international", "regional"}, false),
+										Description:  "Phone number formatting. Available options: `international`, `regional`.",
+									},
+									"masking": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ValidateFunc: validation.StringInSlice([]string{"mask_digits", "hide_country_code", "show_all"}, false),
+										Description:  "Phone number masking. Available options: `mask_digits`, `hide_country_code`, `show_all`.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }

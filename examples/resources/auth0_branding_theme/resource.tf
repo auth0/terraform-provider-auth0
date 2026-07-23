@@ -96,4 +96,15 @@ resource "auth0_branding_theme" "my_theme" {
     logo_url              = "https://google.com/logo.png"
     social_buttons_layout = "top"
   }
+
+  # Requires the identifier input feature flag to be enabled on the tenant.
+  identifiers {
+    login_display    = "unified"
+    otp_autocomplete = true
+
+    phone_display {
+      formatting = "international"
+      masking    = "mask_digits"
+    }
+  }
 }

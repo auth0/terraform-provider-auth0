@@ -31,4 +31,11 @@ resource "auth0_tenant" "my_tenant" {
     show_log_link = false
     url           = "https://example.com/error"
   }
+
+  # Requires the country codes feature flag to be enabled on the tenant.
+  # Remove this block entirely to disable filtering.
+  country_codes {
+    list = ["US", "CA"]
+    mode = "allow"
+  }
 }

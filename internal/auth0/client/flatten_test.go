@@ -179,3 +179,31 @@ func TestClientGrantScopesConflictWithAllowAll(t *testing.T) {
 		})
 	}
 }
+
+func TestFlattenClientIdentityAssertionAuthorizationGrant(t *testing.T) {
+	t.Run("returns nil when grant is nil", func(t *testing.T) {
+		assert.Nil(t, flattenClientIdentityAssertionAuthorizationGrant(nil))
+	})
+
+	t.Run("flattens active=true", func(t *testing.T) {
+		result := flattenClientIdentityAssertionAuthorizationGrant(&management.IdentityAssertionAuthorizationGrant{
+			Active: auth0.Bool(true),
+		})
+
+		assert.Len(t, result, 1)
+		flat, ok := result[0].(map[string]interface{})
+		assert.True(t, ok, "expected result[0] to be a map[string]interface{}")
+		assert.Equal(t, true, flat["active"])
+	})
+
+	t.Run("flattens active=false", func(t *testing.T) {
+		result := flattenClientIdentityAssertionAuthorizationGrant(&management.IdentityAssertionAuthorizationGrant{
+			Active: auth0.Bool(false),
+		})
+
+		assert.Len(t, result, 1)
+		flat, ok := result[0].(map[string]interface{})
+		assert.True(t, ok, "expected result[0] to be a map[string]interface{}")
+		assert.Equal(t, false, flat["active"])
+	})
+}

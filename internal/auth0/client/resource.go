@@ -1661,6 +1661,21 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"identity_assertion_authorization_grant": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configures the client to participate in the Identity Assertion Authorization Grant (ID-JAG) exchange, used for Cross App Access (XAA). (EA only)",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"active": {
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: "Whether the client can exchange ID-JAGs for access tokens. (EA only)",
+						},
+					},
+				},
+			},
 			"token_quota": commons.TokenQuotaSchema(),
 			"skip_non_verifiable_callback_uri_confirmation_prompt": {
 				Type:         schema.TypeString,

@@ -63,6 +63,7 @@ Read-Only:
 - `external_metadata_type` (String)
 - `fedcm_login` (List of Object) (see [below for nested schema](#nestedobjatt--clients--fedcm_login))
 - `grant_types` (List of String)
+- `identity_assertion_authorization_grant` (List of Object) (see [below for nested schema](#nestedobjatt--clients--identity_assertion_authorization_grant))
 - `is_first_party` (Boolean)
 - `is_token_endpoint_ip_header_trusted` (Boolean)
 - `jwks_uri` (String)
@@ -117,6 +118,14 @@ Read-Only:
 
 - `is_enabled` (Boolean)
 
+
+
+<a id="nestedobjatt--clients--identity_assertion_authorization_grant"></a>
+### Nested Schema for `clients.identity_assertion_authorization_grant`
+
+Read-Only:
+
+- `active` (Boolean)
 
 
 <a id="nestedobjatt--clients--my_organization_configuration"></a>

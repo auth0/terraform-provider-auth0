@@ -3675,3 +3675,71 @@ func TestAccClientFedCMLogin(t *testing.T) {
 		},
 	})
 }
+
+const testAccCreateClientWithIdentityAssertionAuthorizationGrant = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - ID JAG - {{.testName}}"
+	app_type        = "regular_web"
+	oidc_conformant = true
+	identity_assertion_authorization_grant {
+		active = true
+	}
+}
+`
+
+const testAccUpdateClientWithIdentityAssertionAuthorizationGrantFalse = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - ID JAG - {{.testName}}"
+	app_type        = "regular_web"
+	oidc_conformant = true
+	identity_assertion_authorization_grant {
+		active = false
+	}
+}
+`
+
+const testAccClientWithoutIdentityAssertionAuthorizationGrant = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - ID JAG - {{.testName}}"
+	app_type        = "regular_web"
+	oidc_conformant = true
+}
+`
+
+func TestAccClientIdentityAssertionAuthorizationGrant(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithIdentityAssertionAuthorizationGrant, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - ID JAG - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "identity_assertion_authorization_grant.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "identity_assertion_authorization_grant.0.active", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithIdentityAssertionAuthorizationGrantFalse, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "identity_assertion_authorization_grant.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "identity_assertion_authorization_grant.0.active", "false"),
+				),
+			},
+			{
+				// Re-enable to exercise toggling active back on before testing removal.
+				Config: acctest.ParseTestName(testAccCreateClientWithIdentityAssertionAuthorizationGrant, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "identity_assertion_authorization_grant.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "identity_assertion_authorization_grant.0.active", "true"),
+				),
+			},
+			{
+				// Dropping the block from config actively removes it via a raw PATCH
+				// ({"identity_assertion_authorization_grant": null}) issued by fetchNullableFields.
+				Config: acctest.ParseTestName(testAccClientWithoutIdentityAssertionAuthorizationGrant, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "identity_assertion_authorization_grant.#", "0"),
+				),
+			},
+		},
+	})
+}

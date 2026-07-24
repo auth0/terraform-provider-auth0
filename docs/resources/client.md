@@ -173,6 +173,7 @@ resource "auth0_client" "mcp_server" {
 - `fedcm_login` (Block List, Max: 1) Federated Credential Management (FedCM) configuration. (EA only) (see [below for nested schema](#nestedblock--fedcm_login))
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
+- `identity_assertion_authorization_grant` (Block List, Max: 1) Configures the client to participate in the Identity Assertion Authorization Grant (ID-JAG) exchange, used for Cross App Access (XAA). (EA only) (see [below for nested schema](#nestedblock--identity_assertion_authorization_grant))
 - `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string. May contain Auth0 dynamic login URI placeholders such as `{organization.metadata.public_login_host}` or `{custom_domain.metadata.public_app_host}`, which are resolved by Auth0 at request time. See https://auth0.com/docs/get-started/applications/application-settings.
 - `is_first_party` (Boolean) Indicates whether this client is a first-party client.
 - `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. Requires the authentication method to be set to `client_secret_post` or `client_secret_basic`. Setting this property when creating the resource, will default the authentication method to `client_secret_post`. To change the authentication method to `client_secret_basic` use the `auth0_client_credentials` resource.
@@ -584,6 +585,14 @@ Required:
 
 - `is_enabled` (Boolean) Whether to show the Google FedCM prompt on Login. (EA only)
 
+
+
+<a id="nestedblock--identity_assertion_authorization_grant"></a>
+### Nested Schema for `identity_assertion_authorization_grant`
+
+Required:
+
+- `active` (Boolean) Whether the client can exchange ID-JAGs for access tokens. (EA only)
 
 
 <a id="nestedblock--jwt_configuration"></a>

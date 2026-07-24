@@ -43,23 +43,24 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		IsTokenEndpointIPHeaderTrusted: value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
 		// TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.
 		//nolint:staticcheck // SA1019 — OIDCBackchannelLogout is deprecated, retained for backward compatibility.
-		OIDCBackchannelLogout:    expandOIDCBackchannelLogout(data),
-		OIDCLogout:               expandOIDCLogout(data),
-		ClientMetadata:           expandClientMetadata(data),
-		RefreshToken:             expandClientRefreshToken(data),
-		JWTConfiguration:         expandClientJWTConfiguration(data),
-		Addons:                   expandClientAddons(data),
-		NativeSocialLogin:        expandClientNativeSocialLogin(data),
-		Mobile:                   expandClientMobile(data),
-		DefaultOrganization:      expandDefaultOrganization(data),
-		TokenExchange:            expandTokenExchange(data),
-		RequireProofOfPossession: value.Bool(config.GetAttr("require_proof_of_possession")),
-		SessionTransfer:          expandSessionTransfer(data),
-		FedCMLogin:               expandClientFedCMLogin(data),
-		ComplianceLevel:          value.String(config.GetAttr("compliance_level")),
-		ThirdPartySecurityMode:   value.String(config.GetAttr("third_party_security_mode")),
-		RedirectionPolicy:        value.String(config.GetAttr("redirection_policy")),
-		TokenQuota:               commons.ExpandTokenQuota(config.GetAttr("token_quota")),
+		OIDCBackchannelLogout:               expandOIDCBackchannelLogout(data),
+		OIDCLogout:                          expandOIDCLogout(data),
+		ClientMetadata:                      expandClientMetadata(data),
+		RefreshToken:                        expandClientRefreshToken(data),
+		JWTConfiguration:                    expandClientJWTConfiguration(data),
+		Addons:                              expandClientAddons(data),
+		NativeSocialLogin:                   expandClientNativeSocialLogin(data),
+		Mobile:                              expandClientMobile(data),
+		DefaultOrganization:                 expandDefaultOrganization(data),
+		TokenExchange:                       expandTokenExchange(data),
+		RequireProofOfPossession:            value.Bool(config.GetAttr("require_proof_of_possession")),
+		SessionTransfer:                     expandSessionTransfer(data),
+		FedCMLogin:                          expandClientFedCMLogin(data),
+		IdentityAssertionAuthorizationGrant: expandClientIdentityAssertionAuthorizationGrant(data),
+		ComplianceLevel:                     value.String(config.GetAttr("compliance_level")),
+		ThirdPartySecurityMode:              value.String(config.GetAttr("third_party_security_mode")),
+		RedirectionPolicy:                   value.String(config.GetAttr("redirection_policy")),
+		TokenQuota:                          commons.ExpandTokenQuota(config.GetAttr("token_quota")),
 		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 		ExpressConfiguration:                           expandExpressConfiguration(data),
 		MyOrganizationConfiguration:                    expandMyOrganizationConfiguration(data),
@@ -392,6 +393,30 @@ func expandClientFedCMLoginGoogle(config cty.Value) *management.FedCMLoginGoogle
 	})
 
 	return &google
+}
+
+func expandClientIdentityAssertionAuthorizationGrant(data *schema.ResourceData) *management.IdentityAssertionAuthorizationGrant {
+	if !data.HasChange("identity_assertion_authorization_grant") {
+		return nil
+	}
+
+	grantConfig := data.GetRawConfig().GetAttr("identity_assertion_authorization_grant")
+
+	// When the block is removed from config we return nil here; the SDK's omitempty would
+	// then drop the field from the typed Update, so active removal is handled separately by
+	// fetchNullableFields, which sends {"identity_assertion_authorization_grant": null} via a raw PATCH.
+	if grantConfig.IsNull() || grantConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var grant management.IdentityAssertionAuthorizationGrant
+
+	grantConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		grant.Active = value.Bool(config.GetAttr("active"))
+		return stop
+	})
+
+	return &grant
 }
 
 func expandClientMobile(data *schema.ResourceData) *management.ClientMobile {
@@ -1154,6 +1179,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"token_exchange":                                       isTokenExchangeNull,
 		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
 		"fedcm_login":                                          isFedCMLoginNull,
+		"identity_assertion_authorization_grant":               isIdentityAssertionAuthorizationGrantNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1289,6 +1315,15 @@ func isFedCMLoginNull(data *schema.ResourceData) bool {
 	}
 
 	rawConfig := data.GetRawConfig().GetAttr("fedcm_login")
+	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
+}
+
+func isIdentityAssertionAuthorizationGrantNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("identity_assertion_authorization_grant") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("identity_assertion_authorization_grant")
 	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
 }
 

@@ -66,7 +66,7 @@ func updateConnection(ctx context.Context, data *schema.ResourceData, meta inter
 		return diagnostics
 	}
 
-	// omitempty drops the nil field from the typed Update, so null it out via a raw PATCH.
+	// The typed Update drops the nil field (omitempty), so null it out via a raw PATCH.
 	if isConnectionCrossAppAccessResourceAppNull(data) {
 		nullFields := map[string]interface{}{"cross_app_access_resource_app": nil}
 		if err := api.Request(ctx, http.MethodPatch, api.URI("connections", data.Id()), nullFields); err != nil {

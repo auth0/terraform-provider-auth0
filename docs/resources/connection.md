@@ -683,6 +683,7 @@ resource "auth0_connection" "okta" {
 - `authentication` (Block List, Max: 1) Configure the purpose of a connection to be used for authentication during login.**Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (see [below for nested schema](#nestedblock--authentication))
 - `connected_accounts` (Block List, Max: 1) Configure the purpose of a connection to be used for connected accounts and Token Vault.**Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (see [below for nested schema](#nestedblock--connected_accounts))
 - `cross_app_access_requesting_app` (Block List, Max: 1) Configure the purpose of a connection to be used as a requesting application authorization server for Cross-App Access (XAA). This is an Early Access feature and requires the `token_vault_xaa` flag to be enabled on your tenant. Only supported on `oidc` and `okta` strategy connections. **Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (EA Only) (see [below for nested schema](#nestedblock--cross_app_access_requesting_app))
+- `cross_app_access_resource_app` (Block List, Max: 1) Resource App settings that apply to this connection. (EA only) (see [below for nested schema](#nestedblock--cross_app_access_resource_app))
 - `display_name` (String) Name used in login screen.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
 - `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars).
@@ -716,6 +717,14 @@ Required:
 Required:
 
 - `active` (Boolean)
+
+
+<a id="nestedblock--cross_app_access_resource_app"></a>
+### Nested Schema for `cross_app_access_resource_app`
+
+Required:
+
+- `status` (String) Whether the connection acts as a Cross App Access resource application. One of `enabled` or `disabled`. (EA only)
 
 
 <a id="nestedblock--options"></a>
@@ -788,6 +797,7 @@ Optional:
 - `mfa` (Block List, Max: 1) Configuration options for multifactor authentication. (see [below for nested schema](#nestedblock--options--mfa))
 - `name` (String) The public name of the email or SMS Connection. In most cases this is the same name as the connection name.
 - `non_persistent_attrs` (Set of String) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here.
+- `oidc_metadata` (String) Additional OIDC metadata to include in the discovery document. Only applicable when strategy=oidc, okta, or samlp. (EA only)
 - `passkey_options` (Block List, Max: 1) Defines options for the passkey authentication method (see [below for nested schema](#nestedblock--options--passkey_options))
 - `password_complexity_options` (Block List, Max: 1) Configuration settings for password complexity. (see [below for nested schema](#nestedblock--options--password_complexity_options))
 - `password_dictionary` (Block List, Max: 1) Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary. (see [below for nested schema](#nestedblock--options--password_dictionary))

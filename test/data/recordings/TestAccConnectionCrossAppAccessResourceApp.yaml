@@ -1,0 +1,444 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 502
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","strategy":"oidc","cross_app_access_resource_app":{"status":"enabled"},"options":{"client_id":"123456","client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","authorization_endpoint":null,"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","type":"back_channel","userinfo_endpoint":null,"token_endpoint":null,"scope":"openid profile"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"client_id":"123456","client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","type":"back_channel","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","scope":"openid profile","oidc_metadata":{"issuer":"https://api.login.yahoo.com","authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"subject_types_supported":["public"],"grant_types_supported":["authorization_code","refresh_token"],"id_token_signing_alg_values_supported":["ES256","RS256"],"scopes_supported":["openid","openid2","profile","email"],"acr_values_supported":["AAL1","AAL2"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"],"claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"response_modes_supported":["query"],"display_values_supported":["page"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false},"schema_version":"oidc-V4","attribute_map":{"mapping_mode":"bind_all"},"connection_settings":{"pkce":"auto"}},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","enabled_clients":[],"realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"],"cross_app_access_resource_app":{"status":"enabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 644.449916ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"],"cross_app_access_resource_app":{"status":"enabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 2.732062084s
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"],"cross_app_access_resource_app":{"status":"enabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 748.650792ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"],"cross_app_access_resource_app":{"status":"enabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 431.344458ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 413
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"cross_app_access_resource_app":{"status":"disabled"},"options":{"client_id":"123456","client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","authorization_endpoint":null,"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","type":"back_channel","userinfo_endpoint":null,"token_endpoint":null,"scope":"openid profile"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"],"cross_app_access_resource_app":{"status":"disabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 552.645375ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"],"cross_app_access_resource_app":{"status":"disabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 941.664542ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"],"cross_app_access_resource_app":{"status":"disabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 436.842958ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"],"cross_app_access_resource_app":{"status":"disabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 441.884959ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 39
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"cross_app_access_resource_app":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 382.841042ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 359
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"options":{"client_id":"123456","client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","authorization_endpoint":null,"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","type":"back_channel","userinfo_endpoint":null,"token_endpoint":null,"scope":"openid profile"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 683.752417ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 401.845292ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_RsufCMYIFGCvOth8","options":{"type":"back_channel","scope":"openid profile","issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":"https://api.login.yahoo.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://api.login.yahoo.com","jwks_uri":"https://api.login.yahoo.com/openid/v1/certs","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","claims_supported":["aud","email","email_verified","birthdate","exp","family_name","given_name","iat","iss","locale","name","sub","auth_time"],"scopes_supported":["openid","openid2","profile","email"],"userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","acr_values_supported":["AAL1","AAL2"],"grant_types_supported":["authorization_code","refresh_token"],"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth","introspection_endpoint":"https://api.login.yahoo.com/oauth2/introspect","subject_types_supported":["public"],"display_values_supported":["page"],"response_modes_supported":["query"],"response_types_supported":["code","token","id_token","code token","code id_token","token id_token","code token id_token"],"token_revocation_endpoint":"https://api.login.yahoo.com/oauth2/revoke","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["ES256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"]},"schema_version":"oidc-V4","token_endpoint":"https://api.login.yahoo.com/oauth2/get_token","userinfo_endpoint":"https://api.login.yahoo.com/openid/v1/userinfo","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://api.login.yahoo.com/oauth2/request_auth"},"strategy":"oidc","name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp","realms":["Acceptance-Test-XAA-TestAccConnectionCrossAppAccessResourceApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 356.106709ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_RsufCMYIFGCvOth8
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2026-07-24T09:56:03.716Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 448.9ms

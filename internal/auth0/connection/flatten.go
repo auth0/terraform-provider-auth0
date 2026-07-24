@@ -78,6 +78,7 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		data.Set("authentication", flattenConnectionAuthentication(connection.GetAuthentication())),
 		data.Set("connected_accounts", flattenConnectionConnectedAccounts(connection.GetConnectedAccounts())),
 		data.Set("cross_app_access_requesting_app", flattenConnectionCrossAppAccessRequestingApp(connection.GetCrossAppAccessRequestingApp())),
+		data.Set("cross_app_access_resource_app", flattenConnectionCrossAppAccessResourceApp(connection.GetCrossAppAccessResourceApp())),
 	)
 
 	if connectionIsEnterprise(connection.GetStrategy()) {
@@ -136,6 +137,20 @@ func flattenConnectionCrossAppAccessRequestingApp(crossAppAccessRequestingApp *m
 
 	flattened := map[string]interface{}{
 		"active": crossAppAccessRequestingApp.GetActive(),
+	}
+
+	return []interface{}{
+		flattened,
+	}
+}
+
+func flattenConnectionCrossAppAccessResourceApp(resourceApp *management.CrossAppAccessResourceApp) []interface{} {
+	if resourceApp == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"status": resourceApp.GetStatus(),
 	}
 
 	return []interface{}{
@@ -861,6 +876,11 @@ func flattenConnectionOptionsOIDC(
 		return nil, diag.FromErr(err)
 	}
 
+	oidcMetadata, err := structure.FlattenJsonToString(options.GetOIDCMetadata())
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
 	optionsMap := map[string]interface{}{
 		"client_id":                         options.GetClientID(),
 		"client_secret":                     options.GetClientSecret(),
@@ -879,6 +899,7 @@ func flattenConnectionOptionsOIDC(
 		"set_user_root_attributes":          options.GetSetUserAttributes(),
 		"non_persistent_attrs":              options.GetNonPersistentAttrs(),
 		"upstream_params":                   upstreamParams,
+		"oidc_metadata":                     oidcMetadata,
 		"token_endpoint_auth_method":        options.GetTokenEndpointAuthMethod(),
 		"token_endpoint_auth_signing_alg":   options.GetTokenEndpointAuthSigningAlg(),
 		"dpop_signing_alg":                  options.GetDPoPSigningAlg(),
@@ -935,6 +956,11 @@ func flattenConnectionOptionsOkta(
 		return nil, diag.FromErr(err)
 	}
 
+	oidcMetadata, err := structure.FlattenJsonToString(options.GetOIDCMetadata())
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
 	optionsMap := map[string]interface{}{
 		"client_id":                         options.GetClientID(),
 		"client_secret":                     options.GetClientSecret(),
@@ -952,6 +978,7 @@ func flattenConnectionOptionsOkta(
 		"type":                              options.GetType(),
 		"send_back_channel_nonce":           options.GetSendBackChannelNonce(),
 		"upstream_params":                   upstreamParams,
+		"oidc_metadata":                     oidcMetadata,
 		"token_endpoint_auth_method":        options.GetTokenEndpointAuthMethod(),
 		"token_endpoint_auth_signing_alg":   options.GetTokenEndpointAuthSigningAlg(),
 		"dpop_signing_alg":                  options.GetDPoPSigningAlg(),
@@ -1175,6 +1202,11 @@ func flattenConnectionOptionsSAML(
 		return nil, diag.FromErr(err)
 	}
 
+	oidcMetadata, err := structure.FlattenJsonToString(options.GetOIDCMetadata())
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
 	optionsMap := map[string]interface{}{
 		"signing_cert":                    options.GetSigningCert(),
 		"protocol_binding":                options.GetProtocolBinding(),
@@ -1198,6 +1230,8 @@ func flattenConnectionOptionsSAML(
 		"strategy_version":                options.GetStrategyVersion(),
 		"fields_map":                      fieldsMap,
 		"upstream_params":                 upstreamParams,
+		"oidc_metadata":                   oidcMetadata,
+		"discovery_url":                   options.GetDiscoveryURL(),
 		"global_token_revocation_jwt_iss": options.GetGlobalTokenRevocationJWTIss(),
 		"global_token_revocation_jwt_sub": options.GetGlobalTokenRevocationJWTSub(),
 		"destination_url":                 options.GetDestinationURL(),

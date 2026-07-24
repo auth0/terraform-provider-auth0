@@ -80,6 +80,7 @@ var resourceSchema = map[string]*schema.Schema{
 	"authentication":                  authenticationSchema,
 	"connected_accounts":              connectedAccountsSchema,
 	"cross_app_access_requesting_app": crossAppAccessRequestingAppSchema,
+	"cross_app_access_resource_app":   crossAppAccessResourceAppSchema,
 }
 
 var optionsSchema = &schema.Schema{
@@ -981,6 +982,13 @@ var optionsSchema = &schema.Schema{
 				Description: "You can pass provider-specific parameters to an identity provider during " +
 					"authentication. The values can either be static per connection or dynamic per user.",
 			},
+			"oidc_metadata": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringIsJSON,
+				Description:  "Additional OIDC metadata to include in the discovery document. Only applicable when strategy=oidc, okta, or samlp. (EA only)",
+			},
 			"global_token_revocation_jwt_iss": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -1687,6 +1695,23 @@ var crossAppAccessRequestingAppSchema = &schema.Schema{
 			"active": {
 				Type:     schema.TypeBool,
 				Required: true,
+			},
+		},
+	},
+}
+
+var crossAppAccessResourceAppSchema = &schema.Schema{
+	Type:        schema.TypeList,
+	Optional:    true,
+	MaxItems:    1,
+	Description: "Resource App settings that apply to this connection. (EA only)",
+	Elem: &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"status": {
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringInSlice([]string{"enabled", "disabled"}, false),
+				Description:  "Whether the connection acts as a Cross App Access resource application. One of `enabled` or `disabled`. (EA only)",
 			},
 		},
 	},

@@ -3,8 +3,10 @@ package connection
 import (
 	"testing"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFlattenConnectionOptions(t *testing.T) {
@@ -98,5 +100,33 @@ func TestFlattenAuthenticationMethodPassword(t *testing.T) {
 		if m["signup_behavior"] != "allow" {
 			t.Errorf("Expected signup_behavior default=allow, got %q", m["signup_behavior"])
 		}
+	})
+}
+
+func TestFlattenConnectionCrossAppAccessResourceApp(t *testing.T) {
+	t.Run("returns nil when resource app is nil", func(t *testing.T) {
+		assert.Nil(t, flattenConnectionCrossAppAccessResourceApp(nil))
+	})
+
+	t.Run("flattens status enabled", func(t *testing.T) {
+		result := flattenConnectionCrossAppAccessResourceApp(&management.CrossAppAccessResourceApp{
+			Status: auth0.String("enabled"),
+		})
+
+		assert.Len(t, result, 1)
+		flat, ok := result[0].(map[string]interface{})
+		assert.True(t, ok, "expected result[0] to be a map[string]interface{}")
+		assert.Equal(t, "enabled", flat["status"])
+	})
+
+	t.Run("flattens status disabled", func(t *testing.T) {
+		result := flattenConnectionCrossAppAccessResourceApp(&management.CrossAppAccessResourceApp{
+			Status: auth0.String("disabled"),
+		})
+
+		assert.Len(t, result, 1)
+		flat, ok := result[0].(map[string]interface{})
+		assert.True(t, ok, "expected result[0] to be a map[string]interface{}")
+		assert.Equal(t, "disabled", flat["status"])
 	})
 }

@@ -1614,21 +1614,21 @@ func NewResource() *schema.Resource {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
-							Description: "Configuration for delegation (impersonation) access using Session Transfer Tokens. (EA Only)",
+							Description: "Configuration for delegation (impersonation) access using Session Transfer Tokens.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"allow_delegated_access": {
 										Type:        schema.TypeBool,
 										Optional:    true,
 										Computed:    true,
-										Description: "Indicates whether delegation (impersonation) access is allowed using Session Transfer Tokens. Defaults to `false`. (EA Only)",
+										Description: "Indicates whether delegation (impersonation) access is allowed using Session Transfer Tokens. Defaults to `false`.",
 									},
 									"enforce_device_binding": {
 										Type:         schema.TypeString,
 										Optional:     true,
 										Computed:     true,
 										ValidateFunc: validation.StringInSlice([]string{"ip", "asn"}, false),
-										Description:  "Indicates the device binding enforcement for delegation (impersonation) access. If set to 'ip', device binding is enforced by IP. If set to 'asn', device binding is enforced by ASN. Defaults to `ip`. (EA Only)",
+										Description:  "Indicates the device binding enforcement for delegation (impersonation) access. If set to 'ip', device binding is enforced by IP. If set to 'asn', device binding is enforced by ASN. Defaults to `ip`.",
 									},
 								},
 							},

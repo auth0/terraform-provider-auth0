@@ -1636,11 +1636,12 @@ var optionsSchema = &schema.Schema{
 }
 
 var authenticationSchema = &schema.Schema{
-	Type:        schema.TypeList,
-	Optional:    true,
-	Computed:    true,
-	MaxItems:    1,
-	Description: "Configure the purpose of a connection to be used for authentication during login.",
+	Type:     schema.TypeList,
+	Optional: true,
+	Computed: true,
+	MaxItems: 1,
+	Description: "Configure the purpose of a connection to be used for authentication during login." +
+		"**Note:** Once configured, removing this block from your configuration is a no-op and will ",
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"active": {
@@ -1652,11 +1653,12 @@ var authenticationSchema = &schema.Schema{
 }
 
 var connectedAccountsSchema = &schema.Schema{
-	Type:        schema.TypeList,
-	Optional:    true,
-	Computed:    true,
-	MaxItems:    1,
-	Description: "Configure the purpose of a connection to be used for connected accounts and Token Vault.",
+	Type:     schema.TypeList,
+	Optional: true,
+	Computed: true,
+	MaxItems: 1,
+	Description: "Configure the purpose of a connection to be used for connected accounts and Token Vault." +
+		"**Note:** Once configured, removing this block from your configuration is a no-op and will ",
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"active": {

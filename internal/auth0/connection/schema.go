@@ -1677,7 +1677,7 @@ var crossAppAccessRequestingAppSchema = &schema.Schema{
 		"requires the `token_vault_xaa` flag to be enabled on your tenant. Only supported on " +
 		"`oidc` and `okta` strategy connections. " +
 		"**Note:** Once configured, removing this block from your configuration is a no-op and will " +
-		"not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it.",
+		"not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (EA Only)",
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"active": {

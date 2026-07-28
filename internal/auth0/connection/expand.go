@@ -131,7 +131,7 @@ func expandConnectionAuthentication(data *schema.ResourceData) *management.Authe
 	}
 
 	rawConfig := data.GetRawConfig().GetAttr("authentication")
-	if rawConfig.IsNull() || !rawConfig.Type().IsListType() || rawConfig.LengthInt() == 0 {
+	if rawConfig.IsNull() || rawConfig.LengthInt() == 0 {
 		return nil
 	}
 

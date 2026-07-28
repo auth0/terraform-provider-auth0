@@ -34,6 +34,7 @@ data "auth0_clients" "first_party_apps" {
 
 - `app_types` (Set of String) Filter clients by application types.
 - `external_client_id` (String) Filter clients by CIMD external client ID URL.
+- `hide_client_secret` (Boolean) Set this to avoid persisting the sensitive `client_secret` value of each client into state, in which case `client_secret` will contain an empty string.
 - `is_first_party` (Boolean) Filter clients by first party status.
 - `name_filter` (String) Filter clients by name (partial matches supported).
 

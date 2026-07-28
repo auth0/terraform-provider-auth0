@@ -1642,7 +1642,7 @@ var authenticationSchema = &schema.Schema{
 	MaxItems: 1,
 	Description: "Configure the purpose of a connection to be used for authentication during login." +
 		"**Note:** Once configured, removing this block from your configuration is a no-op and will " +
-		"not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (EA Only)",
+		"not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it.",
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"active": {
@@ -1660,7 +1660,7 @@ var connectedAccountsSchema = &schema.Schema{
 	MaxItems: 1,
 	Description: "Configure the purpose of a connection to be used for connected accounts and Token Vault." +
 		"**Note:** Once configured, removing this block from your configuration is a no-op and will " +
-		"not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (EA Only)",
+		"not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it.",
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"active": {

@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+FEATURES:
+- `resource/auth0_connection` – Add support for the `cross_app_access_requesting_app` block to configure a connection as a requesting application authorization server for Cross-App Access (XAA). Supported on `oidc` and `okta` strategies (EA only)
+
 ## v1.53.0
 
 ENHANCEMENTS:

@@ -3,6 +3,9 @@
 FEATURES:
 - `resource/auth0_connection` – Add support for the `cross_app_access_requesting_app` block to configure a connection as a requesting application authorization server for Cross-App Access (XAA). Supported on `oidc` and `okta` strategies (EA only)
 
+CHANGED:
+- `resource/auth0_attack_protection` – Bot Detection and Captcha entitlement failures (403 `insufficient_entitlement`) now surface as non-fatal warnings instead of silently skipping. The temporary `insufficient_scope` workaround from #1410 has been replaced with typed error helpers (`IsInsufficientScope`, `IsInsufficientEntitlement`).
+
 ## v1.53.0
 
 ENHANCEMENTS:

@@ -172,7 +172,7 @@ func expandConnectionCrossAppAccessRequestingApp(data *schema.ResourceData) *man
 	}
 
 	rawConfig := data.GetRawConfig().GetAttr("cross_app_access_requesting_app")
-	if rawConfig.IsNull() || !rawConfig.Type().IsListType() || rawConfig.LengthInt() == 0 {
+	if rawConfig.IsNull() || rawConfig.LengthInt() == 0 {
 		return nil
 	}
 

@@ -683,30 +683,32 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 
 	botDetection, err := apiv2.AttackProtection.BotDetection.Get(ctx)
 	if err != nil {
-		if apierr.IsInsufficientScope(err) {
+		switch {
+		case apierr.IsInsufficientScope(err):
 			log.Printf("[INFO] Insufficient scope for Bot Detection; skipping read.")
-		} else if apierr.IsInsufficientEntitlement(err) {
+		case apierr.IsInsufficientEntitlement(err):
 			diags = append(diags, diag.Diagnostic{
 				Severity: diag.Warning,
 				Summary:  "Bot Detection entitlement not available",
 				Detail:   "Bot Detection requires an add-on entitlement not present on this tenant. The configuration was not applied. Contact Auth0 support to enable this feature.",
 			})
-		} else {
+		default:
 			return diag.FromErr(err)
 		}
 	}
 
 	captcha, err := apiv2.AttackProtection.Captcha.Get(ctx)
 	if err != nil {
-		if apierr.IsInsufficientScope(err) {
+		switch {
+		case apierr.IsInsufficientScope(err):
 			log.Printf("[INFO] Insufficient scope for Captcha; skipping read.")
-		} else if apierr.IsInsufficientEntitlement(err) {
+		case apierr.IsInsufficientEntitlement(err):
 			diags = append(diags, diag.Diagnostic{
 				Severity: diag.Warning,
 				Summary:  "Captcha entitlement not available",
 				Detail:   "Captcha requires an add-on entitlement not present on this tenant. The configuration was not applied. Contact Auth0 support to enable this feature.",
 			})
-		} else {
+		default:
 			return diag.FromErr(err)
 		}
 	}
@@ -747,15 +749,16 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 
 	if botDetection := expandBotDetection(data); botDetection != nil {
 		if _, err := apiv2.AttackProtection.BotDetection.Update(ctx, botDetection); err != nil {
-			if apierr.IsInsufficientScope(err) {
+			switch {
+			case apierr.IsInsufficientScope(err):
 				log.Printf("[INFO] Insufficient scope for Bot Detection; skipping update.")
-			} else if apierr.IsInsufficientEntitlement(err) {
+			case apierr.IsInsufficientEntitlement(err):
 				diags = append(diags, diag.Diagnostic{
 					Severity: diag.Warning,
 					Summary:  "Bot Detection entitlement not available",
 					Detail:   "Bot Detection requires an add-on entitlement not present on this tenant. The configuration was not applied. Contact Auth0 support to enable this feature.",
 				})
-			} else {
+			default:
 				result = multierror.Append(result, err)
 			}
 		}
@@ -763,15 +766,16 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 
 	if captcha := expandCaptcha(data); captcha != nil {
 		if _, err := apiv2.AttackProtection.Captcha.Update(ctx, captcha); err != nil {
-			if apierr.IsInsufficientScope(err) {
+			switch {
+			case apierr.IsInsufficientScope(err):
 				log.Printf("[INFO] Insufficient scope for Captcha; skipping update.")
-			} else if apierr.IsInsufficientEntitlement(err) {
+			case apierr.IsInsufficientEntitlement(err):
 				diags = append(diags, diag.Diagnostic{
 					Severity: diag.Warning,
 					Summary:  "Captcha entitlement not available",
 					Detail:   "Captcha requires an add-on entitlement not present on this tenant. The configuration was not applied. Contact Auth0 support to enable this feature.",
 				})
-			} else {
+			default:
 				result = multierror.Append(result, err)
 			}
 		}

@@ -139,6 +139,54 @@ func TestAccNetworkACLDataSourceAuth0Managed(t *testing.T) {
 	})
 }
 
+const testAccGivenAnAuth0ManagedNotMatchNetworkACL = `
+resource "auth0_network_acl" "auth0_managed_not_match_acl" {
+	description = "Auth0 Managed NotMatch DS - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			allow = true
+		}
+		scope = "authentication"
+		not_match {
+			auth0_managed = ["auth0.low_reputation", "auth0.icloud_relay_proxy"]
+		}
+	}
+}
+`
+
+const testAccDataNetworkACLConfigWithAuth0ManagedNotMatch = testAccGivenAnAuth0ManagedNotMatchNetworkACL + `
+data "auth0_network_acl" "auth0_managed_not_match_acl" {
+	depends_on = [resource.auth0_network_acl.auth0_managed_not_match_acl]
+	id = resource.auth0_network_acl.auth0_managed_not_match_acl.id
+}
+`
+
+// TestAccNetworkACLDataSourceAuth0ManagedNotMatch asserts the data source also
+// surfaces auth0_managed from not_match, and preserves multi-value ordering.
+// Both blocks share networkACLRuleMatchSchema and flattenNetworkACLRule, so this
+// covers the other half of that shared path.
+func TestAccNetworkACLDataSourceAuth0ManagedNotMatch(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataNetworkACLConfigWithAuth0ManagedNotMatch, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLDataSourceExists("data.auth0_network_acl.auth0_managed_not_match_acl"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_not_match_acl", "description", fmt.Sprintf("Auth0 Managed NotMatch DS - %s", t.Name())),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_not_match_acl", "rule.0.action.0.allow", "true"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_not_match_acl", "rule.0.not_match.0.auth0_managed.#", "2"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_not_match_acl", "rule.0.not_match.0.auth0_managed.0", "auth0.low_reputation"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.auth0_managed_not_match_acl", "rule.0.not_match.0.auth0_managed.1", "auth0.icloud_relay_proxy"),
+					// The field must not leak into the unset block.
+					resource.TestCheckNoResourceAttr("data.auth0_network_acl.auth0_managed_not_match_acl", "rule.0.match.0.auth0_managed.0"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccNetworkACLDataSource(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

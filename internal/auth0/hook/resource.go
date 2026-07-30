@@ -109,7 +109,7 @@ func readHook(ctx context.Context, data *schema.ResourceData, meta interface{}) 
 
 	hookSecrets, err := api.Hook.Secrets(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(err)
+		return internalError.HandleReadAPIError("auth0_hook", data, err)
 	}
 	configSecrets := data.Get("secrets").(map[string]interface{})
 

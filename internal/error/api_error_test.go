@@ -142,6 +142,25 @@ func TestHandleReadAPIError(t *testing.T) {
 	})
 }
 
+func TestRemoveFromStateWithWarning(t *testing.T) {
+	data := schema.TestResourceDataRaw(t, nil, nil)
+	data.SetId("con_123::client_456")
+
+	diags := RemoveFromStateWithWarning(
+		"auth0_connection_client",
+		data,
+		"the client is no longer enabled on the connection",
+	)
+
+	assert.Empty(t, data.Id())
+	assert.Len(t, diags, 1)
+	assert.False(t, diags.HasError())
+	assert.Equal(t, diag.Warning, diags[0].Severity)
+	assert.Contains(t, diags[0].Detail, "con_123::client_456")
+	assert.Contains(t, diags[0].Detail, "the client is no longer enabled on the connection")
+	assert.Contains(t, diags[0].Detail, "terraform state rm auth0_connection_client.<name>")
+}
+
 func TestIsStatusNotFound(t *testing.T) {
 	testCases := []struct {
 		name     string

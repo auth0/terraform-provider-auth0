@@ -1,15 +1,26 @@
 package error
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
+	managementv2 "github.com/auth0/go-auth0/v2/management"
+	"github.com/auth0/go-auth0/v2/management/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stretchr/testify/assert"
 )
+
+// newV2NotFoundError builds the error the v2 SDK returns on a 404, which wraps a
+// *core.APIError instead of implementing the v1 management.Error interface.
+func newV2NotFoundError(body string) error {
+	return &managementv2.NotFoundError{
+		APIError: core.NewAPIError(http.StatusNotFound, nil, errors.New(body)),
+	}
+}
 
 var _ management.Error = &testManagementError{}
 
@@ -99,4 +110,91 @@ func TestHandleReadAPIError(t *testing.T) {
 		assert.Equal(t, "id", data.Id())
 		assert.True(t, diags.HasError())
 	})
+
+	t.Run("it removes the resource from state and returns a warning on a v2 SDK 404", func(t *testing.T) {
+		data := schema.TestResourceDataRaw(t, nil, nil)
+		data.SetId("org_123::con_123")
+
+		diags := HandleReadAPIError(
+			"auth0_organization_connection",
+			data,
+			newV2NotFoundError(`{"statusCode":404,"error":"Not Found","message":"No connection found by that id"}`),
+		)
+
+		assert.Empty(t, data.Id())
+		assert.Len(t, diags, 1)
+		assert.False(t, diags.HasError())
+		assert.Equal(t, diag.Warning, diags[0].Severity)
+		assert.Contains(t, diags[0].Detail, "auth0_organization_connection")
+		assert.Contains(t, diags[0].Detail, "org_123::con_123")
+	})
+
+	t.Run("it returns the error and keeps the resource in state on a non-404 v2 SDK error", func(t *testing.T) {
+		data := schema.TestResourceDataRaw(t, nil, nil)
+		data.SetId("id")
+
+		diags := HandleReadAPIError("auth0_organization_connection", data, &managementv2.BadRequestError{
+			APIError: core.NewAPIError(http.StatusBadRequest, nil, errors.New("bad request")),
+		})
+
+		assert.Equal(t, "id", data.Id())
+		assert.True(t, diags.HasError())
+	})
+}
+
+func TestIsStatusNotFound(t *testing.T) {
+	testCases := []struct {
+		name     string
+		givenErr error
+		expected bool
+	}{
+		{
+			name:     "nil error",
+			givenErr: nil,
+			expected: false,
+		},
+		{
+			name:     "v1 SDK 404",
+			givenErr: testManagementError{StatusCode: http.StatusNotFound},
+			expected: true,
+		},
+		{
+			name:     "v1 SDK 400",
+			givenErr: testManagementError{StatusCode: http.StatusBadRequest},
+			expected: false,
+		},
+		{
+			name:     "v2 SDK 404",
+			givenErr: newV2NotFoundError(`{"statusCode":404,"error":"Not Found"}`),
+			expected: true,
+		},
+		{
+			name:     "v2 SDK bare core.APIError with a 404",
+			givenErr: core.NewAPIError(http.StatusNotFound, nil, errors.New("not found")),
+			expected: true,
+		},
+		{
+			name:     "v2 SDK 404 wrapped by fmt.Errorf",
+			givenErr: fmt.Errorf("reading connection: %w", newV2NotFoundError(`{"statusCode":404}`)),
+			expected: true,
+		},
+		{
+			name: "v2 SDK 400",
+			givenErr: &managementv2.BadRequestError{
+				APIError: core.NewAPIError(http.StatusBadRequest, nil, errors.New("bad request")),
+			},
+			expected: false,
+		},
+		{
+			name:     "plain error",
+			givenErr: errors.New("404"),
+			expected: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			assert.Equal(t, testCase.expected, IsStatusNotFound(testCase.givenErr))
+		})
+	}
 }

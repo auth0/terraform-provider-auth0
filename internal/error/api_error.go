@@ -1,10 +1,12 @@
 package error
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/auth0/go-auth0/v2/management/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -52,8 +54,29 @@ func HandleReadAPIError(resourceType string, data *schema.ResourceData, err erro
 }
 
 // IsStatusNotFound checks to see if the error from the Auth0 Management API is a 404.
+// It understands both the v1 SDK error type, which exposes the status code through the
+// management.Error interface, and the v2 SDK error types, which wrap a *core.APIError
+// carrying the status code (e.g. *management.NotFoundError).
 func IsStatusNotFound(err error) bool {
-	if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+	return IsStatusCode(err, http.StatusNotFound)
+}
+
+// IsStatusCode checks whether the error from the Auth0 Management API carries the
+// given HTTP status code, regardless of whether it originated from the v1 or v2 SDK.
+func IsStatusCode(err error, statusCode int) bool {
+	if err == nil {
+		return false
+	}
+
+	// v1 SDK: errors implement management.Error with a Status() method.
+	var mErr management.Error
+	if errors.As(err, &mErr) && mErr.Status() == statusCode {
+		return true
+	}
+
+	// v2 SDK: errors embed *core.APIError, which holds the status code in a field.
+	var apiErr *core.APIError
+	if errors.As(err, &apiErr) && apiErr.StatusCode == statusCode {
 		return true
 	}
 

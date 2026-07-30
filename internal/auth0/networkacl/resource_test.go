@@ -339,8 +339,10 @@ func TestAccNetworkACLValidation(t *testing.T) {
 				ExpectError: regexp.MustCompile("Missing required argument"),
 			},
 			{
-				Config:      acctest.ParseTestName(testAccNetworkACLMissingRedirectURI, t.Name()),
-				ExpectError: regexp.MustCompile("Missing required property: redirect_uri"),
+				Config: acctest.ParseTestName(testAccNetworkACLMissingRedirectURI, t.Name()),
+				// The API reworded this from "Missing required property: redirect_uri";
+				// match on the property name alone so either phrasing satisfies it.
+				ExpectError: regexp.MustCompile("redirect_uri"),
 			},
 			{
 				Config:      acctest.ParseTestName(testAccNetworkACLInvalidScope, t.Name()),
@@ -516,8 +518,8 @@ resource "auth0_network_acl" "my_acl" {
 }
 `
 
-// auth0_managed on match together with a *different* matcher on not_match is
-// legal - the mutual-exclusivity rule only applies to auth0_managed itself.
+// auth0_managed on match combined with a different matcher on not_match, to prove
+// the field composes with the sibling matchers across both blocks.
 const testAccNetworkACLAuth0ManagedMatchWithOtherNotMatch = `
 resource "auth0_network_acl" "my_acl" {
 	description = "Auth0 Managed Mixed Blocks - {{.testName}}"
@@ -770,26 +772,6 @@ resource "auth0_network_acl" "my_acl" {
 }
 `
 
-const testAccNetworkACLAuth0ManagedMutualExclusivity = `
-resource "auth0_network_acl" "my_acl" {
-	description = "Auth0 Managed Mutual Exclusivity - {{.testName}}"
-	active = true
-	priority = 7
-	rule {
-		action {
-			block = true
-		}
-		scope = "authentication"
-		match {
-			auth0_managed = ["auth0.icloud_relay_proxy"]
-		}
-		not_match {
-			auth0_managed = ["auth0.low_reputation"]
-		}
-	}
-}
-`
-
 // auth0ManagedPatternConfig builds a config whose sole variable is the
 // auth0_managed value, so each pattern case differs only in the input.
 func auth0ManagedPatternConfig(value string) string {
@@ -811,19 +793,16 @@ resource "auth0_network_acl" "my_acl" {
 `, value)
 }
 
-// TestAccNetworkACLAuth0ManagedValidation covers the client-side validation for
-// the auth0_managed field: the identifier pattern and the mutual-exclusivity
-// invariant between match and not_match. Neither case reaches the API.
+// TestAccNetworkACLAuth0ManagedValidation covers the only client-side validation
+// for the auth0_managed field: the identifier pattern. It never reaches the API.
+// Every other constraint (allowed values, uniqueness, and whether the field may
+// appear on both match and not_match) is left to the Management API.
 func TestAccNetworkACLAuth0ManagedValidation(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config:      acctest.ParseTestName(testAccNetworkACLAuth0ManagedInvalidPattern, t.Name()),
 				ExpectError: regexp.MustCompile("must be an Auth0-curated blocklist identifier"),
-			},
-			{
-				Config:      acctest.ParseTestName(testAccNetworkACLAuth0ManagedMutualExclusivity, t.Name()),
-				ExpectError: regexp.MustCompile("'auth0_managed' can only be set on one of 'match' or 'not_match'"),
 			},
 		},
 	})
@@ -862,11 +841,9 @@ func TestAccNetworkACLAuth0ManagedPatternBoundaries(t *testing.T) {
 	acctest.Test(t, resource.TestCase{Steps: steps})
 }
 
-// The mutual-exclusivity check must not fire when only one block sets
-// auth0_managed, even if the other block sets a different matcher.
-const testAccNetworkACLAuth0ManagedMutualExclusivityNotMatchOnly = `
+const testAccNetworkACLAuth0ManagedNotMatchWithSiblingMatch = `
 resource "auth0_network_acl" "my_acl" {
-	description = "Auth0 Managed Mutex NotMatch Only - {{.testName}}"
+	description = "Auth0 Managed NotMatch Sibling - {{.testName}}"
 	active = true
 	priority = 7
 	rule {
@@ -884,20 +861,56 @@ resource "auth0_network_acl" "my_acl" {
 }
 `
 
-// TestAccNetworkACLAuth0ManagedMutexNoFalsePositive guards against the
-// mutual-exclusivity check over-reaching: auth0_managed on one block plus a
-// different matcher on the other must be accepted.
-func TestAccNetworkACLAuth0ManagedMutexNoFalsePositive(t *testing.T) {
+// The Management API accepts auth0_managed on match and not_match simultaneously
+// (verified against an EA-entitled tenant), so the provider must not reject it.
+const testAccNetworkACLAuth0ManagedOnBothBlocks = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Both Blocks - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.icloud_relay_proxy"]
+		}
+		not_match {
+			auth0_managed = ["auth0.low_reputation"]
+		}
+	}
+}
+`
+
+// TestAccNetworkACLAuth0ManagedBlockPlacement asserts the provider imposes no
+// placement restriction of its own on auth0_managed: it round-trips on either
+// block alone and on both blocks at once.
+func TestAccNetworkACLAuth0ManagedBlockPlacement(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedMutualExclusivityNotMatchOnly, t.Name()),
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedNotMatchWithSiblingMatch, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					checkNetworkACLExists("auth0_network_acl.my_acl"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.asns.0", "9453"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.#", "1"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.0", "auth0.low_reputation"),
 				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedOnBothBlocks, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.0", "auth0.icloud_relay_proxy"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.0", "auth0.low_reputation"),
+				),
+			},
+			{
+				ResourceName:      "auth0_network_acl.my_acl",
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 		},
 	})

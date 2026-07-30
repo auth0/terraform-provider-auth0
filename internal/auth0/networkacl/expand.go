@@ -91,25 +91,7 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 		networkACL.Rule.Scope = auth0.String(scope)
 	}
 
-	if err := validateAuth0ManagedMutualExclusivity(networkACL.Rule.Match, networkACL.Rule.NotMatch); err != nil {
-		return nil, err
-	}
-
 	return networkACL, nil
-}
-
-// validateAuth0ManagedMutualExclusivity ensures the auth0_managed curated blocklists
-// are configured on only one of match/not_match within a rule, mirroring the
-// documented API invariant.
-func validateAuth0ManagedMutualExclusivity(match, notMatch *management.NetworkACLRuleMatch) error {
-	matchSet := match != nil && match.Auth0Managed != nil && len(*match.Auth0Managed) > 0
-	notMatchSet := notMatch != nil && notMatch.Auth0Managed != nil && len(*notMatch.Auth0Managed) > 0
-
-	if matchSet && notMatchSet {
-		return errors.New("'auth0_managed' can only be set on one of 'match' or 'not_match' within a rule")
-	}
-
-	return nil
 }
 
 func expandNetworkACLRuleMatch(m map[string]interface{}) *management.NetworkACLRuleMatch {

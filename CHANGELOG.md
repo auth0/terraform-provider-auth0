@@ -4,7 +4,7 @@ FEATURES:
 - `resource/auth0_connection` – Add support for the `cross_app_access_requesting_app` block to configure a connection as a requesting application authorization server for Cross-App Access (XAA). Supported on `oidc` and `okta` strategies (EA only)
 
 CHANGED:
-- `resource/auth0_attack_protection` – Bot Detection and Captcha entitlement failures (403 `insufficient_entitlement`) now surface as non-fatal warnings instead of silently skipping. The temporary `insufficient_scope` workaround from #1410 has been replaced with typed error helpers (`IsInsufficientScope`, `IsInsufficientEntitlement`).
+- `resource/auth0_attack_protection` – Bot Detection and Captcha failures caused by a missing tenant entitlement (403 `insufficient_entitlement`) now surface as non-fatal warnings naming the gated sub-feature, instead of being silently skipped. The remaining sub-features continue to apply, warnings are also surfaced alongside any fatal error raised later in the same operation, and error-code detection is now based on the API response body rather than string matching on the error message ([#1410](https://github.com/auth0/terraform-provider-auth0/pull/1410)).
 
 ## v1.53.0
 

@@ -1,0 +1,75 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 231
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"description":"Auth0 Managed Unknown Category - TestAccNetworkACLAuth0ManagedAPIRejections","active":true,"priority":9,"rule":{"action":{"block":true},"match":{"auth0_managed":["auth0.totally_made_up"]},"scope":"authentication"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 211
+        uncompressed: false
+        body: '{"statusCode":400,"error":"Bad Request","message":"Invalid curated list name(s): auth0.totally_made_up. Allowed curated list names are: auth0.low_reputation, auth0.icloud_relay_proxy","errorCode":"invalid_body"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 400 Bad Request
+        code: 400
+        duration: 267.317ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 247
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"description":"Auth0 Managed Duplicates - TestAccNetworkACLAuth0ManagedAPIRejections","active":true,"priority":9,"rule":{"action":{"block":true},"match":{"auth0_managed":["auth0.low_reputation","auth0.low_reputation"]},"scope":"authentication"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 190
+        uncompressed: false
+        body: '{"statusCode":400,"error":"Bad Request","message":"Payload validation error: ''Array items are not unique (indexes 0 and 1)'' on property rule.match.auth0_managed.","errorCode":"invalid_body"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 400 Bad Request
+        code: 400
+        duration: 267.935917ms

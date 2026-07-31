@@ -691,3 +691,152 @@ func TestAccAttackProtectionCaptcha(t *testing.T) {
 		},
 	})
 }
+
+// ============================================================================.
+
+// Entitlement handling: a tenant without the Bot Detection / Captcha add-on
+// entitlement receives a 403 with errorCode "insufficient_entitlement" from
+// GET and PATCH on the v2 attack-protection endpoints. The provider must
+// surface these as non-fatal warnings and keep applying the remaining
+// sub-features, rather than failing the apply.
+//
+// Recorded against a non-entitled tenant; replays from the cassette.
+
+const testAccEntitlementBotDetection = `
+resource "auth0_attack_protection" "my_protection" {
+	bot_detection {
+		bot_detection_level             = "low"
+		challenge_password_policy       = "when_risky"
+		challenge_passwordless_policy   = "when_risky"
+		challenge_password_reset_policy = "when_risky"
+		monitoring_mode_enabled         = true
+		allowlist                       = ["127.0.0.1"]
+	}
+
+	brute_force_protection {
+		enabled      = true
+		max_attempts = 5
+		mode         = "count_per_identifier_and_ip"
+		allowlist    = ["127.0.0.1"]
+		shields      = ["block"]
+	}
+}
+`
+
+// TestAccAttackProtectionBotDetectionInsufficientEntitlement asserts that the
+// 403 insufficient_entitlement path is non-fatal: the apply succeeds, the
+// gated bot_detection block is absent from state (the API returned nothing to
+// store), and the ungated brute_force_protection block is still applied.
+//
+// ExpectNonEmptyPlan is required because the gated block cannot be persisted,
+// so the config/state difference remains after apply.
+func TestAccAttackProtectionBotDetectionInsufficientEntitlement(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             testAccEntitlementBotDetection,
+				ExpectNonEmptyPlan: true,
+				Check: resource.ComposeTestCheckFunc(
+					// The gated sub-feature is not persisted: the 403 leaves it unset.
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.#", "0"),
+					// The ungated sub-feature is still applied: no short-circuit.
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.max_attempts", "5"),
+				),
+			},
+		},
+	})
+}
+
+const testAccEntitlementCaptcha = `
+resource "auth0_attack_protection" "my_protection" {
+	captcha {
+		active_provider_id = "recaptcha_v2"
+		recaptcha_v2 {
+			site_key = "test-site-key-v2"
+			secret   = "test-secret-v2"
+		}
+	}
+
+	brute_force_protection {
+		enabled      = true
+		max_attempts = 5
+		mode         = "count_per_identifier_and_ip"
+		allowlist    = ["127.0.0.1"]
+		shields      = ["block"]
+	}
+}
+`
+
+// TestAccAttackProtectionCaptchaInsufficientEntitlement is the Captcha
+// equivalent of the Bot Detection entitlement test above.
+func TestAccAttackProtectionCaptchaInsufficientEntitlement(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             testAccEntitlementCaptcha,
+				ExpectNonEmptyPlan: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "0"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.enabled", "true"),
+				),
+			},
+		},
+	})
+}
+
+const testAccEntitlementBotDetectionAndCaptcha = `
+resource "auth0_attack_protection" "my_protection" {
+	bot_detection {
+		bot_detection_level     = "low"
+		monitoring_mode_enabled = true
+		allowlist               = ["127.0.0.1"]
+	}
+
+	captcha {
+		active_provider_id = "recaptcha_v2"
+		recaptcha_v2 {
+			site_key = "test-site-key-v2"
+			secret   = "test-secret-v2"
+		}
+	}
+
+	suspicious_ip_throttling {
+		enabled   = true
+		allowlist = ["192.168.1.1"]
+		shields   = ["admin_notification", "block"]
+
+		pre_login {
+			max_attempts = 5
+			rate         = 864000
+		}
+
+		pre_user_registration {
+			max_attempts = 5
+			rate         = 1200
+		}
+	}
+}
+`
+
+// TestAccAttackProtectionMultipleInsufficientEntitlements asserts diagnostic
+// accumulation: when both gated sub-features return 403 in the same apply,
+// neither short-circuits the other and the ungated sub-feature still applies.
+func TestAccAttackProtectionMultipleInsufficientEntitlements(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             testAccEntitlementBotDetectionAndCaptcha,
+				ExpectNonEmptyPlan: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "bot_detection.#", "0"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "captcha.#", "0"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.0.enabled", "true"),
+				),
+			},
+		},
+	})
+}

@@ -339,8 +339,10 @@ func TestAccNetworkACLValidation(t *testing.T) {
 				ExpectError: regexp.MustCompile("Missing required argument"),
 			},
 			{
-				Config:      acctest.ParseTestName(testAccNetworkACLMissingRedirectURI, t.Name()),
-				ExpectError: regexp.MustCompile("Missing required property: redirect_uri"),
+				Config: acctest.ParseTestName(testAccNetworkACLMissingRedirectURI, t.Name()),
+				// The API reworded this from "Missing required property: redirect_uri";
+				// match on the property name alone so either phrasing satisfies it.
+				ExpectError: regexp.MustCompile("redirect_uri"),
 			},
 			{
 				Config:      acctest.ParseTestName(testAccNetworkACLInvalidScope, t.Name()),
@@ -404,6 +406,511 @@ func TestAccNetworkACLNewFields(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.connecting_ipv4_cidrs.#", "1"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.connecting_ipv4_cidrs.0", "20.0.0.0/8"),
 				),
+			},
+		},
+	})
+}
+
+const testAccNetworkACLWithAuth0Managed = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.icloud_relay_proxy"]
+		}
+	}
+}
+`
+
+const testAccNetworkACLWithAuth0ManagedNotMatch = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed NotMatch - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			allow = true
+		}
+		scope = "authentication"
+		not_match {
+			auth0_managed = ["auth0.low_reputation"]
+		}
+	}
+}
+`
+
+// TestAccNetworkACLAuth0Managed exercises a create/update round-trip of the
+// Early Access auth0_managed curated blocklists field on both match and
+// not_match.
+func TestAccNetworkACLAuth0Managed(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLWithAuth0Managed, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLExists("auth0_network_acl.my_acl"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "description", fmt.Sprintf("Auth0 Managed - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "active", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "priority", "7"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.block", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.scope", "authentication"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.0", "auth0.icloud_relay_proxy"),
+				),
+			},
+			{
+				ResourceName:      "auth0_network_acl.my_acl",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLWithAuth0ManagedNotMatch, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "description", fmt.Sprintf("Auth0 Managed NotMatch - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.allow", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.0", "auth0.low_reputation"),
+				),
+			},
+		},
+	})
+}
+
+const testAccNetworkACLAuth0ManagedMultipleValues = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Multiple - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			log = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.low_reputation", "auth0.icloud_relay_proxy"]
+		}
+	}
+}
+`
+
+const testAccNetworkACLAuth0ManagedWithSiblingFields = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed With Siblings - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.low_reputation"]
+			asns = [9453]
+			geo_country_codes = ["US"]
+		}
+	}
+}
+`
+
+// auth0_managed on match combined with a different matcher on not_match, to prove
+// the field composes with the sibling matchers across both blocks.
+const testAccNetworkACLAuth0ManagedMatchWithOtherNotMatch = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Mixed Blocks - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.icloud_relay_proxy"]
+		}
+		not_match {
+			asns = [9453]
+		}
+	}
+}
+`
+
+// Dropping auth0_managed must clear it server-side and leave no residue in
+// state, so the follow-up plan stays empty.
+const testAccNetworkACLAuth0ManagedRemoved = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Removed - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			asns = [9453]
+		}
+	}
+}
+`
+
+// TestAccNetworkACLAuth0ManagedLifecycle walks the auth0_managed field through
+// multi-value, sibling-field, mixed-block and removal states. Each step also
+// asserts idempotency implicitly: the test framework fails a step whose
+// post-apply plan is non-empty, which is the no-perma-diff guarantee.
+func TestAccNetworkACLAuth0ManagedLifecycle(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedMultipleValues, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLExists("auth0_network_acl.my_acl"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.log", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.#", "2"),
+					// Ordering must survive the round-trip: auth0_managed is a
+					// TypeList, so a reordered response would surface as a diff.
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.0", "auth0.low_reputation"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.1", "auth0.icloud_relay_proxy"),
+				),
+			},
+			{
+				ResourceName:      "auth0_network_acl.my_acl",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedWithSiblingFields, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.0", "auth0.low_reputation"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.asns.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.asns.0", "9453"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.geo_country_codes.0", "US"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedMatchWithOtherNotMatch, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.0", "auth0.icloud_relay_proxy"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.asns.0", "9453"),
+					resource.TestCheckNoResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.asns.0", "9453"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccNetworkACLAuth0ManagedInactiveRedirect = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Inactive Redirect - {{.testName}}"
+	active = false
+	priority = 8
+	rule {
+		action {
+			redirect = true
+			redirect_uri = "https://example.com/blocked"
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.icloud_relay_proxy"]
+		}
+	}
+}
+`
+
+const testAccNetworkACLAuth0ManagedTenantScope = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Tenant Scope - {{.testName}}"
+	active = true
+	priority = 8
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match {
+			auth0_managed = ["auth0.low_reputation"]
+		}
+	}
+}
+`
+
+const testAccNetworkACLAuth0ManagedManagementScope = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Management Scope - {{.testName}}"
+	active = true
+	priority = 8
+	rule {
+		action {
+			allow = true
+		}
+		scope = "management"
+		not_match {
+			auth0_managed = ["auth0.icloud_relay_proxy"]
+		}
+	}
+}
+`
+
+// TestAccNetworkACLAuth0ManagedScopesAndActions proves auth0_managed is
+// orthogonal to the existing scope/action/active handling.
+func TestAccNetworkACLAuth0ManagedScopesAndActions(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedInactiveRedirect, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLExists("auth0_network_acl.my_acl"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "active", "false"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.redirect", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.redirect_uri", "https://example.com/blocked"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.0", "auth0.icloud_relay_proxy"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedTenantScope, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "active", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.scope", "tenant"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.block", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.0", "auth0.low_reputation"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedManagementScope, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.scope", "management"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.allow", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.0", "auth0.icloud_relay_proxy"),
+				),
+			},
+		},
+	})
+}
+
+// The provider validates the auth0_managed *pattern* but deliberately does not
+// enumerate the EA value set, so these two cases are rejected by the API rather
+// than client-side. They assert the server error is surfaced faithfully.
+const testAccNetworkACLAuth0ManagedUnknownCategory = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Unknown Category - {{.testName}}"
+	active = true
+	priority = 9
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.totally_made_up"]
+		}
+	}
+}
+`
+
+const testAccNetworkACLAuth0ManagedDuplicateValues = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Duplicates - {{.testName}}"
+	active = true
+	priority = 9
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.low_reputation", "auth0.low_reputation"]
+		}
+	}
+}
+`
+
+// TestAccNetworkACLAuth0ManagedAPIRejections covers constraints enforced by the
+// Management API but intentionally not mirrored client-side.
+func TestAccNetworkACLAuth0ManagedAPIRejections(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccNetworkACLAuth0ManagedUnknownCategory, t.Name()),
+				ExpectError: regexp.MustCompile("Invalid curated list name"),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccNetworkACLAuth0ManagedDuplicateValues, t.Name()),
+				ExpectError: regexp.MustCompile("Array items are not unique"),
+			},
+		},
+	})
+}
+
+const testAccNetworkACLAuth0ManagedInvalidPattern = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Invalid - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["not_a_valid_identifier"]
+		}
+	}
+}
+`
+
+// auth0ManagedPatternConfig builds a config whose sole variable is the
+// auth0_managed value, so each pattern case differs only in the input.
+func auth0ManagedPatternConfig(value string) string {
+	return fmt.Sprintf(`
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Pattern - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = [%q]
+		}
+	}
+}
+`, value)
+}
+
+// TestAccNetworkACLAuth0ManagedValidation covers the only client-side validation
+// for the auth0_managed field: the identifier pattern. It never reaches the API.
+// Every other constraint (allowed values, uniqueness, and whether the field may
+// appear on both match and not_match) is left to the Management API.
+func TestAccNetworkACLAuth0ManagedValidation(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccNetworkACLAuth0ManagedInvalidPattern, t.Name()),
+				ExpectError: regexp.MustCompile("must be an Auth0-curated blocklist identifier"),
+			},
+		},
+	})
+}
+
+// TestAccNetworkACLAuth0ManagedPatternBoundaries exercises the boundaries of the
+// ^auth0\.[^\.\s]+$ validator. Every case must be rejected before any API call,
+// so this test needs no HTTP interactions.
+func TestAccNetworkACLAuth0ManagedPatternBoundaries(t *testing.T) {
+	invalidValues := []struct {
+		name  string
+		value string
+	}{
+		{"no auth0 prefix", "icloud_relay_proxy"},
+		{"wrong prefix", "okta.low_reputation"},
+		{"no dot separator", "auth0"},
+		{"empty name after dot", "auth0."},
+		{"internal dot", "auth0.icloud.relay"},
+		{"trailing dot", "auth0.low_reputation."},
+		{"embedded space", "auth0.low reputation"},
+		{"leading space", " auth0.low_reputation"},
+		{"trailing space", "auth0.low_reputation "},
+		{"tab character", "auth0.low\treputation"},
+		{"uppercase prefix", "AUTH0.LOW_REPUTATION"},
+		{"empty string", ""},
+	}
+
+	steps := make([]resource.TestStep, 0, len(invalidValues))
+	for _, invalid := range invalidValues {
+		steps = append(steps, resource.TestStep{
+			Config:      acctest.ParseTestName(auth0ManagedPatternConfig(invalid.value), t.Name()),
+			ExpectError: regexp.MustCompile("must be an Auth0-curated blocklist identifier"),
+		})
+	}
+
+	acctest.Test(t, resource.TestCase{Steps: steps})
+}
+
+const testAccNetworkACLAuth0ManagedNotMatchWithSiblingMatch = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed NotMatch Sibling - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			asns = [9453]
+		}
+		not_match {
+			auth0_managed = ["auth0.low_reputation"]
+		}
+	}
+}
+`
+
+// The Management API accepts auth0_managed on match and not_match simultaneously
+// (verified against an EA-entitled tenant), so the provider must not reject it.
+const testAccNetworkACLAuth0ManagedOnBothBlocks = `
+resource "auth0_network_acl" "my_acl" {
+	description = "Auth0 Managed Both Blocks - {{.testName}}"
+	active = true
+	priority = 7
+	rule {
+		action {
+			block = true
+		}
+		scope = "authentication"
+		match {
+			auth0_managed = ["auth0.icloud_relay_proxy"]
+		}
+		not_match {
+			auth0_managed = ["auth0.low_reputation"]
+		}
+	}
+}
+`
+
+// TestAccNetworkACLAuth0ManagedBlockPlacement asserts the provider imposes no
+// placement restriction of its own on auth0_managed: it round-trips on either
+// block alone and on both blocks at once.
+func TestAccNetworkACLAuth0ManagedBlockPlacement(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedNotMatchWithSiblingMatch, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLExists("auth0_network_acl.my_acl"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.asns.0", "9453"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.0", "auth0.low_reputation"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLAuth0ManagedOnBothBlocks, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.auth0_managed.0", "auth0.icloud_relay_proxy"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.#", "1"),
+					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.auth0_managed.0", "auth0.low_reputation"),
+				),
+			},
+			{
+				ResourceName:      "auth0_network_acl.my_acl",
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 		},
 	})

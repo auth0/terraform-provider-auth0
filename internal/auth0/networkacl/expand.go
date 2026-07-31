@@ -101,6 +101,10 @@ func expandNetworkACLRuleMatch(m map[string]interface{}) *management.NetworkACLR
 
 	match := &management.NetworkACLRuleMatch{}
 
+	if v, ok := m["auth0_managed"].([]interface{}); ok {
+		match.Auth0Managed = expandStringList(v)
+	}
+
 	if asns, ok := m["asns"].([]interface{}); ok {
 		if len(asns) == 0 {
 			match.Asns = nil

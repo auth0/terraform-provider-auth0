@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -16,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	apierr "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_attack_protection resource.
@@ -655,6 +655,29 @@ func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
 	}
 }
 
+// Consequences of a missing entitlement, phrased per operation: a read only
+// failed to fetch the remote configuration, whereas an update failed to write
+// the configured values.
+const (
+	entitlementReadConsequence   = "its current configuration could not be read"
+	entitlementUpdateConsequence = "the configuration was not applied"
+)
+
+// entitlementWarning builds the non-fatal diagnostic surfaced when the tenant
+// lacks the add-on entitlement for an attack protection sub-feature. Pass the
+// consequence matching the operation that failed.
+func entitlementWarning(feature, consequence string) diag.Diagnostic {
+	return diag.Diagnostic{
+		Severity: diag.Warning,
+		Summary:  fmt.Sprintf("%s entitlement not available", feature),
+		Detail: fmt.Sprintf(
+			"%s requires an add-on entitlement not present on this tenant, so %s. "+
+				"Contact Auth0 support to enable this feature.",
+			feature, consequence,
+		),
+	}
+}
+
 func createAttackProtection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	data.SetId(id.UniqueId())
 	return updateAttackProtection(ctx, data, meta)
@@ -664,35 +687,45 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 	api := meta.(*config.Config).GetAPI()
 	apiv2 := meta.(*config.Config).GetAPIV2()
 
+	var diags diag.Diagnostics
+
 	breachedPasswords, err := api.AttackProtection.GetBreachedPasswordDetection(ctx)
 	if err != nil {
-		return diag.FromErr(err)
+		return append(diags, diag.FromErr(err)...)
 	}
 
 	bruteForce, err := api.AttackProtection.GetBruteForceProtection(ctx)
 	if err != nil {
-		return diag.FromErr(err)
+		return append(diags, diag.FromErr(err)...)
 	}
 
 	ipThrottling, err := api.AttackProtection.GetSuspiciousIPThrottling(ctx)
 	if err != nil {
-		return diag.FromErr(err)
+		return append(diags, diag.FromErr(err)...)
 	}
 
 	botDetection, err := apiv2.AttackProtection.BotDetection.Get(ctx)
 	if err != nil {
-		if !strings.Contains(err.Error(), "insufficient_scope") {
-			return diag.FromErr(err)
+		switch {
+		case apierr.IsInsufficientScope(err):
+			log.Printf("[INFO] Insufficient scope for Bot Detection; skipping read.")
+		case apierr.IsInsufficientEntitlement(err):
+			diags = append(diags, entitlementWarning("Bot Detection", entitlementReadConsequence))
+		default:
+			return append(diags, diag.FromErr(err)...)
 		}
-		log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
 	}
 
 	captcha, err := apiv2.AttackProtection.Captcha.Get(ctx)
 	if err != nil {
-		if !strings.Contains(err.Error(), "insufficient_scope") {
-			return diag.FromErr(err)
+		switch {
+		case apierr.IsInsufficientScope(err):
+			log.Printf("[INFO] Insufficient scope for Captcha; skipping read.")
+		case apierr.IsInsufficientEntitlement(err):
+			diags = append(diags, entitlementWarning("Captcha", entitlementReadConsequence))
+		default:
+			return append(diags, diag.FromErr(err)...)
 		}
-		log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
 	}
 
 	result := multierror.Append(
@@ -703,14 +736,20 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		data.Set("captcha", flattenCaptcha(data, captcha)),
 	)
 
-	return diag.FromErr(result.ErrorOrNil())
+	if result.ErrorOrNil() != nil {
+		return append(diags, diag.FromErr(result.ErrorOrNil())...)
+	}
+
+	return diags
 }
 
 func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 	apiv2 := meta.(*config.Config).GetAPIV2()
 
+	var diags diag.Diagnostics
 	var result *multierror.Error
+
 	if ipt := expandSuspiciousIPThrottling(data); ipt != nil {
 		result = multierror.Append(result, api.AttackProtection.UpdateSuspiciousIPThrottling(ctx, ipt))
 	}
@@ -725,29 +764,35 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 
 	if botDetection := expandBotDetection(data); botDetection != nil {
 		if _, err := apiv2.AttackProtection.BotDetection.Update(ctx, botDetection); err != nil {
-			if !strings.Contains(err.Error(), "insufficient_scope") {
+			switch {
+			case apierr.IsInsufficientScope(err):
+				log.Printf("[INFO] Insufficient scope for Bot Detection; skipping update.")
+			case apierr.IsInsufficientEntitlement(err):
+				diags = append(diags, entitlementWarning("Bot Detection", entitlementUpdateConsequence))
+			default:
 				result = multierror.Append(result, err)
-			} else {
-				log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
 			}
 		}
 	}
 
 	if captcha := expandCaptcha(data); captcha != nil {
 		if _, err := apiv2.AttackProtection.Captcha.Update(ctx, captcha); err != nil {
-			if !strings.Contains(err.Error(), "insufficient_scope") {
+			switch {
+			case apierr.IsInsufficientScope(err):
+				log.Printf("[INFO] Insufficient scope for Captcha; skipping update.")
+			case apierr.IsInsufficientEntitlement(err):
+				diags = append(diags, entitlementWarning("Captcha", entitlementUpdateConsequence))
+			default:
 				result = multierror.Append(result, err)
-			} else {
-				log.Printf("[INFO] Bot Detection is not enabled, skipping these updates.")
 			}
 		}
 	}
 
 	if result.ErrorOrNil() != nil {
-		return diag.FromErr(result.ErrorOrNil())
+		return append(diags, diag.FromErr(result.ErrorOrNil())...)
 	}
 
-	return readAttackProtection(ctx, data, meta)
+	return append(diags, readAttackProtection(ctx, data, meta)...)
 }
 
 func deleteAttackProtection(ctx context.Context, _ *schema.ResourceData, meta interface{}) diag.Diagnostics {

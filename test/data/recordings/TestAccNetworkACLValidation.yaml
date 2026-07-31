@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.19.0
+                - Go-Auth0/1.45.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
         method: POST
       response:
@@ -28,12 +28,12 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 758
+        content_length: 157
         uncompressed: false
-        body: '{"statusCode":400,"error":"Bad Request","message":"Payload validation error: ''None of the valid schemas were met'' on property rule ({description}). Inner errors: [ Payload validation error: ''None of the valid schemas were met'' on property rule.action ({description}). Inner errors: [ Payload validation error: ''Missing required property: block'' on property action. (also) Payload validation error: ''Missing required property: allow'' on property action. (also) Payload validation error: ''Missing required property: log'' on property action. (also) Payload validation error: ''Missing required property: redirect_uri'' on property action. ]. (also) Payload validation error: ''Missing required property: not_match'' on property rule. ].","errorCode":"invalid_body"}'
+        body: '{"statusCode":400,"error":"Bad Request","message":"Payload validation error: Action type of `redirect` requires a `redirect_uri`","errorCode":"invalid_body"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 400 Bad Request
         code: 400
-        duration: 232.283167ms
+        duration: 283.465083ms

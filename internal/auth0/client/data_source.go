@@ -33,7 +33,15 @@ func dataSourceSchema() map[string]*schema.Schema {
 		Computed:  true,
 		Sensitive: true,
 		Description: "Secret for the client. Keep this private. To access this attribute you need to add the " +
-			"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.",
+			"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string. " +
+			"Set `hide_client_secret` to `true` to avoid persisting this value into Terraform state.",
+	}
+
+	dataSourceSchema["hide_client_secret"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Description: "Set this to avoid persisting the sensitive `client_secret` value into state, in which case " +
+			"`client_secret` will contain an empty string.",
 	}
 
 	dataSourceSchema["token_endpoint_auth_method"] = &schema.Schema{

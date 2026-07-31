@@ -296,4 +296,31 @@ func TestFlattenTenant(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, "", mockResourceData.Get("dynamic_client_registration_security_mode"))
 	})
+
+	t.Run("it sets country_codes to nil if remote tenant does not have it set", func(t *testing.T) {
+		tenant := management.Tenant{
+			CountryCodes: nil,
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.Equal(t, mockResourceData.Get("country_codes"), []interface{}{})
+	})
+
+	t.Run("it sets country_codes if remote tenant has it set", func(t *testing.T) {
+		tenant := management.Tenant{
+			CountryCodes: &management.TenantCountryCodes{
+				List: []string{"US", "CA"},
+				Mode: "allow",
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		countryCodes := mockResourceData.Get("country_codes").([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, "allow", countryCodes["mode"])
+		assert.Equal(t, countryCodes["list"].(*schema.Set).Len(), 2)
+	})
 }

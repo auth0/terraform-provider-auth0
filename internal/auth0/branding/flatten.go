@@ -30,6 +30,7 @@ func flattenBrandingTheme(data *schema.ResourceData, brandingTheme *management.B
 		data.Set("fonts", flattenBrandingThemeFonts(brandingTheme.Fonts)),
 		data.Set("page_background", flattenBrandingThemePageBackground(brandingTheme.PageBackground)),
 		data.Set("widget", flattenBrandingThemeWidget(brandingTheme.Widget)),
+		data.Set("identifiers", flattenBrandingThemeIdentifiers(brandingTheme.Identifiers)),
 	)
 
 	return result.ErrorOrNil()
@@ -179,6 +180,25 @@ func flattenBrandingThemeWidget(widget management.BrandingThemeWidget) []interfa
 	}
 
 	return []interface{}{m}
+}
+
+func flattenBrandingThemeIdentifiers(identifiers *management.BrandingThemeIdentifiers) []interface{} {
+	if identifiers == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"login_display":    identifiers.LoginDisplay,
+			"otp_autocomplete": identifiers.OTPAutocomplete,
+			"phone_display": []interface{}{
+				map[string]interface{}{
+					"formatting": identifiers.PhoneDisplay.Formatting,
+					"masking":    identifiers.PhoneDisplay.Masking,
+				},
+			},
+		},
+	}
 }
 
 func flattenPhoneProvider(data *schema.ResourceData, phoneProvider *management.BrandingPhoneProvider) error {

@@ -23,6 +23,7 @@ data "auth0_tenant" "my_tenant" {}
 - `allow_organization_name_in_authentication_api` (Boolean) Whether to accept an organization name instead of an ID on auth endpoints.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `client_id_metadata_document_supported` (Boolean) Whether the tenant supports Client ID Metadata Document (CIMD) for client registration.
+- `country_codes` (List of Object) Configuration for phone identifier country code filtering. Remove this block to disable filtering. Requires the country codes feature flag to be enabled on the tenant. (see [below for nested schema](#nestedatt--country_codes))
 - `customize_mfa_in_postlogin_action` (Boolean) Whether to enable flexible factors for MFA in the PostLogin action.
 - `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
 - `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
@@ -53,6 +54,15 @@ data "auth0_tenant" "my_tenant" {}
 - `skip_non_verifiable_callback_uri_confirmation_prompt` (String) Indicates whether the confirmation prompt appears when using non-verifiable callback URIs. Set to true to skip the prompt, false to show it, or null to unset. Accepts (true/false/null) or ("true"/"false"/"null")
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
+
+<a id="nestedatt--country_codes"></a>
+### Nested Schema for `country_codes`
+
+Read-Only:
+
+- `list` (Set of String)
+- `mode` (String)
+
 
 <a id="nestedatt--default_token_quota"></a>
 ### Nested Schema for `default_token_quota`

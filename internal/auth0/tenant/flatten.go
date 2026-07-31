@@ -62,6 +62,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("client_id_metadata_document_supported", tenant.GetClientIDMetadataDocumentSupported()),
 		data.Set("resource_parameter_profile", tenant.GetResourceParameterProfile()),
 		data.Set("dynamic_client_registration_security_mode", tenant.GetDynamicClientRegistrationSecurityMode()),
+		data.Set("country_codes", flattenTenantCountryCodes(tenant.CountryCodes)),
 	)
 
 	if tenant.GetACRValuesSupported() == nil {
@@ -177,6 +178,19 @@ func flattenErrorPageConfiguration(errorPage *management.TenantErrorPage) []inte
 	m["url"] = errorPage.GetURL()
 
 	return []interface{}{m}
+}
+
+func flattenTenantCountryCodes(countryCodes *management.TenantCountryCodes) []interface{} {
+	if countryCodes == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"list": countryCodes.List,
+			"mode": countryCodes.Mode,
+		},
+	}
 }
 
 func flattenDefaultTokenQuota(defaultTokenQuota *management.TenantDefaultTokenQuota) []interface{} {

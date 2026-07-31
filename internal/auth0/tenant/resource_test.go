@@ -619,6 +619,82 @@ func TestAccTenant_DefaultRedirectionURI(t *testing.T) {
 	})
 }
 
+// testAccPreCheckFeatureCountryCodes skips the test unless
+// AUTH0_FEATURE_COUNTRY_CODES is set, since the country_codes block on
+// auth0_tenant requires a tenant with the phone identifier country code
+// filtering feature flag enabled.
+func testAccPreCheckFeatureCountryCodes(t *testing.T) {
+	t.Helper()
+
+	if os.Getenv("AUTH0_FEATURE_COUNTRY_CODES") == "" {
+		t.Skip("AUTH0_FEATURE_COUNTRY_CODES must be set for this acceptance test to run")
+	}
+}
+
+const testAccTenantCountryCodesCreate = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "Country Codes Test"
+
+	country_codes {
+		list = ["US", "CA"]
+		mode = "allow"
+	}
+}
+`
+
+const testAccTenantCountryCodesUpdate = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "Country Codes Test"
+
+	country_codes {
+		list = ["GB", "FR", "DE"]
+		mode = "deny"
+	}
+}
+`
+
+const testAccTenantCountryCodesRemoved = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "Country Codes Test"
+}
+`
+
+func TestAccTenant_CountryCodes(t *testing.T) {
+	testAccPreCheckFeatureCountryCodes(t)
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTenantCountryCodesCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "country_codes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "country_codes.0.mode", "allow"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "country_codes.0.list.#", "2"),
+				),
+			},
+			{
+				Config: testAccTenantCountryCodesUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "country_codes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "country_codes.0.mode", "deny"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "country_codes.0.list.#", "3"),
+				),
+			},
+			{
+				Config: testAccTenantCountryCodesRemoved,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "friendly_name", "Country Codes Test"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "country_codes.#", "0"),
+				),
+			},
+			{
+				Config:   testAccTenantCountryCodesRemoved,
+				PlanOnly: true,
+			},
+		},
+	})
+}
+
 func TestAccTenantDefaults(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
 		// Only run with recorded HTTP requests because  normal E2E tests will naturally configure the tenant

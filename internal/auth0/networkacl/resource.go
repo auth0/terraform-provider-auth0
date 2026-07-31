@@ -2,6 +2,7 @@ package networkacl
 
 import (
 	"context"
+	"regexp"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -95,6 +96,21 @@ var networkACLRuleMatchSchema = &schema.Schema{
 	Description: "The configuration for the Network ACL Rule",
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"auth0_managed": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateDiagFunc: validation.ToDiagFunc(validation.StringMatch(
+						regexp.MustCompile(`^auth0\.[^\.\s]+$`),
+						"must be an Auth0-curated blocklist identifier of the form 'auth0.<name>' (for example, 'auth0.icloud_relay_proxy')",
+					)),
+				},
+				Description: "Auth0-curated blocklists to match against. Allowed values are `auth0.low_reputation` " +
+					"and `auth0.icloud_relay_proxy`; the set is validated by the Management API and may grow. " +
+					"Requires the `advanced-breached-password-detection` entitlement and the " +
+					"`tenant_acl_curated_blocklists` feature flag to be enabled on the tenant. (EA Only)",
+			},
 			"asns": {
 				Type:        schema.TypeList,
 				Optional:    true,

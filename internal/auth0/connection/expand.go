@@ -1110,11 +1110,6 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 	expandConnectionOptionsScopes(data, options)
 
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
-	if err != nil {
-		return nil, diag.FromErr(err)
-	}
-
-	options.OIDCMetadata, err = value.MapFromJSON(config.GetAttr("oidc_metadata"))
 
 	return options, diag.FromErr(err)
 }
@@ -1173,11 +1168,6 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 	expandConnectionOptionsScopes(data, options)
 
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
-	if err != nil {
-		return nil, diag.FromErr(err)
-	}
-
-	options.OIDCMetadata, err = value.MapFromJSON(config.GetAttr("oidc_metadata"))
 
 	return options, diag.FromErr(err)
 }

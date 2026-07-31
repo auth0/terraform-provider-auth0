@@ -1,15 +1,23 @@
 ## [Unreleased]
 
-ENHANCEMENTS:
-- `provider` – When a managed resource is read and API responds with 404 (deleted outside of Terraform), the provider now emits a warning explaining that the resource was removed from state and how to proceed. ([#1654](https://github.com/auth0/terraform-provider-auth0/pull/1654))
+## v1.54.0
 
 FEATURES:
-- `resource/auth0_connection` – Add support for the `cross_app_access_requesting_app` block to configure a connection as a requesting application authorization server for Cross-App Access (XAA). Supported on `oidc` and `okta` strategies (EA only)
-- `resource/auth0_network_acl` – Add support for the `auth0_managed` attribute on rule `match`/`not_match` blocks to match against Auth0-curated blocklists such as `auth0.icloud_relay_proxy` (Early Access; requires the `advanced-breached-password-detection` entitlement and the `tenant_acl_curated_blocklists` feature flag)
-- `data-source/auth0_network_acl` – Expose the `auth0_managed` attribute on rule `match`/`not_match` blocks
+- `resource/auth0_connection` – Add `cross_app_access_requesting_app` block for Cross-App Access (XAA) on `oidc`/`okta` strategies (EA only) ([#1648](https://github.com/auth0/terraform-provider-auth0/pull/1648))
+- `resource/auth0_client` – Add `identity_assertion_authorization_grant` block for the ID-JAG exchange used by XAA (EA only) ([#1658](https://github.com/auth0/terraform-provider-auth0/pull/1658))
+- `resource/auth0_connection` – Add `cross_app_access_resource_app` block and expose the `oidc_metadata` option on `samlp` strategy (EA only) ([#1658](https://github.com/auth0/terraform-provider-auth0/pull/1658))
+- `resource/auth0_network_acl` – Add `auth0_managed` attribute on `match`/`not_match` blocks for Auth0-curated blocklists (EA only) ([#1653](https://github.com/auth0/terraform-provider-auth0/pull/1653))
+- `resource/auth0_branding_theme` – Add `identifiers` block for identifier input display settings ([#1638](https://github.com/auth0/terraform-provider-auth0/pull/1638))
+- `resource/auth0_tenant` – Add `country_codes` block for phone identifier country-code filtering ([#1638](https://github.com/auth0/terraform-provider-auth0/pull/1638))
 
-CHANGED:
-- `resource/auth0_attack_protection` – Bot Detection and Captcha failures caused by a missing tenant entitlement (403 `insufficient_entitlement`) now surface as non-fatal warnings naming the gated sub-feature, instead of being silently skipped. The remaining sub-features continue to apply, warnings are also surfaced alongside any fatal error raised later in the same operation, and error-code detection is now based on the API response body rather than string matching on the error message ([#1410](https://github.com/auth0/terraform-provider-auth0/pull/1410))
+ENHANCEMENTS:
+- `provider` – Emit a warning when a resource 404s on read (deleted outside Terraform) explaining it was removed from state ([#1654](https://github.com/auth0/terraform-provider-auth0/pull/1654))
+- `data-source/auth0_client` – Add `hide_client_secret` to keep `client_secret` out of state ([#1652](https://github.com/auth0/terraform-provider-auth0/pull/1652))
+- `data-source/auth0_clients` – Add `hide_client_secret` to keep `client_secret` out of state for all returned clients ([#1652](https://github.com/auth0/terraform-provider-auth0/pull/1652))
+- `resource/auth0_attack_protection` – Surface missing Bot Detection/Captcha entitlements as non-fatal warnings ([#1661](https://github.com/auth0/terraform-provider-auth0/pull/1661))
+
+NOTES:
+- `resource/auth0_client` – Promote `session_transfer.delegation` from Early Access to general availability ([#1659](https://github.com/auth0/terraform-provider-auth0/pull/1659))
 
 ## v1.53.0
 

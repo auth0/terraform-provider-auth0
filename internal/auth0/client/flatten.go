@@ -707,6 +707,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("redirection_policy", client.GetRedirectionPolicy()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 		data.Set("fedcm_login", flattenFedCMLogin(client.GetFedCMLogin())),
+		data.Set("identity_assertion_authorization_grant", flattenClientIdentityAssertionAuthorizationGrant(client.GetIdentityAssertionAuthorizationGrant())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
@@ -779,6 +780,18 @@ func flattenFedCMLoginGoogle(google *management.FedCMLoginGoogle) []interface{} 
 	return []interface{}{
 		map[string]interface{}{
 			"is_enabled": google.GetIsEnabled(),
+		},
+	}
+}
+
+func flattenClientIdentityAssertionAuthorizationGrant(grant *management.IdentityAssertionAuthorizationGrant) []interface{} {
+	if grant == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"active": grant.GetActive(),
 		},
 	}
 }

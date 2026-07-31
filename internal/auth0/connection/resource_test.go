@@ -3584,3 +3584,155 @@ func TestAccConnectionPasswordHash(t *testing.T) {
 		},
 	})
 }
+
+const testAccConnectionCrossAppAccessResourceAppEnabled = `
+resource "auth0_connection" "oidc" {
+	name     = "Acceptance-Test-XAA-{{.testName}}"
+	strategy = "oidc"
+	options {
+		client_id     = "123456"
+		client_secret = "123456"
+		type          = "back_channel"
+		issuer        = "https://api.login.yahoo.com"
+		jwks_uri      = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		scopes        = ["openid", "profile"]
+	}
+
+	cross_app_access_resource_app {
+		status = "enabled"
+	}
+}
+`
+
+const testAccConnectionCrossAppAccessResourceAppDisabled = `
+resource "auth0_connection" "oidc" {
+	name     = "Acceptance-Test-XAA-{{.testName}}"
+	strategy = "oidc"
+	options {
+		client_id     = "123456"
+		client_secret = "123456"
+		type          = "back_channel"
+		issuer        = "https://api.login.yahoo.com"
+		jwks_uri      = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		scopes        = ["openid", "profile"]
+	}
+
+	cross_app_access_resource_app {
+		status = "disabled"
+	}
+}
+`
+
+const testAccConnectionCrossAppAccessResourceAppRemoved = `
+resource "auth0_connection" "oidc" {
+	name     = "Acceptance-Test-XAA-{{.testName}}"
+	strategy = "oidc"
+	options {
+		client_id     = "123456"
+		client_secret = "123456"
+		type          = "back_channel"
+		issuer        = "https://api.login.yahoo.com"
+		jwks_uri      = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		scopes        = ["openid", "profile"]
+	}
+}
+`
+
+func TestAccConnectionCrossAppAccessResourceApp(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionCrossAppAccessResourceAppEnabled, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "name", fmt.Sprintf("Acceptance-Test-XAA-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "strategy", "oidc"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_resource_app.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_resource_app.0.status", "enabled"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionCrossAppAccessResourceAppDisabled, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_resource_app.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_resource_app.0.status", "disabled"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionCrossAppAccessResourceAppRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "cross_app_access_resource_app.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+// testAccConnectionSAMLOIDCMetadata mirrors the validated CN_SAML2 audit case: a SAML
+// connection acting as a Cross App Access resource application, with the OIDC discovery
+// document uploaded directly via oidc_metadata (no discovery_url). When discovery_url is
+// absent the API preserves the uploaded document verbatim, so the value round-trips and
+// the plan stays empty.
+const testAccConnectionSAMLOIDCMetadata = `
+resource "auth0_connection" "saml" {
+	name     = "Acceptance-Test-OIDCMeta-{{.testName}}"
+	strategy = "samlp"
+	options {
+		sign_in_endpoint = "https://saml.example.com/sso"
+		signing_cert     = <<EOF
+-----BEGIN CERTIFICATE-----
+MIIDCzCCAfOgAwIBAgIUCdRoetBaO+Fr+NdcNdtnL0slU0swDQYJKoZIhvcNAQEL
+BQAwFTETMBEGA1UEAwwKZXhhbXBsZS5jbzAeFw0yNjA3MjMxMDQyMjZaFw0zNjA3
+MjAxMDQyMjZaMBUxEzARBgNVBAMMCmV4YW1wbGUuY28wggEiMA0GCSqGSIb3DQEB
+AQUAA4IBDwAwggEKAoIBAQCvkWF+EDRDxldOx5rqvecWO1fDElU3qEArKzs05vSK
+V4wyndGBLtGcmPNMM3rftyHquGQHjFyxo9lv91xBSTv8vxPox6WbtcoDxRbItyco
+dfhp1cst6D2e7/HC6lttMeCH6lyN7VBWzz8+j7EKe7aW7x23f0WQFU5VbScgxnBY
+6terHOUdHSdS57YrCvyWXPtuQ1J9eJOuLsntRKtTorqWf833IYPC9UJQFWcj3H+A
+T1qayQFpCCcGTi8AY1QWb6soSqu31D1ntr5xQBygkZN2hqAHuoZvJce0ZKuOu57a
+33Zc6eniuVO51zgUlG+sW/g9tQyzLw/isIni9Uv1WphrAgMBAAGjUzBRMB0GA1Ud
+DgQWBBQl3+X4u7aRQRaRpPPMO2gypy6uPzAfBgNVHSMEGDAWgBQl3+X4u7aRQRaR
+pPPMO2gypy6uPzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBt
+/MuP34GNq+orLEwDqBzDRQK0Ty4jSOM5ZGfdSBHZhypHWUcvQdGNkxeK9cu8WJC/
+8ulovvgnKyWVzVKezdhpCmNInldsuxWC2I9Wu0LB3Jr203BPFNcpAFE6c+aT6ASd
+GtuQ6kElsyfcwCJvIr9RzP2DSPftwCRgqTriJCLRmYf71eV5OFvhkCVQPU1H2Giw
+V1oF1EfQM54000xuVEUlhFlFQHmHmRfeX1Aqir8cXGefdxr3t6bAM3PgM93e/dET
+qzsMQBATo8yKgrirPzmNc5bxfhKS+3fpQOFON+tqsgnXnb9Hksd7zJ52TM5w3RyZ
+/OY2k3sWyAuCKbX1Em/h
+-----END CERTIFICATE-----
+EOF
+
+		oidc_metadata = jsonencode({
+			issuer                                = "https://idp.apitest-xaa.example.com"
+			jwks_uri                              = "https://idp.apitest-xaa.example.com/jwks"
+			authorization_endpoint                = "https://idp.apitest-xaa.example.com/authorize"
+			token_endpoint                        = "https://idp.apitest-xaa.example.com/token"
+			response_types_supported              = ["code"]
+			subject_types_supported               = ["public"]
+			id_token_signing_alg_values_supported = ["RS256"]
+		})
+	}
+
+	cross_app_access_resource_app {
+		status = "enabled"
+	}
+}
+`
+
+func TestAccConnectionOIDCMetadata(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLOIDCMetadata, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "name", fmt.Sprintf("Acceptance-Test-OIDCMeta-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "strategy", "samlp"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "cross_app_access_resource_app.0.status", "enabled"),
+					resource.TestCheckResourceAttrSet("auth0_connection.saml", "options.0.oidc_metadata"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.oidc_metadata", "{\"authorization_endpoint\":\"https://idp.apitest-xaa.example.com/authorize\",\"id_token_signing_alg_values_supported\":[\"RS256\"],\"issuer\":\"https://idp.apitest-xaa.example.com\",\"jwks_uri\":\"https://idp.apitest-xaa.example.com/jwks\",\"response_types_supported\":[\"code\"],\"subject_types_supported\":[\"public\"],\"token_endpoint\":\"https://idp.apitest-xaa.example.com/token\"}"),
+				),
+			},
+		},
+	})
+}

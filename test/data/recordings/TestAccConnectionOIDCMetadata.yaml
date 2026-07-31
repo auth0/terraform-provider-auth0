@@ -1,0 +1,138 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 1725
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-OIDCMeta-TestAccConnectionOIDCMetadata","strategy":"samlp","cross_app_access_resource_app":{"status":"enabled"},"options":{"signingCert":"-----BEGIN CERTIFICATE-----\nMIIDCzCCAfOgAwIBAgIUCdRoetBaO+Fr+NdcNdtnL0slU0swDQYJKoZIhvcNAQEL\nBQAwFTETMBEGA1UEAwwKZXhhbXBsZS5jbzAeFw0yNjA3MjMxMDQyMjZaFw0zNjA3\nMjAxMDQyMjZaMBUxEzARBgNVBAMMCmV4YW1wbGUuY28wggEiMA0GCSqGSIb3DQEB\nAQUAA4IBDwAwggEKAoIBAQCvkWF+EDRDxldOx5rqvecWO1fDElU3qEArKzs05vSK\nV4wyndGBLtGcmPNMM3rftyHquGQHjFyxo9lv91xBSTv8vxPox6WbtcoDxRbItyco\ndfhp1cst6D2e7/HC6lttMeCH6lyN7VBWzz8+j7EKe7aW7x23f0WQFU5VbScgxnBY\n6terHOUdHSdS57YrCvyWXPtuQ1J9eJOuLsntRKtTorqWf833IYPC9UJQFWcj3H+A\nT1qayQFpCCcGTi8AY1QWb6soSqu31D1ntr5xQBygkZN2hqAHuoZvJce0ZKuOu57a\n33Zc6eniuVO51zgUlG+sW/g9tQyzLw/isIni9Uv1WphrAgMBAAGjUzBRMB0GA1Ud\nDgQWBBQl3+X4u7aRQRaRpPPMO2gypy6uPzAfBgNVHSMEGDAWgBQl3+X4u7aRQRaR\npPPMO2gypy6uPzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBt\n/MuP34GNq+orLEwDqBzDRQK0Ty4jSOM5ZGfdSBHZhypHWUcvQdGNkxeK9cu8WJC/\n8ulovvgnKyWVzVKezdhpCmNInldsuxWC2I9Wu0LB3Jr203BPFNcpAFE6c+aT6ASd\nGtuQ6kElsyfcwCJvIr9RzP2DSPftwCRgqTriJCLRmYf71eV5OFvhkCVQPU1H2Giw\nV1oF1EfQM54000xuVEUlhFlFQHmHmRfeX1Aqir8cXGefdxr3t6bAM3PgM93e/dET\nqzsMQBATo8yKgrirPzmNc5bxfhKS+3fpQOFON+tqsgnXnb9Hksd7zJ52TM5w3RyZ\n/OY2k3sWyAuCKbX1Em/h\n-----END CERTIFICATE-----\n","signInEndpoint":"https://saml.example.com/sso","oidc_metadata":{"authorization_endpoint":"https://idp.apitest-xaa.example.com/authorize","id_token_signing_alg_values_supported":["RS256"],"issuer":"https://idp.apitest-xaa.example.com","jwks_uri":"https://idp.apitest-xaa.example.com/jwks","response_types_supported":["code"],"subject_types_supported":["public"],"token_endpoint":"https://idp.apitest-xaa.example.com/token"}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"id":"con_mNTZceGwlPxyG0h8","options":{"signingCert":"-----BEGIN CERTIFICATE-----\nMIIDCzCCAfOgAwIBAgIUCdRoetBaO+Fr+NdcNdtnL0slU0swDQYJKoZIhvcNAQEL\nBQAwFTETMBEGA1UEAwwKZXhhbXBsZS5jbzAeFw0yNjA3MjMxMDQyMjZaFw0zNjA3\nMjAxMDQyMjZaMBUxEzARBgNVBAMMCmV4YW1wbGUuY28wggEiMA0GCSqGSIb3DQEB\nAQUAA4IBDwAwggEKAoIBAQCvkWF+EDRDxldOx5rqvecWO1fDElU3qEArKzs05vSK\nV4wyndGBLtGcmPNMM3rftyHquGQHjFyxo9lv91xBSTv8vxPox6WbtcoDxRbItyco\ndfhp1cst6D2e7/HC6lttMeCH6lyN7VBWzz8+j7EKe7aW7x23f0WQFU5VbScgxnBY\n6terHOUdHSdS57YrCvyWXPtuQ1J9eJOuLsntRKtTorqWf833IYPC9UJQFWcj3H+A\nT1qayQFpCCcGTi8AY1QWb6soSqu31D1ntr5xQBygkZN2hqAHuoZvJce0ZKuOu57a\n33Zc6eniuVO51zgUlG+sW/g9tQyzLw/isIni9Uv1WphrAgMBAAGjUzBRMB0GA1Ud\nDgQWBBQl3+X4u7aRQRaRpPPMO2gypy6uPzAfBgNVHSMEGDAWgBQl3+X4u7aRQRaR\npPPMO2gypy6uPzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBt\n/MuP34GNq+orLEwDqBzDRQK0Ty4jSOM5ZGfdSBHZhypHWUcvQdGNkxeK9cu8WJC/\n8ulovvgnKyWVzVKezdhpCmNInldsuxWC2I9Wu0LB3Jr203BPFNcpAFE6c+aT6ASd\nGtuQ6kElsyfcwCJvIr9RzP2DSPftwCRgqTriJCLRmYf71eV5OFvhkCVQPU1H2Giw\nV1oF1EfQM54000xuVEUlhFlFQHmHmRfeX1Aqir8cXGefdxr3t6bAM3PgM93e/dET\nqzsMQBATo8yKgrirPzmNc5bxfhKS+3fpQOFON+tqsgnXnb9Hksd7zJ52TM5w3RyZ\n/OY2k3sWyAuCKbX1Em/h\n-----END CERTIFICATE-----\n","signInEndpoint":"https://saml.example.com/sso","oidc_metadata":{"authorization_endpoint":"https://idp.apitest-xaa.example.com/authorize","id_token_signing_alg_values_supported":["RS256"],"issuer":"https://idp.apitest-xaa.example.com","jwks_uri":"https://idp.apitest-xaa.example.com/jwks","response_types_supported":["code"],"subject_types_supported":["public"],"token_endpoint":"https://idp.apitest-xaa.example.com/token"},"assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]},"expires":"2036-07-20T10:42:26.000Z","subject":{"commonName":"example.co"},"thumbprints":["560d54ca2b8ec192668e18a8d0bac5c8cd51e151"],"cert":"-----BEGIN CERTIFICATE-----\nMIIDCzCCAfOgAwIBAgIUCdRoetBaO+Fr+NdcNdtnL0slU0swDQYJKoZIhvcNAQEL\nBQAwFTETMBEGA1UEAwwKZXhhbXBsZS5jbzAeFw0yNjA3MjMxMDQyMjZaFw0zNjA3\nMjAxMDQyMjZaMBUxEzARBgNVBAMMCmV4YW1wbGUuY28wggEiMA0GCSqGSIb3DQEB\nAQUAA4IBDwAwggEKAoIBAQCvkWF+EDRDxldOx5rqvecWO1fDElU3qEArKzs05vSK\nV4wyndGBLtGcmPNMM3rftyHquGQHjFyxo9lv91xBSTv8vxPox6WbtcoDxRbItyco\ndfhp1cst6D2e7/HC6lttMeCH6lyN7VBWzz8+j7EKe7aW7x23f0WQFU5VbScgxnBY\n6terHOUdHSdS57YrCvyWXPtuQ1J9eJOuLsntRKtTorqWf833IYPC9UJQFWcj3H+A\nT1qayQFpCCcGTi8AY1QWb6soSqu31D1ntr5xQBygkZN2hqAHuoZvJce0ZKuOu57a\n33Zc6eniuVO51zgUlG+sW/g9tQyzLw/isIni9Uv1WphrAgMBAAGjUzBRMB0GA1Ud\nDgQWBBQl3+X4u7aRQRaRpPPMO2gypy6uPzAfBgNVHSMEGDAWgBQl3+X4u7aRQRaR\npPPMO2gypy6uPzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBt\n/MuP34GNq+orLEwDqBzDRQK0Ty4jSOM5ZGfdSBHZhypHWUcvQdGNkxeK9cu8WJC/\n8ulovvgnKyWVzVKezdhpCmNInldsuxWC2I9Wu0LB3Jr203BPFNcpAFE6c+aT6ASd\nGtuQ6kElsyfcwCJvIr9RzP2DSPftwCRgqTriJCLRmYf71eV5OFvhkCVQPU1H2Giw\nV1oF1EfQM54000xuVEUlhFlFQHmHmRfeX1Aqir8cXGefdxr3t6bAM3PgM93e/dET\nqzsMQBATo8yKgrirPzmNc5bxfhKS+3fpQOFON+tqsgnXnb9Hksd7zJ52TM5w3RyZ\n/OY2k3sWyAuCKbX1Em/h\n-----END CERTIFICATE-----\n"},"strategy":"samlp","name":"Acceptance-Test-OIDCMeta-TestAccConnectionOIDCMetadata","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/jSB28rCJtsw53Q37IjlLXVD5FHL8tbLt","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"enabled_clients":[],"realms":["Acceptance-Test-OIDCMeta-TestAccConnectionOIDCMetadata"],"cross_app_access_resource_app":{"status":"enabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 1.951625292s
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mNTZceGwlPxyG0h8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_mNTZceGwlPxyG0h8","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIDCzCCAfOgAwIBAgIUCdRoetBaO+Fr+NdcNdtnL0slU0swDQYJKoZIhvcNAQEL\nBQAwFTETMBEGA1UEAwwKZXhhbXBsZS5jbzAeFw0yNjA3MjMxMDQyMjZaFw0zNjA3\nMjAxMDQyMjZaMBUxEzARBgNVBAMMCmV4YW1wbGUuY28wggEiMA0GCSqGSIb3DQEB\nAQUAA4IBDwAwggEKAoIBAQCvkWF+EDRDxldOx5rqvecWO1fDElU3qEArKzs05vSK\nV4wyndGBLtGcmPNMM3rftyHquGQHjFyxo9lv91xBSTv8vxPox6WbtcoDxRbItyco\ndfhp1cst6D2e7/HC6lttMeCH6lyN7VBWzz8+j7EKe7aW7x23f0WQFU5VbScgxnBY\n6terHOUdHSdS57YrCvyWXPtuQ1J9eJOuLsntRKtTorqWf833IYPC9UJQFWcj3H+A\nT1qayQFpCCcGTi8AY1QWb6soSqu31D1ntr5xQBygkZN2hqAHuoZvJce0ZKuOu57a\n33Zc6eniuVO51zgUlG+sW/g9tQyzLw/isIni9Uv1WphrAgMBAAGjUzBRMB0GA1Ud\nDgQWBBQl3+X4u7aRQRaRpPPMO2gypy6uPzAfBgNVHSMEGDAWgBQl3+X4u7aRQRaR\npPPMO2gypy6uPzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBt\n/MuP34GNq+orLEwDqBzDRQK0Ty4jSOM5ZGfdSBHZhypHWUcvQdGNkxeK9cu8WJC/\n8ulovvgnKyWVzVKezdhpCmNInldsuxWC2I9Wu0LB3Jr203BPFNcpAFE6c+aT6ASd\nGtuQ6kElsyfcwCJvIr9RzP2DSPftwCRgqTriJCLRmYf71eV5OFvhkCVQPU1H2Giw\nV1oF1EfQM54000xuVEUlhFlFQHmHmRfeX1Aqir8cXGefdxr3t6bAM3PgM93e/dET\nqzsMQBATo8yKgrirPzmNc5bxfhKS+3fpQOFON+tqsgnXnb9Hksd7zJ52TM5w3RyZ\n/OY2k3sWyAuCKbX1Em/h\n-----END CERTIFICATE-----\n","expires":"2036-07-20T10:42:26.000Z","subject":{"commonName":"example.co"},"signingCert":"-----BEGIN CERTIFICATE-----\nMIIDCzCCAfOgAwIBAgIUCdRoetBaO+Fr+NdcNdtnL0slU0swDQYJKoZIhvcNAQEL\nBQAwFTETMBEGA1UEAwwKZXhhbXBsZS5jbzAeFw0yNjA3MjMxMDQyMjZaFw0zNjA3\nMjAxMDQyMjZaMBUxEzARBgNVBAMMCmV4YW1wbGUuY28wggEiMA0GCSqGSIb3DQEB\nAQUAA4IBDwAwggEKAoIBAQCvkWF+EDRDxldOx5rqvecWO1fDElU3qEArKzs05vSK\nV4wyndGBLtGcmPNMM3rftyHquGQHjFyxo9lv91xBSTv8vxPox6WbtcoDxRbItyco\ndfhp1cst6D2e7/HC6lttMeCH6lyN7VBWzz8+j7EKe7aW7x23f0WQFU5VbScgxnBY\n6terHOUdHSdS57YrCvyWXPtuQ1J9eJOuLsntRKtTorqWf833IYPC9UJQFWcj3H+A\nT1qayQFpCCcGTi8AY1QWb6soSqu31D1ntr5xQBygkZN2hqAHuoZvJce0ZKuOu57a\n33Zc6eniuVO51zgUlG+sW/g9tQyzLw/isIni9Uv1WphrAgMBAAGjUzBRMB0GA1Ud\nDgQWBBQl3+X4u7aRQRaRpPPMO2gypy6uPzAfBgNVHSMEGDAWgBQl3+X4u7aRQRaR\npPPMO2gypy6uPzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBt\n/MuP34GNq+orLEwDqBzDRQK0Ty4jSOM5ZGfdSBHZhypHWUcvQdGNkxeK9cu8WJC/\n8ulovvgnKyWVzVKezdhpCmNInldsuxWC2I9Wu0LB3Jr203BPFNcpAFE6c+aT6ASd\nGtuQ6kElsyfcwCJvIr9RzP2DSPftwCRgqTriJCLRmYf71eV5OFvhkCVQPU1H2Giw\nV1oF1EfQM54000xuVEUlhFlFQHmHmRfeX1Aqir8cXGefdxr3t6bAM3PgM93e/dET\nqzsMQBATo8yKgrirPzmNc5bxfhKS+3fpQOFON+tqsgnXnb9Hksd7zJ52TM5w3RyZ\n/OY2k3sWyAuCKbX1Em/h\n-----END CERTIFICATE-----\n","thumbprints":["560d54ca2b8ec192668e18a8d0bac5c8cd51e151"],"oidc_metadata":{"issuer":"https://idp.apitest-xaa.example.com","jwks_uri":"https://idp.apitest-xaa.example.com/jwks","token_endpoint":"https://idp.apitest-xaa.example.com/token","authorization_endpoint":"https://idp.apitest-xaa.example.com/authorize","subject_types_supported":["public"],"response_types_supported":["code"],"id_token_signing_alg_values_supported":["RS256"]},"signInEndpoint":"https://saml.example.com/sso","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]}},"strategy":"samlp","name":"Acceptance-Test-OIDCMeta-TestAccConnectionOIDCMetadata","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/jSB28rCJtsw53Q37IjlLXVD5FHL8tbLt","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-OIDCMeta-TestAccConnectionOIDCMetadata"],"cross_app_access_resource_app":{"status":"enabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 440.686042ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mNTZceGwlPxyG0h8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_mNTZceGwlPxyG0h8","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIDCzCCAfOgAwIBAgIUCdRoetBaO+Fr+NdcNdtnL0slU0swDQYJKoZIhvcNAQEL\nBQAwFTETMBEGA1UEAwwKZXhhbXBsZS5jbzAeFw0yNjA3MjMxMDQyMjZaFw0zNjA3\nMjAxMDQyMjZaMBUxEzARBgNVBAMMCmV4YW1wbGUuY28wggEiMA0GCSqGSIb3DQEB\nAQUAA4IBDwAwggEKAoIBAQCvkWF+EDRDxldOx5rqvecWO1fDElU3qEArKzs05vSK\nV4wyndGBLtGcmPNMM3rftyHquGQHjFyxo9lv91xBSTv8vxPox6WbtcoDxRbItyco\ndfhp1cst6D2e7/HC6lttMeCH6lyN7VBWzz8+j7EKe7aW7x23f0WQFU5VbScgxnBY\n6terHOUdHSdS57YrCvyWXPtuQ1J9eJOuLsntRKtTorqWf833IYPC9UJQFWcj3H+A\nT1qayQFpCCcGTi8AY1QWb6soSqu31D1ntr5xQBygkZN2hqAHuoZvJce0ZKuOu57a\n33Zc6eniuVO51zgUlG+sW/g9tQyzLw/isIni9Uv1WphrAgMBAAGjUzBRMB0GA1Ud\nDgQWBBQl3+X4u7aRQRaRpPPMO2gypy6uPzAfBgNVHSMEGDAWgBQl3+X4u7aRQRaR\npPPMO2gypy6uPzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBt\n/MuP34GNq+orLEwDqBzDRQK0Ty4jSOM5ZGfdSBHZhypHWUcvQdGNkxeK9cu8WJC/\n8ulovvgnKyWVzVKezdhpCmNInldsuxWC2I9Wu0LB3Jr203BPFNcpAFE6c+aT6ASd\nGtuQ6kElsyfcwCJvIr9RzP2DSPftwCRgqTriJCLRmYf71eV5OFvhkCVQPU1H2Giw\nV1oF1EfQM54000xuVEUlhFlFQHmHmRfeX1Aqir8cXGefdxr3t6bAM3PgM93e/dET\nqzsMQBATo8yKgrirPzmNc5bxfhKS+3fpQOFON+tqsgnXnb9Hksd7zJ52TM5w3RyZ\n/OY2k3sWyAuCKbX1Em/h\n-----END CERTIFICATE-----\n","expires":"2036-07-20T10:42:26.000Z","subject":{"commonName":"example.co"},"signingCert":"-----BEGIN CERTIFICATE-----\nMIIDCzCCAfOgAwIBAgIUCdRoetBaO+Fr+NdcNdtnL0slU0swDQYJKoZIhvcNAQEL\nBQAwFTETMBEGA1UEAwwKZXhhbXBsZS5jbzAeFw0yNjA3MjMxMDQyMjZaFw0zNjA3\nMjAxMDQyMjZaMBUxEzARBgNVBAMMCmV4YW1wbGUuY28wggEiMA0GCSqGSIb3DQEB\nAQUAA4IBDwAwggEKAoIBAQCvkWF+EDRDxldOx5rqvecWO1fDElU3qEArKzs05vSK\nV4wyndGBLtGcmPNMM3rftyHquGQHjFyxo9lv91xBSTv8vxPox6WbtcoDxRbItyco\ndfhp1cst6D2e7/HC6lttMeCH6lyN7VBWzz8+j7EKe7aW7x23f0WQFU5VbScgxnBY\n6terHOUdHSdS57YrCvyWXPtuQ1J9eJOuLsntRKtTorqWf833IYPC9UJQFWcj3H+A\nT1qayQFpCCcGTi8AY1QWb6soSqu31D1ntr5xQBygkZN2hqAHuoZvJce0ZKuOu57a\n33Zc6eniuVO51zgUlG+sW/g9tQyzLw/isIni9Uv1WphrAgMBAAGjUzBRMB0GA1Ud\nDgQWBBQl3+X4u7aRQRaRpPPMO2gypy6uPzAfBgNVHSMEGDAWgBQl3+X4u7aRQRaR\npPPMO2gypy6uPzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBt\n/MuP34GNq+orLEwDqBzDRQK0Ty4jSOM5ZGfdSBHZhypHWUcvQdGNkxeK9cu8WJC/\n8ulovvgnKyWVzVKezdhpCmNInldsuxWC2I9Wu0LB3Jr203BPFNcpAFE6c+aT6ASd\nGtuQ6kElsyfcwCJvIr9RzP2DSPftwCRgqTriJCLRmYf71eV5OFvhkCVQPU1H2Giw\nV1oF1EfQM54000xuVEUlhFlFQHmHmRfeX1Aqir8cXGefdxr3t6bAM3PgM93e/dET\nqzsMQBATo8yKgrirPzmNc5bxfhKS+3fpQOFON+tqsgnXnb9Hksd7zJ52TM5w3RyZ\n/OY2k3sWyAuCKbX1Em/h\n-----END CERTIFICATE-----\n","thumbprints":["560d54ca2b8ec192668e18a8d0bac5c8cd51e151"],"oidc_metadata":{"issuer":"https://idp.apitest-xaa.example.com","jwks_uri":"https://idp.apitest-xaa.example.com/jwks","token_endpoint":"https://idp.apitest-xaa.example.com/token","authorization_endpoint":"https://idp.apitest-xaa.example.com/authorize","subject_types_supported":["public"],"response_types_supported":["code"],"id_token_signing_alg_values_supported":["RS256"]},"signInEndpoint":"https://saml.example.com/sso","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]}},"strategy":"samlp","name":"Acceptance-Test-OIDCMeta-TestAccConnectionOIDCMetadata","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/jSB28rCJtsw53Q37IjlLXVD5FHL8tbLt","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-OIDCMeta-TestAccConnectionOIDCMetadata"],"cross_app_access_resource_app":{"status":"enabled"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.021972875s
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.45.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mNTZceGwlPxyG0h8
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2026-07-24T09:58:43.878Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 1.029014208s

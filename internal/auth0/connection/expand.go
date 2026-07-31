@@ -79,6 +79,7 @@ func expandConnection(
 		Authentication:              expandConnectionAuthentication(data),
 		ConnectedAccounts:           expandConnectionConnectedAccounts(data),
 		CrossAppAccessRequestingApp: expandConnectionCrossAppAccessRequestingApp(data),
+		CrossAppAccessResourceApp:   expandConnectionCrossAppAccessResourceApp(data),
 	}
 
 	strategy := data.Get("strategy").(string)
@@ -185,6 +186,35 @@ func expandConnectionCrossAppAccessRequestingApp(data *schema.ResourceData) *man
 	})
 
 	return &crossAppAccessRequestingApp
+}
+
+func expandConnectionCrossAppAccessResourceApp(data *schema.ResourceData) *management.CrossAppAccessResourceApp {
+	if !data.HasChange("cross_app_access_resource_app") {
+		return nil
+	}
+
+	var resourceApp *management.CrossAppAccessResourceApp
+
+	// Returns nil when removed; updateConnection sends the null PATCH to actually remove it.
+	data.GetRawConfig().GetAttr("cross_app_access_resource_app").ForEachElement(func(_, config cty.Value) (stop bool) {
+		resourceApp = &management.CrossAppAccessResourceApp{
+			Status: value.String(config.GetAttr("status")),
+		}
+
+		return stop
+	})
+
+	return resourceApp
+}
+
+// isConnectionCrossAppAccessResourceAppNull reports whether the block was removed from config.
+func isConnectionCrossAppAccessResourceAppNull(data *schema.ResourceData) bool {
+	if !data.HasChange("cross_app_access_resource_app") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("cross_app_access_resource_app")
+	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
 }
 
 func connectionIsEnterprise(strategy string) bool {
@@ -1176,6 +1206,7 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 		GlobalTokenRevocationJWTSub: value.String(config.GetAttr("global_token_revocation_jwt_sub")),
 		DestinationURL:              value.String(config.GetAttr("destination_url")),
 		RecipientURL:                value.String(config.GetAttr("recipient_url")),
+		DiscoveryURL:                value.String(config.GetAttr("discovery_url")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -1218,6 +1249,9 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 	diagnostics := diag.FromErr(err)
 
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+	diagnostics = append(diagnostics, diag.FromErr(err)...)
+
+	options.OIDCMetadata, err = value.MapFromJSON(config.GetAttr("oidc_metadata"))
 	diagnostics = append(diagnostics, diag.FromErr(err)...)
 
 	return options, diagnostics

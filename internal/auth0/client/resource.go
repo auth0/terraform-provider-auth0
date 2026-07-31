@@ -1812,7 +1812,7 @@ func readClient(ctx context.Context, data *schema.ResourceData, meta interface{}
 
 	client, err := api.Client.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_client", data, err)
 	}
 
 	err = flattenClient(data, client)

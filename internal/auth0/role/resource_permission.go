@@ -88,7 +88,7 @@ func readRolePermission(ctx context.Context, data *schema.ResourceData, meta int
 	for {
 		permissionList, err := api.Role.Permissions(ctx, roleID, management.Page(page), management.PerPage(100))
 		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
+			return internalError.HandleReadAPIError("auth0_role_permission", data, err)
 		}
 
 		existingPermissions = append(existingPermissions, permissionList.Permissions...)

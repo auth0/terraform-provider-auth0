@@ -82,7 +82,7 @@ func readOrganizationMembers(ctx context.Context, data *schema.ResourceData, met
 
 	members, err := fetchAllOrganizationMembers(ctx, api, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_organization_members", data, err)
 	}
 
 	return diag.FromErr(flattenOrganizationMembers(data, members))

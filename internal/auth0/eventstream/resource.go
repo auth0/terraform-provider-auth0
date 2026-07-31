@@ -295,7 +295,7 @@ func readEventStream(ctx context.Context, d *schema.ResourceData, m interface{})
 
 	es, err := api.EventStream.Read(ctx, d.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return internalError.HandleReadAPIError("auth0_event_stream", d, err)
 	}
 
 	return diag.FromErr(flattenEventStream(d, es))

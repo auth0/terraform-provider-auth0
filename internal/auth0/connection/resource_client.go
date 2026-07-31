@@ -83,7 +83,7 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 
 	allClients, err := GetAllEnabledClients(ctx, api, connectionID)
 	if err != nil {
-		return diag.FromErr(err)
+		return internalError.HandleReadAPIError("auth0_connection_client", data, err)
 	}
 
 	found := false
@@ -96,13 +96,16 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 
 	if !found {
 		// Not found or not enabled.
-		data.SetId("")
-		return nil
+		return internalError.RemoveFromStateWithWarning(
+			"auth0_connection_client",
+			data,
+			"the client is no longer enabled on the connection",
+		)
 	}
 
 	connection, err := api.Connection.Read(ctx, connectionID, management.IncludeFields("strategy", "name"))
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_connection_client", data, err)
 	}
 
 	return diag.FromErr(flattenConnectionClient(data, connection))

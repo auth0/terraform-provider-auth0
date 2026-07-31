@@ -230,7 +230,7 @@ func readAction(ctx context.Context, data *schema.ResourceData, meta interface{}
 
 	action, err := api.Action.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_action", data, err)
 	}
 
 	return diag.FromErr(flattenAction(data, action))

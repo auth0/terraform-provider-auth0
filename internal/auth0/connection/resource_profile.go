@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewConnectionProfileResource will return a new auth0_connection_profile resource.
@@ -151,7 +152,7 @@ func readConnectionProfile(ctx context.Context, data *schema.ResourceData, meta 
 
 	response, err := apiV2.ConnectionProfiles.Get(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(err)
+		return internalError.HandleReadAPIError("auth0_connection_profile", data, err)
 	}
 
 	result := multierror.Append(

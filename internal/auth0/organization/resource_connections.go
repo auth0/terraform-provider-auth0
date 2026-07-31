@@ -183,7 +183,7 @@ func readOrganizationConnections(ctx context.Context, data *schema.ResourceData,
 		&managementv2.ListOrganizationAllConnectionsRequestParameters{IsEnabled: auth0.Bool(true)},
 	)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_organization_connections", data, err)
 	}
 	connections = append(connections, page.Results...)
 	for {
@@ -192,7 +192,7 @@ func readOrganizationConnections(ctx context.Context, data *schema.ResourceData,
 			if errors.Is(err, core.ErrNoPages) {
 				break
 			}
-			return diag.FromErr(internalError.HandleAPIError(data, err))
+			return internalError.HandleReadAPIError("auth0_organization_connections", data, err)
 		}
 		connections = append(connections, page.Results...)
 	}

@@ -74,7 +74,7 @@ func readCustomTextForSSOProfile(ctx context.Context, data *schema.ResourceData,
 		data.Get("language").(string),
 		data.Get("page").(string))
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_self_service_profile_custom_text", data, err)
 	}
 
 	return diag.FromErr(flattenSSOCustomText(data, customText))

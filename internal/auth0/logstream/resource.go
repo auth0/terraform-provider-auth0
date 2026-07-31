@@ -420,7 +420,7 @@ func readLogStream(ctx context.Context, data *schema.ResourceData, meta interfac
 
 	logStream, err := api.LogStream.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_log_stream", data, err)
 	}
 
 	return diag.FromErr(flattenLogStream(data, logStream))

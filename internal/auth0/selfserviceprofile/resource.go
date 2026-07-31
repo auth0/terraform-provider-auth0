@@ -185,7 +185,7 @@ func readSelfServiceProfile(ctx context.Context, data *schema.ResourceData, meta
 
 	ssp, err := api.SelfServiceProfile.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_self_service_profile", data, err)
 	}
 
 	return diag.FromErr(flattenSelfServiceProfile(data, ssp))

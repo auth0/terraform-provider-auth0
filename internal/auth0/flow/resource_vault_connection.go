@@ -112,7 +112,7 @@ func readVaultConnection(ctx context.Context, data *schema.ResourceData, meta in
 
 	vaultConnection, err := api.Flow.Vault.GetConnection(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_flow_vault_connection", data, err)
 	}
 
 	return diag.FromErr(flattenVaultConnection(data, vaultConnection))

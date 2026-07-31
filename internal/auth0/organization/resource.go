@@ -102,7 +102,7 @@ func readOrganization(ctx context.Context, data *schema.ResourceData, meta inter
 
 	organization, err := api.Organization.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_organization", data, err)
 	}
 
 	return diag.FromErr(flattenOrganization(data, organization))

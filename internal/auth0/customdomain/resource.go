@@ -179,7 +179,7 @@ func readCustomDomain(ctx context.Context, data *schema.ResourceData, meta inter
 
 	customDomain, err := api.CustomDomain.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_custom_domain", data, err)
 	}
 
 	return diag.FromErr(flattenCustomDomain(data, customDomain))

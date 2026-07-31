@@ -148,7 +148,7 @@ func readRateLimitPolicy(ctx context.Context, data *schema.ResourceData, meta in
 
 	policy, err := apiv2.RateLimitPolicies.Get(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_rate_limit_policy", data, err)
 	}
 
 	return flattenRateLimitPolicy(data, policy)

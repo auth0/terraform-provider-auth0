@@ -129,7 +129,7 @@ func readPhoneNotificationTemplate(ctx context.Context, data *schema.ResourceDat
 
 	template, err := api.Branding.ReadPhoneNotificationTemplate(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_branding_phone_notification_template", data, err)
 	}
 
 	return diag.FromErr(flattenPhoneNotificationTemplate(data, template))

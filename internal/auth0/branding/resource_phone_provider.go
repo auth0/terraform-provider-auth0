@@ -148,7 +148,7 @@ func readPhoneProvider(ctx context.Context, data *schema.ResourceData, meta inte
 
 	phoneProviderConfig, err := api.Branding.ReadPhoneProvider(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_phone_provider", data, err)
 	}
 
 	return diag.FromErr(flattenPhoneProvider(data, phoneProviderConfig))

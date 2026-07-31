@@ -88,7 +88,7 @@ func readOrganizationMemberRole(ctx context.Context, data *schema.ResourceData, 
 			management.PerPage(100),
 		)
 		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
+			return internalError.HandleReadAPIError("auth0_organization_member_role", data, err)
 		}
 
 		memberRoles = append(memberRoles, memberRoleList.Roles...)

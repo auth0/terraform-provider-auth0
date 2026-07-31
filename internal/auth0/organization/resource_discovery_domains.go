@@ -158,7 +158,7 @@ func readOrganizationDiscoveryDomains(ctx context.Context, data *schema.Resource
 			opts...,
 		)
 		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
+			return internalError.HandleReadAPIError("auth0_organization_discovery_domains", data, err)
 		}
 
 		domains = append(domains, domainList.Domains...)

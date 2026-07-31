@@ -76,7 +76,7 @@ func readTokenExchangeProfile(ctx context.Context, data *schema.ResourceData, me
 
 	ssp, err := api.TokenExchangeProfile.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_token_exchange_profile", data, err)
 	}
 
 	return diag.FromErr(flattenTokenExchangeProfile(data, ssp))

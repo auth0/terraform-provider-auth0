@@ -59,7 +59,7 @@ func readOrganizationClientGrant(ctx context.Context, data *schema.ResourceData,
 	clientGrantList, err := api.Organization.ClientGrants(ctx, organizationID)
 
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_organization_client_grant", data, err)
 	}
 
 	grantID := data.Get("grant_id").(string)

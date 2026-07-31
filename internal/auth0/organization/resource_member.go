@@ -60,7 +60,7 @@ func readOrganizationMember(ctx context.Context, data *schema.ResourceData, meta
 
 	members, err := fetchAllOrganizationMembers(ctx, api, organizationID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_organization_member", data, err)
 	}
 
 	userID := data.Get("user_id").(string)

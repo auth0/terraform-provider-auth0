@@ -59,7 +59,7 @@ func readSupplementalSignals(ctx context.Context, data *schema.ResourceData, met
 
 	supplementalSignalsConfig, err := apiv2.SupplementalSignals.Get(ctx)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return internalError.HandleReadAPIError("auth0_supplemental_signals", data, err)
 	}
 
 	data.SetId("supplemental_signals")

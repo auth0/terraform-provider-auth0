@@ -68,20 +68,19 @@ func RemoveFromStateWithWarning(resourceType string, data *schema.ResourceData, 
 // IsStatusNotFound checks to see if the error from the Auth0 Management API is a 404.
 // It understands both the v1 SDK error type, which exposes the status code through the
 // management.Error interface, and the v2 SDK error types, which wrap a *core.APIError
-// carrying the status code (e.g. *management.NotFoundError). errors.As is used so that
-// wrapped errors are matched too.
+// carrying the status code (e.g. *management.NotFoundError).
 func IsStatusNotFound(err error) bool {
 	if err == nil {
 		return false
 	}
 
-	// v1 SDK: errors implement management.Error with a Status() method.
+	// V1 SDK: errors implement management.Error with a Status() method.
 	var mErr management.Error
 	if errors.As(err, &mErr) && mErr.Status() == http.StatusNotFound {
 		return true
 	}
 
-	// v2 SDK: errors embed *core.APIError, which holds the status code in a field.
+	// V2 SDK: errors embed *core.APIError, which holds the status code in a field.
 	var apiErr *core.APIError
 	if errors.As(err, &apiErr) && apiErr.StatusCode == http.StatusNotFound {
 		return true

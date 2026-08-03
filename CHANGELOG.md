@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+FEATURES:
+- `resource/auth0_client` – Add `token_vault_privileged_access` block to configure a client as a Token Vault privileged worker that can request Token Vault tokens on behalf of other users (EA only)
+
 ## v1.54.0
 
 FEATURES:

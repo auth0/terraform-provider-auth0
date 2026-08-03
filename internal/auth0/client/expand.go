@@ -57,6 +57,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		SessionTransfer:                     expandSessionTransfer(data),
 		FedCMLogin:                          expandClientFedCMLogin(data),
 		IdentityAssertionAuthorizationGrant: expandClientIdentityAssertionAuthorizationGrant(data),
+		TokenVaultPrivilegedAccess:          expandTokenVaultPrivilegedAccess(data),
 		ComplianceLevel:                     value.String(config.GetAttr("compliance_level")),
 		ThirdPartySecurityMode:              value.String(config.GetAttr("third_party_security_mode")),
 		RedirectionPolicy:                   value.String(config.GetAttr("redirection_policy")),
@@ -417,6 +418,96 @@ func expandClientIdentityAssertionAuthorizationGrant(data *schema.ResourceData) 
 	})
 
 	return &grant
+}
+
+// expandTokenVaultPrivilegedAccess maps the token_vault_privileged_access
+// block to its API struct. The Credentials it produces carry credential_type
+// and pem (the shape POST /clients accepts inline), not an id — on update,
+// modifyTokenVaultPrivilegedAccessCredentials resolves these against the
+// currently attached credentials and replaces them with id references before
+// the PATCH, since PATCH only accepts references.
+//
+// ip_allowlist, grants, and credentials are always coerced to a non-nil
+// (possibly empty) pointer: the API requires all three sub-fields whenever
+// this object is written, and omitting any one of them is a 400 even though
+// each is individually Optional in this schema.
+func expandTokenVaultPrivilegedAccess(data *schema.ResourceData) *management.ClientTokenVaultPrivilegedAccess {
+	if !data.IsNewResource() && !data.HasChange("token_vault_privileged_access") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("token_vault_privileged_access")
+	if config.IsNull() || config.LengthInt() == 0 {
+		// Removal is handled by fetchNullableFields/isTokenVaultPrivilegedAccessNull,
+		// which sends a literal null via a raw PATCH; omitempty prevents this
+		// struct from doing so.
+		return nil
+	}
+
+	var access management.ClientTokenVaultPrivilegedAccess
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		ipAllowlist := value.Strings(cfg.GetAttr("ip_allowlist"))
+		if ipAllowlist == nil {
+			ipAllowlist = &[]string{}
+		}
+
+		access = management.ClientTokenVaultPrivilegedAccess{
+			Credentials: expandTokenVaultPrivilegedCredentials(cfg.GetAttr("credentials")),
+			IPAllowlist: ipAllowlist,
+			Grants:      expandTokenVaultPrivilegedGrants(cfg.GetAttr("grants")),
+		}
+
+		return false
+	})
+
+	return &access
+}
+
+func expandTokenVaultPrivilegedCredentials(config cty.Value) *[]management.ClientCredentialID {
+	credentials := []management.ClientCredentialID{}
+
+	if !config.IsNull() {
+		config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			credentials = append(credentials, management.ClientCredentialID{
+				CredentialType: value.String(cfg.GetAttr("credential_type")),
+				PEM:            value.String(cfg.GetAttr("pem")),
+			})
+			return false
+		})
+	}
+
+	return &credentials
+}
+
+func expandTokenVaultPrivilegedGrants(config cty.Value) *[]management.ClientTokenVaultPrivilegedGrant {
+	grants := []management.ClientTokenVaultPrivilegedGrant{}
+
+	if !config.IsNull() {
+		config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			scopes := value.Strings(cfg.GetAttr("scopes"))
+			if scopes == nil {
+				scopes = &[]string{}
+			}
+
+			grants = append(grants, management.ClientTokenVaultPrivilegedGrant{
+				Connection: value.String(cfg.GetAttr("connection")),
+				Scopes:     scopes,
+			})
+			return false
+		})
+	}
+
+	return &grants
+}
+
+func isTokenVaultPrivilegedAccessNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("token_vault_privileged_access") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("token_vault_privileged_access")
+	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
 }
 
 func expandClientMobile(data *schema.ResourceData) *management.ClientMobile {
@@ -1180,6 +1271,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
 		"fedcm_login":                                          isFedCMLoginNull,
 		"identity_assertion_authorization_grant":               isIdentityAssertionAuthorizationGrantNull,
+		"token_vault_privileged_access":                        isTokenVaultPrivilegedAccessNull,
 	}
 
 	nullableMap := make(map[string]interface{})

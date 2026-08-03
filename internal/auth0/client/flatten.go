@@ -708,6 +708,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 		data.Set("fedcm_login", flattenFedCMLogin(client.GetFedCMLogin())),
 		data.Set("identity_assertion_authorization_grant", flattenClientIdentityAssertionAuthorizationGrant(client.GetIdentityAssertionAuthorizationGrant())),
+		data.Set("token_vault_privileged_access", flattenTokenVaultPrivilegedAccess(data, client.GetTokenVaultPrivilegedAccess())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
@@ -794,6 +795,88 @@ func flattenClientIdentityAssertionAuthorizationGrant(grant *management.Identity
 			"active": grant.GetActive(),
 		},
 	}
+}
+
+// flattenTokenVaultPrivilegedAccess flattens the token_vault_privileged_access
+// block. When the EA feature (or its base flag) is off for the tenant, the API
+// never returns this object, so nil correctly produces an empty block in state
+// either way.
+//
+// GET /clients/{id} reduces credentials to bare {"id": ...} references (the
+// PEM/credential_type supplied on write are not echoed back), so `pem` is
+// carried over from the prior state by matching on credential id rather than
+// re-read from the API. A credential id that is new to state (just created)
+// falls back to matching by position, since expandTokenVaultPrivilegedCredentials
+// creates credentials in the same order the config lists them.
+func flattenTokenVaultPrivilegedAccess(data *schema.ResourceData, access *management.ClientTokenVaultPrivilegedAccess) []interface{} {
+	if access == nil {
+		return nil
+	}
+
+	credentials := make([]interface{}, 0, len(access.GetCredentials()))
+	for index, credential := range access.GetCredentials() {
+		pem, credentialType := findTokenVaultCredentialInState(data, credential.GetID(), index)
+		if credentialType == "" {
+			credentialType = credential.GetCredentialType()
+		}
+
+		credentials = append(credentials, map[string]interface{}{
+			"id":              credential.GetID(),
+			"credential_type": credentialType,
+			"pem":             pem,
+		})
+	}
+
+	grants := make([]interface{}, 0, len(access.GetGrants()))
+	for _, grant := range access.GetGrants() {
+		grants = append(grants, map[string]interface{}{
+			"connection": grant.GetConnection(),
+			"scopes":     grant.GetScopes(),
+		})
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"credentials":  credentials,
+			"ip_allowlist": access.GetIPAllowlist(),
+			"grants":       grants,
+		},
+	}
+}
+
+// findTokenVaultCredentialInState looks up a credential's pem and
+// credential_type from the current state, first by matching on credential id
+// and falling back to positional index for a credential that has no id in
+// state yet (just created in this apply).
+func findTokenVaultCredentialInState(data *schema.ResourceData, credentialID string, index int) (pem string, credentialType string) {
+	credentialsRaw := data.Get("token_vault_privileged_access.0.credentials")
+	credentials, ok := credentialsRaw.([]interface{})
+	if !ok {
+		return "", ""
+	}
+
+	if credentialID != "" {
+		for _, item := range credentials {
+			credMap, ok := item.(map[string]interface{})
+			if !ok {
+				continue
+			}
+			if id, _ := credMap["id"].(string); id == credentialID {
+				pem, _ = credMap["pem"].(string)
+				credentialType, _ = credMap["credential_type"].(string)
+				return pem, credentialType
+			}
+		}
+	}
+
+	if index < len(credentials) {
+		if credMap, ok := credentials[index].(map[string]interface{}); ok {
+			pem, _ = credMap["pem"].(string)
+			credentialType, _ = credMap["credential_type"].(string)
+		}
+	}
+
+	return pem, credentialType
 }
 
 func flattenClientGrant(data *schema.ResourceData, clientGrant *management.ClientGrant) error {

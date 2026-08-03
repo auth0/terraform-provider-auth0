@@ -79,6 +79,7 @@ Read-Only:
 - `third_party_security_mode` (String)
 - `token_exchange` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_exchange))
 - `token_quota` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_quota))
+- `token_vault_privileged_access` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_vault_privileged_access))
 - `web_origins` (List of String)
 
 <a id="nestedobjatt--clients--express_configuration"></a>
@@ -214,5 +215,34 @@ Read-Only:
 - `enforce` (Boolean)
 - `per_day` (Number)
 - `per_hour` (Number)
+
+
+
+<a id="nestedobjatt--clients--token_vault_privileged_access"></a>
+### Nested Schema for `clients.token_vault_privileged_access`
+
+Read-Only:
+
+- `credentials` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_vault_privileged_access--credentials))
+- `grants` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_vault_privileged_access--grants))
+- `ip_allowlist` (Set of String)
+
+<a id="nestedobjatt--clients--token_vault_privileged_access--credentials"></a>
+### Nested Schema for `clients.token_vault_privileged_access.credentials`
+
+Read-Only:
+
+- `credential_type` (String)
+- `id` (String)
+- `pem` (String)
+
+
+<a id="nestedobjatt--clients--token_vault_privileged_access--grants"></a>
+### Nested Schema for `clients.token_vault_privileged_access.grants`
+
+Read-Only:
+
+- `connection` (String)
+- `scopes` (Set of String)
 
 

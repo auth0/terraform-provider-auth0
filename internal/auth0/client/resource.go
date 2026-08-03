@@ -76,6 +76,7 @@ func NewResource() *schema.Resource {
 		},
 		Description: "With this resource, you can set up applications that use Auth0 for authentication " +
 			"and configure allowed callback URLs and secrets for these applications.",
+		CustomizeDiff: validateTokenVaultPrivilegedAccess,
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
@@ -1676,6 +1677,71 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"token_vault_privileged_access": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configures the client as a Token Vault privileged worker, allowing it to request Token Vault tokens on behalf of other users. Requires the Token Vault base feature and the Token Vault Privileged Worker EA feature to be enabled for the tenant, and the required RBAC scopes on the calling token: `create:client_token_vault_privileged_access`/`update:client_token_vault_privileged_access`, plus `create:client_credentials` when `credentials` is set. (EA only)",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"credentials": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    2,
+							Description: "Credentials attached to the privileged worker. Required whenever `token_vault_privileged_access` is being written; sending an empty list detaches every credential and disables the worker. (EA only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ID of the client credential. (EA only)",
+									},
+									"credential_type": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ValidateFunc: validation.StringInSlice([]string{"public_key"}, false),
+										Description:  "Credential type. Supported types: `public_key`. (EA only)",
+									},
+									"pem": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Sensitive:   true,
+										Description: "PEM-formatted public key. Must be JSON escaped. (EA only)",
+									},
+								},
+							},
+						},
+						"ip_allowlist": {
+							Type:        schema.TypeSet,
+							Optional:    true,
+							MaxItems:    10,
+							Elem:        &schema.Schema{Type: schema.TypeString},
+							Description: "List of permitted IPv4 or IPv6 addresses, or CIDR ranges, from which the privileged worker may request tokens. Maximum of 10 entries. Required whenever `token_vault_privileged_access` is being written. (EA only)",
+						},
+						"grants": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    5,
+							Description: "Pins the connections, and the scopes within them, that the privileged worker may request tokens for. Maximum of 5 grants, with a maximum of 20 scopes in total across all of them. Required whenever `token_vault_privileged_access` is being written. (EA only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"connection": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "Name of the connection the grant applies to. (EA only)",
+									},
+									"scopes": {
+										Type:        schema.TypeSet,
+										Required:    true,
+										Elem:        &schema.Schema{Type: schema.TypeString},
+										Description: "Scopes the privileged worker may request on the connection. Must be non-empty and unique. (EA only)",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"token_quota": commons.TokenQuotaSchema(),
 			"skip_non_verifiable_callback_uri_confirmation_prompt": {
 				Type:         schema.TypeString,
@@ -1849,8 +1915,19 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 		}
 	}
 
+	staleCredentialIDs, err := modifyTokenVaultPrivilegedAccessCredentials(ctx, api, data, client)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	if err := api.Client.Update(ctx, data.Id(), client); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	for _, credentialID := range staleCredentialIDs {
+		if err := deleteCredentialIgnoringNotFound(ctx, api, data.Id(), credentialID); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	time.Sleep(200 * time.Millisecond)

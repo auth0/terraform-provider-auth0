@@ -91,6 +91,7 @@ data "auth0_client" "some-client-by-id" {
 - `token_endpoint_auth_method` (String) The authentication method for the token endpoint. Results include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic), Managing a client's authentication method can be done via the `auth0_client_credentials` resource.
 - `token_exchange` (List of Object) Allows configuration for token exchange (see [below for nested schema](#nestedatt--token_exchange))
 - `token_quota` (List of Object) The token quota configuration. (see [below for nested schema](#nestedatt--token_quota))
+- `token_vault_privileged_access` (List of Object) Configures the client as a Token Vault privileged worker, allowing it to request Token Vault tokens on behalf of other users. Requires the Token Vault base feature and the Token Vault Privileged Worker EA feature to be enabled for the tenant, and the required RBAC scopes on the calling token: `create:client_token_vault_privileged_access`/`update:client_token_vault_privileged_access`, plus `create:client_credentials` when `credentials` is set. (EA only) (see [below for nested schema](#nestedatt--token_vault_privileged_access))
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 <a id="nestedatt--addons"></a>
@@ -764,5 +765,34 @@ Read-Only:
 - `enforce` (Boolean)
 - `per_day` (Number)
 - `per_hour` (Number)
+
+
+
+<a id="nestedatt--token_vault_privileged_access"></a>
+### Nested Schema for `token_vault_privileged_access`
+
+Read-Only:
+
+- `credentials` (List of Object) (see [below for nested schema](#nestedobjatt--token_vault_privileged_access--credentials))
+- `grants` (List of Object) (see [below for nested schema](#nestedobjatt--token_vault_privileged_access--grants))
+- `ip_allowlist` (Set of String)
+
+<a id="nestedobjatt--token_vault_privileged_access--credentials"></a>
+### Nested Schema for `token_vault_privileged_access.credentials`
+
+Read-Only:
+
+- `credential_type` (String)
+- `id` (String)
+- `pem` (String)
+
+
+<a id="nestedobjatt--token_vault_privileged_access--grants"></a>
+### Nested Schema for `token_vault_privileged_access.grants`
+
+Read-Only:
+
+- `connection` (String)
+- `scopes` (Set of String)
 
 

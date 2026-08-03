@@ -128,3 +128,32 @@ resource "auth0_client" "mcp_server" {
     allow_any_profile_of_type = ["on_behalf_of_token_exchange"]
   }
 }
+
+resource "auth0_connection" "google" {
+  name     = "google-oauth2"
+  strategy = "google-oauth2"
+}
+
+# Token Vault Privileged Worker (EA only). Requires the Token Vault base
+# feature and the Token Vault Privileged Worker EA feature to be enabled for
+# the tenant, and requires the calling token to hold
+# create:client_token_vault_privileged_access (or update:... on subsequent
+# applies) plus create:client_credentials.
+resource "auth0_client" "token_vault_worker" {
+  name     = "Token Vault Privileged Worker"
+  app_type = "non_interactive"
+
+  token_vault_privileged_access {
+    credentials {
+      credential_type = "public_key"
+      pem             = file("worker-public-key.pem")
+    }
+
+    ip_allowlist = ["10.0.0.1", "192.168.1.0/24"]
+
+    grants {
+      connection = auth0_connection.google.name
+      scopes     = ["https://www.googleapis.com/auth/calendar.readonly"]
+    }
+  }
+}

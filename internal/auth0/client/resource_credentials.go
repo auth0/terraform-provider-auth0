@@ -450,7 +450,7 @@ func classifyCredentialChanges(toAdd, toRemove []interface{}) credentialDiff {
 				pemMatch = jwkThumbprint(addPEM) == rmKeyID
 			}
 
-			if pemMatch && rmAlgo == addAlgo {
+			if pemMatch && rmAlgo == addAlgo && addMap["name"] == rmMap["name"] {
 				rmParseExpiry, _ := rmMap["parse_expiry_from_cert"].(bool)
 				if rmParseExpiry && rmPEM != "" {
 					continue

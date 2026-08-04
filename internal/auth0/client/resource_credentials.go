@@ -12,8 +12,10 @@ import (
 	"io"
 	"math/big"
 	"net/http"
+	"strings"
 	"time"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -107,7 +109,15 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 				if err := detachClientCredentials(ctx, api, clientID, newMethod); err != nil {
 					return diag.FromErr(err)
 				}
+
+				// Delete only the credentials this resource owns. Anything else in
+				// the pool belongs to another slot or to no slot at all, and was
+				// never created here.
+				ownedIDs := ownedCredentialIDs(data)
 				for _, cred := range credentials {
+					if !ownedIDs[cred.GetID()] {
+						continue
+					}
 					if err := api.Client.DeleteCredential(ctx, clientID, cred.GetID()); err != nil {
 						return diag.FromErr(err)
 					}
@@ -169,17 +179,50 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	}
 
 	if len(credentials) > 0 {
+		// The detach also resets token_endpoint_auth_method, so the update below
+		// is only needed when there was nothing attached to begin with.
 		if err := detachClientCredentials(ctx, api, client.GetClientID(), tokenEndpointAuthMethod); err != nil {
 			return diag.FromErr(err)
 		}
 
+		// Delete only the credentials this resource owns. The rest of the pool was
+		// created elsewhere and is not ours to remove.
+		var diagnostics diag.Diagnostics
+		ownedIDs := ownedCredentialIDs(data)
 		for _, credential := range credentials {
-			if err := api.Client.DeleteCredential(ctx, client.GetClientID(), credential.GetID()); err != nil {
-				return diag.FromErr(err)
+			if !ownedIDs[credential.GetID()] {
+				continue
 			}
+
+			err := deleteCredentialIgnoringNotFound(ctx, api, client.GetClientID(), credential.GetID())
+			if err == nil {
+				continue
+			}
+
+			// The detach above has already been applied and is not rolled back. A
+			// hard error here would leave the client unable to use its previous
+			// authentication method while the resource stayed in state, and every
+			// retry would fail the same way. Report it and let the destroy finish.
+			if isCredentialStillAttachedError(err) {
+				diagnostics = append(diagnostics, diag.Diagnostic{
+					Severity: diag.Warning,
+					Summary:  "Client credential left in place",
+					Detail: fmt.Sprintf(
+						"The credential with ID %q could not be deleted because it is still "+
+							"attached to client %q through a feature this resource does not "+
+							"manage. The resource has been removed from the Terraform state.\n\n"+
+							"Detach the credential from that feature and delete it directly if it "+
+							"is no longer needed.",
+						credential.GetID(), client.GetClientID(),
+					),
+				})
+				continue
+			}
+
+			return append(diagnostics, diag.FromErr(err)...)
 		}
 
-		return nil
+		return diagnostics
 	}
 
 	if err := api.Client.Update(ctx, client.GetClientID(), &management.Client{
@@ -251,18 +294,31 @@ type rotationStep struct {
 	newCredential map[string]interface{} // Set when kind == createAndAttach.
 }
 
-// minCredentialCap is the smallest per-client credential limit Auth0 enforces
-// on any tenant. The cap is not queryable, but every tenant allows at least
-// this many, so holding this many attached credentials transiently is always
-// safe.
-const minCredentialCap = 2
+// maxSlotCredentials is the most credentials Auth0 allows attached to a single
+// authentication slot, such as private_key_jwt or signed_request_object. The
+// limit is not queryable; exceeding it fails with
+// "Array is too long (3), maximum 2".
+const maxSlotCredentials = 2
+
+// maxPoolCredentials is the most credential records a client can hold in total.
+// The limit is not queryable; exceeding it fails with
+// "A client can have a maximum of 4 credentials.".
+//
+// This is a different container from maxSlotCredentials. The pool holds every
+// credential on the client: those attached to any slot, plus any that are
+// attached to nothing. Because the slots can address more credentials in total
+// than the pool can hold, headroom in a slot does not imply headroom in the
+// pool, and a create-then-delete rotation is impossible once the pool is full.
+const maxPoolCredentials = 4
 
 // planCredentialRotation orders a credential change into interleaved steps,
 // pairing each removal with an addition. Within a pair it chooses the order
-// from the live attached count: with headroom below minCredentialCap it adds
-// first (keeping a credential attached for zero downtime); at or above the cap
-// it removes first (so the count never overshoots the tenant limit).
-func planCredentialRotation(diff credentialDiff, attachedCount int) []rotationStep {
+// from the live counts: while both the slot and the pool have headroom it adds
+// first, keeping a credential attached for zero downtime; once either is at its
+// limit it removes first, so neither count ever overshoots. Both counts matter
+// because they bound different containers — a slot holding one credential on a
+// client whose pool is full still cannot accept a new one.
+func planCredentialRotation(diff credentialDiff, attachedCount, poolCount int) []rotationStep {
 	rotationSteps := make([]rotationStep, 0, len(diff.toRemove)+len(diff.toAdd))
 
 	newRemoval := func(entry interface{}) (rotationStep, bool) {
@@ -281,36 +337,65 @@ func planCredentialRotation(diff credentialDiff, attachedCount int) []rotationSt
 		removal, hasID := newRemoval(diff.toRemove[i])
 		addition := newAddition(diff.toAdd[i])
 
-		if attachedCount < minCredentialCap {
-			// Headroom: add first so a valid credential stays attached.
+		if attachedCount < maxSlotCredentials && poolCount < maxPoolCredentials {
+			// Headroom in both containers: add first so a valid credential
+			// stays attached for the duration of the swap.
 			rotationSteps = append(rotationSteps, addition)
 			attachedCount++
+			poolCount++
 			if hasID {
 				rotationSteps = append(rotationSteps, removal)
 				attachedCount--
+				poolCount--
 			}
 		} else {
-			// At capacity: remove first so the count never overshoots.
+			// Either container is at its limit: remove first so neither count
+			// overshoots. A removal frees a slot entry and a pool record.
 			if hasID {
 				rotationSteps = append(rotationSteps, removal)
 				attachedCount--
+				poolCount--
 			}
 			rotationSteps = append(rotationSteps, addition)
 			attachedCount++
+			poolCount++
 		}
 	}
 	for _, removed := range diff.toRemove[pairs:] {
 		if removal, hasID := newRemoval(removed); hasID {
 			rotationSteps = append(rotationSteps, removal)
 			attachedCount--
+			poolCount--
 		}
 	}
 	for _, added := range diff.toAdd[pairs:] {
 		rotationSteps = append(rotationSteps, newAddition(added))
 		attachedCount++
+		poolCount++
 	}
 
 	return rotationSteps
+}
+
+// credentialChanges returns the credential additions and removals this apply
+// must perform for one credential set.
+//
+// The change is reported as empty unless the set itself changed. Value.Difference
+// reports every entry as an addition when the key has not changed, because it has
+// no prior value to subtract, and the update path runs on every change to the
+// resource — including ones driven by an unrelated attribute such as
+// signed_request_object.required. Acting on that would create a second copy of a
+// credential the client already holds, which the API refuses with "credentials
+// contains public keys that already exist in client", failing an apply that
+// should have left the set alone.
+func credentialChanges(data *schema.ResourceData, credentialsKey string) credentialDiff {
+	if !data.HasChange(credentialsKey) {
+		return credentialDiff{}
+	}
+
+	toAdd, toRemove := value.Difference(data, credentialsKey)
+
+	return classifyCredentialChanges(toAdd, toRemove)
 }
 
 func classifyCredentialChanges(toAdd, toRemove []interface{}) credentialDiff {
@@ -387,26 +472,34 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 	clientID := data.Get("client_id").(string)
 	credentialsKey := "private_key_jwt.0.credentials" //nolint:gosec // This is a Terraform schema key, not a credential.
 
-	toAdd, toRemove := value.Difference(data, credentialsKey)
-	diff := classifyCredentialChanges(toAdd, toRemove)
+	diff := credentialChanges(data, credentialsKey)
 
 	var result *multierror.Error
 
 	if len(diff.toAdd) > 0 || len(diff.toRemove) > 0 {
-		// Snapshot the currently attached credentials so we can mutate the set
-		// incrementally, one slot at a time, without ever exceeding the cap. The
-		// live count also drives the per-pair add-first vs remove-first ordering.
+		// The pool is still read, but never treated as this resource's own list.
+		// It serves two purposes here: counting records, and confirming which of
+		// the credentials state remembers the client actually still holds.
 		existingCreds, err := api.Client.ListCredentials(ctx, clientID)
 		if err != nil {
 			return diag.FromErr(err)
 		}
 
-		attachedCreds := make([]management.Credential, 0, len(existingCreds))
-		for _, cred := range existingCreds {
-			attachedCreds = append(attachedCreds, management.Credential{ID: cred.ID})
-		}
+		// Snapshot the credentials attached to this slot so we can mutate the set
+		// incrementally without ever exceeding the slot limit. The snapshot comes
+		// from state, not from a pool listing: the pool also holds credentials
+		// owned by other slots and by nothing at all, and attaching those here
+		// would grant them this slot's privileges.
+		//
+		// Entries state remembers but the client no longer holds are dropped. Such
+		// a credential was deleted outside Terraform, and sending its ID back in an
+		// attach payload would fail every step of the rotation.
+		attachedCreds := retainExistingCredentials(
+			attachedCredentialsFromState(data, "private_key_jwt"),
+			existingCreds,
+		)
 
-		for _, step := range planCredentialRotation(diff, len(attachedCreds)) {
+		for _, step := range planCredentialRotation(diff, len(attachedCreds), len(existingCreds)) {
 			switch step.kind {
 			case detachAndDelete:
 				attachedCreds = removeAttachedCredential(attachedCreds, step.credentialID)
@@ -454,6 +547,113 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 	return diag.FromErr(result.ErrorOrNil())
 }
 
+// credentialBearingAttributes are the schema attributes of this resource that
+// hold credential records. Every credential this resource owns is reachable
+// through one of them.
+var credentialBearingAttributes = []string{
+	"private_key_jwt",
+	"tls_client_auth",
+	"self_signed_tls_client_auth",
+	"signed_request_object",
+}
+
+// ownedCredentialIDs returns the IDs of the credentials this resource manages,
+// read from state across every credential-bearing attribute.
+//
+// The credential pool is deliberately not used as the source. A pool listing
+// cannot attribute ownership: GET /clients/{id}/credentials returns an identical
+// field set for every credential regardless of which slot holds it, or whether
+// any slot does. Treating the pool as this resource's own list makes the
+// provider attach and delete credentials it never created, so ownership must
+// come from state, which flattenCredentials populates from the client's slot
+// lists.
+func ownedCredentialIDs(data *schema.ResourceData) map[string]bool {
+	ownedIDs := make(map[string]bool)
+
+	for _, attribute := range credentialBearingAttributes {
+		for _, credentialID := range stateCredentialIDs(data, attribute) {
+			ownedIDs[credentialID] = true
+		}
+	}
+
+	return ownedIDs
+}
+
+// stateCredentialIDs returns the credential IDs recorded in state for one
+// attribute, in state order. It handles both the TypeSet and TypeList shapes
+// the credential-bearing attributes use.
+//
+// The prior state is read rather than the planned value, because the planned
+// value describes the desired end state: a credential being removed by this
+// apply is already absent from it, yet is still attached on the client until its
+// removal step runs. Newly added credentials have no ID yet and are skipped.
+func stateCredentialIDs(data *schema.ResourceData, attribute string) []string {
+	priorState, _ := data.GetChange(fmt.Sprintf("%s.0.credentials", attribute))
+
+	var entries []interface{}
+	switch credentials := priorState.(type) {
+	case *schema.Set:
+		entries = credentials.List()
+	case []interface{}:
+		entries = credentials
+	default:
+		return nil
+	}
+
+	credentialIDs := make([]string, 0, len(entries))
+	for _, entry := range entries {
+		credential, ok := entry.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		if credentialID, _ := credential["id"].(string); credentialID != "" {
+			credentialIDs = append(credentialIDs, credentialID)
+		}
+	}
+
+	return credentialIDs
+}
+
+// attachedCredentialsFromState returns the credentials attached to one slot as
+// bare {id} references ready for a PATCH, taken from state rather than from the
+// pool so that credentials belonging to another slot are never pulled in.
+func attachedCredentialsFromState(data *schema.ResourceData, attribute string) []management.Credential {
+	credentialIDs := stateCredentialIDs(data, attribute)
+
+	attachedCredentials := make([]management.Credential, 0, len(credentialIDs))
+	for _, credentialID := range credentialIDs {
+		attachedCredentials = append(attachedCredentials, management.Credential{
+			ID: auth0.String(credentialID),
+		})
+	}
+
+	return attachedCredentials
+}
+
+// retainExistingCredentials drops entries from attachedCredentials that are not
+// present in the client's credential pool.
+//
+// State can name a credential the client no longer holds, because a credential
+// deleted outside Terraform leaves the slot list in state untouched until the
+// next refresh. Carrying such an ID into an attach payload makes the API reject
+// every step of the rotation, so it is filtered out instead. The pool is used
+// only to test existence here, never as a source of ownership.
+func retainExistingCredentials(attachedCredentials []management.Credential, poolCredentials []*management.Credential) []management.Credential {
+	inPool := make(map[string]bool, len(poolCredentials))
+	for _, credential := range poolCredentials {
+		inPool[credential.GetID()] = true
+	}
+
+	retained := make([]management.Credential, 0, len(attachedCredentials))
+	for _, credential := range attachedCredentials {
+		if inPool[credential.GetID()] {
+			retained = append(retained, credential)
+		}
+	}
+
+	return retained
+}
+
 // removeAttachedCredential returns creds without the entry matching id.
 func removeAttachedCredential(creds []management.Credential, id string) []management.Credential {
 	filtered := make([]management.Credential, 0, len(creds))
@@ -463,6 +663,21 @@ func removeAttachedCredential(creds []management.Credential, id string) []manage
 		}
 	}
 	return filtered
+}
+
+// credentialStillAttachedMessage is the message the Management API returns when
+// a credential cannot be deleted because a client feature still references it.
+const credentialStillAttachedMessage = "still associated with a client"
+
+// isCredentialStillAttachedError reports whether err is the API's refusal to
+// delete a credential that is still attached to the client. The API exposes no
+// error code for this case, so the message is the only signal available.
+func isCredentialStillAttachedError(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	return strings.Contains(strings.ToLower(err.Error()), credentialStillAttachedMessage)
 }
 
 // deleteCredentialIgnoringNotFound deletes a credential, treats a 404 as success.

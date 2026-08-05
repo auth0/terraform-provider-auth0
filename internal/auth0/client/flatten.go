@@ -969,6 +969,10 @@ func flattenSignedRequestObject(
 		return nil, nil
 	}
 
+	if isResource && !credentialBlockDeclared(data, "signed_request_object") {
+		return nil, nil
+	}
+
 	if credentials, err := flattenCredentials(
 		ctx, api, data, isResource, "signed_request_object",
 		sro.GetCredentials(),

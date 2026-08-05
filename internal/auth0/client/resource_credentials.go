@@ -106,7 +106,7 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 				return diag.FromErr(err)
 			}
 			if len(credentials) > 0 {
-				if err := detachClientCredentials(ctx, api, clientID, newMethod); err != nil {
+				if err := detachClientCredentials(ctx, api, clientID, newMethod, credentialBlockDeclared(data, "signed_request_object")); err != nil {
 					return diag.FromErr(err)
 				}
 
@@ -181,7 +181,10 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	if len(credentials) > 0 {
 		// The detach also resets token_endpoint_auth_method, so the update below
 		// is only needed when there was nothing attached to begin with.
-		if err := detachClientCredentials(ctx, api, client.GetClientID(), tokenEndpointAuthMethod); err != nil {
+		if err := detachClientCredentials(
+			ctx, api, client.GetClientID(), tokenEndpointAuthMethod,
+			credentialBlockDeclared(data, "signed_request_object"),
+		); err != nil {
 			return diag.FromErr(err)
 		}
 
@@ -557,6 +560,45 @@ var credentialBearingAttributes = []string{
 	"signed_request_object",
 }
 
+// credentialBlockDeclared reports whether this resource declares the named
+// credential-bearing block, and so whether the read path may record what the
+// API returns for it.
+//
+// Without this test the read path adopts every slot the client happens to hold.
+// A credential attached out of band to a slot the configuration never declared
+// is written into state as this resource's own, and the next plan then compares a
+// block that is in state against a configuration that does not have it. The
+// credential fields are ForceNew, so Terraform proposes a replacement, and the
+// destroy leg of that replacement deletes a credential this resource did not
+// create. Declining to record the block leaves it as it was found.
+//
+// Two sources are consulted because neither covers every phase on its own.
+// During an apply the configuration is authoritative and present. During a
+// refresh it is not: ReadResource populates only RawState, leaving GetRawConfig()
+// a null object on which GetAttr would panic. Prior state stands in for the
+// configuration there, which holds because the read path is this block's only
+// writer and this test gates it.
+//
+// When both sources are null or unknown there is nothing to compare against — an
+// import carries no prior state, and the read following one holds only the ID —
+// so the API response is recorded as it was before.
+func credentialBlockDeclared(data *schema.ResourceData, attribute string) bool {
+	for _, source := range []cty.Value{data.GetRawConfig(), data.GetRawState()} {
+		if source.IsNull() || !source.IsKnown() {
+			continue
+		}
+
+		block := source.GetAttr(attribute)
+		if block.IsNull() || !block.IsKnown() {
+			continue
+		}
+
+		return block.LengthInt() > 0
+	}
+
+	return true
+}
+
 // ownedCredentialIDs returns the IDs of the credentials this resource manages,
 // read from state across every credential-bearing attribute.
 //
@@ -884,13 +926,25 @@ func attachSignedRequestObjectNoCredentials(ctx context.Context, api *management
 	return updateClientInternal(ctx, api, client.ID, client)
 }
 
-func detachClientCredentials(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string) error {
+func detachClientCredentials(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string, detachSignedRequestObject bool) error {
 	client := clientWithAuthMethodAndSignedRequestObject{
 		ID:                          clientID,
 		SignedRequestObject:         nil,
 		ClientAuthenticationMethods: nil,
 		// API doesn't accept nil on both of these, so we temporarily set this to a default.
 		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
+	}
+
+	// Clearing signed_request_object is only correct when this resource manages
+	// it. A client can hold a JAR configuration set up elsewhere while this
+	// resource declares only an authentication method, and detaching then erases
+	// a feature it was never asked to touch.
+	if !detachSignedRequestObject {
+		return updateClientInternal(ctx, api, client.ID, clientWithAuthMethod{
+			ID:                          client.ID,
+			ClientAuthenticationMethods: nil,
+			TokenEndpointAuthMethod:     client.TokenEndpointAuthMethod,
+		})
 	}
 
 	return updateClientInternal(ctx, api, client.ID, client)

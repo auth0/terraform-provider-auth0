@@ -110,9 +110,8 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 					return diag.FromErr(err)
 				}
 
-				// Delete only the credentials this resource owns. Anything else in
-				// the pool belongs to another slot or to no slot at all, and was
-				// never created here.
+				// Delete only what this resource owns. The rest of the pool
+				// belongs to another slot or to none, and was created elsewhere.
 				ownedIDs := ownedCredentialIDs(data)
 				for _, cred := range credentials {
 					if !ownedIDs[cred.GetID()] {
@@ -188,8 +187,8 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 			return diag.FromErr(err)
 		}
 
-		// Delete only the credentials this resource owns. The rest of the pool was
-		// created elsewhere and is not ours to remove.
+		// Delete only what this resource owns. The rest of the pool was created
+		// elsewhere and is not ours to remove.
 		var diagnostics diag.Diagnostics
 		ownedIDs := ownedCredentialIDs(data)
 		for _, credential := range credentials {
@@ -202,10 +201,10 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 				continue
 			}
 
-			// The detach above has already been applied and is not rolled back. A
-			// hard error here would leave the client unable to use its previous
-			// authentication method while the resource stayed in state, and every
-			// retry would fail the same way. Report it and let the destroy finish.
+			// The detach above already landed and is not rolled back. Failing hard
+			// here would leave the client unable to use its previous
+			// authentication method with the resource still in state, and every
+			// retry would fail identically. Warn and let the destroy finish.
 			if isCredentialStillAttachedError(err) {
 				diagnostics = append(diagnostics, diag.Diagnostic{
 					Severity: diag.Warning,
@@ -307,20 +306,15 @@ const maxSlotCredentials = 2
 // The limit is not queryable; exceeding it fails with
 // "A client can have a maximum of 4 credentials.".
 //
-// This is a different container from maxSlotCredentials. The pool holds every
-// credential on the client: those attached to any slot, plus any that are
-// attached to nothing. Because the slots can address more credentials in total
-// than the pool can hold, headroom in a slot does not imply headroom in the
-// pool, and a create-then-delete rotation is impossible once the pool is full.
+// The pool is a separate container from a slot: it holds every credential on the
+// client, attached or not. The slots can address more credentials in total than
+// the pool can hold, so headroom in a slot does not imply headroom in the pool.
 const maxPoolCredentials = 4
 
-// planCredentialRotation orders a credential change into interleaved steps,
-// pairing each removal with an addition. Within a pair it chooses the order
-// from the live counts: while both the slot and the pool have headroom it adds
-// first, keeping a credential attached for zero downtime; once either is at its
-// limit it removes first, so neither count ever overshoots. Both counts matter
-// because they bound different containers — a slot holding one credential on a
-// client whose pool is full still cannot accept a new one.
+// planCredentialRotation orders a credential change into steps, pairing each
+// removal with an addition. While both the slot and the pool have headroom it
+// adds first, so a usable credential stays attached throughout the swap. Once
+// either container is full it removes first, so neither count overshoots.
 func planCredentialRotation(diff credentialDiff, attachedCount, poolCount int) []rotationStep {
 	rotationSteps := make([]rotationStep, 0, len(diff.toRemove)+len(diff.toAdd))
 
@@ -341,8 +335,7 @@ func planCredentialRotation(diff credentialDiff, attachedCount, poolCount int) [
 		addition := newAddition(diff.toAdd[i])
 
 		if attachedCount < maxSlotCredentials && poolCount < maxPoolCredentials {
-			// Headroom in both containers: add first so a valid credential
-			// stays attached for the duration of the swap.
+			// Room in both containers, so the slot is never left empty.
 			rotationSteps = append(rotationSteps, addition)
 			attachedCount++
 			poolCount++
@@ -352,8 +345,8 @@ func planCredentialRotation(diff credentialDiff, attachedCount, poolCount int) [
 				poolCount--
 			}
 		} else {
-			// Either container is at its limit: remove first so neither count
-			// overshoots. A removal frees a slot entry and a pool record.
+			// One container is full. Removing frees an entry in both, so the
+			// addition that follows fits.
 			if hasID {
 				rotationSteps = append(rotationSteps, removal)
 				attachedCount--
@@ -380,17 +373,15 @@ func planCredentialRotation(diff credentialDiff, attachedCount, poolCount int) [
 	return rotationSteps
 }
 
-// credentialChanges returns the credential additions and removals this apply
-// must perform for one credential set.
+// credentialChanges returns the additions and removals this apply must perform
+// for one credential set, or nothing if the set did not change.
 //
-// The change is reported as empty unless the set itself changed. Value.Difference
-// reports every entry as an addition when the key has not changed, because it has
-// no prior value to subtract, and the update path runs on every change to the
-// resource — including ones driven by an unrelated attribute such as
-// signed_request_object.required. Acting on that would create a second copy of a
-// credential the client already holds, which the API refuses with "credentials
-// contains public keys that already exist in client", failing an apply that
-// should have left the set alone.
+// The HasChange guard matters because the update path runs on every change to the
+// resource, including ones driven by an unrelated attribute such as
+// signed_request_object.required. On an unchanged key value.Difference has no
+// prior value to subtract and so reports every entry as an addition. Acting on
+// that re-creates credentials the client already holds, which the API rejects
+// with "credentials contains public keys that already exist in client".
 func credentialChanges(data *schema.ResourceData, credentialsKey string) credentialDiff {
 	if !data.HasChange(credentialsKey) {
 		return credentialDiff{}
@@ -480,23 +471,18 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 	var result *multierror.Error
 
 	if len(diff.toAdd) > 0 || len(diff.toRemove) > 0 {
-		// The pool is still read, but never treated as this resource's own list.
-		// It serves two purposes here: counting records, and confirming which of
-		// the credentials state remembers the client actually still holds.
+		// The pool is read for two things only: the record count, and whether a
+		// credential still exists. Never for ownership.
 		existingCreds, err := api.Client.ListCredentials(ctx, clientID)
 		if err != nil {
 			return diag.FromErr(err)
 		}
 
-		// Snapshot the credentials attached to this slot so we can mutate the set
-		// incrementally without ever exceeding the slot limit. The snapshot comes
-		// from state, not from a pool listing: the pool also holds credentials
-		// owned by other slots and by nothing at all, and attaching those here
-		// would grant them this slot's privileges.
-		//
-		// Entries state remembers but the client no longer holds are dropped. Such
-		// a credential was deleted outside Terraform, and sending its ID back in an
-		// attach payload would fail every step of the rotation.
+		// The attached set comes from state, not from the pool listing. The pool
+		// also holds credentials owned by other slots and by nothing at all, and
+		// attaching those here would grant them this slot's privileges. IDs state
+		// remembers but the client no longer holds are dropped, since the API
+		// rejects an attach payload naming a deleted credential.
 		attachedCreds := retainExistingCredentials(
 			attachedCredentialsFromState(data, "private_key_jwt"),
 			existingCreds,
@@ -561,27 +547,24 @@ var credentialBearingAttributes = []string{
 }
 
 // credentialBlockDeclared reports whether this resource declares the named
-// credential-bearing block, and so whether the read path may record what the
-// API returns for it.
+// credential-bearing block, and so whether the read path may record what the API
+// returns for it.
 //
-// Without this test the read path adopts every slot the client happens to hold.
-// A credential attached out of band to a slot the configuration never declared
-// is written into state as this resource's own, and the next plan then compares a
-// block that is in state against a configuration that does not have it. The
-// credential fields are ForceNew, so Terraform proposes a replacement, and the
-// destroy leg of that replacement deletes a credential this resource did not
-// create. Declining to record the block leaves it as it was found.
+// Without this test the read path adopts whatever slot the client happens to
+// hold. A credential attached out of band to a block the configuration never
+// declared lands in state as ours, and the next plan compares that block against
+// a configuration without it. The credential fields are ForceNew, so Terraform
+// proposes a replacement whose destroy leg deletes a credential we did not create.
 //
-// Two sources are consulted because neither covers every phase on its own.
-// During an apply the configuration is authoritative and present. During a
-// refresh it is not: ReadResource populates only RawState, leaving GetRawConfig()
-// a null object on which GetAttr would panic. Prior state stands in for the
-// configuration there, which holds because the read path is this block's only
-// writer and this test gates it.
+// Both raw sources are checked because neither covers every phase alone. Config
+// is authoritative during an apply but absent during a refresh, where
+// ReadResource populates only RawState and GetRawConfig() returns a null object
+// that would panic on GetAttr. Prior state substitutes there, which is sound
+// because this read path is the block's only writer and this test gates it.
 //
-// When both sources are null or unknown there is nothing to compare against — an
-// import carries no prior state, and the read following one holds only the ID —
-// so the API response is recorded as it was before.
+// With both sources null there is nothing to compare against — that is import,
+// and the read after it, which carry no prior state — so the response is recorded
+// as before.
 func credentialBlockDeclared(data *schema.ResourceData, attribute string) bool {
 	for _, source := range []cty.Value{data.GetRawConfig(), data.GetRawState()} {
 		if source.IsNull() || !source.IsKnown() {
@@ -602,13 +585,12 @@ func credentialBlockDeclared(data *schema.ResourceData, attribute string) bool {
 // ownedCredentialIDs returns the IDs of the credentials this resource manages,
 // read from state across every credential-bearing attribute.
 //
-// The credential pool is deliberately not used as the source. A pool listing
-// cannot attribute ownership: GET /clients/{id}/credentials returns an identical
-// field set for every credential regardless of which slot holds it, or whether
-// any slot does. Treating the pool as this resource's own list makes the
-// provider attach and delete credentials it never created, so ownership must
-// come from state, which flattenCredentials populates from the client's slot
-// lists.
+// State is the source, not the credential pool: GET /clients/{id}/credentials
+// returns an identical field set for every credential no matter which slot holds
+// it, or whether any does, so a pool listing cannot attribute ownership. Reading
+// it as our own list is what made the provider attach and delete credentials it
+// never created. State is trustworthy here because flattenCredentials fills it
+// from the client's slot lists.
 func ownedCredentialIDs(data *schema.ResourceData) map[string]bool {
 	ownedIDs := make(map[string]bool)
 
@@ -622,13 +604,13 @@ func ownedCredentialIDs(data *schema.ResourceData) map[string]bool {
 }
 
 // stateCredentialIDs returns the credential IDs recorded in state for one
-// attribute, in state order. It handles both the TypeSet and TypeList shapes
-// the credential-bearing attributes use.
+// attribute, in state order. It handles both the TypeSet and TypeList shapes the
+// credential-bearing attributes use.
 //
-// The prior state is read rather than the planned value, because the planned
-// value describes the desired end state: a credential being removed by this
-// apply is already absent from it, yet is still attached on the client until its
-// removal step runs. Newly added credentials have no ID yet and are skipped.
+// It reads prior state rather than the planned value, which describes the desired
+// end state: a credential this apply removes is already gone from the plan, yet
+// stays attached on the client until its removal step runs. Newly added
+// credentials have no ID yet and are skipped.
 func stateCredentialIDs(data *schema.ResourceData, attribute string) []string {
 	priorState, _ := data.GetChange(fmt.Sprintf("%s.0.credentials", attribute))
 
@@ -672,14 +654,13 @@ func attachedCredentialsFromState(data *schema.ResourceData, attribute string) [
 	return attachedCredentials
 }
 
-// retainExistingCredentials drops entries from attachedCredentials that are not
-// present in the client's credential pool.
+// retainExistingCredentials drops entries from attachedCredentials that the
+// client's credential pool no longer contains.
 //
-// State can name a credential the client no longer holds, because a credential
-// deleted outside Terraform leaves the slot list in state untouched until the
-// next refresh. Carrying such an ID into an attach payload makes the API reject
-// every step of the rotation, so it is filtered out instead. The pool is used
-// only to test existence here, never as a source of ownership.
+// A credential deleted outside Terraform leaves the slot list in state untouched
+// until the next refresh, so state can name one the client no longer holds.
+// Carrying that ID into an attach payload makes the API reject every step of the
+// rotation. The pool is used only to test existence, never for ownership.
 func retainExistingCredentials(attachedCredentials []management.Credential, poolCredentials []*management.Credential) []management.Credential {
 	inPool := make(map[string]bool, len(poolCredentials))
 	for _, credential := range poolCredentials {
@@ -935,10 +916,10 @@ func detachClientCredentials(ctx context.Context, api *management.Management, cl
 		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
 	}
 
-	// Clearing signed_request_object is only correct when this resource manages
-	// it. A client can hold a JAR configuration set up elsewhere while this
-	// resource declares only an authentication method, and detaching then erases
-	// a feature it was never asked to touch.
+	// Only clear signed_request_object when this resource manages it. A client can
+	// hold a JAR configuration set up elsewhere while this resource declares just
+	// an authentication method, and clearing it there erases a feature we were
+	// never asked to touch.
 	if !detachSignedRequestObject {
 		return updateClientInternal(ctx, api, client.ID, clientWithAuthMethod{
 			ID:                          client.ID,

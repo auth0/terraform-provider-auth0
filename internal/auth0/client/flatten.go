@@ -969,6 +969,9 @@ func flattenSignedRequestObject(
 		return nil, nil
 	}
 
+	// A JAR configuration the resource does not declare belongs to whoever set it
+	// up. Leave it out of state so we never rotate or delete it. The data source
+	// reports it either way.
 	if isResource && !credentialBlockDeclared(data, "signed_request_object") {
 		return nil, nil
 	}

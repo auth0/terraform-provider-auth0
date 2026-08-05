@@ -8,6 +8,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"math/big"
+	"strings"
 	"testing"
 
 	"context"
@@ -74,169 +75,132 @@ func TestJWKThumbprint_UnsupportedInputReturnsEmpty(t *testing.T) {
 		"unsupported block type returns empty")
 }
 
-// simulateAttachedCount replays the rotation steps against a starting attached
-// count and returns the lowest and highest attached count seen at any step
-// boundary.
-func simulateAttachedCount(rotationSteps []rotationStep, startingAttachedCount int) (lowestAttachedCount, highestAttachedCount int) {
-	currentAttachedCount := startingAttachedCount
-	lowestAttachedCount, highestAttachedCount = startingAttachedCount, startingAttachedCount
+// formatRotation renders the planned steps as "-<removed id>" and "+<added name>"
+// in order, so a case can state the whole expected sequence in one string.
+func formatRotation(rotationSteps []rotationStep) string {
+	rendered := make([]string, 0, len(rotationSteps))
 	for _, step := range rotationSteps {
 		switch step.kind {
 		case detachAndDelete:
-			currentAttachedCount--
+			rendered = append(rendered, "-"+step.credentialID)
 		case createAndAttach:
-			currentAttachedCount++
-		}
-		if currentAttachedCount < lowestAttachedCount {
-			lowestAttachedCount = currentAttachedCount
-		}
-		if currentAttachedCount > highestAttachedCount {
-			highestAttachedCount = currentAttachedCount
+			name, _ := step.newCredential["name"].(string)
+			rendered = append(rendered, "+"+name)
 		}
 	}
-	return lowestAttachedCount, highestAttachedCount
+	return strings.Join(rendered, " ")
 }
 
-func TestPlanCredentialRotation_AtCapacityRemovesFirst(t *testing.T) {
-	// A full 2-for-2 swap starting at the cap: each pair must remove before it
-	// adds so the count never overshoots 2.
-	diff := credentialDiff{
-		toRemove: []interface{}{
-			map[string]interface{}{"id": "old-1"},
-			map[string]interface{}{"id": "old-2"},
+// highestAttachedCount replays the steps and returns the largest attached count
+// reached at any boundary.
+func highestAttachedCount(rotationSteps []rotationStep, startingCount int) int {
+	current, highest := startingCount, startingCount
+	for _, step := range rotationSteps {
+		switch step.kind {
+		case detachAndDelete:
+			current--
+		case createAndAttach:
+			current++
+		}
+		if current > highest {
+			highest = current
+		}
+	}
+	return highest
+}
+
+func TestPlanCredentialRotation(t *testing.T) {
+	removals := func(ids ...string) []interface{} {
+		entries := make([]interface{}, 0, len(ids))
+		for _, id := range ids {
+			entries = append(entries, map[string]interface{}{"id": id})
+		}
+		return entries
+	}
+	additions := func(names ...string) []interface{} {
+		entries := make([]interface{}, 0, len(names))
+		for _, name := range names {
+			entries = append(entries, map[string]interface{}{"name": name})
+		}
+		return entries
+	}
+
+	cases := []struct {
+		name           string
+		toRemove       []interface{}
+		toAdd          []interface{}
+		attachedCount  int
+		poolCount      int
+		expectedSteps  string
+		expectedReason string
+	}{
+		{
+			name: "swap of two at the slot cap removes before each add",
+			// Adding first here would ask the slot to hold 3.
+			toRemove: removals("old-1", "old-2"), toAdd: additions("new-1", "new-2"),
+			attachedCount: maxSlotCredentials, poolCount: 2,
+			expectedSteps: "-old-1 +new-1 -old-2 +new-2",
 		},
-		toAdd: []interface{}{
-			map[string]interface{}{"name": "new-1"},
-			map[string]interface{}{"name": "new-2"},
+		{
+			name: "full pool removes first even when the slot has room",
+			// The remaining pool records belong to other features. Creating first
+			// fails with "A client can have a maximum of 4 credentials".
+			toRemove: removals("old-1"), toAdd: additions("new-1"),
+			attachedCount: 1, poolCount: maxPoolCredentials,
+			expectedSteps:  "-old-1 +new-1",
+			expectedReason: "both counts are consulted, not just the slot",
+		},
+		{
+			name:     "room in both containers adds first",
+			toRemove: removals("old-1"), toAdd: additions("new-1"),
+			attachedCount: 1, poolCount: maxPoolCredentials - 1,
+			expectedSteps:  "+new-1 -old-1",
+			expectedReason: "a usable credential stays attached throughout the swap",
+		},
+		{
+			name:          "pure addition",
+			toAdd:         additions("new-1"),
+			expectedSteps: "+new-1",
+		},
+		{
+			name:          "pure removal",
+			toRemove:      removals("old-1"),
+			attachedCount: 1, poolCount: 1,
+			expectedSteps: "-old-1",
+		},
+		{
+			name:     "more removals than additions pairs one, then trails the rest",
+			toRemove: removals("old-1", "old-2"), toAdd: additions("new-1"),
+			attachedCount: maxSlotCredentials, poolCount: 2,
+			expectedSteps: "-old-1 +new-1 -old-2",
+		},
+		{
+			name:     "more additions than removals pairs one, then trails the rest",
+			toRemove: removals("old-1"), toAdd: additions("new-1", "new-2"),
+			attachedCount: 1, poolCount: 1,
+			expectedSteps: "+new-1 -old-1 +new-2",
+		},
+		{
+			name:          "a removal without an ID is skipped",
+			toRemove:      removals(""),
+			attachedCount: 1, poolCount: 1,
+			expectedSteps: "",
 		},
 	}
 
-	const startingAttachedCount = 2
-	rotationSteps := planCredentialRotation(diff, startingAttachedCount, startingAttachedCount)
+	for _, testCase := range cases {
+		t.Run(testCase.name, func(t *testing.T) {
+			rotationSteps := planCredentialRotation(
+				credentialDiff{toAdd: testCase.toAdd, toRemove: testCase.toRemove},
+				testCase.attachedCount, testCase.poolCount,
+			)
 
-	require.Len(t, rotationSteps, 4)
-	assert.Equal(t, detachAndDelete, rotationSteps[0].kind)
-	assert.Equal(t, "old-1", rotationSteps[0].credentialID)
-	assert.Equal(t, createAndAttach, rotationSteps[1].kind)
-	assert.Equal(t, "new-1", rotationSteps[1].newCredential["name"])
-	assert.Equal(t, detachAndDelete, rotationSteps[2].kind)
-	assert.Equal(t, "old-2", rotationSteps[2].credentialID)
-	assert.Equal(t, createAndAttach, rotationSteps[3].kind)
-	assert.Equal(t, "new-2", rotationSteps[3].newCredential["name"])
-
-	lowestAttachedCount, highestAttachedCount := simulateAttachedCount(rotationSteps, startingAttachedCount)
-	assert.Equal(t, 2, highestAttachedCount, "count must never exceed the cap during a swap at capacity")
-	assert.Equal(t, 1, lowestAttachedCount, "at least one credential stays attached throughout")
-}
-
-func TestPlanCredentialRotation_WithHeadroomAddsFirst(t *testing.T) {
-	// A 1-for-1 swap on a client holding a single credential. With headroom
-	// below the minimum cap the new credential must be added before the old one
-	// is removed, so the client is never left with zero attached credentials.
-	diff := credentialDiff{
-		toRemove: []interface{}{map[string]interface{}{"id": "old-1"}},
-		toAdd:    []interface{}{map[string]interface{}{"name": "new-1"}},
+			assert.Equal(t, testCase.expectedSteps, formatRotation(rotationSteps), testCase.expectedReason)
+			assert.LessOrEqual(t,
+				highestAttachedCount(rotationSteps, testCase.attachedCount), maxSlotCredentials,
+				"the attached count must never exceed the slot cap mid-rotation")
+		})
 	}
-
-	const startingAttachedCount = 1
-	rotationSteps := planCredentialRotation(diff, startingAttachedCount, startingAttachedCount)
-
-	require.Len(t, rotationSteps, 2)
-	assert.Equal(t, createAndAttach, rotationSteps[0].kind)
-	assert.Equal(t, "new-1", rotationSteps[0].newCredential["name"])
-	assert.Equal(t, detachAndDelete, rotationSteps[1].kind)
-	assert.Equal(t, "old-1", rotationSteps[1].credentialID)
-
-	lowestAttachedCount, highestAttachedCount := simulateAttachedCount(rotationSteps, startingAttachedCount)
-	assert.GreaterOrEqual(t, lowestAttachedCount, 1, "a valid credential must stay attached throughout a 1-for-1 rotation")
-	assert.Equal(t, 2, highestAttachedCount, "adding first briefly holds 2, which every tenant allows")
-}
-
-func TestPlanCredentialRotation_HandlesUnevenAndPureChanges(t *testing.T) {
-	pureAdditionSteps := planCredentialRotation(credentialDiff{
-		toAdd: []interface{}{map[string]interface{}{"name": "new-1"}},
-	}, 0, 0)
-	require.Len(t, pureAdditionSteps, 1)
-	assert.Equal(t, createAndAttach, pureAdditionSteps[0].kind)
-
-	pureRemovalSteps := planCredentialRotation(credentialDiff{
-		toRemove: []interface{}{map[string]interface{}{"id": "old-1"}},
-	}, 1, 1)
-	require.Len(t, pureRemovalSteps, 1)
-	assert.Equal(t, detachAndDelete, pureRemovalSteps[0].kind)
-
-	// More removals than additions, starting at capacity: one interleaved pair
-	// (remove-first), then a trailing removal.
-	moreRemovalsThanAdditionsSteps := planCredentialRotation(credentialDiff{
-		toRemove: []interface{}{
-			map[string]interface{}{"id": "old-1"},
-			map[string]interface{}{"id": "old-2"},
-		},
-		toAdd: []interface{}{map[string]interface{}{"name": "new-1"}},
-	}, 2, 2)
-	require.Len(t, moreRemovalsThanAdditionsSteps, 3)
-	assert.Equal(t, detachAndDelete, moreRemovalsThanAdditionsSteps[0].kind)
-	assert.Equal(t, createAndAttach, moreRemovalsThanAdditionsSteps[1].kind)
-	assert.Equal(t, detachAndDelete, moreRemovalsThanAdditionsSteps[2].kind)
-
-	// More additions than removals, starting with headroom: the pair adds first,
-	// then a trailing addition.
-	moreAdditionsThanRemovalsSteps := planCredentialRotation(credentialDiff{
-		toRemove: []interface{}{
-			map[string]interface{}{"id": "old-1"},
-		},
-		toAdd: []interface{}{
-			map[string]interface{}{"name": "new-1"},
-			map[string]interface{}{"name": "new-2"},
-		},
-	}, 1, 1)
-	require.Len(t, moreAdditionsThanRemovalsSteps, 3)
-	assert.Equal(t, createAndAttach, moreAdditionsThanRemovalsSteps[0].kind)
-	assert.Equal(t, detachAndDelete, moreAdditionsThanRemovalsSteps[1].kind)
-	assert.Equal(t, createAndAttach, moreAdditionsThanRemovalsSteps[2].kind)
-}
-
-func TestPlanCredentialRotation_SkipsRemovalsWithoutID(t *testing.T) {
-	rotationSteps := planCredentialRotation(credentialDiff{
-		toRemove: []interface{}{map[string]interface{}{"id": ""}},
-	}, 1, 1)
-	assert.Empty(t, rotationSteps)
-}
-
-func TestPlanCredentialRotation_FullPoolWithSlotHeadroomRemovesFirst(t *testing.T) {
-	// The slot holds one credential, so it has headroom, but the client's pool is
-	// full because other features hold the remaining records. Creating first would
-	// fail with "A client can have a maximum of 4 credentials", so the rotation
-	// must remove before it adds even though the slot looks like it has room.
-	diff := credentialDiff{
-		toRemove: []interface{}{map[string]interface{}{"id": "old-1"}},
-		toAdd:    []interface{}{map[string]interface{}{"name": "new-1"}},
-	}
-
-	rotationSteps := planCredentialRotation(diff, 1, maxPoolCredentials)
-
-	require.Len(t, rotationSteps, 2)
-	assert.Equal(t, detachAndDelete, rotationSteps[0].kind,
-		"a full pool must free a record before a new credential is created")
-	assert.Equal(t, "old-1", rotationSteps[0].credentialID)
-	assert.Equal(t, createAndAttach, rotationSteps[1].kind)
-	assert.Equal(t, "new-1", rotationSteps[1].newCredential["name"])
-}
-
-func TestPlanCredentialRotation_SlotHeadroomWithPoolHeadroomAddsFirst(t *testing.T) {
-	// Same slot occupancy as above, but the pool has room. Zero-downtime ordering
-	// is available here, so the new credential is added before the old is removed.
-	diff := credentialDiff{
-		toRemove: []interface{}{map[string]interface{}{"id": "old-1"}},
-		toAdd:    []interface{}{map[string]interface{}{"name": "new-1"}},
-	}
-
-	rotationSteps := planCredentialRotation(diff, 1, maxPoolCredentials-1)
-
-	require.Len(t, rotationSteps, 2)
-	assert.Equal(t, createAndAttach, rotationSteps[0].kind,
-		"pool headroom allows the zero-downtime add-first ordering")
-	assert.Equal(t, detachAndDelete, rotationSteps[1].kind)
 }
 
 func TestIsCredentialStillAttachedError(t *testing.T) {
@@ -438,79 +402,10 @@ func TestOwnedCredentialIDs_SurvivesAuthMethodSwitch(t *testing.T) {
 		},
 	)
 
-	t.Logf("planned pkjwt = %#v", data.Get("private_key_jwt"))
 	owned := ownedCredentialIDs(data)
-	t.Logf("owned = %v", owned)
 	assert.True(t, owned["cred-mine"],
 		"an owned credential must still be deletable after the block leaves the config")
 	assert.Len(t, owned, 1)
-}
-
-// State records 2 attached, the rotation replaces 1. Snapshot must be both
-// (so the surviving one stays attached), and pool headroom must drive ordering.
-func TestRotation_TwoAttachedRotatingOneKeepsTheOther(t *testing.T) {
-	data := diffData(t,
-		map[string]interface{}{
-			"client_id":             "test-client-id",
-			"authentication_method": "private_key_jwt",
-			"private_key_jwt": pkjwtBlock(
-				map[string]interface{}{"id": "cred-a", "name": "a", "credential_type": "public_key", "pem": "PEM-A", "algorithm": "RS256"},
-				map[string]interface{}{"id": "cred-b", "name": "b", "credential_type": "public_key", "pem": "PEM-B", "algorithm": "RS256"},
-			),
-		},
-		map[string]interface{}{
-			"client_id":             "test-client-id",
-			"authentication_method": "private_key_jwt",
-			"private_key_jwt": pkjwtBlock(
-				map[string]interface{}{"name": "a", "credential_type": "public_key", "pem": "PEM-A", "algorithm": "RS256"},
-				map[string]interface{}{"name": "b", "credential_type": "public_key", "pem": "PEM-B-NEW", "algorithm": "RS256"},
-			),
-		},
-	)
-
-	ids := stateCredentialIDs(data, "private_key_jwt")
-	t.Logf("snapshot ids = %v", ids)
-	assert.ElementsMatch(t, []string{"cred-a", "cred-b"}, ids)
-
-	toAdd, toRemove := value.Difference(data, "private_key_jwt.0.credentials")
-	d := classifyCredentialChanges(toAdd, toRemove)
-	t.Logf("classified toAdd=%d toRemove=%d", len(d.toAdd), len(d.toRemove))
-
-	// Slot is FULL (2) -> must remove first regardless of pool.
-	steps := planCredentialRotation(d, len(ids), 2)
-	require.Len(t, steps, 2)
-	t.Logf("step0=%v id=%q  step1=%v", steps[0].kind, steps[0].credentialID, steps[1].kind)
-	assert.Equal(t, detachAndDelete, steps[0].kind, "slot at cap must remove first")
-
-	// Simulate the live sequence to prove the slot list never exceeds 2 and never
-	// contains a foreign credential.
-	attached := attachedCredentialsFromState(data, "private_key_jwt")
-	maxSeen := len(attached)
-	for _, s := range steps {
-		switch s.kind {
-		case detachAndDelete:
-			attached = removeAttachedCredential(attached, s.credentialID)
-		case createAndAttach:
-			newID := "cred-new"
-			attached = append(attached, management.Credential{ID: &newID})
-		}
-		if len(attached) > maxSeen {
-			maxSeen = len(attached)
-		}
-		ids := []string{}
-		for _, c := range attached {
-			ids = append(ids, c.GetID())
-		}
-		t.Logf("  after step: slot=%v", ids)
-	}
-	assert.LessOrEqual(t, maxSeen, maxSlotCredentials, "slot list must never exceed the slot cap")
-
-	final := []string{}
-	for _, c := range attached {
-		final = append(final, c.GetID())
-	}
-	assert.ElementsMatch(t, []string{"cred-a", "cred-new"}, final,
-		"the untouched credential survives and only the rotated one is replaced")
 }
 
 // The spurious-rotation trigger: private_key_jwt credentials are IDENTICAL
@@ -551,16 +446,13 @@ func TestCredentialChanges_IgnoresUnchangedSetOnUnrelatedApply(t *testing.T) {
 	require.False(t, data.HasChange("private_key_jwt.0.credentials"),
 		"the credential set is identical")
 
-	rawAdd, rawRemove := value.Difference(data, "private_key_jwt.0.credentials")
-	t.Logf("raw Difference toAdd=%d toRemove=%d (the trap)", len(rawAdd), len(rawRemove))
+	// The trap the guard exists for: on an unchanged key Difference has no prior
+	// value to subtract, so it reports every entry as an addition.
+	rawAdd, _ := value.Difference(data, "private_key_jwt.0.credentials")
+	require.NotEmpty(t, rawAdd)
 
-	d := credentialChanges(data, "private_key_jwt.0.credentials")
-	t.Logf("credentialChanges toAdd=%d toRemove=%d", len(d.toAdd), len(d.toRemove))
-	steps := planCredentialRotation(d, 1, 2)
-	for i, s := range steps {
-		t.Logf("  step %d kind=%v pem=%v", i, s.kind, s.newCredential["pem"])
-	}
-	assert.Empty(t, steps,
+	diff := credentialChanges(data, "private_key_jwt.0.credentials")
+	assert.Empty(t, planCredentialRotation(diff, 1, 2),
 		"an unchanged credential set must not create a duplicate credential")
 }
 

@@ -4,6 +4,9 @@ BUG FIXES:
 - `resource/auth0_connection` – Fix updates failing with `cannot patch unique property on email attribute` on `auth0` connections whose `options.attributes.email.unique` is `false`. The Management API reads a missing `unique` as `true`, so any change to an unrelated option was rejected ([#1669](https://github.com/auth0/terraform-provider-auth0/pull/1669))
 
 
+BUG FIXES:
+- `resource/auth0_client_credentials` – Include `name` when matching added/removed `private_key_jwt` credentials during diff classification, so credentials that differ only by name are no longer incorrectly treated as the same credential
+
 ## v1.54.0
 
 FEATURES:

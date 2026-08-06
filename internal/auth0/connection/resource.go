@@ -2,6 +2,7 @@ package connection
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -21,6 +22,7 @@ func NewResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		CustomizeDiff: validateConnection,
 		Description: "With Auth0, you can define sources of users, otherwise known as connections, " +
 			"which may include identity providers (such as Google or LinkedIn), databases, or " +
 			"passwordless authentication methods. This resource allows you to configure " +
@@ -28,6 +30,32 @@ func NewResource() *schema.Resource {
 		Schema:        resourceSchema,
 		SchemaVersion: 3,
 	}
+}
+
+// validateConnection rejects a planned change to options.attributes.email.unique.
+// The Management API only accepts that property when the connection is created and
+// rejects any PATCH that changes it, so such a diff can never be applied and would
+// otherwise persist forever. Failing here surfaces it at plan time instead.
+func validateConnection(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	// On create there is nothing to conflict with; the API accepts any value.
+	if diff.Id() == "" {
+		return nil
+	}
+
+	// A value the configuration leaves unset is filled in from state by the
+	// Computed flag, so only an explicit change shows up here.
+	oldValue, newValue := diff.GetChange("options.0.attributes.0.email.0.unique")
+	if oldValue == newValue {
+		return nil
+	}
+
+	return fmt.Errorf(
+		"options.attributes.email.unique cannot be changed after the connection is created: "+
+			"it is %v and the configuration requests %v. The Auth0 Management API only accepts "+
+			"this property when the connection is created. Restore it to %v, or destroy and "+
+			"recreate the connection to change it",
+		oldValue, newValue, oldValue,
+	)
 }
 
 func createConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

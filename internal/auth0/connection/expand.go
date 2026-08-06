@@ -114,13 +114,18 @@ func expandConnection(
 			return nil, diag.FromErr(err)
 		}
 
+		options := connection.Options.(*management.ConnectionOptions)
+		apiOptions := apiConn.Options.(*management.ConnectionOptions)
+
 		diagnostics = append(
 			diagnostics,
 			checkForUnmanagedConfigurationSecrets(
-				connection.Options.(*management.ConnectionOptions).GetConfiguration(),
-				apiConn.Options.(*management.ConnectionOptions).GetConfiguration(),
+				options.GetConfiguration(),
+				apiOptions.GetConfiguration(),
 			)...,
 		)
+
+		echoEmailAttributeUnique(options, apiOptions)
 	}
 
 	return connection, diagnostics
@@ -402,12 +407,33 @@ func expandConnectionOptionsEmailAttribute(config cty.Value, isNew bool) *manage
 				Signup:             expandConnectionOptionsAttributeSignup(email),
 			}
 			// Unique is a create-only property; including it only in a POST request.
+			// On updates echoEmailAttributeUnique fills it in from the API, as the
+			// API rejects a PATCH that omits it whenever the stored value is false.
 			if isNew {
 				coea.Unique = value.Bool(email.GetAttr("unique"))
 			}
 			return stop
 		})
 	return coea
+}
+
+// echoEmailAttributeUnique copies the stored unique value into an update payload.
+//
+// The Management API treats a missing options.attributes.email.unique as an
+// implicit true, so omitting it on a connection where it is false reads as an
+// attempt to flip the value and fails with "cannot patch unique property on email
+// attribute"; even when the update leaves the email attribute untouched.
+func echoEmailAttributeUnique(options, apiOptions *management.ConnectionOptions) {
+	emailAttribute := options.GetAttributes().GetEmail()
+	apiEmailAttribute := apiOptions.GetAttributes().GetEmail()
+
+	// When the email attribute is being added there is no stored value to echo.
+	// The API only accepts additions that are unique and reports its own error.
+	if emailAttribute == nil || apiEmailAttribute == nil {
+		return
+	}
+
+	emailAttribute.Unique = auth0.Bool(emailAttributeUnique(apiEmailAttribute))
 }
 
 func expandConnectionOptionsUsernameAttribute(config cty.Value) *management.ConnectionOptionsUsernameAttribute {

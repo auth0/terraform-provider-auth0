@@ -66,6 +66,49 @@ func TestCheckForUnmanagedConfigurationSecrets(t *testing.T) {
 	}
 }
 
+// TestEchoEmailAttributeUnique guards the workaround for the Management API
+// rejecting a PATCH that omits options.attributes.email.unique when the stored
+// value is false.
+func TestEchoEmailAttributeUnique(t *testing.T) {
+	optionsWithEmailUnique := func(unique *bool) *management.ConnectionOptions {
+		return &management.ConnectionOptions{
+			Attributes: &management.ConnectionOptionsAttributes{
+				Email: &management.ConnectionOptionsEmailAttribute{Unique: unique},
+			},
+		}
+	}
+
+	t.Run("echoes back a stored unique of false so the API accepts the patch", func(t *testing.T) {
+		options := optionsWithEmailUnique(nil)
+
+		echoEmailAttributeUnique(options, optionsWithEmailUnique(auth0.Bool(false)))
+
+		assert.Equal(t, auth0.Bool(false), options.GetAttributes().GetEmail().Unique)
+	})
+
+	t.Run("treats a unique absent from the API response as true", func(t *testing.T) {
+		options := optionsWithEmailUnique(nil)
+
+		echoEmailAttributeUnique(options, optionsWithEmailUnique(nil))
+
+		assert.Equal(t, auth0.Bool(true), options.GetAttributes().GetEmail().Unique)
+	})
+
+	t.Run("leaves unique untouched when the email attribute is being added", func(t *testing.T) {
+		options := optionsWithEmailUnique(nil)
+
+		echoEmailAttributeUnique(options, &management.ConnectionOptions{})
+
+		assert.Nil(t, options.GetAttributes().GetEmail().Unique)
+	})
+}
+
+func TestEmailAttributeUnique(t *testing.T) {
+	assert.True(t, emailAttributeUnique(nil))
+	assert.True(t, emailAttributeUnique(&management.ConnectionOptionsEmailAttribute{}))
+	assert.False(t, emailAttributeUnique(&management.ConnectionOptionsEmailAttribute{Unique: auth0.Bool(false)}))
+}
+
 // TestConnectionOptionsTypeOmitsWhenNil guards against a regression where an unset
 // connection `type` was serialized as `"type":null`, which the Auth0 API rejects
 // with `"options.type" must be ...`. The field must be omitted entirely when nil,

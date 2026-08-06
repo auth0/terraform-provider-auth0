@@ -1200,10 +1200,13 @@ var optionsSchema = &schema.Schema{
 										},
 									},
 									"unique": {
-										Type:        schema.TypeBool,
-										Optional:    true,
-										Computed:    true,
-										Description: "If set to false, it allow multiple accounts with the same email address",
+										Type:     schema.TypeBool,
+										Optional: true,
+										Computed: true,
+										Description: "If set to false, it allow multiple accounts with the same email address. " +
+											"Defaults to `true`. This can only be set when the connection is created: the " +
+											"Auth0 Management API does not allow updating it, so changing it on an existing " +
+											"connection fails at plan time and requires recreating the connection.",
 									},
 								},
 							},

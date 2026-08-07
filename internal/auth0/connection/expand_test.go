@@ -66,6 +66,101 @@ func TestCheckForUnmanagedConfigurationSecrets(t *testing.T) {
 	}
 }
 
+// TestEchoEmailAttributeUnique guards the workaround for the Management API
+// rejecting a PATCH that omits options.attributes.email.unique when the stored
+// value is false.
+func TestEchoEmailAttributeUnique(t *testing.T) {
+	optionsWithEmailUnique := func(unique *bool) *management.ConnectionOptions {
+		return &management.ConnectionOptions{
+			Attributes: &management.ConnectionOptionsAttributes{
+				Email: &management.ConnectionOptionsEmailAttribute{Unique: unique},
+			},
+		}
+	}
+
+	t.Run("echoes back a stored unique of false so the API accepts the patch", func(t *testing.T) {
+		options := optionsWithEmailUnique(nil)
+
+		echoEmailAttributeUnique(options, optionsWithEmailUnique(auth0.Bool(false)))
+
+		assert.Equal(t, auth0.Bool(false), options.GetAttributes().GetEmail().Unique)
+	})
+
+	t.Run("treats a unique absent from the API response as true", func(t *testing.T) {
+		options := optionsWithEmailUnique(nil)
+
+		echoEmailAttributeUnique(options, optionsWithEmailUnique(nil))
+
+		assert.Equal(t, auth0.Bool(true), options.GetAttributes().GetEmail().Unique)
+	})
+
+	t.Run("keeps a configured false when the email attribute is being added", func(t *testing.T) {
+		options := optionsWithEmailUnique(auth0.Bool(false))
+
+		echoEmailAttributeUnique(options, &management.ConnectionOptions{})
+
+		assert.Equal(t, auth0.Bool(false), options.GetAttributes().GetEmail().Unique)
+	})
+
+	t.Run("overwrites a configured value that disagrees with the stored one", func(t *testing.T) {
+		options := optionsWithEmailUnique(auth0.Bool(false))
+
+		echoEmailAttributeUnique(options, optionsWithEmailUnique(auth0.Bool(true)))
+
+		assert.Equal(t, auth0.Bool(true), options.GetAttributes().GetEmail().Unique)
+	})
+}
+
+// TestExpandConnectionOptionsEmailAttributeUnique asserts that unique is expanded
+// from the configuration on every request, not only on create. The API rejects a
+// PATCH that omits it when the stored value is false, and an email attribute added
+// on update has no stored value for echoEmailAttributeUnique to supply.
+func TestExpandConnectionOptionsEmailAttributeUnique(t *testing.T) {
+	attributesConfig := func(unique cty.Value) cty.Value {
+		return cty.ObjectVal(map[string]cty.Value{
+			"email": cty.ListVal([]cty.Value{
+				cty.ObjectVal(map[string]cty.Value{
+					"identifier": cty.ListValEmpty(cty.Object(map[string]cty.Type{
+						"active":         cty.Bool,
+						"default_method": cty.String,
+					})),
+					"profile_required":    cty.True,
+					"verification_method": cty.StringVal("link"),
+					"signup": cty.ListValEmpty(cty.Object(map[string]cty.Type{
+						"status":       cty.String,
+						"verification": cty.List(cty.Object(map[string]cty.Type{"active": cty.Bool})),
+					})),
+					"unique": unique,
+				}),
+			}),
+		})
+	}
+
+	t.Run("expands a configured false", func(t *testing.T) {
+		emailAttribute := expandConnectionOptionsEmailAttribute(attributesConfig(cty.False))
+
+		assert.Equal(t, auth0.Bool(false), emailAttribute.Unique)
+	})
+
+	t.Run("expands a configured true", func(t *testing.T) {
+		emailAttribute := expandConnectionOptionsEmailAttribute(attributesConfig(cty.True))
+
+		assert.Equal(t, auth0.Bool(true), emailAttribute.Unique)
+	})
+
+	t.Run("omits unique when the configuration leaves it unset", func(t *testing.T) {
+		emailAttribute := expandConnectionOptionsEmailAttribute(attributesConfig(cty.NullVal(cty.Bool)))
+
+		assert.Nil(t, emailAttribute.Unique)
+	})
+}
+
+func TestEmailAttributeUnique(t *testing.T) {
+	assert.True(t, emailAttributeUnique(nil))
+	assert.True(t, emailAttributeUnique(&management.ConnectionOptionsEmailAttribute{}))
+	assert.False(t, emailAttributeUnique(&management.ConnectionOptionsEmailAttribute{Unique: auth0.Bool(false)}))
+}
+
 // TestConnectionOptionsTypeOmitsWhenNil guards against a regression where an unset
 // connection `type` was serialized as `"type":null`, which the Auth0 API rejects
 // with `"options.type" must be ...`. The field must be omitted entirely when nil,

@@ -427,9 +427,8 @@ func TestAccConnectionOptionsAttrEmailNonUnique(t *testing.T) {
 					"unique":      "unique = true",
 					"loginScript": "function login(email, password, callback) { /* updated */ callback(null, {}); }",
 				}),
-				PlanOnly:           true,
-				ExpectNonEmptyPlan: true,
-				ExpectError:        regexp.MustCompile("options.attributes.email.unique cannot be changed"),
+				PlanOnly:    true,
+				ExpectError: regexp.MustCompile("options.attributes.email.unique cannot be changed"),
 			},
 			{
 				// Leaving unique out of the configuration adopts the stored value, so

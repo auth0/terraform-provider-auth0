@@ -42,6 +42,16 @@ func validateConnection(_ context.Context, diff *schema.ResourceDiff, _ interfac
 		return nil
 	}
 
+	// Without a stored email attribute there is no stored unique to conflict with,
+	// so the connection is free to adopt whatever the configuration asks for. This
+	// has to be checked before reading the value itself: GetChange cannot express
+	// an absent value and reports the zero value, making "no email attribute" look
+	// identical to "stored as false".
+	storedEmailCount, _ := diff.GetChange("options.0.attributes.0.email.#")
+	if count, ok := storedEmailCount.(int); !ok || count == 0 {
+		return nil
+	}
+
 	// A value the configuration leaves unset is filled in from state by the
 	// Computed flag, so only an explicit change shows up here.
 	oldValue, newValue := diff.GetChange("options.0.attributes.0.email.0.unique")

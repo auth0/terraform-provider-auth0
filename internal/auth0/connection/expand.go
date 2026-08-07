@@ -107,7 +107,10 @@ func expandConnection(
 		}
 	}
 
-	// Prevent erasing database configuration secrets.
+	// Updating a database connection needs the stored options: the PATCH payload
+	// replaces options wholesale, so values the configuration cannot supply have to
+	// be read back and carried over. The strategy check also guards the type
+	// assertions below — only the auth0 strategy uses *management.ConnectionOptions.
 	if !data.IsNewResource() && strategy == management.ConnectionStrategyAuth0 && connection.Options != nil {
 		apiConn, err := api.Connection.Read(ctx, data.Id())
 		if err != nil {
@@ -117,6 +120,7 @@ func expandConnection(
 		options := connection.Options.(*management.ConnectionOptions)
 		apiOptions := apiConn.Options.(*management.ConnectionOptions)
 
+		// Prevent erasing database configuration secrets.
 		diagnostics = append(
 			diagnostics,
 			checkForUnmanagedConfigurationSecrets(
@@ -125,6 +129,8 @@ func expandConnection(
 			)...,
 		)
 
+		// The API reads a missing unique as true and rejects the PATCH when the
+		// stored value is false, so the stored value has to be sent back.
 		echoEmailAttributeUnique(options, apiOptions)
 	}
 

@@ -94,12 +94,64 @@ func TestEchoEmailAttributeUnique(t *testing.T) {
 		assert.Equal(t, auth0.Bool(true), options.GetAttributes().GetEmail().Unique)
 	})
 
-	t.Run("leaves unique untouched when the email attribute is being added", func(t *testing.T) {
-		options := optionsWithEmailUnique(nil)
+	t.Run("keeps a configured false when the email attribute is being added", func(t *testing.T) {
+		options := optionsWithEmailUnique(auth0.Bool(false))
 
 		echoEmailAttributeUnique(options, &management.ConnectionOptions{})
 
-		assert.Nil(t, options.GetAttributes().GetEmail().Unique)
+		assert.Equal(t, auth0.Bool(false), options.GetAttributes().GetEmail().Unique)
+	})
+
+	t.Run("overwrites a configured value that disagrees with the stored one", func(t *testing.T) {
+		options := optionsWithEmailUnique(auth0.Bool(false))
+
+		echoEmailAttributeUnique(options, optionsWithEmailUnique(auth0.Bool(true)))
+
+		assert.Equal(t, auth0.Bool(true), options.GetAttributes().GetEmail().Unique)
+	})
+}
+
+// TestExpandConnectionOptionsEmailAttributeUnique asserts that unique is expanded
+// from the configuration on every request, not only on create. The API rejects a
+// PATCH that omits it when the stored value is false, and an email attribute added
+// on update has no stored value for echoEmailAttributeUnique to supply.
+func TestExpandConnectionOptionsEmailAttributeUnique(t *testing.T) {
+	attributesConfig := func(unique cty.Value) cty.Value {
+		return cty.ObjectVal(map[string]cty.Value{
+			"email": cty.ListVal([]cty.Value{
+				cty.ObjectVal(map[string]cty.Value{
+					"identifier": cty.ListValEmpty(cty.Object(map[string]cty.Type{
+						"active":         cty.Bool,
+						"default_method": cty.String,
+					})),
+					"profile_required":    cty.True,
+					"verification_method": cty.StringVal("link"),
+					"signup": cty.ListValEmpty(cty.Object(map[string]cty.Type{
+						"status":       cty.String,
+						"verification": cty.List(cty.Object(map[string]cty.Type{"active": cty.Bool})),
+					})),
+					"unique": unique,
+				}),
+			}),
+		})
+	}
+
+	t.Run("expands a configured false", func(t *testing.T) {
+		emailAttribute := expandConnectionOptionsEmailAttribute(attributesConfig(cty.False))
+
+		assert.Equal(t, auth0.Bool(false), emailAttribute.Unique)
+	})
+
+	t.Run("expands a configured true", func(t *testing.T) {
+		emailAttribute := expandConnectionOptionsEmailAttribute(attributesConfig(cty.True))
+
+		assert.Equal(t, auth0.Bool(true), emailAttribute.Unique)
+	})
+
+	t.Run("omits unique when the configuration leaves it unset", func(t *testing.T) {
+		emailAttribute := expandConnectionOptionsEmailAttribute(attributesConfig(cty.NullVal(cty.Bool)))
+
+		assert.Nil(t, emailAttribute.Unique)
 	})
 }
 

@@ -388,12 +388,12 @@ func expandConnectionOptionsCustomPasswordHash(config cty.Value) *management.Cus
 	return customPasswordHash
 }
 
-func expandConnectionOptionsAttributes(config cty.Value, isNew bool) *management.ConnectionOptionsAttributes {
+func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
 	var coa *management.ConnectionOptionsAttributes
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
 			coa = &management.ConnectionOptionsAttributes{
-				Email:       expandConnectionOptionsEmailAttribute(attributes, isNew),
+				Email:       expandConnectionOptionsEmailAttribute(attributes),
 				Username:    expandConnectionOptionsUsernameAttribute(attributes),
 				PhoneNumber: expandConnectionOptionsPhoneNumberAttribute(attributes),
 			}
@@ -402,7 +402,7 @@ func expandConnectionOptionsAttributes(config cty.Value, isNew bool) *management
 	return coa
 }
 
-func expandConnectionOptionsEmailAttribute(config cty.Value, isNew bool) *management.ConnectionOptionsEmailAttribute {
+func expandConnectionOptionsEmailAttribute(config cty.Value) *management.ConnectionOptionsEmailAttribute {
 	var coea *management.ConnectionOptionsEmailAttribute
 	config.GetAttr("email").ForEachElement(
 		func(_ cty.Value, email cty.Value) (stop bool) {
@@ -411,30 +411,34 @@ func expandConnectionOptionsEmailAttribute(config cty.Value, isNew bool) *manage
 				ProfileRequired:    value.Bool(email.GetAttr("profile_required")),
 				VerificationMethod: (*management.ConnectionOptionsEmailAttributeVerificationMethod)(value.String(email.GetAttr("verification_method"))),
 				Signup:             expandConnectionOptionsAttributeSignup(email),
-			}
-			// Unique is a create-only property; including it only in a POST request.
-			// On updates echoEmailAttributeUnique fills it in from the API, as the
-			// API rejects a PATCH that omits it whenever the stored value is false.
-			if isNew {
-				coea.Unique = value.Bool(email.GetAttr("unique"))
+				// The API rejects a PATCH that omits unique when the stored value is
+				// false, so it is always sent. On updates echoEmailAttributeUnique
+				// overwrites this with the stored value, since the property is
+				// immutable; the configured value only takes effect on a create or
+				// when the email attribute is being added.
+				Unique: value.Bool(email.GetAttr("unique")),
 			}
 			return stop
 		})
 	return coea
 }
 
-// echoEmailAttributeUnique copies the stored unique value into an update payload.
+// echoEmailAttributeUnique overwrites the unique value in an update payload with
+// the value the API has stored.
 //
 // The Management API treats a missing options.attributes.email.unique as an
 // implicit true, so omitting it on a connection where it is false reads as an
 // attempt to flip the value and fails with "cannot patch unique property on email
-// attribute"; even when the update leaves the email attribute untouched.
+// attribute"; even when the update leaves the email attribute untouched. The
+// property is immutable, so echoing the stored value is always what the API
+// expects: a configuration that agrees is unchanged by this, and one that
+// disagrees is already rejected at plan time by validateConnection.
 func echoEmailAttributeUnique(options, apiOptions *management.ConnectionOptions) {
 	emailAttribute := options.GetAttributes().GetEmail()
 	apiEmailAttribute := apiOptions.GetAttributes().GetEmail()
 
-	// When the email attribute is being added there is no stored value to echo.
-	// The API only accepts additions that are unique and reports its own error.
+	// When the email attribute is being added there is no stored value to echo, so
+	// the configured value is left in place for the API to accept or reject.
 	if emailAttribute == nil || apiEmailAttribute == nil {
 		return
 	}
@@ -548,7 +552,7 @@ func expandConnectionOptionsAttributeAllowedTypes(config cty.Value) *management.
 	return coaat
 }
 
-func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
+func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -562,7 +566,7 @@ func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (
 		RequiresUsername:                 value.Bool(config.GetAttr("requires_username")),
 		CustomScripts:                    value.MapOfStrings(config.GetAttr("custom_scripts")),
 		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
-		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes"), data.IsNewResource()),
+		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
 		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 		RealmFallback:                    value.Bool(config.GetAttr("realm_fallback")),
 	}

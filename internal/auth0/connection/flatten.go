@@ -252,8 +252,7 @@ func flattenAttributes(connAttributes *management.ConnectionOptionsAttributes) i
 // emailAttributeUnique reports the effective value of the email attribute's
 // unique property. The Management API treats an absent unique as true, both in
 // the responses it returns and in the payloads it accepts, so an absent value
-// must not be read as false. This is confirmed API behaviour rather than an
-// inference, but it is not part of the published specification.
+// must not be read as false.
 func emailAttributeUnique(emailAttribute *management.ConnectionOptionsEmailAttribute) bool {
 	if emailAttribute == nil || emailAttribute.Unique == nil {
 		return true

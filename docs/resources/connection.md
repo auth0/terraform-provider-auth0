@@ -884,7 +884,7 @@ Optional:
 - `identifier` (Block List) Connection Options Email Attribute Identifier (see [below for nested schema](#nestedblock--options--attributes--email--identifier))
 - `profile_required` (Boolean) Defines whether Profile is required
 - `signup` (Block List) Defines signup settings for Email attribute (see [below for nested schema](#nestedblock--options--attributes--email--signup))
-- `unique` (Boolean) If set to false, it allow multiple accounts with the same email address. Defaults to `true`. This can only be set when the connection is created: the Auth0 Management API does not allow updating it, so changing it on an existing connection fails at plan time and requires recreating the connection.
+- `unique` (Boolean) If set to false, it allow multiple accounts with the same email address. Defaults to `true`. This can only be set when the connection is created: the Auth0 Management API does not allow updating it, so changing it on an existing connection fails at plan time and requires recreating the connection. The API also refuses to add a non-unique email attribute to a connection that does not already have one.
 - `verification_method` (String) Defines whether whether user will receive a link or an OTP during user signup for email verification and password reset for email verification
 
 <a id="nestedblock--options--attributes--email--identifier"></a>

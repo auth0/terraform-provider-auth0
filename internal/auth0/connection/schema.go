@@ -1206,7 +1206,9 @@ var optionsSchema = &schema.Schema{
 										Description: "If set to false, it allow multiple accounts with the same email address. " +
 											"Defaults to `true`. This can only be set when the connection is created: the " +
 											"Auth0 Management API does not allow updating it, so changing it on an existing " +
-											"connection fails at plan time and requires recreating the connection.",
+											"connection fails at plan time and requires recreating the connection. The API " +
+											"also refuses to add a non-unique email attribute to a connection that does not " +
+											"already have one.",
 									},
 								},
 							},

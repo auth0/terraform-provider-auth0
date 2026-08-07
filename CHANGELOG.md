@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+BUG FIXES:
+- `resource/auth0_connection` – Fix updates failing with `cannot patch unique property on email attribute` on `auth0` connections whose `options.attributes.email.unique` is `false`. The Management API reads a missing `unique` as `true`, so any change to an unrelated option was rejected ([#1669](https://github.com/auth0/terraform-provider-auth0/pull/1669))
+
+
 ## v1.54.0
 
 FEATURES:

@@ -341,6 +341,217 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 	})
 }
 
+const testAccConnectionOptionAttrEmailNonUniqueTemplate = `
+resource "auth0_connection" "my_connection" {
+	name = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+	options {
+		enabled_database_customization = true
+		custom_scripts = {
+			login = "{{.loginScript}}"
+		}
+		attributes {
+			email {
+				identifier {
+					active = false
+				}
+				profile_required = true
+				verification_method = "link"
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+				{{.unique}}
+			}
+			username {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+				}
+				validation {
+					min_length = 3
+					max_length = 20
+					allowed_types {
+						email = false
+						phone_number = false
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+// TestAccConnectionOptionsAttrEmailNonUnique asserts that a connection whose email
+// attribute is not unique can still be updated. The Management API reads a missing
+// options.attributes.email.unique as true, so a PATCH that omits it on such a
+// connection used to fail with "cannot patch unique property on email attribute",
+// blocking unrelated changes like a login script update.
+// See https://github.com/auth0/terraform-provider-auth0/issues/1646.
+func TestAccConnectionOptionsAttrEmailNonUnique(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttrEmailNonUniqueTemplate, map[string]interface{}{
+					"testName":    t.Name(),
+					"unique":      "unique = false",
+					"loginScript": "function login(email, password, callback) { callback(null, {}); }",
+				}),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.unique", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.custom_scripts.login", "function login(email, password, callback) { callback(null, {}); }"),
+				),
+			},
+			{
+				// Updating an unrelated option must not trip the unique validation.
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttrEmailNonUniqueTemplate, map[string]interface{}{
+					"testName":    t.Name(),
+					"unique":      "unique = false",
+					"loginScript": "function login(email, password, callback) { /* updated */ callback(null, {}); }",
+				}),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.unique", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.custom_scripts.login", "function login(email, password, callback) { /* updated */ callback(null, {}); }"),
+				),
+			},
+			{
+				// The API forbids changing unique, so this must fail at plan time
+				// rather than produce a diff that can never be applied.
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttrEmailNonUniqueTemplate, map[string]interface{}{
+					"testName":    t.Name(),
+					"unique":      "unique = true",
+					"loginScript": "function login(email, password, callback) { /* updated */ callback(null, {}); }",
+				}),
+				PlanOnly:    true,
+				ExpectError: regexp.MustCompile("options.attributes.email.unique cannot be changed"),
+			},
+			{
+				// Leaving unique out of the configuration adopts the stored value, so
+				// it must neither error nor produce a diff.
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttrEmailNonUniqueTemplate, map[string]interface{}{
+					"testName":    t.Name(),
+					"unique":      "",
+					"loginScript": "function login(email, password, callback) { /* updated */ callback(null, {}); }",
+				}),
+				PlanOnly: true,
+			},
+		},
+	})
+}
+
+const testAccConnectionAddEmailAttributeTemplate = `
+resource "auth0_connection" "my_connection" {
+	name = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+	options {
+		brute_force_protection = true
+		{{.attributes}}
+	}
+}
+`
+
+const testAccConnectionAddEmailAttributeBlock = `
+		attributes {
+			email {
+				identifier {
+					active = false
+				}
+				profile_required = true
+				verification_method = "link"
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+				{{.unique}}
+			}
+			username {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+				}
+				validation {
+					min_length = 3
+					max_length = 20
+					allowed_types {
+						email = false
+						phone_number = false
+					}
+				}
+			}
+		}
+`
+
+func testAccConnectionAddEmailAttributeConfig(testName, unique string, withAttributes bool) string {
+	attributes := ""
+	if withAttributes {
+		attributes = acctest.ParseParametersInTemplate(
+			testAccConnectionAddEmailAttributeBlock,
+			map[string]interface{}{"unique": unique},
+		)
+	}
+
+	return acctest.ParseParametersInTemplate(testAccConnectionAddEmailAttributeTemplate, map[string]interface{}{
+		"testName":   testName,
+		"attributes": attributes,
+	})
+}
+
+// TestAccConnectionAddEmailAttributeNonUnique asserts that adding a non-unique email
+// attribute to an existing connection surfaces the API's rejection. The provider now
+// sends unique on every request, so the API answers with its own error instead of
+// silently creating a unique attribute the configuration did not ask for.
+func TestAccConnectionAddEmailAttributeNonUnique(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccConnectionAddEmailAttributeConfig(t.Name(), "", false),
+			},
+			{
+				Config:      testAccConnectionAddEmailAttributeConfig(t.Name(), "unique = false", true),
+				ExpectError: regexp.MustCompile("cannot add non-unique email attribute"),
+			},
+		},
+	})
+}
+
+// TestAccConnectionAddEmailAttributeUnique asserts that adding a unique email
+// attribute to an existing connection still works, both when unique is stated
+// explicitly and when it is left to the API default.
+func TestAccConnectionAddEmailAttributeUnique(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccConnectionAddEmailAttributeConfig(t.Name(), "", false),
+			},
+			{
+				Config: testAccConnectionAddEmailAttributeConfig(t.Name(), "unique = true", true),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.unique", "true"),
+				),
+			},
+			{
+				Config:   testAccConnectionAddEmailAttributeConfig(t.Name(), "unique = true", true),
+				PlanOnly: true,
+			},
+			{
+				// Omitting unique adopts the stored true and must not produce a diff.
+				Config:   testAccConnectionAddEmailAttributeConfig(t.Name(), "", true),
+				PlanOnly: true,
+			},
+		},
+	})
+}
+
 func TestAccConnectionOptionsAttrUserName(t *testing.T) {
 	params := map[string]interface{}{
 		"testName":          t.Name(),

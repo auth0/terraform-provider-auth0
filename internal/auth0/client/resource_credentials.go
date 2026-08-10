@@ -247,7 +247,7 @@ func createAuthenticationMethodCredentials(ctx context.Context, api *management.
 	credentialsToAttach := make([]management.Credential, 0)
 	for _, credential := range credentials {
 		if err := api.Client.CreateCredential(ctx, clientID, credential); err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(rollbackCreatedCredentials(ctx, api, clientID, credentialsToAttach, err))
 		}
 
 		credentialsToAttach = append(credentialsToAttach, management.Credential{
@@ -255,9 +255,33 @@ func createAuthenticationMethodCredentials(ctx context.Context, api *management.
 		})
 	}
 
-	err := attachAuthenticationMethodCredentials(ctx, api, clientID, authenticationMethod, credentialsToAttach)
+	if err := attachAuthenticationMethodCredentials(ctx, api, clientID, authenticationMethod, credentialsToAttach); err != nil {
+		return diag.FromErr(rollbackCreatedCredentials(ctx, api, clientID, credentialsToAttach, err))
+	}
 
-	return diag.FromErr(err)
+	return nil
+}
+
+// rollbackCreatedCredentials deletes credentials this apply created before it
+// failed, and returns the original error. Without it a failed create leaves them
+// in the pool: unattached, unknown to state, and consuming the four-record cap.
+// The next apply then cannot recreate the same key material, so it fails with
+// "credentials contains public keys that already exist in client" and keeps
+// failing until someone deletes the orphans by hand.
+func rollbackCreatedCredentials(ctx context.Context, api *management.Management, clientID string, created []management.Credential, cause error) error {
+	result := multierror.Append(nil, cause)
+
+	for _, credential := range created {
+		if credential.GetID() == "" {
+			continue
+		}
+		if err := deleteCredentialIgnoringNotFound(ctx, api, clientID, credential.GetID()); err != nil {
+			result = multierror.Append(result, fmt.Errorf(
+				"rollback of credential %s also failed: %w", credential.GetID(), err))
+		}
+	}
+
+	return result.ErrorOrNil()
 }
 
 func modifyAuthenticationMethodCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData, authenticationMethod string) diag.Diagnostics {
@@ -562,12 +586,24 @@ var credentialBearingAttributes = []string{
 // that would panic on GetAttr. Prior state substitutes there, which is sound
 // because this read path is the block's only writer and this test gates it.
 //
-// With both sources null there is nothing to compare against — that is import,
-// and the read after it, which carry no prior state — so the response is recorded
-// as before.
+// Import is the one phase with nothing to compare against, and it is recorded
+// whole. It does not present as a null raw state: the SDK supplies an object with
+// every block empty, indistinguishable from a configuration that declares none.
+// The discriminator is client_id, which import has not yet read and every other
+// phase carries.
 func credentialBlockDeclared(data *schema.ResourceData, attribute string) bool {
-	for _, source := range []cty.Value{data.GetRawConfig(), data.GetRawState()} {
-		if source.IsNull() || !source.IsKnown() {
+	return blockDeclaredIn(attribute, data.GetRawConfig(), data.GetRawState())
+}
+
+// blockDeclaredIn holds the decision credentialBlockDeclared makes, separated from
+// the ResourceData the raw values come from so it can be exercised directly.
+func blockDeclaredIn(attribute string, sources ...cty.Value) bool {
+	for _, source := range sources {
+		if source.IsNull() || !source.IsKnown() || !source.Type().IsObjectType() {
+			continue
+		}
+
+		if clientID := source.GetAttr("client_id"); clientID.IsNull() || !clientID.IsKnown() {
 			continue
 		}
 
@@ -636,6 +672,146 @@ func stateCredentialIDs(data *schema.ResourceData, attribute string) []string {
 	}
 
 	return credentialIDs
+}
+
+// credentialMatchers describes the credentials one attribute asks for, in the
+// forms an API response can be recognised by. It is built from the value the SDK
+// currently holds for that attribute: the planned value during an apply, and the
+// prior state during a refresh.
+type credentialMatchers struct {
+	count      int
+	keyIDs     map[string]bool
+	subjectDNS map[string]bool
+	names      map[string]bool
+	// Entries that carry no recognisable field at all. A credential the
+	// configuration declares but nothing can identify makes attribution unsafe for
+	// the whole attribute.
+	unmatchable int
+}
+
+// desiredCredentialMatchers collects the recognisable fields of the credentials
+// one attribute asks for.
+//
+// The key ID is the credential's RFC 7638 JWK thumbprint, so it can be computed
+// from a configured PEM without calling the API. That is what lets a credential
+// this apply has just created be recognised as ours before its ID reaches state.
+func desiredCredentialMatchers(data *schema.ResourceData, attribute string) credentialMatchers {
+	matchers := credentialMatchers{
+		keyIDs:     map[string]bool{},
+		subjectDNS: map[string]bool{},
+		names:      map[string]bool{},
+	}
+
+	var entries []interface{}
+	switch credentials := data.Get(fmt.Sprintf("%s.0.credentials", attribute)).(type) {
+	case *schema.Set:
+		entries = credentials.List()
+	case []interface{}:
+		entries = credentials
+	default:
+		return matchers
+	}
+
+	for _, entry := range entries {
+		credential, ok := entry.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		matchers.count++
+		matchable := false
+
+		if pemData, _ := credential["pem"].(string); pemData != "" {
+			if thumbprint := jwkThumbprint(pemData); thumbprint != "" {
+				matchers.keyIDs[thumbprint] = true
+				matchable = true
+			}
+		}
+		if subjectDN, _ := credential["subject_dn"].(string); subjectDN != "" {
+			matchers.subjectDNS[subjectDN] = true
+			matchable = true
+		}
+		if name, _ := credential["name"].(string); name != "" {
+			matchers.names[name] = true
+			matchable = true
+		}
+
+		// An ID already in state identifies the credential on its own.
+		if credentialID, _ := credential["id"].(string); credentialID != "" {
+			matchable = true
+		}
+
+		if !matchable {
+			matchers.unmatchable++
+		}
+	}
+
+	return matchers
+}
+
+// filterOwnedCredentials narrows a slot listing to the credentials this resource
+// manages, and returns the IDs it left out.
+//
+// The slot can hold credentials attached by another tool. Recording those as ours
+// is what makes the next plan propose deleting a key we never created, so the read
+// path has to attribute them rather than take the listing whole. A credential is
+// ours when state already records its ID, or when its key material matches what
+// the configuration asks for.
+//
+// Two escape hatches keep this from breaking an apply. Nothing is filtered when
+// the attribute has neither prior state nor a desired set, which is import and
+// the read that follows it. And nothing is filtered when the configuration asks
+// for a credential that carries no field this can match on, because there is then
+// no way to tell ours from anyone else's, and returning less than the
+// configuration declared would fail the apply with "provider produced
+// inconsistent result after apply".
+//
+// That second hatch is deliberately keyed on unmatchable entries rather than on a
+// shortfall in the result. A shortfall is the ordinary shape of drift — a managed
+// credential deleted out of band — and treating it as a matching failure would
+// hand the whole listing back, adopting any foreign credential that happened to
+// share the slot.
+func filterOwnedCredentials(data *schema.ResourceData, attribute string, credentials []management.Credential) ([]management.Credential, []string) {
+	knownIDs := make(map[string]bool)
+	for _, credentialID := range stateCredentialIDs(data, attribute) {
+		knownIDs[credentialID] = true
+	}
+
+	matchers := desiredCredentialMatchers(data, attribute)
+	if len(knownIDs) == 0 && matchers.count == 0 {
+		return credentials, nil
+	}
+
+	if matchers.unmatchable > 0 {
+		return credentials, nil
+	}
+
+	isOwned := func(credential management.Credential) bool {
+		if knownIDs[credential.GetID()] {
+			return true
+		}
+		if keyID := credential.GetKeyID(); keyID != "" && matchers.keyIDs[keyID] {
+			return true
+		}
+		if subjectDN := credential.GetSubjectDN(); subjectDN != "" && matchers.subjectDNS[subjectDN] {
+			return true
+		}
+		// Names are matched last. A credential set up elsewhere under a name the
+		// configuration also uses is indistinguishable from ours, and adopting it
+		// is the safer of the two mistakes.
+		return credential.GetName() != "" && matchers.names[credential.GetName()]
+	}
+
+	owned := make([]management.Credential, 0, len(credentials))
+	var skippedIDs []string
+	for _, credential := range credentials {
+		if isOwned(credential) {
+			owned = append(owned, credential)
+			continue
+		}
+		skippedIDs = append(skippedIDs, credential.GetID())
+	}
+
+	return owned, skippedIDs
 }
 
 // attachedCredentialsFromState returns the credentials attached to one slot as
@@ -788,7 +964,7 @@ func createSignedRequestObject(ctx context.Context, api *management.Management, 
 		credentialsToAttach := make([]management.Credential, 0)
 		for _, credential := range signedRequestObject.GetCredentials() {
 			if err := api.Client.CreateCredential(ctx, clientID, &credential); err != nil {
-				return diag.FromErr(err)
+				return diag.FromErr(rollbackCreatedCredentials(ctx, api, clientID, credentialsToAttach, err))
 			}
 
 			credentialsToAttach = append(credentialsToAttach, management.Credential{
@@ -796,7 +972,11 @@ func createSignedRequestObject(ctx context.Context, api *management.Management, 
 			})
 		}
 
-		return diag.FromErr(attachSignedRequestObjectCredentials(ctx, api, clientID, signedRequestObject.Required, credentialsToAttach))
+		if err := attachSignedRequestObjectCredentials(ctx, api, clientID, signedRequestObject.Required, credentialsToAttach); err != nil {
+			return diag.FromErr(rollbackCreatedCredentials(ctx, api, clientID, credentialsToAttach, err))
+		}
+
+		return nil
 	}
 
 	return nil

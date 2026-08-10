@@ -8,6 +8,9 @@ import (
 	"encoding/pem"
 	"fmt"
 	"math/big"
+	"net/http"
+	"net/http/httptest"
+	"path"
 	"strings"
 	"testing"
 
@@ -15,6 +18,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/stretchr/testify/assert"
@@ -456,6 +460,226 @@ func TestCredentialChanges_IgnoresUnchangedSetOnUnrelatedApply(t *testing.T) {
 		"an unchanged credential set must not create a duplicate credential")
 }
 
+func TestFilterOwnedCredentials(t *testing.T) {
+	spkiPEM, _, _ := generateTestRSAPEMs(t)
+	ownKeyID := jwkThumbprint(spkiPEM)
+	require.NotEmpty(t, ownKeyID)
+
+	foreign := management.Credential{
+		ID:    auth0.String("cred-foreign"),
+		Name:  auth0.String("set-up-elsewhere"),
+		KeyID: auth0.String("some-other-thumbprint"),
+	}
+
+	t.Run("a credential state records is kept, one it does not is dropped", func(t *testing.T) {
+		data := credentialsDataWithState(t, map[string]interface{}{
+			"signed_request_object": []interface{}{map[string]interface{}{
+				"required": false,
+				"credentials": []interface{}{map[string]interface{}{
+					"id": "cred-mine", "credential_type": "public_key", "pem": spkiPEM,
+				}},
+			}},
+		})
+
+		owned, skipped := filterOwnedCredentials(data, "signed_request_object", []management.Credential{
+			{ID: auth0.String("cred-mine"), KeyID: auth0.String(ownKeyID)},
+			foreign,
+		})
+
+		require.Len(t, owned, 1)
+		assert.Equal(t, "cred-mine", owned[0].GetID())
+		assert.Equal(t, []string{"cred-foreign"}, skipped,
+			"the dropped credential must be reported so it can be logged")
+	})
+
+	t.Run("a credential just created is matched by its key thumbprint", func(t *testing.T) {
+		// The read after a create is what puts the ID into state, so ownership
+		// cannot come from state here. The configured PEM is the only signal.
+		data := credentialsDataWithState(t, map[string]interface{}{
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"credential_type": "public_key", "pem": spkiPEM, "algorithm": "RS256",
+			}),
+		})
+
+		owned, skipped := filterOwnedCredentials(data, "private_key_jwt", []management.Credential{
+			{ID: auth0.String("cred-brand-new"), KeyID: auth0.String(ownKeyID)},
+			foreign,
+		})
+
+		require.Len(t, owned, 1, "the new credential must be recorded, not filtered away")
+		assert.Equal(t, "cred-brand-new", owned[0].GetID())
+		assert.Equal(t, []string{"cred-foreign"}, skipped)
+	})
+
+	t.Run("import records the listing whole", func(t *testing.T) {
+		// Import carries neither prior state nor a configuration, so nothing can be
+		// attributed and everything the slot holds is recorded.
+		data := credentialsDataWithState(t, map[string]interface{}{})
+
+		owned, skipped := filterOwnedCredentials(data, "private_key_jwt",
+			[]management.Credential{foreign})
+
+		require.Len(t, owned, 1)
+		assert.Empty(t, skipped)
+	})
+
+	t.Run("a credential with no recognisable field disables filtering", func(t *testing.T) {
+		// Nothing here identifies the declared credential, so ours cannot be told
+		// from anyone else's. Returning less than was declared fails the apply with
+		// "provider produced inconsistent result after apply", so the listing stands.
+		data := credentialsDataWithState(t, map[string]interface{}{
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"credential_type": "public_key",
+			}),
+		})
+
+		owned, skipped := filterOwnedCredentials(data, "private_key_jwt",
+			[]management.Credential{foreign})
+
+		require.Len(t, owned, 1, "an unidentifiable declaration must not shrink state")
+		assert.Empty(t, skipped)
+	})
+
+	t.Run("a managed credential deleted out of band does not adopt a slot mate", func(t *testing.T) {
+		// Two credentials declared, one deleted elsewhere. The shortfall is drift,
+		// not a matching failure, so the foreign credential sharing the slot must
+		// still be left alone.
+		data := credentialsDataWithState(t, map[string]interface{}{
+			"private_key_jwt": []interface{}{map[string]interface{}{
+				"credentials": []interface{}{
+					map[string]interface{}{
+						"id": "cred-mine", "name": "tf-a",
+						"credential_type": "public_key", "pem": spkiPEM, "algorithm": "RS256",
+					},
+					map[string]interface{}{
+						"id": "cred-deleted-elsewhere", "name": "tf-b",
+						"credential_type": "public_key", "pem": spkiPEM, "algorithm": "RS256",
+					},
+				},
+			}},
+		})
+
+		owned, skipped := filterOwnedCredentials(data, "private_key_jwt", []management.Credential{
+			{ID: auth0.String("cred-mine"), KeyID: auth0.String(ownKeyID)},
+			foreign,
+		})
+
+		require.Len(t, owned, 1, "only the surviving managed credential belongs in state")
+		assert.Equal(t, "cred-mine", owned[0].GetID())
+		assert.Equal(t, []string{"cred-foreign"}, skipped)
+	})
+
+	t.Run("a cert_subject_dn credential is matched by its subject", func(t *testing.T) {
+		data := credentialsDataWithState(t, map[string]interface{}{
+			"tls_client_auth": []interface{}{map[string]interface{}{
+				"credentials": []interface{}{map[string]interface{}{
+					"credential_type": "cert_subject_dn", "subject_dn": "CN=mine",
+				}},
+			}},
+		})
+
+		owned, skipped := filterOwnedCredentials(data, "tls_client_auth", []management.Credential{
+			{ID: auth0.String("cred-mine"), SubjectDN: auth0.String("CN=mine")},
+			{ID: auth0.String("cred-theirs"), SubjectDN: auth0.String("CN=theirs")},
+		})
+
+		require.Len(t, owned, 1)
+		assert.Equal(t, "cred-mine", owned[0].GetID())
+		assert.Equal(t, []string{"cred-theirs"}, skipped)
+	})
+}
+
+// rawSource builds the object shape the SDK hands to GetRawConfig/GetRawState:
+// client_id plus one list per credential-bearing block, each holding declared
+// entries. A blockLengths entry of -1 makes that block null.
+func rawSource(clientID interface{}, blockLengths map[string]int) cty.Value {
+	attributes := map[string]cty.Value{}
+
+	if clientID == nil {
+		attributes["client_id"] = cty.NullVal(cty.String)
+	} else {
+		attributes["client_id"] = cty.StringVal(clientID.(string))
+	}
+
+	for _, attribute := range credentialBearingAttributes {
+		blockType := cty.Object(map[string]cty.Type{"placeholder": cty.String})
+		length, ok := blockLengths[attribute]
+		if !ok || length == 0 {
+			attributes[attribute] = cty.ListValEmpty(blockType)
+			continue
+		}
+		if length < 0 {
+			attributes[attribute] = cty.NullVal(cty.List(blockType))
+			continue
+		}
+
+		entries := make([]cty.Value, 0, length)
+		for range length {
+			entries = append(entries, cty.ObjectVal(map[string]cty.Value{
+				"placeholder": cty.StringVal("x"),
+			}))
+		}
+		attributes[attribute] = cty.ListVal(entries)
+	}
+
+	return cty.ObjectVal(attributes)
+}
+
+func TestBlockDeclaredIn(t *testing.T) {
+	nullObject := cty.NullVal(cty.EmptyObject)
+
+	t.Run("the configuration decides during an apply", func(t *testing.T) {
+		config := rawSource("test-client-id", map[string]int{"private_key_jwt": 1})
+		state := rawSource("test-client-id", map[string]int{"private_key_jwt": 1})
+
+		assert.True(t, blockDeclaredIn("private_key_jwt", config, state))
+		assert.False(t, blockDeclaredIn("signed_request_object", config, state),
+			"a block absent from the configuration belongs to whoever set it up")
+	})
+
+	t.Run("a block being removed is decided by the configuration, not prior state", func(t *testing.T) {
+		// The apply that drops a block must still see it as undeclared, or the read
+		// at the end of it re-adopts what the configuration just gave up.
+		config := rawSource("test-client-id", nil)
+		state := rawSource("test-client-id", map[string]int{"signed_request_object": 1})
+
+		assert.False(t, blockDeclaredIn("signed_request_object", config, state))
+	})
+
+	t.Run("prior state decides during a refresh", func(t *testing.T) {
+		// ReadResource populates only RawState; GetRawConfig() returns a null object.
+		state := rawSource("test-client-id", map[string]int{"signed_request_object": 1})
+
+		assert.True(t, blockDeclaredIn("signed_request_object", nullObject, state))
+		assert.False(t, blockDeclaredIn("private_key_jwt", nullObject, state))
+	})
+
+	t.Run("import records every block", func(t *testing.T) {
+		// Import does not present as a null raw state: the SDK supplies an object
+		// with every block empty, so client_id is what distinguishes it. Import has
+		// not read one yet and every other phase carries it.
+		state := rawSource(nil, nil)
+
+		for _, attribute := range credentialBearingAttributes {
+			assert.True(t, blockDeclaredIn(attribute, nullObject, state),
+				"%s must be recorded on import, which has nothing to compare against", attribute)
+		}
+	})
+
+	t.Run("a null block falls through to the next source", func(t *testing.T) {
+		config := rawSource("test-client-id", map[string]int{"signed_request_object": -1})
+		state := rawSource("test-client-id", map[string]int{"signed_request_object": 1})
+
+		assert.True(t, blockDeclaredIn("signed_request_object", config, state))
+	})
+
+	t.Run("with no usable source the response is recorded", func(t *testing.T) {
+		assert.True(t, blockDeclaredIn("private_key_jwt", nullObject, nullObject))
+		assert.True(t, blockDeclaredIn("private_key_jwt",
+			cty.UnknownVal(cty.EmptyObject), cty.NullVal(cty.String)))
+	})
+}
+
 func TestRetainExistingCredentials(t *testing.T) {
 	fromState := []management.Credential{
 		{ID: auth0.String("cred-live")},
@@ -474,4 +698,82 @@ func TestRetainExistingCredentials(t *testing.T) {
 
 	assert.Empty(t, retainExistingCredentials(fromState, nil),
 		"an empty pool retains nothing")
+}
+
+// TestRollbackCreatedCredentials covers the create path's cleanup. A failed
+// attach used to leave the credentials it had just created sitting in the pool,
+// where they consumed the four-record cap and made every later apply fail with
+// "credentials contains public keys that already exist in client".
+func TestRollbackCreatedCredentials(t *testing.T) {
+	newAPI := func(t *testing.T, handler http.Handler) *management.Management {
+		t.Helper()
+		server := httptest.NewServer(handler)
+		t.Cleanup(server.Close)
+
+		api, err := management.New(strings.TrimPrefix(server.URL, "http://"),
+			management.WithStaticToken("test-token"), management.WithInsecure())
+		require.NoError(t, err)
+
+		return api
+	}
+
+	t.Run("it deletes every credential the failed apply created", func(t *testing.T) {
+		var deleted []string
+		api := newAPI(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.Method == http.MethodDelete {
+				deleted = append(deleted, path.Base(r.URL.Path))
+			}
+			w.WriteHeader(http.StatusNoContent)
+		}))
+
+		created := []management.Credential{
+			{ID: auth0.String("cred-one")},
+			{ID: auth0.String("cred-two")},
+		}
+		cause := fmt.Errorf("attach failed")
+
+		err := rollbackCreatedCredentials(context.Background(), api, "client-id", created, cause)
+
+		assert.ErrorContains(t, err, "attach failed",
+			"the original failure must still reach the user")
+		assert.Equal(t, []string{"cred-one", "cred-two"}, deleted,
+			"both created credentials must be removed from the pool")
+	})
+
+	t.Run("it reports a rollback failure alongside the original error", func(t *testing.T) {
+		api := newAPI(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.Method == http.MethodDelete {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(http.StatusNoContent)
+		}))
+
+		err := rollbackCreatedCredentials(context.Background(), api, "client-id",
+			[]management.Credential{{ID: auth0.String("cred-one")}},
+			fmt.Errorf("attach failed"))
+
+		assert.ErrorContains(t, err, "attach failed")
+		assert.ErrorContains(t, err, "rollback of credential cred-one also failed")
+	})
+
+	t.Run("a credential with no ID is skipped and nothing is created to roll back", func(t *testing.T) {
+		calls := 0
+		api := newAPI(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			calls++
+			w.WriteHeader(http.StatusNoContent)
+		}))
+
+		cause := fmt.Errorf("create failed")
+		err := rollbackCreatedCredentials(context.Background(), api, "client-id",
+			[]management.Credential{{}}, cause)
+
+		assert.ErrorContains(t, err, "create failed")
+		assert.Zero(t, calls, "an empty ID must not produce a delete call")
+
+		require.ErrorContains(t,
+			rollbackCreatedCredentials(context.Background(), api, "client-id", nil, cause),
+			"create failed")
+		assert.Zero(t, calls, "nothing created means nothing to roll back")
+	})
 }

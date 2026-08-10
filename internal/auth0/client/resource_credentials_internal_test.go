@@ -265,7 +265,8 @@ func TestPlanCredentialRotation_HeadroomButSameKeyRemovesFirst(t *testing.T) {
 	}
 
 	const startingAttachedCount = 1
-	rotationSteps := planCredentialRotation(diff, startingAttachedCount)
+	const startingPoolCount = 1
+	rotationSteps := planCredentialRotation(diff, startingAttachedCount, startingPoolCount)
 
 	require.Len(t, rotationSteps, 2)
 	assert.Equal(t, detachAndDelete, rotationSteps[0].kind)
@@ -291,7 +292,7 @@ func TestPlanCredentialRotation_HeadroomButSameKeyViaThumbprintRemovesFirst(t *t
 		},
 	}
 
-	rotationSteps := planCredentialRotation(diff, 1)
+	rotationSteps := planCredentialRotation(diff, 1, 1)
 
 	require.Len(t, rotationSteps, 2)
 	assert.Equal(t, detachAndDelete, rotationSteps[0].kind)
@@ -311,7 +312,7 @@ func TestPlanCredentialRotation_HeadroomDifferentKeyAddsFirst(t *testing.T) {
 		},
 	}
 
-	rotationSteps := planCredentialRotation(diff, 1)
+	rotationSteps := planCredentialRotation(diff, 1, 1)
 
 	require.Len(t, rotationSteps, 2)
 	assert.Equal(t, createAndAttach, rotationSteps[0].kind)
@@ -321,13 +322,13 @@ func TestPlanCredentialRotation_HeadroomDifferentKeyAddsFirst(t *testing.T) {
 func TestPlanCredentialRotation_HandlesUnevenAndPureChanges(t *testing.T) {
 	pureAdditionSteps := planCredentialRotation(credentialDiff{
 		toAdd: []interface{}{map[string]interface{}{"name": "new-1"}},
-	}, 0)
+	}, 0, 0)
 	require.Len(t, pureAdditionSteps, 1)
 	assert.Equal(t, createAndAttach, pureAdditionSteps[0].kind)
 
 	pureRemovalSteps := planCredentialRotation(credentialDiff{
 		toRemove: []interface{}{map[string]interface{}{"id": "old-1"}},
-	}, 1)
+	}, 1, 1)
 	require.Len(t, pureRemovalSteps, 1)
 	assert.Equal(t, detachAndDelete, pureRemovalSteps[0].kind)
 
@@ -338,7 +339,17 @@ func TestPlanCredentialRotation_HandlesUnevenAndPureChanges(t *testing.T) {
 			map[string]interface{}{"id": "old-1"},
 			map[string]interface{}{"id": "old-2"},
 		},
-	})
+		toAdd: []interface{}{
+			map[string]interface{}{"name": "new-1"},
+		},
+	}, maxSlotCredentials, 2)
+	require.Len(t, moreRemovalsThanAdditionsSteps, 3)
+	assert.Equal(t, detachAndDelete, moreRemovalsThanAdditionsSteps[0].kind)
+	assert.Equal(t, "old-1", moreRemovalsThanAdditionsSteps[0].credentialID)
+	assert.Equal(t, createAndAttach, moreRemovalsThanAdditionsSteps[1].kind)
+	assert.Equal(t, "new-1", moreRemovalsThanAdditionsSteps[1].newCredential["name"])
+	assert.Equal(t, detachAndDelete, moreRemovalsThanAdditionsSteps[2].kind)
+	assert.Equal(t, "old-2", moreRemovalsThanAdditionsSteps[2].credentialID)
 }
 
 func TestStateCredentialIDs_ReadsOnlyTheRequestedSlot(t *testing.T) {

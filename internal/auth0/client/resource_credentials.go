@@ -335,10 +335,35 @@ const maxSlotCredentials = 2
 // the pool can hold, so headroom in a slot does not imply headroom in the pool.
 const maxPoolCredentials = 4
 
+// credentialKeysMatch reports whether the removed and added credential entries
+// carry the same public key: either their pem strings are byte-identical, or
+// the removed entry has no pem in state (e.g. it was adopted from a
+// CLI-created credential) and the added entry's key thumbprint matches the
+// removed entry's key_id.
+func credentialKeysMatch(removeMap, addMap map[string]interface{}) bool {
+	addPEM, _ := addMap["pem"].(string)
+	if addPEM == "" {
+		return false
+	}
+
+	rmPEM, _ := removeMap["pem"].(string)
+	if rmPEM == addPEM {
+		return true
+	}
+
+	rmKeyID, _ := removeMap["key_id"].(string)
+	if rmPEM == "" && rmKeyID != "" {
+		return jwkThumbprint(addPEM) == rmKeyID
+	}
+	return false
+}
+
 // planCredentialRotation orders a credential change into steps, pairing each
 // removal with an addition. While both the slot and the pool have headroom it
 // adds first, so a usable credential stays attached throughout the swap. Once
-// either container is full it removes first, so neither count overshoots.
+// either container is full, or the paired removal and addition share the same
+// public key, it removes first, so neither count overshoots and the create is
+// never rejected as a duplicate key.
 func planCredentialRotation(diff credentialDiff, attachedCount, poolCount int) []rotationStep {
 	rotationSteps := make([]rotationStep, 0, len(diff.toRemove)+len(diff.toAdd))
 
@@ -358,8 +383,13 @@ func planCredentialRotation(diff credentialDiff, attachedCount, poolCount int) [
 		removal, hasID := newRemoval(diff.toRemove[i])
 		addition := newAddition(diff.toAdd[i])
 
-		if attachedCount < maxSlotCredentials && poolCount < maxPoolCredentials {
-			// Room in both containers, so the slot is never left empty.
+		removeMap, _ := diff.toRemove[i].(map[string]interface{})
+		addMap, _ := diff.toAdd[i].(map[string]interface{})
+		colliding := hasID && credentialKeysMatch(removeMap, addMap)
+
+		if attachedCount < maxSlotCredentials && poolCount < maxPoolCredentials && !colliding {
+			// Room in both containers, and no key collision, so the slot is
+			// never left empty.
 			rotationSteps = append(rotationSteps, addition)
 			attachedCount++
 			poolCount++
@@ -369,11 +399,9 @@ func planCredentialRotation(diff credentialDiff, attachedCount, poolCount int) [
 				poolCount--
 			}
 		} else {
-			// One container is full. Removing frees an entry in both, so the
-			// addition that follows fits.
-			// At capacity, or the pair's public key collides: remove first so
-			// the create is never rejected as a duplicate, and the count never
-			// overshoots the cap.
+			// One container is full, or the pair's public key collides: remove
+			// first so the create is never rejected as a duplicate, and the
+			// count never overshoots the cap.
 			if hasID {
 				rotationSteps = append(rotationSteps, removal)
 				attachedCount--
@@ -427,7 +455,6 @@ func classifyCredentialChanges(toAdd, toRemove []interface{}) credentialDiff {
 	usedRemoveIndexes := make(map[int]bool)
 	for _, addedCred := range toAdd {
 		addMap := addedCred.(map[string]interface{})
-		addPEM, _ := addMap["pem"].(string)
 		addAlgo, _ := addMap["algorithm"].(string)
 		addExpiry, _ := addMap["expires_at"].(string)
 
@@ -440,20 +467,12 @@ func classifyCredentialChanges(toAdd, toRemove []interface{}) credentialDiff {
 			rmPEM, _ := rmMap["pem"].(string)
 			rmAlgo, _ := rmMap["algorithm"].(string)
 			rmID, _ := rmMap["id"].(string)
-			rmKeyID, _ := rmMap["key_id"].(string)
 
 			if rmID == "" {
 				continue
 			}
 
-			var pemMatch bool
-			if rmPEM == addPEM {
-				pemMatch = true
-			} else if rmPEM == "" && rmKeyID != "" && addPEM != "" {
-				pemMatch = jwkThumbprint(addPEM) == rmKeyID
-			}
-
-			if pemMatch && rmAlgo == addAlgo && addMap["name"] == rmMap["name"] {
+			if credentialKeysMatch(rmMap, addMap) && rmAlgo == addAlgo && addMap["name"] == rmMap["name"] {
 				rmParseExpiry, _ := rmMap["parse_expiry_from_cert"].(bool)
 				if rmParseExpiry && rmPEM != "" {
 					continue

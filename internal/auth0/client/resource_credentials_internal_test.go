@@ -10,6 +10,7 @@ import (
 	"math/big"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"path"
 	"strings"
 	"testing"
@@ -586,6 +587,152 @@ func TestFilterOwnedCredentials(t *testing.T) {
 		require.Len(t, owned, 1)
 		assert.Equal(t, "cred-mine", owned[0].GetID())
 		assert.Equal(t, []string{"cred-theirs"}, skipped)
+	})
+
+	t.Run("an x509_cert credential without a name is matched by its certificate thumbprint", func(t *testing.T) {
+		// The name field is optional on this block, and the API returns neither a
+		// key ID nor a subject for an x509_cert credential. Only thumbprint_sha256
+		// identifies it, and that is computable from the configured certificate.
+		// Without this rung a self-signed mTLS user who omitted the name loses
+		// their credential from state on the read that follows create.
+		_, _, certPEM := generateTestRSAPEMs(t)
+
+		data := credentialsDataWithState(t, map[string]interface{}{
+			"self_signed_tls_client_auth": []interface{}{map[string]interface{}{
+				"credentials": []interface{}{map[string]interface{}{
+					"credential_type": "x509_cert", "pem": certPEM,
+				}},
+			}},
+		})
+
+		owned, skipped := filterOwnedCredentials(data, "self_signed_tls_client_auth", []management.Credential{
+			{
+				ID:               auth0.String("cred-mine"),
+				CredentialType:   auth0.String("x509_cert"),
+				ThumbprintSHA256: auth0.String(certificateThumbprint(certPEM)),
+			},
+			{
+				ID:               auth0.String("cred-theirs"),
+				CredentialType:   auth0.String("x509_cert"),
+				ThumbprintSHA256: auth0.String("a-different-certificate-digest"),
+			},
+		})
+
+		require.Len(t, owned, 1, "the user's own certificate must stay in state")
+		assert.Equal(t, "cred-mine", owned[0].GetID())
+		assert.Equal(t, []string{"cred-theirs"}, skipped)
+	})
+
+	t.Run("a cert_subject_dn credential declared by pem alone disables filtering", func(t *testing.T) {
+		// The schema lets pem stand in for subject_dn here, and name is optional.
+		// The API returns no key_id and no thumbprint_sha256 for this type, so a
+		// digest of the certificate matches nothing it sends back. The entry must
+		// count as unmatchable rather than look identifiable, or the credential is
+		// dropped from state.
+		_, _, certPEM := generateTestRSAPEMs(t)
+
+		data := credentialsDataWithState(t, map[string]interface{}{
+			"tls_client_auth": []interface{}{map[string]interface{}{
+				"credentials": []interface{}{map[string]interface{}{
+					"credential_type": "cert_subject_dn", "pem": certPEM,
+				}},
+			}},
+		})
+
+		matchers := desiredCredentialMatchers(data, "tls_client_auth")
+		assert.Equal(t, 1, matchers.unmatchable,
+			"a pem-only cert_subject_dn entry carries nothing the API echoes back")
+
+		owned, skipped := filterOwnedCredentials(data, "tls_client_auth", []management.Credential{
+			{
+				ID:             auth0.String("cred-mine"),
+				CredentialType: auth0.String("cert_subject_dn"),
+				SubjectDN:      auth0.String("CN=derived-by-the-api"),
+			},
+		})
+
+		require.Len(t, owned, 1, "an unidentifiable declaration must not shrink state")
+		assert.Empty(t, skipped)
+	})
+}
+
+func TestCertificateThumbprint(t *testing.T) {
+	spkiPEM, pkcs1PEM, certPEM := generateTestRSAPEMs(t)
+
+	t.Run("matches the digest the API reports for a recorded certificate", func(t *testing.T) {
+		// The file creds-cert-1.pem is the certificate used by the
+		// self_signed_tls_client_auth acceptance test, and the value below is the
+		// thumbprint_sha256 the API answered with in the recorded cassette. It pins
+		// the digest to real API behaviour rather than to our own restatement of it.
+		recorded, err := os.ReadFile("./../../../test/data/creds-cert-1.pem")
+		require.NoError(t, err)
+
+		assert.Equal(t,
+			"irPW_52cQKIRPeblpAs2LjaUELUxnh5Vi7_1idgHX7w",
+			certificateThumbprint(string(recorded)))
+	})
+
+	t.Run("is empty for anything that is not a certificate", func(t *testing.T) {
+		// A public key carries no certificate digest. Returning one anyway would
+		// make a public_key entry look matchable on a field the API never sends.
+		assert.Empty(t, certificateThumbprint(spkiPEM))
+		assert.Empty(t, certificateThumbprint(pkcs1PEM))
+		assert.Empty(t, certificateThumbprint(""))
+		assert.Empty(t, certificateThumbprint("not a pem at all"))
+	})
+
+	t.Run("differs from the jwk thumbprint of the same certificate", func(t *testing.T) {
+		// The two digests cover different bytes, so they must never be interchanged:
+		// key_id is the JWK thumbprint of the public key, thumbprint_sha256 is the
+		// digest of the whole certificate.
+		assert.NotEqual(t, jwkThumbprint(certPEM), certificateThumbprint(certPEM))
+	})
+}
+
+func TestExpandClientCredential(t *testing.T) {
+	// The helper below builds the object shape expandClientCredential reads. A raw
+	// configuration carries every attribute of the block, null where the
+	// configuration said nothing, which is what makes an omitted credential_type
+	// arrive as a null string rather than as an absent key.
+	credentialRawConfig := func(credentialType cty.Value) cty.Value {
+		return cty.ObjectVal(map[string]cty.Value{
+			"credential_type":        credentialType,
+			"pem":                    cty.StringVal("-----BEGIN CERTIFICATE-----\nAA==\n-----END CERTIFICATE-----\n"),
+			"name":                   cty.NullVal(cty.String),
+			"algorithm":              cty.NullVal(cty.String),
+			"parse_expiry_from_cert": cty.NullVal(cty.Bool),
+			"expires_at":             cty.NullVal(cty.String),
+			"subject_dn":             cty.NullVal(cty.String),
+		})
+	}
+
+	t.Run("an omitted credential_type takes the one its block accepts", func(t *testing.T) {
+		// Only self_signed_tls_client_auth makes credential_type Optional, so this
+		// configuration is valid. Dereferencing the absent value used to panic the
+		// provider, and sending it empty had the API answer 400 'Missing required
+		// property: credential_type'.
+		for _, credentialType := range []cty.Value{cty.NullVal(cty.String), cty.StringVal("")} {
+			credential := expandClientCredential(credentialRawConfig(credentialType), "x509_cert")
+
+			require.NotNil(t, credential.CredentialType)
+			assert.Equal(t, "x509_cert", credential.GetCredentialType())
+			assert.NotEmpty(t, credential.GetPEM(), "the certificate must still be sent")
+		}
+	})
+
+	t.Run("a configured credential_type is never overridden", func(t *testing.T) {
+		credential := expandClientCredential(credentialRawConfig(cty.StringVal("cert_subject_dn")), "x509_cert")
+
+		assert.Equal(t, "cert_subject_dn", credential.GetCredentialType())
+	})
+
+	t.Run("every authentication method has a credential type to fall back on", func(t *testing.T) {
+		// A missing entry would default to the empty string, which is the 400 the
+		// default exists to prevent. The signed_request_object block is absent by
+		// design: it requires credential_type, and it is not an authentication method.
+		for _, authenticationMethod := range []string{"private_key_jwt", "tls_client_auth", "self_signed_tls_client_auth"} {
+			assert.NotEmpty(t, credentialTypeByAuthenticationMethod[authenticationMethod], authenticationMethod)
+		}
 	})
 }
 

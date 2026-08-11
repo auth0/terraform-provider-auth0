@@ -679,10 +679,11 @@ func stateCredentialIDs(data *schema.ResourceData, attribute string) []string {
 // currently holds for that attribute: the planned value during an apply, and the
 // prior state during a refresh.
 type credentialMatchers struct {
-	count      int
-	keyIDs     map[string]bool
-	subjectDNS map[string]bool
-	names      map[string]bool
+	count       int
+	keyIDs      map[string]bool
+	thumbprints map[string]bool
+	subjectDNS  map[string]bool
+	names       map[string]bool
 	// Entries that carry no recognisable field at all. A credential the
 	// configuration declares but nothing can identify makes attribution unsafe for
 	// the whole attribute.
@@ -697,9 +698,10 @@ type credentialMatchers struct {
 // this apply has just created be recognised as ours before its ID reaches state.
 func desiredCredentialMatchers(data *schema.ResourceData, attribute string) credentialMatchers {
 	matchers := credentialMatchers{
-		keyIDs:     map[string]bool{},
-		subjectDNS: map[string]bool{},
-		names:      map[string]bool{},
+		keyIDs:      map[string]bool{},
+		thumbprints: map[string]bool{},
+		subjectDNS:  map[string]bool{},
+		names:       map[string]bool{},
 	}
 
 	var entries []interface{}
@@ -720,10 +722,26 @@ func desiredCredentialMatchers(data *schema.ResourceData, attribute string) cred
 		matchers.count++
 		matchable := false
 
-		if pemData, _ := credential["pem"].(string); pemData != "" {
-			if thumbprint := jwkThumbprint(pemData); thumbprint != "" {
-				matchers.keyIDs[thumbprint] = true
-				matchable = true
+		credentialType, _ := credential["credential_type"].(string)
+		pemData, _ := credential["pem"].(string)
+
+		// A fingerprint only helps if the API returns the matching field for this
+		// credential type. The key ID is populated for public_key credentials, and
+		// thumbprint_sha256 for x509_cert. A cert_subject_dn credential is given
+		// neither, so its PEM yields nothing to match on however computable a
+		// digest of it may be.
+		if pemData != "" {
+			switch credentialType {
+			case "public_key":
+				if thumbprint := jwkThumbprint(pemData); thumbprint != "" {
+					matchers.keyIDs[thumbprint] = true
+					matchable = true
+				}
+			case "x509_cert":
+				if thumbprint := certificateThumbprint(pemData); thumbprint != "" {
+					matchers.thumbprints[thumbprint] = true
+					matchable = true
+				}
 			}
 		}
 		if subjectDN, _ := credential["subject_dn"].(string); subjectDN != "" {
@@ -790,6 +808,9 @@ func filterOwnedCredentials(data *schema.ResourceData, attribute string, credent
 			return true
 		}
 		if keyID := credential.GetKeyID(); keyID != "" && matchers.keyIDs[keyID] {
+			return true
+		}
+		if thumbprint := credential.GetThumbprintSHA256(); thumbprint != "" && matchers.thumbprints[thumbprint] {
 			return true
 		}
 		if subjectDN := credential.GetSubjectDN(); subjectDN != "" && matchers.subjectDNS[subjectDN] {
@@ -1196,12 +1217,21 @@ func updateSecret(ctx context.Context, api *management.Management, data *schema.
 	})
 }
 
+// credentialTypeByAuthenticationMethod is the credential type each authentication
+// method's block accepts, used when the configuration leaves credential_type out.
+var credentialTypeByAuthenticationMethod = map[string]string{
+	"private_key_jwt":             "public_key",
+	"tls_client_auth":             "cert_subject_dn",
+	"self_signed_tls_client_auth": "x509_cert",
+}
+
 func expandAuthenticationMethodCredentials(rawConfig cty.Value, authenticationMethod string) ([]*management.Credential, diag.Diagnostics) {
 	credentials := make([]*management.Credential, 0)
+	defaultCredentialType := credentialTypeByAuthenticationMethod[authenticationMethod]
 
 	rawConfig.GetAttr(authenticationMethod).ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-			credentials = append(credentials, expandClientCredential(config))
+			credentials = append(credentials, expandClientCredential(config, defaultCredentialType))
 			return stop
 		})
 		return stop
@@ -1245,7 +1275,9 @@ func expandSignedRequestObject(rawConfig cty.Value) (*management.ClientSignedReq
 	signedRequestObjectConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		credentials := make([]management.Credential, 0)
 		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-			credentials = append(credentials, *expandClientCredential(config))
+			// This block requires credential_type, so there is nothing to default to
+			// and the configured value always wins.
+			credentials = append(credentials, *expandClientCredential(config, "public_key"))
 			return stop
 		})
 		signedRequestObject.Credentials = &credentials
@@ -1271,13 +1303,28 @@ func expandSignedRequestObject(rawConfig cty.Value) (*management.ClientSignedReq
 	return &signedRequestObject, nil
 }
 
-func expandClientCredential(rawConfig cty.Value) *management.Credential {
-	clientCredential := management.Credential{
-		Name:           value.String(rawConfig.GetAttr("name")),
-		CredentialType: value.String(rawConfig.GetAttr("credential_type")),
+// expandClientCredential builds one credential from its raw configuration.
+//
+// The defaultCredentialType argument is the type to assume when the configuration
+// omits it. Only the self_signed_tls_client_auth block makes credential_type
+// Optional, but the API rejects a credential that carries no type, and the raw
+// configuration is the literal one the user wrote, so a schema Default never
+// reaches here. The caller knows which block it is expanding, and every block
+// accepts exactly one type, so the type is supplied here instead.
+func expandClientCredential(rawConfig cty.Value, defaultCredentialType string) *management.Credential {
+	credentialType := value.String(rawConfig.GetAttr("credential_type"))
+	if credentialType == nil || *credentialType == "" {
+		credentialType = &defaultCredentialType
 	}
 
-	switch *clientCredential.CredentialType {
+	clientCredential := management.Credential{
+		Name:           value.String(rawConfig.GetAttr("name")),
+		CredentialType: credentialType,
+	}
+
+	// GetCredentialType rather than a dereference: an unrecognised or absent type
+	// must not panic the provider.
+	switch clientCredential.GetCredentialType() {
 	case "public_key":
 		clientCredential.PEM = value.String(rawConfig.GetAttr("pem"))
 		clientCredential.Algorithm = value.String(rawConfig.GetAttr("algorithm"))
@@ -1286,11 +1333,28 @@ func expandClientCredential(rawConfig cty.Value) *management.Credential {
 	case "cert_subject_dn":
 		clientCredential.PEM = value.String(rawConfig.GetAttr("pem"))
 		clientCredential.SubjectDN = value.String(rawConfig.GetAttr("subject_dn"))
-	case "x509_cert":
+	default:
+		// The x509_cert type, and any type this build does not know about, are
+		// declared by PEM alone.
 		clientCredential.PEM = value.String(rawConfig.GetAttr("pem"))
 	}
 
 	return &clientCredential
+}
+
+// certificateThumbprint returns the base64url SHA-256 digest of a certificate's
+// DER bytes, which is the thumbprint_sha256 the API reports for an x509_cert
+// credential. It lets a self-signed mTLS certificate be recognised from the
+// configured PEM alone, with no API call and no reliance on the optional name.
+func certificateThumbprint(pemData string) string {
+	block, _ := pem.Decode([]byte(pemData))
+	if block == nil || block.Type != "CERTIFICATE" {
+		return ""
+	}
+
+	digest := sha256.Sum256(block.Bytes)
+
+	return base64.RawURLEncoding.EncodeToString(digest[:])
 }
 
 // jwkThumbprint computes the RFC 7638 JWK thumbprint from a PEM-encoded

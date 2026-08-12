@@ -291,8 +291,14 @@ func NewCredentialsResource() *schema.Resource {
 										Description: "Friendly name for a credential.",
 									},
 									"credential_type": {
-										Type:         schema.TypeString,
-										Optional:     true,
+										Type:     schema.TypeString,
+										Optional: true,
+										// Computed because this one is Optional: the API records
+										// x509_cert whether or not the configuration said so, and
+										// without this the read writes a value the configuration does
+										// not have, which ForceNew then reads as a removal and plans
+										// a replacement on every run.
+										Computed:     true,
 										ForceNew:     true,
 										ValidateFunc: validation.StringInSlice([]string{"x509_cert"}, false),
 										Description:  "Credential type. Supported types: `x509_cert`.",

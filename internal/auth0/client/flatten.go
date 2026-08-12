@@ -11,6 +11,7 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -906,7 +907,15 @@ func flattenClientAuthenticationMethods(
 		"self_signed_tls_client_auth": nil,
 	}
 
-	if authMethods.GetPrivateKeyJWT() != nil {
+	// An authentication method block the resource does not declare was configured
+	// elsewhere. Recording it would both claim its credentials and overwrite
+	// authentication_method, so the next apply would switch the method back and
+	// delete them. The data source reports every block either way.
+	declared := func(attribute string) bool {
+		return !isResource || credentialBlockDeclared(data, attribute)
+	}
+
+	if authMethods.GetPrivateKeyJWT() != nil && declared("private_key_jwt") {
 		if credentials, err := flattenCredentials(
 			ctx, api, data, isResource, "private_key_jwt",
 			authMethods.GetPrivateKeyJWT().GetCredentials(),
@@ -921,7 +930,7 @@ func flattenClientAuthenticationMethods(
 		}
 	}
 
-	if authMethods.GetTLSClientAuth() != nil {
+	if authMethods.GetTLSClientAuth() != nil && declared("tls_client_auth") {
 		if credentials, err := flattenCredentials(
 			ctx, api, data, isResource, "tls_client_auth",
 			authMethods.GetTLSClientAuth().GetCredentials(),
@@ -936,7 +945,7 @@ func flattenClientAuthenticationMethods(
 		}
 	}
 
-	if authMethods.GetSelfSignedTLSClientAuth() != nil {
+	if authMethods.GetSelfSignedTLSClientAuth() != nil && declared("self_signed_tls_client_auth") {
 		if credentials, err := flattenCredentials(
 			ctx, api, data, isResource, "self_signed_tls_client_auth",
 			authMethods.GetSelfSignedTLSClientAuth().GetCredentials(),
@@ -969,6 +978,13 @@ func flattenSignedRequestObject(
 		return nil, nil
 	}
 
+	// A JAR configuration the resource does not declare belongs to whoever set it
+	// up. Leave it out of state so we never rotate or delete it. The data source
+	// reports it either way.
+	if isResource && !credentialBlockDeclared(data, "signed_request_object") {
+		return nil, nil
+	}
+
 	if credentials, err := flattenCredentials(
 		ctx, api, data, isResource, "signed_request_object",
 		sro.GetCredentials(),
@@ -997,12 +1013,34 @@ func flattenCredentials(
 		return nil, nil
 	}
 
-	stateCredentials := make([]interface{}, 0)
-	for index, cred := range credentials {
+	// A slot listing carries bare {id} references, so each record has to be
+	// fetched before it can be attributed. Ownership is decided on the full set,
+	// then state is built from what is left.
+	fetched := make([]management.Credential, 0, len(credentials))
+	for _, cred := range credentials {
 		credential, err := api.Client.GetCredential(ctx, data.Id(), cred.GetID())
 		if err != nil {
 			return nil, err
 		}
+		fetched = append(fetched, *credential)
+	}
+
+	if isResource {
+		var skippedIDs []string
+		fetched, skippedIDs = filterOwnedCredentials(data, attribute, fetched)
+
+		if len(skippedIDs) > 0 {
+			tflog.Warn(ctx, "Client credential left unmanaged", map[string]interface{}{
+				"client_id":      data.Id(),
+				"attribute":      attribute,
+				"credential_ids": skippedIDs,
+			})
+		}
+	}
+
+	stateCredentials := make([]interface{}, 0)
+	for index := range fetched {
+		credential := &fetched[index]
 
 		stateCredential := map[string]interface{}{
 			"id":              credential.GetID(),

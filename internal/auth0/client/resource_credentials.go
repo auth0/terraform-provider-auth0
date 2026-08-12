@@ -12,8 +12,10 @@ import (
 	"io"
 	"math/big"
 	"net/http"
+	"strings"
 	"time"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -104,10 +106,17 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 				return diag.FromErr(err)
 			}
 			if len(credentials) > 0 {
-				if err := detachClientCredentials(ctx, api, clientID, newMethod); err != nil {
+				if err := detachClientCredentials(ctx, api, clientID, newMethod, credentialBlockDeclared(data, "signed_request_object")); err != nil {
 					return diag.FromErr(err)
 				}
+
+				// Delete only what this resource owns. The rest of the pool
+				// belongs to another slot or to none, and was created elsewhere.
+				ownedIDs := ownedCredentialIDs(data)
 				for _, cred := range credentials {
+					if !ownedIDs[cred.GetID()] {
+						continue
+					}
 					if err := api.Client.DeleteCredential(ctx, clientID, cred.GetID()); err != nil {
 						return diag.FromErr(err)
 					}
@@ -169,17 +178,53 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	}
 
 	if len(credentials) > 0 {
-		if err := detachClientCredentials(ctx, api, client.GetClientID(), tokenEndpointAuthMethod); err != nil {
+		// The detach also resets token_endpoint_auth_method, so the update below
+		// is only needed when there was nothing attached to begin with.
+		if err := detachClientCredentials(
+			ctx, api, client.GetClientID(), tokenEndpointAuthMethod,
+			credentialBlockDeclared(data, "signed_request_object"),
+		); err != nil {
 			return diag.FromErr(err)
 		}
 
+		// Delete only what this resource owns. The rest of the pool was created
+		// elsewhere and is not ours to remove.
+		var diagnostics diag.Diagnostics
+		ownedIDs := ownedCredentialIDs(data)
 		for _, credential := range credentials {
-			if err := api.Client.DeleteCredential(ctx, client.GetClientID(), credential.GetID()); err != nil {
-				return diag.FromErr(err)
+			if !ownedIDs[credential.GetID()] {
+				continue
 			}
+
+			err := deleteCredentialIgnoringNotFound(ctx, api, client.GetClientID(), credential.GetID())
+			if err == nil {
+				continue
+			}
+
+			// The detach above already landed and is not rolled back. Failing hard
+			// here would leave the client unable to use its previous
+			// authentication method with the resource still in state, and every
+			// retry would fail identically. Warn and let the destroy finish.
+			if isCredentialStillAttachedError(err) {
+				diagnostics = append(diagnostics, diag.Diagnostic{
+					Severity: diag.Warning,
+					Summary:  "Client credential left in place",
+					Detail: fmt.Sprintf(
+						"The credential with ID %q could not be deleted because it is still "+
+							"attached to client %q through a feature this resource does not "+
+							"manage. The resource has been removed from the Terraform state.\n\n"+
+							"Detach the credential from that feature and delete it directly if it "+
+							"is no longer needed.",
+						credential.GetID(), client.GetClientID(),
+					),
+				})
+				continue
+			}
+
+			return append(diagnostics, diag.FromErr(err)...)
 		}
 
-		return nil
+		return diagnostics
 	}
 
 	if err := api.Client.Update(ctx, client.GetClientID(), &management.Client{
@@ -202,7 +247,7 @@ func createAuthenticationMethodCredentials(ctx context.Context, api *management.
 	credentialsToAttach := make([]management.Credential, 0)
 	for _, credential := range credentials {
 		if err := api.Client.CreateCredential(ctx, clientID, credential); err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(rollbackCreatedCredentials(ctx, api, clientID, credentialsToAttach, err))
 		}
 
 		credentialsToAttach = append(credentialsToAttach, management.Credential{
@@ -210,9 +255,33 @@ func createAuthenticationMethodCredentials(ctx context.Context, api *management.
 		})
 	}
 
-	err := attachAuthenticationMethodCredentials(ctx, api, clientID, authenticationMethod, credentialsToAttach)
+	if err := attachAuthenticationMethodCredentials(ctx, api, clientID, authenticationMethod, credentialsToAttach); err != nil {
+		return diag.FromErr(rollbackCreatedCredentials(ctx, api, clientID, credentialsToAttach, err))
+	}
 
-	return diag.FromErr(err)
+	return nil
+}
+
+// rollbackCreatedCredentials deletes credentials this apply created before it
+// failed, and returns the original error. Without it a failed create leaves them
+// in the pool: unattached, unknown to state, and consuming the four-record cap.
+// The next apply then cannot recreate the same key material, so it fails with
+// "credentials contains public keys that already exist in client" and keeps
+// failing until someone deletes the orphans by hand.
+func rollbackCreatedCredentials(ctx context.Context, api *management.Management, clientID string, created []management.Credential, cause error) error {
+	result := multierror.Append(nil, cause)
+
+	for _, credential := range created {
+		if credential.GetID() == "" {
+			continue
+		}
+		if err := deleteCredentialIgnoringNotFound(ctx, api, clientID, credential.GetID()); err != nil {
+			result = multierror.Append(result, fmt.Errorf(
+				"rollback of credential %s also failed: %w", credential.GetID(), err))
+		}
+	}
+
+	return result.ErrorOrNil()
 }
 
 func modifyAuthenticationMethodCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData, authenticationMethod string) diag.Diagnostics {
@@ -251,18 +320,26 @@ type rotationStep struct {
 	newCredential map[string]interface{} // Set when kind == createAndAttach.
 }
 
-// minCredentialCap is the smallest per-client credential limit Auth0 enforces
-// on any tenant. The cap is not queryable, but every tenant allows at least
-// this many, so holding this many attached credentials transiently is always
-// safe.
-const minCredentialCap = 2
+// maxSlotCredentials is the most credentials Auth0 allows attached to a single
+// authentication slot, such as private_key_jwt or signed_request_object. The
+// limit is not queryable; exceeding it fails with
+// "Array is too long (3), maximum 2".
+const maxSlotCredentials = 2
 
-// planCredentialRotation orders a credential change into interleaved steps,
-// pairing each removal with an addition. Within a pair it chooses the order
-// from the live attached count: with headroom below minCredentialCap it adds
-// first (keeping a credential attached for zero downtime); at or above the cap
-// it removes first (so the count never overshoots the tenant limit).
-func planCredentialRotation(diff credentialDiff, attachedCount int) []rotationStep {
+// maxPoolCredentials is the most credential records a client can hold in total.
+// The limit is not queryable; exceeding it fails with
+// "A client can have a maximum of 4 credentials.".
+//
+// The pool is a separate container from a slot: it holds every credential on the
+// client, attached or not. The slots can address more credentials in total than
+// the pool can hold, so headroom in a slot does not imply headroom in the pool.
+const maxPoolCredentials = 4
+
+// planCredentialRotation orders a credential change into steps, pairing each
+// removal with an addition. While both the slot and the pool have headroom it
+// adds first, so a usable credential stays attached throughout the swap. Once
+// either container is full it removes first, so neither count overshoots.
+func planCredentialRotation(diff credentialDiff, attachedCount, poolCount int) []rotationStep {
 	rotationSteps := make([]rotationStep, 0, len(diff.toRemove)+len(diff.toAdd))
 
 	newRemoval := func(entry interface{}) (rotationStep, bool) {
@@ -281,36 +358,62 @@ func planCredentialRotation(diff credentialDiff, attachedCount int) []rotationSt
 		removal, hasID := newRemoval(diff.toRemove[i])
 		addition := newAddition(diff.toAdd[i])
 
-		if attachedCount < minCredentialCap {
-			// Headroom: add first so a valid credential stays attached.
+		if attachedCount < maxSlotCredentials && poolCount < maxPoolCredentials {
+			// Room in both containers, so the slot is never left empty.
 			rotationSteps = append(rotationSteps, addition)
 			attachedCount++
+			poolCount++
 			if hasID {
 				rotationSteps = append(rotationSteps, removal)
 				attachedCount--
+				poolCount--
 			}
 		} else {
-			// At capacity: remove first so the count never overshoots.
+			// One container is full. Removing frees an entry in both, so the
+			// addition that follows fits.
 			if hasID {
 				rotationSteps = append(rotationSteps, removal)
 				attachedCount--
+				poolCount--
 			}
 			rotationSteps = append(rotationSteps, addition)
 			attachedCount++
+			poolCount++
 		}
 	}
 	for _, removed := range diff.toRemove[pairs:] {
 		if removal, hasID := newRemoval(removed); hasID {
 			rotationSteps = append(rotationSteps, removal)
 			attachedCount--
+			poolCount--
 		}
 	}
 	for _, added := range diff.toAdd[pairs:] {
 		rotationSteps = append(rotationSteps, newAddition(added))
 		attachedCount++
+		poolCount++
 	}
 
 	return rotationSteps
+}
+
+// credentialChanges returns the additions and removals this apply must perform
+// for one credential set, or nothing if the set did not change.
+//
+// The HasChange guard matters because the update path runs on every change to the
+// resource, including ones driven by an unrelated attribute such as
+// signed_request_object.required. On an unchanged key value.Difference has no
+// prior value to subtract and so reports every entry as an addition. Acting on
+// that re-creates credentials the client already holds, which the API rejects
+// with "credentials contains public keys that already exist in client".
+func credentialChanges(data *schema.ResourceData, credentialsKey string) credentialDiff {
+	if !data.HasChange(credentialsKey) {
+		return credentialDiff{}
+	}
+
+	toAdd, toRemove := value.Difference(data, credentialsKey)
+
+	return classifyCredentialChanges(toAdd, toRemove)
 }
 
 func classifyCredentialChanges(toAdd, toRemove []interface{}) credentialDiff {
@@ -387,26 +490,29 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 	clientID := data.Get("client_id").(string)
 	credentialsKey := "private_key_jwt.0.credentials" //nolint:gosec // This is a Terraform schema key, not a credential.
 
-	toAdd, toRemove := value.Difference(data, credentialsKey)
-	diff := classifyCredentialChanges(toAdd, toRemove)
+	diff := credentialChanges(data, credentialsKey)
 
 	var result *multierror.Error
 
 	if len(diff.toAdd) > 0 || len(diff.toRemove) > 0 {
-		// Snapshot the currently attached credentials so we can mutate the set
-		// incrementally, one slot at a time, without ever exceeding the cap. The
-		// live count also drives the per-pair add-first vs remove-first ordering.
+		// The pool is read for two things only: the record count, and whether a
+		// credential still exists. Never for ownership.
 		existingCreds, err := api.Client.ListCredentials(ctx, clientID)
 		if err != nil {
 			return diag.FromErr(err)
 		}
 
-		attachedCreds := make([]management.Credential, 0, len(existingCreds))
-		for _, cred := range existingCreds {
-			attachedCreds = append(attachedCreds, management.Credential{ID: cred.ID})
-		}
+		// The attached set comes from state, not from the pool listing. The pool
+		// also holds credentials owned by other slots and by nothing at all, and
+		// attaching those here would grant them this slot's privileges. IDs state
+		// remembers but the client no longer holds are dropped, since the API
+		// rejects an attach payload naming a deleted credential.
+		attachedCreds := retainExistingCredentials(
+			attachedCredentialsFromState(data, "private_key_jwt"),
+			existingCreds,
+		)
 
-		for _, step := range planCredentialRotation(diff, len(attachedCreds)) {
+		for _, step := range planCredentialRotation(diff, len(attachedCreds), len(existingCreds)) {
 			switch step.kind {
 			case detachAndDelete:
 				attachedCreds = removeAttachedCredential(attachedCreds, step.credentialID)
@@ -454,6 +560,320 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 	return diag.FromErr(result.ErrorOrNil())
 }
 
+// credentialBearingAttributes are the schema attributes of this resource that
+// hold credential records. Every credential this resource owns is reachable
+// through one of them.
+var credentialBearingAttributes = []string{
+	"private_key_jwt",
+	"tls_client_auth",
+	"self_signed_tls_client_auth",
+	"signed_request_object",
+}
+
+// credentialBlockDeclared reports whether this resource declares the named
+// credential-bearing block, and so whether the read path may record what the API
+// returns for it.
+//
+// Without this test the read path adopts whatever slot the client happens to
+// hold. A credential attached out of band to a block the configuration never
+// declared lands in state as ours, and the next plan compares that block against
+// a configuration without it. The credential fields are ForceNew, so Terraform
+// proposes a replacement whose destroy leg deletes a credential we did not create.
+//
+// Both raw sources are checked because neither covers every phase alone. Config
+// is authoritative during an apply but absent during a refresh, where
+// ReadResource populates only RawState and GetRawConfig() returns a null object
+// that would panic on GetAttr. Prior state substitutes there, which is sound
+// because this read path is the block's only writer and this test gates it.
+//
+// Import is the one phase with nothing to compare against, and it is recorded
+// whole. It does not present as a null raw state: the SDK supplies an object with
+// every block empty, indistinguishable from a configuration that declares none.
+// The discriminator is client_id, which import has not yet read and every other
+// phase carries.
+func credentialBlockDeclared(data *schema.ResourceData, attribute string) bool {
+	return blockDeclaredIn(attribute, data.GetRawConfig(), data.GetRawState())
+}
+
+// blockDeclaredIn holds the decision credentialBlockDeclared makes, separated from
+// the ResourceData the raw values come from so it can be exercised directly.
+func blockDeclaredIn(attribute string, sources ...cty.Value) bool {
+	for _, source := range sources {
+		if source.IsNull() || !source.IsKnown() || !source.Type().IsObjectType() {
+			continue
+		}
+
+		if clientID := source.GetAttr("client_id"); clientID.IsNull() || !clientID.IsKnown() {
+			continue
+		}
+
+		block := source.GetAttr(attribute)
+		if block.IsNull() || !block.IsKnown() {
+			continue
+		}
+
+		return block.LengthInt() > 0
+	}
+
+	return true
+}
+
+// ownedCredentialIDs returns the IDs of the credentials this resource manages,
+// read from state across every credential-bearing attribute.
+//
+// State is the source, not the credential pool: GET /clients/{id}/credentials
+// returns an identical field set for every credential no matter which slot holds
+// it, or whether any does, so a pool listing cannot attribute ownership. Reading
+// it as our own list is what made the provider attach and delete credentials it
+// never created. State is trustworthy here because flattenCredentials fills it
+// from the client's slot lists.
+func ownedCredentialIDs(data *schema.ResourceData) map[string]bool {
+	ownedIDs := make(map[string]bool)
+
+	for _, attribute := range credentialBearingAttributes {
+		for _, credentialID := range stateCredentialIDs(data, attribute) {
+			ownedIDs[credentialID] = true
+		}
+	}
+
+	return ownedIDs
+}
+
+// stateCredentialIDs returns the credential IDs recorded in state for one
+// attribute, in state order. It handles both the TypeSet and TypeList shapes the
+// credential-bearing attributes use.
+//
+// It reads prior state rather than the planned value, which describes the desired
+// end state: a credential this apply removes is already gone from the plan, yet
+// stays attached on the client until its removal step runs. Newly added
+// credentials have no ID yet and are skipped.
+func stateCredentialIDs(data *schema.ResourceData, attribute string) []string {
+	priorState, _ := data.GetChange(fmt.Sprintf("%s.0.credentials", attribute))
+
+	var entries []interface{}
+	switch credentials := priorState.(type) {
+	case *schema.Set:
+		entries = credentials.List()
+	case []interface{}:
+		entries = credentials
+	default:
+		return nil
+	}
+
+	credentialIDs := make([]string, 0, len(entries))
+	for _, entry := range entries {
+		credential, ok := entry.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		if credentialID, _ := credential["id"].(string); credentialID != "" {
+			credentialIDs = append(credentialIDs, credentialID)
+		}
+	}
+
+	return credentialIDs
+}
+
+// credentialMatchers describes the credentials one attribute asks for, in the
+// forms an API response can be recognised by. It is built from the value the SDK
+// currently holds for that attribute: the planned value during an apply, and the
+// prior state during a refresh.
+type credentialMatchers struct {
+	count       int
+	keyIDs      map[string]bool
+	thumbprints map[string]bool
+	subjectDNS  map[string]bool
+	names       map[string]bool
+	// Entries that carry no recognisable field at all. A credential the
+	// configuration declares but nothing can identify makes attribution unsafe for
+	// the whole attribute.
+	unmatchable int
+}
+
+// desiredCredentialMatchers collects the recognisable fields of the credentials
+// one attribute asks for.
+//
+// The key ID is the credential's RFC 7638 JWK thumbprint, so it can be computed
+// from a configured PEM without calling the API. That is what lets a credential
+// this apply has just created be recognised as ours before its ID reaches state.
+func desiredCredentialMatchers(data *schema.ResourceData, attribute string) credentialMatchers {
+	matchers := credentialMatchers{
+		keyIDs:      map[string]bool{},
+		thumbprints: map[string]bool{},
+		subjectDNS:  map[string]bool{},
+		names:       map[string]bool{},
+	}
+
+	var entries []interface{}
+	switch credentials := data.Get(fmt.Sprintf("%s.0.credentials", attribute)).(type) {
+	case *schema.Set:
+		entries = credentials.List()
+	case []interface{}:
+		entries = credentials
+	default:
+		return matchers
+	}
+
+	for _, entry := range entries {
+		credential, ok := entry.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		matchers.count++
+		matchable := false
+
+		credentialType, _ := credential["credential_type"].(string)
+		pemData, _ := credential["pem"].(string)
+
+		// A fingerprint only helps if the API returns the matching field for this
+		// credential type. The key ID is populated for public_key credentials, and
+		// thumbprint_sha256 for x509_cert. A cert_subject_dn credential is given
+		// neither, so its PEM yields nothing to match on however computable a
+		// digest of it may be.
+		if pemData != "" {
+			switch credentialType {
+			case "public_key":
+				if thumbprint := jwkThumbprint(pemData); thumbprint != "" {
+					matchers.keyIDs[thumbprint] = true
+					matchable = true
+				}
+			case "x509_cert":
+				if thumbprint := certificateThumbprint(pemData); thumbprint != "" {
+					matchers.thumbprints[thumbprint] = true
+					matchable = true
+				}
+			}
+		}
+		if subjectDN, _ := credential["subject_dn"].(string); subjectDN != "" {
+			matchers.subjectDNS[subjectDN] = true
+			matchable = true
+		}
+		if name, _ := credential["name"].(string); name != "" {
+			matchers.names[name] = true
+			matchable = true
+		}
+
+		// An ID already in state identifies the credential on its own.
+		if credentialID, _ := credential["id"].(string); credentialID != "" {
+			matchable = true
+		}
+
+		if !matchable {
+			matchers.unmatchable++
+		}
+	}
+
+	return matchers
+}
+
+// filterOwnedCredentials narrows a slot listing to the credentials this resource
+// manages, and returns the IDs it left out.
+//
+// The slot can hold credentials attached by another tool. Recording those as ours
+// is what makes the next plan propose deleting a key we never created, so the read
+// path has to attribute them rather than take the listing whole. A credential is
+// ours when state already records its ID, or when its key material matches what
+// the configuration asks for.
+//
+// Two escape hatches keep this from breaking an apply. Nothing is filtered when
+// the attribute has neither prior state nor a desired set, which is import and
+// the read that follows it. And nothing is filtered when the configuration asks
+// for a credential that carries no field this can match on, because there is then
+// no way to tell ours from anyone else's, and returning less than the
+// configuration declared would fail the apply with "provider produced
+// inconsistent result after apply".
+//
+// That second hatch is deliberately keyed on unmatchable entries rather than on a
+// shortfall in the result. A shortfall is the ordinary shape of drift — a managed
+// credential deleted out of band — and treating it as a matching failure would
+// hand the whole listing back, adopting any foreign credential that happened to
+// share the slot.
+func filterOwnedCredentials(data *schema.ResourceData, attribute string, credentials []management.Credential) ([]management.Credential, []string) {
+	knownIDs := make(map[string]bool)
+	for _, credentialID := range stateCredentialIDs(data, attribute) {
+		knownIDs[credentialID] = true
+	}
+
+	matchers := desiredCredentialMatchers(data, attribute)
+	if len(knownIDs) == 0 && matchers.count == 0 {
+		return credentials, nil
+	}
+
+	if matchers.unmatchable > 0 {
+		return credentials, nil
+	}
+
+	isOwned := func(credential management.Credential) bool {
+		if knownIDs[credential.GetID()] {
+			return true
+		}
+		if keyID := credential.GetKeyID(); keyID != "" && matchers.keyIDs[keyID] {
+			return true
+		}
+		if thumbprint := credential.GetThumbprintSHA256(); thumbprint != "" && matchers.thumbprints[thumbprint] {
+			return true
+		}
+		if subjectDN := credential.GetSubjectDN(); subjectDN != "" && matchers.subjectDNS[subjectDN] {
+			return true
+		}
+		// Names are matched last. A credential set up elsewhere under a name the
+		// configuration also uses is indistinguishable from ours, and adopting it
+		// is the safer of the two mistakes.
+		return credential.GetName() != "" && matchers.names[credential.GetName()]
+	}
+
+	owned := make([]management.Credential, 0, len(credentials))
+	var skippedIDs []string
+	for _, credential := range credentials {
+		if isOwned(credential) {
+			owned = append(owned, credential)
+			continue
+		}
+		skippedIDs = append(skippedIDs, credential.GetID())
+	}
+
+	return owned, skippedIDs
+}
+
+// attachedCredentialsFromState returns the credentials attached to one slot as
+// bare {id} references ready for a PATCH, taken from state rather than from the
+// pool so that credentials belonging to another slot are never pulled in.
+func attachedCredentialsFromState(data *schema.ResourceData, attribute string) []management.Credential {
+	credentialIDs := stateCredentialIDs(data, attribute)
+
+	attachedCredentials := make([]management.Credential, 0, len(credentialIDs))
+	for _, credentialID := range credentialIDs {
+		attachedCredentials = append(attachedCredentials, management.Credential{
+			ID: auth0.String(credentialID),
+		})
+	}
+
+	return attachedCredentials
+}
+
+// retainExistingCredentials drops entries from attachedCredentials that the
+// client's credential pool no longer contains.
+//
+// A credential deleted outside Terraform leaves the slot list in state untouched
+// until the next refresh, so state can name one the client no longer holds.
+// Carrying that ID into an attach payload makes the API reject every step of the
+// rotation. The pool is used only to test existence, never for ownership.
+func retainExistingCredentials(attachedCredentials []management.Credential, poolCredentials []*management.Credential) []management.Credential {
+	inPool := make(map[string]bool, len(poolCredentials))
+	for _, credential := range poolCredentials {
+		inPool[credential.GetID()] = true
+	}
+
+	retained := make([]management.Credential, 0, len(attachedCredentials))
+	for _, credential := range attachedCredentials {
+		if inPool[credential.GetID()] {
+			retained = append(retained, credential)
+		}
+	}
+
+	return retained
+}
+
 // removeAttachedCredential returns creds without the entry matching id.
 func removeAttachedCredential(creds []management.Credential, id string) []management.Credential {
 	filtered := make([]management.Credential, 0, len(creds))
@@ -463,6 +883,21 @@ func removeAttachedCredential(creds []management.Credential, id string) []manage
 		}
 	}
 	return filtered
+}
+
+// credentialStillAttachedMessage is the message the Management API returns when
+// a credential cannot be deleted because a client feature still references it.
+const credentialStillAttachedMessage = "still associated with a client"
+
+// isCredentialStillAttachedError reports whether err is the API's refusal to
+// delete a credential that is still attached to the client. The API exposes no
+// error code for this case, so the message is the only signal available.
+func isCredentialStillAttachedError(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	return strings.Contains(strings.ToLower(err.Error()), credentialStillAttachedMessage)
 }
 
 // deleteCredentialIgnoringNotFound deletes a credential, treats a 404 as success.
@@ -550,7 +985,7 @@ func createSignedRequestObject(ctx context.Context, api *management.Management, 
 		credentialsToAttach := make([]management.Credential, 0)
 		for _, credential := range signedRequestObject.GetCredentials() {
 			if err := api.Client.CreateCredential(ctx, clientID, &credential); err != nil {
-				return diag.FromErr(err)
+				return diag.FromErr(rollbackCreatedCredentials(ctx, api, clientID, credentialsToAttach, err))
 			}
 
 			credentialsToAttach = append(credentialsToAttach, management.Credential{
@@ -558,7 +993,11 @@ func createSignedRequestObject(ctx context.Context, api *management.Management, 
 			})
 		}
 
-		return diag.FromErr(attachSignedRequestObjectCredentials(ctx, api, clientID, signedRequestObject.Required, credentialsToAttach))
+		if err := attachSignedRequestObjectCredentials(ctx, api, clientID, signedRequestObject.Required, credentialsToAttach); err != nil {
+			return diag.FromErr(rollbackCreatedCredentials(ctx, api, clientID, credentialsToAttach, err))
+		}
+
+		return nil
 	}
 
 	return nil
@@ -669,13 +1108,25 @@ func attachSignedRequestObjectNoCredentials(ctx context.Context, api *management
 	return updateClientInternal(ctx, api, client.ID, client)
 }
 
-func detachClientCredentials(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string) error {
+func detachClientCredentials(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string, detachSignedRequestObject bool) error {
 	client := clientWithAuthMethodAndSignedRequestObject{
 		ID:                          clientID,
 		SignedRequestObject:         nil,
 		ClientAuthenticationMethods: nil,
 		// API doesn't accept nil on both of these, so we temporarily set this to a default.
 		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
+	}
+
+	// Only clear signed_request_object when this resource manages it. A client can
+	// hold a JAR configuration set up elsewhere while this resource declares just
+	// an authentication method, and clearing it there erases a feature we were
+	// never asked to touch.
+	if !detachSignedRequestObject {
+		return updateClientInternal(ctx, api, client.ID, clientWithAuthMethod{
+			ID:                          client.ID,
+			ClientAuthenticationMethods: nil,
+			TokenEndpointAuthMethod:     client.TokenEndpointAuthMethod,
+		})
 	}
 
 	return updateClientInternal(ctx, api, client.ID, client)
@@ -766,12 +1217,21 @@ func updateSecret(ctx context.Context, api *management.Management, data *schema.
 	})
 }
 
+// credentialTypeByAuthenticationMethod is the credential type each authentication
+// method's block accepts, used when the configuration leaves credential_type out.
+var credentialTypeByAuthenticationMethod = map[string]string{
+	"private_key_jwt":             "public_key",
+	"tls_client_auth":             "cert_subject_dn",
+	"self_signed_tls_client_auth": "x509_cert",
+}
+
 func expandAuthenticationMethodCredentials(rawConfig cty.Value, authenticationMethod string) ([]*management.Credential, diag.Diagnostics) {
 	credentials := make([]*management.Credential, 0)
+	defaultCredentialType := credentialTypeByAuthenticationMethod[authenticationMethod]
 
 	rawConfig.GetAttr(authenticationMethod).ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-			credentials = append(credentials, expandClientCredential(config))
+			credentials = append(credentials, expandClientCredential(config, defaultCredentialType))
 			return stop
 		})
 		return stop
@@ -815,7 +1275,9 @@ func expandSignedRequestObject(rawConfig cty.Value) (*management.ClientSignedReq
 	signedRequestObjectConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		credentials := make([]management.Credential, 0)
 		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-			credentials = append(credentials, *expandClientCredential(config))
+			// This block requires credential_type, so there is nothing to default to
+			// and the configured value always wins.
+			credentials = append(credentials, *expandClientCredential(config, "public_key"))
 			return stop
 		})
 		signedRequestObject.Credentials = &credentials
@@ -841,13 +1303,28 @@ func expandSignedRequestObject(rawConfig cty.Value) (*management.ClientSignedReq
 	return &signedRequestObject, nil
 }
 
-func expandClientCredential(rawConfig cty.Value) *management.Credential {
-	clientCredential := management.Credential{
-		Name:           value.String(rawConfig.GetAttr("name")),
-		CredentialType: value.String(rawConfig.GetAttr("credential_type")),
+// expandClientCredential builds one credential from its raw configuration.
+//
+// The defaultCredentialType argument is the type to assume when the configuration
+// omits it. Only the self_signed_tls_client_auth block makes credential_type
+// Optional, but the API rejects a credential that carries no type, and the raw
+// configuration is the literal one the user wrote, so a schema Default never
+// reaches here. The caller knows which block it is expanding, and every block
+// accepts exactly one type, so the type is supplied here instead.
+func expandClientCredential(rawConfig cty.Value, defaultCredentialType string) *management.Credential {
+	credentialType := value.String(rawConfig.GetAttr("credential_type"))
+	if credentialType == nil || *credentialType == "" {
+		credentialType = &defaultCredentialType
 	}
 
-	switch *clientCredential.CredentialType {
+	clientCredential := management.Credential{
+		Name:           value.String(rawConfig.GetAttr("name")),
+		CredentialType: credentialType,
+	}
+
+	// GetCredentialType rather than a dereference: an unrecognised or absent type
+	// must not panic the provider.
+	switch clientCredential.GetCredentialType() {
 	case "public_key":
 		clientCredential.PEM = value.String(rawConfig.GetAttr("pem"))
 		clientCredential.Algorithm = value.String(rawConfig.GetAttr("algorithm"))
@@ -856,11 +1333,28 @@ func expandClientCredential(rawConfig cty.Value) *management.Credential {
 	case "cert_subject_dn":
 		clientCredential.PEM = value.String(rawConfig.GetAttr("pem"))
 		clientCredential.SubjectDN = value.String(rawConfig.GetAttr("subject_dn"))
-	case "x509_cert":
+	default:
+		// The x509_cert type, and any type this build does not know about, are
+		// declared by PEM alone.
 		clientCredential.PEM = value.String(rawConfig.GetAttr("pem"))
 	}
 
 	return &clientCredential
+}
+
+// certificateThumbprint returns the base64url SHA-256 digest of a certificate's
+// DER bytes, which is the thumbprint_sha256 the API reports for an x509_cert
+// credential. It lets a self-signed mTLS certificate be recognised from the
+// configured PEM alone, with no API call and no reliance on the optional name.
+func certificateThumbprint(pemData string) string {
+	block, _ := pem.Decode([]byte(pemData))
+	if block == nil || block.Type != "CERTIFICATE" {
+		return ""
+	}
+
+	digest := sha256.Sum256(block.Bytes)
+
+	return base64.RawURLEncoding.EncodeToString(digest[:])
 }
 
 // jwkThumbprint computes the RFC 7638 JWK thumbprint from a PEM-encoded

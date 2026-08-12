@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	managementv2 "github.com/auth0/go-auth0/v2/management"
-	managementv2client "github.com/auth0/go-auth0/v2/management/client"
-	"github.com/auth0/go-auth0/v2/management/core"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
+	managementv3client "github.com/auth0/go-auth0/v3/management/client"
+	"github.com/auth0/go-auth0/v3/management/core"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -46,12 +46,12 @@ func NewDirectorySynchronizedGroupsResource() *schema.Resource {
 }
 
 func upsertDirectorySynchronizedGroups(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 	connectionID := data.Get("connection_id").(string)
 
 	groupIDs := value.Strings(data.GetRawConfig().GetAttr("group_ids"))
 
-	if err := putSynchronizedGroups(ctx, apiv2, connectionID, *groupIDs); err != nil {
+	if err := putSynchronizedGroups(ctx, apiv3, connectionID, *groupIDs); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -61,9 +61,9 @@ func upsertDirectorySynchronizedGroups(ctx context.Context, data *schema.Resourc
 }
 
 func readDirectorySynchronizedGroups(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	groupIDs, err := getAllSynchronizedGroups(ctx, apiv2, data.Id())
+	groupIDs, err := getAllSynchronizedGroups(ctx, apiv3, data.Id())
 	if err != nil {
 		return internalError.HandleReadAPIError("auth0_connection_directory_synchronized_groups", data, err)
 	}
@@ -77,20 +77,20 @@ func readDirectorySynchronizedGroups(ctx context.Context, data *schema.ResourceD
 }
 
 func deleteDirectorySynchronizedGroups(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	if err := putSynchronizedGroups(ctx, apiv2, data.Id(), []string{}); err != nil {
+	if err := putSynchronizedGroups(ctx, apiv3, data.Id(), []string{}); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil
 }
 
-func getAllSynchronizedGroups(ctx context.Context, apiv2 *managementv2client.Management, connectionID string) ([]string, error) {
+func getAllSynchronizedGroups(ctx context.Context, apiv3 *managementv3client.Management, connectionID string) ([]string, error) {
 	var groupIDs []string
 
-	page, err := apiv2.Connections.DirectoryProvisioning.ListSynchronizedGroups(ctx, connectionID,
-		&managementv2.ListSynchronizedGroupsRequestParameters{},
+	page, err := apiv3.Connections.DirectoryProvisioning.ListSynchronizedGroups(ctx, connectionID,
+		&managementv3.ListSynchronizedGroupsRequestParameters{},
 	)
 	if err != nil {
 		return nil, err
@@ -116,16 +116,16 @@ func getAllSynchronizedGroups(ctx context.Context, apiv2 *managementv2client.Man
 	return groupIDs, nil
 }
 
-func putSynchronizedGroups(ctx context.Context, apiv2 *managementv2client.Management, connectionID string, groupIDs []string) error {
-	payloadGroups := make([]*managementv2.SynchronizedGroupPayload, len(groupIDs))
+func putSynchronizedGroups(ctx context.Context, apiv3 *managementv3client.Management, connectionID string, groupIDs []string) error {
+	payloadGroups := make([]*managementv3.SynchronizedGroupPayload, len(groupIDs))
 	for i, id := range groupIDs {
-		payloadGroups[i] = &managementv2.SynchronizedGroupPayload{
+		payloadGroups[i] = &managementv3.SynchronizedGroupPayload{
 			ID: id,
 		}
 	}
 
-	return apiv2.Connections.DirectoryProvisioning.Set(ctx, connectionID,
-		&managementv2.ReplaceSynchronizedGroupsRequestContent{
+	return apiv3.Connections.DirectoryProvisioning.Set(ctx, connectionID,
+		&managementv3.ReplaceSynchronizedGroupsRequestContent{
 			Groups: payloadGroups,
 		},
 	)

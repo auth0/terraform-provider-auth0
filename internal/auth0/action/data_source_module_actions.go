@@ -3,7 +3,7 @@ package action
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/v2/management"
+	"github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -80,10 +80,10 @@ func NewModuleActionsDataSource() *schema.Resource {
 }
 
 func readActionModuleActionsForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 	moduleID := data.Get("module_id").(string)
 
-	actionsPage, err := apiv2.Actions.Modules.ListActions(ctx, moduleID, &management.GetActionModuleActionsRequestParameters{})
+	actionsPage, err := apiv3.Actions.Modules.ListActions(ctx, moduleID, &management.GetActionModuleActionsRequestParameters{})
 	if err != nil {
 		return diag.FromErr(err)
 	}

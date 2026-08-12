@@ -133,11 +133,11 @@ func strategyOverrideSchema() *schema.Schema {
 }
 
 func createConnectionProfile(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiV2 := meta.(*config.Config).GetAPIV2()
+	apiV3 := meta.(*config.Config).GetAPIV3()
 
 	profile := expandConnectionProfile(data)
 
-	response, err := apiV2.ConnectionProfiles.Create(ctx, profile)
+	response, err := apiV3.ConnectionProfiles.Create(ctx, profile)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -148,9 +148,9 @@ func createConnectionProfile(ctx context.Context, data *schema.ResourceData, met
 }
 
 func readConnectionProfile(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiV2 := meta.(*config.Config).GetAPIV2()
+	apiV3 := meta.(*config.Config).GetAPIV3()
 
-	response, err := apiV2.ConnectionProfiles.Get(ctx, data.Id())
+	response, err := apiV3.ConnectionProfiles.Get(ctx, data.Id())
 	if err != nil {
 		return internalError.HandleReadAPIError("auth0_connection_profile", data, err)
 	}
@@ -163,11 +163,11 @@ func readConnectionProfile(ctx context.Context, data *schema.ResourceData, meta 
 }
 
 func updateConnectionProfile(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiV2 := meta.(*config.Config).GetAPIV2()
+	apiV3 := meta.(*config.Config).GetAPIV3()
 
 	profile := expandConnectionProfileForUpdate(data)
 
-	_, err := apiV2.ConnectionProfiles.Update(ctx, data.Id(), profile)
+	_, err := apiV3.ConnectionProfiles.Update(ctx, data.Id(), profile)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -176,9 +176,9 @@ func updateConnectionProfile(ctx context.Context, data *schema.ResourceData, met
 }
 
 func deleteConnectionProfile(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiV2 := meta.(*config.Config).GetAPIV2()
+	apiV3 := meta.(*config.Config).GetAPIV3()
 
-	err := apiV2.ConnectionProfiles.Delete(ctx, data.Id())
+	err := apiV3.ConnectionProfiles.Delete(ctx, data.Id())
 	if err != nil {
 		return diag.FromErr(err)
 	}

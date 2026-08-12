@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"testing"
 
-	managementv2 "github.com/auth0/go-auth0/v2/management"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestV2ForbiddenErrorCode(t *testing.T) {
+func TestV3ForbiddenErrorCode(t *testing.T) {
 	t.Run("returns errorCode from valid ForbiddenError", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{
 				"statusCode": 403,
 				"error":      "Forbidden",
@@ -20,40 +20,40 @@ func TestV2ForbiddenErrorCode(t *testing.T) {
 			},
 		}
 
-		code := v2ForbiddenErrorCode(err)
+		code := v3ForbiddenErrorCode(err)
 		assert.Equal(t, "insufficient_entitlement", code)
 	})
 
 	t.Run("returns empty string for non-ForbiddenError", func(t *testing.T) {
 		err := errors.New("some other error")
 
-		code := v2ForbiddenErrorCode(err)
+		code := v3ForbiddenErrorCode(err)
 		assert.Equal(t, "", code)
 	})
 
 	t.Run("returns empty string when Body is not a map", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: "not a map",
 		}
 
-		code := v2ForbiddenErrorCode(err)
+		code := v3ForbiddenErrorCode(err)
 		assert.Equal(t, "", code)
 	})
 
 	t.Run("returns empty string when errorCode key is missing", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{
 				"statusCode": 403,
 				"error":      "Forbidden",
 			},
 		}
 
-		code := v2ForbiddenErrorCode(err)
+		code := v3ForbiddenErrorCode(err)
 		assert.Equal(t, "", code)
 	})
 
 	t.Run("returns empty string when errorCode is not a string", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{
 				"statusCode": 403,
 				"error":      "Forbidden",
@@ -61,14 +61,14 @@ func TestV2ForbiddenErrorCode(t *testing.T) {
 			},
 		}
 
-		code := v2ForbiddenErrorCode(err)
+		code := v3ForbiddenErrorCode(err)
 		assert.Equal(t, "", code)
 	})
 }
 
 func TestIsInsufficientScope(t *testing.T) {
 	t.Run("returns true for insufficient_scope error", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{
 				"errorCode": "insufficient_scope",
 			},
@@ -78,7 +78,7 @@ func TestIsInsufficientScope(t *testing.T) {
 	})
 
 	t.Run("returns false for insufficient_entitlement error", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{
 				"errorCode": "insufficient_entitlement",
 			},
@@ -94,7 +94,7 @@ func TestIsInsufficientScope(t *testing.T) {
 	})
 
 	t.Run("returns false for malformed ForbiddenError", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: "not a map",
 		}
 
@@ -104,7 +104,7 @@ func TestIsInsufficientScope(t *testing.T) {
 
 func TestIsInsufficientEntitlement(t *testing.T) {
 	t.Run("returns true for insufficient_entitlement error", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{
 				"errorCode": "insufficient_entitlement",
 			},
@@ -114,7 +114,7 @@ func TestIsInsufficientEntitlement(t *testing.T) {
 	})
 
 	t.Run("returns false for insufficient_scope error", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{
 				"errorCode": "insufficient_scope",
 			},
@@ -130,7 +130,7 @@ func TestIsInsufficientEntitlement(t *testing.T) {
 	})
 
 	t.Run("returns false for malformed ForbiddenError", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: "not a map",
 		}
 
@@ -138,9 +138,9 @@ func TestIsInsufficientEntitlement(t *testing.T) {
 	})
 }
 
-// TestV2ErrorCodeMalformedBodies covers scope item E1: every malformed Body
+// TestV3ErrorCodeMalformedBodies covers scope item E1: every malformed Body
 // permutation must fail closed to "" rather than panicking or false-positiving.
-func TestV2ForbiddenErrorCodeMalformedBodies(t *testing.T) {
+func TestV3ForbiddenErrorCodeMalformedBodies(t *testing.T) {
 	var testCases = []struct {
 		name string
 		body interface{}
@@ -165,18 +165,18 @@ func TestV2ForbiddenErrorCodeMalformedBodies(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			err := &managementv2.ForbiddenError{Body: testCase.body}
+			err := &managementv3.ForbiddenError{Body: testCase.body}
 
-			assert.Equal(t, "", v2ForbiddenErrorCode(err))
+			assert.Equal(t, "", v3ForbiddenErrorCode(err))
 			assert.False(t, IsInsufficientEntitlement(err))
 			assert.False(t, IsInsufficientScope(err))
 		})
 	}
 }
 
-// TestV2ErrorCodeExactMatchBoundary covers scope item B1: the matcher is an
+// TestV3ErrorCodeExactMatchBoundary covers scope item B1: the matcher is an
 // exact string comparison, so near-miss variants must not match.
-func TestV2ForbiddenErrorCodeExactMatchBoundary(t *testing.T) {
+func TestV3ForbiddenErrorCodeExactMatchBoundary(t *testing.T) {
 	var testCases = []struct {
 		name      string
 		errorCode string
@@ -194,7 +194,7 @@ func TestV2ForbiddenErrorCodeExactMatchBoundary(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			err := &managementv2.ForbiddenError{
+			err := &managementv3.ForbiddenError{
 				Body: map[string]interface{}{"errorCode": testCase.errorCode},
 			}
 
@@ -204,23 +204,23 @@ func TestV2ForbiddenErrorCodeExactMatchBoundary(t *testing.T) {
 	}
 }
 
-// TestV2ErrorCodeWrappedErrors covers scope item E2: errors.As must unwrap
+// TestV3ErrorCodeWrappedErrors covers scope item E2: errors.As must unwrap
 // through fmt.Errorf %w chains so SDK/middleware wrapping does not defeat
 // detection.
-func TestV2ForbiddenErrorCodeWrappedErrors(t *testing.T) {
+func TestV3ForbiddenErrorCodeWrappedErrors(t *testing.T) {
 	t.Run("single-level wrap preserves entitlement detection", func(t *testing.T) {
-		forbidden := &managementv2.ForbiddenError{
+		forbidden := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{"errorCode": "insufficient_entitlement"},
 		}
 		wrapped := fmt.Errorf("calling bot detection: %w", forbidden)
 
-		assert.Equal(t, "insufficient_entitlement", v2ForbiddenErrorCode(wrapped))
+		assert.Equal(t, "insufficient_entitlement", v3ForbiddenErrorCode(wrapped))
 		assert.True(t, IsInsufficientEntitlement(wrapped))
 		assert.False(t, IsInsufficientScope(wrapped))
 	})
 
 	t.Run("multi-level wrap preserves scope detection", func(t *testing.T) {
-		forbidden := &managementv2.ForbiddenError{
+		forbidden := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{"errorCode": "insufficient_scope"},
 		}
 		wrapped := fmt.Errorf("outer: %w", fmt.Errorf("inner: %w", forbidden))
@@ -232,26 +232,26 @@ func TestV2ForbiddenErrorCodeWrappedErrors(t *testing.T) {
 	t.Run("wrapped non-Forbidden error does not match", func(t *testing.T) {
 		wrapped := fmt.Errorf("outer: %w", errors.New("boom"))
 
-		assert.Equal(t, "", v2ForbiddenErrorCode(wrapped))
+		assert.Equal(t, "", v3ForbiddenErrorCode(wrapped))
 		assert.False(t, IsInsufficientEntitlement(wrapped))
 		assert.False(t, IsInsufficientScope(wrapped))
 	})
 }
 
-// TestV2ErrorCodeNilError covers scope item E3: nil input must not panic.
-func TestV2ForbiddenErrorCodeNilError(t *testing.T) {
-	assert.Equal(t, "", v2ForbiddenErrorCode(nil))
+// TestV3ErrorCodeNilError covers scope item E3: nil input must not panic.
+func TestV3ForbiddenErrorCodeNilError(t *testing.T) {
+	assert.Equal(t, "", v3ForbiddenErrorCode(nil))
 	assert.False(t, IsInsufficientEntitlement(nil))
 	assert.False(t, IsInsufficientScope(nil))
 }
 
-// TestV2ErrorCodeLiveWireFormat covers scope items B1 and N4 by asserting
+// TestV3ErrorCodeLiveWireFormat covers scope items B1 and N4 by asserting
 // against the exact 403 bodies returned by the Management API for a
 // non-entitled tenant, including the backend's own copy-paste bug where the
 // captcha endpoint's message mentions "bot detection".
-func TestV2ForbiddenErrorCodeLiveWireFormat(t *testing.T) {
+func TestV3ForbiddenErrorCodeLiveWireFormat(t *testing.T) {
 	t.Run("bot detection 403 body", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{
 				"statusCode": float64(403),
 				"error":      "Forbidden",
@@ -265,7 +265,7 @@ func TestV2ForbiddenErrorCodeLiveWireFormat(t *testing.T) {
 	})
 
 	t.Run("captcha 403 body (backend message says bot detection)", func(t *testing.T) {
-		err := &managementv2.ForbiddenError{
+		err := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{
 				"statusCode": float64(403),
 				"error":      "Forbidden",

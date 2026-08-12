@@ -3,7 +3,7 @@ package ratelimitpolicy
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/v2/management"
+	"github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -58,7 +58,7 @@ func rateLimitPolicyListElemSchema() map[string]*schema.Schema {
 }
 
 func readRateLimitPoliciesForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	params := &management.ListRateLimitPoliciesRequestParameters{}
 	if v, ok := data.GetOk("resource"); ok {
@@ -72,7 +72,7 @@ func readRateLimitPoliciesForDataSource(ctx context.Context, data *schema.Resour
 		params.SetConsumerSelector(&selector)
 	}
 
-	page, err := apiv2.RateLimitPolicies.List(ctx, params)
+	page, err := apiv3.RateLimitPolicies.List(ctx, params)
 	if err != nil {
 		return diag.FromErr(err)
 	}

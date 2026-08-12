@@ -6,7 +6,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -1676,12 +1676,12 @@ func expandSCIMConfiguration(data *schema.ResourceData) *management.SCIMConfigur
 	return nil
 }
 
-func expandDirectoryMapping(data *schema.ResourceData) []*managementv2.DirectoryProvisioningMappingItem {
+func expandDirectoryMapping(data *schema.ResourceData) []*managementv3.DirectoryProvisioningMappingItem {
 	srcMapping := data.Get("mapping").(*schema.Set)
-	mapping := make([]*managementv2.DirectoryProvisioningMappingItem, 0, srcMapping.Len())
+	mapping := make([]*managementv3.DirectoryProvisioningMappingItem, 0, srcMapping.Len())
 	for _, item := range srcMapping.List() {
 		srcMap := item.(map[string]interface{})
-		mappingItem := &managementv2.DirectoryProvisioningMappingItem{}
+		mappingItem := &managementv3.DirectoryProvisioningMappingItem{}
 		mappingItem.SetAuth0(srcMap["auth0"].(string))
 		mappingItem.SetIdp(srcMap["idp"].(string))
 		mapping = append(mapping, mappingItem)
@@ -1690,9 +1690,9 @@ func expandDirectoryMapping(data *schema.ResourceData) []*managementv2.Directory
 	return mapping
 }
 
-func expandDirectory(data *schema.ResourceData) *managementv2.CreateDirectoryProvisioningRequestContent {
+func expandDirectory(data *schema.ResourceData) *managementv3.CreateDirectoryProvisioningRequestContent {
 	cfg := data.GetRawConfig()
-	directoryConfig := &managementv2.CreateDirectoryProvisioningRequestContent{}
+	directoryConfig := &managementv3.CreateDirectoryProvisioningRequestContent{}
 
 	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
 		mapping := expandDirectoryMapping(data)
@@ -1705,16 +1705,16 @@ func expandDirectory(data *schema.ResourceData) *managementv2.CreateDirectoryPro
 	}
 
 	if !cfg.GetAttr("synchronize_groups").IsNull() {
-		syncGroups := managementv2.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
+		syncGroups := managementv3.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
 		directoryConfig.SetSynchronizeGroups(&syncGroups)
 	}
 
 	return directoryConfig
 }
 
-func expandDirectoryUpdate(data *schema.ResourceData) *managementv2.UpdateDirectoryProvisioningRequestContent {
+func expandDirectoryUpdate(data *schema.ResourceData) *managementv3.UpdateDirectoryProvisioningRequestContent {
 	cfg := data.GetRawConfig()
-	directoryConfig := &managementv2.UpdateDirectoryProvisioningRequestContent{}
+	directoryConfig := &managementv3.UpdateDirectoryProvisioningRequestContent{}
 
 	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
 		mapping := expandDirectoryMapping(data)
@@ -1727,7 +1727,7 @@ func expandDirectoryUpdate(data *schema.ResourceData) *managementv2.UpdateDirect
 	}
 
 	if !cfg.GetAttr("synchronize_groups").IsNull() {
-		syncGroups := managementv2.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
+		syncGroups := managementv3.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
 		directoryConfig.SetSynchronizeGroups(&syncGroups)
 	}
 

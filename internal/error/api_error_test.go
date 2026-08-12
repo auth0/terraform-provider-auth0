@@ -7,17 +7,17 @@ import (
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management"
-	"github.com/auth0/go-auth0/v2/management/core"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
+	"github.com/auth0/go-auth0/v3/management/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stretchr/testify/assert"
 )
 
-// newV2NotFoundError builds the error the v2 SDK returns on a 404, which wraps a
+// newV3NotFoundError builds the error the v3 SDK returns on a 404, which wraps a
 // *core.APIError instead of implementing the v1 management.Error interface.
-func newV2NotFoundError(body string) error {
-	return &managementv2.NotFoundError{
+func newV3NotFoundError(body string) error {
+	return &managementv3.NotFoundError{
 		APIError: core.NewAPIError(http.StatusNotFound, nil, errors.New(body)),
 	}
 }
@@ -111,14 +111,14 @@ func TestHandleReadAPIError(t *testing.T) {
 		assert.True(t, diags.HasError())
 	})
 
-	t.Run("it removes the resource from state and returns a warning on a v2 SDK 404", func(t *testing.T) {
+	t.Run("it removes the resource from state and returns a warning on a v3 SDK 404", func(t *testing.T) {
 		data := schema.TestResourceDataRaw(t, nil, nil)
 		data.SetId("org_123::con_123")
 
 		diags := HandleReadAPIError(
 			"auth0_organization_connection",
 			data,
-			newV2NotFoundError(`{"statusCode":404,"error":"Not Found","message":"No connection found by that id"}`),
+			newV3NotFoundError(`{"statusCode":404,"error":"Not Found","message":"No connection found by that id"}`),
 		)
 
 		assert.Empty(t, data.Id())
@@ -129,11 +129,11 @@ func TestHandleReadAPIError(t *testing.T) {
 		assert.Contains(t, diags[0].Detail, "org_123::con_123")
 	})
 
-	t.Run("it returns the error and keeps the resource in state on a non-404 v2 SDK error", func(t *testing.T) {
+	t.Run("it returns the error and keeps the resource in state on a non-404 v3 SDK error", func(t *testing.T) {
 		data := schema.TestResourceDataRaw(t, nil, nil)
 		data.SetId("id")
 
-		diags := HandleReadAPIError("auth0_organization_connection", data, &managementv2.BadRequestError{
+		diags := HandleReadAPIError("auth0_organization_connection", data, &managementv3.BadRequestError{
 			APIError: core.NewAPIError(http.StatusBadRequest, nil, errors.New("bad request")),
 		})
 
@@ -183,23 +183,23 @@ func TestIsStatusNotFound(t *testing.T) {
 			expected: false,
 		},
 		{
-			name:     "v2 SDK 404",
-			givenErr: newV2NotFoundError(`{"statusCode":404,"error":"Not Found"}`),
+			name:     "v3 SDK 404",
+			givenErr: newV3NotFoundError(`{"statusCode":404,"error":"Not Found"}`),
 			expected: true,
 		},
 		{
-			name:     "v2 SDK bare core.APIError with a 404",
+			name:     "v3 SDK bare core.APIError with a 404",
 			givenErr: core.NewAPIError(http.StatusNotFound, nil, errors.New("not found")),
 			expected: true,
 		},
 		{
-			name:     "v2 SDK 404 wrapped by fmt.Errorf",
-			givenErr: fmt.Errorf("reading connection: %w", newV2NotFoundError(`{"statusCode":404}`)),
+			name:     "v3 SDK 404 wrapped by fmt.Errorf",
+			givenErr: fmt.Errorf("reading connection: %w", newV3NotFoundError(`{"statusCode":404}`)),
 			expected: true,
 		},
 		{
-			name: "v2 SDK 400",
-			givenErr: &managementv2.BadRequestError{
+			name: "v3 SDK 400",
+			givenErr: &managementv3.BadRequestError{
 				APIError: core.NewAPIError(http.StatusBadRequest, nil, errors.New("bad request")),
 			},
 			expected: false,

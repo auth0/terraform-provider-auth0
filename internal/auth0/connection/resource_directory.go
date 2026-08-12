@@ -111,12 +111,12 @@ func NewDirectoryResource() *schema.Resource {
 }
 
 func createDirectory(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 	connectionID := data.Get("connection_id").(string)
 
 	directoryConfig := expandDirectory(data)
 
-	result, err := apiv2.Connections.DirectoryProvisioning.Create(ctx, connectionID, directoryConfig)
+	result, err := apiv3.Connections.DirectoryProvisioning.Create(ctx, connectionID, directoryConfig)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -127,10 +127,10 @@ func createDirectory(ctx context.Context, data *schema.ResourceData, meta interf
 }
 
 func updateDirectory(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 	directoryConfig := expandDirectoryUpdate(data)
 
-	_, err := apiv2.Connections.DirectoryProvisioning.Update(ctx, data.Id(), directoryConfig)
+	_, err := apiv3.Connections.DirectoryProvisioning.Update(ctx, data.Id(), directoryConfig)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
@@ -139,9 +139,9 @@ func updateDirectory(ctx context.Context, data *schema.ResourceData, meta interf
 }
 
 func readDirectory(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	directoryConfig, err := apiv2.Connections.DirectoryProvisioning.Get(ctx, data.Id())
+	directoryConfig, err := apiv3.Connections.DirectoryProvisioning.Get(ctx, data.Id())
 	if err != nil {
 		return internalError.HandleReadAPIError("auth0_connection_directory", data, err)
 	}
@@ -150,9 +150,9 @@ func readDirectory(ctx context.Context, data *schema.ResourceData, meta interfac
 }
 
 func deleteDirectory(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	if err := apiv2.Connections.DirectoryProvisioning.Delete(ctx, data.Id()); err != nil {
+	if err := apiv3.Connections.DirectoryProvisioning.Delete(ctx, data.Id()); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 

@@ -7,9 +7,9 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management"
-	managementv2client "github.com/auth0/go-auth0/v2/management/client"
-	"github.com/auth0/go-auth0/v2/management/core"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
+	managementv3client "github.com/auth0/go-auth0/v3/management/client"
+	"github.com/auth0/go-auth0/v3/management/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -139,7 +139,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	foundOrganization, err := findOrganizationByIDOrName(ctx, data, api)
 	if err != nil {
@@ -148,10 +148,10 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 
 	data.SetId(foundOrganization.GetID())
 
-	var foundConnections []*managementv2.OrganizationAllConnectionPost
+	var foundConnections []*managementv3.OrganizationAllConnectionPost
 	skipClientGrants := data.Get("skip_client_grants").(bool)
 	if !skipClientGrants {
-		foundConnections, err = fetchAllOrganizationConnectionsV2(ctx, apiv2, foundOrganization.GetID())
+		foundConnections, err = fetchAllOrganizationConnectionsV3(ctx, apiv3, foundOrganization.GetID())
 		if err != nil {
 			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
@@ -192,10 +192,10 @@ func findOrganizationByIDOrName(
 	return api.Organization.ReadByName(ctx, organizationName)
 }
 
-func fetchAllOrganizationConnectionsV2(ctx context.Context, apiv2 *managementv2client.Management, organizationID string) ([]*managementv2.OrganizationAllConnectionPost, error) {
-	var foundConnections []*managementv2.OrganizationAllConnectionPost
+func fetchAllOrganizationConnectionsV3(ctx context.Context, apiv3 *managementv3client.Management, organizationID string) ([]*managementv3.OrganizationAllConnectionPost, error) {
+	var foundConnections []*managementv3.OrganizationAllConnectionPost
 
-	page, err := apiv2.Organizations.Connections.List(ctx, organizationID, &managementv2.ListOrganizationAllConnectionsRequestParameters{IsEnabled: auth0.Bool(true)})
+	page, err := apiv3.Organizations.Connections.List(ctx, organizationID, &managementv3.ListOrganizationAllConnectionsRequestParameters{IsEnabled: auth0.Bool(true)})
 	if err != nil {
 		return nil, err
 	}

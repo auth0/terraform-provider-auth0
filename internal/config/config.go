@@ -21,8 +21,8 @@ import (
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management/client"
-	"github.com/auth0/go-auth0/v2/management/option"
+	managementv3 "github.com/auth0/go-auth0/v3/management/client"
+	"github.com/auth0/go-auth0/v3/management/option"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -61,7 +61,7 @@ type CliConfig struct {
 // *schema.Provider meta parameter.
 type Config struct {
 	api   *management.Management
-	apiv2 *managementv2.Management
+	apiv3 *managementv3.Management
 	mutex *mutex.KeyValue
 }
 
@@ -73,11 +73,11 @@ func New(apiClient *management.Management) *Config {
 	}
 }
 
-// NewWithV2 instantiates a new Config with both v1 and v2 clients.
-func NewWithV2(apiClient *management.Management, apiClientV2 *managementv2.Management) *Config {
+// NewWithV3 instantiates a new Config with both v1 and v3 clients.
+func NewWithV3(apiClient *management.Management, apiClientV3 *managementv3.Management) *Config {
 	return &Config{
 		api:   apiClient,
-		apiv2: apiClientV2,
+		apiv3: apiClientV3,
 		mutex: mutex.New(),
 	}
 }
@@ -87,9 +87,9 @@ func (c *Config) GetAPI() *management.Management {
 	return c.api
 }
 
-// GetAPIV2 fetches an instance of the v2 *managementv2.Management client.
-func (c *Config) GetAPIV2() *managementv2.Management {
-	return c.apiv2
+// GetAPIV3 fetches an instance of the v3 *managementv3.Management client.
+func (c *Config) GetAPIV3() *managementv3.Management {
+	return c.apiv3
 }
 
 // GetMutex fetches an instance of the *mutex.KeyValue.
@@ -222,8 +222,8 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			return nil, diag.FromErr(err)
 		}
 
-		apiClientV2, err := managementv2.New(config.Domain,
-			authenticationOptionV2(config),
+		apiClientV3, err := managementv3.New(config.Domain,
+			authenticationOptionV3(config),
 			option.WithUserAgent(userAgent(terraformVersion)),
 			option.WithAuth0ClientEnvEntry(providerName, version),
 			option.WithHTTPClient(customClientWithRetries()),
@@ -234,7 +234,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			return nil, diag.FromErr(err)
 		}
 
-		return NewWithV2(apiClient, apiClientV2), nil
+		return NewWithV3(apiClient, apiClientV3), nil
 	}
 }
 
@@ -387,8 +387,8 @@ func authenticationOption(cfg ProviderConfig) management.Option {
 	}
 }
 
-// authenticationOptionV2 computes the desired authentication option for the v2 management client.
-func authenticationOptionV2(cfg ProviderConfig) option.RequestOption {
+// authenticationOptionV3 computes the desired authentication option for the v3 management client.
+func authenticationOptionV3(cfg ProviderConfig) option.RequestOption {
 	ctx := context.Background()
 
 	switch {

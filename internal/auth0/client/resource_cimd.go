@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	mgmtv2 "github.com/auth0/go-auth0/v2/management"
+	mgmtv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -362,9 +362,9 @@ func validateBoolEquals(expected bool) schema.SchemaValidateDiagFunc {
 }
 
 func createCIMDClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	result, err := apiv2.Clients.RegisterCimdClient(ctx, &mgmtv2.RegisterCimdClientRequestContent{
+	result, err := apiv3.Clients.RegisterCimdClient(ctx, &mgmtv3.RegisterCimdClientRequestContent{
 		ExternalClientID: data.Get("external_client_id").(string),
 	})
 	if err != nil {
@@ -382,10 +382,10 @@ func createCIMDClient(ctx context.Context, data *schema.ResourceData, meta inter
 }
 
 func updateCIMDClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	if !data.IsNewResource() && data.HasChange("external_client_id_version") {
-		if _, err := apiv2.Clients.RegisterCimdClient(ctx, &mgmtv2.RegisterCimdClientRequestContent{
+		if _, err := apiv3.Clients.RegisterCimdClient(ctx, &mgmtv3.RegisterCimdClientRequestContent{
 			ExternalClientID: data.Get("external_client_id").(string),
 		}); err != nil {
 			return diag.FromErr(fmt.Errorf("CIMD sync failed: %w", err))
@@ -400,7 +400,7 @@ func updateCIMDClient(ctx context.Context, data *schema.ResourceData, meta inter
 	if emptyreq, err := isEmptyRequest(updateReq); err != nil {
 		return diag.FromErr(fmt.Errorf("failed to determine if update request is empty: %w", err))
 	} else if !emptyreq {
-		if _, err := apiv2.Clients.Update(ctx, data.Id(), updateReq); err != nil {
+		if _, err := apiv3.Clients.Update(ctx, data.Id(), updateReq); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -409,14 +409,14 @@ func updateCIMDClient(ctx context.Context, data *schema.ResourceData, meta inter
 }
 
 func readCIMDClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	client, err := apiv2.Clients.Get(ctx, data.Id(), &mgmtv2.GetClientRequestParameters{})
+	client, err := apiv3.Clients.Get(ctx, data.Id(), &mgmtv3.GetClientRequestParameters{})
 	if err != nil {
 		return internalError.HandleReadAPIError("auth0_client_cimd", data, err)
 	}
 
-	preview, err := apiv2.Clients.PreviewCimdMetadata(ctx, &mgmtv2.PreviewCimdMetadataRequestContent{
+	preview, err := apiv3.Clients.PreviewCimdMetadata(ctx, &mgmtv3.PreviewCimdMetadataRequestContent{
 		ExternalClientID: client.GetExternalClientID(),
 	})
 	if err != nil {
@@ -431,9 +431,9 @@ func readCIMDClient(ctx context.Context, data *schema.ResourceData, meta interfa
 }
 
 func deleteCIMDClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	if err := apiv2.Clients.Delete(ctx, data.Id()); err != nil {
+	if err := apiv3.Clients.Delete(ctx, data.Id()); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -441,14 +441,14 @@ func deleteCIMDClient(ctx context.Context, data *schema.ResourceData, meta inter
 }
 
 func importCIMDClient(ctx context.Context, data *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	client, err := apiv2.Clients.Get(ctx, data.Id(), &mgmtv2.GetClientRequestParameters{})
+	client, err := apiv3.Clients.Get(ctx, data.Id(), &mgmtv3.GetClientRequestParameters{})
 	if err != nil {
 		return nil, err
 	}
 
-	if client.GetExternalMetadataType() != mgmtv2.ClientExternalMetadataTypeEnumCimd {
+	if client.GetExternalMetadataType() != mgmtv3.ClientExternalMetadataTypeEnumCimd {
 		return nil, fmt.Errorf(
 			"client %q is not a CIMD client. "+
 				"Use the auth0_client resource to manage regular clients",

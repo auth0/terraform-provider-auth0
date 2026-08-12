@@ -87,11 +87,11 @@ func NewConnectionProfileDataSource() *schema.Resource {
 }
 
 func readConnectionProfileDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiV2 := meta.(*config.Config).GetAPIV2()
+	apiV3 := meta.(*config.Config).GetAPIV3()
 
 	profileID := data.Get("id").(string)
 
-	profile, err := apiV2.ConnectionProfiles.Get(ctx, profileID)
+	profile, err := apiV3.ConnectionProfiles.Get(ctx, profileID)
 	if err != nil {
 		return diag.FromErr(err)
 	}

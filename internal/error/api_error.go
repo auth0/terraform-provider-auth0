@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/auth0/go-auth0/v2/management/core"
+	"github.com/auth0/go-auth0/v3/management/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -67,7 +67,7 @@ func RemoveFromStateWithWarning(resourceType string, data *schema.ResourceData, 
 
 // IsStatusNotFound checks to see if the error from the Auth0 Management API is a 404.
 // It understands both the v1 SDK error type, which exposes the status code through the
-// management.Error interface, and the v2 SDK error types, which wrap a *core.APIError
+// management.Error interface, and the v3 SDK error types, which wrap a *core.APIError
 // carrying the status code (e.g. *management.NotFoundError).
 func IsStatusNotFound(err error) bool {
 	if err == nil {
@@ -80,7 +80,7 @@ func IsStatusNotFound(err error) bool {
 		return true
 	}
 
-	// V2 SDK: errors embed *core.APIError, which holds the status code in a field.
+	// V3 SDK: errors embed *core.APIError, which holds the status code in a field.
 	var apiErr *core.APIError
 	if errors.As(err, &apiErr) && apiErr.StatusCode == http.StatusNotFound {
 		return true

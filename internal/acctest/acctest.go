@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management/client"
-	"github.com/auth0/go-auth0/v2/management/option"
+	managementv3 "github.com/auth0/go-auth0/v3/management/client"
+	"github.com/auth0/go-auth0/v3/management/option"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -98,7 +98,7 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 			return nil, diag.FromErr(err)
 		}
 
-		// Initialize v2 API client for new endpoints.
+		// Initialize v3 API client for new endpoints.
 		clientID := data.Get("client_id").(string)
 		clientSecret := data.Get("client_secret").(string)
 		apiToken := data.Get("api_token").(string)
@@ -106,8 +106,8 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 
 		ctx := context.Background()
 
-		// Build v2 client options similar to config.go.
-		clientOptionsV2 := []option.RequestOption{
+		// Build v3 client options similar to config.go.
+		clientOptionsV3 := []option.RequestOption{
 			option.WithDebug(debug),
 			option.WithHTTPClient(httpRecorder.GetDefaultClient()),
 		}
@@ -115,24 +115,24 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 		// Add authentication option.
 		if domain != RecordingsDomain {
 			if apiToken != "" {
-				clientOptionsV2 = append(clientOptionsV2, option.WithToken(apiToken))
+				clientOptionsV3 = append(clientOptionsV3, option.WithToken(apiToken))
 			} else {
 				if audience != "" {
-					clientOptionsV2 = append(clientOptionsV2, option.WithClientCredentialsAndAudience(ctx, clientID, clientSecret, audience))
+					clientOptionsV3 = append(clientOptionsV3, option.WithClientCredentialsAndAudience(ctx, clientID, clientSecret, audience))
 				} else {
-					clientOptionsV2 = append(clientOptionsV2, option.WithClientCredentials(ctx, clientID, clientSecret))
+					clientOptionsV3 = append(clientOptionsV3, option.WithClientCredentials(ctx, clientID, clientSecret))
 				}
 			}
 		} else {
-			clientOptionsV2 = append(clientOptionsV2, option.WithToken("insecure"))
+			clientOptionsV3 = append(clientOptionsV3, option.WithToken("insecure"))
 		}
 
-		apiClientV2, err := managementv2.New(domain, clientOptionsV2...)
+		apiClientV3, err := managementv3.New(domain, clientOptionsV3...)
 
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
 
-		return config.NewWithV2(apiClient, apiClientV2), nil
+		return config.NewWithV3(apiClient, apiClientV3), nil
 	}
 }

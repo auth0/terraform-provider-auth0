@@ -30,11 +30,11 @@ func dataSourceSchema() map[string]*schema.Schema {
 }
 
 func readRateLimitPolicyForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	policyID := data.Get("policy_id").(string)
 
-	policy, err := apiv2.RateLimitPolicies.Get(ctx, policyID)
+	policy, err := apiv3.RateLimitPolicies.Get(ctx, policyID)
 	if err != nil {
 		return diag.FromErr(err)
 	}

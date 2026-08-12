@@ -1,7 +1,7 @@
 package client
 
 import (
-	mgmtv2 "github.com/auth0/go-auth0/v2/management"
+	mgmtv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -9,14 +9,14 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandCIMDClient(data *schema.ResourceData) *mgmtv2.UpdateClientRequestContent {
+func expandCIMDClient(data *schema.ResourceData) *mgmtv3.UpdateClientRequestContent {
 	config := data.GetRawConfig()
-	req := &mgmtv2.UpdateClientRequestContent{}
+	req := &mgmtv3.UpdateClientRequestContent{}
 
 	req.Description = value.String(config.GetAttr("description"))
 
 	if appType := value.String(config.GetAttr("app_type")); appType != nil {
-		v := mgmtv2.ClientAppTypeEnum(*appType)
+		v := mgmtv3.ClientAppTypeEnum(*appType)
 		req.AppType = &v
 	}
 
@@ -37,16 +37,16 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv2.UpdateClientRequestCont
 
 	if orgDiscovery := config.GetAttr("organization_discovery_methods"); !orgDiscovery.IsNull() {
 		if methods := value.Strings(orgDiscovery); methods != nil && len(*methods) > 0 {
-			enumMethods := make([]mgmtv2.ClientOrganizationDiscoveryEnum, len(*methods))
+			enumMethods := make([]mgmtv3.ClientOrganizationDiscoveryEnum, len(*methods))
 			for i, m := range *methods {
-				enumMethods[i] = mgmtv2.ClientOrganizationDiscoveryEnum(m)
+				enumMethods[i] = mgmtv3.ClientOrganizationDiscoveryEnum(m)
 			}
 			req.OrganizationDiscoveryMethods = enumMethods
 		}
 	}
 
 	if rp := value.String(config.GetAttr("redirection_policy")); rp != nil {
-		v := mgmtv2.ClientRedirectionPolicyEnum(*rp)
+		v := mgmtv3.ClientRedirectionPolicyEnum(*rp)
 		req.RedirectionPolicy = &v
 	}
 
@@ -59,20 +59,20 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv2.UpdateClientRequestCont
 	return req
 }
 
-func expandCIMDJwtConfiguration(data *schema.ResourceData) *mgmtv2.ClientJwtConfiguration {
+func expandCIMDJwtConfiguration(data *schema.ResourceData) *mgmtv3.ClientJwtConfiguration {
 	jwtConfig := data.GetRawConfig().GetAttr("jwt_configuration")
 	if jwtConfig.IsNull() || jwtConfig.LengthInt() == 0 {
 		return nil
 	}
 
-	var jwt mgmtv2.ClientJwtConfiguration
+	var jwt mgmtv3.ClientJwtConfiguration
 
 	jwtConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		jwt.LifetimeInSeconds = value.Int(config.GetAttr("lifetime_in_seconds"))
 		jwt.SecretEncoded = value.Bool(config.GetAttr("secret_encoded"))
 
 		if alg := value.String(config.GetAttr("alg")); alg != nil {
-			v := mgmtv2.SigningAlgorithmEnum(*alg)
+			v := mgmtv3.SigningAlgorithmEnum(*alg)
 			jwt.Alg = &v
 		}
 
@@ -82,19 +82,19 @@ func expandCIMDJwtConfiguration(data *schema.ResourceData) *mgmtv2.ClientJwtConf
 	return &jwt
 }
 
-func expandCIMDRefreshToken(data *schema.ResourceData) *mgmtv2.ClientRefreshTokenConfiguration {
+func expandCIMDRefreshToken(data *schema.ResourceData) *mgmtv3.ClientRefreshTokenConfiguration {
 	rtConfig := data.GetRawConfig().GetAttr("refresh_token")
 	if rtConfig.IsNull() || rtConfig.LengthInt() == 0 {
 		return nil
 	}
 
-	var rt mgmtv2.ClientRefreshTokenConfiguration
+	var rt mgmtv3.ClientRefreshTokenConfiguration
 	rtConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		if rotType := value.String(config.GetAttr("rotation_type")); rotType != nil {
-			rt.RotationType = mgmtv2.RefreshTokenRotationTypeEnum(*rotType)
+			rt.RotationType = mgmtv3.RefreshTokenRotationTypeEnum(*rotType)
 		}
 		if expType := value.String(config.GetAttr("expiration_type")); expType != nil {
-			rt.ExpirationType = mgmtv2.RefreshTokenExpirationTypeEnum(*expType)
+			rt.ExpirationType = mgmtv3.RefreshTokenExpirationTypeEnum(*expType)
 		}
 		rt.Leeway = value.Int(config.GetAttr("leeway"))
 		rt.TokenLifetime = value.Int(config.GetAttr("token_lifetime"))
@@ -108,7 +108,7 @@ func expandCIMDRefreshToken(data *schema.ResourceData) *mgmtv2.ClientRefreshToke
 	return &rt
 }
 
-func expandCIMDDefaultOrganization(data *schema.ResourceData) *mgmtv2.ClientDefaultOrganization {
+func expandCIMDDefaultOrganization(data *schema.ResourceData) *mgmtv3.ClientDefaultOrganization {
 	if !data.IsNewResource() && !data.HasChange("default_organization") {
 		return nil
 	}
@@ -118,16 +118,16 @@ func expandCIMDDefaultOrganization(data *schema.ResourceData) *mgmtv2.ClientDefa
 		return nil
 	}
 
-	var defaultOrg mgmtv2.ClientDefaultOrganization
+	var defaultOrg mgmtv3.ClientDefaultOrganization
 
 	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		if orgID := value.String(cfg.GetAttr("organization_id")); orgID != nil {
 			defaultOrg.OrganizationID = *orgID
 		}
 		if flows := value.Strings(cfg.GetAttr("flows")); flows != nil {
-			enumFlows := make([]mgmtv2.ClientDefaultOrganizationFlowsEnum, len(*flows))
+			enumFlows := make([]mgmtv3.ClientDefaultOrganizationFlowsEnum, len(*flows))
 			for i, f := range *flows {
-				enumFlows[i] = mgmtv2.ClientDefaultOrganizationFlowsEnum(f)
+				enumFlows[i] = mgmtv3.ClientDefaultOrganizationFlowsEnum(f)
 			}
 			defaultOrg.Flows = enumFlows
 		}
@@ -138,7 +138,7 @@ func expandCIMDDefaultOrganization(data *schema.ResourceData) *mgmtv2.ClientDefa
 	return &defaultOrg
 }
 
-func expandCIMDClientMetadata(data *schema.ResourceData) *mgmtv2.ClientMetadata {
+func expandCIMDClientMetadata(data *schema.ResourceData) *mgmtv3.ClientMetadata {
 	if !data.HasChange("client_metadata") {
 		return nil
 	}
@@ -160,13 +160,13 @@ func expandCIMDClientMetadata(data *schema.ResourceData) *mgmtv2.ClientMetadata 
 	return &newMetadataMap
 }
 
-func expandCIMDTokenQuota(data *schema.ResourceData) *mgmtv2.UpdateTokenQuota {
+func expandCIMDTokenQuota(data *schema.ResourceData) *mgmtv3.UpdateTokenQuota {
 	config := data.GetRawConfig().GetAttr("token_quota")
 	if config.IsNull() {
 		return nil
 	}
 
-	var quota *mgmtv2.UpdateTokenQuota
+	var quota *mgmtv3.UpdateTokenQuota
 
 	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		clientCredsValue := cfg.GetAttr("client_credentials")
@@ -179,8 +179,8 @@ func expandCIMDTokenQuota(data *schema.ResourceData) *mgmtv2.UpdateTokenQuota {
 			perHour := value.Int(credsConfig.GetAttr("per_hour"))
 			perDay := value.Int(credsConfig.GetAttr("per_day"))
 
-			quota = &mgmtv2.UpdateTokenQuota{
-				ClientCredentials: &mgmtv2.TokenQuotaClientCredentials{
+			quota = &mgmtv3.UpdateTokenQuota{
+				ClientCredentials: &mgmtv3.TokenQuotaClientCredentials{
 					Enforce: enforce,
 				},
 			}
@@ -201,7 +201,7 @@ func expandCIMDTokenQuota(data *schema.ResourceData) *mgmtv2.UpdateTokenQuota {
 	return quota
 }
 
-func isEmptyRequest(req *mgmtv2.UpdateClientRequestContent) (bool, error) {
+func isEmptyRequest(req *mgmtv3.UpdateClientRequestContent) (bool, error) {
 	reqBytes, err := req.MarshalJSON()
 	if err != nil {
 		return false, err
@@ -209,7 +209,7 @@ func isEmptyRequest(req *mgmtv2.UpdateClientRequestContent) (bool, error) {
 	return string(reqBytes) == "{}", nil
 }
 
-func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv2.UpdateClientRequestContent) {
+func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv3.UpdateClientRequestContent) {
 	config := data.GetRawConfig()
 
 	if data.HasChange("allowed_origins") && config.GetAttr("allowed_origins").IsNull() {

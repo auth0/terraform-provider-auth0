@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	managementv2 "github.com/auth0/go-auth0/v2/management"
-	managementv2client "github.com/auth0/go-auth0/v2/management/client"
-	"github.com/auth0/go-auth0/v2/management/core"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
+	managementv3client "github.com/auth0/go-auth0/v3/management/client"
+	"github.com/auth0/go-auth0/v3/management/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -87,11 +87,11 @@ func NewConnectedAccountsDataSource() *schema.Resource {
 }
 
 func readUserConnectedAccountsForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	userID := data.Get("user_id").(string)
 
-	accounts, err := fetchAllConnectedAccounts(ctx, apiv2, userID)
+	accounts, err := fetchAllConnectedAccounts(ctx, apiv3, userID)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -101,10 +101,10 @@ func readUserConnectedAccountsForDataSource(ctx context.Context, data *schema.Re
 	return diag.FromErr(data.Set("connected_accounts", flattenConnectedAccounts(accounts)))
 }
 
-func fetchAllConnectedAccounts(ctx context.Context, apiv2 *managementv2client.Management, userID string) ([]*managementv2.ConnectedAccount, error) {
-	var accounts []*managementv2.ConnectedAccount
+func fetchAllConnectedAccounts(ctx context.Context, apiv3 *managementv3client.Management, userID string) ([]*managementv3.ConnectedAccount, error) {
+	var accounts []*managementv3.ConnectedAccount
 
-	page, err := apiv2.Users.ConnectedAccounts.List(ctx, userID, &managementv2.GetUserConnectedAccountsRequestParameters{})
+	page, err := apiv3.Users.ConnectedAccounts.List(ctx, userID, &managementv3.GetUserConnectedAccountsRequestParameters{})
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +127,7 @@ func fetchAllConnectedAccounts(ctx context.Context, apiv2 *managementv2client.Ma
 	return accounts, nil
 }
 
-func flattenConnectedAccounts(accounts []*managementv2.ConnectedAccount) []interface{} {
+func flattenConnectedAccounts(accounts []*managementv3.ConnectedAccount) []interface{} {
 	result := make([]interface{}, 0, len(accounts))
 
 	for _, a := range accounts {

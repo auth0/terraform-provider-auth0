@@ -1,14 +1,14 @@
 package client
 
 import (
-	mgmtv2 "github.com/auth0/go-auth0/v2/management"
+	mgmtv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
-func flattenCIMDClient(data *schema.ResourceData, client *mgmtv2.GetClientResponseContent, validation *mgmtv2.CimdValidationResult) error {
+func flattenCIMDClient(data *schema.ResourceData, client *mgmtv3.GetClientResponseContent, validation *mgmtv3.CimdValidationResult) error {
 	result := multierror.Append(
 		data.Set("client_id", client.GetClientID()),
 		data.Set("name", client.GetName()),
@@ -43,7 +43,7 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv2.GetClientRespon
 	return result.ErrorOrNil()
 }
 
-func flattenCIMDJwtConfiguration(jwt *mgmtv2.ClientJwtConfiguration) []interface{} {
+func flattenCIMDJwtConfiguration(jwt *mgmtv3.ClientJwtConfiguration) []interface{} {
 	if jwt == nil {
 		return nil
 	}
@@ -57,7 +57,7 @@ func flattenCIMDJwtConfiguration(jwt *mgmtv2.ClientJwtConfiguration) []interface
 	}
 }
 
-func flattenCIMDRefreshToken(rt *mgmtv2.ClientRefreshTokenConfiguration) []interface{} {
+func flattenCIMDRefreshToken(rt *mgmtv3.ClientRefreshTokenConfiguration) []interface{} {
 	if rt == nil {
 		return nil
 	}
@@ -75,7 +75,7 @@ func flattenCIMDRefreshToken(rt *mgmtv2.ClientRefreshTokenConfiguration) []inter
 	}
 }
 
-func flattenCIMDDefaultOrganization(do *mgmtv2.ClientDefaultOrganization) []interface{} {
+func flattenCIMDDefaultOrganization(do *mgmtv3.ClientDefaultOrganization) []interface{} {
 	if do == nil {
 		return nil
 	}
@@ -88,7 +88,7 @@ func flattenCIMDDefaultOrganization(do *mgmtv2.ClientDefaultOrganization) []inte
 	return []interface{}{m}
 }
 
-func flattenCIMDTokenQuota(tq *mgmtv2.TokenQuota) []interface{} {
+func flattenCIMDTokenQuota(tq *mgmtv3.TokenQuota) []interface{} {
 	if tq == nil || tq.GetClientCredentials() == nil {
 		return nil
 	}
@@ -107,14 +107,14 @@ func flattenCIMDTokenQuota(tq *mgmtv2.TokenQuota) []interface{} {
 	}
 }
 
-func flattenCIMDClientMetadata(cm *mgmtv2.ClientMetadata) map[string]interface{} {
+func flattenCIMDClientMetadata(cm *mgmtv3.ClientMetadata) map[string]interface{} {
 	if cm == nil {
 		return nil
 	}
 	return *cm
 }
 
-func flattenCIMDSigningKeys(keys *mgmtv2.ClientSigningKeys) []interface{} {
+func flattenCIMDSigningKeys(keys *mgmtv3.ClientSigningKeys) []interface{} {
 	if keys == nil {
 		return nil
 	}
@@ -134,7 +134,7 @@ func flattenCIMDSigningKeys(keys *mgmtv2.ClientSigningKeys) []interface{} {
 	return result
 }
 
-func flattenCIMDValidation(v *mgmtv2.CimdValidationResult) []interface{} {
+func flattenCIMDValidation(v *mgmtv3.CimdValidationResult) []interface{} {
 	if v == nil {
 		return nil
 	}

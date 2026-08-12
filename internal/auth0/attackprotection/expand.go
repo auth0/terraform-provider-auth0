@@ -2,7 +2,7 @@ package attackprotection
 
 import (
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -128,38 +128,38 @@ func expandBreachedPasswordDetection(data *schema.ResourceData) *management.Brea
 	return bpd
 }
 
-func expandBotDetection(data *schema.ResourceData) *managementv2.UpdateBotDetectionSettingsRequestContent {
+func expandBotDetection(data *schema.ResourceData) *managementv3.UpdateBotDetectionSettingsRequestContent {
 	if !data.HasChange("bot_detection") {
 		return nil
 	}
 
-	var request *managementv2.UpdateBotDetectionSettingsRequestContent
+	var request *managementv3.UpdateBotDetectionSettingsRequestContent
 
 	data.GetRawConfig().GetAttr("bot_detection").ForEachElement(
 		func(_ cty.Value, cfg cty.Value) (stop bool) {
-			request = &managementv2.UpdateBotDetectionSettingsRequestContent{}
+			request = &managementv3.UpdateBotDetectionSettingsRequestContent{}
 
 			// BotDetectionLevel.
 			if levelStr := value.String(cfg.GetAttr("bot_detection_level")); levelStr != nil && *levelStr != "" {
-				level := managementv2.BotDetectionLevelEnum(*levelStr)
+				level := managementv3.BotDetectionLevelEnum(*levelStr)
 				request.BotDetectionLevel = &level
 			}
 
 			// ChallengePasswordPolicy.
 			if policyStr := value.String(cfg.GetAttr("challenge_password_policy")); policyStr != nil && *policyStr != "" {
-				policy := managementv2.BotDetectionChallengePolicyPasswordFlowEnum(*policyStr)
+				policy := managementv3.BotDetectionChallengePolicyPasswordFlowEnum(*policyStr)
 				request.ChallengePasswordPolicy = &policy
 			}
 
 			// ChallengePasswordlessPolicy.
 			if policyStr := value.String(cfg.GetAttr("challenge_passwordless_policy")); policyStr != nil && *policyStr != "" {
-				policy := managementv2.BotDetectionChallengePolicyPasswordlessFlowEnum(*policyStr)
+				policy := managementv3.BotDetectionChallengePolicyPasswordlessFlowEnum(*policyStr)
 				request.ChallengePasswordlessPolicy = &policy
 			}
 
 			// ChallengePasswordResetPolicy.
 			if policyStr := value.String(cfg.GetAttr("challenge_password_reset_policy")); policyStr != nil && *policyStr != "" {
-				policy := managementv2.BotDetectionChallengePolicyPasswordResetFlowEnum(*policyStr)
+				policy := managementv3.BotDetectionChallengePolicyPasswordResetFlowEnum(*policyStr)
 				request.ChallengePasswordResetPolicy = &policy
 			}
 
@@ -180,21 +180,21 @@ func expandBotDetection(data *schema.ResourceData) *managementv2.UpdateBotDetect
 	return request
 }
 
-func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtectionCaptchaRequestContent {
+func expandCaptcha(data *schema.ResourceData) *managementv3.UpdateAttackProtectionCaptchaRequestContent {
 	if !data.HasChange("captcha") {
 		return nil
 	}
 
-	var request *managementv2.UpdateAttackProtectionCaptchaRequestContent
+	var request *managementv3.UpdateAttackProtectionCaptchaRequestContent
 
 	data.GetRawConfig().GetAttr("captcha").ForEachElement(
 		func(_ cty.Value, cfg cty.Value) (stop bool) {
-			request = &managementv2.UpdateAttackProtectionCaptchaRequestContent{}
+			request = &managementv3.UpdateAttackProtectionCaptchaRequestContent{}
 
 			// ActiveProviderID.
 			if providerID := value.String(cfg.GetAttr("active_provider_id")); providerID != nil {
 				if *providerID != "" {
-					pid := managementv2.AttackProtectionCaptchaProviderID(*providerID)
+					pid := managementv3.AttackProtectionCaptchaProviderID(*providerID)
 					request.ActiveProviderID = &pid
 				}
 			}
@@ -204,7 +204,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				siteKey := value.String(v2cfg.GetAttr("site_key"))
 				secret := value.String(v2cfg.GetAttr("secret"))
 				if siteKey != nil && secret != nil {
-					request.RecaptchaV2 = &managementv2.AttackProtectionUpdateCaptchaRecaptchaV2{
+					request.RecaptchaV2 = &managementv3.AttackProtectionUpdateCaptchaRecaptchaV2{
 						SiteKey: *siteKey,
 						Secret:  *secret,
 					}
@@ -218,7 +218,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				apiKey := value.String(entcfg.GetAttr("api_key"))
 				projectID := value.String(entcfg.GetAttr("project_id"))
 				if siteKey != nil && apiKey != nil && projectID != nil {
-					request.RecaptchaEnterprise = &managementv2.AttackProtectionUpdateCaptchaRecaptchaEnterprise{
+					request.RecaptchaEnterprise = &managementv3.AttackProtectionUpdateCaptchaRecaptchaEnterprise{
 						SiteKey:   *siteKey,
 						APIKey:    *apiKey,
 						ProjectID: *projectID,
@@ -232,7 +232,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				siteKey := value.String(hcfg.GetAttr("site_key"))
 				secret := value.String(hcfg.GetAttr("secret"))
 				if siteKey != nil && secret != nil {
-					request.Hcaptcha = &managementv2.AttackProtectionUpdateCaptchaHcaptcha{
+					request.Hcaptcha = &managementv3.AttackProtectionUpdateCaptchaHcaptcha{
 						SiteKey: *siteKey,
 						Secret:  *secret,
 					}
@@ -245,7 +245,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				siteKey := value.String(fcfg.GetAttr("site_key"))
 				secret := value.String(fcfg.GetAttr("secret"))
 				if siteKey != nil && secret != nil {
-					request.FriendlyCaptcha = &managementv2.AttackProtectionUpdateCaptchaFriendlyCaptcha{
+					request.FriendlyCaptcha = &managementv3.AttackProtectionUpdateCaptchaFriendlyCaptcha{
 						SiteKey: *siteKey,
 						Secret:  *secret,
 					}
@@ -258,7 +258,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 				siteKey := value.String(acfg.GetAttr("site_key"))
 				secret := value.String(acfg.GetAttr("secret"))
 				if siteKey != nil && secret != nil {
-					arkose := &managementv2.AttackProtectionUpdateCaptchaArkose{
+					arkose := &managementv3.AttackProtectionUpdateCaptchaArkose{
 						SiteKey: *siteKey,
 						Secret:  *secret,
 					}
@@ -281,7 +281,7 @@ func expandCaptcha(data *schema.ResourceData) *managementv2.UpdateAttackProtecti
 			cfg.GetAttr("auth_challenge").ForEachElement(func(_ cty.Value, ac cty.Value) (stop bool) {
 				failOpen := value.Bool(ac.GetAttr("fail_open"))
 				if failOpen != nil {
-					request.AuthChallenge = &managementv2.AttackProtectionCaptchaAuthChallengeRequest{
+					request.AuthChallenge = &managementv3.AttackProtectionCaptchaAuthChallengeRequest{
 						FailOpen: *failOpen,
 					}
 				}

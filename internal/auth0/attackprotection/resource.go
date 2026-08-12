@@ -685,7 +685,7 @@ func createAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 
 func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	var diags diag.Diagnostics
 
@@ -704,7 +704,7 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		return append(diags, diag.FromErr(err)...)
 	}
 
-	botDetection, err := apiv2.AttackProtection.BotDetection.Get(ctx)
+	botDetection, err := apiv3.AttackProtection.BotDetection.Get(ctx)
 	if err != nil {
 		switch {
 		case apierr.IsInsufficientScope(err):
@@ -716,7 +716,7 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		}
 	}
 
-	captcha, err := apiv2.AttackProtection.Captcha.Get(ctx)
+	captcha, err := apiv3.AttackProtection.Captcha.Get(ctx)
 	if err != nil {
 		switch {
 		case apierr.IsInsufficientScope(err):
@@ -745,7 +745,7 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 
 func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	var diags diag.Diagnostics
 	var result *multierror.Error
@@ -763,7 +763,7 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 	}
 
 	if botDetection := expandBotDetection(data); botDetection != nil {
-		if _, err := apiv2.AttackProtection.BotDetection.Update(ctx, botDetection); err != nil {
+		if _, err := apiv3.AttackProtection.BotDetection.Update(ctx, botDetection); err != nil {
 			switch {
 			case apierr.IsInsufficientScope(err):
 				log.Printf("[INFO] Insufficient scope for Bot Detection; skipping update.")
@@ -776,7 +776,7 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 	}
 
 	if captcha := expandCaptcha(data); captcha != nil {
-		if _, err := apiv2.AttackProtection.Captcha.Update(ctx, captcha); err != nil {
+		if _, err := apiv3.AttackProtection.Captcha.Update(ctx, captcha); err != nil {
 			switch {
 			case apierr.IsInsufficientScope(err):
 				log.Printf("[INFO] Insufficient scope for Captcha; skipping update.")

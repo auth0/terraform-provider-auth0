@@ -92,11 +92,11 @@ func NewConnectionResource() *schema.Resource {
 }
 
 func createOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 	organizationID := data.Get("organization_id").(string)
 	createReq := expandOrganizationConnectionCreate(data)
 
-	if _, err := apiv2.Organizations.Connections.Create(ctx, organizationID, createReq); err != nil {
+	if _, err := apiv3.Organizations.Connections.Create(ctx, organizationID, createReq); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 	internalSchema.SetResourceGroupID(data, organizationID, createReq.ConnectionID)
@@ -105,12 +105,12 @@ func createOrganizationConnection(ctx context.Context, data *schema.ResourceData
 }
 
 func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
 
-	organizationConnection, err := apiv2.Organizations.Connections.Get(ctx, organizationID, connectionID)
+	organizationConnection, err := apiv3.Organizations.Connections.Get(ctx, organizationID, connectionID)
 	if err != nil {
 		return internalError.HandleReadAPIError("auth0_organization_connection", data, err)
 	}
@@ -119,13 +119,13 @@ func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, 
 }
 
 func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
 	updateReq := expandOrganizationConnectionUpdate(data)
 
-	if _, err := apiv2.Organizations.Connections.Update(ctx, organizationID, connectionID, updateReq); err != nil {
+	if _, err := apiv3.Organizations.Connections.Update(ctx, organizationID, connectionID, updateReq); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -133,12 +133,12 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 }
 
 func deleteOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
 
-	if err := apiv2.Organizations.Connections.Delete(ctx, organizationID, connectionID); err != nil {
+	if err := apiv3.Organizations.Connections.Delete(ctx, organizationID, connectionID); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 

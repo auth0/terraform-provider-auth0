@@ -2,7 +2,7 @@ package attackprotection
 
 import (
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -61,7 +61,7 @@ func flattenBreachedPasswordProtection(bpd *management.BreachedPasswordDetection
 	}
 }
 
-func flattenBotDetection(botDetection *managementv2.GetBotDetectionSettingsResponseContent) []interface{} {
+func flattenBotDetection(botDetection *managementv3.GetBotDetectionSettingsResponseContent) []interface{} {
 	if botDetection == nil {
 		return nil
 	}
@@ -89,7 +89,7 @@ func flattenBotDetection(botDetection *managementv2.GetBotDetectionSettingsRespo
 	return []interface{}{m}
 }
 
-func flattenCaptcha(data *schema.ResourceData, captcha *managementv2.GetAttackProtectionCaptchaResponseContent) []interface{} {
+func flattenCaptcha(data *schema.ResourceData, captcha *managementv3.GetAttackProtectionCaptchaResponseContent) []interface{} {
 	if captcha == nil {
 		return nil
 	}

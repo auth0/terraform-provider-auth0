@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/auth0/go-auth0/v2/management"
+	"github.com/auth0/go-auth0/v3/management"
 	"github.com/stretchr/testify/assert"
 )
 

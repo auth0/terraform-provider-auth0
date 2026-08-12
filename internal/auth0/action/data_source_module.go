@@ -31,12 +31,12 @@ func moduleDataSourceSchema() map[string]*schema.Schema {
 }
 
 func readActionModuleForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 	id := data.Get("id").(string)
 
 	data.SetId(id)
 
-	module, err := apiv2.Actions.Modules.Get(ctx, id)
+	module, err := apiv3.Actions.Modules.Get(ctx, id)
 	if err != nil {
 		return diag.FromErr(err)
 	}

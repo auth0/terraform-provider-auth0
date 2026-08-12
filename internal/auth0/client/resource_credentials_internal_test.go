@@ -249,6 +249,98 @@ func credentialsDataWithState(t *testing.T, attributes map[string]interface{}) *
 	return data
 }
 
+func TestPlanCredentialRotation_HeadroomButSameKeyRemovesFirst(t *testing.T) {
+	// A 1-for-1 rename (or algorithm change) on a client holding a single
+	// credential, where the new entry carries the SAME public key as the one
+	// being replaced. Despite headroom below the cap, the removal must go
+	// first: the API rejects creating a credential whose key already exists
+	// on the client, so add-first would 400.
+	diff := credentialDiff{
+		toRemove: []interface{}{
+			map[string]interface{}{"id": "old-1", "pem": "same-pem", "key_id": "kid-1"},
+		},
+		toAdd: []interface{}{
+			map[string]interface{}{"name": "new-1", "pem": "same-pem"},
+		},
+	}
+
+	const startingAttachedCount = 1
+	rotationSteps := planCredentialRotation(diff, startingAttachedCount)
+
+	require.Len(t, rotationSteps, 2)
+	assert.Equal(t, detachAndDelete, rotationSteps[0].kind)
+	assert.Equal(t, "old-1", rotationSteps[0].credentialID)
+	assert.Equal(t, createAndAttach, rotationSteps[1].kind)
+	assert.Equal(t, "new-1", rotationSteps[1].newCredential["name"])
+}
+
+func TestPlanCredentialRotation_HeadroomButSameKeyViaThumbprintRemovesFirst(t *testing.T) {
+	// Same as above, but the removed credential has no PEM in state (e.g. it
+	// was adopted from a CLI-created credential) and the match is made via
+	// JWK thumbprint against key_id instead of a literal PEM comparison.
+	spkiPEM, _, _ := generateTestRSAPEMs(t)
+	kid := jwkThumbprint(spkiPEM)
+	require.NotEmpty(t, kid)
+
+	diff := credentialDiff{
+		toRemove: []interface{}{
+			map[string]interface{}{"id": "old-1", "pem": "", "key_id": kid},
+		},
+		toAdd: []interface{}{
+			map[string]interface{}{"name": "new-1", "pem": spkiPEM},
+		},
+	}
+
+	rotationSteps := planCredentialRotation(diff, 1)
+
+	require.Len(t, rotationSteps, 2)
+	assert.Equal(t, detachAndDelete, rotationSteps[0].kind)
+	assert.Equal(t, createAndAttach, rotationSteps[1].kind)
+}
+
+func TestPlanCredentialRotation_HeadroomDifferentKeyAddsFirst(t *testing.T) {
+	// Sanity check that the collision guard doesn't over-trigger: a genuine
+	// key rotation (different PEM, no key_id match) on a single-credential
+	// client should still add-first as before.
+	diff := credentialDiff{
+		toRemove: []interface{}{
+			map[string]interface{}{"id": "old-1", "pem": "old-pem", "key_id": "kid-old"},
+		},
+		toAdd: []interface{}{
+			map[string]interface{}{"name": "new-1", "pem": "new-pem"},
+		},
+	}
+
+	rotationSteps := planCredentialRotation(diff, 1)
+
+	require.Len(t, rotationSteps, 2)
+	assert.Equal(t, createAndAttach, rotationSteps[0].kind)
+	assert.Equal(t, detachAndDelete, rotationSteps[1].kind)
+}
+
+func TestPlanCredentialRotation_HandlesUnevenAndPureChanges(t *testing.T) {
+	pureAdditionSteps := planCredentialRotation(credentialDiff{
+		toAdd: []interface{}{map[string]interface{}{"name": "new-1"}},
+	}, 0)
+	require.Len(t, pureAdditionSteps, 1)
+	assert.Equal(t, createAndAttach, pureAdditionSteps[0].kind)
+
+	pureRemovalSteps := planCredentialRotation(credentialDiff{
+		toRemove: []interface{}{map[string]interface{}{"id": "old-1"}},
+	}, 1)
+	require.Len(t, pureRemovalSteps, 1)
+	assert.Equal(t, detachAndDelete, pureRemovalSteps[0].kind)
+
+	// More removals than additions, starting at capacity: one interleaved pair
+	// (remove-first), then a trailing removal.
+	moreRemovalsThanAdditionsSteps := planCredentialRotation(credentialDiff{
+		toRemove: []interface{}{
+			map[string]interface{}{"id": "old-1"},
+			map[string]interface{}{"id": "old-2"},
+		},
+	})
+}
+
 func TestStateCredentialIDs_ReadsOnlyTheRequestedSlot(t *testing.T) {
 	data := credentialsDataWithState(t, map[string]interface{}{
 		"private_key_jwt": []interface{}{

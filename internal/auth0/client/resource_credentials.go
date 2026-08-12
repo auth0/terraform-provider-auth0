@@ -371,6 +371,9 @@ func planCredentialRotation(diff credentialDiff, attachedCount, poolCount int) [
 		} else {
 			// One container is full. Removing frees an entry in both, so the
 			// addition that follows fits.
+			// At capacity, or the pair's public key collides: remove first so
+			// the create is never rejected as a duplicate, and the count never
+			// overshoots the cap.
 			if hasID {
 				rotationSteps = append(rotationSteps, removal)
 				attachedCount--

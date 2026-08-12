@@ -187,11 +187,11 @@ func NewModuleResource() *schema.Resource {
 }
 
 func createActionModule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	moduleRequest := expandActionModule(data)
 
-	result, err := apiv2.Actions.Modules.Create(ctx, moduleRequest)
+	result, err := apiv3.Actions.Modules.Create(ctx, moduleRequest)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -206,9 +206,9 @@ func createActionModule(ctx context.Context, data *schema.ResourceData, meta int
 }
 
 func readActionModule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	module, err := apiv2.Actions.Modules.Get(ctx, data.Id())
+	module, err := apiv3.Actions.Modules.Get(ctx, data.Id())
 	if err != nil {
 		return internalError.HandleReadAPIError("auth0_action_module", data, err)
 	}
@@ -217,11 +217,11 @@ func readActionModule(ctx context.Context, data *schema.ResourceData, meta inter
 }
 
 func updateActionModule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	moduleRequest := expandActionModuleUpdate(data)
 
-	_, err := apiv2.Actions.Modules.Update(ctx, data.Id(), moduleRequest)
+	_, err := apiv3.Actions.Modules.Update(ctx, data.Id(), moduleRequest)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
@@ -234,9 +234,9 @@ func updateActionModule(ctx context.Context, data *schema.ResourceData, meta int
 }
 
 func deleteActionModule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	if err := apiv2.Actions.Modules.Delete(ctx, data.Id()); err != nil {
+	if err := apiv3.Actions.Modules.Delete(ctx, data.Id()); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -249,9 +249,9 @@ func publishActionModule(ctx context.Context, data *schema.ResourceData, meta in
 		return nil
 	}
 
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	moduleVersion, err := apiv2.Actions.Modules.Versions.Create(ctx, data.Id())
+	moduleVersion, err := apiv3.Actions.Modules.Versions.Create(ctx, data.Id())
 	if err != nil {
 		return err
 	}

@@ -45,10 +45,10 @@ func NewDirectoryDefaultMappingDataSource() *schema.Resource {
 }
 
 func readDirectoryDefaultMappingDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	connectionID := data.Get("connection_id").(string)
-	defaultMapping, err := apiv2.Connections.DirectoryProvisioning.GetDefaultMapping(ctx, connectionID)
+	defaultMapping, err := apiv3.Connections.DirectoryProvisioning.GetDefaultMapping(ctx, connectionID)
 	if err != nil {
 		return diag.FromErr(err)
 	}

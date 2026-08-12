@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -249,6 +249,18 @@ func flattenAttributes(connAttributes *management.ConnectionOptionsAttributes) i
 	}
 }
 
+// emailAttributeUnique reports the effective value of the email attribute's
+// unique property. The Management API treats an absent unique as true, both in
+// the responses it returns and in the payloads it accepts, so an absent value
+// must not be read as false.
+func emailAttributeUnique(emailAttribute *management.ConnectionOptionsEmailAttribute) bool {
+	if emailAttribute == nil || emailAttribute.Unique == nil {
+		return true
+	}
+
+	return emailAttribute.GetUnique()
+}
+
 func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttribute) []map[string]interface{} {
 	if emailAttribute == nil {
 		return nil
@@ -260,7 +272,7 @@ func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttr
 			"profile_required":    emailAttribute.GetProfileRequired(),
 			"signup":              flattenSignUp(emailAttribute.GetSignup()),
 			"verification_method": emailAttribute.GetVerificationMethod(),
-			"unique":              emailAttribute.GetUnique(),
+			"unique":              emailAttributeUnique(emailAttribute),
 		},
 	}
 }
@@ -1414,7 +1426,7 @@ func flattenConnectionKey(data *schema.ResourceData, connectionID string, key *m
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func flattenDirectoryMappings(mappings []*managementv2.DirectoryProvisioningMappingItem) []interface{} {
+func flattenDirectoryMappings(mappings []*managementv3.DirectoryProvisioningMappingItem) []interface{} {
 	if mappings == nil {
 		return nil
 	}
@@ -1430,7 +1442,7 @@ func flattenDirectoryMappings(mappings []*managementv2.DirectoryProvisioningMapp
 	return flattenedMappings
 }
 
-func flattenDirectory(data *schema.ResourceData, directoryConfig *managementv2.GetDirectoryProvisioningResponseContent) diag.Diagnostics {
+func flattenDirectory(data *schema.ResourceData, directoryConfig *managementv3.GetDirectoryProvisioningResponseContent) diag.Diagnostics {
 	result := multierror.Append(
 		data.Set("connection_id", directoryConfig.GetConnectionID()),
 		data.Set("connection_name", directoryConfig.GetConnectionName()),

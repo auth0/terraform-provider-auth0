@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/auth0/go-auth0/v2/management"
+	"github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -131,9 +131,9 @@ func checkRateLimitPolicyConfiguration(action string, limit *int, redirectURI *s
 }
 
 func createRateLimitPolicy(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	policy, err := apiv2.RateLimitPolicies.Create(ctx, expandRateLimitPolicyCreate(data))
+	policy, err := apiv3.RateLimitPolicies.Create(ctx, expandRateLimitPolicyCreate(data))
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -144,9 +144,9 @@ func createRateLimitPolicy(ctx context.Context, data *schema.ResourceData, meta 
 }
 
 func readRateLimitPolicy(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	policy, err := apiv2.RateLimitPolicies.Get(ctx, data.Id())
+	policy, err := apiv3.RateLimitPolicies.Get(ctx, data.Id())
 	if err != nil {
 		return internalError.HandleReadAPIError("auth0_rate_limit_policy", data, err)
 	}
@@ -155,9 +155,9 @@ func readRateLimitPolicy(ctx context.Context, data *schema.ResourceData, meta in
 }
 
 func updateRateLimitPolicy(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	if _, err := apiv2.RateLimitPolicies.Update(ctx, data.Id(), expandRateLimitPolicyPatch(data)); err != nil {
+	if _, err := apiv3.RateLimitPolicies.Update(ctx, data.Id(), expandRateLimitPolicyPatch(data)); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -165,9 +165,9 @@ func updateRateLimitPolicy(ctx context.Context, data *schema.ResourceData, meta 
 }
 
 func deleteRateLimitPolicy(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	if err := apiv2.RateLimitPolicies.Delete(ctx, data.Id()); err != nil {
+	if err := apiv3.RateLimitPolicies.Delete(ctx, data.Id()); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 

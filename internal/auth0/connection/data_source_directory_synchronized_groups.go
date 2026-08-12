@@ -28,10 +28,10 @@ func getDirectorySynchronizedGroupsDataSourceSchema() map[string]*schema.Schema 
 }
 
 func readDirectorySynchronizedGroupsDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 	connectionID := data.Get("connection_id").(string)
 
-	groupIDs, err := getAllSynchronizedGroups(ctx, apiv2, connectionID)
+	groupIDs, err := getAllSynchronizedGroups(ctx, apiv3, connectionID)
 	if err != nil {
 		return diag.FromErr(err)
 	}

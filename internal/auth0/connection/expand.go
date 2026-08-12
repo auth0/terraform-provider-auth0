@@ -6,7 +6,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -107,20 +107,31 @@ func expandConnection(
 		}
 	}
 
-	// Prevent erasing database configuration secrets.
+	// Updating a database connection needs the stored options: the PATCH payload
+	// replaces options wholesale, so values the configuration cannot supply have to
+	// be read back and carried over. The strategy check also guards the type
+	// assertions below — only the auth0 strategy uses *management.ConnectionOptions.
 	if !data.IsNewResource() && strategy == management.ConnectionStrategyAuth0 && connection.Options != nil {
 		apiConn, err := api.Connection.Read(ctx, data.Id())
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
 
+		options := connection.Options.(*management.ConnectionOptions)
+		apiOptions := apiConn.Options.(*management.ConnectionOptions)
+
+		// Prevent erasing database configuration secrets.
 		diagnostics = append(
 			diagnostics,
 			checkForUnmanagedConfigurationSecrets(
-				connection.Options.(*management.ConnectionOptions).GetConfiguration(),
-				apiConn.Options.(*management.ConnectionOptions).GetConfiguration(),
+				options.GetConfiguration(),
+				apiOptions.GetConfiguration(),
 			)...,
 		)
+
+		// The API reads a missing unique as true and rejects the PATCH when the
+		// stored value is false, so the stored value has to be sent back.
+		echoEmailAttributeUnique(options, apiOptions)
 	}
 
 	return connection, diagnostics
@@ -377,12 +388,12 @@ func expandConnectionOptionsCustomPasswordHash(config cty.Value) *management.Cus
 	return customPasswordHash
 }
 
-func expandConnectionOptionsAttributes(config cty.Value, isNew bool) *management.ConnectionOptionsAttributes {
+func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
 	var coa *management.ConnectionOptionsAttributes
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
 			coa = &management.ConnectionOptionsAttributes{
-				Email:       expandConnectionOptionsEmailAttribute(attributes, isNew),
+				Email:       expandConnectionOptionsEmailAttribute(attributes),
 				Username:    expandConnectionOptionsUsernameAttribute(attributes),
 				PhoneNumber: expandConnectionOptionsPhoneNumberAttribute(attributes),
 			}
@@ -391,7 +402,7 @@ func expandConnectionOptionsAttributes(config cty.Value, isNew bool) *management
 	return coa
 }
 
-func expandConnectionOptionsEmailAttribute(config cty.Value, isNew bool) *management.ConnectionOptionsEmailAttribute {
+func expandConnectionOptionsEmailAttribute(config cty.Value) *management.ConnectionOptionsEmailAttribute {
 	var coea *management.ConnectionOptionsEmailAttribute
 	config.GetAttr("email").ForEachElement(
 		func(_ cty.Value, email cty.Value) (stop bool) {
@@ -400,14 +411,39 @@ func expandConnectionOptionsEmailAttribute(config cty.Value, isNew bool) *manage
 				ProfileRequired:    value.Bool(email.GetAttr("profile_required")),
 				VerificationMethod: (*management.ConnectionOptionsEmailAttributeVerificationMethod)(value.String(email.GetAttr("verification_method"))),
 				Signup:             expandConnectionOptionsAttributeSignup(email),
-			}
-			// Unique is a create-only property; including it only in a POST request.
-			if isNew {
-				coea.Unique = value.Bool(email.GetAttr("unique"))
+				// The API rejects a PATCH that omits unique when the stored value is
+				// false, so it is always sent. On updates echoEmailAttributeUnique
+				// overwrites this with the stored value, since the property is
+				// immutable; the configured value only takes effect on a create or
+				// when the email attribute is being added.
+				Unique: value.Bool(email.GetAttr("unique")),
 			}
 			return stop
 		})
 	return coea
+}
+
+// echoEmailAttributeUnique overwrites the unique value in an update payload with
+// the value the API has stored.
+//
+// The Management API treats a missing options.attributes.email.unique as an
+// implicit true, so omitting it on a connection where it is false reads as an
+// attempt to flip the value and fails with "cannot patch unique property on email
+// attribute"; even when the update leaves the email attribute untouched. The
+// property is immutable, so echoing the stored value is always what the API
+// expects: a configuration that agrees is unchanged by this, and one that
+// disagrees is already rejected at plan time by validateConnection.
+func echoEmailAttributeUnique(options, apiOptions *management.ConnectionOptions) {
+	emailAttribute := options.GetAttributes().GetEmail()
+	apiEmailAttribute := apiOptions.GetAttributes().GetEmail()
+
+	// When the email attribute is being added there is no stored value to echo, so
+	// the configured value is left in place for the API to accept or reject.
+	if emailAttribute == nil || apiEmailAttribute == nil {
+		return
+	}
+
+	emailAttribute.Unique = auth0.Bool(emailAttributeUnique(apiEmailAttribute))
 }
 
 func expandConnectionOptionsUsernameAttribute(config cty.Value) *management.ConnectionOptionsUsernameAttribute {
@@ -516,7 +552,7 @@ func expandConnectionOptionsAttributeAllowedTypes(config cty.Value) *management.
 	return coaat
 }
 
-func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
+func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -530,7 +566,7 @@ func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (
 		RequiresUsername:                 value.Bool(config.GetAttr("requires_username")),
 		CustomScripts:                    value.MapOfStrings(config.GetAttr("custom_scripts")),
 		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
-		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes"), data.IsNewResource()),
+		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
 		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 		RealmFallback:                    value.Bool(config.GetAttr("realm_fallback")),
 	}
@@ -1640,12 +1676,12 @@ func expandSCIMConfiguration(data *schema.ResourceData) *management.SCIMConfigur
 	return nil
 }
 
-func expandDirectoryMapping(data *schema.ResourceData) []*managementv2.DirectoryProvisioningMappingItem {
+func expandDirectoryMapping(data *schema.ResourceData) []*managementv3.DirectoryProvisioningMappingItem {
 	srcMapping := data.Get("mapping").(*schema.Set)
-	mapping := make([]*managementv2.DirectoryProvisioningMappingItem, 0, srcMapping.Len())
+	mapping := make([]*managementv3.DirectoryProvisioningMappingItem, 0, srcMapping.Len())
 	for _, item := range srcMapping.List() {
 		srcMap := item.(map[string]interface{})
-		mappingItem := &managementv2.DirectoryProvisioningMappingItem{}
+		mappingItem := &managementv3.DirectoryProvisioningMappingItem{}
 		mappingItem.SetAuth0(srcMap["auth0"].(string))
 		mappingItem.SetIdp(srcMap["idp"].(string))
 		mapping = append(mapping, mappingItem)
@@ -1654,9 +1690,9 @@ func expandDirectoryMapping(data *schema.ResourceData) []*managementv2.Directory
 	return mapping
 }
 
-func expandDirectory(data *schema.ResourceData) *managementv2.CreateDirectoryProvisioningRequestContent {
+func expandDirectory(data *schema.ResourceData) *managementv3.CreateDirectoryProvisioningRequestContent {
 	cfg := data.GetRawConfig()
-	directoryConfig := &managementv2.CreateDirectoryProvisioningRequestContent{}
+	directoryConfig := &managementv3.CreateDirectoryProvisioningRequestContent{}
 
 	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
 		mapping := expandDirectoryMapping(data)
@@ -1669,16 +1705,16 @@ func expandDirectory(data *schema.ResourceData) *managementv2.CreateDirectoryPro
 	}
 
 	if !cfg.GetAttr("synchronize_groups").IsNull() {
-		syncGroups := managementv2.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
+		syncGroups := managementv3.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
 		directoryConfig.SetSynchronizeGroups(&syncGroups)
 	}
 
 	return directoryConfig
 }
 
-func expandDirectoryUpdate(data *schema.ResourceData) *managementv2.UpdateDirectoryProvisioningRequestContent {
+func expandDirectoryUpdate(data *schema.ResourceData) *managementv3.UpdateDirectoryProvisioningRequestContent {
 	cfg := data.GetRawConfig()
-	directoryConfig := &managementv2.UpdateDirectoryProvisioningRequestContent{}
+	directoryConfig := &managementv3.UpdateDirectoryProvisioningRequestContent{}
 
 	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
 		mapping := expandDirectoryMapping(data)
@@ -1691,7 +1727,7 @@ func expandDirectoryUpdate(data *schema.ResourceData) *managementv2.UpdateDirect
 	}
 
 	if !cfg.GetAttr("synchronize_groups").IsNull() {
-		syncGroups := managementv2.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
+		syncGroups := managementv3.SynchronizeGroupsEnum(data.Get("synchronize_groups").(string))
 		directoryConfig.SetSynchronizeGroups(&syncGroups)
 	}
 

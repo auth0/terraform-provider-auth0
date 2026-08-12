@@ -43,11 +43,11 @@ func updateSupplementalSignals(ctx context.Context, data *schema.ResourceData, m
 	mutex.Lock("supplemental_signals")
 	defer mutex.Unlock("supplemental_signals")
 
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	supplementalSignalsConfig := expandSupplementalSignals(data)
 
-	if _, err := apiv2.SupplementalSignals.Patch(ctx, supplementalSignalsConfig); err != nil {
+	if _, err := apiv3.SupplementalSignals.Patch(ctx, supplementalSignalsConfig); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -55,9 +55,9 @@ func updateSupplementalSignals(ctx context.Context, data *schema.ResourceData, m
 }
 
 func readSupplementalSignals(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	supplementalSignalsConfig, err := apiv2.SupplementalSignals.Get(ctx)
+	supplementalSignalsConfig, err := apiv3.SupplementalSignals.Get(ctx)
 	if err != nil {
 		return internalError.HandleReadAPIError("auth0_supplemental_signals", data, err)
 	}
@@ -72,11 +72,11 @@ func deleteSupplementalSignals(ctx context.Context, data *schema.ResourceData, m
 	mutex.Lock("supplemental_signals")
 	defer mutex.Unlock("supplemental_signals")
 
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	supplementalSignalsConfig := expandSupplementalSignalsForDelete()
 
-	if _, err := apiv2.SupplementalSignals.Patch(ctx, supplementalSignalsConfig); err != nil {
+	if _, err := apiv3.SupplementalSignals.Patch(ctx, supplementalSignalsConfig); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 

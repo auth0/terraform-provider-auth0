@@ -27,10 +27,10 @@ func getDirectoryDataSourceSchema() map[string]*schema.Schema {
 }
 
 func readDirectoryDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	apiv2 := meta.(*config.Config).GetAPIV2()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	connectionID := data.Get("connection_id").(string)
-	directoryConfig, err := apiv2.Connections.DirectoryProvisioning.Get(ctx, connectionID)
+	directoryConfig, err := apiv3.Connections.DirectoryProvisioning.Get(ctx, connectionID)
 	if err != nil {
 		return diag.FromErr(err)
 	}

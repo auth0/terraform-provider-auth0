@@ -2,7 +2,7 @@ package organization
 
 import (
 	"github.com/auth0/go-auth0/management"
-	managementv2 "github.com/auth0/go-auth0/v2/management"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -25,7 +25,7 @@ func flattenOrganization(data *schema.ResourceData, organization *management.Org
 func flattenOrganizationForDataSource(
 	data *schema.ResourceData,
 	organization *management.Organization,
-	connections []*managementv2.OrganizationAllConnectionPost,
+	connections []*managementv3.OrganizationAllConnectionPost,
 	members []management.OrganizationMember,
 	clientGrants []*management.ClientGrant,
 ) error {
@@ -52,7 +52,7 @@ func flattenOrganizationBranding(organizationBranding *management.OrganizationBr
 	}
 }
 
-func flattenOrganizationConnection(data *schema.ResourceData, orgConn *managementv2.GetOrganizationAllConnectionResponseContent) error {
+func flattenOrganizationConnection(data *schema.ResourceData, orgConn *managementv3.GetOrganizationAllConnectionResponseContent) error {
 	conn := orgConn.GetConnection()
 	result := multierror.Append(
 		data.Set("assign_membership_on_login", orgConn.GetAssignMembershipOnLogin()),
@@ -68,7 +68,7 @@ func flattenOrganizationConnection(data *schema.ResourceData, orgConn *managemen
 	return result.ErrorOrNil()
 }
 
-func flattenOrganizationConnections(data *schema.ResourceData, connections []*managementv2.OrganizationAllConnectionPost) error {
+func flattenOrganizationConnections(data *schema.ResourceData, connections []*managementv3.OrganizationAllConnectionPost) error {
 	result := multierror.Append(
 		data.Set("organization_id", data.Id()),
 		data.Set("enabled_connections", flattenOrganizationEnabledConnections(connections)),
@@ -77,7 +77,7 @@ func flattenOrganizationConnections(data *schema.ResourceData, connections []*ma
 	return result.ErrorOrNil()
 }
 
-func flattenOrganizationEnabledConnections(connections []*managementv2.OrganizationAllConnectionPost) []interface{} {
+func flattenOrganizationEnabledConnections(connections []*managementv3.OrganizationAllConnectionPost) []interface{} {
 	if connections == nil {
 		return nil
 	}

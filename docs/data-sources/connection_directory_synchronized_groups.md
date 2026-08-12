@@ -1,14 +1,12 @@
 ---
 page_title: "Data Source: auth0_connection_directory_synchronized_groups"
 description: |-
-  Data source to retrieve the selected synchronized group IDs for a connection's directory provisioning configuration.
+  Data source to retrieve the selected synchronized groups for a connection's directory provisioning configuration.
 ---
 
 # Data Source: auth0_connection_directory_synchronized_groups
 
-Data source to retrieve the selected synchronized group IDs for a connection's directory provisioning configuration.
-
--> This data source is only available for [EA](https://auth0.com/docs/troubleshoot/product-lifecycle/product-release-stages#early-access) users.
+Data source to retrieve the selected synchronized groups for a connection's directory provisioning configuration.
 
 ## Example Usage
 
@@ -23,11 +21,26 @@ data "auth0_connection_directory_synchronized_groups" "my_groups" {
 
 ### Required
 
-- `connection_id` (String) ID of the connection for which to manage synchronized groups. (EA only)
+- `connection_id` (String) ID of the connection for which to manage synchronized groups.
+
+### Optional
+
+- `query` (String) Filter the synchronized groups by a prefix search on a single field. Only `name` and `email` are searchable, and only as a prefix, so the term must take the form `name:<value>*` or `email:<value>*` (for example `name:engineering*`). Returns all synchronized groups when omitted.
 
 ### Read-Only
 
-- `group_ids` (Set of String) List of Google Workspace Directory group IDs to synchronize. (EA only)
+- `group_ids` (Set of String) IDs of the synchronized Google Workspace Directory groups. Limited to the groups matching `query`, when one is given.
+- `groups` (Set of Object) Details of the synchronized Google Workspace Directory groups. Limited to the groups matching `query`, when one is given. (see [below for nested schema](#nestedatt--groups))
 - `id` (String) The ID of this resource.
+
+<a id="nestedatt--groups"></a>
+### Nested Schema for `groups`
+
+Read-Only:
+
+- `direct_members_count` (Number)
+- `email` (String)
+- `id` (String)
+- `name` (String)
 
 

@@ -1747,7 +1747,7 @@ func expandDirectorySynchronizedGroupsCreate(data *schema.ResourceData) []*manag
 	return []*managementv3.SynchronizedGroupPayload{}
 }
 
-// directorySynchronizedGroupsUpdate is the delta an update writes
+// directorySynchronizedGroupsUpdate is the delta an update writes.
 type directorySynchronizedGroupsUpdate struct {
 	add    []*managementv3.SynchronizedGroupPayload
 	remove []string

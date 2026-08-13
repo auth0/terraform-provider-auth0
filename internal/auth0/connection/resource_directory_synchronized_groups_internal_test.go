@@ -13,6 +13,7 @@ import (
 	managementv3 "github.com/auth0/go-auth0/v3/management"
 	managementv3client "github.com/auth0/go-auth0/v3/management/client"
 	"github.com/auth0/go-auth0/v3/management/option"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/stretchr/testify/assert"
@@ -30,7 +31,7 @@ func groupIDsAttribute(groupIDs ...string) []interface{} {
 	return attribute
 }
 
-// groupsAttribute renders one block per group carrying only `id`, all a practitioner can set.
+// groupsAttribute renders one block per group carrying only `id`.
 func groupsAttribute(groupIDs ...string) []interface{} {
 	attribute := make([]interface{}, 0, len(groupIDs))
 	for _, groupID := range groupIDs {
@@ -38,6 +39,54 @@ func groupsAttribute(groupIDs ...string) []interface{} {
 	}
 
 	return attribute
+}
+
+// groupBlock is one `groups` block as a practitioner writes it. A nil field is one the configuration
+// leaves out, which the write path has to tell apart from one it sets to the same value.
+type groupBlock struct {
+	ID                 string
+	Name               *string
+	Email              *string
+	DirectMembersCount *int
+}
+
+func (block groupBlock) attribute() map[string]interface{} {
+	attribute := map[string]interface{}{"id": block.ID}
+
+	if block.Name != nil {
+		attribute["name"] = *block.Name
+	}
+	if block.Email != nil {
+		attribute["email"] = *block.Email
+	}
+	if block.DirectMembersCount != nil {
+		attribute["direct_members_count"] = *block.DirectMembersCount
+	}
+
+	return attribute
+}
+
+// rawValue renders the block the way the raw configuration carries it: every attribute present, and
+// the ones the configuration leaves out null.
+func (block groupBlock) rawValue() cty.Value {
+	rawBlock := map[string]cty.Value{
+		"id":                   cty.StringVal(block.ID),
+		"name":                 cty.NullVal(cty.String),
+		"email":                cty.NullVal(cty.String),
+		"direct_members_count": cty.NullVal(cty.Number),
+	}
+
+	if block.Name != nil {
+		rawBlock["name"] = cty.StringVal(*block.Name)
+	}
+	if block.Email != nil {
+		rawBlock["email"] = cty.StringVal(*block.Email)
+	}
+	if block.DirectMembersCount != nil {
+		rawBlock["direct_members_count"] = cty.NumberIntVal(int64(*block.DirectMembersCount))
+	}
+
+	return cty.ObjectVal(rawBlock)
 }
 
 // resourceDataForUpdate builds the *schema.ResourceData an update sees, with the diff computed by
@@ -62,6 +111,70 @@ func resourceDataForUpdate(t *testing.T, priorAttributes map[string]interface{},
 		true,
 	)
 	require.NoError(t, err)
+
+	data, err := schemaMap.Data(priorState, diff)
+	require.NoError(t, err)
+	data.SetId("con_directorySynchronizedGroups")
+
+	return data
+}
+
+// resourceDataForApply is resourceDataForUpdate with the raw configuration an apply carries.
+// `schemaMap.Diff` leaves that null, and declared metadata is only readable from there, so every
+// test about metadata needs this rather than resourceDataForUpdate. The configuration and the raw
+// configuration are rendered from the same blocks, so the two cannot drift apart.
+func resourceDataForApply(t *testing.T, priorAttributes map[string]interface{}, blocks ...groupBlock) *schema.ResourceData {
+	t.Helper()
+
+	resource := NewDirectorySynchronizedGroupsResource()
+	schemaMap := schema.InternalMap(resource.Schema)
+
+	if priorAttributes == nil {
+		priorAttributes = map[string]interface{}{}
+	}
+	priorAttributes["connection_id"] = "con_directorySynchronizedGroups"
+
+	configuration := map[string]interface{}{"connection_id": "con_directorySynchronizedGroups"}
+	rawGroups := cty.NullVal(cty.Set(groupBlock{}.rawValue().Type()))
+
+	if len(blocks) > 0 {
+		attributes := make([]interface{}, 0, len(blocks))
+		rawBlocks := make([]cty.Value, 0, len(blocks))
+
+		for _, block := range blocks {
+			attributes = append(attributes, block.attribute())
+			rawBlocks = append(rawBlocks, block.rawValue())
+		}
+
+		configuration["groups"] = attributes
+		rawGroups = cty.SetVal(rawBlocks)
+	}
+
+	priorData := schema.TestResourceDataRaw(t, resource.Schema, priorAttributes)
+	priorData.SetId("con_directorySynchronizedGroups")
+	priorState := priorData.State()
+
+	diff, err := schemaMap.Diff(
+		context.Background(),
+		priorState,
+		terraform.NewResourceConfigRaw(configuration),
+		nil,
+		nil,
+		true,
+	)
+	require.NoError(t, err)
+
+	rawConfig := cty.ObjectVal(map[string]cty.Value{
+		"connection_id": cty.StringVal("con_directorySynchronizedGroups"),
+		"group_ids":     cty.NullVal(cty.Set(cty.String)),
+		"groups":        rawGroups,
+	})
+
+	// Both, because an update with nothing to change has no diff to hang it off.
+	priorState.RawConfig = rawConfig
+	if diff != nil {
+		diff.RawConfig = rawConfig
+	}
 
 	data, err := schemaMap.Data(priorState, diff)
 	require.NoError(t, err)
@@ -313,10 +426,7 @@ func TestUpdateDirectorySynchronizedGroupsRemovesGroupIDsOnly(t *testing.T) {
 // diffing, since the connection may already have groups synchronized outside Terraform.
 func TestCreateDirectorySynchronizedGroupsReplacesTheWholeSet(t *testing.T) {
 	t.Run("it replaces with the configured groups", func(t *testing.T) {
-		data := resourceDataForUpdate(t, nil, map[string]interface{}{
-			"connection_id": "con_directorySynchronizedGroups",
-			"groups":        groupsAttribute("group1", "group2"),
-		})
+		data := resourceDataForApply(t, nil, groupBlock{ID: "group1"}, groupBlock{ID: "group2"})
 		api, requests := newRecordingAPI(t, `{"groups":[{"id":"group1"},{"id":"group2"}]}`)
 
 		diagnostics := createDirectorySynchronizedGroups(context.Background(), data, api)
@@ -329,9 +439,7 @@ func TestCreateDirectorySynchronizedGroupsReplacesTheWholeSet(t *testing.T) {
 	})
 
 	t.Run("it replaces with an empty set when no groups are configured", func(t *testing.T) {
-		data := resourceDataForUpdate(t, nil, map[string]interface{}{
-			"connection_id": "con_directorySynchronizedGroups",
-		})
+		data := resourceDataForApply(t, nil)
 		api, requests := newRecordingAPI(t, `{"groups":[]}`)
 
 		diagnostics := createDirectorySynchronizedGroups(context.Background(), data, api)
@@ -341,6 +449,163 @@ func TestCreateDirectorySynchronizedGroupsReplacesTheWholeSet(t *testing.T) {
 			{Method: http.MethodPut, GroupIDs: []string{}},
 		}, requests)
 	})
+}
+
+// TestCreateDirectorySynchronizedGroupsSendsDeclaredMetadataOnly pins the payload to what the
+// configuration declares. A field left out has to be absent from the payload rather than sent empty,
+// since absence is what the API reads as "no value", while a field declared empty is sent as declared.
+func TestCreateDirectorySynchronizedGroupsSendsDeclaredMetadataOnly(t *testing.T) {
+	t.Run("it carries the declared metadata and omits the rest", func(t *testing.T) {
+		data := resourceDataForApply(t, nil,
+			groupBlock{
+				ID:                 "group1",
+				Name:               pointerTo("Engineering"),
+				Email:              pointerTo("engineering@example.com"),
+				DirectMembersCount: pointerTo(7),
+			},
+			groupBlock{ID: "group2", Name: pointerTo("Support")},
+			groupBlock{ID: "group3"},
+		)
+		api, requests := newRecordingAPI(t, `{"groups":[]}`)
+
+		diagnostics := createDirectorySynchronizedGroups(context.Background(), data, api)
+
+		assert.False(t, diagnostics.HasError())
+		writes := requests.writes()
+		require.Len(t, writes, 1)
+		assert.Equal(t, http.MethodPut, writes[0].Method)
+		assert.ElementsMatch(t,
+			[]map[string]interface{}{
+				{"id": "group1", "name": "Engineering", "email": "engineering@example.com", "direct_members_count": float64(7)},
+				{"id": "group2", "name": "Support"},
+				{"id": "group3"},
+			},
+			writes[0].Groups,
+		)
+	})
+
+	t.Run("it sends metadata declared as an empty string", func(t *testing.T) {
+		// An empty string is a declared value, not an omission, so it goes on the wire as declared.
+		// `email` carries a format constraint that `""` cannot satisfy, and that error belongs to the
+		// practitioner who asked for it rather than to a provider working around it.
+		data := resourceDataForApply(t, nil,
+			groupBlock{ID: "group1", Name: pointerTo(""), Email: pointerTo(""), DirectMembersCount: pointerTo(0)},
+		)
+		api, requests := newRecordingAPI(t, `{"groups":[]}`)
+
+		diagnostics := createDirectorySynchronizedGroups(context.Background(), data, api)
+
+		assert.False(t, diagnostics.HasError())
+		require.Len(t, requests.writes(), 1)
+		assert.Equal(t,
+			[]map[string]interface{}{{"id": "group1", "name": "", "email": "", "direct_members_count": float64(0)}},
+			requests.writes()[0].Groups,
+		)
+	})
+}
+
+// TestUpdateDirectorySynchronizedGroupsRewritesMetadataByReAdding pins how an update writes metadata.
+// Add stores what its payload holds and clears what it leaves out, so a group whose metadata changed
+// is removed and added back, and the groups that did not change are never named at all.
+func TestUpdateDirectorySynchronizedGroupsRewritesMetadataByReAdding(t *testing.T) {
+	engineering := map[string]interface{}{
+		"id":                   "group1",
+		"name":                 "Engineering",
+		"email":                "engineering@example.com",
+		"direct_members_count": 7,
+	}
+
+	testCases := []struct {
+		name             string
+		priorAttributes  map[string]interface{}
+		blocks           []groupBlock
+		expectedRequests []expectedWrite
+	}{
+		{
+			// Dropping the metadata from the configuration is a change, and leaving the fields out of
+			// the add is what clears them.
+			name:            "dropping the declared metadata re-adds the group without it",
+			priorAttributes: map[string]interface{}{"groups": []interface{}{engineering}},
+			blocks:          []groupBlock{{ID: "group1"}, {ID: "group2"}},
+			expectedRequests: []expectedWrite{
+				{Method: http.MethodDelete, GroupIDs: []string{"group1"}, Groups: []map[string]interface{}{{"id": "group1"}}},
+				{Method: http.MethodPost, GroupIDs: []string{"group1", "group2"}, Groups: []map[string]interface{}{
+					{"id": "group1"},
+					{"id": "group2"},
+				}},
+			},
+		},
+		{
+			name:            "declaring no metadata anywhere sends the difference",
+			priorAttributes: map[string]interface{}{"groups": groupsAttribute("group1")},
+			blocks:          []groupBlock{{ID: "group1"}, {ID: "group2"}},
+			expectedRequests: []expectedWrite{
+				{Method: http.MethodPost, GroupIDs: []string{"group2"}, Groups: []map[string]interface{}{{"id": "group2"}}},
+			},
+		},
+		{
+			name:            "declaring the metadata a read already stored sends nothing",
+			priorAttributes: map[string]interface{}{"groups": []interface{}{engineering}},
+			blocks: []groupBlock{{
+				ID:                 "group1",
+				Name:               pointerTo("Engineering"),
+				Email:              pointerTo("engineering@example.com"),
+				DirectMembersCount: pointerTo(7),
+			}},
+			expectedRequests: nil,
+		},
+		{
+			// The group that changed goes and comes back; the one that did not is left alone, which is
+			// the whole point of not replacing the set.
+			name:            "changing declared metadata re-adds only that group",
+			priorAttributes: map[string]interface{}{"groups": []interface{}{engineering, map[string]interface{}{"id": "group2"}}},
+			blocks:          []groupBlock{{ID: "group1", Name: pointerTo("Platform")}, {ID: "group2"}},
+			expectedRequests: []expectedWrite{
+				{Method: http.MethodDelete, GroupIDs: []string{"group1"}, Groups: []map[string]interface{}{{"id": "group1"}}},
+				{Method: http.MethodPost, GroupIDs: []string{"group1"}, Groups: []map[string]interface{}{
+					{"id": "group1", "name": "Platform"},
+				}},
+			},
+		},
+		{
+			// A group that was never synchronized needs no remove first: the add is already the only
+			// write its metadata takes.
+			name:            "adding a group with metadata adds it in one call",
+			priorAttributes: map[string]interface{}{"groups": groupsAttribute("group1")},
+			blocks:          []groupBlock{{ID: "group1"}, {ID: "group2", Name: pointerTo("Support")}},
+			expectedRequests: []expectedWrite{
+				{Method: http.MethodPost, GroupIDs: []string{"group2"}, Groups: []map[string]interface{}{
+					{"id": "group2", "name": "Support"},
+				}},
+			},
+		},
+		{
+			// The migration carries no metadata across, since `group_ids` holds none, so declaring it
+			// is a change on a group that is already synchronized.
+			name:            "migrating from group_ids while declaring metadata re-adds that group",
+			priorAttributes: map[string]interface{}{"group_ids": groupIDsAttribute("group1", "group2")},
+			blocks:          []groupBlock{{ID: "group1", Name: pointerTo("Engineering")}, {ID: "group2"}},
+			expectedRequests: []expectedWrite{
+				{Method: http.MethodDelete, GroupIDs: []string{"group1"}, Groups: []map[string]interface{}{{"id": "group1"}}},
+				{Method: http.MethodPost, GroupIDs: []string{"group1"}, Groups: []map[string]interface{}{
+					{"id": "group1", "name": "Engineering"},
+				}},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			data := resourceDataForApply(t, testCase.priorAttributes, testCase.blocks...)
+			api, requests := newRecordingAPI(t, `{"groups":[]}`)
+
+			diagnostics := updateDirectorySynchronizedGroups(context.Background(), data, api)
+
+			assert.False(t, diagnostics.HasError())
+			assertWrites(t, testCase.expectedRequests, requests)
+		})
+	}
 }
 
 // TestDeleteDirectorySynchronizedGroups covers delete unsynchronizing every group with an empty
@@ -412,7 +677,7 @@ func TestReadDirectorySynchronizedGroupsWritesOneAttribute(t *testing.T) {
 		assert.False(t, diagnostics.HasError())
 		assert.Equal(t, "con_directorySynchronizedGroups", data.Get("connection_id"))
 		assert.Empty(t, data.Get("group_ids").(*schema.Set).List())
-		assert.Len(t, data.Get("groups").(*schema.Set).List(), 2)
+		assert.ElementsMatch(t, []string{"group1", "group2"}, flattenedGroupIDs(data.Get("groups").(*schema.Set).List()))
 	})
 
 	t.Run("it empties group_ids when every group was unsynchronized elsewhere", func(t *testing.T) {
@@ -521,7 +786,7 @@ func TestChunkGroupIDs(t *testing.T) {
 		t.Run(fmt.Sprintf("%d group IDs", testCase.groupIDCount), func(t *testing.T) {
 			groupIDs := generateGroupIDs(testCase.groupIDCount)
 
-			chunks := chunkGroupIDs(groupIDs)
+			chunks := chunkGroups(groupIDs)
 
 			chunkSizes := make([]int, 0, len(chunks))
 			var chunked []string
@@ -544,7 +809,7 @@ func TestAddAndRemoveGroupsChunkAtTheAPILimit(t *testing.T) {
 	t.Run("add", func(t *testing.T) {
 		api, requests := newRecordingAPI(t, `{"groups":[]}`)
 
-		assert.NoError(t, addGroups(context.Background(), api.GetAPIV3(), "con_directorySynchronizedGroups", groupIDs))
+		assert.NoError(t, addGroups(context.Background(), api.GetAPIV3(), "con_directorySynchronizedGroups", groupsWithOnlyID(groupIDs)))
 
 		writes := requests.writes()
 		require.Len(t, writes, 2)
@@ -579,7 +844,7 @@ func TestPutGroupsIsNotChunked(t *testing.T) {
 	groupIDs := generateGroupIDs(101)
 	api, requests := newRecordingAPI(t, `{"groups":[]}`)
 
-	assert.NoError(t, putGroups(context.Background(), api.GetAPIV3(), "con_directorySynchronizedGroups", groupIDs))
+	assert.NoError(t, putGroups(context.Background(), api.GetAPIV3(), "con_directorySynchronizedGroups", groupsWithOnlyID(groupIDs)))
 
 	writes := requests.writes()
 	require.Len(t, writes, 1)
@@ -651,47 +916,55 @@ func TestDiffGroupIDs(t *testing.T) {
 }
 
 func TestMergeGroupIDs(t *testing.T) {
-	resourceSchema := NewDirectorySynchronizedGroupsResource().Schema
-
-	newGroupIDSet := func(groupIDs ...string) *schema.Set {
-		return schema.NewSet(schema.HashString, groupIDsAttribute(groupIDs...))
-	}
-	newGroupSet := func(groups ...interface{}) *schema.Set {
-		return schema.NewSet(schema.HashResource(resourceSchema["groups"].Elem.(*schema.Resource)), groups)
-	}
-
 	t.Run("it collects from group_ids alone", func(t *testing.T) {
 		assert.ElementsMatch(t,
 			[]string{"group1", "group2"},
-			mergeGroupIDs(newGroupIDSet("group1", "group2"), newGroupSet()),
+			mergeGroupIDs(newGroupIDsSet("group1", "group2"), newGroupsSet()),
 		)
 	})
 
 	t.Run("it collects from groups alone", func(t *testing.T) {
 		assert.ElementsMatch(t,
 			[]string{"group1", "group2"},
-			mergeGroupIDs(newGroupIDSet(), newGroupSet(groupsAttribute("group1", "group2")...)),
+			mergeGroupIDs(newGroupIDsSet(), newGroupsSet("group2", "group1")),
 		)
 	})
 
 	t.Run("it collects from both, which is what makes a migration send nothing", func(t *testing.T) {
 		assert.ElementsMatch(t,
 			[]string{"group1", "group2"},
-			mergeGroupIDs(newGroupIDSet("group1"), newGroupSet(groupsAttribute("group2")...)),
+			mergeGroupIDs(newGroupIDsSet("group1"), newGroupsSet("group2")),
 		)
 	})
 
 	t.Run("it returns an empty slice rather than nil when there is nothing to collect", func(t *testing.T) {
-		assert.Equal(t, []string{}, mergeGroupIDs(newGroupIDSet(), newGroupSet()))
-		assert.Equal(t, []string{}, mergeGroupIDs(nil, nil))
+		assert.Equal(t, []string{}, mergeGroupIDs(newGroupIDsSet(), newGroupsSet()))
+	})
+
+	t.Run("it ignores an attribute that holds nothing at all", func(t *testing.T) {
+		assert.Equal(t, []string{}, groupIDsIn(nil))
 	})
 
 	t.Run("it skips empty group IDs", func(t *testing.T) {
 		assert.Equal(t,
 			[]string{"group1"},
-			mergeGroupIDs(newGroupIDSet("group1", ""), newGroupSet(map[string]interface{}{"id": ""})),
+			mergeGroupIDs(newGroupIDsSet("group1", ""), newGroupsSet("")),
 		)
 	})
+}
+
+func newGroupIDsSet(groupIDs ...string) *schema.Set {
+	return schema.NewSet(schema.HashString, groupIDsAttribute(groupIDs...))
+}
+
+// newGroupsSet renders `groups` the way the schema stores it, hash and all.
+func newGroupsSet(groupIDs ...string) *schema.Set {
+	groups := NewDirectorySynchronizedGroupsResource().Schema["groups"]
+
+	return schema.NewSet(
+		schema.HashResource(groups.Elem.(*schema.Resource)),
+		groupsAttribute(groupIDs...),
+	)
 }
 
 func TestFlattenGroups(t *testing.T) {
@@ -709,6 +982,17 @@ func TestFlattenGroups(t *testing.T) {
 				Email:              pointerTo("engineering@example.com"),
 				DirectMembersCount: pointerTo(7),
 			}}),
+		)
+	})
+
+	t.Run("it renders one entry per group the directory returned", func(t *testing.T) {
+		flattened := flattenGroups([]*managementv3.SynchronizedGroupPayload{
+			{ID: "group1"}, {ID: "group2"}, {ID: "group3"},
+		})
+
+		assert.ElementsMatch(t,
+			[]string{"group1", "group2", "group3"},
+			flattenedGroupIDs(flattened),
 		)
 	})
 
@@ -731,6 +1015,15 @@ func TestFlattenGroups(t *testing.T) {
 	})
 }
 
+func flattenedGroupIDs(flattenedGroups []interface{}) []string {
+	groupIDs := make([]string, 0, len(flattenedGroups))
+	for _, flattenedGroup := range flattenedGroups {
+		groupIDs = append(groupIDs, flattenedGroup.(map[string]interface{})["id"].(string))
+	}
+
+	return groupIDs
+}
+
 func TestFlattenGroupIDs(t *testing.T) {
 	assert.Equal(t,
 		[]string{"group1", "group2"},
@@ -740,6 +1033,150 @@ func TestFlattenGroupIDs(t *testing.T) {
 		}),
 	)
 	assert.Equal(t, []string{}, flattenGroupIDs(nil))
+}
+
+// TestDirectorySynchronizedGroupsMetadataPlansAsDeclared covers what a plan does with metadata, which
+// is what the hash on `groups` decides. The configuration is authoritative: what it declares reaches
+// the plan, and what it leaves out is cleared. A set is diffed on element hashes alone, so hashing the
+// ID would drop the diff entirely and leave a metadata edit permanently unapplied. The whole element
+// is hashed instead, which reads as the entry being swapped rather than as one changed field, and the
+// assertions below are on the value the plan settles on rather than on the hash keys it gets there by.
+func TestDirectorySynchronizedGroupsMetadataPlansAsDeclared(t *testing.T) {
+	synchronizedGroup := map[string]interface{}{
+		"id":                   "group1",
+		"name":                 "Engineering",
+		"email":                "engineering@example.com",
+		"direct_members_count": 7,
+	}
+
+	testCases := []struct {
+		name            string
+		configuredGroup map[string]interface{}
+		expectedEmpty   bool
+		expectedGroup   map[string]interface{}
+	}{
+		{
+			name:            "declaring the metadata a read already stored leaves the plan empty",
+			configuredGroup: synchronizedGroup,
+			expectedEmpty:   true,
+			expectedGroup:   synchronizedGroup,
+		},
+		{
+			name:            "declaring the ID alone clears the stored metadata",
+			configuredGroup: map[string]interface{}{"id": "group1"},
+			expectedGroup: map[string]interface{}{
+				"id":                   "group1",
+				"name":                 "",
+				"email":                "",
+				"direct_members_count": 0,
+			},
+		},
+		{
+			name:            "declaring different metadata is a change",
+			configuredGroup: map[string]interface{}{"id": "group1", "name": "Platform"},
+			expectedGroup: map[string]interface{}{
+				"id":                   "group1",
+				"name":                 "Platform",
+				"email":                "",
+				"direct_members_count": 0,
+			},
+		},
+		{
+			name: "dropping one field clears that field alone",
+			configuredGroup: map[string]interface{}{
+				"id":                   "group1",
+				"name":                 "Engineering",
+				"direct_members_count": 7,
+			},
+			expectedGroup: map[string]interface{}{
+				"id":                   "group1",
+				"name":                 "Engineering",
+				"email":                "",
+				"direct_members_count": 7,
+			},
+		},
+	}
+
+	resource := NewDirectorySynchronizedGroupsResource()
+	schemaMap := schema.InternalMap(resource.Schema)
+
+	for _, testCase := range testCases {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			priorData := schema.TestResourceDataRaw(t, resource.Schema, map[string]interface{}{
+				"connection_id": "con_directorySynchronizedGroups",
+				"groups":        []interface{}{synchronizedGroup},
+			})
+			priorData.SetId("con_directorySynchronizedGroups")
+			priorState := priorData.State()
+
+			diff, err := schemaMap.Diff(
+				context.Background(),
+				priorState,
+				terraform.NewResourceConfigRaw(map[string]interface{}{
+					"connection_id": "con_directorySynchronizedGroups",
+					"groups":        []interface{}{testCase.configuredGroup},
+				}),
+				nil,
+				nil,
+				true,
+			)
+			require.NoError(t, err)
+			assert.Equal(t, testCase.expectedEmpty, diff.Empty())
+
+			data, err := schemaMap.Data(priorState, diff)
+			require.NoError(t, err)
+
+			assert.Equal(t,
+				[]interface{}{testCase.expectedGroup},
+				data.Get("groups").(*schema.Set).List(),
+			)
+		})
+	}
+}
+
+// TestRejectDuplicateGroups covers what the set cannot catch on its own. Two blocks naming the same
+// group with different metadata hash apart, leaving the configuration holding more entries than any
+// read can return, so the plan is refused rather than left to never settle.
+func TestRejectDuplicateGroups(t *testing.T) {
+	resource := NewDirectorySynchronizedGroupsResource()
+
+	diffFor := func(t *testing.T, groups []interface{}) error {
+		t.Helper()
+
+		priorData := schema.TestResourceDataRaw(t, resource.Schema, map[string]interface{}{
+			"connection_id": "con_directorySynchronizedGroups",
+		})
+		priorData.SetId("con_directorySynchronizedGroups")
+
+		_, err := schema.InternalMap(resource.Schema).Diff(
+			context.Background(),
+			priorData.State(),
+			terraform.NewResourceConfigRaw(map[string]interface{}{
+				"connection_id": "con_directorySynchronizedGroups",
+				"groups":        groups,
+			}),
+			resource.CustomizeDiff,
+			nil,
+			true,
+		)
+
+		return err
+	}
+
+	t.Run("it refuses a group declared twice", func(t *testing.T) {
+		err := diffFor(t, []interface{}{
+			map[string]interface{}{"id": "group1"},
+			map[string]interface{}{"id": "group2"},
+			map[string]interface{}{"id": "group1", "name": "Engineering"},
+		})
+
+		assert.ErrorContains(t, err, `group "group1" is declared more than once in `+"`groups`")
+	})
+
+	t.Run("it allows distinct groups", func(t *testing.T) {
+		assert.NoError(t, diffFor(t, groupsAttribute("group1", "group2")))
+	})
 }
 
 // TestDirectorySynchronizedGroupsSchemaConflict records how a practitioner has to write the
@@ -817,6 +1254,10 @@ type recordedRequest struct {
 type expectedWrite struct {
 	Method   string
 	GroupIDs []string
+
+	// Groups, when set, pins the payload objects too, for the assertions on which properties a call
+	// carried rather than only which groups it named.
+	Groups []map[string]interface{}
 }
 
 type recordedRequests struct {
@@ -852,6 +1293,10 @@ func assertWrites(t *testing.T, expected []expectedWrite, recorded *recordedRequ
 	for i, expectedWrite := range expected {
 		assert.Equal(t, expectedWrite.Method, writes[i].Method)
 		assert.ElementsMatch(t, expectedWrite.GroupIDs, writes[i].GroupIDs)
+
+		if expectedWrite.Groups != nil {
+			assert.ElementsMatch(t, expectedWrite.Groups, writes[i].Groups)
+		}
 	}
 }
 

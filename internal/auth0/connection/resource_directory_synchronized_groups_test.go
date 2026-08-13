@@ -69,7 +69,7 @@ resource "auth0_connection_directory_synchronized_groups" "my_sync_groups" {
 const testAccDirectorySyncGroupsDelete = testAccDirectorySyncGroupsGivenAConnection
 
 // TestAccDirectorySynchronizedGroups covers the deprecated `group_ids` on its own, the configuration
-// every existing practitioner already has, so it has to keep passing unchanged.
+// existing practitioners already have.
 func TestAccDirectorySynchronizedGroups(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -78,8 +78,7 @@ func TestAccDirectorySynchronizedGroups(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("auth0_connection_directory_synchronized_groups.my_sync_groups", "connection_id"),
 					resource.TestCheckResourceAttr("auth0_connection_directory_synchronized_groups.my_sync_groups", "group_ids.#", "0"),
-					// The read must leave the unused attribute alone, or every plan would propose
-					// emptying a `groups` this practitioner never wrote.
+					// The read must leave `groups` empty, or every plan would propose emptying it.
 					resource.TestCheckResourceAttr("auth0_connection_directory_synchronized_groups.my_sync_groups", "groups.#", "0"),
 				),
 			},
@@ -143,8 +142,7 @@ resource "auth0_connection_directory_synchronized_groups" "my_sync_groups" {
 }
 `
 
-// TestAccDirectorySynchronizedGroupsAsGroups covers `groups` on its own: the lifecycle a new
-// practitioner gets, and the one a migrated practitioner lands on.
+// TestAccDirectorySynchronizedGroupsAsGroups covers `groups` on its own, including import.
 func TestAccDirectorySynchronizedGroupsAsGroups(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -186,9 +184,18 @@ func TestAccDirectorySynchronizedGroupsAsGroups(t *testing.T) {
 			},
 			{
 				// Importing lands the IDs in `groups`, the attribute that is not deprecated.
+				//
+				// Undeclared metadata is ignored: an apply leaves it null in state, while an import
+				// keeps the empty values the read returned. Both plan the same, so only the state
+				// spelling differs.
 				ResourceName:      "auth0_connection_directory_synchronized_groups.my_sync_groups",
 				ImportState:       true,
 				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{
+					"groups.0.name",
+					"groups.0.email",
+					"groups.0.direct_members_count",
+				},
 				ImportStateIdFunc: func(state *terraform.State) (string, error) {
 					return acctest.ExtractResourceAttributeFromState(state, "auth0_connection.my_connection", "id")
 				},
@@ -200,9 +207,165 @@ func TestAccDirectorySynchronizedGroupsAsGroups(t *testing.T) {
 	})
 }
 
-// Each migration configuration below declares exactly one of `group_ids` and `groups`, never both:
-// `ConflictsWith` rejects an attribute being present at all rather than holding anything, so a
-// practitioner migrating deletes the `group_ids` line rather than emptying it.
+const testAccDirectorySyncGroupsWithMetadata = testAccDirectorySyncGroupsGivenAConnection + `
+resource "auth0_connection_directory_synchronized_groups" "my_sync_groups" {
+	depends_on    = [auth0_connection_directory.my_directory]
+	connection_id = auth0_connection.my_connection.id
+
+	groups {
+		id                   = "group1abc"
+		name                 = "Engineering"
+		email                = "engineering@example.com"
+		direct_members_count = 7
+	}
+	groups {
+		id = "group2def"
+	}
+}
+`
+
+const testAccDirectorySyncGroupsWithChangedMetadata = testAccDirectorySyncGroupsGivenAConnection + `
+resource "auth0_connection_directory_synchronized_groups" "my_sync_groups" {
+	depends_on    = [auth0_connection_directory.my_directory]
+	connection_id = auth0_connection.my_connection.id
+
+	groups {
+		id                   = "group1abc"
+		name                 = "Platform"
+		email                = "platform@example.com"
+		direct_members_count = 9
+	}
+	groups {
+		id = "group2def"
+	}
+}
+`
+
+const testAccDirectorySyncGroupsWithMetadataRemoved = testAccDirectorySyncGroupsGivenAConnection + `
+resource "auth0_connection_directory_synchronized_groups" "my_sync_groups" {
+	depends_on    = [auth0_connection_directory.my_directory]
+	connection_id = auth0_connection.my_connection.id
+
+	groups {
+		id = "group1abc"
+	}
+	groups {
+		id = "group2def"
+	}
+}
+`
+
+const testAccDirectorySyncGroupsWithEmptyEmail = testAccDirectorySyncGroupsGivenAConnection + `
+resource "auth0_connection_directory_synchronized_groups" "my_sync_groups" {
+	depends_on    = [auth0_connection_directory.my_directory]
+	connection_id = auth0_connection.my_connection.id
+
+	groups {
+		id                   = "group1abc"
+		name                 = ""
+		email                = ""
+		direct_members_count = 0
+	}
+	groups {
+		id = "group2def"
+	}
+}
+`
+
+// TestAccDirectorySynchronizedGroupsMetadata covers metadata as an input: it has to survive a refresh,
+// a change has to reach the API, and deleting it has to clear it.
+//
+// `groups` is a set, so checks name the whole element: an index would depend on the order the directory
+// returned. Only declared metadata is checked by value, since an undeclared field is not in state to
+// check. Clearing is proven instead by the empty-plan check each step ends on, which refreshes from the
+// API and would disagree with a configuration declaring no metadata.
+func TestAccDirectorySynchronizedGroupsMetadata(t *testing.T) {
+	const resourceName = "auth0_connection_directory_synchronized_groups.my_sync_groups"
+
+	groupWithoutMetadata := map[string]string{"id": "group2def"}
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDirectorySyncGroupsWithMetadata, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceName, "groups.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs(resourceName, "groups.*", map[string]string{
+						"id":                   "group1abc",
+						"name":                 "Engineering",
+						"email":                "engineering@example.com",
+						"direct_members_count": "7",
+					}),
+					resource.TestCheckTypeSetElemNestedAttrs(resourceName, "groups.*", groupWithoutMetadata),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDirectorySyncGroupsWithChangedMetadata, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceName, "groups.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs(resourceName, "groups.*", map[string]string{
+						"id":                   "group1abc",
+						"name":                 "Platform",
+						"email":                "platform@example.com",
+						"direct_members_count": "9",
+					}),
+					resource.TestCheckTypeSetElemNestedAttrs(resourceName, "groups.*", groupWithoutMetadata),
+				),
+			},
+			{
+				// An empty string is a declared value, not an omission, so it reaches the API and
+				// fails `email`'s format constraint. Clearing means deleting the line, not emptying
+				// it, and the error is left to the practitioner who asked for it.
+				Config:      acctest.ParseTestName(testAccDirectorySyncGroupsWithEmptyEmail, t.Name()),
+				ExpectError: regexp.MustCompile("didn't pass validation for format email"),
+			},
+			{
+				// Deleting the lines clears the values: the add that rewrites the group leaves the
+				// fields out of the payload. The empty plan this step ends on is what proves it.
+				Config: acctest.ParseTestName(testAccDirectorySyncGroupsWithMetadataRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceName, "groups.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs(resourceName, "groups.*", map[string]string{"id": "group1abc"}),
+					resource.TestCheckTypeSetElemNestedAttrs(resourceName, "groups.*", groupWithoutMetadata),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDirectorySyncGroupsDelete, t.Name()),
+			},
+		},
+	})
+}
+
+// TestAccDirectorySynchronizedGroupsDuplicate covers what the set cannot catch on its own: two blocks
+// naming the same group with different metadata are distinct elements, so the plan is refused.
+func TestAccDirectorySynchronizedGroupsDuplicate(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccDirectorySyncGroupsDuplicateGroup, t.Name()),
+				ExpectError: regexp.MustCompile("group \"group1abc\" is declared more than once in `groups`"),
+			},
+		},
+	})
+}
+
+const testAccDirectorySyncGroupsDuplicateGroup = testAccDirectorySyncGroupsGivenAConnection + `
+resource "auth0_connection_directory_synchronized_groups" "my_sync_groups" {
+	depends_on    = [auth0_connection_directory.my_directory]
+	connection_id = auth0_connection.my_connection.id
+
+	groups {
+		id = "group1abc"
+	}
+	groups {
+		id   = "group1abc"
+		name = "Engineering"
+	}
+}
+`
+
+// Each migration configuration below declares exactly one of `group_ids` and `groups`: `ConflictsWith`
+// rejects the attribute being present at all, so migrating means deleting the `group_ids` line.
 
 const testAccDirectorySyncGroupsMigrationFromGroupIDs = testAccDirectorySyncGroupsGivenAConnection + `
 resource "auth0_connection_directory_synchronized_groups" "my_sync_groups" {
@@ -316,13 +479,9 @@ resource "auth0_connection_directory_synchronized_groups" "my_sync_groups" {
 }
 `
 
-// TestAccDirectorySynchronizedGroupsMigration walks a practitioner from the deprecated `group_ids`
-// to `groups` and back, changing the IDs along the way: the same IDs, more, fewer, a disjoint set,
-// none at all, and growing from none.
-//
-// The assertion that matters most is the framework's own empty-plan check at each step. It proves
-// the migration converges, and that the Computed metadata settles, since a configuration declaring
-// only `id` has to match a state carrying the name, email and member count too.
+// TestAccDirectorySynchronizedGroupsMigration walks from the deprecated `group_ids` to `groups` and
+// back, changing the IDs along the way: the same IDs, more, fewer, a disjoint set, none, and growing
+// from none. The empty-plan check each step ends on is what proves the migration converges.
 func TestAccDirectorySynchronizedGroupsMigration(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -388,7 +547,7 @@ func TestAccDirectorySynchronizedGroupsMigration(t *testing.T) {
 			},
 			{
 				// Then groups (4,5) => neither attribute. This is how every group is unsynchronized
-				// while the resource stays managed, and why the schema uses `ConflictsWith`.
+				// while the resource stays managed.
 				Config: acctest.ParseTestName(testAccDirectorySyncGroupsMigrationToNoGroups, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection_directory_synchronized_groups.my_sync_groups", "group_ids.#", "0"),
@@ -403,8 +562,7 @@ func TestAccDirectorySynchronizedGroupsMigration(t *testing.T) {
 				),
 			},
 			{
-				// Finally groups (4,5) => group_ids (4,5). Migrating back has to be just as free,
-				// since nothing forces the move.
+				// Finally groups (4,5) => group_ids (4,5). Migrating back is just as free.
 				Config: acctest.ParseTestName(testAccDirectorySyncGroupsMigrationBackToGroupIDs, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection_directory_synchronized_groups.my_sync_groups", "group_ids.#", "2"),
@@ -420,7 +578,7 @@ func TestAccDirectorySynchronizedGroupsMigration(t *testing.T) {
 			},
 			{
 				// Emptying the deprecated attribute is not a way around the conflict: it has to be
-				// deleted. Pinned here because it is the first mistake a practitioner makes.
+				// deleted.
 				Config:      acctest.ParseTestName(testAccDirectorySyncGroupsEmptiedGroupIDsBesideGroups, t.Name()),
 				ExpectError: regexp.MustCompile(`conflicts with groups`),
 			},

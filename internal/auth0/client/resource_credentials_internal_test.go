@@ -115,10 +115,10 @@ func highestAttachedCount(rotationSteps []rotationStep, startingCount int) int {
 }
 
 func TestPlanCredentialRotation(t *testing.T) {
-	// removedCred/addedCred and the removals/additions builders below give every
-	// entry an explicit pem (and key_id, for a removal), so a case controls
-	// exactly whether credentialKeysMatch sees a collision instead of leaving it
-	// to fall out of both sides omitting pem.
+	// The removedCred/addedCred types and the removals/additions builders below
+	// give every entry an explicit pem (and key_id, for a removal), so a case
+	// controls exactly whether credentialKeysMatch sees a collision instead of
+	// leaving it to fall out of both sides omitting pem.
 	type removedCred struct {
 		id, pem, keyID string
 	}
@@ -169,16 +169,16 @@ func TestPlanCredentialRotation(t *testing.T) {
 			name: "full pool removes first even when the slot has room",
 			// The remaining pool records belong to other features. Creating first
 			// fails with "A client can have a maximum of 4 credentials".
-			toRemove: removals(removedCred{id: "old-1", pem: "pem-old-1"}),
-			toAdd:    additions(addedCred{name: "new-1", pem: "pem-new-1"}),
+			toRemove:      removals(removedCred{id: "old-1", pem: "pem-old-1"}),
+			toAdd:         additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			attachedCount: 1, poolCount: maxPoolCredentials,
 			expectedSteps:  "-old-1 +new-1",
 			expectedReason: "both counts are consulted, not just the slot",
 		},
 		{
-			name:     "room in both containers and different keys adds first",
-			toRemove: removals(removedCred{id: "old-1", pem: "pem-old-1"}),
-			toAdd:    additions(addedCred{name: "new-1", pem: "pem-new-1"}),
+			name:          "room in both containers and different keys adds first",
+			toRemove:      removals(removedCred{id: "old-1", pem: "pem-old-1"}),
+			toAdd:         additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			attachedCount: 1, poolCount: maxPoolCredentials - 1,
 			expectedSteps:  "+new-1 -old-1",
 			expectedReason: "a usable credential stays attached throughout the swap",
@@ -188,8 +188,8 @@ func TestPlanCredentialRotation(t *testing.T) {
 			// Same headroom as the case above, but the pair shares a key. The
 			// collision must override the headroom-driven add-first ordering, or
 			// the create is rejected as a duplicate key.
-			toRemove: removals(removedCred{id: "old-1", pem: "shared-pem"}),
-			toAdd:    additions(addedCred{name: "new-1", pem: "shared-pem"}),
+			toRemove:      removals(removedCred{id: "old-1", pem: "shared-pem"}),
+			toAdd:         additions(addedCred{name: "new-1", pem: "shared-pem"}),
 			attachedCount: 1, poolCount: maxPoolCredentials - 1,
 			expectedSteps:  "-old-1 +new-1",
 			expectedReason: "a same-key pair removes first even with headroom",
@@ -229,7 +229,7 @@ func TestPlanCredentialRotation(t *testing.T) {
 				removedCred{id: "old-1", pem: "pem-old-1"},
 				removedCred{id: "old-2", pem: "pem-old-2"},
 			),
-			toAdd: additions(addedCred{name: "new-1", pem: "pem-new-1"}),
+			toAdd:         additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			attachedCount: maxSlotCredentials, poolCount: 2,
 			expectedSteps: "-old-1 +new-1 -old-2",
 		},

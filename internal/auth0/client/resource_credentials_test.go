@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 	"github.com/stretchr/testify/require"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
@@ -514,6 +516,169 @@ func TestAccClientCredentialsPrivateKeyJWTFullRotation(t *testing.T) {
 						"name": "Testing Credentials 4",
 					}),
 				),
+			},
+		},
+	})
+}
+
+const testAccCreateCredentialForRenameSameKeyRegression = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "private_key_jwt"
+
+	private_key_jwt {
+		credentials {
+			name                   = "Credential A"
+			credential_type        = "public_key"
+			algorithm              = "RS256"
+			parse_expiry_from_cert = false
+			expires_at             = "2096-05-13T09:33:13.000Z"
+			pem                    = <<EOF
+%s
+EOF
+		}
+	}
+}
+`
+
+const testAccRenameCredentialSameKeyRegression = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "private_key_jwt"
+
+	private_key_jwt {
+		credentials {
+			name                   = "Credential B"
+			credential_type        = "public_key"
+			algorithm              = "RS256"
+			parse_expiry_from_cert = false
+			expires_at             = "2096-05-13T09:33:13.000Z"
+			pem                    = <<EOF
+%s
+EOF
+		}
+	}
+}
+`
+
+// findCredentialSetAttr locates the sole "private_key_jwt.0.credentials.<hash>.<attr>"
+// entry for a TypeSet with exactly one credential and returns its value. The hash
+// segment isn't predictable across applies, so callers can't address it by index.
+func findCredentialSetAttr(s *terraform.State, resourceName, attr string) (string, error) {
+	rs, ok := s.RootModule().Resources[resourceName]
+	if !ok {
+		return "", fmt.Errorf("resource %s not found in state", resourceName)
+	}
+
+	prefix := "private_key_jwt.0.credentials."
+	suffix := "." + attr
+	for key, value := range rs.Primary.Attributes {
+		if strings.HasPrefix(key, prefix) && strings.HasSuffix(key, suffix) {
+			return value, nil
+		}
+	}
+
+	return "", fmt.Errorf("no %s.*%s attribute found on %s", prefix, suffix, resourceName)
+}
+
+// TestAccClientCredentialsPrivateKeyJWTRenameWithSameKeyRotates is the regression
+// test for TFP-ESD-65375: renaming a private_key_jwt credential while keeping its
+// PEM identical must surface as a real plan change and a real detach+create
+// rotation against the live API, not be paired away into an empty diff by
+// classifyCredentialChanges. It also covers the single-credential slot/pool
+// collision this rotation exercises: with only one of two attached slots and one
+// of four pool slots used, the planner has headroom to add before removing, so
+// without planCredentialRotation's same-key collision guard this would 400 with
+// "credentials contains public keys that already exist in client" instead of
+// rotating cleanly.
+func TestAccClientCredentialsPrivateKeyJWTRenameWithSameKeyRotates(t *testing.T) {
+	credsCert, err := os.ReadFile("./../../../test/data/creds-cert-2.pem")
+	require.NoError(t, err)
+
+	var originalCredentialID, originalKeyID string
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccCreateCredentialForRenameSameKeyRegression, t.Name()), credsCert),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.#", "1"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "private_key_jwt.0.credentials.*", map[string]string{
+						"name": "Credential A",
+					}),
+					func(s *terraform.State) error {
+						id, err := findCredentialSetAttr(s, "auth0_client_credentials.test", "id")
+						if err != nil {
+							return err
+						}
+						originalCredentialID = id
+
+						keyID, err := findCredentialSetAttr(s, "auth0_client_credentials.test", "key_id")
+						if err != nil {
+							return err
+						}
+						originalKeyID = keyID
+
+						return nil
+					},
+				),
+			},
+			{
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccRenameCredentialSameKeyRegression, t.Name()), credsCert),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("auth0_client_credentials.test", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.#", "1"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "private_key_jwt.0.credentials.*", map[string]string{
+						"name": "Credential B",
+					}),
+					func(s *terraform.State) error {
+						id, err := findCredentialSetAttr(s, "auth0_client_credentials.test", "id")
+						if err != nil {
+							return err
+						}
+						if id == originalCredentialID {
+							return fmt.Errorf("expected the rename to detach the old credential and attach a new one, got the same credential ID %q as before the rename", id)
+						}
+
+						keyID, err := findCredentialSetAttr(s, "auth0_client_credentials.test", "key_id")
+						if err != nil {
+							return err
+						}
+						if keyID != originalKeyID {
+							return fmt.Errorf("expected the rotated credential to carry the same public key (key_id %q), got %q", originalKeyID, keyID)
+						}
+
+						return nil
+					},
+				),
+			},
+			{
+				// Confirms the rotation converged: re-applying the same config
+				// produces no further plan changes.
+				Config:   fmt.Sprintf(acctest.ParseTestName(testAccRenameCredentialSameKeyRegression, t.Name()), credsCert),
+				PlanOnly: true,
 			},
 		},
 	})

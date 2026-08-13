@@ -116,17 +116,28 @@ func highestAttachedCount(rotationSteps []rotationStep, startingCount int) int {
 }
 
 func TestPlanCredentialRotation(t *testing.T) {
-	removals := func(ids ...string) []interface{} {
-		entries := make([]interface{}, 0, len(ids))
-		for _, id := range ids {
-			entries = append(entries, map[string]interface{}{"id": id})
+	// The removedCred/addedCred types and the removals/additions builders below
+	// give every entry an explicit pem (and key_id, for a removal), so a case
+	// controls exactly whether credentialKeysMatch sees a collision instead of
+	// leaving it to fall out of both sides omitting pem.
+	type removedCred struct {
+		id, pem, keyID string
+	}
+	type addedCred struct {
+		name, pem string
+	}
+
+	removals := func(creds ...removedCred) []interface{} {
+		entries := make([]interface{}, 0, len(creds))
+		for _, c := range creds {
+			entries = append(entries, map[string]interface{}{"id": c.id, "pem": c.pem, "key_id": c.keyID})
 		}
 		return entries
 	}
-	additions := func(names ...string) []interface{} {
-		entries := make([]interface{}, 0, len(names))
-		for _, name := range names {
-			entries = append(entries, map[string]interface{}{"name": name})
+	additions := func(creds ...addedCred) []interface{} {
+		entries := make([]interface{}, 0, len(creds))
+		for _, c := range creds {
+			entries = append(entries, map[string]interface{}{"name": c.name, "pem": c.pem})
 		}
 		return entries
 	}
@@ -142,8 +153,16 @@ func TestPlanCredentialRotation(t *testing.T) {
 	}{
 		{
 			name: "swap of two at the slot cap removes before each add",
-			// Adding first here would ask the slot to hold 3.
-			toRemove: removals("old-1", "old-2"), toAdd: additions("new-1", "new-2"),
+			// Adding first here would ask the slot to hold 3. Neither pair shares a
+			// key, so this is the cap forcing remove-first, not a collision.
+			toRemove: removals(
+				removedCred{id: "old-1", pem: "pem-old-1"},
+				removedCred{id: "old-2", pem: "pem-old-2"},
+			),
+			toAdd: additions(
+				addedCred{name: "new-1", pem: "pem-new-1"},
+				addedCred{name: "new-2", pem: "pem-new-2"},
+			),
 			attachedCount: maxSlotCredentials, poolCount: 2,
 			expectedSteps: "-old-1 +new-1 -old-2 +new-2",
 		},
@@ -151,44 +170,83 @@ func TestPlanCredentialRotation(t *testing.T) {
 			name: "full pool removes first even when the slot has room",
 			// The remaining pool records belong to other features. Creating first
 			// fails with "A client can have a maximum of 4 credentials".
-			toRemove: removals("old-1"), toAdd: additions("new-1"),
+			toRemove:      removals(removedCred{id: "old-1", pem: "pem-old-1"}),
+			toAdd:         additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			attachedCount: 1, poolCount: maxPoolCredentials,
 			expectedSteps:  "-old-1 +new-1",
 			expectedReason: "both counts are consulted, not just the slot",
 		},
 		{
-			name:     "room in both containers adds first",
-			toRemove: removals("old-1"), toAdd: additions("new-1"),
+			name:          "room in both containers and different keys adds first",
+			toRemove:      removals(removedCred{id: "old-1", pem: "pem-old-1"}),
+			toAdd:         additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			attachedCount: 1, poolCount: maxPoolCredentials - 1,
 			expectedSteps:  "+new-1 -old-1",
 			expectedReason: "a usable credential stays attached throughout the swap",
 		},
 		{
+			name: "room in both containers but the same pem removes first",
+			// Same headroom as the case above, but the pair shares a key. The
+			// collision must override the headroom-driven add-first ordering, or
+			// the create is rejected as a duplicate key.
+			toRemove:      removals(removedCred{id: "old-1", pem: "shared-pem"}),
+			toAdd:         additions(addedCred{name: "new-1", pem: "shared-pem"}),
+			attachedCount: 1, poolCount: maxPoolCredentials - 1,
+			expectedSteps:  "-old-1 +new-1",
+			expectedReason: "a same-key pair removes first even with headroom",
+		},
+		{
+			name: "mixed pairs: the matching pair removes first, the mismatched pair still adds first",
+			// Two independent pairs with headroom throughout: the first pair
+			// shares a key and must remove first despite the headroom, the second
+			// pair doesn't and adds first as usual. Each pair's ordering is
+			// decided on its own, not by whatever the previous pair did.
+			toRemove: removals(
+				removedCred{id: "old-1", pem: "shared-pem"},
+				removedCred{id: "old-2", pem: "pem-old-2"},
+			),
+			toAdd: additions(
+				addedCred{name: "new-1", pem: "shared-pem"},
+				addedCred{name: "new-2", pem: "pem-new-2"},
+			),
+			attachedCount: 1, poolCount: 1,
+			expectedSteps:  "-old-1 +new-1 +new-2 -old-2",
+			expectedReason: "collision is decided per pair, independent of neighboring pairs",
+		},
+		{
 			name:          "pure addition",
-			toAdd:         additions("new-1"),
+			toAdd:         additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			expectedSteps: "+new-1",
 		},
 		{
 			name:          "pure removal",
-			toRemove:      removals("old-1"),
+			toRemove:      removals(removedCred{id: "old-1", pem: "pem-old-1"}),
 			attachedCount: 1, poolCount: 1,
 			expectedSteps: "-old-1",
 		},
 		{
-			name:     "more removals than additions pairs one, then trails the rest",
-			toRemove: removals("old-1", "old-2"), toAdd: additions("new-1"),
+			name: "more removals than additions pairs one, then trails the rest",
+			toRemove: removals(
+				removedCred{id: "old-1", pem: "pem-old-1"},
+				removedCred{id: "old-2", pem: "pem-old-2"},
+			),
+			toAdd:         additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			attachedCount: maxSlotCredentials, poolCount: 2,
 			expectedSteps: "-old-1 +new-1 -old-2",
 		},
 		{
 			name:     "more additions than removals pairs one, then trails the rest",
-			toRemove: removals("old-1"), toAdd: additions("new-1", "new-2"),
+			toRemove: removals(removedCred{id: "old-1", pem: "pem-old-1"}),
+			toAdd: additions(
+				addedCred{name: "new-1", pem: "pem-new-1"},
+				addedCred{name: "new-2", pem: "pem-new-2"},
+			),
 			attachedCount: 1, poolCount: 1,
 			expectedSteps: "+new-1 -old-1 +new-2",
 		},
 		{
 			name:          "a removal without an ID is skipped",
-			toRemove:      removals(""),
+			toRemove:      removals(removedCred{id: "", pem: "pem-old-1"}),
 			attachedCount: 1, poolCount: 1,
 			expectedSteps: "",
 		},
@@ -248,6 +306,109 @@ func credentialsDataWithState(t *testing.T, attributes map[string]interface{}) *
 	require.Equal(t, "test-client-id", data.Id())
 
 	return data
+}
+
+func TestPlanCredentialRotation_HeadroomButSameKeyRemovesFirst(t *testing.T) {
+	// A 1-for-1 rename (or algorithm change) on a client holding a single
+	// credential, where the new entry carries the SAME public key as the one
+	// being replaced. Despite headroom below the cap, the removal must go
+	// first: the API rejects creating a credential whose key already exists
+	// on the client, so add-first would 400.
+	diff := credentialDiff{
+		toRemove: []interface{}{
+			map[string]interface{}{"id": "old-1", "pem": "same-pem", "key_id": "kid-1"},
+		},
+		toAdd: []interface{}{
+			map[string]interface{}{"name": "new-1", "pem": "same-pem"},
+		},
+	}
+
+	const startingAttachedCount = 1
+	const startingPoolCount = 1
+	rotationSteps := planCredentialRotation(diff, startingAttachedCount, startingPoolCount)
+
+	require.Len(t, rotationSteps, 2)
+	assert.Equal(t, detachAndDelete, rotationSteps[0].kind)
+	assert.Equal(t, "old-1", rotationSteps[0].credentialID)
+	assert.Equal(t, createAndAttach, rotationSteps[1].kind)
+	assert.Equal(t, "new-1", rotationSteps[1].newCredential["name"])
+}
+
+func TestPlanCredentialRotation_HeadroomButSameKeyViaThumbprintRemovesFirst(t *testing.T) {
+	// Same as above, but the removed credential has no PEM in state (e.g. it
+	// was adopted from a CLI-created credential) and the match is made via
+	// JWK thumbprint against key_id instead of a literal PEM comparison.
+	spkiPEM, _, _ := generateTestRSAPEMs(t)
+	kid := jwkThumbprint(spkiPEM)
+	require.NotEmpty(t, kid)
+
+	diff := credentialDiff{
+		toRemove: []interface{}{
+			map[string]interface{}{"id": "old-1", "pem": "", "key_id": kid},
+		},
+		toAdd: []interface{}{
+			map[string]interface{}{"name": "new-1", "pem": spkiPEM},
+		},
+	}
+
+	rotationSteps := planCredentialRotation(diff, 1, 1)
+
+	require.Len(t, rotationSteps, 2)
+	assert.Equal(t, detachAndDelete, rotationSteps[0].kind)
+	assert.Equal(t, createAndAttach, rotationSteps[1].kind)
+}
+
+func TestPlanCredentialRotation_HeadroomDifferentKeyAddsFirst(t *testing.T) {
+	// Sanity check that the collision guard doesn't over-trigger: a genuine
+	// key rotation (different PEM, no key_id match) on a single-credential
+	// client should still add-first as before.
+	diff := credentialDiff{
+		toRemove: []interface{}{
+			map[string]interface{}{"id": "old-1", "pem": "old-pem", "key_id": "kid-old"},
+		},
+		toAdd: []interface{}{
+			map[string]interface{}{"name": "new-1", "pem": "new-pem"},
+		},
+	}
+
+	rotationSteps := planCredentialRotation(diff, 1, 1)
+
+	require.Len(t, rotationSteps, 2)
+	assert.Equal(t, createAndAttach, rotationSteps[0].kind)
+	assert.Equal(t, detachAndDelete, rotationSteps[1].kind)
+}
+
+func TestPlanCredentialRotation_HandlesUnevenAndPureChanges(t *testing.T) {
+	pureAdditionSteps := planCredentialRotation(credentialDiff{
+		toAdd: []interface{}{map[string]interface{}{"name": "new-1"}},
+	}, 0, 0)
+	require.Len(t, pureAdditionSteps, 1)
+	assert.Equal(t, createAndAttach, pureAdditionSteps[0].kind)
+
+	pureRemovalSteps := planCredentialRotation(credentialDiff{
+		toRemove: []interface{}{map[string]interface{}{"id": "old-1"}},
+	}, 1, 1)
+	require.Len(t, pureRemovalSteps, 1)
+	assert.Equal(t, detachAndDelete, pureRemovalSteps[0].kind)
+
+	// More removals than additions, starting at capacity: one interleaved pair
+	// (remove-first), then a trailing removal.
+	moreRemovalsThanAdditionsSteps := planCredentialRotation(credentialDiff{
+		toRemove: []interface{}{
+			map[string]interface{}{"id": "old-1"},
+			map[string]interface{}{"id": "old-2"},
+		},
+		toAdd: []interface{}{
+			map[string]interface{}{"name": "new-1"},
+		},
+	}, maxSlotCredentials, 2)
+	require.Len(t, moreRemovalsThanAdditionsSteps, 3)
+	assert.Equal(t, detachAndDelete, moreRemovalsThanAdditionsSteps[0].kind)
+	assert.Equal(t, "old-1", moreRemovalsThanAdditionsSteps[0].credentialID)
+	assert.Equal(t, createAndAttach, moreRemovalsThanAdditionsSteps[1].kind)
+	assert.Equal(t, "new-1", moreRemovalsThanAdditionsSteps[1].newCredential["name"])
+	assert.Equal(t, detachAndDelete, moreRemovalsThanAdditionsSteps[2].kind)
+	assert.Equal(t, "old-2", moreRemovalsThanAdditionsSteps[2].credentialID)
 }
 
 func TestStateCredentialIDs_ReadsOnlyTheRequestedSlot(t *testing.T) {
@@ -507,6 +668,101 @@ func TestCredentialChanges_IgnoresUnchangedSetOnUnrelatedApply(t *testing.T) {
 	diff := credentialChanges(data, "private_key_jwt.0.credentials")
 	assert.Empty(t, planCredentialRotation(diff, 1, 2),
 		"an unchanged credential set must not create a duplicate credential")
+}
+
+// The ESD-65375 bug itself: a rename (name changes, key material does not) must
+// surface as a real add/remove pair for planCredentialRotation to act on, not
+// be paired away by classifyCredentialChanges and silently dropped.
+func TestCredentialChanges_RenameWithLiteralPEMMatchSurfacesAddRemovePair(t *testing.T) {
+	_, _, certPEM := generateTestRSAPEMs(t)
+
+	data := diffData(t,
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"id": "cred-pkjwt", "name": "A", "credential_type": "public_key",
+				"pem": certPEM, "algorithm": "RS256",
+			}),
+		},
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"name": "B", "credential_type": "public_key", "pem": certPEM, "algorithm": "RS256",
+			}),
+		},
+	)
+
+	diff := credentialChanges(data, "private_key_jwt.0.credentials")
+
+	require.Len(t, diff.toAdd, 1, "the renamed entry must surface as a real addition")
+	require.Len(t, diff.toRemove, 1, "the stale entry must surface as a real removal")
+	assert.Equal(t, "cred-pkjwt", diff.toRemove[0].(map[string]interface{})["id"])
+	assert.Equal(t, "B", diff.toAdd[0].(map[string]interface{})["name"])
+}
+
+// Same bug, but via the thumbprint path: the removed entry's pem is blank in
+// state (e.g. adopted from a CLI-created credential), so the match against the
+// renamed addition can only be made through key_id/jwkThumbprint.
+func TestCredentialChanges_RenameWithThumbprintMatchOnEmptyPEMSurfacesAddRemovePair(t *testing.T) {
+	spkiPEM, _, _ := generateTestRSAPEMs(t)
+	kid := jwkThumbprint(spkiPEM)
+	require.NotEmpty(t, kid)
+
+	data := diffData(t,
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"id": "cred-pkjwt", "name": "A", "credential_type": "public_key",
+				"pem": "", "key_id": kid, "algorithm": "RS256",
+			}),
+		},
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"name": "B", "credential_type": "public_key", "pem": spkiPEM, "algorithm": "RS256",
+			}),
+		},
+	)
+
+	diff := credentialChanges(data, "private_key_jwt.0.credentials")
+
+	require.Len(t, diff.toAdd, 1, "the renamed entry must surface as a real addition")
+	require.Len(t, diff.toRemove, 1, "the stale entry must surface as a real removal")
+	assert.Equal(t, "cred-pkjwt", diff.toRemove[0].(map[string]interface{})["id"])
+	assert.Equal(t, "B", diff.toAdd[0].(map[string]interface{})["name"])
+}
+
+// No-regression case: identical name and PEM must still cancel out to an empty
+// diff, matching the existing cancel-and-do-nothing behaviour.
+func TestCredentialChanges_SameNameAndPEMProducesEmptyDiff(t *testing.T) {
+	_, _, certPEM := generateTestRSAPEMs(t)
+
+	data := diffData(t,
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"id": "cred-pkjwt", "name": "A", "credential_type": "public_key",
+				"pem": certPEM, "algorithm": "RS256",
+			}),
+		},
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"name": "A", "credential_type": "public_key", "pem": certPEM, "algorithm": "RS256",
+			}),
+		},
+	)
+
+	diff := credentialChanges(data, "private_key_jwt.0.credentials")
+
+	assert.Empty(t, diff.toAdd, "nothing changed, so nothing should be added")
+	assert.Empty(t, diff.toRemove, "nothing changed, so nothing should be removed")
 }
 
 func TestFilterOwnedCredentials(t *testing.T) {

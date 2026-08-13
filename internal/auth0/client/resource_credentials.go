@@ -342,9 +342,6 @@ const maxPoolCredentials = 4
 // removed entry's key_id.
 func credentialKeysMatch(removeMap, addMap map[string]interface{}) bool {
 	addPEM, _ := addMap["pem"].(string)
-	if addPEM == "" {
-		return false
-	}
 
 	rmPEM, _ := removeMap["pem"].(string)
 	if rmPEM == addPEM {
@@ -352,7 +349,7 @@ func credentialKeysMatch(removeMap, addMap map[string]interface{}) bool {
 	}
 
 	rmKeyID, _ := removeMap["key_id"].(string)
-	if rmPEM == "" && rmKeyID != "" {
+	if rmPEM == "" && rmKeyID != "" && addPEM != "" {
 		return jwkThumbprint(addPEM) == rmKeyID
 	}
 	return false

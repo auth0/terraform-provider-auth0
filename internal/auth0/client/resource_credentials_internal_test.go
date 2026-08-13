@@ -115,17 +115,28 @@ func highestAttachedCount(rotationSteps []rotationStep, startingCount int) int {
 }
 
 func TestPlanCredentialRotation(t *testing.T) {
-	removals := func(ids ...string) []interface{} {
-		entries := make([]interface{}, 0, len(ids))
-		for _, id := range ids {
-			entries = append(entries, map[string]interface{}{"id": id})
+	// removedCred/addedCred and the removals/additions builders below give every
+	// entry an explicit pem (and key_id, for a removal), so a case controls
+	// exactly whether credentialKeysMatch sees a collision instead of leaving it
+	// to fall out of both sides omitting pem.
+	type removedCred struct {
+		id, pem, keyID string
+	}
+	type addedCred struct {
+		name, pem string
+	}
+
+	removals := func(creds ...removedCred) []interface{} {
+		entries := make([]interface{}, 0, len(creds))
+		for _, c := range creds {
+			entries = append(entries, map[string]interface{}{"id": c.id, "pem": c.pem, "key_id": c.keyID})
 		}
 		return entries
 	}
-	additions := func(names ...string) []interface{} {
-		entries := make([]interface{}, 0, len(names))
-		for _, name := range names {
-			entries = append(entries, map[string]interface{}{"name": name})
+	additions := func(creds ...addedCred) []interface{} {
+		entries := make([]interface{}, 0, len(creds))
+		for _, c := range creds {
+			entries = append(entries, map[string]interface{}{"name": c.name, "pem": c.pem})
 		}
 		return entries
 	}
@@ -141,8 +152,16 @@ func TestPlanCredentialRotation(t *testing.T) {
 	}{
 		{
 			name: "swap of two at the slot cap removes before each add",
-			// Adding first here would ask the slot to hold 3.
-			toRemove: removals("old-1", "old-2"), toAdd: additions("new-1", "new-2"),
+			// Adding first here would ask the slot to hold 3. Neither pair shares a
+			// key, so this is the cap forcing remove-first, not a collision.
+			toRemove: removals(
+				removedCred{id: "old-1", pem: "pem-old-1"},
+				removedCred{id: "old-2", pem: "pem-old-2"},
+			),
+			toAdd: additions(
+				addedCred{name: "new-1", pem: "pem-new-1"},
+				addedCred{name: "new-2", pem: "pem-new-2"},
+			),
 			attachedCount: maxSlotCredentials, poolCount: 2,
 			expectedSteps: "-old-1 +new-1 -old-2 +new-2",
 		},
@@ -150,44 +169,83 @@ func TestPlanCredentialRotation(t *testing.T) {
 			name: "full pool removes first even when the slot has room",
 			// The remaining pool records belong to other features. Creating first
 			// fails with "A client can have a maximum of 4 credentials".
-			toRemove: removals("old-1"), toAdd: additions("new-1"),
+			toRemove: removals(removedCred{id: "old-1", pem: "pem-old-1"}),
+			toAdd:    additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			attachedCount: 1, poolCount: maxPoolCredentials,
 			expectedSteps:  "-old-1 +new-1",
 			expectedReason: "both counts are consulted, not just the slot",
 		},
 		{
-			name:     "room in both containers adds first",
-			toRemove: removals("old-1"), toAdd: additions("new-1"),
+			name:     "room in both containers and different keys adds first",
+			toRemove: removals(removedCred{id: "old-1", pem: "pem-old-1"}),
+			toAdd:    additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			attachedCount: 1, poolCount: maxPoolCredentials - 1,
 			expectedSteps:  "+new-1 -old-1",
 			expectedReason: "a usable credential stays attached throughout the swap",
 		},
 		{
+			name: "room in both containers but the same pem removes first",
+			// Same headroom as the case above, but the pair shares a key. The
+			// collision must override the headroom-driven add-first ordering, or
+			// the create is rejected as a duplicate key.
+			toRemove: removals(removedCred{id: "old-1", pem: "shared-pem"}),
+			toAdd:    additions(addedCred{name: "new-1", pem: "shared-pem"}),
+			attachedCount: 1, poolCount: maxPoolCredentials - 1,
+			expectedSteps:  "-old-1 +new-1",
+			expectedReason: "a same-key pair removes first even with headroom",
+		},
+		{
+			name: "mixed pairs: the matching pair removes first, the mismatched pair still adds first",
+			// Two independent pairs with headroom throughout: the first pair
+			// shares a key and must remove first despite the headroom, the second
+			// pair doesn't and adds first as usual. Each pair's ordering is
+			// decided on its own, not by whatever the previous pair did.
+			toRemove: removals(
+				removedCred{id: "old-1", pem: "shared-pem"},
+				removedCred{id: "old-2", pem: "pem-old-2"},
+			),
+			toAdd: additions(
+				addedCred{name: "new-1", pem: "shared-pem"},
+				addedCred{name: "new-2", pem: "pem-new-2"},
+			),
+			attachedCount: 1, poolCount: 1,
+			expectedSteps:  "-old-1 +new-1 +new-2 -old-2",
+			expectedReason: "collision is decided per pair, independent of neighboring pairs",
+		},
+		{
 			name:          "pure addition",
-			toAdd:         additions("new-1"),
+			toAdd:         additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			expectedSteps: "+new-1",
 		},
 		{
 			name:          "pure removal",
-			toRemove:      removals("old-1"),
+			toRemove:      removals(removedCred{id: "old-1", pem: "pem-old-1"}),
 			attachedCount: 1, poolCount: 1,
 			expectedSteps: "-old-1",
 		},
 		{
-			name:     "more removals than additions pairs one, then trails the rest",
-			toRemove: removals("old-1", "old-2"), toAdd: additions("new-1"),
+			name: "more removals than additions pairs one, then trails the rest",
+			toRemove: removals(
+				removedCred{id: "old-1", pem: "pem-old-1"},
+				removedCred{id: "old-2", pem: "pem-old-2"},
+			),
+			toAdd: additions(addedCred{name: "new-1", pem: "pem-new-1"}),
 			attachedCount: maxSlotCredentials, poolCount: 2,
 			expectedSteps: "-old-1 +new-1 -old-2",
 		},
 		{
 			name:     "more additions than removals pairs one, then trails the rest",
-			toRemove: removals("old-1"), toAdd: additions("new-1", "new-2"),
+			toRemove: removals(removedCred{id: "old-1", pem: "pem-old-1"}),
+			toAdd: additions(
+				addedCred{name: "new-1", pem: "pem-new-1"},
+				addedCred{name: "new-2", pem: "pem-new-2"},
+			),
 			attachedCount: 1, poolCount: 1,
 			expectedSteps: "+new-1 -old-1 +new-2",
 		},
 		{
 			name:          "a removal without an ID is skipped",
-			toRemove:      removals(""),
+			toRemove:      removals(removedCred{id: "", pem: "pem-old-1"}),
 			attachedCount: 1, poolCount: 1,
 			expectedSteps: "",
 		},

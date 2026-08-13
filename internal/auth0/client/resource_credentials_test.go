@@ -1596,6 +1596,38 @@ EOF
 }
 `
 
+// Zero grants blocks and an empty ip_allowlist. Both are the documented way to
+// clear those fields without tearing the worker down, so both must stay
+// expressible: grants is Optional precisely so MinItems: 1 is not synthesized.
+const testAccClearTokenVaultPrivilegedAccessAllowlistAndGrants = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "client_secret_post"
+
+	token_vault_privileged_access {
+		credentials {
+			name            = "Token Vault Credentials 2"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			pem             = <<EOF
+%s
+EOF
+		}
+
+		ip_allowlist = []
+	}
+}
+`
+
 const testAccRemoveTokenVaultPrivilegedAccess = `
 resource "auth0_client" "my_client" {
 	name     = "Acceptance Test - Client Credentials - {{.testName}}"
@@ -1820,6 +1852,19 @@ func TestAccClientCredentialsTokenVaultPrivilegedAccess(t *testing.T) {
 						"name": "Token Vault Credentials 2",
 					}),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.0.key_id"),
+				),
+			},
+			{
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccClearTokenVaultPrivilegedAccessAllowlistAndGrants, t.Name()), credsCert2),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("auth0_client_credentials.test", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.ip_allowlist.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.grants.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.#", "1"),
 				),
 			},
 			{

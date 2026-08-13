@@ -321,8 +321,11 @@ Read-Only:
 Required:
 
 - `credentials` (Block Set, Min: 1, Max: 2) Credentials the privileged worker may authenticate with. A maximum of 2 client credentials can be set. (see [below for nested schema](#nestedblock--token_vault_privileged_access--credentials))
-- `grants` (Block Set, Min: 1, Max: 5) Pins the connections, and the scopes within them, that the privileged worker may request tokens for. A maximum of 5 grants can be set, with a maximum of 20 scopes in total across all of them. Set to an empty list to clear the grants already configured. (see [below for nested schema](#nestedblock--token_vault_privileged_access--grants))
 - `ip_allowlist` (Set of String) Permitted IPv4 or IPv6 addresses, or CIDR ranges, from which the privileged worker may request tokens. A maximum of 10 entries can be set. Set to an empty list to clear the entries already configured.
+
+Optional:
+
+- `grants` (Block Set, Max: 5) Pins the connections, and the scopes within them, that the privileged worker may request tokens for. A maximum of 5 grants can be set, with a maximum of 20 scopes in total across all of them. Omit every `grants` block to clear the grants already configured. (see [below for nested schema](#nestedblock--token_vault_privileged_access--grants))
 
 <a id="nestedblock--token_vault_privileged_access--credentials"></a>
 ### Nested Schema for `token_vault_privileged_access.credentials`

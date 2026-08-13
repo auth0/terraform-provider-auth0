@@ -591,19 +591,26 @@ func NewCredentialsResource() *schema.Resource {
 							MaxItems: 10,
 							Description: "Permitted IPv4 or IPv6 addresses, or CIDR ranges, from which the " +
 								"privileged worker may request tokens. A maximum of 10 entries can be set. " +
-								"Set to an empty list to clear the entries already configured.",
+								"Set to `[]` to clear the entries already configured.",
 							Elem: &schema.Schema{
 								Type:         schema.TypeString,
 								ValidateFunc: validateIPAddressOrCIDR,
 							},
 						},
 						"grants": {
-							Type:     schema.TypeSet,
-							Required: true,
+							Type: schema.TypeSet,
+							// Optional rather than Required, even though the API demands the
+							// field on every write. helper/schema has no "required" flag for a
+							// nested block, so it fakes one by deriving MinItems: 1, and that
+							// makes declaring zero grants impossible. Since the API accepts an
+							// empty array as the way to clear them, that has to stay
+							// expressible. Omitting the block entirely is equivalent to
+							// clearing it; the expander sends [] either way.
+							Optional: true,
 							MaxItems: 5,
 							Description: "Pins the connections, and the scopes within them, that the privileged " +
 								"worker may request tokens for. A maximum of 5 grants can be set, with a maximum " +
-								"of 20 scopes in total across all of them. Set to an empty list to clear the " +
+								"of 20 scopes in total across all of them. Omit every `grants` block to clear the " +
 								"grants already configured.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{

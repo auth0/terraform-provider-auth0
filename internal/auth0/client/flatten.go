@@ -850,6 +850,15 @@ func flattenClientCredentials(ctx context.Context, api *management.Management, d
 		data.Set("signed_request_object", signedRequestObject),
 	)
 
+	tokenVaultPrivilegedAccess, err := flattenTokenVaultPrivilegedAccess(
+		ctx, api, data, client.GetTokenVaultPrivilegedAccess(),
+	)
+	result = multierror.Append(
+		result,
+		err,
+		data.Set("token_vault_privileged_access", tokenVaultPrivilegedAccess),
+	)
+
 	if v, ok := data.GetOk("client_secret_wo_version"); ok {
 		result = multierror.Append(result, data.Set("client_secret_wo_version", v))
 	} else {
@@ -1001,6 +1010,49 @@ func flattenSignedRequestObject(
 	return nil, nil
 }
 
+// flattenTokenVaultPrivilegedAccess maps the Token Vault privileged access object
+// into state.
+func flattenTokenVaultPrivilegedAccess(
+	ctx context.Context,
+	api *management.Management,
+	data *schema.ResourceData,
+	tokenVault *management.ClientTokenVaultPrivilegedAccess,
+) ([]interface{}, error) {
+	if tokenVault == nil {
+		return nil, nil
+	}
+
+	// A privileged worker the resource does not declare belongs to whoever set it
+	// up. Leave it out of state so we never rotate or delete its credentials.
+	if !credentialBlockDeclared(data, "token_vault_privileged_access") {
+		return nil, nil
+	}
+
+	credentials, err := flattenCredentials(
+		ctx, api, data, true, "token_vault_privileged_access",
+		tokenVault.GetCredentials(),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	grants := make([]interface{}, 0, len(tokenVault.GetGrants()))
+	for _, grant := range tokenVault.GetGrants() {
+		grants = append(grants, map[string]interface{}{
+			"connection": grant.GetConnection(),
+			"scopes":     grant.GetScopes(),
+		})
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"credentials":  credentials,
+			"ip_allowlist": tokenVault.GetIPAllowlist(),
+			"grants":       grants,
+		},
+	}, nil
+}
+
 func flattenCredentials(
 	ctx context.Context,
 	api *management.Management,
@@ -1057,7 +1109,10 @@ func flattenCredentials(
 			stateCredential["algorithm"] = credential.GetAlgorithm()
 			stateCredential["key_id"] = credential.GetKeyID()
 
-			if isResource && attribute == "private_key_jwt" {
+			// Both of these attributes hold credentials in a TypeSet, whose element
+			// indexes are hashes rather than positions, so the credential has to be
+			// found by identity instead of by index.
+			if isResource && (attribute == "private_key_jwt" || attribute == "token_vault_privileged_access") {
 				statePEM, parseExpiry := findCredentialInState(data, attribute, credential.GetID())
 				if statePEM == "" {
 					statePEM, parseExpiry = findCredentialInStateByName(data, attribute, credential.GetName())

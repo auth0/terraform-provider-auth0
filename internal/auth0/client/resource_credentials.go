@@ -66,6 +66,11 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 			return diagnostics
 		}
 	}
+	if data.GetRawConfig().GetAttr("token_vault_privileged_access").LengthInt() > 0 {
+		if diagnostics := createTokenVaultPrivilegedAccess(ctx, api, data); diagnostics.HasError() {
+			return diagnostics
+		}
+	}
 
 	return readClientCredentials(ctx, data, meta)
 }
@@ -112,7 +117,7 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 
 				// Delete only what this resource owns. The rest of the pool
 				// belongs to another slot or to none, and was created elsewhere.
-				ownedIDs := ownedCredentialIDs(data)
+				ownedIDs := detachedCredentialIDs(data)
 				for _, cred := range credentials {
 					if !ownedIDs[cred.GetID()] {
 						continue
@@ -150,6 +155,11 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 			return diagnostics
 		}
 	}
+	// Unlike the blocks above, this runs even when the block is absent from the
+	// configuration, because removing it is what triggers the teardown.
+	if diagnostics := modifyTokenVaultPrivilegedAccess(ctx, api, data); diagnostics.HasError() {
+		return diagnostics
+	}
 
 	return readClientCredentials(ctx, data, meta)
 }
@@ -185,6 +195,26 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 			credentialBlockDeclared(data, "signed_request_object"),
 		); err != nil {
 			return diag.FromErr(err)
+		}
+
+		// The token_vault_privileged_access block is a separate field from the ones
+		// the detach above clears, and a credential cannot be deleted while it is
+		// still attached. Without this the destroy would wedge: every owned credential
+		// would fail to delete and the warning path below would be the only outcome.
+		// Removing the whole object is right because this resource owns the block
+		// when it declares it, and there is no partial form the API accepts.
+		//
+		// The gate is the credential IDs in state rather than credentialBlockDeclared,
+		// which defaults to declared when it has no raw value to read. State upgraded
+		// from a provider version that predates this attribute holds null for it, not
+		// an empty list, so that default would fire here and PATCH the field on every
+		// destroy — failing with 403 on the tenants that have no entitlement for it.
+		// Credential IDs are positive evidence: the block requires at least one
+		// credential, so an empty list means this resource never attached a worker.
+		if len(stateCredentialIDs(data, "token_vault_privileged_access")) > 0 {
+			if err := removeTokenVaultPrivilegedAccess(ctx, api, client.GetClientID()); err != nil {
+				return diag.FromErr(err)
+			}
 		}
 
 		// Delete only what this resource owns. The rest of the pool was created
@@ -568,6 +598,7 @@ var credentialBearingAttributes = []string{
 	"tls_client_auth",
 	"self_signed_tls_client_auth",
 	"signed_request_object",
+	"token_vault_privileged_access",
 }
 
 // credentialBlockDeclared reports whether this resource declares the named
@@ -637,6 +668,36 @@ func ownedCredentialIDs(data *schema.ResourceData) map[string]bool {
 	}
 
 	return ownedIDs
+}
+
+// detachedCredentialIDs returns the credentials this resource owns that the
+// authentication-method detach actually releases.
+//
+// It is ownedCredentialIDs minus token_vault_privileged_access. That block is a
+// field of its own, untouched by detachClientCredentials, so its credentials are
+// still attached when the switch-away deletion runs. The API refuses to delete an
+// attached credential, and unlike the destroy path there is no warning branch
+// here: the error aborts the update after the detach has already landed, leaving
+// the client without its previous authentication method and every retry failing
+// the same way.
+//
+// Removing the worker instead would be wrong. The block is still in the
+// configuration; only the authentication method changed, and the two are
+// independent features.
+func detachedCredentialIDs(data *schema.ResourceData) map[string]bool {
+	tokenVaultIDs := make(map[string]bool)
+	for _, credentialID := range stateCredentialIDs(data, "token_vault_privileged_access") {
+		tokenVaultIDs[credentialID] = true
+	}
+
+	detachedIDs := make(map[string]bool)
+	for credentialID := range ownedCredentialIDs(data) {
+		if !tokenVaultIDs[credentialID] {
+			detachedIDs[credentialID] = true
+		}
+	}
+
+	return detachedIDs
 }
 
 // stateCredentialIDs returns the credential IDs recorded in state for one
@@ -973,6 +1034,155 @@ func expandClientCredentialFromMap(m map[string]interface{}) *management.Credent
 	return credential
 }
 
+// createTokenVaultPrivilegedAccess creates the block's credentials in the pool,
+// then attaches them alongside the rest of the object.
+//
+// The credentials are created first and attached by reference because PATCH
+// /clients/{id} takes only credential IDs. POST /clients does accept inline
+// credential material, but this resource always operates on a client that already
+// exists, so that path is unreachable here.
+func createTokenVaultPrivilegedAccess(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
+	rawConfig := data.GetRawConfig()
+
+	tokenVault := expandTokenVaultPrivilegedAccess(rawConfig)
+	if tokenVault == nil {
+		return nil
+	}
+
+	clientID := data.Get("client_id").(string)
+	credentials := expandTokenVaultPrivilegedAccessCredentials(rawConfig)
+
+	credentialsToAttach := make([]management.Credential, 0, len(credentials))
+	for _, credential := range credentials {
+		// Roll back on a failed create as well as a failed attach: the credentials
+		// already in the pool would otherwise linger unattached and consume slots on
+		// every later apply.
+		if err := api.Client.CreateCredential(ctx, clientID, credential); err != nil {
+			return diag.FromErr(rollbackCreatedCredentials(ctx, api, clientID, credentialsToAttach, err))
+		}
+
+		credentialsToAttach = append(credentialsToAttach, management.Credential{ID: credential.ID})
+	}
+
+	if err := attachTokenVaultPrivilegedAccessCredentials(ctx, api, clientID, tokenVault, credentialsToAttach); err != nil {
+		return diag.FromErr(rollbackCreatedCredentials(ctx, api, clientID, credentialsToAttach, err))
+	}
+
+	return nil
+}
+
+// modifyTokenVaultPrivilegedAccess reconciles the Token Vault privileged access
+// block on update.
+//
+// Credential changes reuse the same rotation planner as private_key_jwt, so the
+// pool cap is respected and each intermediate state stays valid. Every write
+// carries the full object because the API rejects a partial one, which also means
+// a change confined to ip_allowlist or grants is a single PATCH that echoes the
+// credentials already attached.
+func modifyTokenVaultPrivilegedAccess(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
+	rawConfig := data.GetRawConfig()
+
+	tokenVault := expandTokenVaultPrivilegedAccess(rawConfig)
+	if tokenVault == nil {
+		// The block was removed from the configuration. Remove the object, then
+		// delete the credentials this resource created for it.
+		if !data.HasChange("token_vault_privileged_access") {
+			return nil
+		}
+
+		clientID := data.Get("client_id").(string)
+		priorIDs := stateCredentialIDs(data, "token_vault_privileged_access")
+
+		if err := removeTokenVaultPrivilegedAccess(ctx, api, clientID); err != nil {
+			return diag.FromErr(err)
+		}
+
+		var result *multierror.Error
+		for _, credentialID := range priorIDs {
+			if err := deleteCredentialIgnoringNotFound(ctx, api, clientID, credentialID); err != nil {
+				result = multierror.Append(result, err)
+			}
+		}
+
+		return diag.FromErr(result.ErrorOrNil())
+	}
+
+	clientID := data.Get("client_id").(string)
+	credentialsKey := "token_vault_privileged_access.0.credentials" //nolint:gosec // This is a Terraform schema key, not a credential.
+
+	diff := credentialChanges(data, credentialsKey)
+
+	// The attached set comes from state, never from the pool listing: the pool also
+	// holds credentials owned by other slots and by nothing at all, and attaching
+	// those here would hand this worker keys it was never given.
+	attachedCreds := attachedCredentialsFromState(data, "token_vault_privileged_access")
+
+	if len(diff.toAdd) > 0 || len(diff.toRemove) > 0 {
+		// The pool is read for two things only: the record count, and whether a
+		// credential still exists. Never for ownership. The count matters because
+		// this block competes for the pool with the authentication method and
+		// signed_request_object, so slot headroom does not imply pool headroom.
+		existingCreds, err := api.Client.ListCredentials(ctx, clientID)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		// IDs state remembers but the client no longer holds are dropped, since the
+		// API rejects an attach payload naming a deleted credential.
+		attachedCreds = retainExistingCredentials(attachedCreds, existingCreds)
+
+		for _, step := range planCredentialRotation(diff, len(attachedCreds), len(existingCreds)) {
+			switch step.kind {
+			case detachAndDelete:
+				attachedCreds = removeAttachedCredential(attachedCreds, step.credentialID)
+				if err := attachTokenVaultPrivilegedAccessCredentials(ctx, api, clientID, tokenVault, attachedCreds); err != nil {
+					return diag.FromErr(err)
+				}
+				if err := deleteCredentialIgnoringNotFound(ctx, api, clientID, step.credentialID); err != nil {
+					return diag.FromErr(err)
+				}
+			case createAndAttach:
+				credential := expandClientCredentialFromMap(step.newCredential)
+				if err := api.Client.CreateCredential(ctx, clientID, credential); err != nil {
+					return diag.FromErr(err)
+				}
+				attachedCreds = append(attachedCreds, management.Credential{ID: credential.ID})
+				if err := attachTokenVaultPrivilegedAccessCredentials(ctx, api, clientID, tokenVault, attachedCreds); err != nil {
+					if deleteErr := deleteCredentialIgnoringNotFound(ctx, api, clientID, credential.GetID()); deleteErr != nil {
+						return diag.Errorf("failed to attach credential (rollback delete also failed: %v): %v", deleteErr, err)
+					}
+					return diag.FromErr(err)
+				}
+			}
+		}
+	} else if data.HasChange("token_vault_privileged_access") {
+		// Only ip_allowlist, grants, or an expiry changed. The object still has to
+		// go out whole, with the credentials that are already attached.
+		if err := attachTokenVaultPrivilegedAccessCredentials(ctx, api, clientID, tokenVault, attachedCreds); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	var result *multierror.Error
+	for _, update := range diff.expiryUpdates {
+		t, parseErr := time.Parse(time.RFC3339, update.expiresAt)
+		if parseErr != nil {
+			t, parseErr = time.Parse(timeRFC3339WithMilliseconds, update.expiresAt)
+			if parseErr != nil {
+				continue
+			}
+		}
+
+		if err := api.Client.UpdateCredential(ctx, clientID, update.credentialID, &management.Credential{
+			ExpiresAt: &t,
+		}); err != nil {
+			result = multierror.Append(result, err)
+		}
+	}
+
+	return diag.FromErr(result.ErrorOrNil())
+}
+
 func createSignedRequestObject(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
 	signedRequestObject, diagnostics := expandSignedRequestObject(data.GetRawConfig())
 	if diagnostics.HasError() {
@@ -1060,6 +1270,15 @@ type clientWithAuthMethodAndSignedRequestObject struct {
 	SignedRequestObject         *management.ClientSignedRequestObject   `json:"signed_request_object"`
 }
 
+// clientWithTokenVaultPrivilegedAccess writes the Token Vault privileged access
+// object. The field carries no omitempty so a nil pointer marshals to a literal
+// null, which is what removes the object; the SDK's Client field cannot express
+// that.
+type clientWithTokenVaultPrivilegedAccess struct {
+	ID                         string                                       `json:"-"`
+	TokenVaultPrivilegedAccess *management.ClientTokenVaultPrivilegedAccess `json:"token_vault_privileged_access"`
+}
+
 func attachAuthenticationMethodCredentials(ctx context.Context, api *management.Management, clientID string, authenticationMethod string, credentials []management.Credential) error {
 	client := clientWithAuthMethod{
 		ID:                          clientID,
@@ -1106,6 +1325,36 @@ func attachSignedRequestObjectNoCredentials(ctx context.Context, api *management
 	}
 
 	return updateClientInternal(ctx, api, client.ID, client)
+}
+
+// attachTokenVaultPrivilegedAccessCredentials writes the Token Vault privileged
+// access object with the given credential references.
+//
+// All three sub-fields go out on every write because the API rejects a payload
+// that omits any of them, so tokenVault must already carry IPAllowlist and Grants.
+func attachTokenVaultPrivilegedAccessCredentials(
+	ctx context.Context,
+	api *management.Management,
+	clientID string,
+	tokenVault *management.ClientTokenVaultPrivilegedAccess,
+	credentials []management.Credential,
+) error {
+	payload := *tokenVault
+	payload.Credentials = &credentials
+
+	return updateClientInternal(ctx, api, clientID, clientWithTokenVaultPrivilegedAccess{
+		ID:                         clientID,
+		TokenVaultPrivilegedAccess: &payload,
+	})
+}
+
+// removeTokenVaultPrivilegedAccess sends a literal null to remove the object
+// entirely, which also detaches every credential it held.
+func removeTokenVaultPrivilegedAccess(ctx context.Context, api *management.Management, clientID string) error {
+	return updateClientInternal(ctx, api, clientID, clientWithTokenVaultPrivilegedAccess{
+		ID:                         clientID,
+		TokenVaultPrivilegedAccess: nil,
+	})
 }
 
 func detachClientCredentials(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string, detachSignedRequestObject bool) error {
@@ -1301,6 +1550,85 @@ func expandSignedRequestObject(rawConfig cty.Value) (*management.ClientSignedReq
 	}
 
 	return &signedRequestObject, nil
+}
+
+// expandTokenVaultPrivilegedAccess builds the Token Vault privileged access
+// object from configuration, less the credentials.
+//
+// Credentials are deliberately excluded: the block's credentials are created in
+// the pool first and attached by ID, so the caller supplies that list once the
+// IDs exist. Both other sub-fields are always set to a non-nil slice, because the
+// API rejects a write that omits any of the three, and the SDK's *[]T fields omit
+// the key when nil.
+func expandTokenVaultPrivilegedAccess(rawConfig cty.Value) *management.ClientTokenVaultPrivilegedAccess {
+	// GetAttr panics on a null or unknown object, which is what the raw config is
+	// during a destroy.
+	if rawConfig.IsNull() || !rawConfig.IsKnown() {
+		return nil
+	}
+
+	tokenVaultConfig := rawConfig.GetAttr("token_vault_privileged_access")
+	if tokenVaultConfig.IsNull() || !tokenVaultConfig.IsKnown() || tokenVaultConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var tokenVault management.ClientTokenVaultPrivilegedAccess
+
+	tokenVaultConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		ipAllowlist := make([]string, 0)
+		config.GetAttr("ip_allowlist").ForEachElement(func(_ cty.Value, entry cty.Value) (stop bool) {
+			if address := value.String(entry); address != nil {
+				ipAllowlist = append(ipAllowlist, *address)
+			}
+			return stop
+		})
+		tokenVault.IPAllowlist = &ipAllowlist
+
+		grants := make([]management.ClientTokenVaultPrivilegedGrant, 0)
+		config.GetAttr("grants").ForEachElement(func(_ cty.Value, grantConfig cty.Value) (stop bool) {
+			scopes := make([]string, 0)
+			grantConfig.GetAttr("scopes").ForEachElement(func(_ cty.Value, scope cty.Value) (stop bool) {
+				if name := value.String(scope); name != nil {
+					scopes = append(scopes, *name)
+				}
+				return stop
+			})
+
+			grants = append(grants, management.ClientTokenVaultPrivilegedGrant{
+				Connection: value.String(grantConfig.GetAttr("connection")),
+				Scopes:     &scopes,
+			})
+			return stop
+		})
+		tokenVault.Grants = &grants
+
+		return stop
+	})
+
+	return &tokenVault
+}
+
+// expandTokenVaultPrivilegedAccessCredentials returns the credentials declared on
+// the Token Vault privileged access block, in configuration order.
+func expandTokenVaultPrivilegedAccessCredentials(rawConfig cty.Value) []*management.Credential {
+	credentials := make([]*management.Credential, 0)
+
+	tokenVaultConfig := rawConfig.GetAttr("token_vault_privileged_access")
+	if tokenVaultConfig.IsNull() || !tokenVaultConfig.IsKnown() {
+		return credentials
+	}
+
+	tokenVaultConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentialConfig cty.Value) (stop bool) {
+			// This block requires credential_type, so there is nothing to default to
+			// and the configured value always wins.
+			credentials = append(credentials, expandClientCredential(credentialConfig, "public_key"))
+			return stop
+		})
+		return stop
+	})
+
+	return credentials
 }
 
 // expandClientCredential builds one credential from its raw configuration.

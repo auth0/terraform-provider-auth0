@@ -1,3 +1,14 @@
+## v1.55.0
+
+FEATURES:
+- `resource/auth0_organization` – Add `is_app_entitlement_active` attribute to control whether members of the organization can access applications associated with it (EA only)
+- `resource/auth0_organization_client` – Add resource to manage an organization's entitlement to a client (application), including the `use_for_member_access` flag (EA only)
+- `data-source/auth0_organization_client` – Add data source to retrieve a single organization-client association (EA only)
+- `data-source/auth0_organization_clients` – Add data source to retrieve all client associations for an organization (EA only)
+- `data-source/auth0_client_grant_organizations` – Add data source to retrieve all organizations associated with a client grant (EA only)
+- `data-source/auth0_user_organizations` – Add data source to retrieve all organization memberships for a user (EA only)
+
+
 ## v1.54.1
 
 BUG FIXES:

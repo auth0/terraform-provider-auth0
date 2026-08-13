@@ -18,6 +18,7 @@ func expandOrganization(data *schema.ResourceData) *management.Organization {
 		Name:                   value.String(cfg.GetAttr("name")),
 		DisplayName:            value.String(cfg.GetAttr("display_name")),
 		ThirdPartyClientAccess: value.String(cfg.GetAttr("third_party_client_access")),
+		IsAppEntitlementActive: value.Bool(cfg.GetAttr("is_app_entitlement_active")),
 		Branding:               expandOrganizationBranding(cfg.GetAttr("branding")),
 		TokenQuota:             commons.ExpandTokenQuota(cfg.GetAttr("token_quota")),
 	}
@@ -115,6 +116,28 @@ func expandOrganizationConnectionsCreate(cfg cty.Value) []*managementv3.CreateOr
 	})
 
 	return connections
+}
+
+func expandOrganizationClientCreate(data *schema.ResourceData) *managementv3.CreateOrganizationClientsRequestContent {
+	clientID := data.Get("client_id").(string)
+	useForMemberAccess := data.Get("use_for_member_access").(bool)
+
+	return &managementv3.CreateOrganizationClientsRequestContent{
+		Clients: []*managementv3.CreateOrganizationClientRequestItem{
+			{
+				ClientID:           clientID,
+				UseForMemberAccess: useForMemberAccess,
+			},
+		},
+	}
+}
+
+func expandOrganizationClientUpdate(data *schema.ResourceData) *managementv3.UpdateOrganizationClientRequestContent {
+	cfg := data.GetRawConfig()
+
+	return &managementv3.UpdateOrganizationClientRequestContent{
+		UseForMemberAccess: value.Bool(cfg.GetAttr("use_for_member_access")),
+	}
 }
 
 func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {

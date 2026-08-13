@@ -414,6 +414,53 @@ func TestOwnedCredentialIDs_SurvivesAuthMethodSwitch(t *testing.T) {
 	assert.Len(t, owned, 1)
 }
 
+// Switching authentication_method while the Token Vault block stays in the
+// configuration. The detach that precedes the deletion clears only the
+// authentication method and signed_request_object, so a Token Vault credential is
+// still attached and the API refuses to delete it. The switch-away deletion set
+// must therefore exclude the block.
+func TestDetachedCredentialIDs_ExcludesTokenVaultPrivilegedAccess(t *testing.T) {
+	tokenVault := []interface{}{map[string]interface{}{
+		"credentials": []interface{}{map[string]interface{}{
+			"id": "cred-tvpa", "name": "tv", "credential_type": "public_key",
+			"pem": "PEM-TVPA", "algorithm": "RS256",
+		}},
+		"ip_allowlist": []interface{}{"10.0.0.1"},
+		"grants": []interface{}{map[string]interface{}{
+			"connection": "google-oauth2",
+			"scopes":     []interface{}{"calendar.readonly"},
+		}},
+	}}
+
+	data := diffData(t,
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"id": "cred-pkjwt", "name": "k1", "credential_type": "public_key",
+				"pem": "PEM-ONE", "algorithm": "RS256",
+			}),
+			"token_vault_privileged_access": tokenVault,
+		},
+		map[string]interface{}{
+			"client_id":                     "test-client-id",
+			"authentication_method":         "client_secret_post",
+			"token_vault_privileged_access": tokenVault,
+		},
+	)
+
+	// Ownership is unchanged: the worker's credential is still ours to manage, and
+	// the destroy path relies on that to tear it down.
+	assert.True(t, ownedCredentialIDs(data)["cred-tvpa"],
+		"the Token Vault credential is still owned by this resource")
+
+	detached := detachedCredentialIDs(data)
+	assert.True(t, detached["cred-pkjwt"],
+		"the authentication method's credential is released by the detach and must be deleted")
+	assert.False(t, detached["cred-tvpa"],
+		"the Token Vault credential is still attached, so deleting it here would fail the update")
+}
+
 // The spurious-rotation trigger: private_key_jwt credentials are IDENTICAL
 // in state and config; only signed_request_object.required changed. The rotation
 // must plan nothing.

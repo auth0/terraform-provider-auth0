@@ -1612,6 +1612,136 @@ resource "auth0_client_credentials" "test" {
 }
 `
 
+const testAccTokenVaultPrivilegedAccessWithPrivateKeyJWT = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "private_key_jwt"
+
+	private_key_jwt {
+		credentials {
+			name            = "PKJWT Credentials"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			pem             = <<EOF
+%s
+EOF
+		}
+	}
+
+	token_vault_privileged_access {
+		credentials {
+			name            = "Token Vault Credentials 1"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			pem             = <<EOF
+%s
+EOF
+		}
+
+		ip_allowlist = ["10.0.0.1"]
+
+		grants {
+			connection = "google-oauth2"
+			scopes     = ["https://www.googleapis.com/auth/calendar.readonly"]
+		}
+	}
+}
+`
+
+const testAccTokenVaultPrivilegedAccessAfterAuthMethodSwitch = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "client_secret_post"
+
+	token_vault_privileged_access {
+		credentials {
+			name            = "Token Vault Credentials 1"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			pem             = <<EOF
+%s
+EOF
+		}
+
+		ip_allowlist = ["10.0.0.1"]
+
+		grants {
+			connection = "google-oauth2"
+			scopes     = ["https://www.googleapis.com/auth/calendar.readonly"]
+		}
+	}
+}
+`
+
+// TestAccClientCredentialsTokenVaultPrivilegedAccessSurvivesAuthMethodSwitch covers
+// switching authentication_method away from private_key_jwt while the Token Vault
+// block stays in the configuration.
+//
+// The detach that precedes the switch-away deletion clears only the authentication
+// method and signed_request_object, so the worker's credential is still attached
+// when that deletion runs. Deleting it there fails with "Cannot delete credential
+// still associated with a client", aborting the update after the detach has already
+// landed. Like the test above, this is Early Access.
+func TestAccClientCredentialsTokenVaultPrivilegedAccessSurvivesAuthMethodSwitch(t *testing.T) {
+	credsCert1, err := os.ReadFile("./../../../test/data/creds-cert-1.pem")
+	require.NoError(t, err)
+
+	credsCert2, err := os.ReadFile("./../../../test/data/creds-cert-2.pem")
+	require.NoError(t, err)
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(
+					acctest.ParseTestName(testAccTokenVaultPrivilegedAccessWithPrivateKeyJWT, t.Name()),
+					credsCert1, credsCert2,
+				),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "private_key_jwt"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.#", "1"),
+				),
+			},
+			{
+				// The authentication method's credential is released by the detach and
+				// deleted; the worker's credential is not, and must be left alone.
+				Config: fmt.Sprintf(
+					acctest.ParseTestName(testAccTokenVaultPrivilegedAccessAfterAuthMethodSwitch, t.Name()),
+					credsCert2,
+				),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "client_secret_post"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.#", "1"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.*", map[string]string{
+						"name": "Token Vault Credentials 1",
+					}),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.ip_allowlist.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.grants.#", "1"),
+				),
+			},
+		},
+	})
+}
+
 // TestAccClientCredentialsTokenVaultPrivilegedAccess covers token_vault_privileged_access,
 // which is Early Access: running it live needs a tenant entitled to the feature and the
 // create: and update:client_token_vault_privileged_access scopes on the client grant.

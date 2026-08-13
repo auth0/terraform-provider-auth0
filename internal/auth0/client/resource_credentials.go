@@ -117,7 +117,7 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 
 				// Delete only what this resource owns. The rest of the pool
 				// belongs to another slot or to none, and was created elsewhere.
-				ownedIDs := ownedCredentialIDs(data)
+				ownedIDs := detachedCredentialIDs(data)
 				for _, cred := range credentials {
 					if !ownedIDs[cred.GetID()] {
 						continue
@@ -668,6 +668,36 @@ func ownedCredentialIDs(data *schema.ResourceData) map[string]bool {
 	}
 
 	return ownedIDs
+}
+
+// detachedCredentialIDs returns the credentials this resource owns that the
+// authentication-method detach actually releases.
+//
+// It is ownedCredentialIDs minus token_vault_privileged_access. That block is a
+// field of its own, untouched by detachClientCredentials, so its credentials are
+// still attached when the switch-away deletion runs. The API refuses to delete an
+// attached credential, and unlike the destroy path there is no warning branch
+// here: the error aborts the update after the detach has already landed, leaving
+// the client without its previous authentication method and every retry failing
+// the same way.
+//
+// Removing the worker instead would be wrong. The block is still in the
+// configuration; only the authentication method changed, and the two are
+// independent features.
+func detachedCredentialIDs(data *schema.ResourceData) map[string]bool {
+	tokenVaultIDs := make(map[string]bool)
+	for _, credentialID := range stateCredentialIDs(data, "token_vault_privileged_access") {
+		tokenVaultIDs[credentialID] = true
+	}
+
+	detachedIDs := make(map[string]bool)
+	for credentialID := range ownedCredentialIDs(data) {
+		if !tokenVaultIDs[credentialID] {
+			detachedIDs[credentialID] = true
+		}
+	}
+
+	return detachedIDs
 }
 
 // stateCredentialIDs returns the credential IDs recorded in state for one

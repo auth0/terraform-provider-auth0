@@ -145,21 +145,6 @@ resource "auth0_client_credentials" "test" {
 resource "auth0_client_credentials" "test" {
   client_id = auth0_client.my_client.id
 
-  authentication_method = "private_key_jwt"
-
-  private_key_jwt {
-    credentials {
-      name            = "Testing Credentials 1"
-      credential_type = "public_key"
-      algorithm       = "RS256"
-      pem             = <<EOF
------BEGIN CERTIFICATE-----
-MIIFWDCCA0ACCQDXqpBo3R...G9w0BAQsFADBuMQswCQYDVQQGEwJl
------END CERTIFICATE-----
-EOF
-    }
-  }
-
   token_vault_privileged_access {
     credentials {
       name            = "Token Vault Credentials 1"

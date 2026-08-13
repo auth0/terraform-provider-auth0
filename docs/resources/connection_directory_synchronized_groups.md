@@ -1,14 +1,12 @@
 ---
 page_title: "Resource: auth0_connection_directory_synchronized_groups"
 description: |-
-  With this resource, you can manage the set of Google Workspace group IDs synchronized via directory provisioning for an Auth0 connection. (EA only)
+  With this resource, you can manage the set of Google Workspace groups synchronized via directory provisioning for an Auth0 connection.
 ---
 
 # Resource: auth0_connection_directory_synchronized_groups
 
-With this resource, you can manage the set of Google Workspace group IDs synchronized via directory provisioning for an Auth0 connection. (EA only)
-
--> This resource is only available for [EA](https://auth0.com/docs/troubleshoot/product-lifecycle/product-release-stages#early-access) users.
+With this resource, you can manage the set of Google Workspace groups synchronized via directory provisioning for an Auth0 connection.
 
 ## Example Usage
 
@@ -34,7 +32,16 @@ resource "auth0_connection_directory" "my_directory" {
 resource "auth0_connection_directory_synchronized_groups" "my_groups" {
   depends_on    = [auth0_connection_directory.my_directory]
   connection_id = auth0_connection.my_connection.id
-  group_ids     = ["group1abc", "group2def", "group3ghi"]
+
+  groups {
+    id = "group1"
+  }
+  groups {
+    id                   = "group2"
+    name                 = "test"
+    email                = "test@test.com"
+    direct_members_count = 123
+  }
 }
 ```
 
@@ -43,12 +50,29 @@ resource "auth0_connection_directory_synchronized_groups" "my_groups" {
 
 ### Required
 
-- `connection_id` (String) ID of the connection for which to manage synchronized groups. (EA only)
-- `group_ids` (Set of String) List of Google Workspace Directory group IDs to synchronize. (EA only)
+- `connection_id` (String) ID of the connection for which to manage synchronized groups.
+
+### Optional
+
+- `group_ids` (Set of String, Deprecated) IDs of the Google Workspace Directory groups to synchronize.
+- `groups` (Block Set) Google Workspace Directory groups to synchronize. (see [below for nested schema](#nestedblock--groups))
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+
+<a id="nestedblock--groups"></a>
+### Nested Schema for `groups`
+
+Required:
+
+- `id` (String) Google Workspace Directory group ID.
+
+Optional:
+
+- `direct_members_count` (Number) Number of direct members in the Google Workspace Directory group.
+- `email` (String) Google Workspace Directory group email.
+- `name` (String) Google Workspace Directory group name.
 
 ## Import
 

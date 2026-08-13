@@ -5,6 +5,7 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"crypto/x509/pkix"
+	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"math/big"
@@ -923,4 +924,338 @@ func TestRollbackCreatedCredentials(t *testing.T) {
 			"create failed")
 		assert.Zero(t, calls, "nothing created means nothing to roll back")
 	})
+}
+
+// tokenVaultConfig builds a cty value shaped like the resource's raw
+// configuration, carrying only the token_vault_privileged_access block. The
+// expanders reach for that one attribute, so the rest of the schema is omitted.
+func tokenVaultConfig(t *testing.T, block cty.Value) cty.Value {
+	t.Helper()
+
+	return cty.ObjectVal(map[string]cty.Value{
+		"token_vault_privileged_access": block,
+	})
+}
+
+func TestExpandTokenVaultPrivilegedAccess_AlwaysSendsBothSubFields(t *testing.T) {
+	// The API rejects a write that omits any sub-field, and the SDK omits the key
+	// when the pointer is nil, so an empty block must still marshal both keys.
+	tokenVault := expandTokenVaultPrivilegedAccess(tokenVaultConfig(t, cty.ListVal([]cty.Value{
+		cty.ObjectVal(map[string]cty.Value{
+			"credentials":  cty.SetValEmpty(cty.Object(map[string]cty.Type{"pem": cty.String})),
+			"ip_allowlist": cty.SetValEmpty(cty.String),
+			"grants":       cty.SetValEmpty(cty.Object(map[string]cty.Type{"connection": cty.String, "scopes": cty.Set(cty.String)})),
+		}),
+	})))
+
+	require.NotNil(t, tokenVault)
+	require.NotNil(t, tokenVault.IPAllowlist, "a nil ip_allowlist would omit the key and 400")
+	require.NotNil(t, tokenVault.Grants, "a nil grants would omit the key and 400")
+	assert.Empty(t, *tokenVault.IPAllowlist)
+	assert.Empty(t, *tokenVault.Grants)
+
+	assert.Nil(t, tokenVault.Credentials,
+		"credentials are attached by ID once created, not expanded from config")
+}
+
+// TestAttachTokenVaultPrivilegedAccessPayload_EmptyListsClearTheFields pins the
+// wire format for the clear case, which is what `ip_allowlist = []` means on
+// PATCH. The omitempty tag on a pointer field keys off the pointer, not the
+// length, so a non-nil pointer to an empty slice sends `[]` and clears them. The
+// map round-trip is asserted too because updateClientInternal marshals to a map
+// before sending, and a naive shape there would drop the keys again.
+func TestAttachTokenVaultPrivilegedAccessPayload_EmptyListsClearTheFields(t *testing.T) {
+	emptyAllowlist := make([]string, 0)
+	emptyGrants := make([]management.ClientTokenVaultPrivilegedGrant, 0)
+
+	payload := clientWithTokenVaultPrivilegedAccess{
+		ID: "client-id",
+		TokenVaultPrivilegedAccess: &management.ClientTokenVaultPrivilegedAccess{
+			Credentials: &[]management.Credential{},
+			IPAllowlist: &emptyAllowlist,
+			Grants:      &emptyGrants,
+		},
+	}
+
+	encoded, err := json.Marshal(payload)
+	require.NoError(t, err)
+
+	assert.JSONEq(t,
+		`{"token_vault_privileged_access":{"credentials":[],"ip_allowlist":[],"grants":[]}}`,
+		string(encoded),
+		"an empty list must reach the API as [], which is what clears the field")
+
+	var asMap map[string]interface{}
+	require.NoError(t, json.Unmarshal(encoded, &asMap))
+	roundTripped, err := json.Marshal(asMap)
+	require.NoError(t, err)
+
+	assert.JSONEq(t,
+		`{"token_vault_privileged_access":{"credentials":[],"ip_allowlist":[],"grants":[]}}`,
+		string(roundTripped),
+		"the map round-trip updateClientInternal performs must preserve the empty lists")
+}
+
+// TestRemoveTokenVaultPrivilegedAccessPayload_SendsNull covers the other half of
+// the contract: clearing a sub-field is not the same as removing the block, and
+// the two must not collapse into one payload.
+func TestRemoveTokenVaultPrivilegedAccessPayload_SendsNull(t *testing.T) {
+	encoded, err := json.Marshal(clientWithTokenVaultPrivilegedAccess{ID: "client-id"})
+	require.NoError(t, err)
+
+	assert.JSONEq(t, `{"token_vault_privileged_access":null}`, string(encoded),
+		"a nil pointer must marshal to a literal null, which removes the whole object")
+}
+
+func TestExpandTokenVaultPrivilegedAccess_AbsentBlockIsNil(t *testing.T) {
+	nullBlock := cty.NullVal(cty.List(cty.Object(map[string]cty.Type{
+		"credentials":  cty.Set(cty.Object(map[string]cty.Type{"pem": cty.String})),
+		"ip_allowlist": cty.Set(cty.String),
+		"grants":       cty.Set(cty.Object(map[string]cty.Type{"connection": cty.String, "scopes": cty.Set(cty.String)})),
+	})))
+
+	assert.Nil(t, expandTokenVaultPrivilegedAccess(tokenVaultConfig(t, nullBlock)),
+		"an absent block must not be written, which is what makes removal detectable")
+}
+
+func TestExpandTokenVaultPrivilegedAccess_ReadsAllowlistAndGrants(t *testing.T) {
+	tokenVault := expandTokenVaultPrivilegedAccess(tokenVaultConfig(t, cty.ListVal([]cty.Value{
+		cty.ObjectVal(map[string]cty.Value{
+			"credentials": cty.SetValEmpty(cty.Object(map[string]cty.Type{"pem": cty.String})),
+			"ip_allowlist": cty.SetVal([]cty.Value{
+				cty.StringVal("10.0.0.1"),
+				cty.StringVal("192.168.1.0/24"),
+			}),
+			"grants": cty.SetVal([]cty.Value{
+				cty.ObjectVal(map[string]cty.Value{
+					"connection": cty.StringVal("google-oauth2"),
+					"scopes":     cty.SetVal([]cty.Value{cty.StringVal("calendar.readonly")}),
+				}),
+			}),
+		}),
+	})))
+
+	require.NotNil(t, tokenVault)
+	assert.ElementsMatch(t, []string{"10.0.0.1", "192.168.1.0/24"}, *tokenVault.IPAllowlist)
+
+	require.Len(t, *tokenVault.Grants, 1)
+	grant := (*tokenVault.Grants)[0]
+	assert.Equal(t, "google-oauth2", grant.GetConnection())
+	assert.Equal(t, []string{"calendar.readonly"}, grant.GetScopes())
+}
+
+func TestOwnedCredentialIDs_IncludesTokenVaultPrivilegedAccess(t *testing.T) {
+	// The destroy path deletes only what this map contains. Were the Token Vault
+	// block missing from credentialBearingAttributes, its credentials would be
+	// detached and then left behind in the pool.
+	data := credentialsDataWithState(t, map[string]interface{}{
+		"token_vault_privileged_access": []interface{}{
+			map[string]interface{}{
+				"credentials": []interface{}{
+					map[string]interface{}{"id": "cred-tvpa", "credential_type": "public_key", "pem": "pem-1"},
+				},
+				"ip_allowlist": []interface{}{"10.0.0.1"},
+				"grants": []interface{}{
+					map[string]interface{}{
+						"connection": "google-oauth2",
+						"scopes":     []interface{}{"calendar.readonly"},
+					},
+				},
+			},
+		},
+	})
+
+	assert.True(t, ownedCredentialIDs(data)["cred-tvpa"],
+		"a Token Vault credential recorded in state is owned by this resource")
+
+	assert.Equal(t, []string{"cred-tvpa"},
+		stateCredentialIDs(data, "token_vault_privileged_access"),
+		"the block's credentials must be reachable as its own slot")
+}
+
+// credentialsDataWithRawState returns resource data whose RawState carries the
+// given block, which is the source credentialBlockDeclared reads during a refresh
+// or destroy. Set() alone does not populate it, and with both raw sources null the
+// helper defaults to declared.
+func credentialsDataWithRawState(t *testing.T, rawState cty.Value) *schema.ResourceData {
+	t.Helper()
+
+	resource := NewCredentialsResource()
+
+	return resource.Data(&terraform.InstanceState{
+		ID:       "test-client-id",
+		RawState: rawState,
+	})
+}
+
+func TestCredentialBlockDeclared_TokenVaultGatesTheDestroyRemoval(t *testing.T) {
+	// The destroy path only sends the removal PATCH when the block is declared, so
+	// a client holding a worker configured elsewhere is left alone.
+	implied := NewCredentialsResource().CoreConfigSchema().ImpliedType()
+
+	nullState := make(map[string]cty.Value, len(implied.AttributeTypes()))
+	for name, attributeType := range implied.AttributeTypes() {
+		nullState[name] = cty.NullVal(attributeType)
+	}
+
+	// The client_id attribute is what tells a real refresh apart from an import,
+	// and a source without it is skipped entirely. Every case below is a
+	// post-import phase, so it has to be present or block lengths are never read.
+	nullState["client_id"] = cty.StringVal("test-client-id")
+
+	tokenVaultType := implied.AttributeType("token_vault_privileged_access")
+
+	undeclaredState := make(map[string]cty.Value, len(nullState))
+	for name, attributeValue := range nullState {
+		undeclaredState[name] = attributeValue
+	}
+	undeclaredState["token_vault_privileged_access"] = cty.ListValEmpty(tokenVaultType.ElementType())
+
+	assert.False(t,
+		credentialBlockDeclared(credentialsDataWithRawState(t, cty.ObjectVal(undeclaredState)),
+			"token_vault_privileged_access"),
+		"a worker this resource never declared must not be torn down")
+
+	// With no raw config or state to compare against — import, and the read after
+	// it — the block is treated as declared so the response is still recorded.
+	assert.True(t,
+		credentialBlockDeclared(credentialsDataWithRawState(t, cty.NullVal(implied)),
+			"token_vault_privileged_access"),
+		"import carries no prior state, so the response is recorded as before")
+
+	// State upgraded from a provider version that predates this attribute holds
+	// null for it rather than an empty list, so credentialBlockDeclared falls
+	// through to its declared default. That is why the destroy gate keys off the
+	// credential IDs in state instead: no IDs, no worker, no PATCH. Gating on
+	// credentialBlockDeclared here would PATCH the field on every destroy and 403
+	// on any tenant without the entitlement.
+	upgraded := credentialsDataWithRawState(t, cty.ObjectVal(nullState))
+
+	assert.True(t,
+		credentialBlockDeclared(upgraded, "token_vault_privileged_access"),
+		"a null block reads as declared, which is exactly why it cannot be the gate")
+	assert.Empty(t,
+		stateCredentialIDs(upgraded, "token_vault_privileged_access"),
+		"upgraded state names no token vault credential, so the destroy must not touch the field")
+}
+
+func TestExpandTokenVaultPrivilegedAccess_NullRawConfigIsNil(t *testing.T) {
+	// During a destroy there is no configuration at all and the raw config is a
+	// null object. GetAttr panics on one, so the nil check has to come first.
+	implied := NewCredentialsResource().CoreConfigSchema().ImpliedType()
+
+	assert.Nil(t, expandTokenVaultPrivilegedAccess(cty.NullVal(implied)))
+	assert.Nil(t, expandTokenVaultPrivilegedAccess(cty.UnknownVal(implied)))
+}
+
+func TestValidateIPAddressOrCIDR(t *testing.T) {
+	for _, allowed := range []string{"10.0.0.1", "192.168.1.0/24", "::1", "2001:db8::/32"} {
+		_, errs := validateIPAddressOrCIDR(allowed, "ip_allowlist")
+		assert.Empty(t, errs, "%q is a valid address or CIDR range", allowed)
+	}
+
+	for _, rejected := range []string{"", "not-an-ip", "10.0.0.256", "10.0.0.0/33"} {
+		_, errs := validateIPAddressOrCIDR(rejected, "ip_allowlist")
+		assert.NotEmpty(t, errs, "%q is neither an address nor a CIDR range", rejected)
+	}
+}
+
+// tokenVaultGrantsConfig builds a resource configuration carrying one
+// token_vault_privileged_access block whose grants hold the given
+// connection-to-scope-count mapping. The connections are listed rather than
+// mapped so a repeated one can be expressed.
+func tokenVaultGrantsConfig(grants [][2]interface{}) map[string]interface{} {
+	grantBlocks := make([]interface{}, 0, len(grants))
+	for _, grant := range grants {
+		connection, scopeCount := grant[0].(string), grant[1].(int)
+
+		scopes := make([]interface{}, 0, scopeCount)
+		for i := range scopeCount {
+			scopes = append(scopes, fmt.Sprintf("scope-%d", i))
+		}
+
+		grantBlocks = append(grantBlocks, map[string]interface{}{
+			"connection": connection,
+			"scopes":     scopes,
+		})
+	}
+
+	return map[string]interface{}{
+		"client_id":             "test-client-id",
+		"authentication_method": "client_secret_post",
+		"token_vault_privileged_access": []interface{}{
+			map[string]interface{}{
+				"credentials": []interface{}{
+					map[string]interface{}{"credential_type": "public_key", "pem": "pem-1"},
+				},
+				"ip_allowlist": []interface{}{"10.0.0.1"},
+				"grants":       grantBlocks,
+			},
+		},
+	}
+}
+
+// TestValidateTokenVaultPrivilegedAccess covers the two grant constraints that
+// span more than one element, which MaxItems cannot express. The API answers both
+// with a 400, so catching them in the diff turns a failed apply into a plan error.
+func TestValidateTokenVaultPrivilegedAccess(t *testing.T) {
+	testCases := []struct {
+		name          string
+		grants        [][2]interface{}
+		expectedError string
+	}{
+		{
+			name:   "accepts exactly twenty scopes across several grants",
+			grants: [][2]interface{}{{"google-oauth2", 10}, {"slack", 6}, {"github", 4}},
+		},
+		{
+			name:          "rejects more than twenty scopes in total",
+			grants:        [][2]interface{}{{"google-oauth2", 11}, {"slack", 10}},
+			expectedError: "maximum of 20 scopes in total across all grants, but 21 were configured",
+		},
+		{
+			name:          "rejects a repeated connection",
+			grants:        [][2]interface{}{{"google-oauth2", 1}, {"google-oauth2", 2}},
+			expectedError: `must not repeat a connection, but "google-oauth2" appears more than once`,
+		},
+		{
+			name:   "a single grant well under the cap is fine",
+			grants: [][2]interface{}{{"google-oauth2", 1}},
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			_, err := NewCredentialsResource().Diff(
+				context.Background(),
+				nil,
+				terraform.NewResourceConfigRaw(tokenVaultGrantsConfig(testCase.grants)),
+				nil,
+			)
+
+			if testCase.expectedError == "" {
+				require.NoError(t, err)
+				return
+			}
+
+			require.Error(t, err)
+			assert.Contains(t, err.Error(), testCase.expectedError)
+		})
+	}
+}
+
+func TestValidateTokenVaultPrivilegedAccess_NoBlockIsAccepted(t *testing.T) {
+	// Every other configuration of this resource omits the block entirely, so the
+	// validator has to be a no-op when there is nothing to check.
+	_, err := NewCredentialsResource().Diff(
+		context.Background(),
+		nil,
+		terraform.NewResourceConfigRaw(map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "client_secret_post",
+		}),
+		nil,
+	)
+
+	require.NoError(t, err)
 }

@@ -1444,6 +1444,284 @@ func TestAccClientAuthenticationMethodsSignedRequestObject(t *testing.T) {
 	})
 }
 
+const testAccThrowErrorWhenTokenVaultPrivilegedAccessInvalidIP = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "client_secret_post"
+
+	token_vault_privileged_access {
+		credentials {
+			name            = "Token Vault Credentials 1"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			pem             = <<EOF
+%s
+EOF
+		}
+
+		ip_allowlist = ["not-an-ip"]
+
+		grants {
+			connection = "google-oauth2"
+			scopes     = ["https://www.googleapis.com/auth/calendar.readonly"]
+		}
+	}
+}
+`
+
+const testAccCreateTokenVaultPrivilegedAccess = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "client_secret_post"
+
+	token_vault_privileged_access {
+		credentials {
+			name            = "Token Vault Credentials 1"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			pem             = <<EOF
+%s
+EOF
+		}
+
+		ip_allowlist = ["10.0.0.1"]
+
+		grants {
+			connection = "google-oauth2"
+			scopes     = ["https://www.googleapis.com/auth/calendar.readonly"]
+		}
+	}
+}
+`
+
+const testAccUpdateTokenVaultPrivilegedAccessAllowlistAndGrantsOnly = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "client_secret_post"
+
+	token_vault_privileged_access {
+		credentials {
+			name            = "Token Vault Credentials 1"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			pem             = <<EOF
+%s
+EOF
+		}
+
+		ip_allowlist = ["10.0.0.1", "192.168.1.0/24"]
+
+		grants {
+			connection = "google-oauth2"
+			scopes = [
+				"https://www.googleapis.com/auth/calendar.readonly",
+				"https://www.googleapis.com/auth/calendar.events",
+			]
+		}
+
+		grants {
+			connection = "github"
+			scopes     = ["repo"]
+		}
+	}
+}
+`
+
+const testAccRotateTokenVaultPrivilegedAccessCredential = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "client_secret_post"
+
+	token_vault_privileged_access {
+		credentials {
+			name            = "Token Vault Credentials 2"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			pem             = <<EOF
+%s
+EOF
+		}
+
+		ip_allowlist = ["10.0.0.1", "192.168.1.0/24"]
+
+		grants {
+			connection = "google-oauth2"
+			scopes = [
+				"https://www.googleapis.com/auth/calendar.readonly",
+				"https://www.googleapis.com/auth/calendar.events",
+			]
+		}
+
+		grants {
+			connection = "github"
+			scopes     = ["repo"]
+		}
+	}
+}
+`
+
+const testAccRemoveTokenVaultPrivilegedAccess = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id             = auth0_client.my_client.id
+	authentication_method = "client_secret_post"
+}
+`
+
+// TestAccClientCredentialsTokenVaultPrivilegedAccess covers token_vault_privileged_access,
+// which is Early Access: running it live needs a tenant entitled to the feature and the
+// create: and update:client_token_vault_privileged_access scopes on the client grant.
+// Replaying the recorded cassette needs neither.
+func TestAccClientCredentialsTokenVaultPrivilegedAccess(t *testing.T) {
+	credsCert1, err := os.ReadFile("./../../../test/data/creds-cert-1.pem")
+	require.NoError(t, err)
+
+	credsCert2, err := os.ReadFile("./../../../test/data/creds-cert-2.pem")
+	require.NoError(t, err)
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      fmt.Sprintf(acctest.ParseTestName(testAccThrowErrorWhenTokenVaultPrivilegedAccessInvalidIP, t.Name()), credsCert1),
+				ExpectError: regexp.MustCompile("expected .* to be a valid IPv4/IPv6 address or CIDR range"),
+			},
+			{
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccCreateTokenVaultPrivilegedAccess, t.Name()), credsCert1),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.#", "1"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.*", map[string]string{
+						"name":            "Token Vault Credentials 1",
+						"credential_type": "public_key",
+						"algorithm":       "RS256",
+					}),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.ip_allowlist.#", "1"),
+					resource.TestCheckTypeSetElemAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.ip_allowlist.*", "10.0.0.1"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.grants.#", "1"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "token_vault_privileged_access.0.grants.*", map[string]string{
+						"connection": "google-oauth2",
+						"scopes.#":   "1",
+					}),
+				),
+			},
+			{
+				// Only ip_allowlist and grants change. The credential stays put, but the
+				// whole object still has to go out because the API rejects a partial one.
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccUpdateTokenVaultPrivilegedAccessAllowlistAndGrantsOnly, t.Name()), credsCert1),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("auth0_client_credentials.test", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.#", "1"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.*", map[string]string{
+						"name": "Token Vault Credentials 1",
+					}),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.ip_allowlist.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.ip_allowlist.*", "192.168.1.0/24"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.grants.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "token_vault_privileged_access.0.grants.*", map[string]string{
+						"connection": "github",
+						"scopes.#":   "1",
+					}),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "token_vault_privileged_access.0.grants.*", map[string]string{
+						"connection": "google-oauth2",
+						"scopes.#":   "2",
+					}),
+				),
+			},
+			{
+				// Rotate the credential. The planner has to keep every intermediate
+				// state valid without exceeding the 4-credential pool.
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccRotateTokenVaultPrivilegedAccessCredential, t.Name()), credsCert2),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("auth0_client_credentials.test", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.#", "1"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.*", map[string]string{
+						"name": "Token Vault Credentials 2",
+					}),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.0.key_id"),
+				),
+			},
+			{
+				// Dropping the block sends token_vault_privileged_access: null and then
+				// deletes the credentials this resource created for it.
+				Config: acctest.ParseTestName(testAccRemoveTokenVaultPrivilegedAccess, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.#", "0"),
+				),
+			},
+			{
+				// Recreate it so the destroy path exercises the removal PATCH; without
+				// that, deleting the still-attached credential would fail.
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccCreateTokenVaultPrivilegedAccess, t.Name()), credsCert1),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "token_vault_privileged_access.0.credentials.#", "1"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDeletingTheResourceSetsTheTokenEndpointAuthMethodToADefaultOnTheClient, t.Name()),
+			},
+			{
+				RefreshState: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Client Credentials - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+				),
+			},
+		},
+	})
+}
+
 const testAccImportClientWithSecretPost = `
 resource "auth0_client" "my_test_client_secret" {
 	name     = "Acceptance Test - Client Credentials Import"

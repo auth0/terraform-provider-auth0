@@ -1,6 +1,7 @@
 package organization_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -60,10 +61,12 @@ data "auth0_organization_clients" "my_organization_clients" {
 `
 
 func TestAccOrganizationClient(t *testing.T) {
+	testName := strings.ToLower(t.Name())
+
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccOrganizationClientCreate, t.Name()),
+				Config: acctest.ParseTestName(testAccOrganizationClientCreate, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("auth0_organization_client.my_organization_client", "organization_id"),
 					resource.TestCheckResourceAttrSet("auth0_organization_client.my_organization_client", "client_id"),
@@ -72,7 +75,7 @@ func TestAccOrganizationClient(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccOrganizationClientUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccOrganizationClientUpdate, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_client.my_organization_client", "use_for_member_access", "false"),
 					resource.TestCheckResourceAttrSet("data.auth0_organization_client.my_organization_client", "name"),

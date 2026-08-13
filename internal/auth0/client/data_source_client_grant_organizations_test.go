@@ -1,6 +1,7 @@
 package client_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -49,7 +50,7 @@ func TestAccDataSourceClientGrantOrganizations(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccDataSourceClientGrantOrganizationsConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccDataSourceClientGrantOrganizationsConfig, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_client_grant_organizations.my_client_grant_organizations", "organizations.#", "1"),
 					resource.TestCheckResourceAttrSet("data.auth0_client_grant_organizations.my_client_grant_organizations", "organizations.0.organization_id"),

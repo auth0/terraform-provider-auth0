@@ -1,1069 +1,867 @@
+---
 version: 2
 interactions:
-- id: 0
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
-    method: POST
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"id":"org_TESTORGCLIENT01","name":"test-org-TestAccOrganizationClient","display_name":"Test
-      Org TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 201 Created
-    code: 201
-    duration: 1ms
-- id: 1
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
-    method: POST
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","name":"test-client-TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 201 Created
-    code: 201
-    duration: 1ms
-- id: 2
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"id":"org_TESTORGCLIENT01","name":"test-org-TestAccOrganizationClient","display_name":"Test
-      Org TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 3
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","name":"test-client-TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 4
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"id":"org_TESTORGCLIENT01","name":"test-org-TestAccOrganizationClient","display_name":"Test
-      Org TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 5
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","name":"test-client-TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 6
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"id":"org_TESTORGCLIENT01","name":"test-org-TestAccOrganizationClient","display_name":"Test
-      Org TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 7
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","name":"test-client-TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 8
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 80
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: '{"clients":[{"client_id":"clientTESTORGCLIENT01","use_for_member_access":true}]}'
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients
-    method: POST
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '[{"client_id":"clientTESTORGCLIENT01","use_for_member_access":true,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}]'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 201 Created
-    code: 201
-    duration: 1ms
-- id: 9
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","use_for_member_access":true,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 10
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","use_for_member_access":true,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 11
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","use_for_member_access":true,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 12
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 31
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: '{"use_for_member_access":false}'
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients/clientTESTORGCLIENT01
-    method: PATCH
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 13
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 14
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 15
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 16
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients?take=50
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"clients":[{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}]}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 17
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients?take=50
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"clients":[{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}]}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 18
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients?take=50
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"clients":[{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}]}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 19
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"id":"org_TESTORGCLIENT01","name":"test-org-TestAccOrganizationClient","display_name":"Test
-      Org TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 20
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","name":"test-client-TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 21
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 22
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients?take=50
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"clients":[{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}]}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 23
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"id":"org_TESTORGCLIENT01","name":"test-org-TestAccOrganizationClient","display_name":"Test
-      Org TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 24
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","name":"test-client-TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 25
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 26
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients?take=50
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"clients":[{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}]}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 27
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"id":"org_TESTORGCLIENT01","name":"test-org-TestAccOrganizationClient","display_name":"Test
-      Org TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 28
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","name":"test-client-TestAccOrganizationClient"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 29
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients/clientTESTORGCLIENT01
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 30
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients?take=50
-    method: GET
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: '{"clients":[{"client_id":"clientTESTORGCLIENT01","use_for_member_access":false,"client":{"name":"test-client-TestAccOrganizationClient","app_type":"non_interactive","logo_uri":"","is_first_party":true,"grant_types":["client_credentials"]}}]}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- id: 31
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 37
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: '{"clients":["clientTESTORGCLIENT01"]}'
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01/clients
-    method: DELETE
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: ''
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 204 No Content
-    code: 204
-    duration: 1ms
-- id: 32
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/clientTESTORGCLIENT01
-    method: DELETE
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: ''
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 204 No Content
-    code: 204
-    duration: 1ms
-- id: 33
-  request:
-    proto: HTTP/1.1
-    proto_major: 1
-    proto_minor: 1
-    content_length: 0
-    transfer_encoding: []
-    trailer: {}
-    host: terraform-provider-auth0-dev.eu.auth0.com
-    remote_addr: ''
-    request_uri: ''
-    body: ''
-    form: {}
-    headers: {}
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_TESTORGCLIENT01
-    method: DELETE
-  response:
-    proto: HTTP/2.0
-    proto_major: 2
-    proto_minor: 0
-    transfer_encoding: []
-    trailer: {}
-    content_length: -1
-    uncompressed: true
-    body: ''
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 204 No Content
-    code: 204
-    duration: 1ms
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 98
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"test-org-testaccorganizationclient","display_name":"Test Org testaccorganizationclient"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 195
+        uncompressed: false
+        body: '{"id":"org_5x1526nwk8jdGO4h","display_name":"Test Org testaccorganizationclient","name":"test-org-testaccorganizationclient","third_party_client_access":"block","is_app_entitlement_active":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 325.639666ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 49
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"test-client-testaccorganizationclient"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"name":"test-client-testaccorganizationclient","client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 533.73675ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_5x1526nwk8jdGO4h","name":"test-org-testaccorganizationclient","display_name":"Test Org testaccorganizationclient","third_party_client_access":"block","is_app_entitlement_active":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 309.57675ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"test-client-testaccorganizationclient","client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.440375ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 91
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"clients":[{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":true}]}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 244
+        uncompressed: false
+        body: '[{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}]'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 317.010875ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 292.708792ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_5x1526nwk8jdGO4h","name":"test-org-testaccorganizationclient","display_name":"Test Org testaccorganizationclient","third_party_client_access":"block","is_app_entitlement_active":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 286.647208ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"test-client-testaccorganizationclient","client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 309.719042ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 306.606667ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_5x1526nwk8jdGO4h","name":"test-org-testaccorganizationclient","display_name":"Test Org testaccorganizationclient","third_party_client_access":"block","is_app_entitlement_active":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 287.022417ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"test-client-testaccorganizationclient","client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 304.394417ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 306.035042ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 31
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"use_for_member_access":false}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 312.143416ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 299.1915ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients?take=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"clients":[{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 298.550709ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 300.862042ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 309.269709ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients?take=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"clients":[{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 310.449417ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_5x1526nwk8jdGO4h","name":"test-org-testaccorganizationclient","display_name":"Test Org testaccorganizationclient","third_party_client_access":"block","is_app_entitlement_active":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 290.407709ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"test-client-testaccorganizationclient","client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 297.645042ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 310.632583ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 290.680875ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients?take=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"clients":[{"client_id":"2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 302.066458ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 48
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"clients":["2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9"]}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h/clients
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 301.574625ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_5x1526nwk8jdGO4h
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 304.438083ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/2hqbTROaBn4VGTJTDfL7GzwggKKoTaD9
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 360.071666ms

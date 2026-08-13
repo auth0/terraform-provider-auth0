@@ -1,6 +1,7 @@
 package user_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -13,7 +14,6 @@ resource "auth0_user" "my_user" {
 	connection_name = "Username-Password-Authentication"
 	email           = "{{.testName}}@auth0.com"
 	password        = "MyPass123$"
-	username        = "tempusername{{.testName}}"
 }
 
 resource "auth0_organization" "my_organization" {
@@ -41,7 +41,7 @@ func TestAccDataSourceUserOrganizations(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccDataSourceUserOrganizationsConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccDataSourceUserOrganizationsConfig, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_user_organizations.my_user_organizations", "organizations.#", "1"),
 					resource.TestCheckResourceAttrSet("data.auth0_user_organizations.my_user_organizations", "organizations.0.organization_id"),

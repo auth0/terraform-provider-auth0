@@ -564,6 +564,101 @@ func TestCredentialChanges_IgnoresUnchangedSetOnUnrelatedApply(t *testing.T) {
 		"an unchanged credential set must not create a duplicate credential")
 }
 
+// The ESD-65375 bug itself: a rename (name changes, key material does not) must
+// surface as a real add/remove pair for planCredentialRotation to act on, not
+// be paired away by classifyCredentialChanges and silently dropped.
+func TestCredentialChanges_RenameWithLiteralPEMMatchSurfacesAddRemovePair(t *testing.T) {
+	_, _, certPEM := generateTestRSAPEMs(t)
+
+	data := diffData(t,
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"id": "cred-pkjwt", "name": "A", "credential_type": "public_key",
+				"pem": certPEM, "algorithm": "RS256",
+			}),
+		},
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"name": "B", "credential_type": "public_key", "pem": certPEM, "algorithm": "RS256",
+			}),
+		},
+	)
+
+	diff := credentialChanges(data, "private_key_jwt.0.credentials")
+
+	require.Len(t, diff.toAdd, 1, "the renamed entry must surface as a real addition")
+	require.Len(t, diff.toRemove, 1, "the stale entry must surface as a real removal")
+	assert.Equal(t, "cred-pkjwt", diff.toRemove[0].(map[string]interface{})["id"])
+	assert.Equal(t, "B", diff.toAdd[0].(map[string]interface{})["name"])
+}
+
+// Same bug, but via the thumbprint path: the removed entry's pem is blank in
+// state (e.g. adopted from a CLI-created credential), so the match against the
+// renamed addition can only be made through key_id/jwkThumbprint.
+func TestCredentialChanges_RenameWithThumbprintMatchOnEmptyPEMSurfacesAddRemovePair(t *testing.T) {
+	spkiPEM, _, _ := generateTestRSAPEMs(t)
+	kid := jwkThumbprint(spkiPEM)
+	require.NotEmpty(t, kid)
+
+	data := diffData(t,
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"id": "cred-pkjwt", "name": "A", "credential_type": "public_key",
+				"pem": "", "key_id": kid, "algorithm": "RS256",
+			}),
+		},
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"name": "B", "credential_type": "public_key", "pem": spkiPEM, "algorithm": "RS256",
+			}),
+		},
+	)
+
+	diff := credentialChanges(data, "private_key_jwt.0.credentials")
+
+	require.Len(t, diff.toAdd, 1, "the renamed entry must surface as a real addition")
+	require.Len(t, diff.toRemove, 1, "the stale entry must surface as a real removal")
+	assert.Equal(t, "cred-pkjwt", diff.toRemove[0].(map[string]interface{})["id"])
+	assert.Equal(t, "B", diff.toAdd[0].(map[string]interface{})["name"])
+}
+
+// No-regression case: identical name and PEM must still cancel out to an empty
+// diff, matching the existing cancel-and-do-nothing behaviour.
+func TestCredentialChanges_SameNameAndPEMProducesEmptyDiff(t *testing.T) {
+	_, _, certPEM := generateTestRSAPEMs(t)
+
+	data := diffData(t,
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"id": "cred-pkjwt", "name": "A", "credential_type": "public_key",
+				"pem": certPEM, "algorithm": "RS256",
+			}),
+		},
+		map[string]interface{}{
+			"client_id":             "test-client-id",
+			"authentication_method": "private_key_jwt",
+			"private_key_jwt": pkjwtBlock(map[string]interface{}{
+				"name": "A", "credential_type": "public_key", "pem": certPEM, "algorithm": "RS256",
+			}),
+		},
+	)
+
+	diff := credentialChanges(data, "private_key_jwt.0.credentials")
+
+	assert.Empty(t, diff.toAdd, "nothing changed, so nothing should be added")
+	assert.Empty(t, diff.toRemove, "nothing changed, so nothing should be removed")
+}
+
 func TestFilterOwnedCredentials(t *testing.T) {
 	spkiPEM, _, _ := generateTestRSAPEMs(t)
 	ownKeyID := jwkThumbprint(spkiPEM)

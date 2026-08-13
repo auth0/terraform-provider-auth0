@@ -600,11 +600,11 @@ func NewCredentialsResource() *schema.Resource {
 						"grants": {
 							Type: schema.TypeSet,
 							// Optional rather than Required, even though the API demands the
-							// field on every write. helper/schema has no "required" flag for a
-							// nested block, so it fakes one by deriving MinItems: 1, and that
-							// makes declaring zero grants impossible. Since the API accepts an
-							// empty array as the way to clear them, that has to stay
-							// expressible. Omitting the block entirely is equivalent to
+							// field on every write. There is no "required" flag for a nested
+							// block in helper/schema, so it fakes one by deriving MinItems: 1,
+							// and that makes declaring zero grants impossible. Since the API
+							// accepts an empty array as the way to clear them, that has to
+							// stay expressible. Omitting the block entirely is equivalent to
 							// clearing it; the expander sends [] either way.
 							Optional: true,
 							MaxItems: 5,

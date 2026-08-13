@@ -321,7 +321,7 @@ Read-Only:
 Required:
 
 - `credentials` (Block Set, Min: 1, Max: 2) Credentials the privileged worker may authenticate with. A maximum of 2 client credentials can be set. (see [below for nested schema](#nestedblock--token_vault_privileged_access--credentials))
-- `ip_allowlist` (Set of String) Permitted IPv4 or IPv6 addresses, or CIDR ranges, from which the privileged worker may request tokens. A maximum of 10 entries can be set. Set to an empty list to clear the entries already configured.
+- `ip_allowlist` (Set of String) Permitted IPv4 or IPv6 addresses, or CIDR ranges, from which the privileged worker may request tokens. A maximum of 10 entries can be set. Set to `[]` to clear the entries already configured.
 
 Optional:
 

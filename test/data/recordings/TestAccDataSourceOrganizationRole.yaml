@@ -1,0 +1,606 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 138
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"test-org-role-ds-testaccdatasourceorganizationrole","display_name":"Zion - Acceptance Test - testaccdatasourceorganizationrole"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 235
+        uncompressed: false
+        body: '{"id":"org_y6q6bi9dhWvgq7Xx","display_name":"Zion - Acceptance Test - testaccdatasourceorganizationrole","name":"test-org-role-ds-testaccdatasourceorganizationrole","third_party_client_access":"block","is_app_entitlement_active":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 332.710667ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_y6q6bi9dhWvgq7Xx
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_y6q6bi9dhWvgq7Xx","name":"test-org-role-ds-testaccdatasourceorganizationrole","display_name":"Zion - Acceptance Test - testaccdatasourceorganizationrole","third_party_client_access":"block","is_app_entitlement_active":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 329.867667ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 181
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 326.998334ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_vLCUREqx3JT4QPsu
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 312.672292ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles?include_totals=true&name_filter=The+Operator+-+Acceptance+Test+-+testaccdatasourceorganizationrole&owner_id=org_y6q6bi9dhWvgq7Xx&page=0&per_page=100&type=organization
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}],"start":0,"limit":100,"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 321.923125ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles?include_totals=true&name_filter=The+Operator+-+Acceptance+Test+-+testaccdatasourceorganizationrole&owner_id=org_y6q6bi9dhWvgq7Xx&page=0&per_page=100&type=organization
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}],"start":0,"limit":100,"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 321.474584ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_y6q6bi9dhWvgq7Xx
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_y6q6bi9dhWvgq7Xx","name":"test-org-role-ds-testaccdatasourceorganizationrole","display_name":"Zion - Acceptance Test - testaccdatasourceorganizationrole","third_party_client_access":"block","is_app_entitlement_active":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 299.35975ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_vLCUREqx3JT4QPsu
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 334.917459ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles?include_totals=true&name_filter=The+Operator+-+Acceptance+Test+-+testaccdatasourceorganizationrole&owner_id=org_y6q6bi9dhWvgq7Xx&page=0&per_page=100&type=organization
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}],"start":0,"limit":100,"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 302.47575ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_y6q6bi9dhWvgq7Xx
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_y6q6bi9dhWvgq7Xx","name":"test-org-role-ds-testaccdatasourceorganizationrole","display_name":"Zion - Acceptance Test - testaccdatasourceorganizationrole","third_party_client_access":"block","is_app_entitlement_active":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 312.66775ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_vLCUREqx3JT4QPsu
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 319.247625ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_vLCUREqx3JT4QPsu
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 302.507ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_vLCUREqx3JT4QPsu
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.605041ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_y6q6bi9dhWvgq7Xx
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_y6q6bi9dhWvgq7Xx","name":"test-org-role-ds-testaccdatasourceorganizationrole","display_name":"Zion - Acceptance Test - testaccdatasourceorganizationrole","third_party_client_access":"block","is_app_entitlement_active":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 308.510208ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_vLCUREqx3JT4QPsu
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 310.58775ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_vLCUREqx3JT4QPsu
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_vLCUREqx3JT4QPsu","name":"The Operator - Acceptance Test - testaccdatasourceorganizationrole","description":"The Operator - Acceptance Test","type":"organization","owner_id":"org_y6q6bi9dhWvgq7Xx"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 334.308709ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 3
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_vLCUREqx3JT4QPsu
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 309.95925ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.46.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_y6q6bi9dhWvgq7Xx
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 309.663666ms

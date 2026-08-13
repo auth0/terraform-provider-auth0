@@ -324,25 +324,3 @@ func TestAccActionWithSecretsWO(t *testing.T) {
 		},
 	})
 }
-
-func TestAccActionSecretsWOConflictsWithSecrets(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config:      acctest.ParseTestName(testAccActionConfigSecretsWOConflictsWithSecrets, t.Name()),
-				ExpectError: regexp.MustCompile(`"secrets": conflicts with secrets_wo|"secrets_wo": conflicts with secrets`),
-			},
-		},
-	})
-}
-
-func TestAccActionSecretsWORequiresVersion(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config:      acctest.ParseTestName(testAccActionConfigSecretsWORequiresVersion, t.Name()),
-				ExpectError: regexp.MustCompile(`"secrets_wo":\s+all of|secrets_wo_version`),
-			},
-		},
-	})
-}

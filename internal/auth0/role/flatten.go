@@ -10,6 +10,8 @@ func flattenRole(data *schema.ResourceData, role *management.Role) error {
 	result := multierror.Append(
 		data.Set("name", role.GetName()),
 		data.Set("description", role.GetDescription()),
+		data.Set("type", role.GetType()),
+		data.Set("owner_id", role.GetOwnerID()),
 	)
 
 	return result.ErrorOrNil()

@@ -21,12 +21,12 @@ resource "auth0_connection_directory_synchronized_groups" "my_groups" {
   connection_id = auth0_connection.my_connection.id
 
   groups {
-    id = "group1abc"
+    id = "group1"
   }
   groups {
-    id = "group2def"
-  }
-  groups {
-    id = "group3ghi"
+    id                   = "group2"
+    name                 = "test"
+    email                = "test@test.com"
+    direct_members_count = 123
   }
 }

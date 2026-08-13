@@ -3,6 +3,7 @@ package connection
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	managementv3 "github.com/auth0/go-auth0/v3/management"
 	managementv3client "github.com/auth0/go-auth0/v3/management/client"
@@ -22,6 +23,7 @@ func NewDirectorySynchronizedGroupsResource() *schema.Resource {
 		ReadContext:   readDirectorySynchronizedGroups,
 		UpdateContext: updateDirectorySynchronizedGroups,
 		DeleteContext: deleteDirectorySynchronizedGroups,
+		CustomizeDiff: rejectDuplicateGroupsByID,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -34,9 +36,6 @@ func NewDirectorySynchronizedGroupsResource() *schema.Resource {
 				ForceNew:    true,
 				Description: "ID of the connection for which to manage synchronized groups.",
 			},
-			// Superseded by `groups`, but kept Optional so existing configurations keep working.
-			// `ConflictsWith` rather than `ExactlyOneOf`, since setting neither is how every group
-			// is unsynchronized.
 			"group_ids": {
 				Type:          schema.TypeSet,
 				Elem:          &schema.Schema{Type: schema.TypeString},
@@ -45,12 +44,6 @@ func NewDirectorySynchronizedGroupsResource() *schema.Resource {
 				Deprecated:    "Use `groups` instead, which exposes each group's name, email and member count alongside its ID.",
 				Description:   "IDs of the Google Workspace Directory groups to synchronize.",
 			},
-			// `TypeSet` because the API treats this as a selection set: adding an
-			// already-synchronized group yields one entry, and reads are unordered.
-			//
-			// TODO: the metadata is Computed-only because it is not established whether a directory
-			// sync overwrites what a write stored. The feature team has been asked; revisit whether
-			// it should also be settable once they answer.
 			"groups": {
 				Type:          schema.TypeSet,
 				Optional:      true,
@@ -65,17 +58,17 @@ func NewDirectorySynchronizedGroupsResource() *schema.Resource {
 						},
 						"name": {
 							Type:        schema.TypeString,
-							Computed:    true,
+							Optional:    true,
 							Description: "Google Workspace Directory group name.",
 						},
 						"email": {
 							Type:        schema.TypeString,
-							Computed:    true,
+							Optional:    true,
 							Description: "Google Workspace Directory group email.",
 						},
 						"direct_members_count": {
 							Type:        schema.TypeInt,
-							Computed:    true,
+							Optional:    true,
 							Description: "Number of direct members in the Google Workspace Directory group.",
 						},
 					},
@@ -88,12 +81,27 @@ func NewDirectorySynchronizedGroupsResource() *schema.Resource {
 // groupsWriteChunkSize is the most groups the add and remove endpoints accept in one call.
 const groupsWriteChunkSize = 100
 
+// rejectDuplicateGroupsByID fails the plan on a repeated group ID with different metadata.
+func rejectDuplicateGroupsByID(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	seenGroupIDs := make(map[string]struct{})
+
+	for _, groupID := range groupIDsIn(diff.Get("groups")) {
+		if _, duplicate := seenGroupIDs[groupID]; duplicate {
+			return fmt.Errorf("group %q is declared more than once in `groups`", groupID)
+		}
+
+		seenGroupIDs[groupID] = struct{}{}
+	}
+
+	return nil
+}
+
 // createDirectorySynchronizedGroups replaces the whole set.
 func createDirectorySynchronizedGroups(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	apiv3 := meta.(*config.Config).GetAPIV3()
 	connectionID := data.Get("connection_id").(string)
 
-	if err := putGroups(ctx, apiv3, connectionID, configuredGroupIDs(data)); err != nil {
+	if err := putGroups(ctx, apiv3, connectionID, expandDirectorySynchronizedGroupsCreate(data)); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -102,27 +110,62 @@ func createDirectorySynchronizedGroups(ctx context.Context, data *schema.Resourc
 	return readDirectorySynchronizedGroups(ctx, data, meta)
 }
 
-// updateDirectorySynchronizedGroups touches only the groups that changed, so appending one group to
-// a directory of 800 sends one rather than re-sending all 801 through a replace.
+// updateDirectorySynchronizedGroups writes the delta, removing before adding so that a group whose
+// metadata changed is gone by the time the add rewrites it.
 func updateDirectorySynchronizedGroups(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	apiv3 := meta.(*config.Config).GetAPIV3()
 	connectionID := data.Get("connection_id").(string)
 
-	groupIDsToAdd, groupIDsToRemove := diffGroupIDs(groupIDsChange(data))
+	update := expandDirectorySynchronizedGroupsUpdate(data)
 
-	if err := removeGroups(ctx, apiv3, connectionID, groupIDsToRemove); err != nil {
+	if err := removeGroups(ctx, apiv3, connectionID, update.remove); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	if err := addGroups(ctx, apiv3, connectionID, groupIDsToAdd); err != nil {
+	if err := addGroups(ctx, apiv3, connectionID, update.add); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return readDirectorySynchronizedGroups(ctx, data, meta)
 }
 
-func configuredGroupIDs(data *schema.ResourceData) []string {
-	return mergeGroupIDs(data.Get("group_ids"), data.Get("groups"))
+// metadataDiffers compares one group's declared metadata against what the last read stored. A field
+// the configuration omits counts as empty, so deleting one is a change: leaving it out of the add
+// payload is what clears it. A group state does not hold differs as soon as anything is declared for
+// it, since indexing the absent entry yields the zero values.
+func metadataDiffers(group *managementv3.SynchronizedGroupPayload, priorGroup map[string]interface{}) bool {
+	priorName, _ := priorGroup["name"].(string)
+	priorEmail, _ := priorGroup["email"].(string)
+	priorDirectMembersCount, _ := priorGroup["direct_members_count"].(int)
+
+	return group.GetName() != priorName ||
+		group.GetEmail() != priorEmail ||
+		group.GetDirectMembersCount() != priorDirectMembersCount
+}
+
+// existedGroupsInState builds a payload for each `groups` block existing in the state.
+func existedGroupsInState(data *schema.ResourceData) map[string]map[string]interface{} {
+	priorGroups, _ := data.GetChange("groups")
+
+	groupsByID := make(map[string]map[string]interface{})
+
+	priorGroupSet, ok := priorGroups.(*schema.Set)
+	if !ok {
+		return groupsByID
+	}
+
+	for _, rawGroup := range priorGroupSet.List() {
+		group, ok := rawGroup.(map[string]interface{})
+		if !ok {
+			continue
+		}
+
+		if groupID, ok := group["id"].(string); ok {
+			groupsByID[groupID] = group
+		}
+	}
+
+	return groupsByID
 }
 
 // groupIDsChange returns the group IDs in state and the ones the configuration asks for.
@@ -132,34 +175,6 @@ func groupIDsChange(data *schema.ResourceData) (prior []string, desired []string
 
 	return mergeGroupIDs(priorGroupIDs, priorGroups),
 		mergeGroupIDs(desiredGroupIDs, desiredGroups)
-}
-
-// mergeGroupIDs collects the IDs held by both args. The two conflict in
-// configuration, so at most one ever contributes.
-func mergeGroupIDs(rawGroupIDs interface{}, rawGroups interface{}) []string {
-	groupIDs := make([]string, 0)
-
-	if groupIDSet, ok := rawGroupIDs.(*schema.Set); ok {
-		for _, rawGroupID := range groupIDSet.List() {
-			if groupID, ok := rawGroupID.(string); ok && groupID != "" {
-				groupIDs = append(groupIDs, groupID)
-			}
-		}
-	}
-
-	if groupSet, ok := rawGroups.(*schema.Set); ok {
-		for _, rawGroup := range groupSet.List() {
-			group, ok := rawGroup.(map[string]interface{})
-			if !ok {
-				continue
-			}
-			if groupID, ok := group["id"].(string); ok && groupID != "" {
-				groupIDs = append(groupIDs, groupID)
-			}
-		}
-	}
-
-	return groupIDs
 }
 
 func diffGroupIDs(prior []string, desired []string) (toAdd []string, toRemove []string) {
@@ -198,51 +213,16 @@ func readDirectorySynchronizedGroups(ctx context.Context, data *schema.ResourceD
 
 	result := multierror.Append(
 		data.Set("connection_id", data.Id()),
-		setGroups(data, groups),
+		flattenDirectorySynchronizedGroups(data, groups),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-// setGroups writes to whichever of `group_ids` and `groups` the configuration uses, never both.
-// `groups` is the default, so an import lands on the attribute that is not deprecated.
-func setGroups(data *schema.ResourceData, groups []*managementv3.SynchronizedGroupPayload) error {
-	if priorGroupIDs, ok := data.Get("group_ids").(*schema.Set); ok && priorGroupIDs.Len() > 0 {
-		return data.Set("group_ids", flattenGroupIDs(groups))
-	}
-
-	return data.Set("groups", flattenGroups(groups))
-}
-
-func flattenGroupIDs(groups []*managementv3.SynchronizedGroupPayload) []string {
-	groupIDs := make([]string, 0, len(groups))
-
-	for _, group := range groups {
-		groupIDs = append(groupIDs, group.GetID())
-	}
-
-	return groupIDs
-}
-
-func flattenGroups(groups []*managementv3.SynchronizedGroupPayload) []interface{} {
-	flattenedGroups := make([]interface{}, 0, len(groups))
-
-	for _, group := range groups {
-		flattenedGroups = append(flattenedGroups, map[string]interface{}{
-			"id":                   group.GetID(),
-			"name":                 group.GetName(),
-			"email":                group.GetEmail(),
-			"direct_members_count": group.GetDirectMembersCount(),
-		})
-	}
-
-	return flattenedGroups
-}
-
 func deleteDirectorySynchronizedGroups(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	apiv3 := meta.(*config.Config).GetAPIV3()
 
-	if err := putGroups(ctx, apiv3, data.Id(), []string{}); err != nil {
+	if err := putGroups(ctx, apiv3, data.Id(), []*managementv3.SynchronizedGroupPayload{}); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -280,35 +260,22 @@ func getAllGroups(ctx context.Context, apiv3 *managementv3client.Management, con
 	return groups, nil
 }
 
-func putGroups(ctx context.Context, apiv3 *managementv3client.Management, connectionID string, groupIDs []string) error {
-	payloadGroups := make([]*managementv3.SynchronizedGroupPayload, len(groupIDs))
-	for i, id := range groupIDs {
-		payloadGroups[i] = &managementv3.SynchronizedGroupPayload{
-			ID: id,
-		}
-	}
-
+func putGroups(ctx context.Context, apiv3 *managementv3client.Management, connectionID string, groups []*managementv3.SynchronizedGroupPayload) error {
 	return apiv3.Connections.DirectoryProvisioning.Set(ctx, connectionID,
 		&managementv3.ReplaceSynchronizedGroupsRequestContent{
-			Groups: payloadGroups,
+			Groups: groups,
 		},
 	)
 }
 
-// addGroups is safe to retry after a partial failure: adding an already-synchronized group is a
-// no-op.
-func addGroups(ctx context.Context, apiv3 *managementv3client.Management, connectionID string, groupIDs []string) error {
-	for _, chunk := range chunkGroupIDs(groupIDs) {
-		payloadGroups := make([]*managementv3.SynchronizedGroupPayload, len(chunk))
-		for i, id := range chunk {
-			payloadGroups[i] = &managementv3.SynchronizedGroupPayload{
-				ID: id,
-			}
-		}
-
+// addGroups writes each group's metadata alongside its ID, since add stores what the payload holds
+// and clears what it leaves out. Re-adding a synchronized group creates no duplicate, so a retry
+// after a partial failure is safe.
+func addGroups(ctx context.Context, apiv3 *managementv3client.Management, connectionID string, groups []*managementv3.SynchronizedGroupPayload) error {
+	for _, chunk := range chunkGroups(groups) {
 		if err := apiv3.Connections.DirectoryProvisioning.AddSynchronizedGroupSelections(ctx, connectionID,
 			&managementv3.AddSynchronizedGroupsRequestContent{
-				Groups: payloadGroups,
+				Groups: chunk,
 			},
 		); err != nil {
 			return err
@@ -321,7 +288,7 @@ func addGroups(ctx context.Context, apiv3 *managementv3client.Management, connec
 // removeGroups is safe to retry after a partial failure: removing a group that is not synchronized
 // is a no-op rather than a 404.
 func removeGroups(ctx context.Context, apiv3 *managementv3client.Management, connectionID string, groupIDs []string) error {
-	for _, chunk := range chunkGroupIDs(groupIDs) {
+	for _, chunk := range chunkGroups(groupIDs) {
 		selections := make([]*managementv3.SynchronizedGroupSelectionID, len(chunk))
 		for i, id := range chunk {
 			selections[i] = &managementv3.SynchronizedGroupSelectionID{
@@ -341,11 +308,13 @@ func removeGroups(ctx context.Context, apiv3 *managementv3client.Management, con
 	return nil
 }
 
-func chunkGroupIDs(groupIDs []string) [][]string {
-	var chunks [][]string
+// chunkGroups splits a write into calls the add and remove endpoints accept, whether it carries
+// whole groups or the IDs alone.
+func chunkGroups[T any](groups []T) [][]T {
+	var chunks [][]T
 
-	for start := 0; start < len(groupIDs); start += groupsWriteChunkSize {
-		chunks = append(chunks, groupIDs[start:min(start+groupsWriteChunkSize, len(groupIDs))])
+	for start := 0; start < len(groups); start += groupsWriteChunkSize {
+		chunks = append(chunks, groups[start:min(start+groupsWriteChunkSize, len(groups))])
 	}
 
 	return chunks

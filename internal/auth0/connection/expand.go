@@ -1733,3 +1733,134 @@ func expandDirectoryUpdate(data *schema.ResourceData) *managementv3.UpdateDirect
 
 	return directoryConfig
 }
+
+// expandDirectorySynchronizedGroupsCreate builds the payloads for whichever attribute is declared.
+func expandDirectorySynchronizedGroupsCreate(data *schema.ResourceData) []*managementv3.SynchronizedGroupPayload {
+	if groupIDs := groupIDsIn(data.Get("group_ids")); len(groupIDs) > 0 {
+		return groupsWithOnlyID(groupIDs)
+	}
+
+	if groups := desiredGroupsInConfig(data); len(groups) > 0 {
+		return groups
+	}
+
+	return []*managementv3.SynchronizedGroupPayload{}
+}
+
+// directorySynchronizedGroupsUpdate is the delta an update writes
+type directorySynchronizedGroupsUpdate struct {
+	add    []*managementv3.SynchronizedGroupPayload
+	remove []string
+}
+
+// expandDirectorySynchronizedGroupsUpdate writes only the difference, so adding one group to a
+// directory of 800 sends one rather than re-sending all 801 through a replace. A group whose metadata
+// changed is removed and added back, since the add is what carries metadata.
+func expandDirectorySynchronizedGroupsUpdate(data *schema.ResourceData) directorySynchronizedGroupsUpdate {
+	// These contain ids from both `group_ids` and `groups`.
+	existedGroupIDs, desiredGroupIDs := groupIDsChange(data)
+	newGroupIDs, staleGroupIDs := diffGroupIDs(existedGroupIDs, desiredGroupIDs)
+	update := directorySynchronizedGroupsUpdate{remove: staleGroupIDs}
+
+	isNew := make(map[string]struct{}, len(newGroupIDs))
+	for _, groupID := range newGroupIDs {
+		isNew[groupID] = struct{}{}
+	}
+
+	// It containes only config entries of `groups` as only those can have metadata.
+	desiredGroups := make(map[string]*managementv3.SynchronizedGroupPayload)
+	for _, group := range desiredGroupsInConfig(data) {
+		desiredGroups[group.GetID()] = group
+	}
+	// It containes only state entries of `groups` as only those can have metadata.
+	existedGroups := existedGroupsInState(data)
+
+	for _, groupID := range desiredGroupIDs {
+		group, desired := desiredGroups[groupID]
+		if !desired {
+			group = &managementv3.SynchronizedGroupPayload{ID: groupID}
+		}
+
+		if _, added := isNew[groupID]; !added {
+			if !metadataDiffers(group, existedGroups[groupID]) {
+				continue
+			}
+
+			update.remove = append(update.remove, groupID)
+		}
+
+		update.add = append(update.add, group)
+	}
+
+	return update
+}
+
+// desiredGroupsInConfig builds a payload for each `groups` block the configuration holds.
+func desiredGroupsInConfig(data *schema.ResourceData) []*managementv3.SynchronizedGroupPayload {
+	rawConfig := data.GetRawConfig()
+	if rawConfig.IsNull() {
+		return nil
+	}
+
+	rawGroups := rawConfig.GetAttr("groups")
+	if rawGroups.IsNull() {
+		return nil
+	}
+
+	groups := make([]*managementv3.SynchronizedGroupPayload, 0, rawGroups.LengthInt())
+
+	for _, rawGroup := range rawGroups.AsValueSlice() {
+		groups = append(groups, &managementv3.SynchronizedGroupPayload{
+			ID:                 *value.String(rawGroup.GetAttr("id")),
+			Name:               value.String(rawGroup.GetAttr("name")),
+			Email:              value.String(rawGroup.GetAttr("email")),
+			DirectMembersCount: value.Int(rawGroup.GetAttr("direct_members_count")),
+		})
+	}
+
+	return groups
+}
+
+func groupsWithOnlyID(groupIDs []string) []*managementv3.SynchronizedGroupPayload {
+	groups := make([]*managementv3.SynchronizedGroupPayload, 0, len(groupIDs))
+
+	for _, groupID := range groupIDs {
+		groups = append(groups, &managementv3.SynchronizedGroupPayload{ID: groupID})
+	}
+
+	return groups
+}
+
+// mergeGroupIDs collects the IDs held by both attributes. The two conflict in configuration, so at
+// most one ever contributes.
+func mergeGroupIDs(rawGroupIDs interface{}, rawGroups interface{}) []string {
+	return append(groupIDsIn(rawGroupIDs), groupIDsIn(rawGroups)...)
+}
+
+// groupIDsIn collects the group IDs the `group_ids` or `groups` set holds, whose members are a plain
+// ID and an object carrying one, respectively.
+func groupIDsIn(rawGroups interface{}) []string {
+	groupIDs := make([]string, 0)
+
+	groups, ok := rawGroups.(*schema.Set)
+	if !ok {
+		return groupIDs
+	}
+
+	for _, rawGroup := range groups.List() {
+		var groupID string
+
+		switch group := rawGroup.(type) {
+		case string:
+			groupID = group
+		case map[string]interface{}:
+			groupID, _ = group["id"].(string)
+		}
+
+		if groupID != "" {
+			groupIDs = append(groupIDs, groupID)
+		}
+	}
+
+	return groupIDs
+}

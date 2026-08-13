@@ -34,13 +34,13 @@ resource "auth0_connection_directory_synchronized_groups" "my_groups" {
   connection_id = auth0_connection.my_connection.id
 
   groups {
-    id = "group1abc"
+    id = "group1"
   }
   groups {
-    id = "group2def"
-  }
-  groups {
-    id = "group3ghi"
+    id                   = "group2"
+    name                 = "test"
+    email                = "test@test.com"
+    direct_members_count = 123
   }
 }
 ```
@@ -68,7 +68,7 @@ Required:
 
 - `id` (String) Google Workspace Directory group ID.
 
-Read-Only:
+Optional:
 
 - `direct_members_count` (Number) Number of direct members in the Google Workspace Directory group.
 - `email` (String) Google Workspace Directory group email.

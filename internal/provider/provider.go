@@ -262,6 +262,8 @@ func New() *schema.Provider {
 			"auth0_flow_vault_connection":                    flow.NewVaultConnectionDataSource(),
 			"auth0_form":                                     form.NewDataSource(),
 			"auth0_organization":                             organization.NewDataSource(),
+			"auth0_organization_role_members":                organization.NewRoleMembersDataSource(),
+			"auth0_organization_role_groups":                 organization.NewRoleGroupsDataSource(),
 			"auth0_organization_client":                      organization.NewClientDataSource(),
 			"auth0_organization_clients":                     organization.NewClientsDataSource(),
 			"auth0_organizations":                            organization.NewOrganizationsDataSource(),

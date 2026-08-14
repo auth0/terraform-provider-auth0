@@ -29,9 +29,15 @@ func dataSourceSchema() map[string]*schema.Schema {
 		AtLeastOneOf: []string{"role_id", "name"},
 	}
 
-	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "name")
+	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "name", "type", "owner_id")
 	dataSourceSchema["name"].Description = "The name of the role. If not provided, `role_id` must be set."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"role_id", "name"}
+
+	dataSourceSchema["type"].Description = "The type of the role, either `tenant` or `organization`. " +
+		"Only used to narrow down the search when looking the role up by `name`. (EA only)"
+	dataSourceSchema["owner_id"].Description = "The ID of the organization owning the role. Only used to " +
+		"narrow down the search when looking the role up by `name`, alongside a `type` of `organization`. (EA only)"
+	dataSourceSchema["owner_id"].RequiredWith = []string{"type"}
 
 	dataSourceSchema["skip_permissions"] = &schema.Schema{
 		Type:     schema.TypeBool,
@@ -106,6 +112,21 @@ func readRoleForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 	return readRoleByName(ctx, data, api, roleName)
 }
 
+// roleListFilters narrows down a lookup by name to a given type and owner.
+func roleListFilters(data *schema.ResourceData) []management.RequestOption {
+	var options []management.RequestOption
+
+	if roleType := data.Get("type").(string); roleType != "" {
+		options = append(options, management.Parameter("type", roleType))
+	}
+
+	if ownerID := data.Get("owner_id").(string); ownerID != "" {
+		options = append(options, management.Parameter("owner_id", ownerID))
+	}
+
+	return options
+}
+
 func readRoleByID(
 	ctx context.Context,
 	data *schema.ResourceData,
@@ -146,12 +167,14 @@ func readRoleByName(
 ) diag.Diagnostics {
 	page := 0
 	for {
-		roles, err := api.Role.List(
-			ctx,
+		options := []management.RequestOption{
 			management.Page(page),
 			management.PerPage(100),
 			management.Parameter("name_filter", roleName),
-		)
+		}
+		options = append(options, roleListFilters(data)...)
+
+		roles, err := api.Role.List(ctx, options...)
 		if err != nil {
 			return diag.FromErr(err)
 		}

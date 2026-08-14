@@ -1468,3 +1468,39 @@ func flattenDirectory(data *schema.ResourceData, directoryConfig *managementv3.G
 
 	return diag.FromErr(result.ErrorOrNil())
 }
+
+// flattenDirectorySynchronizedGroups writes to whichever of `group_ids` and `groups` the
+// configuration uses, never both. `groups` is the default, so an import lands on the attribute that
+// is not deprecated.
+func flattenDirectorySynchronizedGroups(data *schema.ResourceData, groups []*managementv3.SynchronizedGroupPayload) error {
+	if groupIDs, ok := data.Get("group_ids").(*schema.Set); ok && groupIDs.Len() > 0 {
+		return data.Set("group_ids", flattenGroupIDs(groups))
+	}
+
+	return data.Set("groups", flattenGroups(groups))
+}
+
+func flattenGroupIDs(groups []*managementv3.SynchronizedGroupPayload) []string {
+	groupIDs := make([]string, 0, len(groups))
+
+	for _, group := range groups {
+		groupIDs = append(groupIDs, group.GetID())
+	}
+
+	return groupIDs
+}
+
+func flattenGroups(groups []*managementv3.SynchronizedGroupPayload) []interface{} {
+	flattenedGroups := make([]interface{}, 0, len(groups))
+
+	for _, group := range groups {
+		flattenedGroups = append(flattenedGroups, map[string]interface{}{
+			"id":                   group.GetID(),
+			"name":                 group.GetName(),
+			"email":                group.GetEmail(),
+			"direct_members_count": group.GetDirectMembersCount(),
+		})
+	}
+
+	return flattenedGroups
+}

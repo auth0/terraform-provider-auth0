@@ -42,14 +42,14 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 49
+        content_length: 78
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"test-client-testaccorganizationclient"}
+            {"name":"test-client-testaccorganizationclient","organization_usage":"allow"}
         form: {}
         headers:
             Content-Type:
@@ -66,7 +66,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"test-client-testaccorganizationclient","client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"test-client-testaccorganizationclient","client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow","custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -132,7 +132,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"test-client-testaccorganizationclient","client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"test-client-testaccorganizationclient","client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow","custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -165,7 +165,7 @@ interactions:
         trailer: {}
         content_length: 244
         uncompressed: false
-        body: '[{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}]'
+        body: '[{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}]'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -198,7 +198,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -231,7 +231,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"test-client-testaccorganizationclient","client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"test-client-testaccorganizationclient","client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow","custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -297,7 +297,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -363,7 +363,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"test-client-testaccorganizationclient","client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"test-client-testaccorganizationclient","client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow","custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -396,7 +396,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":true,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -429,7 +429,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -462,7 +462,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -495,7 +495,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"clients":[{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}]}'
+        body: '{"clients":[{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -528,7 +528,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -561,7 +561,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"clients":[{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}]}'
+        body: '{"clients":[{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -594,7 +594,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -627,7 +627,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"test-client-testaccorganizationclient","client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"test-client-testaccorganizationclient","client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow","custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -693,7 +693,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -726,7 +726,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}'
+        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -759,7 +759,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"clients":[{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"]}}]}'
+        body: '{"clients":[{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -865,3 +865,36 @@ interactions:
         status: 204 No Content
         code: 204
         duration: 424.60475ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_rp73Y0GD0JAmmRNt/clients/EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"client_id":"EQEL3Qy7ydF5djQy2jgFuxdvbY58Iujc","use_for_member_access":false,"client":{"name":"test-client-testaccorganizationclient","is_first_party":true,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"organization_usage":"allow"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 304.126333ms

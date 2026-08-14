@@ -166,7 +166,25 @@ func flattenOrganizationClientAttributes(
 		"logo_uri":              clientMetadata.GetLogoURI(),
 		"is_first_party":        clientMetadata.GetIsFirstParty(),
 		"grant_types":           clientMetadata.GetGrantTypes(),
+		"organization_usage":    string(clientMetadata.GetOrganizationUsage()),
 	}
+}
+
+func flattenOrganizationClients(data *schema.ResourceData, organizationClients []*managementv3.OrganizationClient) error {
+	clients := make([]interface{}, 0, len(organizationClients))
+	for _, organizationClient := range organizationClients {
+		clients = append(clients, map[string]interface{}{
+			"client_id":             organizationClient.GetClientID(),
+			"use_for_member_access": organizationClient.GetUseForMemberAccess(),
+		})
+	}
+
+	result := multierror.Append(
+		data.Set("organization_id", data.Id()),
+		data.Set("clients", clients),
+	)
+
+	return result.ErrorOrNil()
 }
 
 func flattenOrganizationClientListItem(organizationClient *managementv3.OrganizationClient) map[string]interface{} {

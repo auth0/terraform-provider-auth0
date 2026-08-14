@@ -45,10 +45,12 @@ func clientResourceSchema() map[string]*schema.Schema {
 			Description: "The ID of the client (application) to associate with the organization.",
 		},
 		"use_for_member_access": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Computed:    true,
-			Description: "Whether this client is used for member access to the organization.",
+			Type:     schema.TypeBool,
+			Optional: true,
+			Default:  false,
+			Description: "Whether this client is used for member access to the organization. " +
+				"An association starts out with this turned off and it has to be activated " +
+				"explicitly.",
 		},
 		"name": {
 			Type:        schema.TypeString,
@@ -76,6 +78,13 @@ func clientResourceSchema() map[string]*schema.Schema {
 			Description: "The grant types enabled for the associated client.",
 			Elem:        &schema.Schema{Type: schema.TypeString},
 		},
+		"organization_usage": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Description: "How the associated client handles organizations during authentication. Available " +
+				"values are `deny`, `allow` or `require`. This is a read-only reflection of the client's own " +
+				"`organization_usage` setting and is managed on the `auth0_client` resource, not here.",
+		},
 	}
 }
 
@@ -87,8 +96,10 @@ func createOrganizationClient(ctx context.Context, data *schema.ResourceData, me
 
 	createReq := expandOrganizationClientCreate(data)
 
+	// Not HandleAPIError: there is nothing in state to remove at create time, so swallowing a
+	// 404 would end the apply with no error and no ID, which Terraform blames on the provider.
 	if _, err := apiv3.Organizations.Clients.Create(ctx, organizationID, createReq); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(err)
 	}
 
 	internalSchema.SetResourceGroupID(data, organizationID, clientID)
@@ -122,8 +133,10 @@ func updateOrganizationClient(ctx context.Context, data *schema.ResourceData, me
 
 	updateReq := expandOrganizationClientUpdate(data)
 
+	// Reporting a 404 beats dropping the resource from state mid-apply, which would leave
+	// Terraform with a plan it cannot match.
 	if _, err := apiv3.Organizations.Clients.Update(ctx, organizationID, clientID, updateReq); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(err)
 	}
 
 	return readOrganizationClient(ctx, data, meta)

@@ -5,6 +5,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
@@ -16,7 +18,8 @@ resource "auth0_organization" "my_organization" {
 }
 
 resource "auth0_client" "my_test_client" {
-	name = "test-client-{{.testName}}"
+	name               = "test-client-{{.testName}}"
+	organization_usage = "allow"
 }
 
 resource "auth0_organization_client" "my_organization_client" {
@@ -35,7 +38,8 @@ resource "auth0_organization" "my_organization" {
 }
 
 resource "auth0_client" "my_test_client" {
-	name = "test-client-{{.testName}}"
+	name               = "test-client-{{.testName}}"
+	organization_usage = "allow"
 }
 
 resource "auth0_organization_client" "my_organization_client" {
@@ -72,6 +76,7 @@ func TestAccOrganizationClient(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_organization_client.my_organization_client", "client_id"),
 					resource.TestCheckResourceAttr("auth0_organization_client.my_organization_client", "use_for_member_access", "true"),
 					resource.TestCheckResourceAttrSet("auth0_organization_client.my_organization_client", "name"),
+					resource.TestCheckResourceAttr("auth0_organization_client.my_organization_client", "organization_usage", "allow"),
 				),
 			},
 			{
@@ -80,9 +85,27 @@ func TestAccOrganizationClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_organization_client.my_organization_client", "use_for_member_access", "false"),
 					resource.TestCheckResourceAttrSet("data.auth0_organization_client.my_organization_client", "name"),
 					resource.TestCheckResourceAttr("data.auth0_organization_client.my_organization_client", "use_for_member_access", "false"),
+					resource.TestCheckResourceAttr("auth0_organization_client.my_organization_client", "organization_usage", "allow"),
+					resource.TestCheckResourceAttr("data.auth0_organization_client.my_organization_client", "organization_usage", "allow"),
 					resource.TestCheckResourceAttr("data.auth0_organization_clients.my_organization_clients", "clients.#", "1"),
 					resource.TestCheckResourceAttrSet("data.auth0_organization_clients.my_organization_clients", "clients.0.client_id"),
+					resource.TestCheckResourceAttr("data.auth0_organization_clients.my_organization_clients", "clients.0.organization_usage", "allow"),
 				),
+			},
+			{
+				Config:            acctest.ParseTestName(testAccOrganizationClientUpdate, testName),
+				ResourceName:      "auth0_organization_client.my_organization_client",
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					organizationID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_organization.my_organization", "id")
+					assert.NoError(t, err)
+
+					clientID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_client.my_test_client", "id")
+					assert.NoError(t, err)
+
+					return organizationID + "::" + clientID, nil
+				},
 			},
 		},
 	})

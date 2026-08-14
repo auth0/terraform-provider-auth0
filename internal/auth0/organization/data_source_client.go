@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -36,7 +35,7 @@ func readOrganizationClientForDataSource(ctx context.Context, data *schema.Resou
 
 	organizationClient, err := apiv3.Organizations.Clients.Get(ctx, organizationID, clientID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(err)
 	}
 
 	internalSchema.SetResourceGroupID(data, organizationID, clientID)

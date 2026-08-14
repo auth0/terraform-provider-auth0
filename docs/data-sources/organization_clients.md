@@ -39,6 +39,7 @@ Read-Only:
 - `is_first_party` (Boolean)
 - `logo_uri` (String)
 - `name` (String)
+- `organization_usage` (String)
 - `use_for_member_access` (Boolean)
 
 

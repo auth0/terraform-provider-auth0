@@ -9,7 +9,18 @@ import (
 // an organization within a list, shared by the `auth0_client_grant_organizations` and
 // `auth0_user_organizations` data sources (EA only).
 func OrganizationSummaryElem() *schema.Resource {
-	return &schema.Resource{
+	return organizationSummaryElem(false)
+}
+
+// OrganizationSummaryElemWithClientAssociation returns OrganizationSummaryElem plus the
+// nested `client` block that `GET /organizations` adds when `include_client_association_for`
+// is passed (EA only).
+func OrganizationSummaryElemWithClientAssociation() *schema.Resource {
+	return organizationSummaryElem(true)
+}
+
+func organizationSummaryElem(withClientAssociation bool) *schema.Resource {
+	elem := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"organization_id": {
 				Type:        schema.TypeString,
@@ -97,6 +108,27 @@ func OrganizationSummaryElem() *schema.Resource {
 			},
 		},
 	}
+
+	if withClientAssociation {
+		elem.Schema["client"] = &schema.Schema{
+			Type:     schema.TypeList,
+			Computed: true,
+			Description: "The organization's association with the client passed as " +
+				"`include_client_association_for`. Empty for organizations that have no association " +
+				"with that client (EA only).",
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"use_for_member_access": {
+						Type:        schema.TypeBool,
+						Computed:    true,
+						Description: "Whether organization members can log in via this client.",
+					},
+				},
+			},
+		}
+	}
+
+	return elem
 }
 
 // FlattenOrganizationSummary flattens a v3 *managementv3.Organization into the map
@@ -111,6 +143,27 @@ func FlattenOrganizationSummary(organization *managementv3.Organization) map[str
 		"metadata":                  flattenOrganizationMetadataV3(organization.GetMetadata()),
 		"branding":                  flattenOrganizationBrandingV3(organization.GetBranding()),
 		"token_quota":               flattenTokenQuotaV3(organization.GetTokenQuota()),
+	}
+}
+
+// FlattenOrganizationSummaryWithClientAssociation flattens an organization into the shape of
+// OrganizationSummaryElemWithClientAssociation, including the `client` block when present.
+func FlattenOrganizationSummaryWithClientAssociation(organization *managementv3.Organization) map[string]interface{} {
+	summary := FlattenOrganizationSummary(organization)
+	summary["client"] = flattenOrganizationClientAssociationV3(organization.Client)
+
+	return summary
+}
+
+func flattenOrganizationClientAssociationV3(association *managementv3.OrganizationClientAssociation) []interface{} {
+	if association == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"use_for_member_access": association.GetUseForMemberAccess(),
+		},
 	}
 }
 

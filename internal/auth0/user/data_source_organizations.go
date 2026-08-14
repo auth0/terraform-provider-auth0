@@ -12,7 +12,6 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewOrganizationsDataSource will return a new auth0_user_organizations data source (EA only).
@@ -44,7 +43,7 @@ func readUserOrganizationsForDataSource(ctx context.Context, data *schema.Resour
 
 	organizations, err := fetchAllUserOrganizations(ctx, apiv3, userID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(err)
 	}
 
 	data.SetId(userID)

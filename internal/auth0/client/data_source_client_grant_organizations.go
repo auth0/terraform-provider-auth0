@@ -12,7 +12,6 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewClientGrantOrganizationsDataSource will return a new auth0_client_grant_organizations data source (EA only).
@@ -44,7 +43,7 @@ func readClientGrantOrganizationsForDataSource(ctx context.Context, data *schema
 
 	organizations, err := fetchAllClientGrantOrganizations(ctx, apiv3, clientGrantID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(err)
 	}
 
 	data.SetId(clientGrantID)

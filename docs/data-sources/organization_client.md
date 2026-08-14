@@ -33,6 +33,7 @@ data "auth0_organization_client" "my_org_client" {
 - `is_first_party` (Boolean) Whether the associated client is a first-party client (`true`) or not (`false`).
 - `logo_uri` (String) The URI of the associated client's logo.
 - `name` (String) The name of the associated client.
-- `use_for_member_access` (Boolean) Whether this client is used for member access to the organization.
+- `organization_usage` (String) How the associated client handles organizations during authentication. Available values are `deny`, `allow` or `require`. This is a read-only reflection of the client's own `organization_usage` setting and is managed on the `auth0_client` resource, not here.
+- `use_for_member_access` (Boolean) Whether this client is used for member access to the organization. An association starts out with this turned off and it has to be activated explicitly.
 
 

@@ -1,23 +1,39 @@
 ## v1.55.0
 
 FEATURES:
-- `resource/auth0_organization` – Add `is_app_entitlement_active` attribute to control whether members of the organization can access applications associated with it (EA only)
-- `resource/auth0_organization_client` – Add resource to manage an organization's entitlement to a client (application), including the `use_for_member_access` flag (EA only)
-- `data-source/auth0_organization_client` – Add data source to retrieve a single organization-client association (EA only)
-- `data-source/auth0_organization_clients` – Add data source to retrieve all client associations for an organization (EA only)
-- `data-source/auth0_client_grant_organizations` – Add data source to retrieve all organizations associated with a client grant (EA only)
-- `data-source/auth0_user_organizations` – Add data source to retrieve all organization memberships for a user (EA only)
+- `resource/auth0_organization_client` – Add resource to manage a single client (application) association of an organization, with `use_for_member_access` (EA only) ([#1675](https://github.com/auth0/terraform-provider-auth0/pull/1675))
+- `resource/auth0_organization_clients` – Add authoritative resource to manage all client (application) associations of an organization, up to the 100-client limit (EA only) ([#1675](https://github.com/auth0/terraform-provider-auth0/pull/1675))
+- `data-source/auth0_organization_client` – Add data source to retrieve a single organization-client association (EA only) ([#1675](https://github.com/auth0/terraform-provider-auth0/pull/1675))
+- `data-source/auth0_organization_clients` – Add data source to retrieve all client associations for an organization (EA only) ([#1675](https://github.com/auth0/terraform-provider-auth0/pull/1675))
+- `data-source/auth0_organizations` – Add data source to retrieve all organizations of the tenant, with `include_client_association_for` to also return each organization's association with a given client (EA only) ([#1675](https://github.com/auth0/terraform-provider-auth0/pull/1675))
+- `data-source/auth0_client_grant_organizations` – Add data source to retrieve all organizations associated with a client grant (EA only) ([#1675](https://github.com/auth0/terraform-provider-auth0/pull/1675))
+- `data-source/auth0_user_organizations` – Add data source to retrieve all organization memberships for a user (EA only) ([#1675](https://github.com/auth0/terraform-provider-auth0/pull/1675))
+- `data-source/auth0_organization_role_members` – Add data source to retrieve the organization members with a direct assignment of a role (EA only) ([#1674](https://github.com/auth0/terraform-provider-auth0/pull/1674))
+- `data-source/auth0_organization_role_groups` – Add data source to retrieve the groups assigned to a role within an organization (EA only) ([#1674](https://github.com/auth0/terraform-provider-auth0/pull/1674))
 
+ENHANCEMENTS:
+- `resource/auth0_organization` – Add `is_app_entitlement_active` to control whether members of the organization can access applications associated with it (EA only) ([#1675](https://github.com/auth0/terraform-provider-auth0/pull/1675))
+- `data-source/auth0_organization` – Expose `is_app_entitlement_active` (EA only) ([#1675](https://github.com/auth0/terraform-provider-auth0/pull/1675))
+- `resource/auth0_role` – Add `type` and `owner_id` to scope a role to a single organization. Both are create-only, so changing either forces a new role (EA only) ([#1674](https://github.com/auth0/terraform-provider-auth0/pull/1674))
+- `data-source/auth0_role` – Add `type` and `owner_id` to disambiguate a lookup by `name`, since several organizations can own a role of the same name (EA only) ([#1674](https://github.com/auth0/terraform-provider-auth0/pull/1674))
+- `resource/auth0_client_credentials` – Add `token_vault_privileged_access` block to configure a client as a Token Vault privileged worker (EA only) ([#1673](https://github.com/auth0/terraform-provider-auth0/pull/1673))
+- `resource/auth0_connection_directory_synchronized_groups` – Add `groups` block with `id`, `name`, `email` and `direct_members_count`, superseding the ID-only `group_ids`. Updates now send only the changed groups, batched by 100, and duplicate IDs are rejected at plan time ([#1672](https://github.com/auth0/terraform-provider-auth0/pull/1672))
+- `data-source/auth0_connection_directory_synchronized_groups` – Expose `groups` with group metadata, and add `query` for a prefix search on `name` or `email` ([#1672](https://github.com/auth0/terraform-provider-auth0/pull/1672))
+
+BUG FIXES:
+- `resource/auth0_client_credentials` – Scope credential operations to the credentials tracked in state, so creates, rotations, `authentication_method` switches and destroys no longer act on unmanaged credentials ([#1668](https://github.com/auth0/terraform-provider-auth0/pull/1668))
+- `resource/auth0_client_credentials` – Match `private_key_jwt` credentials on `name` as well, so credentials differing only by name are no longer treated as one, and detach a renamed credential before recreating it when both share the same public key ([#1666](https://github.com/auth0/terraform-provider-auth0/pull/1666))
+
+NOTES:
+- `resource/auth0_connection_directory_synchronized_groups` / `data-source/auth0_connection_directory_synchronized_groups` – Promote from Early Access to general availability ([#1672](https://github.com/auth0/terraform-provider-auth0/pull/1672))
+- `resource/auth0_connection_directory` / `data-source/auth0_connection_directory` – Promote `synchronize_groups` from Early Access to general availability ([#1672](https://github.com/auth0/terraform-provider-auth0/pull/1672))
+- `resource/auth0_connection_directory_synchronized_groups` – Deprecate `group_ids` in favor of `groups`; the two are mutually exclusive and existing configurations keep working ([#1672](https://github.com/auth0/terraform-provider-auth0/pull/1672))
+- `resource/auth0_connection` – Clarify the `use_oauth_spec_scope` description ([#1667](https://github.com/auth0/terraform-provider-auth0/pull/1667))
 
 ## v1.54.1
 
 BUG FIXES:
 - `resource/auth0_connection` – Fix updates failing with `cannot patch unique property on email attribute` on `auth0` connections whose `options.attributes.email.unique` is `false`. The Management API reads a missing `unique` as `true`, so any change to an unrelated option was rejected ([#1669](https://github.com/auth0/terraform-provider-auth0/pull/1669))
-
-
-BUG FIXES:
-- `resource/auth0_client_credentials` – Include `name` when matching added/removed `private_key_jwt` credentials during diff classification, so credentials that differ only by name are no longer incorrectly treated as the same credential
-- `resource/auth0_client_credentials` – Detach a renamed credential before creating its replacement when the two share the same public key, even with slot/pool headroom, so the apply no longer fails with `credentials contains public keys that already exist in client`
 
 ## v1.54.0
 

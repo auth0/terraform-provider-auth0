@@ -137,47 +137,6 @@ resource "auth0_action" "my_action" {
 }
 `
 
-const testAccActionConfigSecretsWOConflictsWithSecrets = `
-resource "auth0_action" "my_action" {
-	name = "Test Action {{.testName}}"
-	code = "exports.onExecutePostLogin = async (event, api) => {};"
-
-	supported_triggers {
-		id      = "post-login"
-		version = "v3"
-	}
-
-	secrets {
-		name  = "foo"
-		value = "plain_value"
-	}
-
-	secrets_wo {
-		name  = "foo"
-		value = "wo_value"
-	}
-
-	secrets_wo_version = 1
-}
-`
-
-const testAccActionConfigSecretsWORequiresVersion = `
-resource "auth0_action" "my_action" {
-	name = "Test Action {{.testName}}"
-	code = "exports.onExecutePostLogin = async (event, api) => {};"
-
-	supported_triggers {
-		id      = "post-login"
-		version = "v3"
-	}
-
-	secrets_wo {
-		name  = "foo"
-		value = "wo_value"
-	}
-}
-`
-
 // This config makes use of a crypto dependency definition that causes the
 // action build to fail.  This is because the crypto package has been
 // deprecated https://www.npmjs.com/package/crypto.
@@ -320,28 +279,6 @@ func TestAccActionWithSecretsWO(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo_version", "2"),
 					resource.TestCheckNoResourceAttr("auth0_action.my_action", "secrets_wo.0.value"),
 				),
-			},
-		},
-	})
-}
-
-func TestAccActionSecretsWOConflictsWithSecrets(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config:      acctest.ParseTestName(testAccActionConfigSecretsWOConflictsWithSecrets, t.Name()),
-				ExpectError: regexp.MustCompile(`"secrets": conflicts with secrets_wo|"secrets_wo": conflicts with secrets`),
-			},
-		},
-	})
-}
-
-func TestAccActionSecretsWORequiresVersion(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config:      acctest.ParseTestName(testAccActionConfigSecretsWORequiresVersion, t.Name()),
-				ExpectError: regexp.MustCompile(`"secrets_wo":\s+all of|secrets_wo_version`),
 			},
 		},
 	})

@@ -111,6 +111,42 @@ data "auth0_role" "test" {
 }
 `
 
+const testAccGivenAnOrganizationRole = `
+resource "auth0_organization" "zion" {
+	name         = "test-org-role-ds-{{.testName}}"
+	display_name = "Zion - Acceptance Test - {{.testName}}"
+}
+
+resource "auth0_role" "the_operator" {
+	name        = "The Operator - Acceptance Test - {{.testName}}"
+	description = "The Operator - Acceptance Test"
+	type        = "organization"
+	owner_id    = auth0_organization.zion.id
+}
+`
+
+const testAccDataSourceOrganizationRoleByName = testAccGivenAnOrganizationRole + `
+data "auth0_role" "test" {
+	depends_on = [ auth0_role.the_operator ]
+
+	name             = auth0_role.the_operator.name
+	type             = "organization"
+	owner_id         = auth0_organization.zion.id
+	skip_permissions = true
+	skip_users       = true
+}
+`
+
+const testAccDataSourceOrganizationRoleByID = testAccGivenAnOrganizationRole + `
+data "auth0_role" "test" {
+	depends_on = [ auth0_role.the_operator ]
+
+	role_id          = auth0_role.the_operator.id
+	skip_permissions = true
+	skip_users       = true
+}
+`
+
 func TestAccDataSourceRoleRequiredArguments(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
 		ProviderFactories: acctest.TestFactories(),
@@ -176,6 +212,33 @@ func TestAccDataSourceRole(t *testing.T) {
 						"description":                "Bring peace",
 						"resource_server_name":       fmt.Sprintf("Role - Acceptance Test - %s", testName),
 					}),
+				),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceOrganizationRole(t *testing.T) {
+	testName := strings.ToLower(t.Name())
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataSourceOrganizationRoleByName, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_role.test", "name", fmt.Sprintf("The Operator - Acceptance Test - %s", testName)),
+					resource.TestCheckResourceAttr("data.auth0_role.test", "description", "The Operator - Acceptance Test"),
+					resource.TestCheckResourceAttr("data.auth0_role.test", "type", "organization"),
+					resource.TestCheckResourceAttrPair("data.auth0_role.test", "owner_id", "auth0_organization.zion", "id"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDataSourceOrganizationRoleByID, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("data.auth0_role.test", "role_id"),
+					resource.TestCheckResourceAttr("data.auth0_role.test", "name", fmt.Sprintf("The Operator - Acceptance Test - %s", testName)),
+					resource.TestCheckResourceAttr("data.auth0_role.test", "type", "organization"),
+					resource.TestCheckResourceAttrPair("data.auth0_role.test", "owner_id", "auth0_organization.zion", "id"),
 				),
 			},
 		},

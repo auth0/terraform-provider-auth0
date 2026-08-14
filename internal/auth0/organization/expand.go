@@ -1,6 +1,7 @@
 package organization
 
 import (
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -18,6 +19,7 @@ func expandOrganization(data *schema.ResourceData) *management.Organization {
 		Name:                   value.String(cfg.GetAttr("name")),
 		DisplayName:            value.String(cfg.GetAttr("display_name")),
 		ThirdPartyClientAccess: value.String(cfg.GetAttr("third_party_client_access")),
+		IsAppEntitlementActive: value.Bool(cfg.GetAttr("is_app_entitlement_active")),
 		Branding:               expandOrganizationBranding(cfg.GetAttr("branding")),
 		TokenQuota:             commons.ExpandTokenQuota(cfg.GetAttr("token_quota")),
 	}
@@ -115,6 +117,49 @@ func expandOrganizationConnectionsCreate(cfg cty.Value) []*managementv3.CreateOr
 	})
 
 	return connections
+}
+
+func expandOrganizationClientCreate(data *schema.ResourceData) *managementv3.CreateOrganizationClientsRequestContent {
+	clientID := data.Get("client_id").(string)
+	useForMemberAccess := data.Get("use_for_member_access").(bool)
+
+	return &managementv3.CreateOrganizationClientsRequestContent{
+		Clients: []*managementv3.CreateOrganizationClientRequestItem{
+			{
+				ClientID:           clientID,
+				UseForMemberAccess: useForMemberAccess,
+			},
+		},
+	}
+}
+
+// expandOrganizationClients expands the `clients` set of the auth0_organization_clients
+// resource into the items accepted by the batch association endpoint.
+func expandOrganizationClients(clients interface{}) []*managementv3.CreateOrganizationClientRequestItem {
+	clientSet, ok := clients.(*schema.Set)
+	if !ok {
+		return nil
+	}
+
+	items := make([]*managementv3.CreateOrganizationClientRequestItem, 0, clientSet.Len())
+	for _, item := range clientSet.List() {
+		client := item.(map[string]interface{})
+
+		items = append(items, &managementv3.CreateOrganizationClientRequestItem{
+			ClientID:           client["client_id"].(string),
+			UseForMemberAccess: client["use_for_member_access"].(bool),
+		})
+	}
+
+	return items
+}
+
+func expandOrganizationClientUpdate(data *schema.ResourceData) *managementv3.UpdateOrganizationClientRequestContent {
+	// Read from state, not the raw config, so the schema default applies when the attribute is
+	// omitted and a flag flipped outside Terraform gets patched back.
+	return &managementv3.UpdateOrganizationClientRequestContent{
+		UseForMemberAccess: auth0.Bool(data.Get("use_for_member_access").(bool)),
+	}
 }
 
 func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {

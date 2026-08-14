@@ -50,6 +50,15 @@ func NewResource() *schema.Resource {
 				Description: "Controls whether this organization can be used in user flows with third-party clients. " +
 					"Available values are `allow` or `block`. Defaults to `block`.",
 			},
+			"is_app_entitlement_active": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "Controls whether this organization's app entitlement is active, determining whether " +
+					"members of this organization can access applications associated with it (EA only). This is " +
+					"distinct from `auth0_client_grant`'s `organization_usage` attribute, which controls whether " +
+					"organizations can be used with client credentials exchanges for a given client grant.",
+			},
 			"branding": {
 				Type:        schema.TypeList,
 				Optional:    true,

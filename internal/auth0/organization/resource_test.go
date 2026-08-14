@@ -307,3 +307,59 @@ func TestAccOrganizationThirdPartyClientAccess(t *testing.T) {
 		},
 	})
 }
+
+const testAccOrganizationIsAppEntitlementActiveDefault = `
+resource "auth0_organization" "acme" {
+	name         = "test-{{.testName}}"
+	display_name = "Acme Inc. {{.testName}}"
+}
+`
+
+const testAccOrganizationIsAppEntitlementActiveEnabled = `
+resource "auth0_organization" "acme" {
+	name                       = "test-{{.testName}}"
+	display_name               = "Acme Inc. {{.testName}}"
+	is_app_entitlement_active  = true
+}
+
+data "auth0_organization" "acme" {
+	organization_id = auth0_organization.acme.id
+}
+`
+
+const testAccOrganizationIsAppEntitlementActiveDisabled = `
+resource "auth0_organization" "acme" {
+	name                       = "test-{{.testName}}"
+	display_name               = "Acme Inc. {{.testName}}"
+	is_app_entitlement_active  = false
+}
+`
+
+func TestAccOrganizationIsAppEntitlementActive(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccOrganizationIsAppEntitlementActiveDefault, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
+					// Omitting the field must default to "false", materialized via Computed.
+					resource.TestCheckResourceAttr("auth0_organization.acme", "is_app_entitlement_active", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccOrganizationIsAppEntitlementActiveEnabled, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.acme", "is_app_entitlement_active", "true"),
+					// Data source must reflect the same value (read parity).
+					resource.TestCheckResourceAttr("data.auth0_organization.acme", "is_app_entitlement_active", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccOrganizationIsAppEntitlementActiveDisabled, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.acme", "is_app_entitlement_active", "false"),
+				),
+			},
+		},
+	})
+}

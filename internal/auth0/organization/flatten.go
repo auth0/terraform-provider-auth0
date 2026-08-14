@@ -14,6 +14,7 @@ func flattenOrganization(data *schema.ResourceData, organization *management.Org
 		data.Set("name", organization.GetName()),
 		data.Set("display_name", organization.GetDisplayName()),
 		data.Set("third_party_client_access", organization.GetThirdPartyClientAccess()),
+		data.Set("is_app_entitlement_active", organization.GetIsAppEntitlementActive()),
 		data.Set("branding", flattenOrganizationBranding(organization.GetBranding())),
 		data.Set("metadata", organization.GetMetadata()),
 		data.Set("token_quota", commons.FlattenTokenQuota(organization.GetTokenQuota())),
@@ -137,6 +138,60 @@ func flattenOrganizationClientGrantsSlice(clientGrants []*management.ClientGrant
 		flattenedClientGrants = append(flattenedClientGrants, grant.GetID())
 	}
 	return flattenedClientGrants
+}
+
+func flattenOrganizationClient(
+	data *schema.ResourceData,
+	useForMemberAccess bool,
+	clientMetadata *managementv3.OrganizationClientMetadata,
+) error {
+	attributes := flattenOrganizationClientAttributes(useForMemberAccess, clientMetadata)
+
+	var result *multierror.Error
+	for attribute, value := range attributes {
+		result = multierror.Append(result, data.Set(attribute, value))
+	}
+
+	return result.ErrorOrNil()
+}
+
+func flattenOrganizationClientAttributes(
+	useForMemberAccess bool,
+	clientMetadata *managementv3.OrganizationClientMetadata,
+) map[string]interface{} {
+	return map[string]interface{}{
+		"use_for_member_access": useForMemberAccess,
+		"name":                  clientMetadata.GetName(),
+		"app_type":              clientMetadata.GetAppType(),
+		"logo_uri":              clientMetadata.GetLogoURI(),
+		"is_first_party":        clientMetadata.GetIsFirstParty(),
+		"grant_types":           clientMetadata.GetGrantTypes(),
+		"organization_usage":    string(clientMetadata.GetOrganizationUsage()),
+	}
+}
+
+func flattenOrganizationClients(data *schema.ResourceData, organizationClients []*managementv3.OrganizationClient) error {
+	clients := make([]interface{}, 0, len(organizationClients))
+	for _, organizationClient := range organizationClients {
+		clients = append(clients, map[string]interface{}{
+			"client_id":             organizationClient.GetClientID(),
+			"use_for_member_access": organizationClient.GetUseForMemberAccess(),
+		})
+	}
+
+	result := multierror.Append(
+		data.Set("organization_id", data.Id()),
+		data.Set("clients", clients),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenOrganizationClientListItem(organizationClient *managementv3.OrganizationClient) map[string]interface{} {
+	item := flattenOrganizationClientAttributes(organizationClient.GetUseForMemberAccess(), organizationClient.GetClient())
+	item["client_id"] = organizationClient.GetClientID()
+
+	return item
 }
 
 func flattenOrganizationDiscoveryDomain(data *schema.ResourceData, discoveryDomain *management.OrganizationDiscoveryDomain, organizationID string) error {

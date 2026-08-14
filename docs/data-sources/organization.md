@@ -40,6 +40,7 @@ data "auth0_organization" "some-organization-by-id" {
 - `connections` (Set of Object) Connections enabled for this organization. Skips populating if `skip_connections` is `true`. (see [below for nested schema](#nestedatt--connections))
 - `display_name` (String) Friendly name of this organization.
 - `id` (String) The ID of this resource.
+- `is_app_entitlement_active` (Boolean) Controls whether this organization's app entitlement is active, determining whether members of this organization can access applications associated with it (EA only). This is distinct from `auth0_client_grant`'s `organization_usage` attribute, which controls whether organizations can be used with client credentials exchanges for a given client grant.
 - `members` (Set of String) User ID(s) that are members of the organization. Skips populating if `skip_members` is `true`.
 - `metadata` (Map of String) Metadata associated with the organization. Maximum of 10 metadata properties allowed.
 - `third_party_client_access` (String) Controls whether this organization can be used in user flows with third-party clients. Available values are `allow` or `block`. Defaults to `block`.

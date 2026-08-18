@@ -193,3 +193,33 @@ func TestConnectionOptionsTypeOmitsWhenNil(t *testing.T) {
 		assert.Contains(t, string(payload), `"type":"back_channel"`)
 	})
 }
+
+// The API rejects `oidc_metadata: null` with `"metadata_response" must be of type object`,
+// so an unset attribute has to be omitted from the request rather than nulled.
+func TestConnectionOptionsOIDCMetadataOmitsWhenNil(t *testing.T) {
+	metadata := map[string]interface{}{"issuer": "https://idp.example.com"}
+
+	t.Run("oidc omits oidc_metadata when nil", func(t *testing.T) {
+		payload, err := json.Marshal(&management.ConnectionOptionsOIDC{})
+		assert.NoError(t, err)
+		assert.NotContains(t, string(payload), "oidc_metadata")
+	})
+
+	t.Run("oidc includes oidc_metadata when set", func(t *testing.T) {
+		payload, err := json.Marshal(&management.ConnectionOptionsOIDC{OIDCMetadata: metadata})
+		assert.NoError(t, err)
+		assert.Contains(t, string(payload), `"oidc_metadata":{"issuer":"https://idp.example.com"}`)
+	})
+
+	t.Run("okta omits oidc_metadata when nil", func(t *testing.T) {
+		payload, err := json.Marshal(&management.ConnectionOptionsOkta{})
+		assert.NoError(t, err)
+		assert.NotContains(t, string(payload), "oidc_metadata")
+	})
+
+	t.Run("okta includes oidc_metadata when set", func(t *testing.T) {
+		payload, err := json.Marshal(&management.ConnectionOptionsOkta{OIDCMetadata: metadata})
+		assert.NoError(t, err)
+		assert.Contains(t, string(payload), `"oidc_metadata":{"issuer":"https://idp.example.com"}`)
+	})
+}

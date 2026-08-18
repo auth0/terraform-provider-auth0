@@ -1146,8 +1146,12 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 	expandConnectionOptionsScopes(data, options)
 
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+	diagnostics := diag.FromErr(err)
 
-	return options, diag.FromErr(err)
+	options.OIDCMetadata, err = value.MapFromJSON(config.GetAttr("oidc_metadata"))
+	diagnostics = append(diagnostics, diag.FromErr(err)...)
+
+	return options, diagnostics
 }
 
 func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
@@ -1204,8 +1208,12 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 	expandConnectionOptionsScopes(data, options)
 
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+	diagnostics := diag.FromErr(err)
 
-	return options, diag.FromErr(err)
+	options.OIDCMetadata, err = value.MapFromJSON(config.GetAttr("oidc_metadata"))
+	diagnostics = append(diagnostics, diag.FromErr(err)...)
+
+	return options, diagnostics
 }
 
 // nonEmptyStrings returns nil for a null OR empty list.

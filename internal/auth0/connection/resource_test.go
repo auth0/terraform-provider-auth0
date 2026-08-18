@@ -1,8 +1,10 @@
 package connection_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
+	"reflect"
 	"regexp"
 	"testing"
 
@@ -3943,6 +3945,250 @@ func TestAccConnectionOIDCMetadata(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_connection.saml", "options.0.oidc_metadata"),
 					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.oidc_metadata", "{\"authorization_endpoint\":\"https://idp.apitest-xaa.example.com/authorize\",\"id_token_signing_alg_values_supported\":[\"RS256\"],\"issuer\":\"https://idp.apitest-xaa.example.com\",\"jwks_uri\":\"https://idp.apitest-xaa.example.com/jwks\",\"response_types_supported\":[\"code\"],\"subject_types_supported\":[\"public\"],\"token_endpoint\":\"https://idp.apitest-xaa.example.com/token\"}"),
 				),
+			},
+		},
+	})
+}
+
+// checkOIDCMetadataKey asserts one key of the stored discovery document. OIDC and Okta
+// avoid the exact-string check the SAML test uses because key order is not guaranteed
+// once the document round-trips through the API.
+func checkOIDCMetadataKey(resourceName, key string, expected interface{}) resource.TestCheckFunc {
+	return resource.TestCheckResourceAttrWith(resourceName, "options.0.oidc_metadata", func(value string) error {
+		var document map[string]interface{}
+		if err := json.Unmarshal([]byte(value), &document); err != nil {
+			return fmt.Errorf("oidc_metadata is not valid JSON: %w", err)
+		}
+
+		actual, ok := document[key]
+		if !ok {
+			return fmt.Errorf("oidc_metadata is missing key %q", key)
+		}
+
+		if !reflect.DeepEqual(actual, expected) {
+			return fmt.Errorf("oidc_metadata[%q] = %v, want %v", key, actual, expected)
+		}
+
+		return nil
+	})
+}
+
+// checkOIDCMetadataLacksKey asserts a key is absent from the stored document. Used for the
+// server defaults the configuration never wrote: flatten strips them so that editing some
+// other key does not also render them as removals in the plan.
+func checkOIDCMetadataLacksKey(resourceName, key string) resource.TestCheckFunc {
+	return resource.TestCheckResourceAttrWith(resourceName, "options.0.oidc_metadata", func(value string) error {
+		var document map[string]interface{}
+		if err := json.Unmarshal([]byte(value), &document); err != nil {
+			return fmt.Errorf("oidc_metadata is not valid JSON: %w", err)
+		}
+
+		if actual, ok := document[key]; ok {
+			return fmt.Errorf("oidc_metadata unexpectedly holds key %q = %v", key, actual)
+		}
+
+		return nil
+	})
+}
+
+// testAccConnectionOIDCWithOIDCMetadata mirrors the validated PF1b audit case: an oidc
+// connection with the discovery document uploaded directly. Note options.scope is sent as
+// a space-delimited string built from the scopes set, and authorization_endpoint is
+// required on POST regardless of the uploaded document.
+const testAccConnectionOIDCWithOIDCMetadata = `
+resource "auth0_connection" "oidc" {
+	name     = "Acceptance-Test-OIDCMeta-OIDC-{{.testName}}"
+	strategy = "oidc"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		type                   = "back_channel"
+		issuer                 = "https://idp.oidcmeta.example.com"
+		jwks_uri               = "https://idp.oidcmeta.example.com/jwks"
+		token_endpoint         = "https://idp.oidcmeta.example.com/token"
+		authorization_endpoint = "https://idp.oidcmeta.example.com/authorize"
+		scopes                 = [ "openid", "profile" ]
+
+		oidc_metadata = jsonencode({
+			issuer                                = "https://idp.oidcmeta.example.com"
+			jwks_uri                              = "https://idp.oidcmeta.example.com/jwks"
+			authorization_endpoint                = "https://idp.oidcmeta.example.com/authorize"
+			token_endpoint                        = "https://idp.oidcmeta.example.com/token"
+			response_types_supported              = ["code"]
+			subject_types_supported               = ["public"]
+			id_token_signing_alg_values_supported = ["RS256"]
+		})
+	}
+}
+`
+
+// testAccConnectionOIDCWithOIDCMetadataUpdate adds a key, proving updates reach the API.
+const testAccConnectionOIDCWithOIDCMetadataUpdate = `
+resource "auth0_connection" "oidc" {
+	name     = "Acceptance-Test-OIDCMeta-OIDC-{{.testName}}"
+	strategy = "oidc"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		type                   = "back_channel"
+		issuer                 = "https://idp.oidcmeta.example.com"
+		jwks_uri               = "https://idp.oidcmeta.example.com/jwks"
+		token_endpoint         = "https://idp.oidcmeta.example.com/token"
+		authorization_endpoint = "https://idp.oidcmeta.example.com/authorize"
+		scopes                 = [ "openid", "profile" ]
+
+		oidc_metadata = jsonencode({
+			issuer                                = "https://idp.oidcmeta.example.com"
+			jwks_uri                              = "https://idp.oidcmeta.example.com/jwks"
+			authorization_endpoint                = "https://idp.oidcmeta.example.com/authorize"
+			token_endpoint                        = "https://idp.oidcmeta.example.com/token"
+			end_session_endpoint                  = "https://idp.oidcmeta.example.com/logout"
+			response_types_supported              = ["code"]
+			subject_types_supported               = ["public"]
+			id_token_signing_alg_values_supported = ["RS256"]
+			claims_parameter_supported            = true
+		})
+	}
+}
+`
+
+func TestAccConnectionOIDCMetadataOnOIDC(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionOIDCWithOIDCMetadata, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "strategy", "oidc"),
+					resource.TestCheckResourceAttrSet("auth0_connection.oidc", "options.0.oidc_metadata"),
+					checkOIDCMetadataKey("auth0_connection.oidc", "issuer", "https://idp.oidcmeta.example.com"),
+					checkOIDCMetadataKey("auth0_connection.oidc", "token_endpoint", "https://idp.oidcmeta.example.com/token"),
+					checkOIDCMetadataKey("auth0_connection.oidc", "response_types_supported", []interface{}{"code"}),
+					// The API defaults these four in, but the config never wrote them, so
+					// flatten keeps them out of state. Without this, editing any other key
+					// would render all four as removals in the plan.
+					checkOIDCMetadataLacksKey("auth0_connection.oidc", "claims_parameter_supported"),
+					checkOIDCMetadataLacksKey("auth0_connection.oidc", "request_parameter_supported"),
+					checkOIDCMetadataLacksKey("auth0_connection.oidc", "request_uri_parameter_supported"),
+					checkOIDCMetadataLacksKey("auth0_connection.oidc", "require_request_uri_registration"),
+				),
+			},
+			{
+				// Guards the perpetual diff: a config that omits the defaults has to plan clean.
+				Config:   acctest.ParseTestName(testAccConnectionOIDCWithOIDCMetadata, t.Name()),
+				PlanOnly: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionOIDCWithOIDCMetadataUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkOIDCMetadataKey("auth0_connection.oidc", "end_session_endpoint", "https://idp.oidcmeta.example.com/logout"),
+					// Explicitly set to true, so it must not be suppressed back to the default.
+					checkOIDCMetadataKey("auth0_connection.oidc", "claims_parameter_supported", true),
+					// Still absent: setting one default must not pull in the other three.
+					checkOIDCMetadataLacksKey("auth0_connection.oidc", "request_parameter_supported"),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccConnectionOIDCWithOIDCMetadataUpdate, t.Name()),
+				PlanOnly: true,
+			},
+		},
+	})
+}
+
+// testAccConnectionOktaWithOIDCMetadata mirrors the validated PF2 audit case. The fake
+// domain is deliberate: on okta, supplying oidc_metadata is what makes the API skip live
+// discovery, so an unreachable domain is accepted only because this field is present.
+const testAccConnectionOktaWithOIDCMetadata = `
+resource "auth0_connection" "okta" {
+	name     = "Acceptance-Test-OIDCMeta-Okta-{{.testName}}"
+	strategy = "okta"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		domain                 = "oidcmeta.okta.com"
+		type                   = "back_channel"
+		issuer                 = "https://oidcmeta.okta.com"
+		jwks_uri               = "https://oidcmeta.okta.com/oauth2/v1/keys"
+		token_endpoint         = "https://oidcmeta.okta.com/oauth2/v1/token"
+		userinfo_endpoint      = "https://oidcmeta.okta.com/oauth2/v1/userinfo"
+		authorization_endpoint = "https://oidcmeta.okta.com/oauth2/v1/authorize"
+		scopes                 = [ "openid", "profile", "email" ]
+
+		oidc_metadata = jsonencode({
+			issuer                                = "https://oidcmeta.okta.com"
+			jwks_uri                              = "https://oidcmeta.okta.com/oauth2/v1/keys"
+			authorization_endpoint                = "https://oidcmeta.okta.com/oauth2/v1/authorize"
+			token_endpoint                        = "https://oidcmeta.okta.com/oauth2/v1/token"
+			response_types_supported              = ["code"]
+			subject_types_supported               = ["public"]
+			id_token_signing_alg_values_supported = ["RS256"]
+		})
+	}
+}
+`
+
+// testAccConnectionOktaWithOIDCMetadataUpdate drops a key. The API replaces the document
+// wholesale rather than merging, so the key must disappear from state.
+const testAccConnectionOktaWithOIDCMetadataUpdate = `
+resource "auth0_connection" "okta" {
+	name     = "Acceptance-Test-OIDCMeta-Okta-{{.testName}}"
+	strategy = "okta"
+	options {
+		client_id              = "123456"
+		client_secret          = "123456"
+		domain                 = "oidcmeta.okta.com"
+		type                   = "back_channel"
+		issuer                 = "https://oidcmeta.okta.com"
+		jwks_uri               = "https://oidcmeta.okta.com/oauth2/v1/keys"
+		token_endpoint         = "https://oidcmeta.okta.com/oauth2/v1/token"
+		userinfo_endpoint      = "https://oidcmeta.okta.com/oauth2/v1/userinfo"
+		authorization_endpoint = "https://oidcmeta.okta.com/oauth2/v1/authorize"
+		scopes                 = [ "openid", "profile", "email" ]
+
+		oidc_metadata = jsonencode({
+			issuer                                = "https://oidcmeta.okta.com"
+			jwks_uri                              = "https://oidcmeta.okta.com/oauth2/v1/keys"
+			authorization_endpoint                = "https://oidcmeta.okta.com/oauth2/v1/authorize"
+			token_endpoint                        = "https://oidcmeta.okta.com/oauth2/v1/token"
+			response_types_supported              = ["code"]
+			subject_types_supported               = ["public"]
+			id_token_signing_alg_values_supported = ["RS256", "PS256"]
+		})
+	}
+}
+`
+
+func TestAccConnectionOIDCMetadataOnOkta(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionOktaWithOIDCMetadata, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.okta", "strategy", "okta"),
+					resource.TestCheckResourceAttrSet("auth0_connection.okta", "options.0.oidc_metadata"),
+					checkOIDCMetadataKey("auth0_connection.okta", "issuer", "https://oidcmeta.okta.com"),
+					checkOIDCMetadataKey("auth0_connection.okta", "jwks_uri", "https://oidcmeta.okta.com/oauth2/v1/keys"),
+					checkOIDCMetadataKey("auth0_connection.okta", "id_token_signing_alg_values_supported", []interface{}{"RS256"}),
+					// Defaulted in by the API, never written by the config, so kept out of state.
+					checkOIDCMetadataLacksKey("auth0_connection.okta", "claims_parameter_supported"),
+					checkOIDCMetadataLacksKey("auth0_connection.okta", "request_parameter_supported"),
+					checkOIDCMetadataLacksKey("auth0_connection.okta", "request_uri_parameter_supported"),
+					checkOIDCMetadataLacksKey("auth0_connection.okta", "require_request_uri_registration"),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccConnectionOktaWithOIDCMetadata, t.Name()),
+				PlanOnly: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionOktaWithOIDCMetadataUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkOIDCMetadataKey("auth0_connection.okta", "id_token_signing_alg_values_supported", []interface{}{"RS256", "PS256"}),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccConnectionOktaWithOIDCMetadataUpdate, t.Name()),
+				PlanOnly: true,
 			},
 		},
 	})

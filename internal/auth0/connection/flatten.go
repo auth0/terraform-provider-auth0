@@ -3,6 +3,7 @@ package connection
 import (
 	"errors"
 	"fmt"
+	"maps"
 
 	"github.com/auth0/go-auth0/management"
 	managementv3 "github.com/auth0/go-auth0/v3/management"
@@ -14,6 +15,29 @@ import (
 )
 
 var errUnsupportedConnectionOptionsType = errors.New("unsupported connection options type")
+
+// flattenOIDCMetadata renders options.oidc_metadata for an oidc or okta connection,
+// dropping the server defaults the API returned as false.
+//
+// Keeping them out of state is what makes an edit to some other key render as just that
+// edit. DiffSuppressFunc cannot do this job alone: it is all-or-nothing per attribute, so
+// the moment a real change makes it return false, Terraform renders the whole stored
+// document against the configuration and the untouched defaults appear as removals.
+//
+// A default returned as true is kept, since that is a value someone asked for.
+func flattenOIDCMetadata(metadata map[string]interface{}) (string, error) {
+	if len(metadata) == 0 {
+		return "", nil
+	}
+
+	// Copied to avoid modifying original map.
+	document := make(map[string]interface{}, len(metadata))
+	maps.Copy(document, metadata)
+
+	dropFalseOIDCMetadataServerDefaults(document)
+
+	return structure.FlattenJsonToString(document)
+}
 
 var flattenConnectionOptionsMap = map[string]flattenConnectionOptionsFunc{
 	// Database Connection.
@@ -888,6 +912,11 @@ func flattenConnectionOptionsOIDC(
 		return nil, diag.FromErr(err)
 	}
 
+	oidcMetadata, err := flattenOIDCMetadata(options.GetOIDCMetadata())
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
 	optionsMap := map[string]interface{}{
 		"client_id":                         options.GetClientID(),
 		"client_secret":                     options.GetClientSecret(),
@@ -912,6 +941,7 @@ func flattenConnectionOptionsOIDC(
 		"id_token_signed_response_algs":     options.GetIDTokenSignedResponseAlgs(),
 		"token_endpoint_jwtca_aud_format":   options.GetTokenEndpointJwtcaAudFormat(),
 		"id_token_session_expiry_supported": options.GetIDTokenSessionExpirySupported(),
+		"oidc_metadata":                     oidcMetadata,
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -962,6 +992,11 @@ func flattenConnectionOptionsOkta(
 		return nil, diag.FromErr(err)
 	}
 
+	oidcMetadata, err := flattenOIDCMetadata(options.GetOIDCMetadata())
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
 	optionsMap := map[string]interface{}{
 		"client_id":                         options.GetClientID(),
 		"client_secret":                     options.GetClientSecret(),
@@ -985,6 +1020,7 @@ func flattenConnectionOptionsOkta(
 		"id_token_signed_response_algs":     options.GetIDTokenSignedResponseAlgs(),
 		"token_endpoint_jwtca_aud_format":   options.GetTokenEndpointJwtcaAudFormat(),
 		"id_token_session_expiry_supported": options.GetIDTokenSessionExpirySupported(),
+		"oidc_metadata":                     oidcMetadata,
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())

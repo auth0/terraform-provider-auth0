@@ -27,11 +27,13 @@ func NewConnectionResource() *schema.Resource {
 			"organization_id": {
 				Type:        schema.TypeString,
 				Required:    true,
+				ForceNew:    true,
 				Description: "The ID of the organization to enable the connection for.",
 			},
 			"connection_id": {
 				Type:        schema.TypeString,
 				Required:    true,
+				ForceNew:    true,
 				Description: "The ID of the connection to enable for the organization.",
 			},
 			"assign_membership_on_login": {

@@ -64,6 +64,23 @@ resource "auth0_guardian" "my_guardian" {
     secret_key      = "someSecret"
     hostname        = "api-hostname"
   }
+
+  settings {
+    display_remember_me_checkbox   = true
+    remember_me_default_value      = false
+    mfa_session_inactivity_timeout = 604800
+    mfa_session_overall_timeout    = 2592000
+  }
+
+  phone_settings {
+    otp_length          = 6
+    otp_expiration_time = 300
+  }
+
+  email_settings {
+    otp_length          = 6
+    otp_expiration_time = 300
+  }
 }
 ```
 
@@ -78,10 +95,13 @@ resource "auth0_guardian" "my_guardian" {
 
 - `duo` (Block List, Max: 1) Configuration settings for the Duo MFA. If this block is present, Duo MFA will be enabled, and disabled otherwise. (see [below for nested schema](#nestedblock--duo))
 - `email` (Boolean) Indicates whether email MFA is enabled.
+- `email_settings` (Block List, Max: 1) One-time password settings for the email MFA factor. These are independent of whether the email factor is enabled. (see [below for nested schema](#nestedblock--email_settings))
 - `otp` (Boolean) Indicates whether one time password MFA is enabled.
 - `phone` (Block List, Max: 1) Configuration settings for the phone MFA. If this block is present, Phone MFA will be enabled, and disabled otherwise. (see [below for nested schema](#nestedblock--phone))
+- `phone_settings` (Block List, Max: 1) One-time password settings for the phone MFA factor. These are independent of whether the phone factor is enabled. (see [below for nested schema](#nestedblock--phone_settings))
 - `push` (Block List, Max: 1) Configuration settings for the Push MFA. If this block is present, Push MFA will be enabled, and disabled otherwise. (see [below for nested schema](#nestedblock--push))
 - `recovery_code` (Boolean) Indicates whether recovery code MFA is enabled.
+- `settings` (Block List, Max: 1) Tenant-wide MFA settings controlling how often users are re-prompted for MFA and how the "Remember me" checkbox behaves. This block requires `read:tenant_settings` and `update:tenant_settings` scopes, which the other attributes of this resource do not require. (see [below for nested schema](#nestedblock--settings))
 - `webauthn_platform` (Block List, Max: 1) Configuration settings for the WebAuthn with FIDO Device Biometrics MFA. If this block is present, WebAuthn with FIDO Device Biometrics MFA will be enabled, and disabled otherwise. (see [below for nested schema](#nestedblock--webauthn_platform))
 - `webauthn_roaming` (Block List, Max: 1) Configuration settings for the WebAuthn with FIDO Security Keys MFA. If this block is present, WebAuthn with FIDO Security Keys MFA will be enabled, and disabled otherwise. (see [below for nested schema](#nestedblock--webauthn_roaming))
 
@@ -101,6 +121,15 @@ Optional:
 - `hostname` (String) Duo API Hostname, see the Duo documentation for more details on Duo setup.
 - `integration_key` (String) Duo client ID, see the Duo documentation for more details on Duo setup.
 - `secret_key` (String, Sensitive) Duo client secret, see the Duo documentation for more details on Duo setup.
+
+
+<a id="nestedblock--email_settings"></a>
+### Nested Schema for `email_settings`
+
+Required:
+
+- `otp_expiration_time` (Number) The OTP expiration time in seconds. Defaults to `300` (5 minutes).
+- `otp_length` (Number) The length of the OTP code. Defaults to `6`.
 
 
 <a id="nestedblock--phone"></a>
@@ -128,6 +157,15 @@ Optional:
 - `sid` (String) SID for your Twilio account.
 - `verification_message` (String) This message will be sent whenever a user logs in after the enrollment. Supports Liquid syntax, see [Auth0 docs](https://auth0.com/docs/customize/customize-sms-or-voice-messages).
 
+
+
+<a id="nestedblock--phone_settings"></a>
+### Nested Schema for `phone_settings`
+
+Required:
+
+- `otp_expiration_time` (Number) The OTP expiration time in seconds. Defaults to `300` (5 minutes).
+- `otp_length` (Number) The length of the OTP code. Defaults to `6`.
 
 
 <a id="nestedblock--push"></a>
@@ -188,6 +226,17 @@ Required:
 
 - `server_key` (String, Sensitive) The Firebase Cloud Messaging Server Key. For security purposes, we don’t retrieve your existing FCM server key to check for drift.
 
+
+
+<a id="nestedblock--settings"></a>
+### Nested Schema for `settings`
+
+Required:
+
+- `display_remember_me_checkbox` (Boolean) Determines whether to display the "Remember me" checkbox on the MFA prompt in Universal Login. Defaults to `true`.
+- `mfa_session_inactivity_timeout` (Number) Duration of inactivity (seconds) after which the user will be prompted for MFA. Cannot exceed the overall timeout. Defaults to `604800` (7 days).
+- `mfa_session_overall_timeout` (Number) Maximum duration (seconds) after which the user will be prompted for MFA regardless of activity. Defaults to `2592000` (30 days).
+- `remember_me_default_value` (Boolean) Determines the default state of the "Remember Me" checkbox on the MFA prompt in Universal Login. Defaults to `false`.
 
 
 <a id="nestedblock--webauthn_platform"></a>

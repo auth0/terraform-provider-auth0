@@ -64,6 +64,23 @@ resource "auth0_guardian" "my_guardian" {
     secret_key      = "someSecret"
     hostname        = "api-hostname"
   }
+
+  settings {
+    display_remember_me_checkbox   = true
+    remember_me_default_value      = false
+    mfa_session_inactivity_timeout = 604800
+    mfa_session_overall_timeout    = 2592000
+  }
+
+  phone_settings {
+    otp_length          = 6
+    otp_expiration_time = 300
+  }
+
+  email_settings {
+    otp_length          = 6
+    otp_expiration_time = 300
+  }
 }
 ```
 

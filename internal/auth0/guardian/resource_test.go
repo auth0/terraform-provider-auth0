@@ -184,6 +184,149 @@ func TestAccGuardianPhone(t *testing.T) {
 	})
 }
 
+const testAccGuardianSettingsCreate = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+
+	settings {
+		display_remember_me_checkbox   = true
+		remember_me_default_value      = false
+		mfa_session_inactivity_timeout = 604800
+		mfa_session_overall_timeout    = 2592000
+	}
+
+	phone_settings {
+		otp_length          = 6
+		otp_expiration_time = 300
+	}
+
+	email_settings {
+		otp_length          = 6
+		otp_expiration_time = 300
+	}
+}
+`
+
+const testAccGuardianSettingsUpdate = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+
+	settings {
+		display_remember_me_checkbox   = false
+		remember_me_default_value      = true
+		mfa_session_inactivity_timeout = 7200
+		mfa_session_overall_timeout    = 86400
+	}
+
+	phone_settings {
+		otp_length          = 8
+		otp_expiration_time = 600
+	}
+
+	email_settings {
+		otp_length          = 10
+		otp_expiration_time = 3600
+	}
+}
+`
+
+// testAccGuardianSettingsBoundaries exercises the lower bound of every
+// ValidateFunc range: otp_length 4, otp_expiration_time 30, and the shared
+// 3600 second floor on both MFA session timeouts.
+const testAccGuardianSettingsBoundaries = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+
+	settings {
+		display_remember_me_checkbox   = true
+		remember_me_default_value      = true
+		mfa_session_inactivity_timeout = 3600
+		mfa_session_overall_timeout    = 3600
+	}
+
+	phone_settings {
+		otp_length          = 4
+		otp_expiration_time = 30
+	}
+
+	email_settings {
+		otp_length          = 4
+		otp_expiration_time = 30
+	}
+}
+`
+
+// testAccGuardianSettingsOmitted drops all three blocks from the config. They are
+// Optional+Computed, so the API values must be read back into state rather than
+// being blanked, and no write should be attempted for the removed blocks.
+const testAccGuardianSettingsOmitted = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+}
+`
+
+func TestAccGuardianSettings(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccGuardianSettingsCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.display_remember_me_checkbox", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.remember_me_default_value", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_inactivity_timeout", "604800"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_overall_timeout", "2592000"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_length", "6"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_expiration_time", "300"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_length", "6"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_expiration_time", "300"),
+				),
+			},
+			{
+				Config: testAccGuardianSettingsUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.display_remember_me_checkbox", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.remember_me_default_value", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_inactivity_timeout", "7200"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_overall_timeout", "86400"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_length", "8"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_expiration_time", "600"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_length", "10"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_expiration_time", "3600"),
+				),
+			},
+			{
+				Config: testAccGuardianSettingsBoundaries,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_inactivity_timeout", "3600"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_overall_timeout", "3600"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_length", "4"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_expiration_time", "30"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_length", "4"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_expiration_time", "30"),
+				),
+			},
+			{
+				// The blocks are Optional+Computed, so removing them from the config
+				// keeps the last applied values in state instead of clearing them.
+				Config: testAccGuardianSettingsOmitted,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_inactivity_timeout", "3600"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_length", "4"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_length", "4"),
+				),
+			},
+		},
+	})
+}
+
 const testAccConfigureWebAuthnRoamingCreate = `
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"

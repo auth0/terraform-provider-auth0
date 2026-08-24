@@ -406,14 +406,6 @@ func updateSettings(ctx context.Context, data *schema.ResourceData, api *managem
 }
 
 func expandGuardianSettings(data *schema.ResourceData) *managementv3.SetGuardianSettingsRequestContent {
-	// rawConfig := data.GetRawConfig()
-	// if rawConfig.IsNull() {
-	// 	return nil
-	// }
-
-	// block := rawConfig.GetAttr("settings")
-	// if block.IsNull() || block.LengthInt() == 0 ||
-
 	if !data.HasChange("settings") {
 		return nil
 	}

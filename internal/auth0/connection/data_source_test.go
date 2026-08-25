@@ -105,3 +105,63 @@ func TestAccDataSourceConnection(t *testing.T) {
 		},
 	})
 }
+
+// The github strategy echoes options.client_secret back on read, unlike the google-oauth2
+// fixtures elsewhere, which pass empty credentials to use the Auth0 dev keys.
+const testAccGivenAConnectionWithASecret = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "github"
+
+	options {
+		client_id     = "my-client-id"
+		client_secret = "my-client-secret"
+	}
+}
+`
+
+const testAccDataConnectionConfigShowClientSecret = testAccGivenAConnectionWithASecret + `
+data "auth0_connection" "test" {
+	depends_on = [ auth0_connection.my_connection ]
+
+	connection_id = auth0_connection.my_connection.id
+}
+`
+
+const testAccDataConnectionConfigHideClientSecret = testAccGivenAConnectionWithASecret + `
+data "auth0_connection" "test" {
+	depends_on = [ auth0_connection.my_connection ]
+
+	connection_id      = auth0_connection.my_connection.id
+	hide_client_secret = true
+}
+`
+
+func TestAccDataSourceConnectionHideClientSecret(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				// Unset, the data source still returns the secret: the flag is opt-in.
+				Config: acctest.ParseTestName(testAccDataConnectionConfigShowClientSecret, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("data.auth0_connection.test", "id"),
+					resource.TestCheckResourceAttr("data.auth0_connection.test", "strategy", "github"),
+					resource.TestCheckResourceAttr("data.auth0_connection.test", "options.0.client_id", "my-client-id"),
+					resource.TestCheckResourceAttr("data.auth0_connection.test", "options.0.client_secret", "my-client-secret"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDataConnectionConfigHideClientSecret, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("data.auth0_connection.test", "id"),
+					resource.TestCheckResourceAttr("data.auth0_connection.test", "hide_client_secret", "true"),
+					resource.TestCheckResourceAttr("data.auth0_connection.test", "options.0.client_secret", ""),
+					resource.TestCheckResourceAttr("data.auth0_connection.test", "strategy", "github"),
+					resource.TestCheckResourceAttr("data.auth0_connection.test", "options.0.client_id", "my-client-id"),
+					// Only the data source hides it; the resource still manages it.
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.client_secret", "my-client-secret"),
+				),
+			},
+		},
+	})
+}

@@ -28,6 +28,7 @@ data "auth0_connection" "some-connection-by-id" {
 ### Optional
 
 - `connection_id` (String) The ID of the connection. If not provided, `name` must be set.
+- `hide_client_secret` (Boolean) Set this to avoid persisting the sensitive `options.client_secret` value in state; it will be stored as an empty string.
 - `name` (String) The name of the connection. If not provided, `connection_id` must be set.
 - `skip_enabled_clients` (Boolean) Whether to skip enabled clients for this connection. Setting this to `true` will skip additional paginated API calls to /api/v2/connections/{id}/clients. Default: `false`.
 

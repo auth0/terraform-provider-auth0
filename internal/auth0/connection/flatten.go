@@ -115,6 +115,10 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 func flattenConnectionForDataSource(data *schema.ResourceData, connection *management.Connection, enabledClients *management.ConnectionEnabledClientList) diag.Diagnostics {
 	diags := flattenConnection(data, connection)
 
+	if data.Get("hide_client_secret").(bool) {
+		diags = append(diags, diag.FromErr(hideConnectionOptionsClientSecret(data))...)
+	}
+
 	var clientIDs []string
 	for _, ec := range enabledClients.GetClients() {
 		clientIDs = append(clientIDs, ec.GetClientID())
@@ -124,6 +128,26 @@ func flattenConnectionForDataSource(data *schema.ResourceData, connection *manag
 	diags = append(diags, diag.FromErr(err)...)
 
 	return diags
+}
+
+func hideConnectionOptionsClientSecret(data *schema.ResourceData) error {
+	rawOptions, ok := data.Get("options").([]interface{})
+	if !ok || len(rawOptions) == 0 {
+		return nil
+	}
+
+	options, ok := rawOptions[0].(map[string]interface{})
+	if !ok {
+		return nil
+	}
+
+	if _, ok := options["client_secret"]; !ok {
+		return nil
+	}
+
+	options["client_secret"] = ""
+
+	return data.Set("options", rawOptions)
 }
 
 func flattenConnectionAuthentication(authentication *management.Authentication) []interface{} {

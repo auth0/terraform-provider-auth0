@@ -51,6 +51,13 @@ func dataSourceSchema() map[string]*schema.Schema {
 			"Skips populating if `skip_enabled_clients` is `true`.",
 	}
 
+	dataSourceSchema["hide_client_secret"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Description: "Set this to avoid persisting the sensitive `options.client_secret` value in state; " +
+			"it will be stored as an empty string.",
+	}
+
 	return dataSourceSchema
 }
 

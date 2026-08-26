@@ -1,3 +1,8 @@
+## Unreleased
+
+ENHANCEMENTS:
+- `resource/auth0_connection_profile` – add `cross_app_access_resource_app` support (EA only) ([#pr])
+
 ## v1.55.0
 
 FEATURES:

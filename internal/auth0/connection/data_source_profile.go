@@ -82,6 +82,37 @@ func NewConnectionProfileDataSource() *schema.Resource {
 					},
 				},
 			},
+			"cross_app_access_resource_app": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Description: "Configures the connection profile as a Cross-App Access (XAA) resource application. Note: " +
+					"this is distinct from, and unrelated to, `cross_app_access_resource_app` on `auth0_connection`, which " +
+					"uses a flat `status` string rather than this nested `status` block.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"status": {
+							Type:        schema.TypeList,
+							Computed:    true,
+							Description: "The Cross App Access resource app status configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"default_value": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "Default status value for organizations that don't have an explicit override.",
+									},
+									"allowed_values": {
+										Type:        schema.TypeList,
+										Computed:    true,
+										Elem:        &schema.Schema{Type: schema.TypeString},
+										Description: "Status values organizations are allowed to set.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }

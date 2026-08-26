@@ -1730,6 +1730,38 @@ func NewResource() *schema.Resource {
 							Optional:    true,
 							Description: "The client ID used as the invitation landing page when creating invitations through the My Organization API. Requires the tenant to have member management enabled, and the referenced client must allow organizations.",
 						},
+						"third_party_client_access": {
+							Type:     schema.TypeList,
+							Optional: true,
+							MaxItems: 1,
+							Description: "Configures third-party client access to organizations created for this client " +
+								"through the My Organization API. Requires the `my_orgs_third_party_client_support` " +
+								"feature flag to be enabled on the tenant. (EA Only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"default_value": {
+										Type:     schema.TypeString,
+										Computed: true,
+										Description: "The default third-party client access value applied to " +
+											"organizations created for this client. The API currently only " +
+											"accepts \"block\"; \"allow\" is rejected with a 400 error, so this " +
+											"is exposed as computed-only rather than user-settable. (EA Only)",
+									},
+									"allowed_values": {
+										Type:     schema.TypeList,
+										Required: true,
+										MinItems: 1,
+										Elem:     &schema.Schema{Type: schema.TypeString},
+										Description: "The third-party client access values that can be set on " +
+											"organizations created for this client through the My Organization " +
+											"API. Required whenever this block is set — the API rejects the " +
+											"block without it. Possible values: `allow`, `block`. Unlike " +
+											"`auth0_connection_profile`'s `cross_app_access_resource_app`, a " +
+											"single value is accepted here. (EA Only)",
+									},
+								},
+							},
+						},
 					},
 				},
 			},

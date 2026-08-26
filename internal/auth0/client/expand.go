@@ -1456,12 +1456,44 @@ func expandMyOrganizationConfiguration(data *schema.ResourceData) *management.My
 			UserAttributeProfileID:     value.String(elem.GetAttr("user_attribute_profile_id")),
 			ConnectionDeletionBehavior: value.String(elem.GetAttr("connection_deletion_behavior")),
 			InvitationLandingClientID:  value.String(elem.GetAttr("invitation_landing_client_id")),
+			ThirdPartyClientAccess:     expandMyOrganizationConfigurationThirdPartyClientAccess(elem.GetAttr("third_party_client_access")),
 		}
 
 		allowedStrategiesAttr := elem.GetAttr("allowed_strategies")
 		if !allowedStrategiesAttr.IsNull() && allowedStrategiesAttr.LengthInt() > 0 {
 			if strategies := value.Strings(allowedStrategiesAttr); strategies != nil && len(*strategies) > 0 {
 				result.AllowedStrategies = strategies
+			}
+		}
+
+		return stop
+	})
+
+	return result
+}
+
+// expandMyOrganizationConfigurationThirdPartyClientAccess expands the
+// `my_organization_configuration.third_party_client_access` block. `default_value` is never
+// user-settable (the field is modeled as computed-only in the schema, since the API hard-locks it to
+// "block") but the API requires the property on the wire whenever this object is sent, so it's always
+// injected here as the only value the API accepts.
+func expandMyOrganizationConfigurationThirdPartyClientAccess(tpcaConfig cty.Value) *management.MyOrganizationThirdPartyClientAccess {
+	if tpcaConfig.IsNull() || tpcaConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var result *management.MyOrganizationThirdPartyClientAccess
+
+	tpcaConfig.ForEachElement(func(_ cty.Value, elem cty.Value) (stop bool) {
+		allowedValuesAttr := elem.GetAttr("allowed_values")
+		if allowedValuesAttr.IsNull() || allowedValuesAttr.LengthInt() == 0 {
+			return stop
+		}
+
+		if allowedValues := value.Strings(allowedValuesAttr); allowedValues != nil && len(*allowedValues) > 0 {
+			result = &management.MyOrganizationThirdPartyClientAccess{
+				DefaultValue:  auth0.String("block"),
+				AllowedValues: allowedValues,
 			}
 		}
 

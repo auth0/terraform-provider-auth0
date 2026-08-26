@@ -1295,5 +1295,25 @@ func flattenMyOrganizationConfiguration(moc *management.MyOrganizationConfigurat
 		result["allowed_strategies"] = strategies
 	}
 
+	if tpca := flattenMyOrganizationConfigurationThirdPartyClientAccess(moc.GetThirdPartyClientAccess()); tpca != nil {
+		result["third_party_client_access"] = tpca
+	}
+
+	return []interface{}{result}
+}
+
+func flattenMyOrganizationConfigurationThirdPartyClientAccess(tpca *management.MyOrganizationThirdPartyClientAccess) []interface{} {
+	if tpca == nil {
+		return nil
+	}
+
+	result := map[string]interface{}{
+		"default_value": tpca.GetDefaultValue(),
+	}
+
+	if tpca.AllowedValues != nil {
+		result["allowed_values"] = *tpca.AllowedValues
+	}
+
 	return []interface{}{result}
 }

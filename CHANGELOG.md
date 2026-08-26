@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 - `resource/auth0_connection_profile` – add `cross_app_access_resource_app` support (EA only) ([#pr])
+- `resource/auth0_client` – add `third_party_client_access` support to `my_organization_configuration` (EA only) ([#pr])
 
 ## v1.55.0
 

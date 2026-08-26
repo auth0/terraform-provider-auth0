@@ -606,7 +606,16 @@ Read-Only:
 - `connection_deletion_behavior` (String)
 - `connection_profile_id` (String)
 - `invitation_landing_client_id` (String)
+- `third_party_client_access` (List of Object) (see [below for nested schema](#nestedobjatt--my_organization_configuration--third_party_client_access))
 - `user_attribute_profile_id` (String)
+
+<a id="nestedobjatt--my_organization_configuration--third_party_client_access"></a>
+### Nested Schema for `my_organization_configuration.third_party_client_access`
+
+Read-Only:
+
+- `allowed_values` (List of String)
+- `default_value` (String)
 
 
 <a id="nestedatt--native_social_login"></a>

@@ -3558,13 +3558,19 @@ func TestAccClientMyOrganizationConfiguration(t *testing.T) {
 }
 
 // testAccClientMyOrganizationConfigurationThirdPartyClientAccessFull sets the block with the full
-// two-value allowed_values list.
+// two-value allowed_values list. Connection_deletion_behavior and allowed_strategies are required by
+// the API on every write to my_organization_configuration, independent of third_party_client_access
+// — confirmed live: omitting them 400s with "Missing required property" even when
+// third_party_client_access is otherwise valid.
 const testAccClientMyOrganizationConfigurationThirdPartyClientAccessFull = `
 resource "auth0_client" "my_client" {
 	name        = "Acceptance Test - MyOrgConfig TPCA - {{.testName}}"
 	description = "Client with third_party_client_access"
 
 	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
+		connection_deletion_behavior = "allow"
+
 		third_party_client_access {
 			allowed_values = ["allow", "block"]
 		}
@@ -3580,6 +3586,9 @@ resource "auth0_client" "my_client" {
 	description = "Client with third_party_client_access (single value)"
 
 	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
+		connection_deletion_behavior = "allow"
+
 		third_party_client_access {
 			allowed_values = ["block"]
 		}
@@ -3597,6 +3606,8 @@ resource "auth0_client" "my_client" {
 	description = "Client with third_party_client_access removed"
 
 	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
+		connection_deletion_behavior = "allow"
 	}
 }
 `
@@ -3697,12 +3708,15 @@ func TestAccClientMyOrganizationConfigurationThirdPartyClientAccessInvalidDefaul
 }
 
 // testAccClientMyOrganizationConfigurationWholeBlockDisciplineBase omits third_party_client_access.
+// Allowed_strategies is required by the API on every write to my_organization_configuration,
+// independent of third_party_client_access — confirmed live.
 const testAccClientMyOrganizationConfigurationWholeBlockDisciplineBase = `
 resource "auth0_client" "my_client" {
 	name        = "Acceptance Test - MyOrgConfig Discipline - {{.testName}}"
 	description = "Client for whole-block-PATCH discipline check"
 
 	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
 		connection_deletion_behavior = "allow"
 	}
 }
@@ -3717,6 +3731,7 @@ resource "auth0_client" "my_client" {
 	description = "Client for whole-block-PATCH discipline check"
 
 	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
 		connection_deletion_behavior = "allow"
 
 		third_party_client_access {
@@ -3735,6 +3750,7 @@ resource "auth0_client" "my_client" {
 	description = "Client for whole-block-PATCH discipline check"
 
 	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
 		connection_deletion_behavior = "allow_if_empty"
 
 		third_party_client_access {

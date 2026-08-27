@@ -13,6 +13,12 @@ creation of multiple connections per strategy, the additional connections may no
 
 ~> When updating the `options` parameter, ensure that all nested fields within the `options` schema are explicitly defined. Failing to do so may result in the loss of existing configurations.
 
+~> When `options_client_secret_wo` (write-only) is set, `terraform plan -refresh=false` may report a
+non-empty plan for unrelated optional `options` fields (e.g. `+ scripts = {}`). This is an upstream
+limitation of the Terraform Plugin SDK ([hashicorp/terraform-plugin-sdk#1612](https://github.com/hashicorp/terraform-plugin-sdk/issues/1612))
+that only surfaces without a refresh; a normal `terraform plan`/`apply` (which refreshes) is
+unaffected and idempotent.
+
 ## Example Usage
 
 ### Auth0 Connection
@@ -97,6 +103,32 @@ resource "auth0_connection" "my_connection" {
       local_enrollment_enabled       = true
       progressive_enrollment_enabled = true
     }
+  }
+}
+
+# The strategy's client secret can be set as a write-only argument so it is never persisted to
+# Terraform state. It can be sourced from an ephemeral value (e.g. a secrets manager) and is
+# mutually exclusive with `options.client_secret`. Bump `options_client_secret_wo_version` to
+# rotate the secret.
+#
+# NOTE: Write-only arguments require Terraform 1.11 or later.
+resource "auth0_connection" "my_connection_write_only_secret" {
+  name     = "Example-Connection-Write-Only-Secret"
+  strategy = "oidc"
+
+  options_client_secret_wo         = var.connection_client_secret # can be an ephemeral value
+  options_client_secret_wo_version = 1
+
+  options {
+    client_id              = "1234567"
+    type                   = "back_channel"
+    issuer                 = "https://www.paypalobjects.com"
+    jwks_uri               = "https://api.paypal.com/v1/oauth2/certs"
+    discovery_url          = "https://www.paypalobjects.com/.well-known/openid-configuration"
+    token_endpoint         = "https://api.paypal.com/v1/oauth2/token"
+    userinfo_endpoint      = "https://api.paypal.com/v1/oauth2/token/userinfo"
+    authorization_endpoint = "https://www.paypal.com/signin/authorize"
+    scopes                 = ["openid", "email"]
   }
 }
 ```
@@ -680,6 +712,8 @@ resource "auth0_connection" "okta" {
 
 ### Optional
 
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
 - `authentication` (Block List, Max: 1) Configure the purpose of a connection to be used for authentication during login.**Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (see [below for nested schema](#nestedblock--authentication))
 - `connected_accounts` (Block List, Max: 1) Configure the purpose of a connection to be used for connected accounts and Token Vault.**Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (see [below for nested schema](#nestedblock--connected_accounts))
 - `cross_app_access_requesting_app` (Block List, Max: 1) Configure the purpose of a connection to be used as a requesting application authorization server for Cross-App Access (XAA). This is an Early Access feature and requires the `token_vault_xaa` flag to be enabled on your tenant. Only supported on `oidc` and `okta` strategy connections. **Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (EA Only) (see [below for nested schema](#nestedblock--cross_app_access_requesting_app))
@@ -688,6 +722,8 @@ resource "auth0_connection" "okta" {
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
 - `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars).
 - `options` (Block List, Max: 1) Configuration settings for connection options. (see [below for nested schema](#nestedblock--options))
+- `options_client_secret_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The strategy's client secret (write-only). This value is **not** stored in Terraform state and can be sourced from an ephemeral value. Bump `options_client_secret_wo_version` to rotate it. Conflicts with `options.client_secret`.
+- `options_client_secret_wo_version` (Number) Version counter for `options_client_secret_wo`, required whenever the write-only secret is set. Must be a positive integer starting at `1`. This value signals rotation intent, though the secret is resent even for other config updates.
 - `realms` (List of String) Defines the realms for which the connection will be used (e.g., email domains). If not specified, the connection name is added as the realm.
 - `show_as_button` (Boolean) Display connection as a button. Only available on enterprise connections.
 
@@ -745,7 +781,7 @@ Optional:
 - `authorization_endpoint` (String) Authorization endpoint.
 - `brute_force_protection` (Boolean) Indicates whether to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
 - `client_id` (String) The strategy's client ID.
-- `client_secret` (String, Sensitive) The strategy's client secret.
+- `client_secret` (String, Sensitive) The strategy's client secret. **Note:** For better security, consider using `options_client_secret_wo` instead to avoid storing the secret in Terraform state.
 - `community_base_url` (String) Salesforce community base URL.
 - `configuration` (Map of String, Sensitive) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
 - `connection_settings` (Block List, Max: 1) Proof Key for Code Exchange (PKCE) configuration settings for an OIDC or Okta Workforce connection. (see [below for nested schema](#nestedblock--options--connection_settings))

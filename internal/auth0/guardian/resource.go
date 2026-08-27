@@ -535,7 +535,7 @@ func isPhoneConsolidatedExperienceEnabled(ctx context.Context, api *management.M
 		return false, err
 	}
 
-	// If not explisitly set, Enabled by default for new tenants.
+	// If not explicitly set, Enabled by default for new tenants.
 	if tenant.PhoneConsolidatedExperience == nil {
 		return true, nil
 	}

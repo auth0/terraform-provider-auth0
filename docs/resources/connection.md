@@ -797,7 +797,7 @@ Optional:
 - `mfa` (Block List, Max: 1) Configuration options for multifactor authentication. (see [below for nested schema](#nestedblock--options--mfa))
 - `name` (String) The public name of the email or SMS Connection. In most cases this is the same name as the connection name.
 - `non_persistent_attrs` (Set of String) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here.
-- `oidc_metadata` (String) Additional OIDC metadata to include in the discovery document. Only applicable when strategy=oidc, okta, or samlp. (EA only)
+- `oidc_metadata` (String) Additional OIDC metadata to include in the discovery document. Only applicable when strategy=oidc, okta, or samlp. On oidc and okta, Auth0 defaults any omitted `claims_parameter_supported`, `request_parameter_supported`, `request_uri_parameter_supported`, `require_request_uri_registration` field to false. Those defaults are not tracked in provider until set to true explisitly. (EA only)
 - `passkey_options` (Block List, Max: 1) Defines options for the passkey authentication method (see [below for nested schema](#nestedblock--options--passkey_options))
 - `password_complexity_options` (Block List, Max: 1) Configuration settings for password complexity. (see [below for nested schema](#nestedblock--options--password_complexity_options))
 - `password_dictionary` (Block List, Max: 1) Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary. (see [below for nested schema](#nestedblock--options--password_dictionary))

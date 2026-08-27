@@ -132,6 +132,133 @@ func TestFlattenConnectionCrossAppAccessResourceApp(t *testing.T) {
 	})
 }
 
+func TestFlattenConnectionOptionsOIDCMetadata(t *testing.T) {
+	metadata := map[string]interface{}{
+		"issuer":   "https://idp.example.com",
+		"jwks_uri": "https://idp.example.com/jwks",
+	}
+	metadataJSON := `{"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks"}`
+
+	t.Run("oidc flattens the document", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsOIDC(nil, &management.ConnectionOptionsOIDC{
+			OIDCMetadata: metadata,
+		})
+
+		assert.Nil(t, diags)
+		assert.Equal(t, metadataJSON, result.(map[string]interface{})["oidc_metadata"])
+	})
+
+	t.Run("okta flattens the document", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsOkta(nil, &management.ConnectionOptionsOkta{
+			OIDCMetadata: metadata,
+		})
+
+		assert.Nil(t, diags)
+		assert.Equal(t, metadataJSON, result.(map[string]interface{})["oidc_metadata"])
+	})
+
+	// The API omits the field when it was never set, so state must hold "" and not "null".
+	t.Run("oidc yields an empty string when the API omits the field", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsOIDC(nil, &management.ConnectionOptionsOIDC{})
+
+		assert.Nil(t, diags)
+		assert.Equal(t, "", result.(map[string]interface{})["oidc_metadata"])
+	})
+
+	t.Run("okta yields an empty string when the API omits the field", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsOkta(nil, &management.ConnectionOptionsOkta{})
+
+		assert.Nil(t, diags)
+		assert.Equal(t, "", result.(map[string]interface{})["oidc_metadata"])
+	})
+
+	// The four booleans the API defaults in are dropped, so state holds only what was asked
+	// for. This is what keeps an edit to some other key from also rendering them as removals.
+	t.Run("server-defaulted keys are dropped", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsOIDC(nil, &management.ConnectionOptionsOIDC{
+			OIDCMetadata: enrichedMetadata(),
+		})
+
+		assert.Nil(t, diags)
+		assert.Equal(t, `{"issuer":"https://idp.example.com"}`, result.(map[string]interface{})["oidc_metadata"])
+	})
+}
+
+// enrichedMetadata is what the API returns: a one-key document plus the four defaults.
+func enrichedMetadata() map[string]interface{} {
+	return map[string]interface{}{
+		"issuer":                           "https://idp.example.com",
+		"claims_parameter_supported":       false,
+		"request_parameter_supported":      false,
+		"request_uri_parameter_supported":  false,
+		"require_request_uri_registration": false,
+	}
+}
+
+// TestFlattenOIDCMetadataDropsServerDefaults covers why flatten strips the defaults at
+// all. DiffSuppressFunc is all-or-nothing per attribute: on a plan where some other key
+// genuinely changed it returns false, and Terraform then renders the whole stored document
+// against the configuration, showing the four untouched defaults as removals. Keeping them
+// out of state is what makes such a plan show only the edited key.
+func TestFlattenOIDCMetadataDropsServerDefaults(t *testing.T) {
+	t.Run("okta drops them too", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsOkta(
+			nil,
+			&management.ConnectionOptionsOkta{OIDCMetadata: enrichedMetadata()},
+		)
+
+		assert.Nil(t, diags)
+		assert.Equal(t, `{"issuer":"https://idp.example.com"}`, result.(map[string]interface{})["oidc_metadata"])
+	})
+
+	// Drift the practitioner must see: true is a value someone asked for, not a default.
+	t.Run("a default the API returned as true is kept", func(t *testing.T) {
+		metadata := enrichedMetadata()
+		metadata["request_parameter_supported"] = true
+
+		result, diags := flattenConnectionOptionsOIDC(
+			nil,
+			&management.ConnectionOptionsOIDC{OIDCMetadata: metadata},
+		)
+
+		assert.Nil(t, diags)
+		assert.Equal(
+			t,
+			`{"issuer":"https://idp.example.com","request_parameter_supported":true}`,
+			result.(map[string]interface{})["oidc_metadata"],
+		)
+	})
+
+	// Nothing outside the four keys may be dropped, false or not.
+	t.Run("unrelated keys are never dropped", func(t *testing.T) {
+		metadata := enrichedMetadata()
+		metadata["scopes_supported"] = []interface{}{"openid"}
+		metadata["backchannel_logout_supported"] = false
+
+		result, diags := flattenConnectionOptionsOIDC(
+			nil,
+			&management.ConnectionOptionsOIDC{OIDCMetadata: metadata},
+		)
+
+		assert.Nil(t, diags)
+		assert.Equal(
+			t,
+			`{"backchannel_logout_supported":false,"issuer":"https://idp.example.com","scopes_supported":["openid"]}`,
+			result.(map[string]interface{})["oidc_metadata"],
+		)
+	})
+
+	// Flatten must not mutate the caller's map, which the resource reads from afterwards.
+	t.Run("the API document is not mutated", func(t *testing.T) {
+		metadata := enrichedMetadata()
+
+		_, diags := flattenConnectionOptionsOIDC(nil, &management.ConnectionOptionsOIDC{OIDCMetadata: metadata})
+
+		assert.Nil(t, diags)
+		assert.Len(t, metadata, len(enrichedMetadata()))
+	})
+}
+
 // flattenedOptions reads back the single options block written to state.
 func flattenedOptions(t *testing.T, data *schema.ResourceData) map[string]interface{} {
 	t.Helper()

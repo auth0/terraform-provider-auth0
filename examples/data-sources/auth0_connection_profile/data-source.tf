@@ -12,6 +12,14 @@ resource "auth0_connection_profile" "my_profile" {
     "scim",
     "universal_logout"
   ]
+
+  # Requires the `my_orgs_cross_app_access_resource_app` tenant flag (EA only).
+  cross_app_access_resource_app {
+    status {
+      default_value  = "enabled"
+      allowed_values = ["enabled", "disabled"]
+    }
+  }
 }
 
 data "auth0_connection_profile" "my_profile_ds" {

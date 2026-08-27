@@ -642,7 +642,20 @@ Optional:
 - `connection_deletion_behavior` (String) Controls the behavior when deleting connections associated with organizations for this client. Possible values: `allow`, `allow_if_empty`.
 - `connection_profile_id` (String) The ID of the connection profile to use when creating organizations for this client.
 - `invitation_landing_client_id` (String) The client ID used as the invitation landing page when creating invitations through the My Organization API. Requires the tenant to have member management enabled, and the referenced client must allow organizations.
+- `third_party_client_access` (Block List, Max: 1) Configures third-party client access to organizations created for this client through the My Organization API. Requires the `my_orgs_third_party_client_support` 	 (EA Only) (see [below for nested schema](#nestedblock--my_organization_configuration--third_party_client_access))
 - `user_attribute_profile_id` (String) The ID of the user attribute profile to use when creating organizations for this client.
+
+<a id="nestedblock--my_organization_configuration--third_party_client_access"></a>
+### Nested Schema for `my_organization_configuration.third_party_client_access`
+
+Required:
+
+- `allowed_values` (List of String) The third-party client access values that can be set on organizations created for this client through the My Organization API. Required whenever this block is set — the API rejects the block without it. Possible values: `allow`, `block`. Unlike `auth0_connection_profile`'s `cross_app_access_resource_app`, a single value is accepted here. (EA Only)
+
+Read-Only:
+
+- `default_value` (String) The default third-party client access value applied to organizations created for this client. The API currently only accepts "block"; "allow" is rejected with a 400 error, so this is exposed as computed-only rather than user-settable. (EA Only)
+
 
 
 <a id="nestedblock--native_social_login"></a>

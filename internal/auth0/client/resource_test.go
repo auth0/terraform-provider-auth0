@@ -3557,6 +3557,242 @@ func TestAccClientMyOrganizationConfiguration(t *testing.T) {
 	})
 }
 
+// testAccClientMyOrganizationConfigurationThirdPartyClientAccessFull sets the block with the full
+// two-value allowed_values list. Connection_deletion_behavior and allowed_strategies are required by
+// the API on every write to my_organization_configuration, independent of third_party_client_access
+// — confirmed live: omitting them 400s with "Missing required property" even when
+// third_party_client_access is otherwise valid.
+const testAccClientMyOrganizationConfigurationThirdPartyClientAccessFull = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MyOrgConfig TPCA - {{.testName}}"
+	description = "Client with third_party_client_access"
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
+		connection_deletion_behavior = "allow"
+
+		third_party_client_access {
+			allowed_values = ["allow", "block"]
+		}
+	}
+}
+`
+
+// testAccClientMyOrganizationConfigurationThirdPartyClientAccessSingle sets allowed_values to a
+// single value, which the API accepts here (unlike auth0_connection_profile's equivalent field).
+const testAccClientMyOrganizationConfigurationThirdPartyClientAccessSingle = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MyOrgConfig TPCA - {{.testName}}"
+	description = "Client with third_party_client_access (single value)"
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
+		connection_deletion_behavior = "allow"
+
+		third_party_client_access {
+			allowed_values = ["block"]
+		}
+	}
+}
+`
+
+// testAccClientMyOrganizationConfigurationThirdPartyClientAccessRemoved omits third_party_client_access
+// entirely. Because the block is schema `Optional` without `Computed`, removing it from config must
+// produce a real diff and a clearing PATCH — not a silently-suppressed no-op — matching the
+// confirmed API behavior that omitting the field from a request removes it from the GET response.
+const testAccClientMyOrganizationConfigurationThirdPartyClientAccessRemoved = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MyOrgConfig TPCA - {{.testName}}"
+	description = "Client with third_party_client_access removed"
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
+		connection_deletion_behavior = "allow"
+	}
+}
+`
+
+// TestAccClientMyOrganizationConfigurationThirdPartyClientAccess covers: setting the block with the
+// full allowed_values list, updating to a single-value allowed_values list (confirmed accepted,
+// unlike auth0_connection_profile's cross_app_access_resource_app), and removing the block entirely
+// (removal round-trip — see testAccClientMyOrganizationConfigurationThirdPartyClientAccessRemoved).
+// Requires the `my_orgs_third_party_client_support` tenant flag to be enabled.
+func TestAccClientMyOrganizationConfigurationThirdPartyClientAccess(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientMyOrganizationConfigurationThirdPartyClientAccessFull, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.third_party_client_access.0.default_value", "block"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.third_party_client_access.0.allowed_values.#", "2"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMyOrganizationConfigurationThirdPartyClientAccessSingle, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.third_party_client_access.0.default_value", "block"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.third_party_client_access.0.allowed_values.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.third_party_client_access.0.allowed_values.0", "block"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMyOrganizationConfigurationThirdPartyClientAccessRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.third_party_client_access.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+// testAccClientMyOrganizationConfigurationThirdPartyClientAccessOmitted sets the block with
+// allowed_values omitted, which must be rejected client-side before any API call is made.
+const testAccClientMyOrganizationConfigurationThirdPartyClientAccessOmitted = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MyOrgConfig TPCA - {{.testName}}"
+	description = "Client with third_party_client_access (omitted allowed_values)"
+
+	my_organization_configuration {
+		third_party_client_access {
+		}
+	}
+}
+`
+
+// TestAccClientMyOrganizationConfigurationThirdPartyClientAccessOmittedAllowedValues covers the
+// client-side rejection of a third_party_client_access block with allowed_values empty/unset.
+// Allowed_values is schema `Required` (with `MinItems: 1`), so this is caught by Terraform's own
+// config validation before any plan/apply, never mind an API call — no HTTP recording needed.
+func TestAccClientMyOrganizationConfigurationThirdPartyClientAccessOmittedAllowedValues(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccClientMyOrganizationConfigurationThirdPartyClientAccessOmitted, t.Name()),
+				ExpectError: regexp.MustCompile(`(?i)"allowed_values" is required`),
+			},
+		},
+	})
+}
+
+// testAccClientMyOrganizationConfigurationThirdPartyClientAccessInvalidDefault attempts to set
+// default_value directly. Default_value is modeled as computed-only (Constraint 4: the API
+// unconditionally rejects any value other than "block", so the provider never exposes it as
+// user-settable) — Terraform rejects this at schema-validation time, before any plan/apply.
+const testAccClientMyOrganizationConfigurationThirdPartyClientAccessInvalidDefault = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MyOrgConfig TPCA - {{.testName}}"
+	description = "Client with an invalid default_value"
+
+	my_organization_configuration {
+		third_party_client_access {
+			default_value  = "allow"
+			allowed_values = ["allow", "block"]
+		}
+	}
+}
+`
+
+// TestAccClientMyOrganizationConfigurationThirdPartyClientAccessInvalidDefault covers the documented
+// 400 case of default_value != "block". Because default_value is computed-only in this provider's
+// schema, the rejection happens even earlier than a CustomizeDiff — Terraform refuses to parse the
+// config at all, so this never reaches the API either.
+func TestAccClientMyOrganizationConfigurationThirdPartyClientAccessInvalidDefault(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccClientMyOrganizationConfigurationThirdPartyClientAccessInvalidDefault, t.Name()),
+				ExpectError: regexp.MustCompile(`(?i)default_value`),
+			},
+		},
+	})
+}
+
+// testAccClientMyOrganizationConfigurationWholeBlockDisciplineBase omits third_party_client_access.
+// Allowed_strategies is required by the API on every write to my_organization_configuration,
+// independent of third_party_client_access — confirmed live.
+const testAccClientMyOrganizationConfigurationWholeBlockDisciplineBase = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MyOrgConfig Discipline - {{.testName}}"
+	description = "Client for whole-block-PATCH discipline check"
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
+		connection_deletion_behavior = "allow"
+	}
+}
+`
+
+// testAccClientMyOrganizationConfigurationWholeBlockDisciplineAdded adds third_party_client_access
+// without changing connection_deletion_behavior, confirming the new field doesn't regress the
+// existing one on a full-block PATCH.
+const testAccClientMyOrganizationConfigurationWholeBlockDisciplineAdded = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MyOrgConfig Discipline - {{.testName}}"
+	description = "Client for whole-block-PATCH discipline check"
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
+		connection_deletion_behavior = "allow"
+
+		third_party_client_access {
+			allowed_values = ["block"]
+		}
+	}
+}
+`
+
+// testAccClientMyOrganizationConfigurationWholeBlockDisciplineChanged changes
+// connection_deletion_behavior while third_party_client_access stays set, confirming the existing
+// field doesn't regress the new one.
+const testAccClientMyOrganizationConfigurationWholeBlockDisciplineChanged = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MyOrgConfig Discipline - {{.testName}}"
+	description = "Client for whole-block-PATCH discipline check"
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp", "okta"]
+		connection_deletion_behavior = "allow_if_empty"
+
+		third_party_client_access {
+			allowed_values = ["block"]
+		}
+	}
+}
+`
+
+// TestAccClientMyOrganizationConfigurationWholeBlockDiscipline confirms Constraint 6:
+// my_organization_configuration is full-replace on PATCH, so the auth0_client Update path must
+// always send the complete block. Adding third_party_client_access must not drop
+// connection_deletion_behavior, and later changing connection_deletion_behavior must not drop
+// third_party_client_access.
+func TestAccClientMyOrganizationConfigurationWholeBlockDiscipline(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientMyOrganizationConfigurationWholeBlockDisciplineBase, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.connection_deletion_behavior", "allow"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.third_party_client_access.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMyOrganizationConfigurationWholeBlockDisciplineAdded, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.connection_deletion_behavior", "allow"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.third_party_client_access.0.allowed_values.#", "1"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMyOrganizationConfigurationWholeBlockDisciplineChanged, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.connection_deletion_behavior", "allow_if_empty"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.third_party_client_access.0.allowed_values.#", "1"),
+				),
+			},
+		},
+	})
+}
+
 const testAccClientThirdPartySecurityModeCreate = `
 resource "auth0_client" "my_client" {
 	name                      = "Acceptance Test - 3P Client - {{.testName}}"

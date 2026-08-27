@@ -25,6 +25,14 @@ resource "auth0_connection_profile" "my_profile" {
     "scim",
     "universal_logout"
   ]
+
+  # Requires the `my_orgs_cross_app_access_resource_app` tenant flag (EA only).
+  cross_app_access_resource_app {
+    status {
+      default_value  = "enabled"
+      allowed_values = ["enabled", "disabled"]
+    }
+  }
 }
 
 data "auth0_connection_profile" "my_profile_ds" {
@@ -43,6 +51,7 @@ data "auth0_connection_profile" "my_profile_ds" {
 
 - `connection_config` (List of Object) Connection configuration for the profile. (see [below for nested schema](#nestedatt--connection_config))
 - `connection_name_prefix_template` (String) Template for generating connection names from the profile.
+- `cross_app_access_resource_app` (List of Object) Configures the connection profile as a Cross-App Access (XAA) resource application. Note: this is distinct from, and unrelated to, `cross_app_access_resource_app` on `auth0_connection`, which uses a flat `status` string rather than this nested `status` block. (see [below for nested schema](#nestedatt--cross_app_access_resource_app))
 - `enabled_features` (List of String) List of enabled features for the connection profile.
 - `name` (String) Name of the connection profile.
 - `organization` (List of Object) Organization associated with the connection profile. (see [below for nested schema](#nestedatt--organization))
@@ -52,6 +61,23 @@ data "auth0_connection_profile" "my_profile_ds" {
 ### Nested Schema for `connection_config`
 
 Read-Only:
+
+
+
+<a id="nestedatt--cross_app_access_resource_app"></a>
+### Nested Schema for `cross_app_access_resource_app`
+
+Read-Only:
+
+- `status` (List of Object) (see [below for nested schema](#nestedobjatt--cross_app_access_resource_app--status))
+
+<a id="nestedobjatt--cross_app_access_resource_app--status"></a>
+### Nested Schema for `cross_app_access_resource_app.status`
+
+Read-Only:
+
+- `allowed_values` (List of String)
+- `default_value` (String)
 
 
 

@@ -4193,3 +4193,58 @@ func TestAccConnectionOIDCMetadataOnOkta(t *testing.T) {
 		},
 	})
 }
+
+// TestAccConnectionClientSecretWriteOnlyValidation covers the plan-time schema constraints.
+// Apply/rotation/flatten behaviour is unit-tested; an apply-based test is avoided because the
+// harness's post-apply non-refresh plan trips on terraform-plugin-sdk#1612, which does not
+// affect real usage.
+func TestAccConnectionClientSecretWriteOnlyValidation(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccConnectionClientSecretWOConflicts, t.Name()),
+				PlanOnly:    true,
+				ExpectError: regexp.MustCompile(`(?i)conflicts with`),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccConnectionClientSecretWOMissingVersion, t.Name()),
+				PlanOnly:    true,
+				ExpectError: regexp.MustCompile(`options_client_secret_wo_version`),
+			},
+		},
+	})
+}
+
+const testAccConnectionClientSecretWOConflicts = `
+resource "auth0_connection" "oidc_wo_val" {
+	name     = "Acceptance-Test-OIDC-WO-Val-{{.testName}}"
+	strategy = "oidc"
+
+	options_client_secret_wo         = "wo-secret"
+	options_client_secret_wo_version = 1
+
+	options {
+		client_id     = "123456"
+		client_secret = "legacy-secret"
+		type          = "back_channel"
+		issuer        = "https://api.login.yahoo.com"
+		jwks_uri      = "https://api.login.yahoo.com/openid/v1/certs"
+	}
+}
+`
+
+const testAccConnectionClientSecretWOMissingVersion = `
+resource "auth0_connection" "oidc_wo_val" {
+	name     = "Acceptance-Test-OIDC-WO-Val-{{.testName}}"
+	strategy = "oidc"
+
+	options_client_secret_wo = "wo-secret"
+
+	options {
+		client_id = "123456"
+		type      = "back_channel"
+		issuer    = "https://api.login.yahoo.com"
+		jwks_uri  = "https://api.login.yahoo.com/openid/v1/certs"
+	}
+}
+`

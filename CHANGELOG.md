@@ -1,8 +1,19 @@
 ## Unreleased
 
+## v1.56.0
+
+FEATURES:
+- `resource/auth0_connection` – Add `oidc_metadata` support on `oidc` and `okta` strategies, with automatic suppression of server-injected defaults that would otherwise cause spurious diffs ([#1679](https://github.com/auth0/terraform-provider-auth0/pull/1679))
+- `resource/auth0_connection_profile` – Add `cross_app_access_resource_app` support (EA only) ([#1688](https://github.com/auth0/terraform-provider-auth0/pull/1688))
+- `resource/auth0_client` – Add `third_party_client_access` support to `my_organization_configuration` (EA only) ([#1688](https://github.com/auth0/terraform-provider-auth0/pull/1688))
+
 ENHANCEMENTS:
-- `resource/auth0_connection_profile` – add `cross_app_access_resource_app` support (EA only) ([#pr])
-- `resource/auth0_client` – add `third_party_client_access` support to `my_organization_configuration` (EA only) ([#pr])
+- `resource/auth0_prompt_screen_renderer` – Add `brute-force-protection` prompt and its `brute-force-protection-unblock`, `brute-force-protection-unblock-failure`, `brute-force-protection-unblock-success` screens ([#1677](https://github.com/auth0/terraform-provider-auth0/pull/1677))
+- `data-source/auth0_connection` – Add `hide_client_secret` to keep `options.client_secret` out of state ([#1685](https://github.com/auth0/terraform-provider-auth0/pull/1685))
+
+BUG FIXES:
+- `resource/auth0_organization_connection` – Mark `organization_id` and `connection_id` as `ForceNew` so that changing either recreates the resource instead of attempting an impossible in-place update ([#1681](https://github.com/auth0/terraform-provider-auth0/pull/1681))
+- `resource/auth0_connection_client` / `data-source/auth0_connection` – Filter out clients whose status is explicitly disabled when reading the enabled-client list, preventing phantom associations from appearing in state ([#1687](https://github.com/auth0/terraform-provider-auth0/pull/1687))
 
 ## v1.55.0
 

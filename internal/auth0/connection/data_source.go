@@ -149,7 +149,7 @@ func GetAllEnabledClients(ctx context.Context, api *management.Management, conne
 			return nil, err
 		}
 
-		allClients = append(allClients, enabledClientsResp.GetClients()...)
+		allClients = append(allClients, filterEnabledClients(enabledClientsResp.GetClients())...)
 
 		if !enabledClientsResp.HasNext() {
 			break
@@ -160,4 +160,20 @@ func GetAllEnabledClients(ctx context.Context, api *management.Management, conne
 	return &management.ConnectionEnabledClientList{
 		Clients: &allClients,
 	}, nil
+}
+
+// filterEnabledClients drops the clients that the connection is explicitly
+// disabled for.
+func filterEnabledClients(clients []management.ConnectionEnabledClient) []management.ConnectionEnabledClient {
+	enabledClients := make([]management.ConnectionEnabledClient, 0, len(clients))
+
+	for _, client := range clients {
+		if client.Status != nil && !client.GetStatus() {
+			continue
+		}
+
+		enabledClients = append(enabledClients, client)
+	}
+
+	return enabledClients
 }

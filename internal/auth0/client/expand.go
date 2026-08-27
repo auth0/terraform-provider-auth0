@@ -1456,6 +1456,7 @@ func expandMyOrganizationConfiguration(data *schema.ResourceData) *management.My
 			UserAttributeProfileID:     value.String(elem.GetAttr("user_attribute_profile_id")),
 			ConnectionDeletionBehavior: value.String(elem.GetAttr("connection_deletion_behavior")),
 			InvitationLandingClientID:  value.String(elem.GetAttr("invitation_landing_client_id")),
+			ThirdPartyClientAccess:     expandMyOrganizationConfigurationThirdPartyClientAccess(elem.GetAttr("third_party_client_access")),
 		}
 
 		allowedStrategiesAttr := elem.GetAttr("allowed_strategies")
@@ -1465,6 +1466,24 @@ func expandMyOrganizationConfiguration(data *schema.ResourceData) *management.My
 			}
 		}
 
+		return stop
+	})
+
+	return result
+}
+
+func expandMyOrganizationConfigurationThirdPartyClientAccess(tpcaConfig cty.Value) *management.MyOrganizationThirdPartyClientAccess {
+	if tpcaConfig.IsNull() || tpcaConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var result *management.MyOrganizationThirdPartyClientAccess
+
+	tpcaConfig.ForEachElement(func(_ cty.Value, elem cty.Value) (stop bool) {
+		result = &management.MyOrganizationThirdPartyClientAccess{
+			DefaultValue:  auth0.String("block"),
+			AllowedValues: value.Strings(elem.GetAttr("allowed_values")),
+		}
 		return stop
 	})
 

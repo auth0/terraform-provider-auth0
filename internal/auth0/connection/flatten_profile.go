@@ -92,8 +92,6 @@ func flattenConnectionProfileCrossAppAccessResourceApp(profile *management.GetCo
 			values[i] = string(v)
 		}
 		statusMap["allowed_values"] = values
-	} else {
-		statusMap["allowed_values"] = []string{}
 	}
 
 	return []interface{}{

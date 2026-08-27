@@ -1736,7 +1736,7 @@ func NewResource() *schema.Resource {
 							MaxItems: 1,
 							Description: "Configures third-party client access to organizations created for this client " +
 								"through the My Organization API. Requires the `my_orgs_third_party_client_support` " +
-								"feature flag to be enabled on the tenant. (EA Only)",
+								"	 (EA Only)",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"default_value": {

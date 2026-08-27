@@ -103,10 +103,6 @@ func NewConnectionProfileResource() *schema.Resource {
 				},
 			},
 			"cross_app_access_resource_app": {
-				// Deliberately Optional without Computed: Computed would make Terraform's core
-				// diffing carry over the prior state whenever the block is omitted from config,
-				// so removing the block would never produce a diff and updateConnectionProfile
-				// would never be invoked to send the clearing PATCH.
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
@@ -151,10 +147,6 @@ func NewConnectionProfileResource() *schema.Resource {
 	}
 }
 
-// validateConnectionProfileCrossAppAccessResourceApp pre-empts the Auth0 API's `minItems: 2` and
-// `uniqueItems: true` rejection of `cross_app_access_resource_app.status.allowed_values` with a
-// clearer Terraform-side error, since the only valid non-empty values for a 2-value enum are the
-// full pair. This is UX-only: it never rejects a value the API would otherwise accept.
 func validateConnectionProfileCrossAppAccessResourceApp(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
 	rawAllowedValues, ok := diff.GetOk("cross_app_access_resource_app.0.status.0.allowed_values")
 	if !ok {

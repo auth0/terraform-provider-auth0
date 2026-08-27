@@ -92,9 +92,9 @@ var resourceSchema = map[string]*schema.Schema{
 			"`options_client_secret_wo_version` to rotate it. Conflicts with `options.client_secret`.",
 	},
 	"options_client_secret_wo_version": {
-		Type:     schema.TypeInt,
-		Optional: true,
-		RequiredWith:  []string{"options_client_secret_wo"},
+		Type:         schema.TypeInt,
+		Optional:     true,
+		RequiredWith: []string{"options_client_secret_wo"},
 		Description: "Version counter for `options_client_secret_wo`, required whenever the write-only secret is set. " +
 			"Must be a positive integer starting at `1`. This value signals rotation intent, " +
 			"though the secret is resent even for other config updates.",

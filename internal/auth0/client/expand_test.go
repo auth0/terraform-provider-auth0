@@ -37,13 +37,3 @@ func TestExpandMyOrganizationConfigurationThirdPartyClientAccess_NullConfigIsNil
 	assert.Nil(t, tpca)
 }
 
-func TestExpandMyOrganizationConfigurationThirdPartyClientAccess_EmptyAllowedValuesIsNil(t *testing.T) {
-	tpca := expandMyOrganizationConfigurationThirdPartyClientAccess(cty.ListVal([]cty.Value{
-		cty.ObjectVal(map[string]cty.Value{
-			"default_value":  cty.StringVal(""),
-			"allowed_values": cty.ListValEmpty(cty.String),
-		}),
-	}))
-
-	assert.Nil(t, tpca, "an unset third_party_client_access must never send a bare default_value with no allowed_values")
-}

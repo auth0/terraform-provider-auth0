@@ -36,4 +36,3 @@ func TestExpandMyOrganizationConfigurationThirdPartyClientAccess_NullConfigIsNil
 
 	assert.Nil(t, tpca)
 }
-

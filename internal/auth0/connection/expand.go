@@ -402,6 +402,32 @@ func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionO
 	return coa
 }
 
+func expandConnectionOptionsOTPSettings(otpConfig cty.Value) *management.ConnectionOptionsOTPSettings {
+	var otpSettings *management.ConnectionOptionsOTPSettings
+	otpConfig.ForEachElement(
+		func(_ cty.Value, settings cty.Value) (stop bool) {
+			otpSettings = &management.ConnectionOptionsOTPSettings{
+				Email: expandConnectionOptionsOTPChannelSettings(settings.GetAttr("email")),
+				Phone: expandConnectionOptionsOTPChannelSettings(settings.GetAttr("phone")),
+			}
+			return stop
+		})
+	return otpSettings
+}
+
+func expandConnectionOptionsOTPChannelSettings(otpChannelConfig cty.Value) *management.ConnectionOptionsOTPChannelSettings {
+	var channel *management.ConnectionOptionsOTPChannelSettings
+	otpChannelConfig.ForEachElement(
+		func(_ cty.Value, settings cty.Value) (stop bool) {
+			channel = &management.ConnectionOptionsOTPChannelSettings{
+				OTPLength: value.Int(settings.GetAttr("otp_length")),
+				OTPExpiry: value.Int(settings.GetAttr("otp_expiry")),
+			}
+			return stop
+		})
+	return channel
+}
+
 func expandConnectionOptionsEmailAttribute(config cty.Value) *management.ConnectionOptionsEmailAttribute {
 	var coea *management.ConnectionOptionsEmailAttribute
 	config.GetAttr("email").ForEachElement(
@@ -569,6 +595,7 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
 		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 		RealmFallback:                    value.Bool(config.GetAttr("realm_fallback")),
+		OTPSettings:                      expandConnectionOptionsOTPSettings(config.GetAttr("otp_settings")),
 	}
 
 	if precedence := value.Strings(config.GetAttr("precedence")); precedence != nil && len(*precedence) > 0 {

@@ -639,9 +639,9 @@ var optionsSchema = &schema.Schema{
 				},
 			},
 			"otp_settings": {
-				Type:        schema.TypeList,
-				MaxItems:    1,
-				Optional:    true,
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
 				Description: "One-time password settings for database (`auth0` strategy) connections, " +
 					"configurable per delivery channel. (EA only)",
 				Elem: &schema.Resource{

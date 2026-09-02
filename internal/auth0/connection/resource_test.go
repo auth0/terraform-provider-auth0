@@ -4252,6 +4252,13 @@ func TestAccConnectionOTPSettings(t *testing.T) {
 				),
 			},
 			{
+				// otp_settings round-trips through import unchanged.
+				Config:            acctest.ParseTestName(testAccConnectionOTPSettingsBothChannels, t.Name()),
+				ResourceName:      "auth0_connection.my_connection",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
 				// Full-replace (F1): dropping the phone channel and changing email
 				// removes phone entirely rather than merging.
 				Config: acctest.ParseTestName(testAccConnectionOTPSettingsEmailOnly, t.Name()),

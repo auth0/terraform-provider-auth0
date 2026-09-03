@@ -383,3 +383,63 @@ func TestHideConnectionOptionsClientSecret(t *testing.T) {
 		assert.Equal(t, "my-client-secret", flattenedOptions(t, data)["client_secret"])
 	})
 }
+
+func TestBlankClientSecretInOptions(t *testing.T) {
+	t.Run("blanks client_secret when present", func(t *testing.T) {
+		options := []interface{}{map[string]interface{}{
+			"client_id":     "cid",
+			"client_secret": "the-secret",
+		}}
+		blankClientSecretInOptions(options)
+		assert.Equal(t, "", options[0].(map[string]interface{})["client_secret"])
+		assert.Equal(t, "cid", options[0].(map[string]interface{})["client_id"])
+	})
+
+	t.Run("is a no-op when client_secret is absent", func(t *testing.T) {
+		options := []interface{}{map[string]interface{}{"client_id": "cid"}}
+		blankClientSecretInOptions(options)
+		_, present := options[0].(map[string]interface{})["client_secret"]
+		assert.False(t, present)
+	})
+
+	t.Run("is a no-op on an empty options list", func(t *testing.T) {
+		assert.NotPanics(t, func() { blankClientSecretInOptions(nil) })
+		assert.NotPanics(t, func() { blankClientSecretInOptions([]interface{}{}) })
+	})
+}
+
+func TestFlattenConnectionWriteOnlyClientSecret(t *testing.T) {
+	newConnection := func() *management.Connection {
+		return &management.Connection{
+			Name:     auth0.String("my-oidc"),
+			Strategy: auth0.String("oidc"),
+			Options: &management.ConnectionOptionsOIDC{
+				ClientID:     auth0.String("my-client-id"),
+				ClientSecret: auth0.String("secret-echoed-by-api"),
+			},
+		}
+	}
+
+	t.Run("write-only path: blanks the mirrored client_secret and persists the version", func(t *testing.T) {
+		data := NewResource().TestResourceData()
+		assert.NoError(t, data.Set("options_client_secret_wo_version", 1))
+
+		diags := flattenConnection(data, newConnection())
+		assert.False(t, diags.HasError())
+
+		options := flattenedOptions(t, data)
+		assert.Empty(t, options["client_secret"])
+		assert.Equal(t, "my-client-id", options["client_id"])
+		assert.Equal(t, 1, data.Get("options_client_secret_wo_version"))
+	})
+
+	t.Run("legacy path: client_secret is preserved when no write-only version is set", func(t *testing.T) {
+		data := NewResource().TestResourceData()
+
+		diags := flattenConnection(data, newConnection())
+		assert.False(t, diags.HasError())
+
+		options := flattenedOptions(t, data)
+		assert.Equal(t, "secret-echoed-by-api", options["client_secret"])
+	})
+}

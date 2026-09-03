@@ -13,6 +13,12 @@ creation of multiple connections per strategy, the additional connections may no
 
 ~> When updating the `options` parameter, ensure that all nested fields within the `options` schema are explicitly defined. Failing to do so may result in the loss of existing configurations.
 
+~> When `options_client_secret_wo` (write-only) is set, `terraform plan -refresh=false` may report a
+non-empty plan for unrelated optional `options` fields (e.g. `+ scripts = {}`). This is an upstream
+limitation of the Terraform Plugin SDK ([hashicorp/terraform-plugin-sdk#1612](https://github.com/hashicorp/terraform-plugin-sdk/issues/1612))
+that only surfaces without a refresh; a normal `terraform plan`/`apply` (which refreshes) is
+unaffected and idempotent.
+
 {{ if .HasExample -}}
 
 ## Example Usage

@@ -55,6 +55,7 @@ var (
 		string(management.PromptCustomizedConsent),
 		string(management.PromptEmailOTPChallenge),
 		string(management.PromptBruteForceProtection),
+		string(management.PromptConfirmation),
 	}
 	allowedScreensSettingsRenderer = []string{
 		string(management.ScreenSignupID),
@@ -137,6 +138,7 @@ var (
 		string(management.ScreenBruteForceProtectionUnblock),
 		string(management.ScreenBruteForceProtectionUnblockFailure),
 		string(management.ScreenBruteForceProtectionUnblockSuccess),
+		string(management.ScreenConfirmation),
 	}
 
 	supportedRenderingModes = []string{string(management.RenderingModeStandard), string(management.RenderingModeAdvanced)}

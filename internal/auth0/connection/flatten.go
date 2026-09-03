@@ -389,6 +389,35 @@ func flattenCustomPasswordHash(customPasswordHash *management.CustomPasswordHash
 	}
 }
 
+func flattenOTPSettings(otpSettings *management.ConnectionOptionsOTPSettings) interface{} {
+	if otpSettings == nil {
+		return nil
+	}
+
+	otpSettingsMap := map[string]interface{}{}
+
+	if otpSettings.Email != nil {
+		otpSettingsMap["email"] = []interface{}{flattenOTPChannelSettings(otpSettings.GetEmail())}
+	}
+
+	if otpSettings.Phone != nil {
+		otpSettingsMap["phone"] = []interface{}{flattenOTPChannelSettings(otpSettings.GetPhone())}
+	}
+
+	return otpSettingsMap
+}
+
+func flattenOTPChannelSettings(channel *management.ConnectionOptionsOTPChannelSettings) interface{} {
+	if channel == nil {
+		return nil
+	}
+
+	return map[string]interface{}{
+		"otp_length": channel.GetOTPLength(),
+		"otp_expiry": channel.GetOTPExpiry(),
+	}
+}
+
 func flattenPasswordOptions(po *management.PasswordOptions) map[string]interface{} {
 	return map[string]interface{}{
 		"complexity":   []interface{}{flattenPasswordOptionsComplexity(po.GetComplexity())},
@@ -608,6 +637,10 @@ func flattenConnectionOptionsAuth0(
 
 	if options.CustomPasswordHash != nil {
 		optionsMap["custom_password_hash"] = []interface{}{flattenCustomPasswordHash(options.GetCustomPasswordHash())}
+	}
+
+	if options.OTPSettings != nil {
+		optionsMap["otp_settings"] = []interface{}{flattenOTPSettings(options.GetOTPSettings())}
 	}
 
 	if options.PasswordOptions != nil {

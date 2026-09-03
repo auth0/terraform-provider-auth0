@@ -638,6 +638,19 @@ var optionsSchema = &schema.Schema{
 					},
 				},
 			},
+			"otp_settings": {
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Description: "One-time password settings for database (`auth0` strategy) connections, " +
+					"configurable per delivery channel. (EA only)",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"email": otpChannelSettingsSchema("email"),
+						"phone": otpChannelSettingsSchema("phone"),
+					},
+				},
+			},
 			"provider": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -1652,6 +1665,36 @@ var optionsSchema = &schema.Schema{
 			},
 		},
 	},
+}
+
+// otpChannelSettingsSchema returns the one-time password settings schema for a
+// single delivery channel (`email` or `phone`) of a database (`auth0` strategy)
+// connection. The channel name is used to populate the block description.
+func otpChannelSettingsSchema(channel string) *schema.Schema {
+	return &schema.Schema{
+		Type:        schema.TypeList,
+		MaxItems:    1,
+		Optional:    true,
+		Description: "One-time password settings for the " + channel + " delivery channel.",
+		Elem: &schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"otp_length": {
+					Type:         schema.TypeInt,
+					Optional:     true,
+					ValidateFunc: validation.IntBetween(4, 48),
+					Description: "Number of digits in the generated one-time password. " +
+						"Must be between 4 and 48. Defaults to 6 if not set.",
+				},
+				"otp_expiry": {
+					Type:         schema.TypeInt,
+					Optional:     true,
+					ValidateFunc: validation.IntBetween(60, 86400),
+					Description: "Number of seconds before the one-time password expires. " +
+						"Must be between 60 and 86400. Defaults to 900 if not set.",
+				},
+			},
+		},
+	}
 }
 
 var authenticationSchema = &schema.Schema{

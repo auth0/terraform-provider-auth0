@@ -4193,3 +4193,89 @@ func TestAccConnectionOIDCMetadataOnOkta(t *testing.T) {
 		},
 	})
 }
+
+const testAccConnectionOTPSettingsBothChannels = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+	options {
+		otp_settings {
+			email {
+				otp_length = 8
+				otp_expiry = 600
+			}
+			phone {
+				otp_length = 6
+				otp_expiry = 900
+			}
+		}
+	}
+}
+`
+
+const testAccConnectionOTPSettingsEmailOnly = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+	options {
+		otp_settings {
+			email {
+				otp_length = 7
+				otp_expiry = 600
+			}
+		}
+	}
+}
+`
+
+const testAccConnectionOTPSettingsRemoved = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+	options {
+	}
+}
+`
+
+func TestAccConnectionOTPSettings(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionOTPSettingsBothChannels, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.otp_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.otp_settings.0.email.0.otp_length", "8"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.otp_settings.0.email.0.otp_expiry", "600"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.otp_settings.0.phone.0.otp_length", "6"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.otp_settings.0.phone.0.otp_expiry", "900"),
+				),
+			},
+			{
+				// The otp_settings round-trips through import unchanged.
+				Config:            acctest.ParseTestName(testAccConnectionOTPSettingsBothChannels, t.Name()),
+				ResourceName:      "auth0_connection.my_connection",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				// Full-replace (F1): dropping the phone channel and changing email
+				// removes phone entirely rather than merging.
+				Config: acctest.ParseTestName(testAccConnectionOTPSettingsEmailOnly, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.otp_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.otp_settings.0.email.0.otp_length", "7"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.otp_settings.0.email.0.otp_expiry", "600"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.otp_settings.0.phone.#", "0"),
+				),
+			},
+			{
+				// Removing the block entirely clears otp_settings from options.
+				Config: acctest.ParseTestName(testAccConnectionOTPSettingsRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.otp_settings.#", "0"),
+				),
+			},
+		},
+	})
+}

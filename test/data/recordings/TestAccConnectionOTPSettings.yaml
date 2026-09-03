@@ -1,0 +1,507 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 199
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","strategy":"auth0","options":{"otp_settings":{"email":{"otp_length":8,"otp_expiry":600},"phone":{"otp_length":6,"otp_expiry":900}}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"mfa":{"active":true,"return_enroll_settings":true},"otp_settings":{"email":{"otp_length":8,"otp_expiry":600},"phone":{"otp_length":6,"otp_expiry":900}},"password_options":{"complexity":{"character_type_rule":"all","identical_characters":"allow","sequential_characters":"allow","max_length_exceeded":"error","min_length":15,"character_types":[]},"profile_data":{"active":false,"blocked_fields":["name","username","nickname","email","phone_number","user_metadata.name","user_metadata.first","user_metadata.last"]},"history":{"active":false,"size":3},"dictionary":{"active":false,"custom":[],"default":"en_100k"}},"strategy_version":2,"authentication_methods":{"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"},"passkey":{"enabled":false}},"passkey_options":{"challenge_ui":"both","progressive_enrollment_enabled":true,"local_enrollment_enabled":true},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 582.00025ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"mfa":{"active":true,"return_enroll_settings":true},"otp_settings":{"email":{"otp_expiry":600,"otp_length":8},"phone":{"otp_expiry":900,"otp_length":6}},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"password_options":{"history":{"size":3,"active":false},"complexity":{"min_length":15,"character_types":[],"character_type_rule":"all","max_length_exceeded":"error","identical_characters":"allow","sequential_characters":"allow"},"dictionary":{"active":false,"custom":[],"default":"en_100k"},"profile_data":{"active":false,"blocked_fields":["name","username","nickname","email","phone_number","user_metadata.name","user_metadata.first","user_metadata.last"]}},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 345.792167ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"mfa":{"active":true,"return_enroll_settings":true},"otp_settings":{"email":{"otp_expiry":600,"otp_length":8},"phone":{"otp_expiry":900,"otp_length":6}},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"password_options":{"history":{"size":3,"active":false},"complexity":{"min_length":15,"character_types":[],"character_type_rule":"all","max_length_exceeded":"error","identical_characters":"allow","sequential_characters":"allow"},"dictionary":{"active":false,"custom":[],"default":"en_100k"},"profile_data":{"active":false,"blocked_fields":["name","username","nickname","email","phone_number","user_metadata.name","user_metadata.first","user_metadata.last"]}},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 358.356292ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"mfa":{"active":true,"return_enroll_settings":true},"otp_settings":{"email":{"otp_expiry":600,"otp_length":8},"phone":{"otp_expiry":900,"otp_length":6}},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"password_options":{"history":{"size":3,"active":false},"complexity":{"min_length":15,"character_types":[],"character_type_rule":"all","max_length_exceeded":"error","identical_characters":"allow","sequential_characters":"allow"},"dictionary":{"active":false,"custom":[],"default":"en_100k"},"profile_data":{"active":false,"blocked_fields":["name","username","nickname","email","phone_number","user_metadata.name","user_metadata.first","user_metadata.last"]}},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 341.694458ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"mfa":{"active":true,"return_enroll_settings":true},"otp_settings":{"email":{"otp_expiry":600,"otp_length":8},"phone":{"otp_expiry":900,"otp_length":6}},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"password_options":{"history":{"size":3,"active":false},"complexity":{"min_length":15,"character_types":[],"character_type_rule":"all","max_length_exceeded":"error","identical_characters":"allow","sequential_characters":"allow"},"dictionary":{"active":false,"custom":[],"default":"en_100k"},"profile_data":{"active":false,"blocked_fields":["name","username","nickname","email","phone_number","user_metadata.name","user_metadata.first","user_metadata.last"]}},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 312.82425ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"mfa":{"active":true,"return_enroll_settings":true},"otp_settings":{"email":{"otp_expiry":600,"otp_length":8},"phone":{"otp_expiry":900,"otp_length":6}},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"password_options":{"history":{"size":3,"active":false},"complexity":{"min_length":15,"character_types":[],"character_type_rule":"all","max_length_exceeded":"error","identical_characters":"allow","sequential_characters":"allow"},"dictionary":{"active":false,"custom":[],"default":"en_100k"},"profile_data":{"active":false,"blocked_fields":["name","username","nickname","email","phone_number","user_metadata.name","user_metadata.first","user_metadata.last"]}},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 316.680125ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 73
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"options":{"otp_settings":{"email":{"otp_length":7,"otp_expiry":600}}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"otp_settings":{"email":{"otp_expiry":600,"otp_length":7}},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 828.887959ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"otp_settings":{"email":{"otp_expiry":600,"otp_length":7}},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 425.635458ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"otp_settings":{"email":{"otp_expiry":600,"otp_length":7}},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 279.828ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"otp_settings":{"email":{"otp_expiry":600,"otp_length":7}},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 320.393ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"otp_settings":{"email":{"otp_expiry":600,"otp_length":7}},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 336.073917ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 15
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"options":{}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 323.939917ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 710.144709ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_ehdQwHJ7QbWBXmg9","options":{"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true,"api_behavior":"required","signup_behavior":"allow"}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOTPSettings","is_domain_connection":false,"authentication":{"active":true},"connected_accounts":{"active":false},"realms":["Acceptance-Test-Connection-TestAccConnectionOTPSettings"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 327.313416ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ehdQwHJ7QbWBXmg9
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2026-09-02T14:26:53.657Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 333.369917ms

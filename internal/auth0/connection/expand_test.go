@@ -194,6 +194,59 @@ func TestConnectionOptionsTypeOmitsWhenNil(t *testing.T) {
 	})
 }
 
+// The connection PATCH replaces the whole options object, and the API does not
+// materialize otp_settings defaults on read. So the request must omit otp_settings
+// (and any unset channel or sub-field) entirely rather than send zero values.
+func TestConnectionOptionsOTPSettingsOmitsWhenNil(t *testing.T) {
+	t.Run("omits otp_settings when nil", func(t *testing.T) {
+		payload, err := json.Marshal(&management.ConnectionOptions{})
+		assert.NoError(t, err)
+		assert.NotContains(t, string(payload), "otp_settings")
+	})
+
+	t.Run("omits the phone channel when only email is set", func(t *testing.T) {
+		options := &management.ConnectionOptions{
+			OTPSettings: &management.ConnectionOptionsOTPSettings{
+				Email: &management.ConnectionOptionsOTPChannelSettings{
+					OTPLength: auth0.Int(8),
+					OTPExpiry: auth0.Int(600),
+				},
+			},
+		}
+		payload, err := json.Marshal(options)
+		assert.NoError(t, err)
+		assert.Contains(t, string(payload), `"otp_settings":{"email":{"otp_length":8,"otp_expiry":600}}`)
+		assert.NotContains(t, string(payload), "phone")
+	})
+
+	t.Run("omits an unset sub-field within a channel", func(t *testing.T) {
+		options := &management.ConnectionOptions{
+			OTPSettings: &management.ConnectionOptionsOTPSettings{
+				Email: &management.ConnectionOptionsOTPChannelSettings{
+					OTPLength: auth0.Int(7),
+				},
+			},
+		}
+		payload, err := json.Marshal(options)
+		assert.NoError(t, err)
+		assert.Contains(t, string(payload), `"otp_settings":{"email":{"otp_length":7}}`)
+		assert.NotContains(t, string(payload), "otp_expiry")
+	})
+
+	t.Run("includes both channels when set", func(t *testing.T) {
+		options := &management.ConnectionOptions{
+			OTPSettings: &management.ConnectionOptionsOTPSettings{
+				Email: &management.ConnectionOptionsOTPChannelSettings{OTPLength: auth0.Int(8), OTPExpiry: auth0.Int(600)},
+				Phone: &management.ConnectionOptionsOTPChannelSettings{OTPLength: auth0.Int(6), OTPExpiry: auth0.Int(900)},
+			},
+		}
+		payload, err := json.Marshal(options)
+		assert.NoError(t, err)
+		assert.Contains(t, string(payload), `"email":{"otp_length":8,"otp_expiry":600}`)
+		assert.Contains(t, string(payload), `"phone":{"otp_length":6,"otp_expiry":900}`)
+	})
+}
+
 // The API rejects `oidc_metadata: null` with `"metadata_response" must be of type object`,
 // so an unset attribute has to be omitted from the request rather than nulled.
 func TestConnectionOptionsOIDCMetadataOmitsWhenNil(t *testing.T) {

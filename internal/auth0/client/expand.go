@@ -90,6 +90,12 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 	}
 
 	if data.IsNewResource() {
+		if clientID := value.String(config.GetAttr("client_id")); clientID != nil {
+			client.ClientID = clientID
+		}
+	}
+
+	if data.IsNewResource() {
 		switch client.GetAppType() {
 		case "native", "spa":
 			client.TokenEndpointAuthMethod = auth0.String("none")

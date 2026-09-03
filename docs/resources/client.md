@@ -160,6 +160,7 @@ resource "auth0_client" "mcp_server" {
 - `async_approval_notification_channels` (List of String) List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated.
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
+- `client_id` (String) The ID of the client. If not provided, Auth0 will generate one automatically. Use this to specify a custom client ID for migration or tenant-copy scenarios. Requires feature flag to be enabled on the tenant.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
 - `compliance_level` (String) Defines the compliance level for this client, which may restrict it's capabilities. Can be one of `none`, `fapi1_adv_pkj_par`, `fapi1_adv_mtls_par`.
 - `cross_origin_auth` (Boolean) Whether this client can be used to make cross-origin authentication requests (`true`) or it is not allowed to make such requests (`false`).
@@ -204,7 +205,6 @@ resource "auth0_client" "mcp_server" {
 
 ### Read-Only
 
-- `client_id` (String) The ID of the client.
 - `external_client_id` (String) The URL of the Client ID Metadata Document. Only present for CIMD-registered clients.
 - `external_metadata_created_by` (String) Who created the external metadata client: `admin` (via Management API), `client` (self-registered), or `unknown`.
 - `external_metadata_type` (String) Type of external metadata. Value is `cimd` for CIMD-registered clients.

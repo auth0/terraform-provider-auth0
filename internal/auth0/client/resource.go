@@ -89,9 +89,13 @@ func NewResource() *schema.Resource {
 				Description:  "Description of the purpose of the client.",
 			},
 			"client_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The ID of the client.",
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: "The ID of the client. If not provided, Auth0 will generate one automatically. " +
+					"Use this to specify a custom client ID for migration or tenant-copy scenarios. " +
+					"Requires feature flag to be enabled on the tenant.",
 			},
 			"external_client_id": {
 				Type:        schema.TypeString,

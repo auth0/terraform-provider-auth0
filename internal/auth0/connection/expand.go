@@ -273,10 +273,23 @@ func expandConnectionOptions(data *schema.ResourceData, strategy string) (interf
 	return connectionOptions, diagnostics
 }
 
+// clientSecretForOptions returns the write-only client secret value when set;
+// otherwise, it falls back to the legacy nested options.client_secret.
+// It is read from the full raw config. The secret is resent on every
+// apply (not only when the version changes), because the connection PATCH
+// replaces options wholesale; omitting it would wipe the stored secret.
+func clientSecretForOptions(data *schema.ResourceData, config cty.Value) *string {
+	if writeOnly := data.GetRawConfig().GetAttr("options_client_secret_wo"); !writeOnly.IsNull() {
+		return value.String(writeOnly)
+	}
+
+	return value.String(config.GetAttr("client_secret"))
+}
+
 func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsGitHub{
 		ClientID:           value.String(config.GetAttr("client_id")),
-		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		ClientSecret:       clientSecretForOptions(data, config),
 		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
@@ -780,7 +793,7 @@ func expandPasswordOptionsDictionary(config cty.Value) *management.PasswordOptio
 func expandConnectionOptionsGoogleOAuth2(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsGoogleOAuth2{
 		ClientID:           value.String(config.GetAttr("client_id")),
-		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		ClientSecret:       clientSecretForOptions(data, config),
 		AllowedAudiences:   value.Strings(config.GetAttr("allowed_audiences")),
 		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -797,7 +810,7 @@ func expandConnectionOptionsGoogleOAuth2(data *schema.ResourceData, config cty.V
 func expandConnectionOptionsGoogleApps(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsGoogleApps{
 		ClientID:           value.String(config.GetAttr("client_id")),
-		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		ClientSecret:       clientSecretForOptions(data, config),
 		Domain:             value.String(config.GetAttr("domain")),
 		TenantDomain:       value.String(config.GetAttr("tenant_domain")),
 		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
@@ -827,7 +840,7 @@ func expandConnectionOptionsGoogleApps(data *schema.ResourceData, config cty.Val
 func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOAuth2{
 		ClientID:           value.String(config.GetAttr("client_id")),
-		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		ClientSecret:       clientSecretForOptions(data, config),
 		AuthorizationURL:   value.String(config.GetAttr("authorization_endpoint")),
 		TokenURL:           value.String(config.GetAttr("token_endpoint")),
 		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
@@ -868,7 +881,7 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 func expandConnectionOptionsFacebook(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsFacebook{
 		ClientID:           value.String(config.GetAttr("client_id")),
-		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		ClientSecret:       clientSecretForOptions(data, config),
 		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
@@ -884,7 +897,7 @@ func expandConnectionOptionsFacebook(data *schema.ResourceData, config cty.Value
 func expandConnectionOptionsApple(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsApple{
 		ClientID:           value.String(config.GetAttr("client_id")),
-		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		ClientSecret:       clientSecretForOptions(data, config),
 		TeamID:             value.String(config.GetAttr("team_id")),
 		KeyID:              value.String(config.GetAttr("key_id")),
 		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
@@ -902,7 +915,7 @@ func expandConnectionOptionsApple(data *schema.ResourceData, config cty.Value) (
 func expandConnectionOptionsLinkedin(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsLinkedin{
 		ClientID:           value.String(config.GetAttr("client_id")),
-		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		ClientSecret:       clientSecretForOptions(data, config),
 		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -919,7 +932,7 @@ func expandConnectionOptionsLinkedin(data *schema.ResourceData, config cty.Value
 func expandConnectionOptionsSalesforce(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSalesforce{
 		ClientID:           value.String(config.GetAttr("client_id")),
-		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		ClientSecret:       clientSecretForOptions(data, config),
 		CommunityBaseURL:   value.String(config.GetAttr("community_base_url")),
 		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -936,7 +949,7 @@ func expandConnectionOptionsSalesforce(data *schema.ResourceData, config cty.Val
 func expandConnectionOptionsWindowsLive(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsWindowsLive{
 		ClientID:           value.String(config.GetAttr("client_id")),
-		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		ClientSecret:       clientSecretForOptions(data, config),
 		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -1056,7 +1069,7 @@ func expandConnectionOptionsAD(_ *schema.ResourceData, config cty.Value) (interf
 func expandConnectionOptionsAzureAD(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsAzureAD{
 		ClientID:            value.String(config.GetAttr("client_id")),
-		ClientSecret:        value.String(config.GetAttr("client_secret")),
+		ClientSecret:        clientSecretForOptions(data, config),
 		AppID:               value.String(config.GetAttr("app_id")),
 		Domain:              value.String(config.GetAttr("domain")),
 		DomainAliases:       value.Strings(config.GetAttr("domain_aliases")),
@@ -1090,7 +1103,7 @@ func expandConnectionOptionsAzureAD(data *schema.ResourceData, config cty.Value)
 func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOIDC{
 		ClientID:                      value.String(config.GetAttr("client_id")),
-		ClientSecret:                  value.String(config.GetAttr("client_secret")),
+		ClientSecret:                  clientSecretForOptions(data, config),
 		TenantDomain:                  value.String(config.GetAttr("tenant_domain")),
 		DomainAliases:                 value.Strings(config.GetAttr("domain_aliases")),
 		LogoURL:                       value.String(config.GetAttr("icon_url")),
@@ -1157,7 +1170,7 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOkta{
 		ClientID:                      value.String(config.GetAttr("client_id")),
-		ClientSecret:                  value.String(config.GetAttr("client_secret")),
+		ClientSecret:                  clientSecretForOptions(data, config),
 		Domain:                        value.String(config.GetAttr("domain")),
 		DomainAliases:                 value.Strings(config.GetAttr("domain_aliases")),
 		AuthorizationEndpoint:         value.String(config.GetAttr("authorization_endpoint")),

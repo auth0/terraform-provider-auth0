@@ -159,11 +159,28 @@ Optional:
 - `geo_country_codes` (List of String) Geo Country Codes. Must contain between 1 and 10 unique items.
 - `geo_subdivision_codes` (List of String) Geo Subdivision Codes. Must contain between 1 and 10 unique items.
 - `hostnames` (List of String) Hostnames. Must contain between 1 and 20 unique items.
+- `http_message_signature` (Block List, Max: 1) Match requests that carry an HTTP Message Signature verified by one of the listed Network ACL keys. (EA Only) (see [below for nested schema](#nestedblock--rule--match--http_message_signature))
 - `ipv4_cidrs` (List of String) IPv4 CIDRs. Must contain between 1 and 10 unique items. Can be IPv4 addresses or CIDR blocks.
 - `ipv6_cidrs` (List of String) IPv6 CIDRs. Must contain between 1 and 10 unique items. Can be IPv6 addresses or CIDR blocks.
 - `ja3_fingerprints` (List of String) JA3 Fingerprints. Must contain between 1 and 10 unique items.
 - `ja4_fingerprints` (List of String) JA4 Fingerprints. Must contain between 1 and 10 unique items.
 - `user_agents` (List of String) User Agents. Must contain between 1 and 10 unique items.
+
+<a id="nestedblock--rule--match--http_message_signature"></a>
+### Nested Schema for `rule.match.http_message_signature`
+
+Required:
+
+- `keys` (Block List, Min: 1, Max: 10) List of Network ACL key references. A request matches if its signature is verified by any of these keys. (see [below for nested schema](#nestedblock--rule--match--http_message_signature--keys))
+
+<a id="nestedblock--rule--match--http_message_signature--keys"></a>
+### Nested Schema for `rule.match.http_message_signature.keys`
+
+Required:
+
+- `id` (String) The ID of the referenced Network ACL key.
+
+
 
 
 <a id="nestedblock--rule--not_match"></a>
@@ -178,11 +195,26 @@ Optional:
 - `geo_country_codes` (List of String) Geo Country Codes. Must contain between 1 and 10 unique items.
 - `geo_subdivision_codes` (List of String) Geo Subdivision Codes. Must contain between 1 and 10 unique items.
 - `hostnames` (List of String) Hostnames. Must contain between 1 and 20 unique items.
+- `http_message_signature` (Block List, Max: 1) Match requests that carry an HTTP Message Signature verified by one of the listed Network ACL keys. (EA Only) (see [below for nested schema](#nestedblock--rule--not_match--http_message_signature))
 - `ipv4_cidrs` (List of String) IPv4 CIDRs. Must contain between 1 and 10 unique items. Can be IPv4 addresses or CIDR blocks.
 - `ipv6_cidrs` (List of String) IPv6 CIDRs. Must contain between 1 and 10 unique items. Can be IPv6 addresses or CIDR blocks.
 - `ja3_fingerprints` (List of String) JA3 Fingerprints. Must contain between 1 and 10 unique items.
 - `ja4_fingerprints` (List of String) JA4 Fingerprints. Must contain between 1 and 10 unique items.
 - `user_agents` (List of String) User Agents. Must contain between 1 and 10 unique items.
+
+<a id="nestedblock--rule--not_match--http_message_signature"></a>
+### Nested Schema for `rule.not_match.http_message_signature`
+
+Required:
+
+- `keys` (Block List, Min: 1, Max: 10) List of Network ACL key references. A request matches if its signature is verified by any of these keys. (see [below for nested schema](#nestedblock--rule--not_match--http_message_signature--keys))
+
+<a id="nestedblock--rule--not_match--http_message_signature--keys"></a>
+### Nested Schema for `rule.not_match.http_message_signature.keys`
+
+Required:
+
+- `id` (String) The ID of the referenced Network ACL key.
 
 ## Import
 

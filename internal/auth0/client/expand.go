@@ -64,6 +64,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 		ExpressConfiguration:                           expandExpressConfiguration(data),
 		MyOrganizationConfiguration:                    expandMyOrganizationConfiguration(data),
+		B2BIntegrationConfiguration:                    expandClientB2BIntegrationConfiguration(data),
 	}
 
 	if data.IsNewResource() || data.HasChange("require_pushed_authorization_requests") {
@@ -162,6 +163,26 @@ func expandTokenExchange(data *schema.ResourceData) *management.ClientTokenExcha
 	}
 
 	return &tokenExchange
+}
+
+func expandClientB2BIntegrationConfiguration(data *schema.ResourceData) *management.B2BIntegrationConfiguration {
+	if !data.IsNewResource() && !data.HasChange("b2b_integration_configuration") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("b2b_integration_configuration")
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var b2b management.B2BIntegrationConfiguration
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		b2b.IntegrationType = value.String(cfg.GetAttr("integration_type"))
+		b2b.SSOProfiles = value.Strings(cfg.GetAttr("sso_profiles"))
+		return stop
+	})
+
+	return &b2b
 }
 
 // TODO(major): Replace OIDCBackchannelLogout with OIDCLogout when releasing v2.

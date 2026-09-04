@@ -541,7 +541,7 @@ Optional:
 Optional:
 
 - `integration_type` (String) The type of integration used to connect to this B2B integration client. One of custom_auth_server, third_party, application
-- `sso_profiles` (List of String) Self-service profile IDs (in `ss-profile-id` format) associated with this B2B integration client.
+- `sso_profiles` (List of String) ID of the self-service SSO profile (an `auth0_self_service_profile` id, in `ssp_...` format) linked to this B2B integration client. Maximum 1.
 
 
 <a id="nestedblock--default_organization"></a>

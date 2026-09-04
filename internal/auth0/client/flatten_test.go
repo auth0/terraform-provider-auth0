@@ -180,6 +180,37 @@ func TestClientGrantScopesConflictWithAllowAll(t *testing.T) {
 	}
 }
 
+func TestFlattenB2BIntegrationConfiguration(t *testing.T) {
+	t.Run("returns nil when config is nil", func(t *testing.T) {
+		assert.Nil(t, flattenB2BIntegrationConfiguration(nil))
+	})
+
+	t.Run("flattens integration_type and sso_profiles", func(t *testing.T) {
+		result := flattenB2BIntegrationConfiguration(&management.B2BIntegrationConfiguration{
+			IntegrationType: auth0.String("third_party"),
+			SSOProfiles:     &[]string{"ss-profile-1", "ss-profile-2"},
+		})
+
+		assert.Len(t, result, 1)
+		flat, ok := result[0].(map[string]interface{})
+		assert.True(t, ok, "expected result[0] to be a map[string]interface{}")
+		assert.Equal(t, "third_party", flat["integration_type"])
+		assert.Equal(t, []string{"ss-profile-1", "ss-profile-2"}, flat["sso_profiles"])
+	})
+
+	t.Run("flattens with empty sso_profiles when the API omits them", func(t *testing.T) {
+		result := flattenB2BIntegrationConfiguration(&management.B2BIntegrationConfiguration{
+			IntegrationType: auth0.String("application"),
+		})
+
+		assert.Len(t, result, 1)
+		flat, ok := result[0].(map[string]interface{})
+		assert.True(t, ok, "expected result[0] to be a map[string]interface{}")
+		assert.Equal(t, "application", flat["integration_type"])
+		assert.Nil(t, flat["sso_profiles"])
+	})
+}
+
 func TestFlattenClientIdentityAssertionAuthorizationGrant(t *testing.T) {
 	t.Run("returns nil when grant is nil", func(t *testing.T) {
 		assert.Nil(t, flattenClientIdentityAssertionAuthorizationGrant(nil))

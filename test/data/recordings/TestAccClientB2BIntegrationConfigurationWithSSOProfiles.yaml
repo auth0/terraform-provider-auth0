@@ -1,0 +1,681 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 197
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"b2b-sso-one-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","allowed_strategies":["oidc"],"user_attributes":[{"name":"email","description":"email attribute","is_optional":true}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 310
+        uncompressed: false
+        body: '{"id":"ssp_hzxj5tuw4JPQ1Z29U1KoC8","name":"b2b-sso-one-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","user_attributes":[{"name":"email","description":"email attribute","is_optional":true}],"allowed_strategies":["oidc"],"created_at":"2026-09-04T11:24:43.389Z","updated_at":"2026-09-04T11:24:43.389Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 416.083417ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 35
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"user_attribute_profile_id":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hzxj5tuw4JPQ1Z29U1KoC8
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_hzxj5tuw4JPQ1Z29U1KoC8","name":"b2b-sso-one-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","user_attributes":[{"name":"email","description":"email attribute","is_optional":true}],"allowed_strategies":["oidc"],"created_at":"2026-09-04T11:24:43.389Z","updated_at":"2026-09-04T11:24:43.684Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 291.022541ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hzxj5tuw4JPQ1Z29U1KoC8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_hzxj5tuw4JPQ1Z29U1KoC8","name":"b2b-sso-one-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","user_attributes":[{"name":"email","description":"email attribute","is_optional":true}],"allowed_strategies":["oidc"],"created_at":"2026-09-04T11:24:43.389Z","updated_at":"2026-09-04T11:24:43.684Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 445.678833ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 217
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - B2B SSO Profiles - TestAccClientB2BIntegrationConfigurationWithSSOProfiles","b2b_integration_configuration":{"integration_type":"third_party","sso_profiles":["ssp_hzxj5tuw4JPQ1Z29U1KoC8"]}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"name":"Acceptance Test - B2B SSO Profiles - TestAccClientB2BIntegrationConfigurationWithSSOProfiles","client_id":"vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","organization_discovery_methods":["email","organization_name"],"b2b_integration_configuration":{"integration_type":"third_party","sso_profiles":["ssp_hzxj5tuw4JPQ1Z29U1KoC8"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 427.545208ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - B2B SSO Profiles - TestAccClientB2BIntegrationConfigurationWithSSOProfiles","client_id":"vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","organization_discovery_methods":["email","organization_name"],"b2b_integration_configuration":{"integration_type":"third_party","sso_profiles":["ssp_hzxj5tuw4JPQ1Z29U1KoC8"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 362.223583ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hzxj5tuw4JPQ1Z29U1KoC8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_hzxj5tuw4JPQ1Z29U1KoC8","name":"b2b-sso-one-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","user_attributes":[{"name":"email","description":"email attribute","is_optional":true}],"allowed_strategies":["oidc"],"created_at":"2026-09-04T11:24:43.389Z","updated_at":"2026-09-04T11:24:43.684Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 275.96925ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - B2B SSO Profiles - TestAccClientB2BIntegrationConfigurationWithSSOProfiles","client_id":"vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","organization_discovery_methods":["email","organization_name"],"b2b_integration_configuration":{"integration_type":"third_party","sso_profiles":["ssp_hzxj5tuw4JPQ1Z29U1KoC8"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 375.1895ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hzxj5tuw4JPQ1Z29U1KoC8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_hzxj5tuw4JPQ1Z29U1KoC8","name":"b2b-sso-one-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","user_attributes":[{"name":"email","description":"email attribute","is_optional":true}],"allowed_strategies":["oidc"],"created_at":"2026-09-04T11:24:43.389Z","updated_at":"2026-09-04T11:24:43.684Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 339.700333ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - B2B SSO Profiles - TestAccClientB2BIntegrationConfigurationWithSSOProfiles","client_id":"vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","organization_discovery_methods":["email","organization_name"],"b2b_integration_configuration":{"integration_type":"third_party","sso_profiles":["ssp_hzxj5tuw4JPQ1Z29U1KoC8"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 338.469333ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 197
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"b2b-sso-two-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","allowed_strategies":["oidc"],"user_attributes":[{"name":"email","description":"email attribute","is_optional":true}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 310
+        uncompressed: false
+        body: '{"id":"ssp_jU7GzaYAf7Y2P44XJAuhpa","name":"b2b-sso-two-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","user_attributes":[{"name":"email","description":"email attribute","is_optional":true}],"allowed_strategies":["oidc"],"created_at":"2026-09-04T11:24:47.813Z","updated_at":"2026-09-04T11:24:47.813Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 321.1955ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 35
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"user_attribute_profile_id":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_jU7GzaYAf7Y2P44XJAuhpa
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_jU7GzaYAf7Y2P44XJAuhpa","name":"b2b-sso-two-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","user_attributes":[{"name":"email","description":"email attribute","is_optional":true}],"allowed_strategies":["oidc"],"created_at":"2026-09-04T11:24:47.813Z","updated_at":"2026-09-04T11:24:48.155Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 341.561833ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_jU7GzaYAf7Y2P44XJAuhpa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_jU7GzaYAf7Y2P44XJAuhpa","name":"b2b-sso-two-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","user_attributes":[{"name":"email","description":"email attribute","is_optional":true}],"allowed_strategies":["oidc"],"created_at":"2026-09-04T11:24:47.813Z","updated_at":"2026-09-04T11:24:48.155Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 333.957042ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 217
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - B2B SSO Profiles - TestAccClientB2BIntegrationConfigurationWithSSOProfiles","b2b_integration_configuration":{"integration_type":"third_party","sso_profiles":["ssp_jU7GzaYAf7Y2P44XJAuhpa"]}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - B2B SSO Profiles - TestAccClientB2BIntegrationConfigurationWithSSOProfiles","client_id":"vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","organization_discovery_methods":["email","organization_name"],"b2b_integration_configuration":{"integration_type":"third_party","sso_profiles":["ssp_jU7GzaYAf7Y2P44XJAuhpa"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 373.786458ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - B2B SSO Profiles - TestAccClientB2BIntegrationConfigurationWithSSOProfiles","client_id":"vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","organization_discovery_methods":["email","organization_name"],"b2b_integration_configuration":{"integration_type":"third_party","sso_profiles":["ssp_jU7GzaYAf7Y2P44XJAuhpa"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 296.240459ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_jU7GzaYAf7Y2P44XJAuhpa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_jU7GzaYAf7Y2P44XJAuhpa","name":"b2b-sso-two-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","user_attributes":[{"name":"email","description":"email attribute","is_optional":true}],"allowed_strategies":["oidc"],"created_at":"2026-09-04T11:24:47.813Z","updated_at":"2026-09-04T11:24:48.155Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 338.58475ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hzxj5tuw4JPQ1Z29U1KoC8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_hzxj5tuw4JPQ1Z29U1KoC8","name":"b2b-sso-one-TestAccClientB2BIntegrationConfigurationWithSSOProfiles","user_attributes":[{"name":"email","description":"email attribute","is_optional":true}],"allowed_strategies":["oidc"],"created_at":"2026-09-04T11:24:43.389Z","updated_at":"2026-09-04T11:24:43.684Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 351.247583ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - B2B SSO Profiles - TestAccClientB2BIntegrationConfigurationWithSSOProfiles","client_id":"vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","organization_discovery_methods":["email","organization_name"],"b2b_integration_configuration":{"integration_type":"third_party","sso_profiles":["ssp_jU7GzaYAf7Y2P44XJAuhpa"]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 333.8075ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_hzxj5tuw4JPQ1Z29U1KoC8
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 295.457917ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/vMTeqJXYhWEDsocV3zHvJk56CY3tQsoz
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 398.817458ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_jU7GzaYAf7Y2P44XJAuhpa
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 292.421333ms

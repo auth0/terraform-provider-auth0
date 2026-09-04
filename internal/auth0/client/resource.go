@@ -294,8 +294,9 @@ func NewResource() *schema.Resource {
 							Type:     schema.TypeList,
 							Elem:     &schema.Schema{Type: schema.TypeString},
 							Optional: true,
-							Description: "Self-service profile IDs (in `ss-profile-id` format) associated with " +
-								"this B2B integration client.",
+							MaxItems: 1,
+							Description: "ID of the self-service SSO profile (an `auth0_self_service_profile` id, " +
+								"in `ssp_...` format) linked to this B2B integration client. Maximum 1.",
 						},
 					},
 				},

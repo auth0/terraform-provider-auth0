@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
@@ -30,6 +31,12 @@ var ValidAppTypes = []string{
 // ValidTokenExchangeProfileTypes contains all valid values for token_exchange.allow_any_profile_of_type.
 var ValidTokenExchangeProfileTypes = []string{
 	"custom_authentication", "on_behalf_of_token_exchange",
+}
+
+// ValidB2BIntegrationTypes contains all valid values for
+// b2b_integration_configuration.integration_type (Enterprise Connect).
+var ValidB2BIntegrationTypes = []string{
+	"custom_auth_server", "third_party", "application",
 }
 
 // samlDefault holds Auth0 server-side defaults for SAML addon fields.
@@ -74,6 +81,14 @@ func NewResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: importClient,
 		},
+		// `b2b_integration_configuration` is immutable after client creation; the Management API rejects adding or clearing it later.
+		CustomizeDiff: customdiff.ForceNewIfChange("b2b_integration_configuration",
+			func(_ context.Context, oldValue, newValue, _ interface{}) bool {
+				oldList, _ := oldValue.([]interface{})
+				newList, _ := newValue.([]interface{})
+				return (len(oldList) == 0) != (len(newList) == 0)
+			},
+		),
 		Description: "With this resource, you can set up applications that use Auth0 for authentication " +
 			"and configure allowed callback URLs and secrets for these applications.",
 		Schema: map[string]*schema.Schema{
@@ -251,11 +266,39 @@ func NewResource() *schema.Resource {
 					}, false),
 				},
 				Optional: true,
+				Computed: true,
 				Description: "Methods for discovering organizations during the pre_login_prompt. " +
 					"Can include `email` (allows users to find their organization by entering their email address) " +
 					"and/or `organization_name` (requires users to enter the organization name directly). " +
 					"These methods can be combined. Setting this property requires that " +
-					"`organization_require_behavior` is set to `pre_login_prompt`.",
+					"`organization_require_behavior` is set to `pre_login_prompt`. " +
+					"For clients that set `b2b_integration_configuration`, server-side defaults the values when this is not specified; " +
+					"Set to `[]` (empty array) to clear the values.",
+			},
+			"b2b_integration_configuration": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				Description: "Configuration for B2B Integration (Enterprise Connect) clients. " +
+					"Contents can be updated in place, but adding or removing whole block forces client recreation. (EA only)",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"integration_type": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.StringInSlice(ValidB2BIntegrationTypes, false),
+							Description: "The type of integration used to connect to this B2B integration client. " +
+								"One of " + strings.Join(ValidB2BIntegrationTypes, ", "),
+						},
+						"sso_profiles": {
+							Type:     schema.TypeList,
+							Elem:     &schema.Schema{Type: schema.TypeString},
+							Optional: true,
+							Description: "Self-service profile IDs (in `ss-profile-id` format) associated with " +
+								"this B2B integration client.",
+						},
+					},
+				},
 			},
 			"allowed_origins": {
 				Type:     schema.TypeList,

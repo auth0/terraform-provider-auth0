@@ -1,0 +1,652 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 138
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"HMS Test Key - TestAccNetworkACLHTTPMessageSignature","alg":"hmac-sha256","value":"dGhpcy1pcy1hLXZhbGlkLWtleS1mb3ItdGVzdGluZyE="}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/network-acls
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 278
+        uncompressed: false
+        body: '{"name":"HMS Test Key - TestAccNetworkACLHTTPMessageSignature","alg":"hmac-sha256","fingerprint":"ad8086e5a92a4993507c7a7af66e649da6ad6c4362b94e4a88c46c91f0fe0424","created_at":"2026-09-04T08:04:08.814Z","updated_at":"2026-09-04T08:04:08.814Z","id":"key_8KorgMwwcA6DLp8UcbiNFa"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 378.920625ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/network-acls/key_8KorgMwwcA6DLp8UcbiNFa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"HMS Test Key - TestAccNetworkACLHTTPMessageSignature","alg":"hmac-sha256","fingerprint":"ad8086e5a92a4993507c7a7af66e649da6ad6c4362b94e4a88c46c91f0fe0424","created_at":"2026-09-04T08:04:08.814Z","updated_at":"2026-09-04T08:04:08.814Z","id":"key_8KorgMwwcA6DLp8UcbiNFa"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 911.155ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 230
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"description":"HMS ACL - TestAccNetworkACLHTTPMessageSignature","active":true,"priority":99,"rule":{"action":{"block":true},"not_match":{"http_message_signature":{"keys":[{"id":"key_8KorgMwwcA6DLp8UcbiNFa"}]}},"scope":"tenant"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 343
+        uncompressed: false
+        body: '{"description":"HMS ACL - TestAccNetworkACLHTTPMessageSignature","active":true,"priority":99,"rule":{"scope":"tenant","action":{"block":true},"not_match":{"http_message_signature":{"keys":[{"id":"key_8KorgMwwcA6DLp8UcbiNFa"}]}}},"created_at":"2026-09-04T08:04:10.473Z","updated_at":"2026-09-04T08:04:10.473Z","id":"acl_vztTxqM4rKwAzTvyLjqgvW"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 344.581125ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_vztTxqM4rKwAzTvyLjqgvW
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"HMS ACL - TestAccNetworkACLHTTPMessageSignature","active":true,"priority":99,"rule":{"scope":"tenant","action":{"block":true},"not_match":{"http_message_signature":{"keys":[{"id":"key_8KorgMwwcA6DLp8UcbiNFa"}]}}},"created_at":"2026-09-04T08:04:10.473Z","updated_at":"2026-09-04T08:04:10.473Z","deleted_at":null,"id":"acl_vztTxqM4rKwAzTvyLjqgvW"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 368.539ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/network-acls/key_8KorgMwwcA6DLp8UcbiNFa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"HMS Test Key - TestAccNetworkACLHTTPMessageSignature","alg":"hmac-sha256","fingerprint":"ad8086e5a92a4993507c7a7af66e649da6ad6c4362b94e4a88c46c91f0fe0424","created_at":"2026-09-04T08:04:08.814Z","updated_at":"2026-09-04T08:04:08.814Z","id":"key_8KorgMwwcA6DLp8UcbiNFa"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 318.752666ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_vztTxqM4rKwAzTvyLjqgvW
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"HMS ACL - TestAccNetworkACLHTTPMessageSignature","active":true,"priority":99,"rule":{"scope":"tenant","action":{"block":true},"not_match":{"http_message_signature":{"keys":[{"id":"key_8KorgMwwcA6DLp8UcbiNFa"}]}}},"created_at":"2026-09-04T08:04:10.473Z","updated_at":"2026-09-04T08:04:10.473Z","deleted_at":null,"id":"acl_vztTxqM4rKwAzTvyLjqgvW"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 319.685833ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/network-acls/key_8KorgMwwcA6DLp8UcbiNFa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"HMS Test Key - TestAccNetworkACLHTTPMessageSignature","alg":"hmac-sha256","fingerprint":"ad8086e5a92a4993507c7a7af66e649da6ad6c4362b94e4a88c46c91f0fe0424","created_at":"2026-09-04T08:04:08.814Z","updated_at":"2026-09-04T08:04:08.814Z","id":"key_8KorgMwwcA6DLp8UcbiNFa"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 314.40875ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_vztTxqM4rKwAzTvyLjqgvW
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"HMS ACL - TestAccNetworkACLHTTPMessageSignature","active":true,"priority":99,"rule":{"scope":"tenant","action":{"block":true},"not_match":{"http_message_signature":{"keys":[{"id":"key_8KorgMwwcA6DLp8UcbiNFa"}]}}},"created_at":"2026-09-04T08:04:10.473Z","updated_at":"2026-09-04T08:04:10.473Z","deleted_at":null,"id":"acl_vztTxqM4rKwAzTvyLjqgvW"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 427.65225ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 140
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"HMS Test Key 2 - TestAccNetworkACLHTTPMessageSignature","alg":"hmac-sha256","value":"YWx0ZXJuYXRlLXZhbGlkLWtleS1tYXRlcmlhbC0xISE="}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/network-acls
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 280
+        uncompressed: false
+        body: '{"name":"HMS Test Key 2 - TestAccNetworkACLHTTPMessageSignature","alg":"hmac-sha256","fingerprint":"f7528f9a045f6b83127cbb79234ae79a65a5db9d59ea77382d1ffd912e3745eb","created_at":"2026-09-04T08:04:14.994Z","updated_at":"2026-09-04T08:04:14.994Z","id":"key_kuorA2WNTTDJLwjpw7P6nV"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 355.727792ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/network-acls/key_kuorA2WNTTDJLwjpw7P6nV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"HMS Test Key 2 - TestAccNetworkACLHTTPMessageSignature","alg":"hmac-sha256","fingerprint":"f7528f9a045f6b83127cbb79234ae79a65a5db9d59ea77382d1ffd912e3745eb","created_at":"2026-09-04T08:04:14.994Z","updated_at":"2026-09-04T08:04:14.994Z","id":"key_kuorA2WNTTDJLwjpw7P6nV"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 315.719959ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 274
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"description":"HMS ACL Updated - TestAccNetworkACLHTTPMessageSignature","active":true,"priority":99,"rule":{"action":{"allow":true},"not_match":{"http_message_signature":{"keys":[{"id":"key_8KorgMwwcA6DLp8UcbiNFa"},{"id":"key_kuorA2WNTTDJLwjpw7P6nV"}]}},"scope":"tenant"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_vztTxqM4rKwAzTvyLjqgvW
+        method: PUT
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"description":"HMS ACL Updated - TestAccNetworkACLHTTPMessageSignature","active":true,"priority":99,"rule":{"scope":"tenant","action":{"allow":true},"not_match":{"http_message_signature":{"keys":[{"id":"key_8KorgMwwcA6DLp8UcbiNFa"},{"id":"key_kuorA2WNTTDJLwjpw7P6nV"}]}}},"created_at":"2026-09-04T08:04:10.473Z","updated_at":"2026-09-04T08:04:15.989Z","id":"acl_vztTxqM4rKwAzTvyLjqgvW"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 344.273291ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_vztTxqM4rKwAzTvyLjqgvW
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"HMS ACL Updated - TestAccNetworkACLHTTPMessageSignature","active":true,"priority":99,"rule":{"scope":"tenant","action":{"allow":true},"not_match":{"http_message_signature":{"keys":[{"id":"key_8KorgMwwcA6DLp8UcbiNFa"},{"id":"key_kuorA2WNTTDJLwjpw7P6nV"}]}}},"created_at":"2026-09-04T08:04:10.473Z","updated_at":"2026-09-04T08:04:15.989Z","deleted_at":null,"id":"acl_vztTxqM4rKwAzTvyLjqgvW"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 314.102167ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/network-acls/key_8KorgMwwcA6DLp8UcbiNFa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"HMS Test Key - TestAccNetworkACLHTTPMessageSignature","alg":"hmac-sha256","fingerprint":"ad8086e5a92a4993507c7a7af66e649da6ad6c4362b94e4a88c46c91f0fe0424","created_at":"2026-09-04T08:04:08.814Z","updated_at":"2026-09-04T08:04:08.814Z","id":"key_8KorgMwwcA6DLp8UcbiNFa"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 315.970583ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/network-acls/key_kuorA2WNTTDJLwjpw7P6nV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"HMS Test Key 2 - TestAccNetworkACLHTTPMessageSignature","alg":"hmac-sha256","fingerprint":"f7528f9a045f6b83127cbb79234ae79a65a5db9d59ea77382d1ffd912e3745eb","created_at":"2026-09-04T08:04:14.994Z","updated_at":"2026-09-04T08:04:14.994Z","id":"key_kuorA2WNTTDJLwjpw7P6nV"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 318.054875ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_vztTxqM4rKwAzTvyLjqgvW
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"HMS ACL Updated - TestAccNetworkACLHTTPMessageSignature","active":true,"priority":99,"rule":{"scope":"tenant","action":{"allow":true},"not_match":{"http_message_signature":{"keys":[{"id":"key_8KorgMwwcA6DLp8UcbiNFa"},{"id":"key_kuorA2WNTTDJLwjpw7P6nV"}]}}},"created_at":"2026-09-04T08:04:10.473Z","updated_at":"2026-09-04T08:04:15.989Z","deleted_at":null,"id":"acl_vztTxqM4rKwAzTvyLjqgvW"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 314.447333ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_vztTxqM4rKwAzTvyLjqgvW
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"HMS ACL Updated - TestAccNetworkACLHTTPMessageSignature","active":true,"priority":99,"rule":{"scope":"tenant","action":{"allow":true},"not_match":{"http_message_signature":{"keys":[{"id":"key_8KorgMwwcA6DLp8UcbiNFa"},{"id":"key_kuorA2WNTTDJLwjpw7P6nV"}]}}},"created_at":"2026-09-04T08:04:10.473Z","updated_at":"2026-09-04T08:04:15.989Z","deleted_at":null,"id":"acl_vztTxqM4rKwAzTvyLjqgvW"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 359.608166ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.48.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_vztTxqM4rKwAzTvyLjqgvW
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 24
+        uncompressed: false
+        body: '{"code":204,"object":""}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 323.905ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/network-acls/key_kuorA2WNTTDJLwjpw7P6nV
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 332.069875ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/keys/network-acls/key_8KorgMwwcA6DLp8UcbiNFa
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 486.49975ms

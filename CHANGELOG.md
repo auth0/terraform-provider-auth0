@@ -1,5 +1,11 @@
 ## Unreleased
 
+FEATURES:
+- `resource/auth0_network_acl_key` – Add new resource to manage HMAC-SHA256 signing keys for Network ACL HTTP Message Signature verification. Key material is write-only (not stored in state); changes are detected via SHA-256 fingerprint comparison. Supports `ForceNew` on name/alg changes and `CustomizeDiff`-triggered replacement on key-material rotation. (EA Only)
+- `data-source/auth0_network_acl_key` – Add data source to look up a Network ACL key by ID (read-only, `value` not available). (EA Only)
+- `resource/auth0_network_acl` – Add `http_message_signature` block to `match` and `not_match` inside `rule`, allowing ACL rules to target requests based on HMAC signature verification against a set of Network ACL keys. (EA Only)
+- `data-source/auth0_network_acl` / `data-source/auth0_network_acls` – `http_message_signature` is now included in flattened output when present. (EA Only)
+
 ## v1.56.0
 
 FEATURES:

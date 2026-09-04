@@ -944,3 +944,101 @@ func TestAccNetworkACLEdgeCases(t *testing.T) {
 		},
 	})
 }
+
+// testAccNetworkACLHTTPMessageSignature tests the http_message_signature block in not_match.
+// Uses priority 99 to avoid conflicts with pre-existing ACLs on the acceptance test tenant.
+const testAccNetworkACLHTTPMessageSignatureCreate = `
+resource "auth0_network_acl_key" "sig_key" {
+	name  = "HMS Test Key - {{.testName}}"
+	alg   = "hmac-sha256"
+	value = "dGhpcy1pcy1hLXZhbGlkLWtleS1mb3ItdGVzdGluZyE="
+}
+
+resource "auth0_network_acl" "sig_acl" {
+	description = "HMS ACL - {{.testName}}"
+	active      = true
+	priority    = 99
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		not_match {
+			http_message_signature {
+				keys {
+					id = auth0_network_acl_key.sig_key.id
+				}
+			}
+		}
+	}
+}
+`
+
+const testAccNetworkACLHTTPMessageSignatureUpdate = `
+resource "auth0_network_acl_key" "sig_key" {
+	name  = "HMS Test Key - {{.testName}}"
+	alg   = "hmac-sha256"
+	value = "dGhpcy1pcy1hLXZhbGlkLWtleS1mb3ItdGVzdGluZyE="
+}
+
+resource "auth0_network_acl_key" "sig_key2" {
+	name  = "HMS Test Key 2 - {{.testName}}"
+	alg   = "hmac-sha256"
+	value = "YWx0ZXJuYXRlLXZhbGlkLWtleS1tYXRlcmlhbC0xISE="
+}
+
+resource "auth0_network_acl" "sig_acl" {
+	description = "HMS ACL Updated - {{.testName}}"
+	active      = true
+	priority    = 99
+	rule {
+		action {
+			allow = true
+		}
+		scope = "tenant"
+		not_match {
+			http_message_signature {
+				keys {
+					id = auth0_network_acl_key.sig_key.id
+				}
+				keys {
+					id = auth0_network_acl_key.sig_key2.id
+				}
+			}
+		}
+	}
+}
+`
+
+// TestAccNetworkACLHTTPMessageSignature verifies CRUD for ACL rules with http_message_signature.
+func TestAccNetworkACLHTTPMessageSignature(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLHTTPMessageSignatureCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLExists("auth0_network_acl.sig_acl"),
+					resource.TestCheckResourceAttr("auth0_network_acl.sig_acl", "priority", "99"),
+					resource.TestCheckResourceAttr("auth0_network_acl.sig_acl", "rule.0.action.0.block", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.sig_acl", "rule.0.not_match.0.http_message_signature.0.keys.#", "1"),
+					resource.TestCheckResourceAttrSet("auth0_network_acl.sig_acl", "rule.0.not_match.0.http_message_signature.0.keys.0.id"),
+				),
+			},
+			{
+				// Add a second key and update description.
+				Config: acctest.ParseTestName(testAccNetworkACLHTTPMessageSignatureUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.sig_acl", "rule.0.not_match.0.http_message_signature.0.keys.#", "2"),
+					resource.TestCheckResourceAttr("auth0_network_acl.sig_acl", "rule.0.action.0.allow", "true"),
+					resource.TestCheckResourceAttrSet("auth0_network_acl.sig_acl", "rule.0.not_match.0.http_message_signature.0.keys.0.id"),
+					resource.TestCheckResourceAttrSet("auth0_network_acl.sig_acl", "rule.0.not_match.0.http_message_signature.0.keys.1.id"),
+				),
+			},
+			{
+				ResourceName:      "auth0_network_acl.sig_acl",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}

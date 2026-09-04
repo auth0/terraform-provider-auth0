@@ -1,6 +1,7 @@
 package networkacl
 
 import (
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -137,6 +138,18 @@ func flattenNetworkACLRule(match *management.NetworkACLRuleMatch) []interface{} 
 
 	if match.ConnectingIPv6Cidrs != nil && len(*match.ConnectingIPv6Cidrs) > 0 {
 		m["connecting_ipv6_cidrs"] = *match.ConnectingIPv6Cidrs
+	}
+
+	if match.HTTPMessageSignature != nil && len(match.HTTPMessageSignature.Keys) > 0 {
+		keys := make([]interface{}, 0, len(match.HTTPMessageSignature.Keys))
+		for _, k := range match.HTTPMessageSignature.Keys {
+			keys = append(keys, map[string]interface{}{
+				"id": auth0.StringValue(k.ID),
+			})
+		}
+		m["http_message_signature"] = []interface{}{
+			map[string]interface{}{"keys": keys},
+		}
 	}
 
 	// Only return a non-empty map.

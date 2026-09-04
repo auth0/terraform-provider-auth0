@@ -661,6 +661,17 @@ func flattenTokenExchange(tokenExchange *management.ClientTokenExchange) []inter
 	return []interface{}{t}
 }
 
+func flattenB2BIntegrationConfiguration(b2b *management.B2BIntegrationConfiguration) []interface{} {
+	if b2b == nil {
+		return nil
+	}
+	m := map[string]interface{}{
+		"integration_type": b2b.GetIntegrationType(),
+		"sso_profiles":     b2b.GetSSOProfiles(),
+	}
+	return []interface{}{m}
+}
+
 func flattenClient(data *schema.ResourceData, client *management.Client) error {
 	result := multierror.Append(
 		data.Set("client_id", client.GetClientID()),
@@ -719,6 +730,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("external_metadata_created_by", client.GetExternalMetadataCreatedBy()),
 		data.Set("jwks_uri", client.GetJwksURI()),
 		data.Set("my_organization_configuration", flattenMyOrganizationConfiguration(client.GetMyOrganizationConfiguration())),
+		data.Set("b2b_integration_configuration", flattenB2BIntegrationConfiguration(client.GetB2BIntegrationConfiguration())),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {

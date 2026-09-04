@@ -8,6 +8,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkacl"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkaclkey"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/outboundips"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tokenexchangeprofile"
@@ -202,6 +203,7 @@ func New() *schema.Provider {
 			"auth0_organization_member_roles":                organization.NewMemberRolesResource(),
 			"auth0_organization_members":                     organization.NewMembersResource(),
 			"auth0_network_acl":                              networkacl.NewResource(),
+			"auth0_network_acl_key":                          networkaclkey.NewResource(),
 			"auth0_pages":                                    page.NewResource(),
 			"auth0_phone_provider":                           branding.NewPhoneProviderResource(),
 			"auth0_phone_notification_template":              branding.NewPhoneNotificationTemplateResource(),
@@ -268,6 +270,7 @@ func New() *schema.Provider {
 			"auth0_organization_clients":                     organization.NewClientsDataSource(),
 			"auth0_organizations":                            organization.NewOrganizationsDataSource(),
 			"auth0_network_acl":                              networkacl.NewDataSource(),
+			"auth0_network_acl_key":                          networkaclkey.NewDataSource(),
 			"auth0_outbound_ips":                             outboundips.NewDataSource(),
 			"auth0_pages":                                    page.NewDataSource(),
 			"auth0_phone_provider":                           branding.NewPhoneProviderDataSource(),

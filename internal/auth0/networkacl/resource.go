@@ -177,6 +177,32 @@ var networkACLRuleMatchSchema = &schema.Schema{
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "Connecting IPv6 CIDRs. Must contain between 1 and 20 unique items. Can be IPv6 addresses or CIDR blocks.",
 			},
+			"http_message_signature": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Match requests that carry an HTTP Message Signature verified by one of the listed Network ACL keys. (EA Only)",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"keys": {
+							Type:        schema.TypeList,
+							Required:    true,
+							MinItems:    1,
+							MaxItems:    10,
+							Description: "List of Network ACL key references. A request matches if its signature is verified by any of these keys.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "The ID of the referenced Network ACL key.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	},
 }

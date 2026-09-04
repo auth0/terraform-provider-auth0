@@ -4113,8 +4113,8 @@ func TestAccClientB2BIntegrationConfigurationWithSSOProfiles(t *testing.T) {
 				),
 			},
 			{
-				// sso_profiles is updated in place (content PATCH, no recreation). The API caps
-				// the list at one entry, so the update swaps the single profile rather than adding.
+				// The sso_profiles is updated in place (content PATCH, no recreation).
+				// The API caps the list at one entry, so the update swaps the single profile rather than adding.
 				Config: acctest.ParseTestName(testAccClientB2BWithSSOProfilesUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.b2b_sso", "b2b_integration_configuration.0.sso_profiles.#", "1"),

@@ -157,6 +157,22 @@ func expandNetworkACLRuleMatch(m map[string]interface{}) *management.NetworkACLR
 		match.ConnectingIPv6Cidrs = expandStringList(v)
 	}
 
+	if v, ok := m["http_message_signature"]; ok {
+		hms := v.([]interface{})
+		if len(hms) > 0 && hms[0] != nil {
+			hmsMap := hms[0].(map[string]interface{})
+			keysList := hmsMap["keys"].([]interface{})
+			keys := make([]*management.NetworkACLHTTPMessageSignatureKey, 0, len(keysList))
+			for _, k := range keysList {
+				km := k.(map[string]interface{})
+				keys = append(keys, &management.NetworkACLHTTPMessageSignatureKey{
+					ID: auth0.String(km["id"].(string)),
+				})
+			}
+			match.HTTPMessageSignature = &management.NetworkACLHTTPMessageSignature{Keys: keys}
+		}
+	}
+
 	return match
 }
 

@@ -2,6 +2,7 @@ package networkacl
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -85,6 +86,21 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 			// Send empty not_match object when the element is nil.
 			networkACL.Rule.NotMatch = &management.NetworkACLRuleMatch{}
 		}
+	}
+
+	if matchAll, ok := rule["match_all"].(bool); ok && matchAll {
+		networkACL.Rule.MatchAll = auth0.Bool(true)
+	}
+
+	hasMatch := len(rule["match"].([]interface{})) > 0
+	hasNotMatch := len(rule["not_match"].([]interface{})) > 0
+	matchAll, _ := rule["match_all"].(bool)
+
+	if !matchAll && !hasMatch && !hasNotMatch {
+		return nil, fmt.Errorf(
+			"at least one of match, not_match, or match_all must be specified " +
+				"(set match_all = true, or provide a match or not_match block)",
+		)
 	}
 
 	if scope, ok := rule["scope"].(string); ok {

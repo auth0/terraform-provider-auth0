@@ -59,20 +59,31 @@ var networkACLRuleSchema = &schema.Schema{
 				Elem:        networkACLRuleActionSchema.Elem,
 			},
 			"match": {
-				Type:         networkACLRuleMatchSchema.Type,
-				Optional:     true,
-				MaxItems:     networkACLRuleMatchSchema.MaxItems,
-				Description:  networkACLRuleMatchSchema.Description,
-				Elem:         networkACLRuleMatchSchema.Elem,
-				AtLeastOneOf: []string{"rule.0.match", "rule.0.not_match"},
+				Type:          networkACLRuleMatchSchema.Type,
+				Optional:      true,
+				MaxItems:      networkACLRuleMatchSchema.MaxItems,
+				Description:   networkACLRuleMatchSchema.Description,
+				Elem:          networkACLRuleMatchSchema.Elem,
+				AtLeastOneOf:  []string{"rule.0.match", "rule.0.not_match", "rule.0.match_all"},
+				ConflictsWith: []string{"rule.0.match_all"},
 			},
 			"not_match": {
-				Type:         networkACLRuleMatchSchema.Type,
-				Optional:     true,
-				MaxItems:     networkACLRuleMatchSchema.MaxItems,
-				Description:  networkACLRuleMatchSchema.Description,
-				Elem:         networkACLRuleMatchSchema.Elem,
-				AtLeastOneOf: []string{"rule.0.match", "rule.0.not_match"},
+				Type:          networkACLRuleMatchSchema.Type,
+				Optional:      true,
+				MaxItems:      networkACLRuleMatchSchema.MaxItems,
+				Description:   networkACLRuleMatchSchema.Description,
+				Elem:          networkACLRuleMatchSchema.Elem,
+				AtLeastOneOf:  []string{"rule.0.match", "rule.0.not_match", "rule.0.match_all"},
+				ConflictsWith: []string{"rule.0.match_all"},
+			},
+			"match_all": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: "When true, the rule unconditionally matches all traffic " +
+					"regardless of any other criteria. Mutually exclusive with " +
+					"match and not_match. Setting this to false is equivalent to " +
+					"omitting it.",
+				ConflictsWith: []string{"rule.0.match", "rule.0.not_match"},
 			},
 			"scope": {
 				Type:        schema.TypeString,

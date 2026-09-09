@@ -70,7 +70,6 @@ func TestExpandMatchAllFalseWithSignal(t *testing.T) {
 	assert.NotNil(t, acl.Rule.Match)
 }
 
-
 func TestFlattenMatchAllTrue(t *testing.T) {
 	networkACL := &management.NetworkACL{
 		Rule: &management.NetworkACLRule{

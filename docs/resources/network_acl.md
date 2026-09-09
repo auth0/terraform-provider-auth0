@@ -133,7 +133,7 @@ Required:
 Optional:
 
 - `match` (Block List, Max: 1) The configuration for the Network ACL Rule (see [below for nested schema](#nestedblock--rule--match))
-- `match_all` (Boolean) When true, the rule unconditionally matches all traffic regardless of any other criteria. Mutually exclusive with match and not_match. Setting this to false is equivalent to omitting it.
+- `match_all` (Boolean) When true, the rule unconditionally matches all traffic regardless of any other criteria. Mutually exclusive with match and not_match.
 - `not_match` (Block List, Max: 1) The configuration for the Network ACL Rule (see [below for nested schema](#nestedblock--rule--not_match))
 
 <a id="nestedblock--rule--action"></a>

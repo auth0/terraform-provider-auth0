@@ -7,6 +7,7 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -28,6 +29,25 @@ func NewResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		CustomizeDiff: customdiff.All(
+			// When the action is in status="failed", force a replacement so the
+			// next apply re-triggers the build rather than silently leaving a
+			// broken action in place. Gated on deploy=true — a non-deployed draft
+			// action in "failed" state does not need an automatic replace.
+			//
+			// SetNewComputed creates a diff entry for "status" (old → computed),
+			// which is required before ForceNew can be called on a Computed-only
+			// attribute. Without it, ForceNew errors with "No changes for status".
+			func(_ context.Context, d *schema.ResourceDiff, _ interface{}) error {
+				if d.Get("deploy").(bool) && d.Get("status").(string) == string(management.ActionStatusFailed) {
+					if err := d.SetNewComputed("status"); err != nil {
+						return err
+					}
+					return d.ForceNew("status")
+				}
+				return nil
+			},
+		),
 		Description: "Actions are secure, tenant-specific, versioned functions written in Node.js " +
 			"that execute at certain points during the Auth0 runtime. Actions are used to customize " +
 			"and extend Auth0's capabilities with custom logic.",
@@ -173,6 +193,13 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "Version ID of the action. This value is available if `deploy` is set to true.",
+			},
+			"status": {
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: "The build status of the action. Possible values: `built`, `failed`, `building`, " +
+					"`pending`, `retrying`. If the action is in `failed` state, the next `terraform plan` " +
+					"will show a replacement to re-trigger the build.",
 			},
 			"modules": {
 				Type:        schema.TypeSet,

@@ -14,6 +14,7 @@ func flattenAction(data *schema.ResourceData, action *management.Action) error {
 		data.Set("dependencies", flattenActionDependencies(action.GetDependencies())),
 		data.Set("runtime", action.GetRuntime()),
 		data.Set("modules", flattenActionModulesForAction(data, action.GetModules())),
+		data.Set("status", string(action.GetStatus())),
 	)
 
 	if action.GetRuntime() == "node18-actions" {

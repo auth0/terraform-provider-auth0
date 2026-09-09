@@ -916,6 +916,126 @@ func TestAccNetworkACLAuth0ManagedBlockPlacement(t *testing.T) {
 	})
 }
 
+const testAccNetworkACLMatchAllCreate = `
+resource "auth0_network_acl" "match_all_acl" {
+	description = "MatchAll Create - {{.testName}}"
+	active = true
+	priority = 99
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match_all = true
+	}
+}
+`
+
+const testAccNetworkACLMatchAllUpdateToSignal = `
+resource "auth0_network_acl" "match_all_acl" {
+	description = "MatchAll Updated To Signal - {{.testName}}"
+	active = true
+	priority = 99
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match {
+			asns = [9453]
+		}
+	}
+}
+`
+
+const testAccNetworkACLMatchAllUpdateFromSignal = `
+resource "auth0_network_acl" "match_all_acl" {
+	description = "MatchAll Updated From Signal - {{.testName}}"
+	active = true
+	priority = 99
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match_all = true
+	}
+}
+`
+
+const testAccNetworkACLMatchAllConflict = `
+resource "auth0_network_acl" "match_all_acl" {
+	description = "MatchAll Conflict - {{.testName}}"
+	active = true
+	priority = 99
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match_all = true
+		match {
+			asns = [9453]
+		}
+	}
+}
+`
+
+// TestAccNetworkACLMatchAll exercises the match_all field lifecycle:
+// create with match_all, import round-trip, update signal→match_all,
+// and update match_all→signal.
+func TestAccNetworkACLMatchAll(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLMatchAllCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLExists("auth0_network_acl.match_all_acl"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "description", fmt.Sprintf("MatchAll Create - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "active", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "priority", "99"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.action.0.block", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.scope", "tenant"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.match_all", "true"),
+				),
+			},
+			{
+				ResourceName:      "auth0_network_acl.match_all_acl",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLMatchAllUpdateToSignal, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "description", fmt.Sprintf("MatchAll Updated To Signal - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.match.0.asns.0", "9453"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.match_all", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLMatchAllUpdateFromSignal, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "description", fmt.Sprintf("MatchAll Updated From Signal - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.match_all", "true"),
+				),
+			},
+		},
+	})
+}
+
+// TestAccNetworkACLMatchAllConflict verifies that specifying match_all=true
+// alongside a match block is rejected at apply time.
+func TestAccNetworkACLMatchAllConflict(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccNetworkACLMatchAllConflict, t.Name()),
+				ExpectError: regexp.MustCompile("conflicts with rule.0.match"),
+			},
+		},
+	})
+}
+
 // Test for edge cases and maximum values.
 func TestAccNetworkACLEdgeCases(t *testing.T) {
 	acctest.Test(t, resource.TestCase{

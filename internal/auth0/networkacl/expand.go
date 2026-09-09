@@ -87,6 +87,10 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 		}
 	}
 
+	if matchAll, ok := rule["match_all"].(bool); ok && matchAll {
+		networkACL.Rule.MatchAll = auth0.Bool(true)
+	}
+
 	if scope, ok := rule["scope"].(string); ok {
 		networkACL.Rule.Scope = auth0.String(scope)
 	}

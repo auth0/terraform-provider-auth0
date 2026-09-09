@@ -88,18 +88,17 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 		}
 	}
 
-	if matchAll, ok := rule["match_all"].(bool); ok && matchAll {
+	matchAll, _ := rule["match_all"].(bool)
+	if matchAll {
 		networkACL.Rule.MatchAll = auth0.Bool(true)
 	}
 
 	hasMatch := len(rule["match"].([]interface{})) > 0
 	hasNotMatch := len(rule["not_match"].([]interface{})) > 0
-	matchAll, _ := rule["match_all"].(bool)
 
-	if !matchAll && !hasMatch && !hasNotMatch {
+	if matchAll && (hasMatch || hasNotMatch) {
 		return nil, fmt.Errorf(
-			"at least one of match, not_match, or match_all must be specified " +
-				"(set match_all = true, or provide a match or not_match block)",
+			"match_all cannot be combined with match or not_match blocks",
 		)
 	}
 

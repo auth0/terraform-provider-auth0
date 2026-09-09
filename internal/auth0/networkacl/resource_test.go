@@ -1024,13 +1024,13 @@ func TestAccNetworkACLMatchAll(t *testing.T) {
 }
 
 // TestAccNetworkACLMatchAllConflict verifies that specifying match_all=true
-// alongside a match block is rejected at plan time.
+// alongside a match block is rejected at apply time.
 func TestAccNetworkACLMatchAllConflict(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config:      acctest.ParseTestName(testAccNetworkACLMatchAllConflict, t.Name()),
-				ExpectError: regexp.MustCompile("conflicts with"),
+				ExpectError: regexp.MustCompile("match_all cannot be combined"),
 			},
 		},
 	})

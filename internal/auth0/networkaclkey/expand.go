@@ -10,7 +10,11 @@ func expandNetworkACLKey(data *schema.ResourceData) *management.CreateKeysNetwor
 
 	req.SetName(data.Get("name").(string))
 	req.SetAlg(management.NetworkACLKeyAlgorithmEnum(data.Get("alg").(string)))
-	req.SetValue(data.Get("value").(string))
+
+	// Value is WriteOnly — must be read from raw config, not state.
+	if rawVal := data.GetRawConfig().GetAttr("value"); !rawVal.IsNull() && rawVal.IsKnown() {
+		req.SetValue(rawVal.AsString())
+	}
 
 	return req
 }

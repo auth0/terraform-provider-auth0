@@ -10,11 +10,11 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-// A 32-byte key encoded as standard base64 (256 bits — minimum valid length).
-const testNetworkACLKeyValue = "dGhpcy1pcy1hLXZhbGlkLWtleS1mb3ItdGVzdGluZyE="
+// A 32-byte cryptographically random key encoded as standard base64.
+const testNetworkACLKeyValue = "Xt3aDuBp8hiZh63ftHNIsAjH00fsEQIe3XnFIu0r1BU="
 
-// A different valid key to exercise value-change → ForceNew.
-const testNetworkACLKeyValueAlt = "YWx0ZXJuYXRlLXZhbGlkLWtleS1tYXRlcmlhbC0xISE="
+// A different cryptographically random key to exercise value-change → ForceNew.
+const testNetworkACLKeyValueAlt = "54p1dLBdZouzti9pWShTgqurFgI/L+lVbycIm72938g="
 
 const testAccNetworkACLKeyCreate = `
 resource "auth0_network_acl_key" "my_key" {

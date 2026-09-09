@@ -951,7 +951,7 @@ const testAccNetworkACLHTTPMessageSignatureCreate = `
 resource "auth0_network_acl_key" "sig_key" {
 	name  = "HMS Test Key - {{.testName}}"
 	alg   = "hmac-sha256"
-	value = "dGhpcy1pcy1hLXZhbGlkLWtleS1mb3ItdGVzdGluZyE="
+	value = "Ygj0G7pdGNmu+eCPdnK32PpzvmFDoFtDcJtiJaRGX1I="
 }
 
 resource "auth0_network_acl" "sig_acl" {
@@ -978,13 +978,13 @@ const testAccNetworkACLHTTPMessageSignatureUpdate = `
 resource "auth0_network_acl_key" "sig_key" {
 	name  = "HMS Test Key - {{.testName}}"
 	alg   = "hmac-sha256"
-	value = "dGhpcy1pcy1hLXZhbGlkLWtleS1mb3ItdGVzdGluZyE="
+	value = "Ygj0G7pdGNmu+eCPdnK32PpzvmFDoFtDcJtiJaRGX1I="
 }
 
 resource "auth0_network_acl_key" "sig_key2" {
 	name  = "HMS Test Key 2 - {{.testName}}"
 	alg   = "hmac-sha256"
-	value = "YWx0ZXJuYXRlLXZhbGlkLWtleS1tYXRlcmlhbC0xISE="
+	value = "Cu+NlOFp9kwS5ien+E3INXOelFFLszwO63pcRg5jmag="
 }
 
 resource "auth0_network_acl" "sig_acl" {

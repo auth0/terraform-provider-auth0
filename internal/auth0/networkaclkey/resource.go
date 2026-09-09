@@ -6,7 +6,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"net/http"
 
 	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -55,6 +54,7 @@ func NewResource() *schema.Resource {
 			"value": {
 				Type:      schema.TypeString,
 				Required:  true,
+				WriteOnly: true,
 				Sensitive: true,
 				Description: "Base64-encoded raw key material. The decoded value must be between 32 and 512 bytes. " +
 					"This field is write-only: it is not returned by the API and not stored in Terraform state. " +
@@ -126,7 +126,12 @@ func validateNetworkACLKeyValue(v interface{}, _ cty.Path) diag.Diagnostics {
 }
 
 func customizeDiffNetworkACLKey(_ context.Context, d *schema.ResourceDiff, _ interface{}) error {
-	rawValue := d.Get("value").(string)
+	// Value is WriteOnly — must be read from raw config, not state.
+	ctyVal := d.GetRawConfig().GetAttr("value")
+	if ctyVal.IsNull() || !ctyVal.IsKnown() {
+		return nil
+	}
+	rawValue := ctyVal.AsString()
 	if rawValue == "" {
 		return nil
 	}
@@ -173,8 +178,11 @@ func readNetworkACLKey(ctx context.Context, data *schema.ResourceData, meta inte
 
 	// If the API fingerprint differs from what is in state, the key was rotated out-of-band.
 	if stateFP := data.Get("fingerprint").(string); stateFP != "" && stateFP != key.GetFingerprint() {
-		data.SetId("")
-		return nil
+		return internalError.RemoveFromStateWithWarning(
+			"auth0_network_acl_key",
+			data,
+			"the key material fingerprint changed — the key may have been rotated out of band",
+		)
 	}
 
 	return diag.FromErr(flattenNetworkACLKey(data, key))
@@ -210,25 +218,5 @@ func deleteNetworkACLKey(ctx context.Context, data *schema.ResourceData, meta in
 		)
 	}
 
-	if isHTTPStatus(err, http.StatusConflict) {
-		return diag.FromErr(fmt.Errorf(
-			"cannot delete network ACL key %q: it is still in use by one or more ACL rules: %w",
-			data.Id(), err,
-		))
-	}
-
 	return diag.FromErr(err)
-}
-
-// isHTTPStatus reports whether err wraps an HTTP response with the given status code.
-func isHTTPStatus(err error, status int) bool {
-	type httpStatus interface {
-		StatusCode() int
-	}
-
-	var sc httpStatus
-	if errors.As(err, &sc) {
-		return sc.StatusCode() == status
-	}
-	return false
 }

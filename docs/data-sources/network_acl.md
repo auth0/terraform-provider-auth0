@@ -38,6 +38,7 @@ Read-Only:
 
 - `action` (List of Object) (see [below for nested schema](#nestedobjatt--rule--action))
 - `match` (List of Object) (see [below for nested schema](#nestedobjatt--rule--match))
+- `match_all` (Boolean)
 - `not_match` (List of Object) (see [below for nested schema](#nestedobjatt--rule--not_match))
 - `scope` (String)
 

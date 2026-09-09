@@ -5,6 +5,7 @@ FEATURES:
 - `data-source/auth0_network_acl_key` – Add data source to look up a Network ACL key by ID (read-only, `value` not available). (EA Only)
 - `resource/auth0_network_acl` – Add `http_message_signature` block to `match` and `not_match` inside `rule`, allowing ACL rules to target requests based on HMAC signature verification against a set of Network ACL keys. (EA Only)
 - `data-source/auth0_network_acl` / `data-source/auth0_network_acls` – `http_message_signature` is now included in flattened output when present. (EA Only)
+- `resource/auth0_network_acl` / `data-source/auth0_network_acl` – Add `match_all` boolean to the `rule` block for unconditional-match rules that apply regardless of any traffic signal. Mutually exclusive with `match` and `not_match`.
 
 ## v1.56.0
 

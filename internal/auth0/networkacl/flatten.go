@@ -44,6 +44,10 @@ func flattenNetworkACL(data *schema.ResourceData, networkACL *management.Network
 			}
 		}
 
+		if networkACL.Rule.MatchAll != nil {
+			rule["match_all"] = *networkACL.Rule.MatchAll
+		}
+
 		if networkACL.Rule.Scope != nil {
 			rule["scope"] = networkACL.Rule.Scope
 		}

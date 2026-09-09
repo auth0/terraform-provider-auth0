@@ -45,9 +45,11 @@ resource "auth0_network_acl" "allow_signed_only" {
 
 ### Required
 
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
 - `alg` (String) Algorithm used for the key. Currently only `hmac-sha256` is supported.
 - `name` (String) User-supplied label for the key. Must be unique across all Network ACL keys for the tenant. Max 255 characters.
-- `value` (String, Sensitive) Base64-encoded raw key material. The decoded value must be between 32 and 512 bytes. This field is write-only: it is not returned by the API and not stored in Terraform state. Changes are detected by comparing SHA-256 fingerprints.
+- `value` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Base64-encoded raw key material. The decoded value must be between 32 and 512 bytes. This field is write-only: it is not returned by the API and not stored in Terraform state. Changes are detected by comparing SHA-256 fingerprints.
 
 ### Read-Only
 

@@ -2,7 +2,6 @@ package networkacl
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -88,18 +87,8 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 		}
 	}
 
-	matchAll, _ := rule["match_all"].(bool)
-	if matchAll {
+	if matchAll, ok := rule["match_all"].(bool); ok && matchAll {
 		networkACL.Rule.MatchAll = auth0.Bool(true)
-	}
-
-	hasMatch := len(rule["match"].([]interface{})) > 0
-	hasNotMatch := len(rule["not_match"].([]interface{})) > 0
-
-	if matchAll && (hasMatch || hasNotMatch) {
-		return nil, fmt.Errorf(
-			"match_all cannot be combined with match or not_match blocks",
-		)
 	}
 
 	if scope, ok := rule["scope"].(string); ok {

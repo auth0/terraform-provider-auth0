@@ -81,6 +81,7 @@ var networkACLRuleSchema = &schema.Schema{
 				Description: "When true, the rule unconditionally matches all traffic " +
 					"regardless of any other criteria. Mutually exclusive with " +
 					"match and not_match.",
+				ConflictsWith: []string{"rule.0.match", "rule.0.not_match"},
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					if b, ok := val.(bool); ok && !b {
 						errs = append(errs, fmt.Errorf(

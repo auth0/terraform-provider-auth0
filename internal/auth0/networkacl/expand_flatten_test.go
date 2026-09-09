@@ -70,25 +70,6 @@ func TestExpandMatchAllFalseWithSignal(t *testing.T) {
 	assert.NotNil(t, acl.Rule.Match)
 }
 
-func TestExpandMatchAllTrueWithSignal(t *testing.T) {
-	rule := makeBaseRule()
-	rule["match_all"] = true
-	rule["match"] = []interface{}{
-		map[string]interface{}{
-			"asns": []interface{}{9453},
-		},
-	}
-
-	matchAll, _ := rule["match_all"].(bool)
-	hasMatch := len(rule["match"].([]interface{})) > 0
-	hasNotMatch := len(rule["not_match"].([]interface{})) > 0
-
-	if matchAll && (hasMatch || hasNotMatch) {
-		// Expected: guard fires.
-		return
-	}
-	t.Fatal("expected validation guard to fire when match_all=true and signals provided")
-}
 
 func TestFlattenMatchAllTrue(t *testing.T) {
 	networkACL := &management.NetworkACL{

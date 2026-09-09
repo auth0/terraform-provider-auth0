@@ -1030,7 +1030,7 @@ func TestAccNetworkACLMatchAllConflict(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      acctest.ParseTestName(testAccNetworkACLMatchAllConflict, t.Name()),
-				ExpectError: regexp.MustCompile("match_all cannot be combined"),
+				ExpectError: regexp.MustCompile("conflicts with rule.0.match"),
 			},
 		},
 	})

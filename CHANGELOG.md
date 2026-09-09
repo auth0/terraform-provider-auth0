@@ -1,11 +1,21 @@
 ## Unreleased
 
+## v1.57.0
+
 FEATURES:
-- `resource/auth0_network_acl_key` – Add new resource to manage HMAC-SHA256 signing keys for Network ACL HTTP Message Signature verification. Key material is write-only (not stored in state); changes are detected via SHA-256 fingerprint comparison. Supports `ForceNew` on name/alg changes and `CustomizeDiff`-triggered replacement on key-material rotation. (EA Only)
-- `data-source/auth0_network_acl_key` – Add data source to look up a Network ACL key by ID (read-only, `value` not available). (EA Only)
-- `resource/auth0_network_acl` – Add `http_message_signature` block to `match` and `not_match` inside `rule`, allowing ACL rules to target requests based on HMAC signature verification against a set of Network ACL keys. (EA Only)
-- `data-source/auth0_network_acl` / `data-source/auth0_network_acls` – `http_message_signature` is now included in flattened output when present. (EA Only)
-- `resource/auth0_network_acl` / `data-source/auth0_network_acl` – Add `match_all` boolean to the `rule` block for unconditional-match rules that apply regardless of any traffic signal. Mutually exclusive with `match` and `not_match`.
+- `resource/auth0_network_acl_key` – Add resource to manage HMAC-SHA256 signing keys for Network ACL HTTP Message Signature verification (EA only) ([#1698](https://github.com/auth0/terraform-provider-auth0/pull/1698))
+- `data-source/auth0_network_acl_key` – Add data source to look up a Network ACL signing key by ID (EA only) ([#1698](https://github.com/auth0/terraform-provider-auth0/pull/1698))
+- `resource/auth0_network_acl` – Add `http_message_signature` block to `match`/`not_match` in `rule` for HMAC signature-based ACL matching against Network ACL keys. (EA only) ([#1698](https://github.com/auth0/terraform-provider-auth0/pull/1698))
+- `data-source/auth0_network_acl` / `data-source/auth0_network_acls` – Expose `http_message_signature` in read output when present. (EA only) ([#1698](https://github.com/auth0/terraform-provider-auth0/pull/1698))
+- `resource/auth0_network_acl` / `data-source/auth0_network_acl` – Add `match_all` boolean to `rule` for unconditional matching regardless of traffic signals; mutually exclusive with `match` and `not_match`. ([#1702](https://github.com/auth0/terraform-provider-auth0/pull/1702))
+- `resource/auth0_client` – Add `client_id` attribute to set a custom client identifier at creation time; changes force a new resource. (EA only) ([#1697](https://github.com/auth0/terraform-provider-auth0/pull/1697))
+- `resource/auth0_client` – Add support to manage `b2b_integration_configuration` for Enterprise Connect with `integration_type` and `sso_profiles` (EA only) ([#1699](https://github.com/auth0/terraform-provider-auth0/pull/1699))
+- `data-source/auth0_client` – Expose `b2b_integration_configuration` (EA only) ([#1699](https://github.com/auth0/terraform-provider-auth0/pull/1699))
+
+ENHANCEMENTS:
+- `resource/auth0_prompt_screen_renderer` – Add `confirmation` prompt and its `confirmation` screen ([#1695](https://github.com/auth0/terraform-provider-auth0/pull/1695))
+- `resource/auth0_connection` – Add write-only `options_client_secret_wo` and `options_client_secret_wo_version` attributes so the connection client secret can be set without persisting it to state; mutually exclusive with `options.client_secret` ([#1690](https://github.com/auth0/terraform-provider-auth0/pull/1690))
+- `resource/auth0_email_template` – Add `auth_email_by_code` as an allowed value for the `template` attribute ([#1692](https://github.com/auth0/terraform-provider-auth0/pull/1692))
 
 ## v1.56.0
 

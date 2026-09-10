@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	apierr "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
@@ -19,6 +20,25 @@ import (
 const phoneProviderDeprecationMessage = "This field is deprecated in favor of the Unified Phone Experience. " +
 	"Use`auth0_phone_provider` resource instead. " +
 	"See the migration guide: https://auth0.com/docs/customize/phone-messages/unified-phone/migrate-to-unified-phone-experience-with-terraform."
+
+// otpSettingsSchema returns the schema shared by the `phone_settings` and
+// `email_settings` blocks.
+func otpSettingsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"otp_length": {
+			Type:         schema.TypeInt,
+			Required:     true,
+			ValidateFunc: validation.IntBetween(4, 10),
+			Description:  "The length of the OTP code. Defaults to `6`. ",
+		},
+		"otp_expiration_time": {
+			Type:         schema.TypeInt,
+			Required:     true,
+			ValidateFunc: validation.IntBetween(30, 3600),
+			Description:  "The OTP expiration time in seconds. Defaults to `300` (5 minutes). ",
+		},
+	}
+}
 
 // NewResource will return a new auth0_guardian resource.
 func NewResource() *schema.Resource {
@@ -45,6 +65,44 @@ func NewResource() *schema.Resource {
 					false,
 				),
 				Description: "Policy to use. Available options are `never`, `all-applications` and `confidence-score`.",
+			},
+			"settings": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "Tenant-wide MFA settings controlling how often users are re-prompted for MFA and how the \"Remember me\" checkbox behaves. " +
+					"This block requires `read:tenant_settings` and `update:tenant_settings` scopes, which the other attributes of this resource do not require.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"display_remember_me_checkbox": {
+							Type:     schema.TypeBool,
+							Required: true,
+							Description: "Determines whether to display the \"Remember me\" checkbox on the MFA prompt in Universal Login. " +
+								"Defaults to `true`. ",
+						},
+						"remember_me_default_value": {
+							Type:     schema.TypeBool,
+							Required: true,
+							Description: "Determines the default state of the \"Remember Me\" checkbox on the MFA prompt in Universal Login. " +
+								"Defaults to `false`. ",
+						},
+						"mfa_session_inactivity_timeout": {
+							Type:         schema.TypeInt,
+							Required:     true,
+							ValidateFunc: validation.IntBetween(3600, 2592000),
+							Description: "Duration of inactivity (seconds) after which the user will be prompted for MFA. Cannot exceed the overall timeout. " +
+								"Defaults to `604800` (7 days). ",
+						},
+						"mfa_session_overall_timeout": {
+							Type:         schema.TypeInt,
+							Required:     true,
+							ValidateFunc: validation.IntBetween(3600, 7776000),
+							Description: "Maximum duration (seconds) after which the user will be prompted for MFA regardless of activity. " +
+								"Defaults to `2592000` (30 days). ",
+						},
+					},
+				},
 			},
 			"webauthn_roaming": {
 				Type:     schema.TypeList,
@@ -217,11 +275,33 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"phone_settings": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "One-time password settings for the phone MFA factor. These are independent of " +
+					"whether the phone factor is enabled. ",
+				Elem: &schema.Resource{
+					Schema: otpSettingsSchema(),
+				},
+			},
 			"email": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
 				Description: "Indicates whether email MFA is enabled.",
+			},
+			"email_settings": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "One-time password settings for the email MFA factor. These are independent of " +
+					"whether the email factor is enabled. ",
+				Elem: &schema.Resource{
+					Schema: otpSettingsSchema(),
+				},
 			},
 			"otp": {
 				Type:        schema.TypeBool,
@@ -427,6 +507,7 @@ func createGuardian(ctx context.Context, data *schema.ResourceData, meta interfa
 
 func readGuardian(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	apiV3 := meta.(*config.Config).GetAPIV3()
 
 	flattenedPolicy, err := flattenMultiFactorPolicy(ctx, api)
 	if err != nil {
@@ -486,11 +567,39 @@ func readGuardian(ctx context.Context, data *schema.ResourceData, meta interface
 		}
 	}
 
-	return diag.FromErr(result.ErrorOrNil())
+	phoneSettings, err := flattenPhoneSettings(ctx, apiV3)
+	result = multierror.Append(result, err)
+	result = multierror.Append(result, data.Set("phone_settings", phoneSettings))
+
+	emailSettings, err := flattenEmailSettings(ctx, apiV3)
+	result = multierror.Append(result, err)
+	result = multierror.Append(result, data.Set("email_settings", emailSettings))
+
+	diags := diag.FromErr(result.ErrorOrNil())
+
+	settings, err := flattenSettings(ctx, apiV3)
+	if err != nil {
+		if apierr.IsInsufficientScope(err) {
+			diags = append(diags, diag.Diagnostic{
+				Severity: diag.Warning,
+				Summary:  "settings could not be read",
+				Detail: "Denied `settings` access due to missing `read:tenant_settings` scope, " +
+					"rest of the resource was read normally.\n\n",
+			})
+		} else {
+			return append(diags, diag.FromErr(err)...)
+		}
+	}
+	if err := data.Set("settings", settings); err != nil {
+		return append(diags, diag.FromErr(err)...)
+	}
+
+	return diags
 }
 
 func updateGuardian(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	apiV3 := meta.(*config.Config).GetAPIV3()
 
 	result := multierror.Append(
 		updatePolicy(ctx, data, api),
@@ -502,6 +611,9 @@ func updateGuardian(ctx context.Context, data *schema.ResourceData, meta interfa
 		updateWebAuthnPlatform(ctx, data, api),
 		updateDUO(ctx, data, api),
 		updatePush(ctx, data, api),
+		updateSettings(ctx, data, apiV3),
+		updatePhoneSettings(ctx, data, apiV3),
+		updateEmailSettings(ctx, data, apiV3),
 	)
 	if err := result.ErrorOrNil(); err != nil {
 		return diag.FromErr(err)

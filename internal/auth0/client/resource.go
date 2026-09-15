@@ -199,14 +199,14 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeList,
 				Optional:    true,
 				MaxItems:    1,
-				Description: "Anonymous Sessions settings for the client. (EA only)",
+				Description: "Anonymous Sessions settings for the client. Removing this block clears the setting on the API. (EA only)",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"active": {
 							Type:     schema.TypeBool,
-							Optional: true,
+							Required: true,
 							Description: "If set to true, this client is allowed to create anonymous sessions. Requires " +
-								"`oidc_conformant` to be set to `true`. (EA only)",
+								"`oidc_conformant` to be set to `true`. Set to `false` to disable. (EA only)",
 						},
 					},
 				},

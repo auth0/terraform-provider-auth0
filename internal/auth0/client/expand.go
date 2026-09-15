@@ -374,7 +374,7 @@ func expandClientNativeSocialLogin(data *schema.ResourceData) *management.Client
 
 func expandClientAnonymousSessions(data *schema.ResourceData) *management.ClientAnonymousSessions {
 	anonymousSessionsConfig := data.GetRawConfig().GetAttr("anonymous_sessions")
-	if anonymousSessionsConfig.IsNull() {
+	if anonymousSessionsConfig.IsNull() || anonymousSessionsConfig.LengthInt() == 0 {
 		return nil
 	}
 
@@ -384,10 +384,6 @@ func expandClientAnonymousSessions(data *schema.ResourceData) *management.Client
 		anonymousSessions.Active = value.Bool(config.GetAttr("active"))
 		return stop
 	})
-
-	if anonymousSessions == (management.ClientAnonymousSessions{}) {
-		return nil
-	}
 
 	return &anonymousSessions
 }
@@ -1228,6 +1224,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
 		"fedcm_login":                                          isFedCMLoginNull,
 		"identity_assertion_authorization_grant":               isIdentityAssertionAuthorizationGrantNull,
+		"anonymous_sessions":                                   isAnonymousSessionsNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1372,6 +1369,15 @@ func isIdentityAssertionAuthorizationGrantNull(data *schema.ResourceData) bool {
 	}
 
 	rawConfig := data.GetRawConfig().GetAttr("identity_assertion_authorization_grant")
+	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
+}
+
+func isAnonymousSessionsNull(data *schema.ResourceData) bool {
+	if !data.HasChange("anonymous_sessions") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("anonymous_sessions")
 	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
 }
 

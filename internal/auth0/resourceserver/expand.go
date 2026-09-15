@@ -144,8 +144,8 @@ func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.Resou
 		if !isManagementAPI {
 			sta.AnonymousUser = expandSubjectTypeAuthorizationAnonymousUser(cfg.GetAttr("anonymous_user"))
 		} else if data.HasChange("subject_type_authorization.0.anonymous_user") {
-			// The management API rejects anonymous_user updates with 400, so only send it when
-			// explicitly changed, matching the client guard and surfacing the error on PATCH.
+			// For management API, updating anonymous_user is rejected with 400, so only send it when
+			// explicitly changed, matching the client guard above.
 			sta.AnonymousUser = expandSubjectTypeAuthorizationAnonymousUser(cfg.GetAttr("anonymous_user"))
 		}
 
@@ -198,7 +198,7 @@ func expandSubjectTypeAuthorizationClient(clientConfig cty.Value) *management.Re
 }
 
 func expandSubjectTypeAuthorizationAnonymousUser(anonymousUserConfig cty.Value) *management.ResourceServerSubjectTypeAuthorizationAnonymousUser {
-	if anonymousUserConfig.IsNull() {
+	if anonymousUserConfig.IsNull() || anonymousUserConfig.LengthInt() == 0 {
 		return nil
 	}
 
@@ -208,10 +208,6 @@ func expandSubjectTypeAuthorizationAnonymousUser(anonymousUserConfig cty.Value) 
 		anonymousUser.Policy = value.String(cfg.GetAttr("policy"))
 		return stop
 	})
-
-	if anonymousUser == (management.ResourceServerSubjectTypeAuthorizationAnonymousUser{}) {
-		return nil
-	}
 
 	return &anonymousUser
 }

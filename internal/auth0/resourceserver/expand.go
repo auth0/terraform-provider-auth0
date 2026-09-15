@@ -37,6 +37,7 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.SigningSecret = value.String(cfg.GetAttr("signing_secret"))
 		resourceServer.AllowOfflineAccess = value.Bool(cfg.GetAttr("allow_offline_access"))
 		resourceServer.TokenLifetimeForWeb = value.Int(cfg.GetAttr("token_lifetime_for_web"))
+		resourceServer.TokenLifetimeForAnonymousAccessTokens = value.Int(cfg.GetAttr("token_lifetime_for_anonymous_access_tokens"))
 		resourceServer.EnforcePolicies = value.Bool(cfg.GetAttr("enforce_policies"))
 		resourceServer.TokenDialect = value.String(cfg.GetAttr("token_dialect"))
 		resourceServer.VerificationLocation = value.String(cfg.GetAttr("verification_location"))
@@ -132,6 +133,14 @@ func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.Resou
 			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
 		}
 
+		if !isManagementAPI {
+			sta.AnonymousUser = expandSubjectTypeAuthorizationAnonymousUser(cfg.GetAttr("anonymous_user"))
+		} else if data.HasChange("subject_type_authorization.0.anonymous_user") {
+			// The management API rejects anonymous_user updates with 400, so only send it when
+			// explicitly changed, matching the client guard and surfacing the error on PATCH.
+			sta.AnonymousUser = expandSubjectTypeAuthorizationAnonymousUser(cfg.GetAttr("anonymous_user"))
+		}
+
 		return stop
 	})
 
@@ -178,6 +187,25 @@ func expandSubjectTypeAuthorizationClient(clientConfig cty.Value) *management.Re
 	}
 
 	return &client
+}
+
+func expandSubjectTypeAuthorizationAnonymousUser(anonymousUserConfig cty.Value) *management.ResourceServerSubjectTypeAuthorizationAnonymousUser {
+	if anonymousUserConfig.IsNull() {
+		return nil
+	}
+
+	var anonymousUser management.ResourceServerSubjectTypeAuthorizationAnonymousUser
+
+	anonymousUserConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		anonymousUser.Policy = value.String(cfg.GetAttr("policy"))
+		return stop
+	})
+
+	if anonymousUser == (management.ResourceServerSubjectTypeAuthorizationAnonymousUser{}) {
+		return nil
+	}
+
+	return &anonymousUser
 }
 
 func expandResourceServerScopes(scopes cty.Value) *[]management.ResourceServerScope {

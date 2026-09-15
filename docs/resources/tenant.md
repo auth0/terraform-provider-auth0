@@ -227,6 +227,18 @@ Required:
 
 - `oidc_logout_prompt_enabled` (Boolean) When active, users will be presented with a consent prompt to confirm the logout request if the request is not trustworthy. Turn off the consent prompt to bypass user confirmation.
 
+Optional:
+
+- `anonymous` (Block List, Max: 1) Anonymous Sessions settings for the tenant. (EA only) (see [below for nested schema](#nestedblock--sessions--anonymous))
+
+<a id="nestedblock--sessions--anonymous"></a>
+### Nested Schema for `sessions.anonymous`
+
+Optional:
+
+- `activate_cookie` (Boolean) Whether anonymous session requests return the `auth0_anon` cookie. (EA only)
+- `lifetime_in_minutes` (Number) Number of minutes during which an anonymous session will stay valid. Minimum 1, maximum 525600. (EA only)
+
 ## Import
 
 Import is supported using the following syntax:

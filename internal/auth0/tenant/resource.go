@@ -348,6 +348,28 @@ func NewResource() *schema.Resource {
 								"logout request if the request is not trustworthy. Turn off the consent prompt to " +
 								"bypass user confirmation.",
 						},
+						"anonymous": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Anonymous Sessions settings for the tenant. (EA only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"lifetime_in_minutes": {
+										Type:         schema.TypeInt,
+										Optional:     true,
+										ValidateFunc: validation.IntBetween(1, 525600),
+										Description: "Number of minutes during which an anonymous session will stay valid. " +
+											"Minimum 1, maximum 525600. (EA only)",
+									},
+									"activate_cookie": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Description: "Whether anonymous session requests return the `auth0_anon` cookie. (EA only)",
+									},
+								},
+							},
+						},
 					},
 				},
 			},

@@ -86,7 +86,7 @@ resource "auth0_client_grant" "default_3p_grant" {
 - `default_for` (String) Applies this client grant as the default for all clients in the specified group. The only accepted value is third_party_clients, which applies the grant to all third-party clients.
 - `organization_usage` (String) Defines whether organizations can be used with client credentials exchanges for this grant. (defaults to deny when not defined)
 - `scopes` (List of String) Permissions (scopes) included in this grant. Can not be provided when `allow_all_scopes` is set to `true`.
-- `subject_type` (String) Defines the type of subject for this grant. Can be one of `client` or `user`. Defaults to `client` when not defined.
+- `subject_type` (String) Defines the type of subject for this grant. Can be one of `client`, `user`, or `anonymous_user` (EA only). Defaults to `client` when not defined.
 
 ### Read-Only
 

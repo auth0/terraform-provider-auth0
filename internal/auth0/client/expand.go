@@ -50,6 +50,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		JWTConfiguration:                    expandClientJWTConfiguration(data),
 		Addons:                              expandClientAddons(data),
 		NativeSocialLogin:                   expandClientNativeSocialLogin(data),
+		AnonymousSessions:                   expandClientAnonymousSessions(data),
 		Mobile:                              expandClientMobile(data),
 		DefaultOrganization:                 expandDefaultOrganization(data),
 		TokenExchange:                       expandTokenExchange(data),
@@ -369,6 +370,26 @@ func expandClientNativeSocialLogin(data *schema.ResourceData) *management.Client
 	}
 
 	return &nativeSocialLogin
+}
+
+func expandClientAnonymousSessions(data *schema.ResourceData) *management.ClientAnonymousSessions {
+	anonymousSessionsConfig := data.GetRawConfig().GetAttr("anonymous_sessions")
+	if anonymousSessionsConfig.IsNull() {
+		return nil
+	}
+
+	var anonymousSessions management.ClientAnonymousSessions
+
+	anonymousSessionsConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		anonymousSessions.Active = value.Bool(config.GetAttr("active"))
+		return stop
+	})
+
+	if anonymousSessions == (management.ClientAnonymousSessions{}) {
+		return nil
+	}
+
+	return &anonymousSessions
 }
 
 func expandClientNativeSocialLoginSupportEnabled(config cty.Value) *management.ClientNativeSocialLoginSupportEnabled {

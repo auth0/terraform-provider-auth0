@@ -22,6 +22,9 @@ resource "auth0_resource_server" "my_resource_server" {
   token_lifetime                                  = 8600
   skip_consent_for_verifiable_first_party_clients = true
   consent_policy                                  = "transactional-authorization-with-mfa"
+
+  # Anonymous Sessions is an Early Access feature.
+  token_lifetime_for_anonymous_access_tokens = 86400
   token_encryption {
     format = "compact-nested-jwe"
     encryption_key {
@@ -49,6 +52,10 @@ EOF
       policy = "allow_all"
     }
     client {
+      policy = "require_client_grant"
+    }
+    # Anonymous Sessions is an Early Access feature.
+    anonymous_user {
       policy = "require_client_grant"
     }
   }
@@ -103,7 +110,7 @@ resource "auth0_resource_server" "okta_oin_express_configuration_api" {
 - `token_dialect` (String) Dialect of access tokens that should be issued for this resource server. Options include `access_token`, `rfc9068_profile`, `access_token_authz`, and `rfc9068_profile_authz`. `access_token` is a JWT containing standard Auth0 claims. `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` is a JWT containing standard Auth0 claims, including RBAC permissions claims. `rfc9068_profile_authz` is a JWT conforming to the IETF JWT Access Token Profile, including RBAC permissions claims. RBAC permissions claims are available if RBAC (`enforce_policies`) is enabled for this API. For more details, refer to [Access Token Profiles](https://auth0.com/docs/secure/tokens/access-tokens/access-token-profiles).
 - `token_encryption` (Block List, Max: 1) Configuration for JSON Web Encryption(JWE) of tokens for this resource server. (see [below for nested schema](#nestedblock--token_encryption))
 - `token_lifetime` (Number) Number of seconds during which access tokens issued for this resource server from the token endpoint remain valid.
-- `token_lifetime_for_anonymous_access_tokens` (Number) Number of seconds during which anonymous-session access tokens issued for this resource server remain valid. Minimum 86400 (1 day), maximum 2592000 (30 days). (EA only)
+- `token_lifetime_for_anonymous_access_tokens` (Number) Number of seconds during which anonymous-session access tokens issued for this resource server remain valid. Minimum 86400 (1 day), maximum 2592000 (30 days).Once set, this value cannot be unset; can be changed to a value within the allowed range. (EA only)
 - `token_lifetime_for_web` (Number) Number of seconds during which access tokens issued for this resource server via implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.
 - `verification_location` (String) URL from which to retrieve JWKs for this resource server. Used for verifying the JWT sent to Auth0 for token introspection.
 

@@ -137,6 +137,11 @@ resource "auth0_client" "mcp_server" {
   oidc_conformant            = true
   resource_server_identifier = auth0_resource_server.my_api.identifier
 
+  # Anonymous Sessions is an Early Access feature.
+  anonymous_sessions {
+    active = true
+  }
+
   token_exchange {
     allow_any_profile_of_type = ["on_behalf_of_token_exchange"]
   }
@@ -156,7 +161,7 @@ resource "auth0_client" "mcp_server" {
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
-- `anonymous_sessions` (Block List, Max: 1) Anonymous Sessions settings for the client. (EA only) (see [below for nested schema](#nestedblock--anonymous_sessions))
+- `anonymous_sessions` (Block List, Max: 1) Anonymous Sessions settings for the client. Removing this block clears the setting on the API. (EA only) (see [below for nested schema](#nestedblock--anonymous_sessions))
 - `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`, `express_configuration`
 - `async_approval_notification_channels` (List of String) List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated.
 - `b2b_integration_configuration` (Block List, Max: 1) Configuration for B2B Integration (Enterprise Connect) clients. Contents can be updated in place, but adding or removing whole block forces client recreation. (EA only) (see [below for nested schema](#nestedblock--b2b_integration_configuration))
@@ -539,9 +544,9 @@ Optional:
 <a id="nestedblock--anonymous_sessions"></a>
 ### Nested Schema for `anonymous_sessions`
 
-Optional:
+Required:
 
-- `active` (Boolean) If set to true, this client is allowed to create anonymous sessions. Requires `oidc_conformant` to be set to `true`. (EA only)
+- `active` (Boolean) If set to true, this client is allowed to create anonymous sessions. Requires `oidc_conformant` to be set to `true`. Set to `false` to disable. (EA only)
 
 
 <a id="nestedblock--b2b_integration_configuration"></a>

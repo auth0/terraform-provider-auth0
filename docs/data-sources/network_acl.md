@@ -38,6 +38,7 @@ Read-Only:
 
 - `action` (List of Object) (see [below for nested schema](#nestedobjatt--rule--action))
 - `match` (List of Object) (see [below for nested schema](#nestedobjatt--rule--match))
+- `match_all` (Boolean)
 - `not_match` (List of Object) (see [below for nested schema](#nestedobjatt--rule--not_match))
 - `scope` (String)
 
@@ -65,11 +66,28 @@ Read-Only:
 - `geo_country_codes` (List of String)
 - `geo_subdivision_codes` (List of String)
 - `hostnames` (List of String)
+- `http_message_signature` (List of Object) (see [below for nested schema](#nestedobjatt--rule--match--http_message_signature))
 - `ipv4_cidrs` (List of String)
 - `ipv6_cidrs` (List of String)
 - `ja3_fingerprints` (List of String)
 - `ja4_fingerprints` (List of String)
 - `user_agents` (List of String)
+
+<a id="nestedobjatt--rule--match--http_message_signature"></a>
+### Nested Schema for `rule.match.http_message_signature`
+
+Read-Only:
+
+- `keys` (List of Object) (see [below for nested schema](#nestedobjatt--rule--match--http_message_signature--keys))
+
+<a id="nestedobjatt--rule--match--http_message_signature--keys"></a>
+### Nested Schema for `rule.match.http_message_signature.keys`
+
+Read-Only:
+
+- `id` (String)
+
+
 
 
 <a id="nestedobjatt--rule--not_match"></a>
@@ -84,10 +102,25 @@ Read-Only:
 - `geo_country_codes` (List of String)
 - `geo_subdivision_codes` (List of String)
 - `hostnames` (List of String)
+- `http_message_signature` (List of Object) (see [below for nested schema](#nestedobjatt--rule--not_match--http_message_signature))
 - `ipv4_cidrs` (List of String)
 - `ipv6_cidrs` (List of String)
 - `ja3_fingerprints` (List of String)
 - `ja4_fingerprints` (List of String)
 - `user_agents` (List of String)
+
+<a id="nestedobjatt--rule--not_match--http_message_signature"></a>
+### Nested Schema for `rule.not_match.http_message_signature`
+
+Read-Only:
+
+- `keys` (List of Object) (see [below for nested schema](#nestedobjatt--rule--not_match--http_message_signature--keys))
+
+<a id="nestedobjatt--rule--not_match--http_message_signature--keys"></a>
+### Nested Schema for `rule.not_match.http_message_signature.keys`
+
+Read-Only:
+
+- `id` (String)
 
 

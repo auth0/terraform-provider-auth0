@@ -3979,3 +3979,150 @@ func TestAccClientIdentityAssertionAuthorizationGrant(t *testing.T) {
 		},
 	})
 }
+
+const testAccClientB2BCreate = `
+resource "auth0_client" "b2b" {
+	name = "Acceptance Test - B2B Integration - {{.testName}}"
+
+	b2b_integration_configuration {
+		integration_type = "third_party"
+	}
+}
+`
+
+const testAccClientB2BUpdateContent = `
+resource "auth0_client" "b2b" {
+	name = "Acceptance Test - B2B Integration - {{.testName}}"
+
+	b2b_integration_configuration {
+		integration_type = "application"
+	}
+}
+`
+
+const testAccClientB2BRemoved = `
+resource "auth0_client" "b2b" {
+	name = "Acceptance Test - B2B Integration - {{.testName}}"
+}
+`
+
+func TestAccClientB2BIntegrationConfiguration(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientB2BCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("auth0_client.b2b", "client_id"),
+					resource.TestCheckResourceAttr("auth0_client.b2b", "b2b_integration_configuration.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.b2b", "b2b_integration_configuration.0.integration_type", "third_party"),
+					// The Management API applies RFC-0040 server defaults when the block is present,
+					// including organization_discovery_methods = ["email", "organization_name"].
+					resource.TestCheckResourceAttr("auth0_client.b2b", "organization_discovery_methods.#", "2"),
+				),
+			},
+			{
+				// Content is PATCHable in place: integration_type changes without recreation.
+				Config: acctest.ParseTestName(testAccClientB2BUpdateContent, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.b2b", "b2b_integration_configuration.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.b2b", "b2b_integration_configuration.0.integration_type", "application"),
+				),
+			},
+			{
+				ResourceName:      "auth0_client.b2b",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				// Removing the block forces recreation (the API rejects clearing it via PATCH);
+				// the recreated client no longer carries the object.
+				Config: acctest.ParseTestName(testAccClientB2BRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.b2b", "b2b_integration_configuration.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+// sso_profiles holds real self-service profile ids (the API rejects arbitrary strings),
+// so the test provisions auth0_self_service_profile resources and references their ids.
+const testAccClientB2BWithSSOProfilesCreate = `
+resource "auth0_self_service_profile" "sso_one" {
+	name               = "b2b-sso-one-{{.testName}}"
+	allowed_strategies = ["oidc"]
+	user_attributes {
+		name        = "email"
+		description = "email attribute"
+		is_optional = true
+	}
+}
+
+resource "auth0_client" "b2b_sso" {
+	name = "Acceptance Test - B2B SSO Profiles - {{.testName}}"
+
+	b2b_integration_configuration {
+		integration_type = "third_party"
+		sso_profiles     = [auth0_self_service_profile.sso_one.id]
+	}
+}
+`
+
+const testAccClientB2BWithSSOProfilesUpdate = `
+resource "auth0_self_service_profile" "sso_one" {
+	name               = "b2b-sso-one-{{.testName}}"
+	allowed_strategies = ["oidc"]
+	user_attributes {
+		name        = "email"
+		description = "email attribute"
+		is_optional = true
+	}
+}
+
+resource "auth0_self_service_profile" "sso_two" {
+	name               = "b2b-sso-two-{{.testName}}"
+	allowed_strategies = ["oidc"]
+	user_attributes {
+		name        = "email"
+		description = "email attribute"
+		is_optional = true
+	}
+}
+
+resource "auth0_client" "b2b_sso" {
+	name = "Acceptance Test - B2B SSO Profiles - {{.testName}}"
+
+	b2b_integration_configuration {
+		integration_type = "third_party"
+		sso_profiles     = [auth0_self_service_profile.sso_two.id]
+	}
+}
+`
+
+func TestAccClientB2BIntegrationConfigurationWithSSOProfiles(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientB2BWithSSOProfilesCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.b2b_sso", "b2b_integration_configuration.0.integration_type", "third_party"),
+					resource.TestCheckResourceAttr("auth0_client.b2b_sso", "b2b_integration_configuration.0.sso_profiles.#", "1"),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.b2b_sso", "b2b_integration_configuration.0.sso_profiles.0",
+						"auth0_self_service_profile.sso_one", "id"),
+				),
+			},
+			{
+				// The sso_profiles is updated in place (content PATCH, no recreation).
+				// The API caps the list at one entry, so the update swaps the single profile rather than adding.
+				Config: acctest.ParseTestName(testAccClientB2BWithSSOProfilesUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.b2b_sso", "b2b_integration_configuration.0.sso_profiles.#", "1"),
+					resource.TestCheckResourceAttrPair(
+						"auth0_client.b2b_sso", "b2b_integration_configuration.0.sso_profiles.0",
+						"auth0_self_service_profile.sso_two", "id"),
+				),
+			},
+		},
+	})
+}

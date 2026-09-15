@@ -302,6 +302,12 @@ func deployAction(ctx context.Context, data *schema.ResourceData, meta interface
 
 	api := meta.(*config.Config).GetAPI()
 
+	// Track how many times we have re-triggered the build due to a transient
+	// module-dependency failure. Capped at maxModuleBuildRetries so that a
+	// genuine code error does not loop indefinitely within the timeout window.
+	const maxModuleBuildRetries = 3
+	moduleBuildRetries := 0
+
 	err := retry.RetryContext(ctx, data.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		action, err := api.Action.Read(ctx, data.Id())
 		if err != nil {
@@ -309,6 +315,25 @@ func deployAction(ctx context.Context, data *schema.ResourceData, meta interface
 		}
 
 		if action.GetStatus() == management.ActionStatusFailed {
+			// When an action references modules, the build failure may be
+			// transient: the module's bundle was not yet available in the build
+			// cache when the action's build started (race between module publish
+			// and action create/update running in parallel). Re-trigger the
+			// build up to maxModuleBuildRetries times before giving up.
+			modulesSet := data.Get("modules").(*schema.Set)
+			if modulesSet.Len() > 0 && moduleBuildRetries < maxModuleBuildRetries {
+				moduleBuildRetries++
+				rebuildAction := expandAction(data)
+				if err := api.Action.Update(ctx, data.Id(), rebuildAction); err != nil {
+					return retry.NonRetryableError(err)
+				}
+				return retry.RetryableError(
+					fmt.Errorf(
+						"action %q build failed (attempt %d/%d), retrying — module dependency may not yet be ready",
+						action.GetName(), moduleBuildRetries, maxModuleBuildRetries,
+					),
+				)
+			}
 			return retry.NonRetryableError(
 				fmt.Errorf("action %q failed to build, check the Auth0 UI for errors", action.GetName()),
 			)

@@ -2,6 +2,7 @@ package client_test
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 	"testing"
 
@@ -4121,6 +4122,66 @@ func TestAccClientB2BIntegrationConfigurationWithSSOProfiles(t *testing.T) {
 					resource.TestCheckResourceAttrPair(
 						"auth0_client.b2b_sso", "b2b_integration_configuration.0.sso_profiles.0",
 						"auth0_self_service_profile.sso_two", "id"),
+				),
+			},
+		},
+	})
+}
+
+// testAccPreCheckFeatureAnonymousSessions skips the test unless
+// AUTH0_FEATURE_ANONYMOUS_SESSIONS is set, since the anonymous_sessions block on
+// auth0_client requires a tenant with the Anonymous Sessions Early Access add-on
+// enabled.
+func testAccPreCheckFeatureAnonymousSessions(t *testing.T) {
+	t.Helper()
+
+	if os.Getenv("AUTH0_FEATURE_ANONYMOUS_SESSIONS") == "" {
+		t.Skip("AUTH0_FEATURE_ANONYMOUS_SESSIONS must be set for this acceptance test to run")
+	}
+}
+
+const testAccClientAnonymousSessionsActive = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - Anonymous Sessions - {{.testName}}"
+	app_type        = "non_interactive"
+	oidc_conformant = true
+
+	anonymous_sessions {
+		active = true
+	}
+}
+`
+
+const testAccClientAnonymousSessionsInactive = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - Anonymous Sessions - {{.testName}}"
+	app_type        = "non_interactive"
+	oidc_conformant = true
+
+	anonymous_sessions {
+		active = false
+	}
+}
+`
+
+func TestAccClientAnonymousSessions(t *testing.T) {
+	testAccPreCheckFeatureAnonymousSessions(t)
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientAnonymousSessionsActive, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.0.active", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientAnonymousSessionsInactive, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.0.active", "false"),
 				),
 			},
 		},

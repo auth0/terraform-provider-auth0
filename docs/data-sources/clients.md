@@ -53,6 +53,7 @@ Read-Only:
 - `allowed_origins` (List of String)
 - `app_type` (String)
 - `async_approval_notification_channels` (List of String)
+- `b2b_integration_configuration` (List of Object) (see [below for nested schema](#nestedobjatt--clients--b2b_integration_configuration))
 - `callbacks` (List of String)
 - `client_id` (String)
 - `client_metadata` (Map of String)
@@ -80,6 +81,15 @@ Read-Only:
 - `token_exchange` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_exchange))
 - `token_quota` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_quota))
 - `web_origins` (List of String)
+
+<a id="nestedobjatt--clients--b2b_integration_configuration"></a>
+### Nested Schema for `clients.b2b_integration_configuration`
+
+Read-Only:
+
+- `integration_type` (String)
+- `sso_profiles` (List of String)
+
 
 <a id="nestedobjatt--clients--express_configuration"></a>
 ### Nested Schema for `clients.express_configuration`
@@ -138,7 +148,17 @@ Read-Only:
 - `connection_deletion_behavior` (String)
 - `connection_profile_id` (String)
 - `invitation_landing_client_id` (String)
+- `third_party_client_access` (List of Object) (see [below for nested schema](#nestedobjatt--clients--my_organization_configuration--third_party_client_access))
 - `user_attribute_profile_id` (String)
+
+<a id="nestedobjatt--clients--my_organization_configuration--third_party_client_access"></a>
+### Nested Schema for `clients.my_organization_configuration.third_party_client_access`
+
+Read-Only:
+
+- `allowed_values` (List of String)
+- `default_value` (String)
+
 
 
 <a id="nestedobjatt--clients--oidc_logout"></a>

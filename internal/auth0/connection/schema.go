@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"reflect"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -76,6 +77,27 @@ var resourceSchema = map[string]*schema.Schema{
 		Type:        schema.TypeBool,
 		Optional:    true,
 		Description: "Display connection as a button. Only available on enterprise connections.",
+	},
+	// The options_client_secret_wo attribute is a sibling of the Computed options block because
+	// the SDK does not allow WriteOnly attributes inside a Computed block.
+	"options_client_secret_wo": {
+		Type:          schema.TypeString,
+		Optional:      true,
+		WriteOnly:     true,
+		Sensitive:     true,
+		ConflictsWith: []string{"options.0.client_secret"},
+		RequiredWith:  []string{"options_client_secret_wo_version"},
+		Description: "The strategy's client secret (write-only). This value is **not** stored in " +
+			"Terraform state and can be sourced from an ephemeral value. Bump " +
+			"`options_client_secret_wo_version` to rotate it. Conflicts with `options.client_secret`.",
+	},
+	"options_client_secret_wo_version": {
+		Type:         schema.TypeInt,
+		Optional:     true,
+		RequiredWith: []string{"options_client_secret_wo"},
+		Description: "Version counter for `options_client_secret_wo`, required whenever the write-only secret is set. " +
+			"Must be a positive integer starting at `1`. This value signals rotation intent, " +
+			"though the secret is resent even for other config updates.",
 	},
 	"options":                         optionsSchema,
 	"authentication":                  authenticationSchema,
@@ -425,10 +447,13 @@ var optionsSchema = &schema.Schema{
 				Description: "The strategy's client ID.",
 			},
 			"client_secret": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Sensitive:   true,
-				Description: "The strategy's client secret.",
+				Type:          schema.TypeString,
+				Optional:      true,
+				Sensitive:     true,
+				ConflictsWith: []string{"options_client_secret_wo"},
+				Description: "The strategy's client secret. " +
+					"**Note:** For better security, consider using `options_client_secret_wo` instead " +
+					"to avoid storing the secret in Terraform state.",
 			},
 			"custom_headers": {
 				Type: schema.TypeSet,
@@ -988,8 +1013,11 @@ var optionsSchema = &schema.Schema{
 				Optional:         true,
 				Computed:         true,
 				ValidateFunc:     validation.StringIsJSON,
-				DiffSuppressFunc: structure.SuppressJsonDiff,
-				Description:      "Additional OIDC metadata to include in the discovery document. Only applicable when strategy=oidc, okta, or samlp. (EA only)",
+				DiffSuppressFunc: suppressOIDCMetadataDiff,
+				Description: "Additional OIDC metadata to include in the discovery document. " +
+					"Only applicable when strategy=oidc, okta, or samlp. On oidc and okta, Auth0 " +
+					"defaults any omitted `" + strings.Join(oidcMetadataServerDefaults, "`, `") +
+					"` field to false. Those defaults are not tracked in provider until set to true explisitly. (EA only)",
 			},
 			"global_token_revocation_jwt_iss": {
 				Type:        schema.TypeString,
@@ -1722,4 +1750,47 @@ var crossAppAccessResourceAppSchema = &schema.Schema{
 			},
 		},
 	},
+}
+
+// oidcMetadataServerDefaults are the keys the API adds to options.oidc_metadata on
+// oidc and okta connections, defaulted to false, when the uploaded document omits
+// them. They stay settable: sending true preserves true. Samlp never gains them.
+var oidcMetadataServerDefaults = []string{
+	"claims_parameter_supported",
+	"request_parameter_supported",
+	"request_uri_parameter_supported",
+	"require_request_uri_registration",
+}
+
+// dropFalseOIDCMetadataServerDefaults removes the server defaults above from doc where
+// the value is false, meaning the API defaulted it in rather than being asked for it.
+// A default returned as true is real drift and is kept, per the U_TRUE API behaviour.
+func dropFalseOIDCMetadataServerDefaults(doc map[string]interface{}) {
+	for _, key := range oidcMetadataServerDefaults {
+		if defaulted, isBool := doc[key].(bool); isBool && !defaulted {
+			delete(doc, key)
+		}
+	}
+}
+
+// suppressOIDCMetadataDiff is structure.SuppressJsonDiff plus tolerance for the server
+// defaults above, applied to both sides so it holds whichever side carries them: state
+// after an import, or the configuration when a practitioner writes one out explicitly.
+// Every other difference stays visible, including a removed key, since the API replaces
+// the document wholesale.
+func suppressOIDCMetadataDiff(_, oldValue, newValue string, _ *schema.ResourceData) bool {
+	stateDoc, err := structure.ExpandJsonFromString(oldValue)
+	if err != nil {
+		return false
+	}
+
+	configDoc, err := structure.ExpandJsonFromString(newValue)
+	if err != nil {
+		return false
+	}
+
+	dropFalseOIDCMetadataServerDefaults(stateDoc)
+	dropFalseOIDCMetadataServerDefaults(configDoc)
+
+	return reflect.DeepEqual(stateDoc, configDoc)
 }

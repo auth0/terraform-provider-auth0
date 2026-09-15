@@ -67,7 +67,38 @@ func flattenConnectionProfile(data *schema.ResourceData, profile *management.Get
 		result = multierror.Append(result, data.Set("strategy_overrides", []interface{}{overridesMap}))
 	}
 
+	result = multierror.Append(result, data.Set("cross_app_access_resource_app", flattenConnectionProfileCrossAppAccessResourceApp(profile)))
+
 	return result.ErrorOrNil()
+}
+
+// flattenConnectionProfileCrossAppAccessResourceApp flattens the cross_app_access_resource_app
+// block. AllowedValues is a pointer-to-slice on the wire, so GetAllowedValues is nil-checked before
+// it's dereferenced and re-sliced into strings.
+func flattenConnectionProfileCrossAppAccessResourceApp(profile *management.GetConnectionProfileResponseContent) []interface{} {
+	resourceApp := profile.GetCrossAppAccessResourceApp()
+	status := resourceApp.GetStatus()
+	if status == nil {
+		return []interface{}{}
+	}
+
+	statusMap := map[string]interface{}{
+		"default_value": string(status.GetDefaultValue()),
+	}
+
+	if allowedValues := status.GetAllowedValues(); allowedValues != nil {
+		values := make([]string, len(allowedValues))
+		for i, v := range allowedValues {
+			values[i] = string(v)
+		}
+		statusMap["allowed_values"] = values
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"status": []interface{}{statusMap},
+		},
+	}
 }
 
 func flattenStrategyOverride(override management.ConnectionProfileStrategyOverride) map[string]interface{} {

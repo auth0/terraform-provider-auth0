@@ -86,6 +86,8 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 		return internalError.HandleReadAPIError("auth0_connection_client", data, err)
 	}
 
+	// GetAllEnabledClients only returns the clients the connection is enabled
+	// for, so a match here means the relationship is still in place.
 	found := false
 	for _, c := range allClients.GetClients() {
 		if c.GetClientID() == clientID {

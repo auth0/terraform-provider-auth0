@@ -1,0 +1,339 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 833
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","strategy":"oidc","options":{"client_id":"123456","client_secret":"123456","discovery_url":null,"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","type":"back_channel","userinfo_endpoint":null,"token_endpoint":"https://idp.oidcmeta.example.com/token","scope":"openid profile","oidc_metadata":{"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","id_token_signing_alg_values_supported":["RS256"],"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","response_types_supported":["code"],"subject_types_supported":["public"],"token_endpoint":"https://idp.oidcmeta.example.com/token"}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.47.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"id":"con_PRZvsZDzAapbtgFF","options":{"client_id":"123456","client_secret":"123456","discovery_url":null,"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","type":"back_channel","userinfo_endpoint":"","token_endpoint":"https://idp.oidcmeta.example.com/token","scope":"openid profile","oidc_metadata":{"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","id_token_signing_alg_values_supported":["RS256"],"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","response_types_supported":["code"],"subject_types_supported":["public"],"token_endpoint":"https://idp.oidcmeta.example.com/token","claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false},"schema_version":"oidc-V4","attribute_map":{"mapping_mode":"bind_all"},"connection_settings":{"pkce":"auto"}},"strategy":"oidc","name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","enabled_clients":[],"realms":["Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 540.197916ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.47.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_PRZvsZDzAapbtgFF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_PRZvsZDzAapbtgFF","options":{"type":"back_channel","scope":"openid profile","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":null,"oidc_metadata":{"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","token_endpoint":"https://idp.oidcmeta.example.com/token","authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","subject_types_supported":["public"],"response_types_supported":["code"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"]},"schema_version":"oidc-V4","token_endpoint":"https://idp.oidcmeta.example.com/token","userinfo_endpoint":"","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize"},"strategy":"oidc","name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","realms":["Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 655.559959ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.47.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_PRZvsZDzAapbtgFF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_PRZvsZDzAapbtgFF","options":{"type":"back_channel","scope":"openid profile","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":null,"oidc_metadata":{"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","token_endpoint":"https://idp.oidcmeta.example.com/token","authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","subject_types_supported":["public"],"response_types_supported":["code"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"]},"schema_version":"oidc-V4","token_endpoint":"https://idp.oidcmeta.example.com/token","userinfo_endpoint":"","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize"},"strategy":"oidc","name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","realms":["Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 456.733792ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.47.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_PRZvsZDzAapbtgFF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_PRZvsZDzAapbtgFF","options":{"type":"back_channel","scope":"openid profile","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":null,"oidc_metadata":{"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","token_endpoint":"https://idp.oidcmeta.example.com/token","authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","subject_types_supported":["public"],"response_types_supported":["code"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"]},"schema_version":"oidc-V4","token_endpoint":"https://idp.oidcmeta.example.com/token","userinfo_endpoint":"","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize"},"strategy":"oidc","name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","realms":["Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 407.948625ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.47.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_PRZvsZDzAapbtgFF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_PRZvsZDzAapbtgFF","options":{"type":"back_channel","scope":"openid profile","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":null,"oidc_metadata":{"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","token_endpoint":"https://idp.oidcmeta.example.com/token","authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","subject_types_supported":["public"],"response_types_supported":["code"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"]},"schema_version":"oidc-V4","token_endpoint":"https://idp.oidcmeta.example.com/token","userinfo_endpoint":"","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize"},"strategy":"oidc","name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","realms":["Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 629.023875ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 839
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"options":{"client_id":"123456","client_secret":"123456","discovery_url":null,"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","type":"back_channel","userinfo_endpoint":null,"token_endpoint":"https://idp.oidcmeta.example.com/token","scope":"openid profile","oidc_metadata":{"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","claims_parameter_supported":true,"end_session_endpoint":"https://idp.oidcmeta.example.com/logout","id_token_signing_alg_values_supported":["RS256"],"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","response_types_supported":["code"],"subject_types_supported":["public"],"token_endpoint":"https://idp.oidcmeta.example.com/token"}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.47.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_PRZvsZDzAapbtgFF
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_PRZvsZDzAapbtgFF","options":{"type":"back_channel","scope":"openid profile","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":null,"oidc_metadata":{"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","token_endpoint":"https://idp.oidcmeta.example.com/token","end_session_endpoint":"https://idp.oidcmeta.example.com/logout","authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","subject_types_supported":["public"],"response_types_supported":["code"],"claims_parameter_supported":true,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"]},"schema_version":"oidc-V4","token_endpoint":"https://idp.oidcmeta.example.com/token","userinfo_endpoint":"","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize"},"strategy":"oidc","name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","realms":["Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 704.15925ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.47.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_PRZvsZDzAapbtgFF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_PRZvsZDzAapbtgFF","options":{"type":"back_channel","scope":"openid profile","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":null,"oidc_metadata":{"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","token_endpoint":"https://idp.oidcmeta.example.com/token","end_session_endpoint":"https://idp.oidcmeta.example.com/logout","authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","subject_types_supported":["public"],"response_types_supported":["code"],"claims_parameter_supported":true,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"]},"schema_version":"oidc-V4","token_endpoint":"https://idp.oidcmeta.example.com/token","userinfo_endpoint":"","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize"},"strategy":"oidc","name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","realms":["Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 623.309334ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.47.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_PRZvsZDzAapbtgFF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_PRZvsZDzAapbtgFF","options":{"type":"back_channel","scope":"openid profile","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":null,"oidc_metadata":{"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","token_endpoint":"https://idp.oidcmeta.example.com/token","end_session_endpoint":"https://idp.oidcmeta.example.com/logout","authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","subject_types_supported":["public"],"response_types_supported":["code"],"claims_parameter_supported":true,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"]},"schema_version":"oidc-V4","token_endpoint":"https://idp.oidcmeta.example.com/token","userinfo_endpoint":"","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize"},"strategy":"oidc","name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","realms":["Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 627.036042ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.47.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_PRZvsZDzAapbtgFF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_PRZvsZDzAapbtgFF","options":{"type":"back_channel","scope":"openid profile","issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","client_id":"123456","attribute_map":{"mapping_mode":"bind_all"},"client_secret":"123456","discovery_url":null,"oidc_metadata":{"issuer":"https://idp.oidcmeta.example.com","jwks_uri":"https://idp.oidcmeta.example.com/jwks","token_endpoint":"https://idp.oidcmeta.example.com/token","end_session_endpoint":"https://idp.oidcmeta.example.com/logout","authorization_endpoint":"https://idp.oidcmeta.example.com/authorize","subject_types_supported":["public"],"response_types_supported":["code"],"claims_parameter_supported":true,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"]},"schema_version":"oidc-V4","token_endpoint":"https://idp.oidcmeta.example.com/token","userinfo_endpoint":"","connection_settings":{"pkce":"disabled"},"authorization_endpoint":"https://idp.oidcmeta.example.com/authorize"},"strategy":"oidc","name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"display_name":"Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC","realms":["Acceptance-Test-OIDCMeta-OIDC-TestAccConnectionOIDCMetadataOnOIDC"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 563.838667ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.47.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_PRZvsZDzAapbtgFF
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2026-08-17T13:58:12.149Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 661.437709ms

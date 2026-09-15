@@ -2,6 +2,7 @@ package connection_test
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -118,5 +119,143 @@ resource "auth0_connection_profile" "my_profile" {
 
 data "auth0_connection_profile" "my_profile_ds" {
 	id = auth0_connection_profile.my_profile.id
+}
+`
+
+// TestAccConnectionProfileXAA covers: create with a full status descriptor, update omitting
+// allowed_values (removal round-trip), and update toggling the whole block off and back on.
+// Requires the `my_orgs_cross_app_access_resource_app` tenant flag to be enabled.
+func TestAccConnectionProfileXAA(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				// Create with a full status descriptor.
+				Config: acctest.ParseTestName(testAccConnectionProfileXAAFull, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection_profile.my_profile", "cross_app_access_resource_app.0.status.0.default_value", "enabled"),
+					resource.TestCheckResourceAttr("auth0_connection_profile.my_profile", "cross_app_access_resource_app.0.status.0.allowed_values.#", "2"),
+				),
+			},
+			{
+				// Update: omit allowed_values (removal round-trip), keep default_value.
+				Config: acctest.ParseTestName(testAccConnectionProfileXAANoAllowed, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection_profile.my_profile", "cross_app_access_resource_app.0.status.0.default_value", "enabled"),
+					resource.TestCheckResourceAttr("auth0_connection_profile.my_profile", "cross_app_access_resource_app.0.status.0.allowed_values.#", "0"),
+				),
+			},
+			{
+				// Update: toggle the whole block off.
+				Config: acctest.ParseTestName(testAccConnectionProfileXAAToggleOff, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection_profile.my_profile", "cross_app_access_resource_app.#", "0"),
+				),
+			},
+			{
+				// Update: toggle the whole block back on.
+				Config: acctest.ParseTestName(testAccConnectionProfileXAAFull, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection_profile.my_profile", "cross_app_access_resource_app.0.status.0.default_value", "enabled"),
+					resource.TestCheckResourceAttr("auth0_connection_profile.my_profile", "cross_app_access_resource_app.0.status.0.allowed_values.#", "2"),
+				),
+			},
+		},
+	})
+}
+
+// TestAccConnectionProfileXAANoAllowed covers create with allowed_values omitted from the start.
+func TestAccConnectionProfileXAANoAllowed(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionProfileXAANoAllowed, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection_profile.my_profile", "cross_app_access_resource_app.0.status.0.default_value", "enabled"),
+					resource.TestCheckResourceAttr("auth0_connection_profile.my_profile", "cross_app_access_resource_app.0.status.0.allowed_values.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+// TestAccConnectionProfileXAAInvalid covers the documented 400 case of a partial allowed_values
+// list. This is caught by CustomizeDiff at plan time, before any API call is made, so it does not
+// need an HTTP recording.
+//
+// The other documented 400 case (default_value not a member of allowed_values) is unreachable
+// through this provider: CustomizeDiff already forces allowed_values, when non-empty, to be the
+// full two-value enum, so any valid default_value is trivially a member.
+func TestAccConnectionProfileXAAInvalid(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccConnectionProfileXAAShortAllowed, t.Name()),
+				ExpectError: regexp.MustCompile("allowed_values must contain exactly"),
+			},
+		},
+	})
+}
+
+const testAccConnectionProfileXAAFull = `
+resource "auth0_connection_profile" "my_profile" {
+	name = "Test-Profile-{{.testName}}"
+
+	connection_name_prefix_template = "template1"
+
+	connection_config {
+	}
+
+	cross_app_access_resource_app {
+		status {
+			default_value  = "enabled"
+			allowed_values = ["enabled", "disabled"]
+		}
+	}
+}
+`
+
+const testAccConnectionProfileXAAToggleOff = `
+resource "auth0_connection_profile" "my_profile" {
+	name = "Test-Profile-{{.testName}}"
+
+	connection_name_prefix_template = "template1"
+
+	connection_config {
+	}
+}
+`
+
+const testAccConnectionProfileXAANoAllowed = `
+resource "auth0_connection_profile" "my_profile" {
+	name = "Test-Profile-{{.testName}}"
+
+	connection_name_prefix_template = "template1"
+
+	connection_config {
+	}
+
+	cross_app_access_resource_app {
+		status {
+			default_value = "enabled"
+		}
+	}
+}
+`
+
+const testAccConnectionProfileXAAShortAllowed = `
+resource "auth0_connection_profile" "my_profile" {
+	name = "Test-Profile-{{.testName}}"
+
+	connection_name_prefix_template = "template1"
+
+	connection_config {
+	}
+
+	cross_app_access_resource_app {
+		status {
+			default_value  = "enabled"
+			allowed_values = ["enabled"]
+		}
+	}
 }
 `

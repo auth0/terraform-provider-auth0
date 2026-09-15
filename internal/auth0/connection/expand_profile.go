@@ -109,6 +109,11 @@ func expandConnectionProfile(data *schema.ResourceData) *management.CreateConnec
 		return stop
 	})
 
+	// Expand cross_app_access_resource_app.
+	if resourceApp, ok := expandConnectionProfileCrossAppAccessResourceApp(config); ok {
+		profile.CrossAppAccessResourceApp = resourceApp
+	}
+
 	return profile
 }
 
@@ -213,6 +218,14 @@ func expandConnectionProfileForUpdate(data *schema.ResourceData) *management.Upd
 		return stop
 	})
 
+	// Expand cross_app_access_resource_app. Removing the block from config must explicitly null
+	// it out: the update PATCH is a partial merge, so an omitted field leaves the prior value intact.
+	if resourceApp, ok := expandConnectionProfileCrossAppAccessResourceApp(config); ok {
+		profile.CrossAppAccessResourceApp = resourceApp
+	} else {
+		profile.SetCrossAppAccessResourceApp(nil)
+	}
+
 	return profile
 }
 
@@ -239,4 +252,41 @@ func expandConnectionProfileStrategyOverride(elem cty.Value) *management.Connect
 	})
 
 	return override
+}
+
+// expandConnectionProfileCrossAppAccessResourceApp builds the cross_app_access_resource_app block
+// from raw config. The returned bool reports whether the block is present in config at all, so
+// callers can distinguish "block omitted" from "block present" (the latter always yields a non-nil
+// result, since the API requires `status.default_value` whenever the block itself is set).
+func expandConnectionProfileCrossAppAccessResourceApp(config cty.Value) (*management.ConnectionProfileCrossAppAccessResourceApp, bool) {
+	var resourceApp *management.ConnectionProfileCrossAppAccessResourceApp
+
+	config.GetAttr("cross_app_access_resource_app").ForEachElement(func(_ cty.Value, appCfg cty.Value) (stop bool) {
+		resourceApp = &management.ConnectionProfileCrossAppAccessResourceApp{}
+
+		appCfg.GetAttr("status").ForEachElement(func(_ cty.Value, statusCfg cty.Value) (stop bool) {
+			status := &management.ConnectionProfileCrossAppAccessResourceAppStatus{}
+
+			if defaultValue := value.String(statusCfg.GetAttr("default_value")); defaultValue != nil {
+				status.DefaultValue = management.ConnectionProfileCrossAppAccessResourceAppStatusDefaultValueEnum(*defaultValue)
+			}
+
+			// The API rejects an explicit `"allowed_values": null` ("Expected type array but found
+			// type null"), so an absent value must omit the key entirely rather than null it out.
+			if allowedValues := value.Strings(statusCfg.GetAttr("allowed_values")); allowedValues != nil && len(*allowedValues) > 0 {
+				enumValues := make(management.ConnectionProfileCrossAppAccessResourceAppStatusAllowedValuesEnum, len(*allowedValues))
+				for i, v := range *allowedValues {
+					enumValues[i] = management.ConnectionProfileCrossAppAccessResourceAppStatusValueEnum(v)
+				}
+				status.SetAllowedValues(&enumValues)
+			}
+
+			resourceApp.Status = status
+			return stop
+		})
+
+		return stop
+	})
+
+	return resourceApp, resourceApp != nil
 }

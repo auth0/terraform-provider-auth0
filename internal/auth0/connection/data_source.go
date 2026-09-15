@@ -22,6 +22,12 @@ func NewDataSource() *schema.Resource {
 
 func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
+
+	// Write-only arguments are input-only and never read back, so they add no value on a data
+	// source. Drop them from the derived schema.
+	delete(dataSourceSchema, "options_client_secret_wo")
+	delete(dataSourceSchema, "options_client_secret_wo_version")
+
 	dataSourceSchema["connection_id"] = &schema.Schema{
 		Type:         schema.TypeString,
 		Optional:     true,
@@ -49,6 +55,13 @@ func dataSourceSchema() map[string]*schema.Schema {
 		Computed: true,
 		Description: "IDs of the clients for which the connection is enabled. " +
 			"Skips populating if `skip_enabled_clients` is `true`.",
+	}
+
+	dataSourceSchema["hide_client_secret"] = &schema.Schema{
+		Type:     schema.TypeBool,
+		Optional: true,
+		Description: "Set this to avoid persisting the sensitive `options.client_secret` value in state; " +
+			"it will be stored as an empty string.",
 	}
 
 	return dataSourceSchema
@@ -142,7 +155,7 @@ func GetAllEnabledClients(ctx context.Context, api *management.Management, conne
 			return nil, err
 		}
 
-		allClients = append(allClients, enabledClientsResp.GetClients()...)
+		allClients = append(allClients, filterEnabledClients(enabledClientsResp.GetClients())...)
 
 		if !enabledClientsResp.HasNext() {
 			break
@@ -153,4 +166,20 @@ func GetAllEnabledClients(ctx context.Context, api *management.Management, conne
 	return &management.ConnectionEnabledClientList{
 		Clients: &allClients,
 	}, nil
+}
+
+// filterEnabledClients drops the clients that the connection is explicitly
+// disabled for.
+func filterEnabledClients(clients []management.ConnectionEnabledClient) []management.ConnectionEnabledClient {
+	enabledClients := make([]management.ConnectionEnabledClient, 0, len(clients))
+
+	for _, client := range clients {
+		if client.Status != nil && !client.GetStatus() {
+			continue
+		}
+
+		enabledClients = append(enabledClients, client)
+	}
+
+	return enabledClients
 }

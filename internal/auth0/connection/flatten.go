@@ -3,6 +3,7 @@ package connection
 import (
 	"errors"
 	"fmt"
+	"maps"
 
 	"github.com/auth0/go-auth0/management"
 	managementv3 "github.com/auth0/go-auth0/v3/management"
@@ -14,6 +15,29 @@ import (
 )
 
 var errUnsupportedConnectionOptionsType = errors.New("unsupported connection options type")
+
+// flattenOIDCMetadata renders options.oidc_metadata for an oidc or okta connection,
+// dropping the server defaults the API returned as false.
+//
+// Keeping them out of state is what makes an edit to some other key render as just that
+// edit. DiffSuppressFunc cannot do this job alone: it is all-or-nothing per attribute, so
+// the moment a real change makes it return false, Terraform renders the whole stored
+// document against the configuration and the untouched defaults appear as removals.
+//
+// A default returned as true is kept, since that is a value someone asked for.
+func flattenOIDCMetadata(metadata map[string]interface{}) (string, error) {
+	if len(metadata) == 0 {
+		return "", nil
+	}
+
+	// Copied to avoid modifying original map.
+	document := make(map[string]interface{}, len(metadata))
+	maps.Copy(document, metadata)
+
+	dropFalseOIDCMetadataServerDefaults(document)
+
+	return structure.FlattenJsonToString(document)
+}
 
 var flattenConnectionOptionsMap = map[string]flattenConnectionOptionsFunc{
 	// Database Connection.
@@ -67,6 +91,14 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		return diags
 	}
 
+	// On the write-only path, blank the API-echoed secret before setting state so it never
+	// lands in the legacy options.client_secret mirror, and persist the version.
+	usingWriteOnlySecret := false
+	if _, ok := data.GetOk("options_client_secret_wo_version"); ok {
+		usingWriteOnlySecret = true
+		blankClientSecretInOptions(connectionOptions)
+	}
+
 	result := multierror.Append(
 		data.Set("name", connection.GetName()),
 		data.Set("display_name", connection.GetDisplayName()),
@@ -85,11 +117,35 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		result = multierror.Append(result, data.Set("show_as_button", connection.GetShowAsButton()))
 	}
 
+	if usingWriteOnlySecret {
+		result = multierror.Append(result, data.Set("options_client_secret_wo_version", data.Get("options_client_secret_wo_version")))
+	}
+
 	return diag.FromErr(result.ErrorOrNil())
+}
+
+// blankClientSecretInOptions empties options[0].client_secret in a flattened options list.
+func blankClientSecretInOptions(connectionOptions []interface{}) {
+	if len(connectionOptions) == 0 {
+		return
+	}
+
+	options, ok := connectionOptions[0].(map[string]interface{})
+	if !ok {
+		return
+	}
+
+	if _, ok := options["client_secret"]; ok {
+		options["client_secret"] = ""
+	}
 }
 
 func flattenConnectionForDataSource(data *schema.ResourceData, connection *management.Connection, enabledClients *management.ConnectionEnabledClientList) diag.Diagnostics {
 	diags := flattenConnection(data, connection)
+
+	if data.Get("hide_client_secret").(bool) {
+		diags = append(diags, diag.FromErr(hideConnectionOptionsClientSecret(data))...)
+	}
 
 	var clientIDs []string
 	for _, ec := range enabledClients.GetClients() {
@@ -100,6 +156,26 @@ func flattenConnectionForDataSource(data *schema.ResourceData, connection *manag
 	diags = append(diags, diag.FromErr(err)...)
 
 	return diags
+}
+
+func hideConnectionOptionsClientSecret(data *schema.ResourceData) error {
+	rawOptions, ok := data.Get("options").([]interface{})
+	if !ok || len(rawOptions) == 0 {
+		return nil
+	}
+
+	options, ok := rawOptions[0].(map[string]interface{})
+	if !ok {
+		return nil
+	}
+
+	if _, ok := options["client_secret"]; !ok {
+		return nil
+	}
+
+	options["client_secret"] = ""
+
+	return data.Set("options", rawOptions)
 }
 
 func flattenConnectionAuthentication(authentication *management.Authentication) []interface{} {
@@ -888,6 +964,11 @@ func flattenConnectionOptionsOIDC(
 		return nil, diag.FromErr(err)
 	}
 
+	oidcMetadata, err := flattenOIDCMetadata(options.GetOIDCMetadata())
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
 	optionsMap := map[string]interface{}{
 		"client_id":                         options.GetClientID(),
 		"client_secret":                     options.GetClientSecret(),
@@ -912,6 +993,7 @@ func flattenConnectionOptionsOIDC(
 		"id_token_signed_response_algs":     options.GetIDTokenSignedResponseAlgs(),
 		"token_endpoint_jwtca_aud_format":   options.GetTokenEndpointJwtcaAudFormat(),
 		"id_token_session_expiry_supported": options.GetIDTokenSessionExpirySupported(),
+		"oidc_metadata":                     oidcMetadata,
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -962,6 +1044,11 @@ func flattenConnectionOptionsOkta(
 		return nil, diag.FromErr(err)
 	}
 
+	oidcMetadata, err := flattenOIDCMetadata(options.GetOIDCMetadata())
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
 	optionsMap := map[string]interface{}{
 		"client_id":                         options.GetClientID(),
 		"client_secret":                     options.GetClientSecret(),
@@ -985,6 +1072,7 @@ func flattenConnectionOptionsOkta(
 		"id_token_signed_response_algs":     options.GetIDTokenSignedResponseAlgs(),
 		"token_endpoint_jwtca_aud_format":   options.GetTokenEndpointJwtcaAudFormat(),
 		"id_token_session_expiry_supported": options.GetIDTokenSessionExpirySupported(),
+		"oidc_metadata":                     oidcMetadata,
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())

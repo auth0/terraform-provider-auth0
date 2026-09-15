@@ -25,6 +25,14 @@ resource "auth0_connection_profile" "my_profile" {
     "scim",
     "universal_logout"
   ]
+
+  # Requires the `my_orgs_cross_app_access_resource_app` tenant flag (EA only).
+  cross_app_access_resource_app {
+    status {
+      default_value  = "enabled"
+      allowed_values = ["enabled", "disabled"]
+    }
+  }
 }
 ```
 
@@ -39,6 +47,7 @@ resource "auth0_connection_profile" "my_profile" {
 
 - `connection_config` (Block List, Max: 1) Connection configuration for the profile. (see [below for nested schema](#nestedblock--connection_config))
 - `connection_name_prefix_template` (String) Template for generating connection names from the profile.
+- `cross_app_access_resource_app` (Block List, Max: 1) Configures the connection profile as a Cross-App Access (XAA) resource application, controlling whether organization admins may enable XAA on their identity providers. Requires the `my_orgs_cross_app_access_resource_app` tenant flag to be enabled (EA only). Note: this is distinct from, and unrelated to, `cross_app_access_resource_app` on `auth0_connection`, which uses a flat `status` string rather than this nested `status` block. (see [below for nested schema](#nestedblock--cross_app_access_resource_app))
 - `enabled_features` (List of String) List of enabled features for the connection profile.
 - `organization` (Block List, Max: 1) Organization associated with the connection profile. (see [below for nested schema](#nestedblock--organization))
 - `strategy_overrides` (Block List, Max: 1) Strategy overrides for the connection profile. (see [below for nested schema](#nestedblock--strategy_overrides))
@@ -49,6 +58,26 @@ resource "auth0_connection_profile" "my_profile" {
 
 <a id="nestedblock--connection_config"></a>
 ### Nested Schema for `connection_config`
+
+
+<a id="nestedblock--cross_app_access_resource_app"></a>
+### Nested Schema for `cross_app_access_resource_app`
+
+Required:
+
+- `status` (Block List, Min: 1, Max: 1) The Cross App Access resource app status configuration. (see [below for nested schema](#nestedblock--cross_app_access_resource_app--status))
+
+<a id="nestedblock--cross_app_access_resource_app--status"></a>
+### Nested Schema for `cross_app_access_resource_app.status`
+
+Required:
+
+- `default_value` (String) Default status value for organizations that don't have an explicit override. Either `enabled` or `disabled`.
+
+Optional:
+
+- `allowed_values` (List of String) Status values organizations are allowed to set. When specified, must contain both "enabled" and "disabled" — the API enforces a minimum of 2 unique values drawn from a 2-value enum, so any non-empty list must be the full pair. Omit entirely to leave it unrestricted.
+
 
 
 <a id="nestedblock--organization"></a>

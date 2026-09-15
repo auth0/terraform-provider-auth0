@@ -39,7 +39,7 @@ func NewResource() *schema.Resource {
 			// which is required before ForceNew can be called on a Computed-only
 			// attribute. Without it, ForceNew errors with "No changes for status".
 			func(_ context.Context, d *schema.ResourceDiff, _ interface{}) error {
-				if d.Get("deploy").(bool) && d.Get("status").(string) == string(management.ActionStatusFailed) {
+				if d.Get("deploy").(bool) && d.Get("status").(string) == management.ActionStatusFailed {
 					if err := d.SetNewComputed("status"); err != nil {
 						return err
 					}

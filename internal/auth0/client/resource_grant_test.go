@@ -341,8 +341,6 @@ resource "auth0_client_grant" "my_client_grant" {
 `
 
 func TestAccClientGrant_AnonymousUser(t *testing.T) {
-	testAccPreCheckFeatureAnonymousSessions(t)
-
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{

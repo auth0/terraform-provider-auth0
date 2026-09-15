@@ -640,9 +640,20 @@ resource "auth0_resource_server" "my_resource_server" {
 }
 `
 
-func TestAccResourceServerAnonymousUser(t *testing.T) {
-	testAccPreCheckFeatureAnonymousSessions(t)
+const testAccResourceServerAnonymousUserRemoved = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
 
+	subject_type_authorization {
+		anonymous_user {
+			policy = "deny_all"
+		}
+	}
+}
+`
+
+func TestAccResourceServerAnonymousUser(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -659,14 +670,16 @@ func TestAccResourceServerAnonymousUser(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "subject_type_authorization.0.anonymous_user.0.policy", "deny_all"),
 				),
 			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAnonymousUserRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime_for_anonymous_access_tokens", "0"),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccResourceServerAnonymousUserRemoved, t.Name()),
+				PlanOnly: true,
+			},
 		},
 	})
-}
-
-func testAccPreCheckFeatureAnonymousSessions(t *testing.T) {
-	t.Helper()
-
-	if os.Getenv("AUTH0_FEATURE_ANONYMOUS_SESSIONS") == "" {
-		t.Skip("AUTH0_FEATURE_ANONYMOUS_SESSIONS must be set for this acceptance test to run")
-	}
 }

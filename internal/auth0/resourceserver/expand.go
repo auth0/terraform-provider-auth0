@@ -89,6 +89,13 @@ func isAuthorizationPolicyNull(data *schema.ResourceData) bool {
 		data.GetRawConfig().GetAttr("authorization_policy").LengthInt() == 0
 }
 
+func isTokenLifetimeForAnonymousAccessTokensNull(data *schema.ResourceData) bool {
+	if !data.HasChange("token_lifetime_for_anonymous_access_tokens") {
+		return false
+	}
+	return data.GetRawConfig().GetAttr("token_lifetime_for_anonymous_access_tokens").IsNull()
+}
+
 // fetchNullableFields returns a map of fields that need to be explicitly set
 // to null on the resource server via a follow-up PATCH request, since the
 // regular Update call uses `omitempty` and cannot transmit nil values.
@@ -96,11 +103,12 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 	type nullCheckFunc func(*schema.ResourceData) bool
 
 	checks := map[string]nullCheckFunc{
-		"consent_policy":        isConsentPolicyNull,
-		"authorization_details": isAuthorizationDetailsNull,
-		"token_encryption":      isTokenEncryptionNull,
-		"proof_of_possession":   isProofOfPossessionNull,
-		"authorization_policy":  isAuthorizationPolicyNull,
+		"consent_policy":                             isConsentPolicyNull,
+		"authorization_details":                      isAuthorizationDetailsNull,
+		"token_encryption":                           isTokenEncryptionNull,
+		"proof_of_possession":                        isProofOfPossessionNull,
+		"authorization_policy":                       isAuthorizationPolicyNull,
+		"token_lifetime_for_anonymous_access_tokens": isTokenLifetimeForAnonymousAccessTokensNull,
 	}
 
 	nullableMap := make(map[string]interface{})

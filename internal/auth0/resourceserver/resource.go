@@ -113,8 +113,8 @@ func NewResource() *schema.Resource {
 				Optional:     true,
 				ValidateFunc: validation.IntBetween(86400, 2592000),
 				Description: "Number of seconds during which anonymous-session access tokens issued for this " +
-					"resource server remain valid. Minimum 86400 (1 day), maximum 2592000 (30 days)." +
-					"Once set, this value cannot be unset; can be changed to a value within the allowed range. (EA only)",
+					"resource server remain valid. Minimum 86400 (1 day), maximum 2592000 (30 days). " +
+					"Removing this attribute clears the value on the API. (EA only)",
 			},
 			"skip_consent_for_verifiable_first_party_clients": {
 				Type:        schema.TypeBool,

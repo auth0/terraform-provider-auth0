@@ -695,23 +695,13 @@ func TestAccTenant_CountryCodes(t *testing.T) {
 	})
 }
 
-// testAccPreCheckFeatureAnonymousSessions skips the test unless
-// AUTH0_FEATURE_ANONYMOUS_SESSIONS is set, since the sessions.anonymous block on
-// auth0_tenant requires a tenant with the Anonymous Sessions Early Access add-on
-// enabled.
-func testAccPreCheckFeatureAnonymousSessions(t *testing.T) {
-	t.Helper()
-
-	if os.Getenv("AUTH0_FEATURE_ANONYMOUS_SESSIONS") == "" {
-		t.Skip("AUTH0_FEATURE_ANONYMOUS_SESSIONS must be set for this acceptance test to run")
-	}
-}
-
 const testAccTenantAnonymousSessionsCreate = `
 resource "auth0_tenant" "my_tenant" {
 	friendly_name = "Anonymous Sessions Test"
 
 	sessions {
+		oidc_logout_prompt_enabled = false
+
 		anonymous {
 			lifetime_in_minutes = 43200
 			activate_cookie     = true
@@ -725,6 +715,8 @@ resource "auth0_tenant" "my_tenant" {
 	friendly_name = "Anonymous Sessions Test"
 
 	sessions {
+		oidc_logout_prompt_enabled = false
+
 		anonymous {
 			lifetime_in_minutes = 60
 			activate_cookie     = false
@@ -744,8 +736,6 @@ resource "auth0_tenant" "my_tenant" {
 `
 
 func TestAccTenant_AnonymousSessions(t *testing.T) {
-	testAccPreCheckFeatureAnonymousSessions(t)
-
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{

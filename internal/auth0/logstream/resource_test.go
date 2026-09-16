@@ -249,6 +249,93 @@ func TestAccLogStreamEventBridge(t *testing.T) {
 	})
 }
 
+const logStreamEventBridgePIIConfig = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-aws-pii-{{.testName}}"
+	type = "eventbridge"
+
+	filters = [
+		{
+			type = "category"
+			name = "auth.login.success"
+		},
+		{
+			type = "category"
+			name = "auth.logout.success"
+		}
+	]
+
+	sink {
+	  aws_account_id = "999999999999"
+	  aws_region = "us-west-2"
+	}
+
+	pii_config {
+		log_fields = ["first_name", "email"]
+		method = "hash"
+		algorithm = "xxhash"
+	}
+}
+`
+
+// logStreamEventBridgePIIConfigFilterOnlyChange keeps pii_config and the sink identical to
+// logStreamEventBridgePIIConfig and changes only the filters. This reproduces ESD-67874:
+// a filter-only update must not drop the PII obfuscation.
+const logStreamEventBridgePIIConfigFilterOnlyChange = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-aws-pii-{{.testName}}"
+	type = "eventbridge"
+
+	filters = [
+		{
+			type = "category"
+			name = "auth.login.success"
+		}
+	]
+
+	sink {
+	  aws_account_id = "999999999999"
+	  aws_region = "us-west-2"
+	}
+
+	pii_config {
+		log_fields = ["first_name", "email"]
+		method = "hash"
+		algorithm = "xxhash"
+	}
+}
+`
+
+func TestAccLogStreamEventBridgePIIConfigPreservedOnFilterChange(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(logStreamEventBridgePIIConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventbridge"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "2"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "pii_config.0.log_fields.#", "2"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "pii_config.0.method", "hash"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "pii_config.0.algorithm", "xxhash"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(logStreamEventBridgePIIConfigFilterOnlyChange, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventbridge"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "1"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.0.name", "auth.login.success"),
+					// The filter-only change must not drop pii_config (ESD-67874).
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "pii_config.#", "1"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "pii_config.0.log_fields.#", "2"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "pii_config.0.method", "hash"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "pii_config.0.algorithm", "xxhash"),
+				),
+			},
+		},
+	})
+}
+
 const logStreamAzureEventGridConfig = `
 resource "auth0_log_stream" "my_log_stream" {
 	name = "Acceptance-Test-LogStream-azure-{{.testName}}"

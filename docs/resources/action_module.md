@@ -77,7 +77,6 @@ resource "auth0_action" "my_action" {
 - `dependencies` (Block Set) List of third party npm modules, and their versions, that this action module depends on. (see [below for nested schema](#nestedblock--dependencies))
 - `publish` (Boolean) Publishing a module will create a new immutable version of the module from the current draft. Actions using this module can then reference the published version.
 - `secrets` (Block Set) List of secrets that are included in the action module. Partial management of secrets is not supported. (see [below for nested schema](#nestedblock--secrets))
-- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -108,15 +107,6 @@ Required:
 Read-Only:
 
 - `updated_at` (String) Last update time
-
-
-<a id="nestedblock--timeouts"></a>
-### Nested Schema for `timeouts`
-
-Optional:
-
-- `create` (String)
-- `update` (String)
 
 
 <a id="nestedatt--latest_version"></a>

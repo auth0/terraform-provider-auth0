@@ -78,6 +78,27 @@ var resourceSchema = map[string]*schema.Schema{
 		Optional:    true,
 		Description: "Display connection as a button. Only available on enterprise connections.",
 	},
+	// The options_client_secret_wo attribute is a sibling of the Computed options block because
+	// the SDK does not allow WriteOnly attributes inside a Computed block.
+	"options_client_secret_wo": {
+		Type:          schema.TypeString,
+		Optional:      true,
+		WriteOnly:     true,
+		Sensitive:     true,
+		ConflictsWith: []string{"options.0.client_secret"},
+		RequiredWith:  []string{"options_client_secret_wo_version"},
+		Description: "The strategy's client secret (write-only). This value is **not** stored in " +
+			"Terraform state and can be sourced from an ephemeral value. Bump " +
+			"`options_client_secret_wo_version` to rotate it. Conflicts with `options.client_secret`.",
+	},
+	"options_client_secret_wo_version": {
+		Type:         schema.TypeInt,
+		Optional:     true,
+		RequiredWith: []string{"options_client_secret_wo"},
+		Description: "Version counter for `options_client_secret_wo`, required whenever the write-only secret is set. " +
+			"Must be a positive integer starting at `1`. This value signals rotation intent, " +
+			"though the secret is resent even for other config updates.",
+	},
 	"options":                         optionsSchema,
 	"authentication":                  authenticationSchema,
 	"connected_accounts":              connectedAccountsSchema,
@@ -426,10 +447,13 @@ var optionsSchema = &schema.Schema{
 				Description: "The strategy's client ID.",
 			},
 			"client_secret": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Sensitive:   true,
-				Description: "The strategy's client secret.",
+				Type:          schema.TypeString,
+				Optional:      true,
+				Sensitive:     true,
+				ConflictsWith: []string{"options_client_secret_wo"},
+				Description: "The strategy's client secret. " +
+					"**Note:** For better security, consider using `options_client_secret_wo` instead " +
+					"to avoid storing the secret in Terraform state.",
 			},
 			"custom_headers": {
 				Type: schema.TypeSet,

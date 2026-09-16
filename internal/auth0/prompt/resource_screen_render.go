@@ -20,6 +20,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
+// promptConfirmation and screenConfirmation are defined here because they were
+// added to the go-auth0 SDK in a version later than what this branch pins.
+const (
+	promptConfirmation management.PromptType = "confirmation"
+	screenConfirmation management.ScreenName = "confirmation"
+)
+
 var (
 	allowedPromptsSettingsRenderer = []string{
 		string(management.PromptSignupID),
@@ -55,6 +62,7 @@ var (
 		string(management.PromptCustomizedConsent),
 		string(management.PromptEmailOTPChallenge),
 		string(management.PromptBruteForceProtection),
+		string(promptConfirmation),
 	}
 	allowedScreensSettingsRenderer = []string{
 		string(management.ScreenSignupID),
@@ -137,6 +145,7 @@ var (
 		string(management.ScreenBruteForceProtectionUnblock),
 		string(management.ScreenBruteForceProtectionUnblockFailure),
 		string(management.ScreenBruteForceProtectionUnblockSuccess),
+		string(screenConfirmation),
 	}
 
 	supportedRenderingModes = []string{string(management.RenderingModeStandard), string(management.RenderingModeAdvanced)}

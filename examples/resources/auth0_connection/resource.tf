@@ -79,3 +79,29 @@ resource "auth0_connection" "my_connection" {
     }
   }
 }
+
+# The strategy's client secret can be set as a write-only argument so it is never persisted to
+# Terraform state. It can be sourced from an ephemeral value (e.g. a secrets manager) and is
+# mutually exclusive with `options.client_secret`. Bump `options_client_secret_wo_version` to
+# rotate the secret.
+#
+# NOTE: Write-only arguments require Terraform 1.11 or later.
+resource "auth0_connection" "my_connection_write_only_secret" {
+  name     = "Example-Connection-Write-Only-Secret"
+  strategy = "oidc"
+
+  options_client_secret_wo         = var.connection_client_secret # can be an ephemeral value
+  options_client_secret_wo_version = 1
+
+  options {
+    client_id              = "1234567"
+    type                   = "back_channel"
+    issuer                 = "https://www.paypalobjects.com"
+    jwks_uri               = "https://api.paypal.com/v1/oauth2/certs"
+    discovery_url          = "https://www.paypalobjects.com/.well-known/openid-configuration"
+    token_endpoint         = "https://api.paypal.com/v1/oauth2/token"
+    userinfo_endpoint      = "https://api.paypal.com/v1/oauth2/token/userinfo"
+    authorization_endpoint = "https://www.paypal.com/signin/authorize"
+    scopes                 = ["openid", "email"]
+  }
+}

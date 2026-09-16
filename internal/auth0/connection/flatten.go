@@ -91,6 +91,14 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		return diags
 	}
 
+	// On the write-only path, blank the API-echoed secret before setting state so it never
+	// lands in the legacy options.client_secret mirror, and persist the version.
+	usingWriteOnlySecret := false
+	if _, ok := data.GetOk("options_client_secret_wo_version"); ok {
+		usingWriteOnlySecret = true
+		blankClientSecretInOptions(connectionOptions)
+	}
+
 	result := multierror.Append(
 		data.Set("name", connection.GetName()),
 		data.Set("display_name", connection.GetDisplayName()),
@@ -109,7 +117,27 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		result = multierror.Append(result, data.Set("show_as_button", connection.GetShowAsButton()))
 	}
 
+	if usingWriteOnlySecret {
+		result = multierror.Append(result, data.Set("options_client_secret_wo_version", data.Get("options_client_secret_wo_version")))
+	}
+
 	return diag.FromErr(result.ErrorOrNil())
+}
+
+// blankClientSecretInOptions empties options[0].client_secret in a flattened options list.
+func blankClientSecretInOptions(connectionOptions []interface{}) {
+	if len(connectionOptions) == 0 {
+		return
+	}
+
+	options, ok := connectionOptions[0].(map[string]interface{})
+	if !ok {
+		return
+	}
+
+	if _, ok := options["client_secret"]; ok {
+		options["client_secret"] = ""
+	}
 }
 
 func flattenConnectionForDataSource(data *schema.ResourceData, connection *management.Connection, enabledClients *management.ConnectionEnabledClientList) diag.Diagnostics {

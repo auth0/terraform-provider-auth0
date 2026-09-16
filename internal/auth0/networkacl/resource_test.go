@@ -916,6 +916,126 @@ func TestAccNetworkACLAuth0ManagedBlockPlacement(t *testing.T) {
 	})
 }
 
+const testAccNetworkACLMatchAllCreate = `
+resource "auth0_network_acl" "match_all_acl" {
+	description = "MatchAll Create - {{.testName}}"
+	active = true
+	priority = 99
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match_all = true
+	}
+}
+`
+
+const testAccNetworkACLMatchAllUpdateToSignal = `
+resource "auth0_network_acl" "match_all_acl" {
+	description = "MatchAll Updated To Signal - {{.testName}}"
+	active = true
+	priority = 99
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match {
+			asns = [9453]
+		}
+	}
+}
+`
+
+const testAccNetworkACLMatchAllUpdateFromSignal = `
+resource "auth0_network_acl" "match_all_acl" {
+	description = "MatchAll Updated From Signal - {{.testName}}"
+	active = true
+	priority = 99
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match_all = true
+	}
+}
+`
+
+const testAccNetworkACLMatchAllConflict = `
+resource "auth0_network_acl" "match_all_acl" {
+	description = "MatchAll Conflict - {{.testName}}"
+	active = true
+	priority = 99
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		match_all = true
+		match {
+			asns = [9453]
+		}
+	}
+}
+`
+
+// TestAccNetworkACLMatchAll exercises the match_all field lifecycle:
+// create with match_all, import round-trip, update signal→match_all,
+// and update match_all→signal.
+func TestAccNetworkACLMatchAll(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLMatchAllCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLExists("auth0_network_acl.match_all_acl"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "description", fmt.Sprintf("MatchAll Create - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "active", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "priority", "99"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.action.0.block", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.scope", "tenant"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.match_all", "true"),
+				),
+			},
+			{
+				ResourceName:      "auth0_network_acl.match_all_acl",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLMatchAllUpdateToSignal, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "description", fmt.Sprintf("MatchAll Updated To Signal - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.match.0.asns.0", "9453"),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.match_all", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLMatchAllUpdateFromSignal, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "description", fmt.Sprintf("MatchAll Updated From Signal - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_network_acl.match_all_acl", "rule.0.match_all", "true"),
+				),
+			},
+		},
+	})
+}
+
+// TestAccNetworkACLMatchAllConflict verifies that specifying match_all=true
+// alongside a match block is rejected at apply time.
+func TestAccNetworkACLMatchAllConflict(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccNetworkACLMatchAllConflict, t.Name()),
+				ExpectError: regexp.MustCompile("conflicts with rule.0.match"),
+			},
+		},
+	})
+}
+
 // Test for edge cases and maximum values.
 func TestAccNetworkACLEdgeCases(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
@@ -938,6 +1058,104 @@ func TestAccNetworkACLEdgeCases(t *testing.T) {
 			},
 			{
 				ResourceName:      "auth0_network_acl.max_acl",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+// testAccNetworkACLHTTPMessageSignature tests the http_message_signature block in not_match.
+// Uses priority 99 to avoid conflicts with pre-existing ACLs on the acceptance test tenant.
+const testAccNetworkACLHTTPMessageSignatureCreate = `
+resource "auth0_network_acl_key" "sig_key" {
+	name  = "HMS Test Key - {{.testName}}"
+	alg   = "hmac-sha256"
+	value = "Ygj0G7pdGNmu+eCPdnK32PpzvmFDoFtDcJtiJaRGX1I="
+}
+
+resource "auth0_network_acl" "sig_acl" {
+	description = "HMS ACL - {{.testName}}"
+	active      = true
+	priority    = 99
+	rule {
+		action {
+			block = true
+		}
+		scope = "tenant"
+		not_match {
+			http_message_signature {
+				keys {
+					id = auth0_network_acl_key.sig_key.id
+				}
+			}
+		}
+	}
+}
+`
+
+const testAccNetworkACLHTTPMessageSignatureUpdate = `
+resource "auth0_network_acl_key" "sig_key" {
+	name  = "HMS Test Key - {{.testName}}"
+	alg   = "hmac-sha256"
+	value = "Ygj0G7pdGNmu+eCPdnK32PpzvmFDoFtDcJtiJaRGX1I="
+}
+
+resource "auth0_network_acl_key" "sig_key2" {
+	name  = "HMS Test Key 2 - {{.testName}}"
+	alg   = "hmac-sha256"
+	value = "Cu+NlOFp9kwS5ien+E3INXOelFFLszwO63pcRg5jmag="
+}
+
+resource "auth0_network_acl" "sig_acl" {
+	description = "HMS ACL Updated - {{.testName}}"
+	active      = true
+	priority    = 99
+	rule {
+		action {
+			allow = true
+		}
+		scope = "tenant"
+		not_match {
+			http_message_signature {
+				keys {
+					id = auth0_network_acl_key.sig_key.id
+				}
+				keys {
+					id = auth0_network_acl_key.sig_key2.id
+				}
+			}
+		}
+	}
+}
+`
+
+// TestAccNetworkACLHTTPMessageSignature verifies CRUD for ACL rules with http_message_signature.
+func TestAccNetworkACLHTTPMessageSignature(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccNetworkACLHTTPMessageSignatureCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					checkNetworkACLExists("auth0_network_acl.sig_acl"),
+					resource.TestCheckResourceAttr("auth0_network_acl.sig_acl", "priority", "99"),
+					resource.TestCheckResourceAttr("auth0_network_acl.sig_acl", "rule.0.action.0.block", "true"),
+					resource.TestCheckResourceAttr("auth0_network_acl.sig_acl", "rule.0.not_match.0.http_message_signature.0.keys.#", "1"),
+					resource.TestCheckResourceAttrSet("auth0_network_acl.sig_acl", "rule.0.not_match.0.http_message_signature.0.keys.0.id"),
+				),
+			},
+			{
+				// Add a second key and update description.
+				Config: acctest.ParseTestName(testAccNetworkACLHTTPMessageSignatureUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_network_acl.sig_acl", "rule.0.not_match.0.http_message_signature.0.keys.#", "2"),
+					resource.TestCheckResourceAttr("auth0_network_acl.sig_acl", "rule.0.action.0.allow", "true"),
+					resource.TestCheckResourceAttrSet("auth0_network_acl.sig_acl", "rule.0.not_match.0.http_message_signature.0.keys.0.id"),
+					resource.TestCheckResourceAttrSet("auth0_network_acl.sig_acl", "rule.0.not_match.0.http_message_signature.0.keys.1.id"),
+				),
+			},
+			{
+				ResourceName:      "auth0_network_acl.sig_acl",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},

@@ -4126,3 +4126,67 @@ func TestAccClientB2BIntegrationConfigurationWithSSOProfiles(t *testing.T) {
 		},
 	})
 }
+
+const testAccClientAnonymousSessionsActive = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - Anonymous Sessions - {{.testName}}"
+	app_type        = "non_interactive"
+	oidc_conformant = true
+
+	anonymous_sessions {
+		active = true
+	}
+}
+`
+
+const testAccClientAnonymousSessionsInactive = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - Anonymous Sessions - {{.testName}}"
+	app_type        = "non_interactive"
+	oidc_conformant = true
+
+	anonymous_sessions {
+		active = false
+	}
+}
+`
+
+const testAccClientAnonymousSessionsRemoved = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - Anonymous Sessions - {{.testName}}"
+	app_type        = "non_interactive"
+	oidc_conformant = true
+}
+`
+
+func TestAccClientAnonymousSessions(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientAnonymousSessionsActive, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.0.active", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientAnonymousSessionsInactive, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.0.active", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientAnonymousSessionsRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.#", "0"),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccClientAnonymousSessionsRemoved, t.Name()),
+				PlanOnly: true,
+			},
+		},
+	})
+}

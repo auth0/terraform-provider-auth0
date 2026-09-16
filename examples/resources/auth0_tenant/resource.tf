@@ -24,6 +24,12 @@ resource "auth0_tenant" "my_tenant" {
 
   sessions {
     oidc_logout_prompt_enabled = false
+
+    # Anonymous Sessions is an Early Access feature.
+    anonymous {
+      lifetime_in_minutes = 43200
+      activate_cookie     = true
+    }
   }
 
   error_page {

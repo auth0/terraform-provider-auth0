@@ -37,6 +37,7 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.SigningSecret = value.String(cfg.GetAttr("signing_secret"))
 		resourceServer.AllowOfflineAccess = value.Bool(cfg.GetAttr("allow_offline_access"))
 		resourceServer.TokenLifetimeForWeb = value.Int(cfg.GetAttr("token_lifetime_for_web"))
+		resourceServer.TokenLifetimeForAnonymousAccessTokens = value.Int(cfg.GetAttr("token_lifetime_for_anonymous_access_tokens"))
 		resourceServer.EnforcePolicies = value.Bool(cfg.GetAttr("enforce_policies"))
 		resourceServer.TokenDialect = value.String(cfg.GetAttr("token_dialect"))
 		resourceServer.VerificationLocation = value.String(cfg.GetAttr("verification_location"))
@@ -88,6 +89,13 @@ func isAuthorizationPolicyNull(data *schema.ResourceData) bool {
 		data.GetRawConfig().GetAttr("authorization_policy").LengthInt() == 0
 }
 
+func isTokenLifetimeForAnonymousAccessTokensNull(data *schema.ResourceData) bool {
+	if !data.HasChange("token_lifetime_for_anonymous_access_tokens") {
+		return false
+	}
+	return data.GetRawConfig().GetAttr("token_lifetime_for_anonymous_access_tokens").IsNull()
+}
+
 // fetchNullableFields returns a map of fields that need to be explicitly set
 // to null on the resource server via a follow-up PATCH request, since the
 // regular Update call uses `omitempty` and cannot transmit nil values.
@@ -95,11 +103,12 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 	type nullCheckFunc func(*schema.ResourceData) bool
 
 	checks := map[string]nullCheckFunc{
-		"consent_policy":        isConsentPolicyNull,
-		"authorization_details": isAuthorizationDetailsNull,
-		"token_encryption":      isTokenEncryptionNull,
-		"proof_of_possession":   isProofOfPossessionNull,
-		"authorization_policy":  isAuthorizationPolicyNull,
+		"consent_policy":                             isConsentPolicyNull,
+		"authorization_details":                      isAuthorizationDetailsNull,
+		"token_encryption":                           isTokenEncryptionNull,
+		"proof_of_possession":                        isProofOfPossessionNull,
+		"authorization_policy":                       isAuthorizationPolicyNull,
+		"token_lifetime_for_anonymous_access_tokens": isTokenLifetimeForAnonymousAccessTokensNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -130,6 +139,14 @@ func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.Resou
 			// Changes to the client block in subject_type_authorization are not allowed for the management API.
 			// This check prevents silently ignoring such errors.
 			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
+		}
+
+		if !isManagementAPI {
+			sta.AnonymousUser = expandSubjectTypeAuthorizationAnonymousUser(cfg.GetAttr("anonymous_user"))
+		} else if data.HasChange("subject_type_authorization.0.anonymous_user") {
+			// For management API, updating anonymous_user is rejected with 400, so only send it when
+			// explicitly changed, matching the client guard above.
+			sta.AnonymousUser = expandSubjectTypeAuthorizationAnonymousUser(cfg.GetAttr("anonymous_user"))
 		}
 
 		return stop
@@ -178,6 +195,21 @@ func expandSubjectTypeAuthorizationClient(clientConfig cty.Value) *management.Re
 	}
 
 	return &client
+}
+
+func expandSubjectTypeAuthorizationAnonymousUser(anonymousUserConfig cty.Value) *management.ResourceServerSubjectTypeAuthorizationAnonymousUser {
+	if anonymousUserConfig.IsNull() || anonymousUserConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var anonymousUser management.ResourceServerSubjectTypeAuthorizationAnonymousUser
+
+	anonymousUserConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		anonymousUser.Policy = value.String(cfg.GetAttr("policy"))
+		return stop
+	})
+
+	return &anonymousUser
 }
 
 func expandResourceServerScopes(scopes cty.Value) *[]management.ResourceServerScope {

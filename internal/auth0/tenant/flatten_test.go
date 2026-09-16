@@ -297,6 +297,40 @@ func TestFlattenTenant(t *testing.T) {
 		assert.Equal(t, "", mockResourceData.Get("dynamic_client_registration_security_mode"))
 	})
 
+	t.Run("it sets the anonymous sessions block when the API returns it", func(t *testing.T) {
+		tenant := management.Tenant{
+			Sessions: &management.TenantSessions{
+				Anonymous: &management.TenantSessionsAnonymous{
+					LifetimeInMinutes: auth0.Int(43200),
+					ActivateCookie:    auth0.Bool(true),
+				},
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		sessions := mockResourceData.Get("sessions").([]interface{})[0].(map[string]interface{})
+		anonymous := sessions["anonymous"].([]interface{})
+		assert.Len(t, anonymous, 1)
+		assert.Equal(t, 43200, anonymous[0].(map[string]interface{})["lifetime_in_minutes"])
+		assert.Equal(t, true, anonymous[0].(map[string]interface{})["activate_cookie"])
+	})
+
+	t.Run("it omits the anonymous sessions block when the API does not return it", func(t *testing.T) {
+		tenant := management.Tenant{
+			Sessions: &management.TenantSessions{
+				OIDCLogoutPromptEnabled: auth0.Bool(true),
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		sessions := mockResourceData.Get("sessions").([]interface{})[0].(map[string]interface{})
+		assert.Len(t, sessions["anonymous"].([]interface{}), 0)
+	})
+
 	t.Run("it sets country_codes to nil if remote tenant does not have it set", func(t *testing.T) {
 		tenant := management.Tenant{
 			CountryCodes: nil,

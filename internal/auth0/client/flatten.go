@@ -17,6 +17,18 @@ import (
 
 const timeRFC3339WithMilliseconds = "2006-01-02T15:04:05.000Z07:00"
 
+func flattenClientAnonymousSessions(anonymousSessions *management.ClientAnonymousSessions) []interface{} {
+	if anonymousSessions == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"active": anonymousSessions.GetActive(),
+		},
+	}
+}
+
 func flattenCustomSocialConfiguration(customSocial *management.ClientNativeSocialLogin) []interface{} {
 	if customSocial == nil {
 		return nil
@@ -701,6 +713,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("custom_login_page", client.GetCustomLoginPage()),
 		data.Set("form_template", client.GetFormTemplate()),
 		data.Set("native_social_login", flattenCustomSocialConfiguration(client.GetNativeSocialLogin())),
+		data.Set("anonymous_sessions", flattenClientAnonymousSessions(client.GetAnonymousSessions())),
 		data.Set("jwt_configuration", flattenClientJwtConfiguration(client.GetJWTConfiguration())),
 		data.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
 		data.Set("addons", flattenClientAddons(client.GetAddons())),

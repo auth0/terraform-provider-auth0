@@ -2,6 +2,7 @@ package client_test
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -293,6 +294,154 @@ func TestAccClientGrant_DefaultFor(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_grant.default_for_grant", "default_for", "third_party_clients"),
 					resource.TestCheckResourceAttr("auth0_client_grant.default_for_grant", "scopes.#", "2"),
 				),
+			},
+		},
+	})
+}
+
+const testAccGivenAClientAndAResourceServerForAnonymousUser = `
+resource "auth0_client" "my_client" {
+	name                 = "Acceptance Test - Anonymous Grant - {{.testName}}"
+	custom_login_page_on = true
+	is_first_party       = true
+}
+
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - Anonymous Grant - {{.testName}}"
+	identifier = "https://uat.tf.terraform-provider-auth0.com/anon-grant/{{.testName}}"
+
+	subject_type_authorization {
+		anonymous_user {
+			policy = "require_client_grant"
+		}
+	}
+}
+
+resource "auth0_resource_server_scopes" "my_api_scopes" {
+	depends_on = [ auth0_resource_server.my_resource_server ]
+
+	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+
+	scopes {
+		name        = "create:foo"
+		description = "Create foos"
+	}
+}
+`
+
+const testAccClientGrantConfigAnonymousUser = testAccGivenAClientAndAResourceServerForAnonymousUser + `
+resource "auth0_client_grant" "my_client_grant" {
+	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
+
+	client_id    = auth0_client.my_client.id
+	audience     = auth0_resource_server.my_resource_server.identifier
+	scopes       = ["create:foo"]
+	subject_type = "anonymous_user"
+}
+`
+
+func TestAccClientGrant_AnonymousUser(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientGrantConfigAnonymousUser, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "subject_type", "anonymous_user"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.0", "create:foo"),
+				),
+			},
+		},
+	})
+}
+
+// The following tests cover the CustomizeDiff mutual-exclusivity checks in
+// validateClientGrant: organization_usage, allow_any_organization,
+// authorization_details_types, and default_for cannot be set alongside
+// subject_type = "anonymous_user". The errors are raised at plan time (before any
+// API call), so each records only the provider-configure interaction. They are not
+// gated behind the feature flag because the validation runs regardless of it.
+
+const testAccClientGrantAnonymousUserWithOrganizationUsage = `
+resource "auth0_client_grant" "my_client_grant" {
+	client_id          = "test-client-id"
+	audience           = "https://api.example.com/anonymous"
+	scopes             = []
+	subject_type       = "anonymous_user"
+	organization_usage = "deny"
+}
+`
+
+const testAccClientGrantAnonymousUserWithAllowAnyOrganization = `
+resource "auth0_client_grant" "my_client_grant" {
+	client_id              = "test-client-id"
+	audience               = "https://api.example.com/anonymous"
+	scopes                 = []
+	subject_type           = "anonymous_user"
+	allow_any_organization = true
+}
+`
+
+const testAccClientGrantAnonymousUserWithAuthorizationDetailsTypes = `
+resource "auth0_client_grant" "my_client_grant" {
+	client_id                   = "test-client-id"
+	audience                    = "https://api.example.com/anonymous"
+	scopes                      = []
+	subject_type                = "anonymous_user"
+	authorization_details_types = ["payment"]
+}
+`
+
+// default_for conflicts with client_id at the schema level, so client_id is omitted
+// here to let the plan reach the anonymous_user CustomizeDiff check.
+const testAccClientGrantAnonymousUserWithDefaultFor = `
+resource "auth0_client_grant" "my_client_grant" {
+	audience     = "https://api.example.com/anonymous"
+	scopes       = []
+	subject_type = "anonymous_user"
+	default_for  = "third_party_clients"
+}
+`
+
+func TestAccClientGrantAnonymousUserRejectsOrganizationUsage(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccClientGrantAnonymousUserWithOrganizationUsage,
+				ExpectError: regexp.MustCompile("`organization_usage` cannot be set for client grants with `subject_type`: anonymous_user"),
+			},
+		},
+	})
+}
+
+func TestAccClientGrantAnonymousUserRejectsAllowAnyOrganization(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccClientGrantAnonymousUserWithAllowAnyOrganization,
+				ExpectError: regexp.MustCompile("`allow_any_organization` cannot be set for client grants with `subject_type`: anonymous_user"),
+			},
+		},
+	})
+}
+
+func TestAccClientGrantAnonymousUserRejectsAuthorizationDetailsTypes(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccClientGrantAnonymousUserWithAuthorizationDetailsTypes,
+				ExpectError: regexp.MustCompile("`authorization_details_types` cannot be set for client grants with `subject_type`: anonymous_user"),
+			},
+		},
+	})
+}
+
+func TestAccClientGrantAnonymousUserRejectsDefaultFor(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccClientGrantAnonymousUserWithDefaultFor,
+				ExpectError: regexp.MustCompile("`default_for` cannot be set for client grants with `subject_type`: anonymous_user"),
 			},
 		},
 	})

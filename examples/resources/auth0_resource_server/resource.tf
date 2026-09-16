@@ -9,6 +9,9 @@ resource "auth0_resource_server" "my_resource_server" {
   token_lifetime                                  = 8600
   skip_consent_for_verifiable_first_party_clients = true
   consent_policy                                  = "transactional-authorization-with-mfa"
+
+  # Anonymous Sessions is an Early Access feature.
+  token_lifetime_for_anonymous_access_tokens = 86400
   token_encryption {
     format = "compact-nested-jwe"
     encryption_key {
@@ -36,6 +39,10 @@ EOF
       policy = "allow_all"
     }
     client {
+      policy = "require_client_grant"
+    }
+    # Anonymous Sessions is an Early Access feature.
+    anonymous_user {
       policy = "require_client_grant"
     }
   }

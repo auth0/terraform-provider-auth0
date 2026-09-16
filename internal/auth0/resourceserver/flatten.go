@@ -15,6 +15,7 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 		data.Set("allow_online_access", resourceServer.GetAllowOnlineAccess()),
 		data.Set("allow_online_access_with_ephemeral_sessions", resourceServer.GetAllowOnlineAccessWithEphemeralSessions()),
 		data.Set("token_lifetime_for_web", resourceServer.GetTokenLifetimeForWeb()),
+		data.Set("token_lifetime_for_anonymous_access_tokens", resourceServer.GetTokenLifetimeForAnonymousAccessTokens()),
 		data.Set("signing_alg", resourceServer.GetSigningAlgorithm()),
 		data.Set("signing_secret", resourceServer.GetSigningSecret()),
 		data.Set(
@@ -167,6 +168,14 @@ func flattenSubjectTypeAuthorization(subjectType *management.ResourceServerSubje
 		m["client"] = []interface{}{
 			map[string]interface{}{
 				"policy": subjectType.GetClient().GetPolicy(),
+			},
+		}
+	}
+
+	if subjectType.GetAnonymousUser() != nil {
+		m["anonymous_user"] = []interface{}{
+			map[string]interface{}{
+				"policy": subjectType.GetAnonymousUser().GetPolicy(),
 			},
 		}
 	}

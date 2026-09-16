@@ -111,6 +111,7 @@ func expandTenantSessions(config cty.Value) *management.TenantSessions {
 
 	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		sessions.OIDCLogoutPromptEnabled = value.Bool(cfg.GetAttr("oidc_logout_prompt_enabled"))
+		sessions.Anonymous = expandTenantSessionsAnonymous(cfg.GetAttr("anonymous"))
 		return stop
 	})
 
@@ -119,6 +120,22 @@ func expandTenantSessions(config cty.Value) *management.TenantSessions {
 	}
 
 	return &sessions
+}
+
+func expandTenantSessionsAnonymous(config cty.Value) *management.TenantSessionsAnonymous {
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var anonymous management.TenantSessionsAnonymous
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		anonymous.LifetimeInMinutes = value.Int(cfg.GetAttr("lifetime_in_minutes"))
+		anonymous.ActivateCookie = value.Bool(cfg.GetAttr("activate_cookie"))
+		return stop
+	})
+
+	return &anonymous
 }
 
 func expandTenantOIDCLogout(config cty.Value) *management.TenantOIDCLogout {
@@ -318,7 +335,38 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 		}
 	}
 
+	// Remove sessions.anonymous via nested null:
+	// {"sessions":{"anonymous":null}} preserves sibling fields, while
+	// {"sessions":{}} would wipe them. Never send the latter.
+	if isSessionsAnonymousNull(data) {
+		nullableMap["sessions"] = map[string]interface{}{"anonymous": nil}
+	}
+
 	return nullableMap
+}
+
+func isSessionsAnonymousNull(data *schema.ResourceData) bool {
+	if !data.HasChange("sessions.0.anonymous") {
+		return false
+	}
+
+	sessions := data.GetRawConfig().GetAttr("sessions")
+	if sessions.IsNull() || sessions.LengthInt() == 0 {
+		// The parent sessions block is Optional+Computed, so its own removal is
+		// suppressed and never reaches the API; do not emit a nested null in that case.
+		return false
+	}
+
+	var anonymousRemoved bool
+	sessions.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		anonymous := cfg.GetAttr("anonymous")
+		if anonymous.IsNull() || anonymous.LengthInt() == 0 {
+			anonymousRemoved = true
+		}
+		return stop
+	})
+
+	return anonymousRemoved
 }
 
 func isDefaultTokenQuotaNull(data *schema.ResourceData) bool {

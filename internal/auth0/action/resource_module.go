@@ -2,12 +2,9 @@ package action
 
 import (
 	"context"
-	"fmt"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
@@ -21,10 +18,6 @@ func NewModuleResource() *schema.Resource {
 		ReadContext:   readActionModule,
 		UpdateContext: updateActionModule,
 		DeleteContext: deleteActionModule,
-		Timeouts: &schema.ResourceTimeout{
-			Create: schema.DefaultTimeout(5 * time.Minute),
-			Update: schema.DefaultTimeout(5 * time.Minute),
-		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -263,29 +256,5 @@ func publishActionModule(ctx context.Context, data *schema.ResourceData, meta in
 		return err
 	}
 
-	if err := data.Set("version_id", moduleVersion.GetID()); err != nil {
-		return err
-	}
-
-	// Wait until the module reflects all_changes_published=true before
-	// returning. The Auth0 backend builds the module bundle asynchronously;
-	// dependent auth0_action resources that start their own builds immediately
-	// after this resource completes will race against the module build and fail
-	// with status="failed" if we return too early.
-	publishedVersionNumber := moduleVersion.GetVersionNumber()
-	return retry.RetryContext(ctx, data.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
-		mod, err := apiv3.Actions.Modules.Get(ctx, data.Id())
-		if err != nil {
-			return retry.NonRetryableError(err)
-		}
-		if !mod.GetAllChangesPublished() || mod.GetLatestVersionNumber() < publishedVersionNumber {
-			return retry.RetryableError(
-				fmt.Errorf(
-					"module %q version %d not yet ready (latest=%d, all_published=%v)",
-					mod.GetName(), publishedVersionNumber, mod.GetLatestVersionNumber(), mod.GetAllChangesPublished(),
-				),
-			)
-		}
-		return nil
-	})
+	return data.Set("version_id", moduleVersion.GetID())
 }

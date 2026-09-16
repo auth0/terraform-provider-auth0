@@ -159,10 +159,7 @@ func expandLogStreamSinkMixpanel(config cty.Value) *management.LogStreamSinkMixp
 }
 
 func expandLogStreamPIIConfig(data *schema.ResourceData) *management.LogStreamPiiConfig {
-	if !data.IsNewResource() && !data.HasChange("pii_config") {
-		return nil
-	}
-
+	// PATCH clears pii_config when omitted; always include it when present.
 	config := data.GetRawConfig().GetAttr("pii_config")
 	if config.IsNull() {
 		return nil

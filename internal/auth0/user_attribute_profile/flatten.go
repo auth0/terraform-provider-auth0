@@ -12,7 +12,7 @@ func flattenUserAttributeProfile(data *schema.ResourceData, userAttributeProfile
 	result := multierror.Append(
 		data.Set("name", userAttributeProfile.GetName()),
 		data.Set("user_id", flattenUserAttributeProfileUserID(userAttributeProfile.UserID)),
-		data.Set("user_attributes", flattenUserAttributeProfileUserAttributes(userAttributeProfile.UserAttributes)),
+		data.Set("user_attributes", flattenUserAttributeProfileUserAttributes(data, userAttributeProfile.UserAttributes)),
 	)
 
 	return result.ErrorOrNil()
@@ -90,22 +90,14 @@ func flattenUserIDStrategyOverrides(overrides map[string]*management.UserAttribu
 	return result
 }
 
-func flattenUserAttributeProfileUserAttributes(userAttributes map[string]*management.UserAttributeProfileUserAttributes) []interface{} {
+func flattenUserAttributeProfileUserAttributes(data *schema.ResourceData, userAttributes map[string]*management.UserAttributeProfileUserAttributes) []interface{} {
 	if len(userAttributes) == 0 {
 		return nil
 	}
 
-	// Create a sorted slice of attribute names for consistent ordering.
-	var attrNames []string
-	for attrName := range userAttributes {
-		attrNames = append(attrNames, attrName)
-	}
-	sort.Strings(attrNames)
-
-	result := make([]interface{}, 0, len(userAttributes))
-
-	for _, attrName := range attrNames {
-		userAttr := userAttributes[attrName]
+	// Build a map of flattened entries keyed by attribute name.
+	attrByName := make(map[string]interface{}, len(userAttributes))
+	for attrName, userAttr := range userAttributes {
 		attrMap := map[string]interface{}{
 			"name":             attrName,
 			"description":      userAttr.GetDescription(),
@@ -139,7 +131,39 @@ func flattenUserAttributeProfileUserAttributes(userAttributes map[string]*manage
 			attrMap["strategy_overrides"] = flattenUserAttributeStrategyOverrides(userAttr.StrategyOverrides)
 		}
 
-		result = append(result, attrMap)
+		attrByName[attrName] = attrMap
+	}
+
+	// Re-order entries to match the current state order so that a TypeList
+	// positional diff is not triggered when the API returns attributes in a
+	// different order than what the user declared in their config.
+	result := make([]interface{}, 0, len(userAttributes))
+	if stateAttrs, ok := data.Get("user_attributes").([]interface{}); ok {
+		for _, stateAttr := range stateAttrs {
+			stateAttrMap, ok := stateAttr.(map[string]interface{})
+			if !ok {
+				continue
+			}
+			name, ok := stateAttrMap["name"].(string)
+			if !ok || name == "" {
+				continue
+			}
+			if entry, found := attrByName[name]; found {
+				result = append(result, entry)
+				delete(attrByName, name)
+			}
+		}
+	}
+
+	// Append any attributes present in the API response but not yet in state,
+	// sorted alphabetically for deterministic ordering.
+	var remaining []string
+	for name := range attrByName {
+		remaining = append(remaining, name)
+	}
+	sort.Strings(remaining)
+	for _, name := range remaining {
+		result = append(result, attrByName[name])
 	}
 
 	return result

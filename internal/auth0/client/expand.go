@@ -1506,11 +1506,13 @@ func expandMyOrganizationConfiguration(data *schema.ResourceData) *management.My
 
 	myOrgConfig.ForEachElement(func(_ cty.Value, elem cty.Value) (stop bool) {
 		result = &management.MyOrganizationConfiguration{
-			ConnectionProfileID:        value.String(elem.GetAttr("connection_profile_id")),
-			UserAttributeProfileID:     value.String(elem.GetAttr("user_attribute_profile_id")),
-			ConnectionDeletionBehavior: value.String(elem.GetAttr("connection_deletion_behavior")),
-			InvitationLandingClientID:  value.String(elem.GetAttr("invitation_landing_client_id")),
-			ThirdPartyClientAccess:     expandMyOrganizationConfigurationThirdPartyClientAccess(elem.GetAttr("third_party_client_access")),
+			ConnectionProfileID:              value.String(elem.GetAttr("connection_profile_id")),
+			UserAttributeProfileID:           value.String(elem.GetAttr("user_attribute_profile_id")),
+			ConnectionDeletionBehavior:       value.String(elem.GetAttr("connection_deletion_behavior")),
+			InvitationLandingClientID:        value.String(elem.GetAttr("invitation_landing_client_id")),
+			ThirdPartyClientAccess:           expandMyOrganizationConfigurationThirdPartyClientAccess(elem.GetAttr("third_party_client_access")),
+			EnforcePermissionCeiling:         value.Bool(elem.GetAttr("enforce_permission_ceiling")),
+			EnforceSelfAssignmentRestriction: value.Bool(elem.GetAttr("enforce_self_assignment_restriction")),
 		}
 
 		allowedStrategiesAttr := elem.GetAttr("allowed_strategies")

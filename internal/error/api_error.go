@@ -65,6 +65,39 @@ func RemoveFromStateWithWarning(resourceType string, data *schema.ResourceData, 
 	}}
 }
 
+// IsInsufficientEntitlement reports whether err represents an Auth0 403
+// insufficient_entitlement response. It handles both the v1 and v3 SDK error
+// types. Use this in Read and Update functions for entitlement-gated resources.
+func IsInsufficientEntitlement(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	// V1 SDK: management.Error exposes Status() and Code().
+	var mErr management.Error
+	if errors.As(err, &mErr) && mErr.Status() == http.StatusForbidden {
+		return mErr.Code() == "insufficient_entitlement"
+	}
+
+	// V3 SDK: delegate to the existing v3-specific helper.
+	return isInsufficientEntitlementV3(err)
+}
+
+// EntitlementWarning returns a non-fatal warning diagnostic for an entitlement-gated
+// feature. Pass the feature name and a phrase describing the consequence of the
+// missing entitlement (e.g. "the configuration was not applied").
+func EntitlementWarning(feature, consequence string) diag.Diagnostic {
+	return diag.Diagnostic{
+		Severity: diag.Warning,
+		Summary:  fmt.Sprintf("%s entitlement not available", feature),
+		Detail: fmt.Sprintf(
+			"%s requires an add-on entitlement not present on this tenant, so %s. "+
+				"Contact Auth0 support to enable this feature.",
+			feature, consequence,
+		),
+	}
+}
+
 // IsStatusNotFound checks to see if the error from the Auth0 Management API is a 404.
 // It understands both the v1 SDK error type, which exposes the status code through the
 // management.Error interface, and the v3 SDK error types, which wrap a *core.APIError

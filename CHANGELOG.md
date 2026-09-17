@@ -1,5 +1,10 @@
 ## Unreleased
 
+ENHANCEMENTS:
+- `resource/auth0_risk_assessments` – Emit a non-fatal warning instead of an error when the tenant lacks the Adaptive MFA entitlement ([#NNNN](https://github.com/auth0/terraform-provider-auth0/pull/NNNN))
+- `resource/auth0_risk_assessments_new_device` – Emit a non-fatal warning instead of an error when the tenant lacks the Adaptive MFA entitlement ([#NNNN](https://github.com/auth0/terraform-provider-auth0/pull/NNNN))
+- `resource/auth0_guardian` – Emit a non-fatal warning when setting `policy = "confidence-score"` on a tenant without the Adaptive MFA entitlement ([#NNNN](https://github.com/auth0/terraform-provider-auth0/pull/NNNN))
+
 ## v1.57.0
 
 FEATURES:

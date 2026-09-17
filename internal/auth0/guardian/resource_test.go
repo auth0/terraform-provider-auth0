@@ -653,3 +653,28 @@ func TestAccGuardianPush(t *testing.T) {
 		},
 	})
 }
+
+const testAccGuardianConfidenceScorePolicy = `
+resource "auth0_guardian" "my_guardian" {
+  policy = "confidence-score"
+}`
+
+// TestAccGuardianPolicyConfidenceScoreInsufficientEntitlement asserts that
+// when the tenant lacks the Adaptive MFA entitlement, setting
+// policy = "confidence-score" emits a non-fatal warning instead of an error.
+// The policy is not applied and readGuardian writes the API's actual value
+// to state, producing a non-empty plan.
+func TestAccGuardianPolicyConfidenceScoreInsufficientEntitlement(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             testAccGuardianConfidenceScorePolicy,
+				ExpectNonEmptyPlan: true,
+				Check: resource.ComposeTestCheckFunc(
+					// The policy was not applied; state reflects the API's actual value.
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "policy", "never"),
+				),
+			},
+		},
+	})
+}

@@ -26,6 +26,7 @@ var _ management.Error = &testManagementError{}
 
 type testManagementError struct {
 	StatusCode int
+	ErrorCode  string
 }
 
 func (m testManagementError) Error() string {
@@ -34,6 +35,10 @@ func (m testManagementError) Error() string {
 
 func (m testManagementError) Status() int {
 	return m.StatusCode
+}
+
+func (m testManagementError) Code() string {
+	return m.ErrorCode
 }
 
 func TestHandleAPIError(t *testing.T) {
@@ -216,4 +221,58 @@ func TestIsStatusNotFound(t *testing.T) {
 			assert.Equal(t, testCase.expected, IsStatusNotFound(testCase.givenErr))
 		})
 	}
+}
+
+func TestIsInsufficientEntitlementV1Path(t *testing.T) {
+	testCases := []struct {
+		name     string
+		givenErr error
+		expected bool
+	}{
+		{
+			name:     "nil error",
+			givenErr: nil,
+			expected: false,
+		},
+		{
+			name:     "v1 SDK 403 with insufficient_entitlement",
+			givenErr: testManagementError{StatusCode: http.StatusForbidden, ErrorCode: "insufficient_entitlement"},
+			expected: true,
+		},
+		{
+			name:     "v1 SDK 403 with insufficient_scope is not an entitlement error",
+			givenErr: testManagementError{StatusCode: http.StatusForbidden, ErrorCode: "insufficient_scope"},
+			expected: false,
+		},
+		{
+			name:     "v1 SDK 403 with empty code is not an entitlement error",
+			givenErr: testManagementError{StatusCode: http.StatusForbidden, ErrorCode: ""},
+			expected: false,
+		},
+		{
+			name:     "v1 SDK 404 with insufficient_entitlement code is not an entitlement error",
+			givenErr: testManagementError{StatusCode: http.StatusNotFound, ErrorCode: "insufficient_entitlement"},
+			expected: false,
+		},
+		{
+			name:     "plain error is not an entitlement error",
+			givenErr: errors.New("403"),
+			expected: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			assert.Equal(t, testCase.expected, IsInsufficientEntitlement(testCase.givenErr))
+		})
+	}
+}
+
+func TestEntitlementWarning(t *testing.T) {
+	diag := EntitlementWarning("Risk Assessment", "the configuration was not applied")
+
+	assert.Equal(t, "Risk Assessment entitlement not available", diag.Summary)
+	assert.Contains(t, diag.Detail, "Risk Assessment requires an add-on entitlement")
+	assert.Contains(t, diag.Detail, "the configuration was not applied")
+	assert.Contains(t, diag.Detail, "Contact Auth0 support to enable this feature.")
 }

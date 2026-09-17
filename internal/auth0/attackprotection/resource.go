@@ -655,28 +655,6 @@ func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
 	}
 }
 
-// Consequences of a missing entitlement, phrased per operation: a read only
-// failed to fetch the remote configuration, whereas an update failed to write
-// the configured values.
-const (
-	entitlementReadConsequence   = "its current configuration could not be read"
-	entitlementUpdateConsequence = "the configuration was not applied"
-)
-
-// entitlementWarning builds the non-fatal diagnostic surfaced when the tenant
-// lacks the add-on entitlement for an attack protection sub-feature. Pass the
-// consequence matching the operation that failed.
-func entitlementWarning(feature, consequence string) diag.Diagnostic {
-	return diag.Diagnostic{
-		Severity: diag.Warning,
-		Summary:  fmt.Sprintf("%s entitlement not available", feature),
-		Detail: fmt.Sprintf(
-			"%s requires an add-on entitlement not present on this tenant, so %s. "+
-				"Contact Auth0 support to enable this feature.",
-			feature, consequence,
-		),
-	}
-}
 
 func createAttackProtection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	data.SetId(id.UniqueId())
@@ -710,7 +688,7 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		case apierr.IsInsufficientScope(err):
 			log.Printf("[INFO] Insufficient scope for Bot Detection; skipping read.")
 		case apierr.IsInsufficientEntitlement(err):
-			diags = append(diags, entitlementWarning("Bot Detection", entitlementReadConsequence))
+			diags = append(diags, apierr.EntitlementWarning("Bot Detection", "its current configuration could not be read"))
 		default:
 			return append(diags, diag.FromErr(err)...)
 		}
@@ -722,7 +700,7 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		case apierr.IsInsufficientScope(err):
 			log.Printf("[INFO] Insufficient scope for Captcha; skipping read.")
 		case apierr.IsInsufficientEntitlement(err):
-			diags = append(diags, entitlementWarning("Captcha", entitlementReadConsequence))
+			diags = append(diags, apierr.EntitlementWarning("Captcha", "its current configuration could not be read"))
 		default:
 			return append(diags, diag.FromErr(err)...)
 		}
@@ -768,7 +746,7 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 			case apierr.IsInsufficientScope(err):
 				log.Printf("[INFO] Insufficient scope for Bot Detection; skipping update.")
 			case apierr.IsInsufficientEntitlement(err):
-				diags = append(diags, entitlementWarning("Bot Detection", entitlementUpdateConsequence))
+				diags = append(diags, apierr.EntitlementWarning("Bot Detection", "the configuration was not applied"))
 			default:
 				result = multierror.Append(result, err)
 			}
@@ -781,7 +759,7 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 			case apierr.IsInsufficientScope(err):
 				log.Printf("[INFO] Insufficient scope for Captcha; skipping update.")
 			case apierr.IsInsufficientEntitlement(err):
-				diags = append(diags, entitlementWarning("Captcha", entitlementUpdateConsequence))
+				diags = append(diags, apierr.EntitlementWarning("Captcha", "the configuration was not applied"))
 			default:
 				result = multierror.Append(result, err)
 			}

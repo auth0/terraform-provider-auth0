@@ -3,15 +3,14 @@ package riskassessment
 import (
 	"context"
 
-	"github.com/auth0/terraform-provider-auth0/internal/value"
-
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/go-auth0/management"
-
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	apierr "github.com/auth0/terraform-provider-auth0/internal/error"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewResource will return a new auth0_risk_assessments resource.
@@ -46,6 +45,9 @@ func readRiskAssessmentSettings(ctx context.Context, data *schema.ResourceData, 
 
 	settings, err := api.RiskAssessment.ReadSettings(ctx)
 	if err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			return diag.Diagnostics{apierr.EntitlementWarning("Risk Assessment", "its current configuration could not be read")}
+		}
 		return diag.FromErr(err)
 	}
 
@@ -65,6 +67,9 @@ func updateRiskAssessmentSettings(ctx context.Context, data *schema.ResourceData
 	}
 
 	if err := api.RiskAssessment.UpdateSettings(ctx, setting); err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			return diag.Diagnostics{apierr.EntitlementWarning("Risk Assessment", "the configuration was not applied")}
+		}
 		return diag.FromErr(err)
 	}
 

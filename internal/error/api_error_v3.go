@@ -24,10 +24,10 @@ func v3ForbiddenErrorCode(err error) string {
 	return code
 }
 
-// IsInsufficientEntitlement checks if the error is a v3 SDK ForbiddenError
-// with errorCode "insufficient_entitlement", indicating the tenant lacks
-// the required entitlement for the requested feature.
-func IsInsufficientEntitlement(err error) bool {
+// isInsufficientEntitlementV3 checks if the error is a v3 SDK ForbiddenError
+// with errorCode "insufficient_entitlement". Called by the unified
+// IsInsufficientEntitlement in api_error.go after the v1 check fails.
+func isInsufficientEntitlementV3(err error) bool {
 	return v3ForbiddenErrorCode(err) == "insufficient_entitlement"
 }
 

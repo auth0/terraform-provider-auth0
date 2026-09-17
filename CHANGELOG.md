@@ -1,5 +1,8 @@
 ## Unreleased
 
+FEATURES:
+- `resource/auth0_client` – Add `enforce_permission_ceiling` and `enforce_self_assignment_restriction` boolean fields to `my_organization_configuration` for member management controls (EA only, requires `my_org_member_management_ea` feature flag)
+
 ## v1.57.0
 
 FEATURES:

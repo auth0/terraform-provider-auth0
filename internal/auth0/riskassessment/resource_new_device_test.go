@@ -34,13 +34,13 @@ resource "auth0_risk_assessments_new_device" "my_new_device" {
 }`
 
 // TestAccRiskAssessmentNewDeviceInsufficientEntitlement asserts that when the
-// tenant lacks the Adaptive MFA entitlement, the 403 response is non-fatal.
+// tenant lacks the Adaptive MFA entitlement, the 403 response is non-fatal:
+// apply succeeds with a warning rather than returning an error.
 func TestAccRiskAssessmentNewDeviceInsufficientEntitlement(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config:             testAccRiskAssessmentNewDeviceInsufficient,
-				ExpectNonEmptyPlan: true,
+				Config: testAccRiskAssessmentNewDeviceInsufficient,
 			},
 		},
 	})

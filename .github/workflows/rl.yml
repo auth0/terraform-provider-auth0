@@ -35,17 +35,18 @@ jobs:
       contents: read
       id-token: write   # required for AWS OIDC federation (PRODSEC_TOOLS_ARN)
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      # Download a previously uploaded artifact, or replace with your own build step.
-      - name: Download artifact
+      # GoReleaser uploads release assets directly to GitHub Releases (no actions/upload-artifact).
+      # Download the linux_amd64 zip from the release to use as the scan target.
+      - name: Download release artifact
         id: download
         continue-on-error: true   # let the rl-scan action be the authority on artifact presence
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
-        with:
-          name: my-artifact              # must match the name used in upload-artifact
-          path: dist/
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "${{ github.event.release.tag_name }}" \
+            --repo "${{ github.repository }}" \
+            --pattern "terraform-provider-auth0_*_linux_amd64.zip" \
+            --dir dist/
 
       - name: Run RL malware scan
         id: rl
@@ -53,8 +54,8 @@ jobs:
         continue-on-error: true   # let the gate step below decide pass/fail
         with:
           # ── Artifact inputs ─────────────────────────────────────────────────
-          artifact-name: my-artifact
-          artifact-path: dist/my-artifact.tgz     # must be a concrete file — the action's [ -f ] check does NOT expand globs
+          artifact-name: terraform-provider-auth0_${{ github.event.release.tag_name }}_linux_amd64.zip
+          artifact-path: dist/terraform-provider-auth0_${{ github.event.release.tag_name }}_linux_amd64.zip
           version: ${{ github.event.release.tag_name }}
           # ── Required secrets ────────────────────────────────────────────────
           RLSECURE_LICENSE:          ${{ secrets.RLSECURE_LICENSE }}

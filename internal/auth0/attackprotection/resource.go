@@ -655,7 +655,6 @@ func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
 	}
 }
 
-
 func createAttackProtection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	data.SetId(id.UniqueId())
 	return updateAttackProtection(ctx, data, meta)

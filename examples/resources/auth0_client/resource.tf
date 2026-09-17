@@ -124,6 +124,11 @@ resource "auth0_client" "mcp_server" {
   oidc_conformant            = true
   resource_server_identifier = auth0_resource_server.my_api.identifier
 
+  # Anonymous Sessions is an Early Access feature.
+  anonymous_sessions {
+    active = true
+  }
+
   token_exchange {
     allow_any_profile_of_type = ["on_behalf_of_token_exchange"]
   }

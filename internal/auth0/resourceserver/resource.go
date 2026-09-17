@@ -108,6 +108,14 @@ func NewResource() *schema.Resource {
 				Description: "Number of seconds during which access tokens issued for this resource server via " +
 					"implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.",
 			},
+			"token_lifetime_for_anonymous_access_tokens": {
+				Type:         schema.TypeInt,
+				Optional:     true,
+				ValidateFunc: validation.IntBetween(86400, 2592000),
+				Description: "Number of seconds during which anonymous-session access tokens issued for this " +
+					"resource server remain valid. Minimum 86400 (1 day), maximum 2592000 (30 days). " +
+					"Removing this attribute clears the value on the API. (EA only)",
+			},
 			"skip_consent_for_verifiable_first_party_clients": {
 				Type:        schema.TypeBool,
 				Optional:    true,
@@ -339,6 +347,27 @@ func NewResource() *schema.Resource {
 											"require_client_grant",
 										}, false),
 										Description: "Client flows policy. One of `deny_all`, `require_client_grant`.",
+									},
+								},
+							},
+						},
+						"anonymous_user": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Anonymous user authorization policies for the resource server. (EA only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"policy": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"deny_all",
+											"require_client_grant",
+										}, false),
+										Description: "Anonymous user flows policy. One of `deny_all`, `require_client_grant`. Defaults to `deny_all` (EA only)",
 									},
 								},
 							},

@@ -43,10 +43,12 @@ func NewTriggerActionsResource() *schema.Resource {
 					"custom-phone-provider",
 					"login-post-identifier",
 					"signup-post-identifier",
+					"post-credential-validation",
 				}, false),
 				Description: "The ID of the trigger to bind with. Options include: `post-login`, `credentials-exchange`, " +
 					"`pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, " +
-					"`password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`, `login-post-identifier`, `signup-post-identifier`.",
+					"`password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`, `login-post-identifier`, " +
+					"`signup-post-identifier` and `post-credential-validation`",
 			},
 			"actions": {
 				Type:     schema.TypeList,

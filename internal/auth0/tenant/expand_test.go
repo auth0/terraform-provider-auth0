@@ -86,3 +86,31 @@ func TestIsCountryCodesNull(t *testing.T) {
 		assert.False(t, isCountryCodesNull(data))
 	})
 }
+
+func TestExpandTenantSessionsAnonymous(t *testing.T) {
+	anonymousType := cty.List(cty.Object(map[string]cty.Type{
+		"lifetime_in_minutes": cty.Number,
+		"activate_cookie":     cty.Bool,
+	}))
+
+	t.Run("it returns nil when the anonymous block is absent", func(t *testing.T) {
+		assert.Nil(t, expandTenantSessionsAnonymous(cty.NullVal(anonymousType)))
+	})
+
+	t.Run("it returns nil when the anonymous block is empty", func(t *testing.T) {
+		assert.Nil(t, expandTenantSessionsAnonymous(cty.ListValEmpty(anonymousType.ElementType())))
+	})
+
+	t.Run("it returns the populated struct when the anonymous block is configured", func(t *testing.T) {
+		anonymous := expandTenantSessionsAnonymous(cty.ListVal([]cty.Value{
+			cty.ObjectVal(map[string]cty.Value{
+				"lifetime_in_minutes": cty.NumberIntVal(43200),
+				"activate_cookie":     cty.BoolVal(true),
+			}),
+		}))
+
+		assert.NotNil(t, anonymous)
+		assert.Equal(t, 43200, anonymous.GetLifetimeInMinutes())
+		assert.True(t, anonymous.GetActivateCookie())
+	})
+}

@@ -609,3 +609,77 @@ func TestAccResourceServerOnlineAccess(t *testing.T) {
 		},
 	})
 }
+
+const testAccResourceServerAnonymousUserCreate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	token_lifetime_for_anonymous_access_tokens = 86400
+
+	subject_type_authorization {
+		anonymous_user {
+			policy = "require_client_grant"
+		}
+	}
+}
+`
+
+const testAccResourceServerAnonymousUserUpdate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	token_lifetime_for_anonymous_access_tokens = 172800
+
+	subject_type_authorization {
+		anonymous_user {
+			policy = "deny_all"
+		}
+	}
+}
+`
+
+const testAccResourceServerAnonymousUserRemoved = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	subject_type_authorization {
+		anonymous_user {
+			policy = "deny_all"
+		}
+	}
+}
+`
+
+func TestAccResourceServerAnonymousUser(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAnonymousUserCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime_for_anonymous_access_tokens", "86400"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "subject_type_authorization.0.anonymous_user.0.policy", "require_client_grant"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAnonymousUserUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime_for_anonymous_access_tokens", "172800"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "subject_type_authorization.0.anonymous_user.0.policy", "deny_all"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAnonymousUserRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime_for_anonymous_access_tokens", "0"),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccResourceServerAnonymousUserRemoved, t.Name()),
+				PlanOnly: true,
+			},
+		},
+	})
+}

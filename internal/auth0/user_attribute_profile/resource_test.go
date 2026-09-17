@@ -254,6 +254,64 @@ func TestAccUserAttributeProfile_ImportState(t *testing.T) {
 	})
 }
 
+// testAccUserAttributeProfileOrderingDrift uses three user_attributes blocks in
+// a deliberately non-alphabetical order (nickname → email → given_name) to
+// verify that a second plan produces no diff.
+const testAccUserAttributeProfileOrderingDrift = `
+resource "auth0_user_attribute_profile" "test" {
+	name = "{{.testName}} Ordering Drift"
+
+	user_attributes {
+		name             = "nickname"
+		description      = "User nickname"
+		label            = "Nickname"
+		profile_required = false
+		auth0_mapping    = "nickname"
+		scim_mapping     = "nickName"
+	}
+
+	user_attributes {
+		name             = "email"
+		description      = "User email"
+		label            = "Email"
+		profile_required = true
+		auth0_mapping    = "email"
+		scim_mapping     = "emails[primary eq true].value"
+	}
+
+	user_attributes {
+		name             = "given_name"
+		description      = "User given name"
+		label            = "Given Name"
+		profile_required = false
+		auth0_mapping    = "given_name"
+		scim_mapping     = "name.givenName"
+	}
+}
+`
+
+func TestAccUserAttributeProfile_OrderingDrift(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccUserAttributeProfileOrderingDrift, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "name", fmt.Sprintf("%s Ordering Drift", t.Name())),
+					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.0.name", "nickname"),
+					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.1.name", "email"),
+					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.2.name", "given_name"),
+				),
+			},
+			// A second plan with an identical config must produce no diff.
+			{
+				Config:             acctest.ParseTestName(testAccUserAttributeProfileOrderingDrift, t.Name()),
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: false,
+			},
+		},
+	})
+}
+
 func TestAccUserAttributeProfile_FieldRemoval(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

@@ -12,6 +12,19 @@ resource "auth0_resource_server" "my_resource_server" {
 
   # Anonymous Sessions is an Early Access feature.
   token_lifetime_for_anonymous_access_tokens = 86400
+  access_token {
+    claims_mapping {
+      custom_claims {
+        name       = "country"
+        expression = "anonymous_session.metadata.country"
+      }
+      custom_claims {
+        name       = "city"
+        expression = "anonymous_session.metadata.city"
+      }
+    }
+  }
+
   token_encryption {
     format = "compact-nested-jwe"
     encryption_key {

@@ -70,3 +70,10 @@ resource "auth0_resource_server" "okta_oin_express_configuration_api" {
     format  = null
   }
 }
+
+# Default permissions for third-party applications, set via a client grant.
+resource "auth0_client_grant" "default_3p_grant" {
+  default_for = "third_party_clients"
+  audience    = auth0_resource_server.my_resource_server.identifier
+  scopes      = ["read:foo"]
+}

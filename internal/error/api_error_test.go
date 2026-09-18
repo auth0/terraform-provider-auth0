@@ -36,6 +36,10 @@ func (m testManagementError) Status() int {
 	return m.StatusCode
 }
 
+func (m testManagementError) Code() string {
+	return ""
+}
+
 func TestHandleAPIError(t *testing.T) {
 	testCases := []struct {
 		name        string

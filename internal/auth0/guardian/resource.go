@@ -609,7 +609,7 @@ func updateGuardian(ctx context.Context, data *schema.ResourceData, meta interfa
 		if apierr.IsInsufficientEntitlement(err) {
 			diags = append(diags, apierr.EntitlementWarning(
 				"Guardian Adaptive MFA Policy (confidence-score)",
-				"the policy was not applied",
+				apierr.EntitlementUpdateConsequence,
 			))
 		} else {
 			return diag.FromErr(err)

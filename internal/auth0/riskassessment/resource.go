@@ -46,7 +46,7 @@ func readRiskAssessmentSettings(ctx context.Context, data *schema.ResourceData, 
 	settings, err := api.RiskAssessment.ReadSettings(ctx)
 	if err != nil {
 		if apierr.IsInsufficientEntitlement(err) {
-			return diag.Diagnostics{apierr.EntitlementWarning("Risk Assessment", "its current configuration could not be read")}
+			return diag.Diagnostics{apierr.EntitlementWarning("Risk Assessment", apierr.EntitlementReadConsequence)}
 		}
 		return diag.FromErr(err)
 	}
@@ -66,12 +66,15 @@ func updateRiskAssessmentSettings(ctx context.Context, data *schema.ResourceData
 		Enabled: value.Bool(rawConfig.GetAttr("enabled")),
 	}
 
+	var diags diag.Diagnostics
+
 	if err := api.RiskAssessment.UpdateSettings(ctx, setting); err != nil {
 		if apierr.IsInsufficientEntitlement(err) {
-			return diag.Diagnostics{apierr.EntitlementWarning("Risk Assessment", "the configuration was not applied")}
+			diags = append(diags, apierr.EntitlementWarning("Risk Assessment", apierr.EntitlementUpdateConsequence))
+		} else {
+			return diag.FromErr(err)
 		}
-		return diag.FromErr(err)
 	}
 
-	return readRiskAssessmentSettings(ctx, data, meta)
+	return append(diags, readRiskAssessmentSettings(ctx, data, meta)...)
 }

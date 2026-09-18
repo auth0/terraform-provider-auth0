@@ -49,7 +49,7 @@ func readRiskAssessmentNewDeviceSettings(ctx context.Context, data *schema.Resou
 	settings, err := api.RiskAssessment.ReadNewDeviceSettings(ctx)
 	if err != nil {
 		if apierr.IsInsufficientEntitlement(err) {
-			return diag.Diagnostics{apierr.EntitlementWarning("Risk Assessment (New Device)", "its current configuration could not be read")}
+			return diag.Diagnostics{apierr.EntitlementWarning("Risk Assessment (New Device)", apierr.EntitlementReadConsequence)}
 		}
 		return diag.FromErr(err)
 	}
@@ -69,12 +69,15 @@ func updateRiskAssessmentNewDeviceSettings(ctx context.Context, data *schema.Res
 		RememberFor: value.Int(rawConfig.GetAttr("remember_for")),
 	}
 
+	var diags diag.Diagnostics
+
 	if err := api.RiskAssessment.UpdateNewDeviceSettings(ctx, setting); err != nil {
 		if apierr.IsInsufficientEntitlement(err) {
-			return diag.Diagnostics{apierr.EntitlementWarning("Risk Assessment (New Device)", "the configuration was not applied")}
+			diags = append(diags, apierr.EntitlementWarning("Risk Assessment (New Device)", apierr.EntitlementUpdateConsequence))
+		} else {
+			return diag.FromErr(fmt.Errorf("failed to update new device settings: %w", err))
 		}
-		return diag.FromErr(fmt.Errorf("failed to update new device settings: %w", err))
 	}
 
-	return readRiskAssessmentNewDeviceSettings(ctx, data, meta)
+	return append(diags, readRiskAssessmentNewDeviceSettings(ctx, data, meta)...)
 }

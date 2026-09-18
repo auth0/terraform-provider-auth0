@@ -83,9 +83,17 @@ func IsInsufficientEntitlement(err error) bool {
 	return isInsufficientEntitlementV3(err)
 }
 
+// EntitlementReadConsequence is the standard consequence phrase for read operations
+// blocked by a missing entitlement.
+const EntitlementReadConsequence = "its current configuration could not be read"
+
+// EntitlementUpdateConsequence is the standard consequence phrase for update operations
+// blocked by a missing entitlement.
+const EntitlementUpdateConsequence = "the configuration was not applied"
+
 // EntitlementWarning returns a non-fatal warning diagnostic for an entitlement-gated
 // feature. Pass the feature name and a phrase describing the consequence of the
-// missing entitlement (e.g. "the configuration was not applied").
+// missing entitlement (e.g. EntitlementUpdateConsequence).
 func EntitlementWarning(feature, consequence string) diag.Diagnostic {
 	return diag.Diagnostic{
 		Severity: diag.Warning,

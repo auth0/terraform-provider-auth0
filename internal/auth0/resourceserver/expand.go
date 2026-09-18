@@ -45,6 +45,7 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.TokenEncryption = expandTokenEncryption(data)
 		resourceServer.ConsentPolicy = expandConsentPolicy(data)
 		resourceServer.ProofOfPossession = expandProofOfPossession(data)
+		resourceServer.AccessToken = expandResourceServerAccessToken(data)
 		// Skip sending EA params implicitly on all PATCH calls.
 		if data.IsNewResource() || data.HasChange("allow_online_access") {
 			resourceServer.AllowOnlineAccess = value.Bool(cfg.GetAttr("allow_online_access"))
@@ -89,6 +90,100 @@ func isAuthorizationPolicyNull(data *schema.ResourceData) bool {
 		data.GetRawConfig().GetAttr("authorization_policy").LengthInt() == 0
 }
 
+func expandResourceServerAccessToken(data *schema.ResourceData) *management.ResourceServerAccessToken {
+	if !data.IsNewResource() && !data.HasChange("access_token") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("access_token")
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var accessToken management.ResourceServerAccessToken
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		accessToken.ClaimsMapping = expandResourceServerAccessTokenClaimsMapping(cfg.GetAttr("claims_mapping"))
+		return stop
+	})
+
+	if accessToken == (management.ResourceServerAccessToken{}) {
+		return nil
+	}
+
+	return &accessToken
+}
+
+func expandResourceServerAccessTokenClaimsMapping(config cty.Value) *management.ResourceServerAccessTokenClaimsMapping {
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var claimsMapping management.ResourceServerAccessTokenClaimsMapping
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		claimsMapping.CustomClaims = expandResourceServerAccessTokenCustomClaims(cfg.GetAttr("custom_claims"))
+		return stop
+	})
+
+	if claimsMapping.CustomClaims == nil {
+		return nil
+	}
+
+	return &claimsMapping
+}
+
+// expandResourceServerAccessTokenCustomClaims returns nil when the list is
+// omitted (leaves it untouched on PATCH) and a non-nil empty slice when the
+// list is present but empty (serialized as `[]` to clear it; the API rejects
+// `null`).
+func expandResourceServerAccessTokenCustomClaims(config cty.Value) *[]management.ResourceServerAccessTokenCustomClaimsMappingRule {
+	if config.IsNull() {
+		return nil
+	}
+
+	customClaims := make([]management.ResourceServerAccessTokenCustomClaimsMappingRule, 0)
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		customClaims = append(customClaims, management.ResourceServerAccessTokenCustomClaimsMappingRule{
+			Name:       value.String(cfg.GetAttr("name")),
+			Expression: value.String(cfg.GetAttr("expression")),
+		})
+		return stop
+	})
+
+	return &customClaims
+}
+
+// isEmptyAccessTokenBlock reports whether a configured `access_token` block is
+// present but carries no nested configuration (no `claims_mapping`). Such a
+// block maps to nothing on the API, so it must be treated as absent to avoid a
+// perpetual plan diff.
+func isEmptyAccessTokenBlock(config cty.Value) bool {
+	if config.IsNull() || config.LengthInt() == 0 {
+		return false
+	}
+
+	empty := true
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		claimsMapping := cfg.GetAttr("claims_mapping")
+		if !claimsMapping.IsNull() && claimsMapping.LengthInt() > 0 {
+			empty = false
+		}
+		return stop
+	})
+
+	return empty
+}
+
+func isAccessTokenNull(data *schema.ResourceData) bool {
+	if !data.HasChange("access_token") {
+		return false
+	}
+	accessToken := data.GetRawConfig().GetAttr("access_token")
+	return accessToken.IsNull() || accessToken.LengthInt() == 0 || isEmptyAccessTokenBlock(accessToken)
+}
+
 func isTokenLifetimeForAnonymousAccessTokensNull(data *schema.ResourceData) bool {
 	if !data.HasChange("token_lifetime_for_anonymous_access_tokens") {
 		return false
@@ -109,6 +204,7 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 		"proof_of_possession":                        isProofOfPossessionNull,
 		"authorization_policy":                       isAuthorizationPolicyNull,
 		"token_lifetime_for_anonymous_access_tokens": isTokenLifetimeForAnonymousAccessTokensNull,
+		"access_token":                               isAccessTokenNull,
 	}
 
 	nullableMap := make(map[string]interface{})

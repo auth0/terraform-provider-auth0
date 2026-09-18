@@ -12,6 +12,19 @@ resource "auth0_resource_server" "my_resource_server" {
 
   # Anonymous Sessions is an Early Access feature.
   token_lifetime_for_anonymous_access_tokens = 86400
+  access_token {
+    claims_mapping {
+      custom_claims {
+        name       = "country"
+        expression = "anonymous_session.metadata.country"
+      }
+      custom_claims {
+        name       = "city"
+        expression = "anonymous_session.metadata.city"
+      }
+    }
+  }
+
   token_encryption {
     format = "compact-nested-jwe"
     encryption_key {
@@ -69,4 +82,11 @@ resource "auth0_resource_server" "okta_oin_express_configuration_api" {
     disable = true
     format  = null
   }
+}
+
+# Default permissions for third-party applications, set via a client grant.
+resource "auth0_client_grant" "default_3p_grant" {
+  default_for = "third_party_clients"
+  audience    = auth0_resource_server.my_resource_server.identifier
+  scopes      = ["read:foo"]
 }

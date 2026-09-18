@@ -47,7 +47,7 @@ jobs:
           # publish_results: true publishes to the Scorecard public dataset and enables the badge.
           # Requires id-token: write above and a push/schedule event.
           # Set to 'false' (and remove id-token: write) to keep results private.
-          publish_results: true
+          publish_results: false
 
       # Upload SARIF as a workflow artifact (optional — comment out to disable).
       # https://docs.github.com/en/actions/advanced-guides/storing-workflow-data-as-artifacts
@@ -64,13 +64,3 @@ jobs:
         with:
           sarif_file: results.sarif
           category: scorecard
-
-      - name: Result
-        if: always()
-        shell: bash
-        run: |
-          if [ "${{ job.status }}" = "success" ]; then
-            echo "::notice title=Scorecard::✅ OpenSSF Scorecard analysis complete — results uploaded to Security tab."
-          else
-            echo "::error title=Scorecard::❌ OpenSSF Scorecard analysis failed."
-          fi

@@ -116,6 +116,55 @@ func NewResource() *schema.Resource {
 					"resource server remain valid. Minimum 86400 (1 day), maximum 2592000 (30 days). " +
 					"Removing this attribute clears the value on the API. (EA only)",
 			},
+			"access_token": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configuration for the access tokens issued for this resource server. Remove the block to clear the configuration on the API. (EA only)",
+				// An empty `access_token {}` block in config removes it from API.
+				// Hence supress it to avoid a constant "+ access_token {}" diff.
+				DiffSuppressFunc: func(k, oldValue, newValue string, data *schema.ResourceData) bool {
+					// Supress only if access_token is empty but block-count is 0 in state and 1 in config.
+					if k == "access_token.#" && oldValue == "0" && newValue == "1" {
+						return isEmptyAccessTokenBlock(data.GetRawConfig().GetAttr("access_token"))
+					}
+					return false
+				},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"claims_mapping": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Configuration for mapping claims into the access tokens issued for this resource server. (EA only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"custom_claims": {
+										Type:        schema.TypeList,
+										Optional:    true,
+										MaxItems:    20,
+										Description: "Custom claims to include in the access tokens issued for this resource server. Maximum of 20 claims. Setting an empty list clears the custom claims on the API. (EA only)",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"name": {
+													Type:        schema.TypeString,
+													Required:    true,
+													Description: "Name of the claim to emit in the access token. Reserved OIDC/JWT claim names are not allowed.",
+												},
+												"expression": {
+													Type:        schema.TypeString,
+													Required:    true,
+													Description: "Expression used to resolve the claim value, given as a dot-path read from the request context (for example `anonymous_session.metadata.country`).",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"skip_consent_for_verifiable_first_party_clients": {
 				Type:        schema.TypeBool,
 				Optional:    true,

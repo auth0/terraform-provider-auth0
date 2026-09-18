@@ -138,7 +138,7 @@ func TestAccActionModuleDataSource(t *testing.T) {
 
 const testAccActionModuleWithPublish = `
 resource "auth0_action_module" "my_module" {
-	name    = "Test Module {{.testName}}"
+	name    = "test-module-{{.testName | toLower}}"
 	publish = true
 	code    = <<-EOT
 		module.exports = {
@@ -160,7 +160,7 @@ func TestAccActionModuleVersionsDataSource(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccActionModuleWithPublish, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_action_module.my_module", "name", fmt.Sprintf("Test Module %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action_module.my_module", "name", fmt.Sprintf("test-module-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_action_module.my_module", "publish", "true"),
 					resource.TestCheckResourceAttrSet("auth0_action_module.my_module", "version_id"),
 					resource.TestCheckResourceAttrSet("data.auth0_action_module_versions.my_module_versions", "module_id"),
@@ -239,7 +239,7 @@ func TestAccActionModuleActionsDataSource(t *testing.T) {
 
 const testAccActionModuleVersionDataSource = `
 resource "auth0_action_module" "my_module" {
-	name    = "Test Module {{.testName}}"
+	name    = "test-module-{{.testName | toLower}}"
 	publish = true
 	code    = <<-EOT
 		module.exports = {
@@ -266,7 +266,7 @@ func TestAccActionModuleVersionDataSource(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccActionModuleVersionDataSource, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_action_module.my_module", "name", fmt.Sprintf("Test Module %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action_module.my_module", "name", fmt.Sprintf("test-module-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttrSet("data.auth0_action_module_version.my_module_version", "module_id"),
 					resource.TestCheckResourceAttrSet("data.auth0_action_module_version.my_module_version", "version_id"),
 					resource.TestCheckResourceAttr("data.auth0_action_module_version.my_module_version", "version_number", "1"),
@@ -280,7 +280,7 @@ func TestAccActionModuleVersionDataSource(t *testing.T) {
 
 const testAccActionModuleMultipleVersions = `
 resource "auth0_action_module" "my_module" {
-	name    = "Test Module {{.testName}}"
+	name    = "test-module-1"
 	publish = true
 	code    = <<-EOT
 		module.exports = {
@@ -298,7 +298,7 @@ data "auth0_action_module_versions" "my_module_versions" {
 
 const testAccActionModuleMultipleVersionsUpdate = `
 resource "auth0_action_module" "my_module" {
-	name    = "Test Module {{.testName}}"
+	name    = "test-module-1"
 	publish = true
 	code    = <<-EOT
 		module.exports = {
@@ -320,7 +320,7 @@ func TestAccActionModuleMultipleVersions(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccActionModuleMultipleVersions, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_action_module.my_module", "name", fmt.Sprintf("Test Module %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action_module.my_module", "name", "test-module-1"),
 					resource.TestCheckResourceAttr("data.auth0_action_module_versions.my_module_versions", "versions.#", "1"),
 					resource.TestCheckResourceAttr("data.auth0_action_module_versions.my_module_versions", "versions.0.version_number", "1"),
 				),
@@ -328,7 +328,7 @@ func TestAccActionModuleMultipleVersions(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccActionModuleMultipleVersionsUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_action_module.my_module", "name", fmt.Sprintf("Test Module %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action_module.my_module", "name", "test-module-1"),
 					resource.TestCheckResourceAttr("data.auth0_action_module_versions.my_module_versions", "versions.#", "2"),
 					resource.TestCheckResourceAttr("data.auth0_action_module_versions.my_module_versions", "versions.0.version_number", "2"),
 					resource.TestCheckResourceAttr("data.auth0_action_module_versions.my_module_versions", "versions.1.version_number", "1"),

@@ -121,6 +121,7 @@ resource "auth0_action" "my_secure_action" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `status` (String) The build status of the action. Possible values: `built`, `failed`, `building`, `pending`, `retrying`. If the action is in `failed` state, the next `terraform plan` will show a replacement to re-trigger the build.
 - `version_id` (String) Version ID of the action. This value is available if `deploy` is set to true.
 
 <a id="nestedblock--supported_triggers"></a>

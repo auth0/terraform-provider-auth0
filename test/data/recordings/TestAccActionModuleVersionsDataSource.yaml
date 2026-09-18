@@ -12,11 +12,13 @@ interactions:
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: '{"name":"Test Module TestAccActionModuleVersionsDataSource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n"}'
+        body: '{"name":"test-module-testaccactionmoduleversionsdatasource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n"}'
         form: {}
         headers:
             Content-Type:
                 - application/json
+            User-Agent:
+                - Go-Auth0/v3.4.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules
         method: POST
       response:
@@ -27,13 +29,13 @@ interactions:
         trailer: {}
         content_length: 388
         uncompressed: false
-        body: '{"id":"ec850166-e024-4a9d-b822-2e0b515c4292","name":"Test Module TestAccActionModuleVersionsDataSource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[],"all_changes_published":false,"actions_using_module_total":0,"created_at":"2026-02-16T16:37:06.395478Z","updated_at":"2026-02-16T16:37:06.395478Z"}'
+        body: '{"id":"90e7a980-251a-4280-996f-42ffbc5d038c","name":"test-module-testaccactionmoduleversionsdatasource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[],"all_changes_published":false,"actions_using_module_total":0,"created_at":"2026-09-16T05:15:25.377199Z","updated_at":"2026-09-16T05:15:25.377199Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 1.402290333s
+        duration: 333.33825ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -50,7 +52,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ec850166-e024-4a9d-b822-2e0b515c4292/versions
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/90e7a980-251a-4280-996f-42ffbc5d038c/versions
         method: POST
       response:
         proto: HTTP/2.0
@@ -60,13 +64,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"3908bf79-44c9-4e83-91d3-f67f3d5f268d","module_id":"ec850166-e024-4a9d-b822-2e0b515c4292","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-02-16T16:37:07.838451Z"}'
+        body: '{"id":"60c2d56d-7fc0-4508-9e98-13d5fb139e41","module_id":"90e7a980-251a-4280-996f-42ffbc5d038c","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-09-16T05:15:25.719900Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 902.918625ms
+        duration: 345.574959ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -83,7 +87,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ec850166-e024-4a9d-b822-2e0b515c4292
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/90e7a980-251a-4280-996f-42ffbc5d038c
         method: GET
       response:
         proto: HTTP/2.0
@@ -93,13 +99,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ec850166-e024-4a9d-b822-2e0b515c4292","name":"Test Module TestAccActionModuleVersionsDataSource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[],"all_changes_published":true,"actions_using_module_total":0,"created_at":"2026-02-16T16:37:06.395478Z","updated_at":"2026-02-16T16:37:06.395478Z","latest_version":{"id":"3908bf79-44c9-4e83-91d3-f67f3d5f268d","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[]}}'
+        body: '{"id":"90e7a980-251a-4280-996f-42ffbc5d038c","name":"test-module-testaccactionmoduleversionsdatasource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[],"all_changes_published":true,"actions_using_module_total":0,"created_at":"2026-09-16T05:15:25.377199Z","updated_at":"2026-09-16T05:15:25.377199Z","latest_version":{"id":"60c2d56d-7fc0-4508-9e98-13d5fb139e41","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 350.796416ms
+        duration: 319.791666ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -116,7 +122,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ec850166-e024-4a9d-b822-2e0b515c4292/versions?page=0&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/90e7a980-251a-4280-996f-42ffbc5d038c/versions?page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -126,13 +134,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"versions":[{"id":"3908bf79-44c9-4e83-91d3-f67f3d5f268d","module_id":"ec850166-e024-4a9d-b822-2e0b515c4292","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-02-16T16:37:07.838451Z"}],"total":1,"page":0,"per_page":50}'
+        body: '{"versions":[{"id":"60c2d56d-7fc0-4508-9e98-13d5fb139e41","module_id":"90e7a980-251a-4280-996f-42ffbc5d038c","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-09-16T05:15:25.719900Z"}],"total":1,"page":0,"per_page":50}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 930.219917ms
+        duration: 316.571ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -149,7 +157,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ec850166-e024-4a9d-b822-2e0b515c4292/versions?page=1&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/90e7a980-251a-4280-996f-42ffbc5d038c/versions?page=1&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -157,15 +167,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 48
+        uncompressed: false
         body: '{"versions":[],"total":0,"page":1,"per_page":50}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 809.911375ms
+        duration: 308.995292ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -182,7 +192,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ec850166-e024-4a9d-b822-2e0b515c4292/versions?page=0&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/90e7a980-251a-4280-996f-42ffbc5d038c/versions?page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -192,13 +204,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"versions":[{"id":"3908bf79-44c9-4e83-91d3-f67f3d5f268d","module_id":"ec850166-e024-4a9d-b822-2e0b515c4292","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-02-16T16:37:07.838451Z"}],"total":1,"page":0,"per_page":50}'
+        body: '{"versions":[{"id":"60c2d56d-7fc0-4508-9e98-13d5fb139e41","module_id":"90e7a980-251a-4280-996f-42ffbc5d038c","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-09-16T05:15:25.719900Z"}],"total":1,"page":0,"per_page":50}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 334.303042ms
+        duration: 308.183917ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -215,7 +227,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ec850166-e024-4a9d-b822-2e0b515c4292/versions?page=1&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/90e7a980-251a-4280-996f-42ffbc5d038c/versions?page=1&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -223,15 +237,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 48
+        uncompressed: false
         body: '{"versions":[],"total":0,"page":1,"per_page":50}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 351.917958ms
+        duration: 333.855916ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -248,7 +262,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ec850166-e024-4a9d-b822-2e0b515c4292
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/90e7a980-251a-4280-996f-42ffbc5d038c
         method: GET
       response:
         proto: HTTP/2.0
@@ -258,13 +274,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ec850166-e024-4a9d-b822-2e0b515c4292","name":"Test Module TestAccActionModuleVersionsDataSource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[],"all_changes_published":true,"actions_using_module_total":0,"created_at":"2026-02-16T16:37:06.395478Z","updated_at":"2026-02-16T16:37:06.395478Z","latest_version":{"id":"3908bf79-44c9-4e83-91d3-f67f3d5f268d","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[]}}'
+        body: '{"id":"90e7a980-251a-4280-996f-42ffbc5d038c","name":"test-module-testaccactionmoduleversionsdatasource","code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[],"all_changes_published":true,"actions_using_module_total":0,"created_at":"2026-09-16T05:15:25.377199Z","updated_at":"2026-09-16T05:15:25.377199Z","latest_version":{"id":"60c2d56d-7fc0-4508-9e98-13d5fb139e41","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","dependencies":[],"secrets":[]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 1.430182375s
+        duration: 314.027292ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -281,7 +297,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ec850166-e024-4a9d-b822-2e0b515c4292/versions?page=0&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/90e7a980-251a-4280-996f-42ffbc5d038c/versions?page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -291,13 +309,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"versions":[{"id":"3908bf79-44c9-4e83-91d3-f67f3d5f268d","module_id":"ec850166-e024-4a9d-b822-2e0b515c4292","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-02-16T16:37:07.838451Z"}],"total":1,"page":0,"per_page":50}'
+        body: '{"versions":[{"id":"60c2d56d-7fc0-4508-9e98-13d5fb139e41","module_id":"90e7a980-251a-4280-996f-42ffbc5d038c","version_number":1,"code":"module.exports = {\n\tgreet: function(name) {\n\t\treturn \"Hello, \" + name + \"!\";\n\t}\n};\n","secrets":[],"dependencies":[],"created_at":"2026-09-16T05:15:25.719900Z"}],"total":1,"page":0,"per_page":50}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 372.660208ms
+        duration: 326.643041ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -314,7 +332,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ec850166-e024-4a9d-b822-2e0b515c4292/versions?page=1&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/90e7a980-251a-4280-996f-42ffbc5d038c/versions?page=1&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -322,15 +342,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
+        content_length: 48
+        uncompressed: false
         body: '{"versions":[],"total":0,"page":1,"per_page":50}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 365.446291ms
+        duration: 310.960083ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -347,7 +367,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/ec850166-e024-4a9d-b822-2e0b515c4292
+            User-Agent:
+                - Go-Auth0/v3.4.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/modules/90e7a980-251a-4280-996f-42ffbc5d038c
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -363,4 +385,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 387.475042ms
+        duration: 317.706375ms

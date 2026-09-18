@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/auth0/go-auth0/v3/management/client"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -230,4 +231,68 @@ func flattenPush(ctx context.Context, data *schema.ResourceData, enabled bool, a
 	}
 
 	return []interface{}{pushData}, nil
+}
+
+// flattenSettings reads the tenant-wide Advanced MFA Configuration settings, returning
+// nil when the call is refused with a 403 so the caller leaves the block untouched in state.
+// A refusal appends a warning to diags; any other error is returned through diags as an error
+// diagnostic, which keeps the read non-fatal for this block while still surfacing real faults.
+func flattenSettings(ctx context.Context, api *client.Management) ([]interface{}, error) {
+	settings, err := api.Guardian.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if settings == nil {
+		return nil, nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"display_remember_me_checkbox":   settings.GetDisplayRememberMeCheckbox(),
+			"remember_me_default_value":      settings.GetRememberMeDefaultValue(),
+			"mfa_session_inactivity_timeout": settings.GetMfaSessionInactivityTimeout(),
+			"mfa_session_overall_timeout":    settings.GetMfaSessionOverallTimeout(),
+		},
+	}, nil
+}
+
+// flattenPhoneSettings reads the phone factor's one-time password settings. See
+// readSettings for the error handling contract.
+func flattenPhoneSettings(ctx context.Context, api *client.Management) ([]interface{}, error) {
+	settings, err := api.Guardian.Factors.Phone.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if settings == nil {
+		return nil, nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"otp_length":          settings.GetOtpLength(),
+			"otp_expiration_time": settings.GetOtpExpirationTime(),
+		},
+	}, nil
+}
+
+// flattenEmailSettings reads the email factor's one-time password settings. See
+// readSettings for the error handling contract.
+func flattenEmailSettings(ctx context.Context, api *client.Management) ([]interface{}, error) {
+	settings, err := api.Guardian.Factors.Email.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if settings == nil {
+		return nil, nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"otp_length":          settings.GetOtpLength(),
+			"otp_expiration_time": settings.GetOtpExpirationTime(),
+		},
+	}, nil
 }

@@ -4190,3 +4190,98 @@ func TestAccClientAnonymousSessions(t *testing.T) {
 		},
 	})
 }
+
+// testAccClientMemberManagementCreate and related fixtures set enforce_permission_ceiling and
+// enforce_self_assignment_restriction. The API requires connection_deletion_behavior and
+// allowed_strategies on every write to my_organization_configuration — confirmed live.
+const testAccClientMemberManagementCreate = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MemberMgmt - {{.testName}}"
+	description = "Client for member management EA test."
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp"]
+		connection_deletion_behavior = "allow"
+
+		enforce_permission_ceiling          = false
+		enforce_self_assignment_restriction = false
+	}
+}
+`
+
+const testAccClientMemberManagementUpdate = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MemberMgmt - {{.testName}}"
+	description = "Client for member management EA test updated."
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp"]
+		connection_deletion_behavior = "allow"
+
+		enforce_permission_ceiling          = true
+		enforce_self_assignment_restriction = true
+	}
+}
+`
+
+const testAccClientMemberManagementReset = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MemberMgmt - {{.testName}}"
+	description = "Client for member management EA test reset."
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp"]
+		connection_deletion_behavior = "allow"
+
+		enforce_permission_ceiling          = false
+		enforce_self_assignment_restriction = false
+	}
+}
+`
+
+const testAccClientMemberManagementOmit = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MemberMgmt - {{.testName}}"
+	description = "Client for member management EA test omit."
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp"]
+		connection_deletion_behavior = "allow"
+	}
+}
+`
+
+func TestAccClientMyOrganizationConfigurationMemberManagement(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientMemberManagementCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_permission_ceiling", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_self_assignment_restriction", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMemberManagementUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_permission_ceiling", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_self_assignment_restriction", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMemberManagementReset, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_permission_ceiling", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_self_assignment_restriction", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMemberManagementOmit, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_permission_ceiling", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_self_assignment_restriction", "false"),
+				),
+			},
+		},
+	})
+}

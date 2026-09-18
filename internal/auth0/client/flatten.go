@@ -1310,10 +1310,12 @@ func flattenMyOrganizationConfiguration(moc *management.MyOrganizationConfigurat
 	}
 
 	result := map[string]interface{}{
-		"connection_profile_id":        moc.GetConnectionProfileID(),
-		"user_attribute_profile_id":    moc.GetUserAttributeProfileID(),
-		"connection_deletion_behavior": moc.GetConnectionDeletionBehavior(),
-		"invitation_landing_client_id": moc.GetInvitationLandingClientID(),
+		"connection_profile_id":               moc.GetConnectionProfileID(),
+		"user_attribute_profile_id":           moc.GetUserAttributeProfileID(),
+		"connection_deletion_behavior":        moc.GetConnectionDeletionBehavior(),
+		"invitation_landing_client_id":        moc.GetInvitationLandingClientID(),
+		"enforce_permission_ceiling":          moc.GetEnforcePermissionCeiling(),
+		"enforce_self_assignment_restriction": moc.GetEnforceSelfAssignmentRestriction(),
 	}
 
 	if strategies := moc.GetAllowedStrategies(); len(strategies) > 0 {

@@ -156,6 +156,8 @@ Read-Only:
 - `allowed_strategies` (List of String)
 - `connection_deletion_behavior` (String)
 - `connection_profile_id` (String)
+- `enforce_permission_ceiling` (Boolean)
+- `enforce_self_assignment_restriction` (Boolean)
 - `invitation_landing_client_id` (String)
 - `third_party_client_access` (List of Object) (see [below for nested schema](#nestedobjatt--clients--my_organization_configuration--third_party_client_access))
 - `user_attribute_profile_id` (String)

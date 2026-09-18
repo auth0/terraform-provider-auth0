@@ -31,20 +31,31 @@ jobs:
   rl-scan:
     name: RL Scan
     runs-on: ubuntu-latest  # Use a runner that supports OIDC (Ubuntu, Windows, macOS)
+    timeout-minutes: 30
     permissions:
       contents: read
       id-token: write   # required for AWS OIDC federation (PRODSEC_TOOLS_ARN)
     steps:
+      # GoReleaser strips the 'v' prefix from version strings in filenames
+      # (tag v1.2.3 → terraform-provider-auth0_1.2.3_linux_amd64.zip).
+      # Compute the bare version once and reuse it in subsequent steps.
+      - name: Resolve artifact version
+        id: version
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: echo "value=${TAG_NAME#v}" >> "$GITHUB_OUTPUT"
+
       # GoReleaser uploads release assets directly to GitHub Releases (no actions/upload-artifact).
       # Download the linux_amd64 zip from the release to use as the scan target.
       - name: Download release artifact
         id: download
-        continue-on-error: true   # let the rl-scan action be the authority on artifact presence
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.event.release.tag_name }}
+          GH_REPO: ${{ github.repository }}
         run: |
-          gh release download "${{ github.event.release.tag_name }}" \
-            --repo "${{ github.repository }}" \
+          gh release download "$TAG_NAME" \
+            --repo "$GH_REPO" \
             --pattern "terraform-provider-auth0_*_linux_amd64.zip" \
             --dir dist/
 
@@ -54,9 +65,9 @@ jobs:
         continue-on-error: true   # let the gate step below decide pass/fail
         with:
           # ── Artifact inputs ─────────────────────────────────────────────────
-          artifact-name: terraform-provider-auth0_${{ github.event.release.tag_name }}_linux_amd64.zip
-          artifact-path: dist/terraform-provider-auth0_${{ github.event.release.tag_name }}_linux_amd64.zip
-          version: ${{ github.event.release.tag_name }}
+          artifact-name: terraform-provider-auth0_${{ steps.version.outputs.value }}_linux_amd64.zip
+          artifact-path: dist/terraform-provider-auth0_${{ steps.version.outputs.value }}_linux_amd64.zip
+          version: ${{ steps.version.outputs.value }}
           # ── Required secrets ────────────────────────────────────────────────
           RLSECURE_LICENSE:          ${{ secrets.RLSECURE_LICENSE }}
           RLSECURE_SITE_KEY:         ${{ secrets.RLSECURE_SITE_KEY }}

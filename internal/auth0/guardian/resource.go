@@ -601,8 +601,22 @@ func updateGuardian(ctx context.Context, data *schema.ResourceData, meta interfa
 	api := meta.(*config.Config).GetAPI()
 	apiV3 := meta.(*config.Config).GetAPIV3()
 
+	var diags diag.Diagnostics
+
+	// Checked separately: go-multierror lacks Unwrap() []error, so errors.As
+	// cannot traverse into its wrapped errors and IsInsufficientEntitlement would never match.
+	if err := updatePolicy(ctx, data, api); err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			diags = append(diags, apierr.EntitlementWarning(
+				"Guardian Adaptive MFA Policy (confidence-score)",
+				apierr.EntitlementUpdateConsequence,
+			))
+		} else {
+			return diag.FromErr(err)
+		}
+	}
+
 	result := multierror.Append(
-		updatePolicy(ctx, data, api),
 		updateEmailFactor(ctx, data, api),
 		updateOTPFactor(ctx, data, api),
 		updateRecoveryCodeFactor(ctx, data, api),
@@ -616,10 +630,10 @@ func updateGuardian(ctx context.Context, data *schema.ResourceData, meta interfa
 		updateEmailSettings(ctx, data, apiV3),
 	)
 	if err := result.ErrorOrNil(); err != nil {
-		return diag.FromErr(err)
+		return append(diags, diag.FromErr(err)...)
 	}
 
-	return readGuardian(ctx, data, meta)
+	return append(diags, readGuardian(ctx, data, meta)...)
 }
 
 func deleteGuardian(ctx context.Context, _ *schema.ResourceData, meta interface{}) diag.Diagnostics {

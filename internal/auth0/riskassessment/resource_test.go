@@ -25,3 +25,21 @@ func TestAccRiskAssessment(t *testing.T) {
 		},
 	})
 }
+
+const testAccRiskAssessmentInsufficient = `
+resource "auth0_risk_assessments" "my_risk_assessments_settings" {
+  enabled = true
+}`
+
+// TestAccRiskAssessmentInsufficientEntitlement asserts that when the tenant
+// lacks the Adaptive MFA entitlement, the 403 response is non-fatal: apply
+// succeeds with a warning rather than returning an error.
+func TestAccRiskAssessmentInsufficientEntitlement(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccRiskAssessmentInsufficient,
+			},
+		},
+	})
+}

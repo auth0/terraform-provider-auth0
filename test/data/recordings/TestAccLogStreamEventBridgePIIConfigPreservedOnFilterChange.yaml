@@ -1,0 +1,273 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 386
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-LogStream-aws-pii-TestAccLogStreamEventBridgePIIConfigPreservedOnFilterChange","type":"eventbridge","filters":[{"name":"auth.login.success","type":"category"},{"name":"auth.logout.success","type":"category"}],"pii_config":{"log_fields":["first_name","email"],"method":"hash","algorithm":"xxhash"},"sink":{"awsAccountId":"999999999999","awsRegion":"us-west-2"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000005744","name":"Acceptance-Test-LogStream-aws-pii-TestAccLogStreamEventBridgePIIConfigPreservedOnFilterChange","type":"eventbridge","status":"active","sink":{"awsAccountId":"999999999999","awsRegion":"us-west-2","awsPartnerEventSource":"aws.partner/auth0.com/terraform-provider-auth0-dev-8a8df80c-4e52-4e7e-b9fd-d337ab57ae5c/auth0.logs"},"filters":[{"name":"auth.login.success","type":"category"},{"name":"auth.logout.success","type":"category"}],"isPriority":false,"pii_config":{"log_fields":["first_name","email"],"method":"hash","algorithm":"xxhash"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 762.677667ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000005744
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000005744","name":"Acceptance-Test-LogStream-aws-pii-TestAccLogStreamEventBridgePIIConfigPreservedOnFilterChange","type":"eventbridge","status":"active","sink":{"awsAccountId":"999999999999","awsRegion":"us-west-2","awsPartnerEventSource":"aws.partner/auth0.com/terraform-provider-auth0-dev-8a8df80c-4e52-4e7e-b9fd-d337ab57ae5c/auth0.logs"},"filters":[{"name":"auth.login.success","type":"category"},{"name":"auth.logout.success","type":"category"}],"isPriority":false,"pii_config":{"log_fields":["first_name","email"],"method":"hash","algorithm":"xxhash"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 310.38975ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000005744
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000005744","name":"Acceptance-Test-LogStream-aws-pii-TestAccLogStreamEventBridgePIIConfigPreservedOnFilterChange","type":"eventbridge","status":"active","sink":{"awsAccountId":"999999999999","awsRegion":"us-west-2","awsPartnerEventSource":"aws.partner/auth0.com/terraform-provider-auth0-dev-8a8df80c-4e52-4e7e-b9fd-d337ab57ae5c/auth0.logs"},"filters":[{"name":"auth.login.success","type":"category"},{"name":"auth.logout.success","type":"category"}],"isPriority":false,"pii_config":{"log_fields":["first_name","email"],"method":"hash","algorithm":"xxhash"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.270667ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000005744
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000005744","name":"Acceptance-Test-LogStream-aws-pii-TestAccLogStreamEventBridgePIIConfigPreservedOnFilterChange","type":"eventbridge","status":"active","sink":{"awsAccountId":"999999999999","awsRegion":"us-west-2","awsPartnerEventSource":"aws.partner/auth0.com/terraform-provider-auth0-dev-8a8df80c-4e52-4e7e-b9fd-d337ab57ae5c/auth0.logs"},"filters":[{"name":"auth.login.success","type":"category"},{"name":"auth.logout.success","type":"category"}],"isPriority":false,"pii_config":{"log_fields":["first_name","email"],"method":"hash","algorithm":"xxhash"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 306.320666ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 253
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-LogStream-aws-pii-TestAccLogStreamEventBridgePIIConfigPreservedOnFilterChange","filters":[{"name":"auth.login.success","type":"category"}],"pii_config":{"log_fields":["first_name","email"],"method":"hash","algorithm":"xxhash"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000005744
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000005744","name":"Acceptance-Test-LogStream-aws-pii-TestAccLogStreamEventBridgePIIConfigPreservedOnFilterChange","type":"eventbridge","status":"active","sink":{"awsAccountId":"999999999999","awsRegion":"us-west-2","awsPartnerEventSource":"aws.partner/auth0.com/terraform-provider-auth0-dev-8a8df80c-4e52-4e7e-b9fd-d337ab57ae5c/auth0.logs"},"filters":[{"name":"auth.login.success","type":"category"}],"isPriority":false,"pii_config":{"log_fields":["first_name","email"],"method":"hash","algorithm":"xxhash"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 316.42525ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000005744
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000005744","name":"Acceptance-Test-LogStream-aws-pii-TestAccLogStreamEventBridgePIIConfigPreservedOnFilterChange","type":"eventbridge","status":"active","sink":{"awsAccountId":"999999999999","awsRegion":"us-west-2","awsPartnerEventSource":"aws.partner/auth0.com/terraform-provider-auth0-dev-8a8df80c-4e52-4e7e-b9fd-d337ab57ae5c/auth0.logs"},"filters":[{"name":"auth.login.success","type":"category"}],"isPriority":false,"pii_config":{"log_fields":["first_name","email"],"method":"hash","algorithm":"xxhash"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 305.373375ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000005744
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000005744","name":"Acceptance-Test-LogStream-aws-pii-TestAccLogStreamEventBridgePIIConfigPreservedOnFilterChange","type":"eventbridge","status":"active","sink":{"awsAccountId":"999999999999","awsRegion":"us-west-2","awsPartnerEventSource":"aws.partner/auth0.com/terraform-provider-auth0-dev-8a8df80c-4e52-4e7e-b9fd-d337ab57ae5c/auth0.logs"},"filters":[{"name":"auth.login.success","type":"category"}],"isPriority":false,"pii_config":{"log_fields":["first_name","email"],"method":"hash","algorithm":"xxhash"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 282.409708ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000005744
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 632.184583ms

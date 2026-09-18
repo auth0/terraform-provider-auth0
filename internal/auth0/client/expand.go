@@ -50,6 +50,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		JWTConfiguration:                    expandClientJWTConfiguration(data),
 		Addons:                              expandClientAddons(data),
 		NativeSocialLogin:                   expandClientNativeSocialLogin(data),
+		AnonymousSessions:                   expandClientAnonymousSessions(data),
 		Mobile:                              expandClientMobile(data),
 		DefaultOrganization:                 expandDefaultOrganization(data),
 		TokenExchange:                       expandTokenExchange(data),
@@ -369,6 +370,22 @@ func expandClientNativeSocialLogin(data *schema.ResourceData) *management.Client
 	}
 
 	return &nativeSocialLogin
+}
+
+func expandClientAnonymousSessions(data *schema.ResourceData) *management.ClientAnonymousSessions {
+	anonymousSessionsConfig := data.GetRawConfig().GetAttr("anonymous_sessions")
+	if anonymousSessionsConfig.IsNull() || anonymousSessionsConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var anonymousSessions management.ClientAnonymousSessions
+
+	anonymousSessionsConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		anonymousSessions.Active = value.Bool(config.GetAttr("active"))
+		return stop
+	})
+
+	return &anonymousSessions
 }
 
 func expandClientNativeSocialLoginSupportEnabled(config cty.Value) *management.ClientNativeSocialLoginSupportEnabled {
@@ -1207,6 +1224,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
 		"fedcm_login":                                          isFedCMLoginNull,
 		"identity_assertion_authorization_grant":               isIdentityAssertionAuthorizationGrantNull,
+		"anonymous_sessions":                                   isAnonymousSessionsNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1351,6 +1369,15 @@ func isIdentityAssertionAuthorizationGrantNull(data *schema.ResourceData) bool {
 	}
 
 	rawConfig := data.GetRawConfig().GetAttr("identity_assertion_authorization_grant")
+	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
+}
+
+func isAnonymousSessionsNull(data *schema.ResourceData) bool {
+	if !data.HasChange("anonymous_sessions") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("anonymous_sessions")
 	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
 }
 

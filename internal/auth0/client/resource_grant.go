@@ -75,9 +75,10 @@ func NewGrantResource() *schema.Resource {
 				ForceNew: true,
 				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
-					"client", "user",
+					"client", "user", "anonymous_user",
 				}, true),
-				Description: "Defines the type of subject for this grant. Can be one of `client` or `user`. Defaults to `client` when not defined.",
+				Description: "Defines the type of subject for this grant. Can be one of `client`, `user`, or " +
+					"`anonymous_user` (EA only). Defaults to `client` when not defined.",
 			},
 			"authorization_details_types": {
 				Type:     schema.TypeList,
@@ -226,6 +227,15 @@ func validateClientGrant(_ context.Context, diff *schema.ResourceDiff, _ interfa
 
 	if !allowAllScopes && scopes.IsNull() {
 		return fmt.Errorf("either `scopes` must be provided or `allow_all_scopes` must be set to `true`")
+	}
+
+	if diff.Get("subject_type").(string) == "anonymous_user" {
+		fieldsIncompatibleWithAnonymousUser := []string{"organization_usage", "allow_any_organization", "authorization_details_types", "default_for"}
+		for _, field := range fieldsIncompatibleWithAnonymousUser {
+			if !rawConfig.GetAttr(field).IsNull() {
+				return fmt.Errorf("`%s` cannot be set for client grants with `subject_type`: anonymous_user", field)
+			}
+		}
 	}
 
 	return nil

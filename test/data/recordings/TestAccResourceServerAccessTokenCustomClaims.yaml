@@ -1,0 +1,612 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 369
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","access_token":{"claims_mapping":{"custom_claims":[{"name":"country","expression":"anonymous_session.metadata.country"},{"name":"region","expression":"anonymous_session.metadata.region"}]}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 783
+        uncompressed: false
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[{"name":"country","expression":"anonymous_session.metadata.country"},{"name":"region","expression":"anonymous_session.metadata.region"}]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 455.061667ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[{"name":"country","expression":"anonymous_session.metadata.country"},{"name":"region","expression":"anonymous_session.metadata.region"}]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 428.007375ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[{"name":"country","expression":"anonymous_session.metadata.country"},{"name":"region","expression":"anonymous_session.metadata.region"}]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 419.533833ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[{"name":"country","expression":"anonymous_session.metadata.country"},{"name":"region","expression":"anonymous_session.metadata.region"}]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 375.906ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 191
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","access_token":{"claims_mapping":{"custom_claims":[{"name":"city","expression":"anonymous_session.metadata.city"}]}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[{"name":"city","expression":"anonymous_session.metadata.city"}]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 405.811334ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[{"name":"city","expression":"anonymous_session.metadata.city"}]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 410.646625ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[{"name":"city","expression":"anonymous_session.metadata.city"}]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 396.206541ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[{"name":"city","expression":"anonymous_session.metadata.city"}]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 368.56825ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 129
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","access_token":{"claims_mapping":{"custom_claims":[]}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 367.572625ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 411.011667ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 327.7165ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 578.263958ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 74
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"access_token":{"claims_mapping":{"custom_claims":[]}},"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 343.090458ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 22
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"access_token":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 433.525ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 434.080334ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 326.683667ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aac0080e9a9bfa06a4e770a","name":"Acceptance Test - TestAccResourceServerAccessTokenCustomClaims","identifier":"https://uat.api.terraform-provider-auth0.com/TestAccResourceServerAccessTokenCustomClaims","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"},"anonymous_user":{"policy":"deny_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 681.674209ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aac0080e9a9bfa06a4e770a
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 366.054583ms

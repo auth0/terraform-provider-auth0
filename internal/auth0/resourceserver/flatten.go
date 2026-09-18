@@ -28,6 +28,7 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 		data.Set("proof_of_possession", flattenProofOfPossession(resourceServer.GetProofOfPossession())),
 		data.Set("subject_type_authorization", flattenSubjectTypeAuthorization(resourceServer.GetSubjectTypeAuthorization())),
 		data.Set("authorization_policy", flattenAuthorizationPolicy(resourceServer.GetAuthorizationPolicy())),
+		data.Set("access_token", flattenResourceServerAccessToken(resourceServer.GetAccessToken())),
 		data.Set("client_id", resourceServer.GetClientID()),
 		data.Set("is_system", resourceServer.GetIsSystem()),
 	)
@@ -181,6 +182,37 @@ func flattenSubjectTypeAuthorization(subjectType *management.ResourceServerSubje
 	}
 
 	return []interface{}{m}
+}
+
+func flattenResourceServerAccessToken(accessToken *management.ResourceServerAccessToken) []interface{} {
+	if accessToken == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+
+	if claimsMapping := accessToken.GetClaimsMapping(); claimsMapping != nil {
+		m["claims_mapping"] = []interface{}{
+			map[string]interface{}{
+				"custom_claims": flattenResourceServerAccessTokenCustomClaims(claimsMapping.GetCustomClaims()),
+			},
+		}
+	}
+
+	return []interface{}{m}
+}
+
+func flattenResourceServerAccessTokenCustomClaims(customClaims []management.ResourceServerAccessTokenCustomClaimsMappingRule) []interface{} {
+	result := make([]interface{}, len(customClaims))
+
+	for index, claim := range customClaims {
+		result[index] = map[string]interface{}{
+			"name":       claim.GetName(),
+			"expression": claim.GetExpression(),
+		}
+	}
+
+	return result
 }
 
 func flattenAuthorizationPolicy(policy *management.ResourceServerAuthorizationPolicy) []interface{} {

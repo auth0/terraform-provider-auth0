@@ -32,6 +32,7 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 
 ### Read-Only
 
+- `access_token` (List of Object) Configuration for the access tokens issued for this resource server. Remove the block to clear the configuration on the API. (EA only) (see [below for nested schema](#nestedatt--access_token))
 - `allow_offline_access` (Boolean) Indicates whether refresh tokens can be issued for this resource server.
 - `allow_online_access` (Boolean) Indicates whether Online Refresh Tokens can be issued for this resource server. (EA Only)
 - `allow_online_access_with_ephemeral_sessions` (Boolean) Indicates whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral. (EA Only)
@@ -55,6 +56,31 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 - `token_lifetime_for_anonymous_access_tokens` (Number) Number of seconds during which anonymous-session access tokens issued for this resource server remain valid. Minimum 86400 (1 day), maximum 2592000 (30 days). Removing this attribute clears the value on the API. (EA only)
 - `token_lifetime_for_web` (Number) Number of seconds during which access tokens issued for this resource server via implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.
 - `verification_location` (String) URL from which to retrieve JWKs for this resource server. Used for verifying the JWT sent to Auth0 for token introspection.
+
+<a id="nestedatt--access_token"></a>
+### Nested Schema for `access_token`
+
+Read-Only:
+
+- `claims_mapping` (List of Object) (see [below for nested schema](#nestedobjatt--access_token--claims_mapping))
+
+<a id="nestedobjatt--access_token--claims_mapping"></a>
+### Nested Schema for `access_token.claims_mapping`
+
+Read-Only:
+
+- `custom_claims` (List of Object) (see [below for nested schema](#nestedobjatt--access_token--claims_mapping--custom_claims))
+
+<a id="nestedobjatt--access_token--claims_mapping--custom_claims"></a>
+### Nested Schema for `access_token.claims_mapping.custom_claims`
+
+Read-Only:
+
+- `expression` (String)
+- `name` (String)
+
+
+
 
 <a id="nestedatt--authorization_details"></a>
 ### Nested Schema for `authorization_details`

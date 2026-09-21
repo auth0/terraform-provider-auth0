@@ -56,10 +56,10 @@ func TestAccClientMobileValidationError(t *testing.T) {
 
 const testAccClientValidationOnRefreshTokenLifetimeEqual = `
 resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Refresh Token Lifetime - {{.testName}}"
+	name = "Acceptance Test - Refresh Token Lifetime Validation"
 	refresh_token {
-		rotation_type   = "non-rotating"
-		expiration_type = "non-expiring"
+		rotation_type       = "non-rotating"
+		expiration_type     = "non-expiring"
 		idle_token_lifetime = 42
 		token_lifetime      = 42
 	}
@@ -68,10 +68,10 @@ resource "auth0_client" "my_client" {
 
 const testAccClientValidationOnRefreshTokenLifetimeGreater = `
 resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Refresh Token Lifetime - {{.testName}}"
+	name = "Acceptance Test - Refresh Token Lifetime Validation"
 	refresh_token {
-		rotation_type   = "non-rotating"
-		expiration_type = "non-expiring"
+		rotation_type       = "non-rotating"
+		expiration_type     = "non-expiring"
 		idle_token_lifetime = 100
 		token_lifetime      = 42
 	}
@@ -79,15 +79,14 @@ resource "auth0_client" "my_client" {
 `
 
 func TestAccClientRefreshTokenLifetimeValidation(t *testing.T) {
-	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config:      acctest.ParseTestName(testAccClientValidationOnRefreshTokenLifetimeEqual, t.Name()),
+				Config:      testAccClientValidationOnRefreshTokenLifetimeEqual,
 				ExpectError: regexp.MustCompile("idle_token_lifetime.*must be less than token_lifetime"),
 			},
 			{
-				Config:      acctest.ParseTestName(testAccClientValidationOnRefreshTokenLifetimeGreater, t.Name()),
+				Config:      testAccClientValidationOnRefreshTokenLifetimeGreater,
 				ExpectError: regexp.MustCompile("idle_token_lifetime.*must be less than token_lifetime"),
 			},
 		},

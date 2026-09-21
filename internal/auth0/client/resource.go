@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -18,6 +19,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
+	internalValue "github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // ValidAppTypes contains all valid values for client app_type.
@@ -71,6 +73,35 @@ var samlDefault = struct {
 	},
 }
 
+func validateRefreshTokenLifetimes(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	cfg := diff.GetRawConfig()
+	if cfg.IsNull() {
+		return nil
+	}
+
+	refreshTokenCfg := cfg.GetAttr("refresh_token")
+	if refreshTokenCfg.IsNull() || !refreshTokenCfg.IsKnown() || refreshTokenCfg.LengthInt() == 0 {
+		return nil
+	}
+
+	var idleTokenLifetime, tokenLifetime *int
+	refreshTokenCfg.ForEachElement(func(_ cty.Value, elem cty.Value) (stop bool) {
+		idleTokenLifetime = internalValue.Int(elem.GetAttr("idle_token_lifetime"))
+		tokenLifetime = internalValue.Int(elem.GetAttr("token_lifetime"))
+		return stop
+	})
+
+	if idleTokenLifetime != nil && tokenLifetime != nil && *idleTokenLifetime >= *tokenLifetime {
+		return fmt.Errorf(
+			"idle_token_lifetime (%d) must be less than token_lifetime (%d)",
+			*idleTokenLifetime,
+			*tokenLifetime,
+		)
+	}
+
+	return nil
+}
+
 // NewResource will return a new auth0_client resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -82,12 +113,15 @@ func NewResource() *schema.Resource {
 			StateContext: importClient,
 		},
 		// `b2b_integration_configuration` is immutable after client creation; the Management API rejects adding or clearing it later.
-		CustomizeDiff: customdiff.ForceNewIfChange("b2b_integration_configuration",
-			func(_ context.Context, oldValue, newValue, _ interface{}) bool {
-				oldList, _ := oldValue.([]interface{})
-				newList, _ := newValue.([]interface{})
-				return (len(oldList) == 0) != (len(newList) == 0)
-			},
+		CustomizeDiff: customdiff.All(
+			customdiff.ForceNewIfChange("b2b_integration_configuration",
+				func(_ context.Context, oldValue, newValue, _ interface{}) bool {
+					oldList, _ := oldValue.([]interface{})
+					newList, _ := newValue.([]interface{})
+					return (len(oldList) == 0) != (len(newList) == 0)
+				},
+			),
+			validateRefreshTokenLifetimes,
 		),
 		Description: "With this resource, you can set up applications that use Auth0 for authentication " +
 			"and configure allowed callback URLs and secrets for these applications.",

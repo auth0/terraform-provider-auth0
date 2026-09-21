@@ -54,6 +54,45 @@ func TestAccClientMobileValidationError(t *testing.T) {
 	})
 }
 
+const testAccClientValidationOnRefreshTokenLifetimeEqual = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Refresh Token Lifetime Validation"
+	refresh_token {
+		rotation_type       = "non-rotating"
+		expiration_type     = "non-expiring"
+		idle_token_lifetime = 42
+		token_lifetime      = 42
+	}
+}
+`
+
+const testAccClientValidationOnRefreshTokenLifetimeGreater = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Refresh Token Lifetime Validation"
+	refresh_token {
+		rotation_type       = "non-rotating"
+		expiration_type     = "non-expiring"
+		idle_token_lifetime = 100
+		token_lifetime      = 42
+	}
+}
+`
+
+func TestAccClientRefreshTokenLifetimeValidation(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccClientValidationOnRefreshTokenLifetimeEqual,
+				ExpectError: regexp.MustCompile("idle_token_lifetime.*must be less than token_lifetime"),
+			},
+			{
+				Config:      testAccClientValidationOnRefreshTokenLifetimeGreater,
+				ExpectError: regexp.MustCompile("idle_token_lifetime.*must be less than token_lifetime"),
+			},
+		},
+	})
+}
+
 const testAccCreateMobileClient = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"

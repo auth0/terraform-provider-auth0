@@ -30,6 +30,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/email"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/encryptionkeymanager"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/experimentfeatureflag"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/guardian"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/hook"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/logstream"
@@ -184,6 +185,7 @@ func New() *schema.Provider {
 			"auth0_email_template":                           email.NewTemplateResource(),
 			"auth0_event_stream":                             eventstream.NewResource(),
 			"auth0_encryption_key_manager":                   encryptionkeymanager.NewEncryptionKeyManagerResource(),
+			"auth0_experiment_feature_flag":                  experimentfeatureflag.NewResource(),
 			"auth0_flow":                                     flow.NewResource(),
 			"auth0_flow_vault_connection":                    flow.NewVaultConnectionResource(),
 			"auth0_form":                                     form.NewResource(),

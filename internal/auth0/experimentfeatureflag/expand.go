@@ -53,8 +53,7 @@ func expandFeatureFlagUpdate(data *schema.ResourceData) (*management.UpdateFeatu
 			return nil, err
 		}
 
-		updateParameters := management.UpdateFeatureFlagParameters(parameters)
-		request.SetParameters(&updateParameters)
+		request.SetParameters(&parameters)
 		hasChanged = true
 	}
 

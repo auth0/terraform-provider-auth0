@@ -296,7 +296,7 @@ type variationUpdate struct {
 type variationDiff struct {
 	toAdd    []variationConfig
 	toUpdate []variationUpdate
-	toRemove []string // server-assigned ids.
+	toRemove []string
 }
 
 // reconcileVariations applies the variation diff to the flag so it matches configuration.

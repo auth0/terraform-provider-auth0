@@ -14,8 +14,8 @@ import (
 func NewDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readFeatureFlagForDataSource,
-		Description:  "Data source to retrieve a specific Experiment Center feature flag by `id`. (EA only)",
-		Schema:       dataSourceSchema(),
+		Description: "Data source to retrieve a specific Experiment Center feature flag by `id`. (EA only)",
+		Schema:      dataSourceSchema(),
 	}
 }
 

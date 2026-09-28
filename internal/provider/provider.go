@@ -262,6 +262,7 @@ func New() *schema.Provider {
 			"auth0_custom_domain":                            customdomain.NewDataSource(),
 			"auth0_custom_domains":                           customdomain.NewCustomDomainsDataSource(),
 			"auth0_event_stream":                             eventstream.NewDataSource(),
+			"auth0_experiment_feature_flag":                  experimentfeatureflag.NewDataSource(),
 			"auth0_flow":                                     flow.NewDataSource(),
 			"auth0_flow_vault_connection":                    flow.NewVaultConnectionDataSource(),
 			"auth0_form":                                     form.NewDataSource(),

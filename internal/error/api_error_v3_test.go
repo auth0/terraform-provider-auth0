@@ -113,6 +113,37 @@ func TestIsInsufficientEntitlement(t *testing.T) {
 		assert.True(t, IsInsufficientEntitlement(err))
 	})
 
+	t.Run("returns true for not_entitled error", func(t *testing.T) {
+		err := &managementv3.ForbiddenError{
+			Body: map[string]interface{}{
+				"errorCode": "not_entitled",
+			},
+		}
+
+		assert.True(t, IsInsufficientEntitlement(err))
+	})
+
+	t.Run("returns true for not_entitled wrapped in fmt.Errorf", func(t *testing.T) {
+		forbidden := &managementv3.ForbiddenError{
+			Body: map[string]interface{}{
+				"errorCode": "not_entitled",
+			},
+		}
+		wrapped := fmt.Errorf("calling guardian: %w", forbidden)
+
+		assert.True(t, IsInsufficientEntitlement(wrapped))
+	})
+
+	t.Run("returns false for feature_not_entitled near-miss", func(t *testing.T) {
+		err := &managementv3.ForbiddenError{
+			Body: map[string]interface{}{
+				"errorCode": "feature_not_entitled",
+			},
+		}
+
+		assert.False(t, IsInsufficientEntitlement(err))
+	})
+
 	t.Run("returns false for insufficient_scope error", func(t *testing.T) {
 		err := &managementv3.ForbiddenError{
 			Body: map[string]interface{}{

@@ -240,6 +240,16 @@ func TestIsInsufficientEntitlementV1Path(t *testing.T) {
 			expected: true,
 		},
 		{
+			name:     "v1 SDK 403 with not_entitled",
+			givenErr: testManagementError{StatusCode: http.StatusForbidden, ErrorCode: "not_entitled"},
+			expected: true,
+		},
+		{
+			name:     "v1 SDK 403 with feature_not_entitled is not an entitlement error",
+			givenErr: testManagementError{StatusCode: http.StatusForbidden, ErrorCode: "feature_not_entitled"},
+			expected: false,
+		},
+		{
 			name:     "v1 SDK 403 with insufficient_scope is not an entitlement error",
 			givenErr: testManagementError{StatusCode: http.StatusForbidden, ErrorCode: "insufficient_scope"},
 			expected: false,
@@ -269,10 +279,29 @@ func TestIsInsufficientEntitlementV1Path(t *testing.T) {
 }
 
 func TestEntitlementWarning(t *testing.T) {
-	diag := EntitlementWarning("Risk Assessment", "the configuration was not applied")
+	err := testManagementError{StatusCode: http.StatusForbidden, ErrorCode: "not_entitled"}
+	d := EntitlementWarning("Risk Assessment", "the configuration was not applied", err)
 
-	assert.Equal(t, "Risk Assessment entitlement not available", diag.Summary)
-	assert.Contains(t, diag.Detail, "Risk Assessment requires an add-on entitlement")
-	assert.Contains(t, diag.Detail, "the configuration was not applied")
-	assert.Contains(t, diag.Detail, "Contact Auth0 support to enable this feature.")
+	assert.Equal(t, "Risk Assessment entitlement not available", d.Summary)
+	assert.Contains(t, d.Detail, "Risk Assessment requires a tenant feature flag")
+	assert.Contains(t, d.Detail, "the configuration was not applied")
+	assert.Contains(t, d.Detail, `(error code: "not_entitled")`)
+	assert.Contains(t, d.Detail, "Contact Auth0 support to enable this feature.")
+}
+
+func TestEntitlementWarningDoesNotEchoBackendMessage(t *testing.T) {
+	backendMessage := "Please upgrade your subscription to use bot detection"
+	err := &managementv3.ForbiddenError{
+		Body: map[string]interface{}{
+			"statusCode": float64(403),
+			"error":      "Forbidden",
+			"message":    backendMessage,
+			"errorCode":  "insufficient_entitlement",
+		},
+	}
+	d := EntitlementWarning("Captcha", "the configuration was not applied", err)
+
+	assert.NotContains(t, d.Detail, backendMessage)
+	assert.Contains(t, d.Detail, `(error code: "insufficient_entitlement")`)
+	assert.Contains(t, d.Detail, "add-on entitlement")
 }

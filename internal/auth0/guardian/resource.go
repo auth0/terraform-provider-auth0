@@ -567,15 +567,29 @@ func readGuardian(ctx context.Context, data *schema.ResourceData, meta interface
 		}
 	}
 
+	diags := diag.FromErr(result.ErrorOrNil())
+
 	phoneSettings, err := flattenPhoneSettings(ctx, apiV3)
-	result = multierror.Append(result, err)
-	result = multierror.Append(result, data.Set("phone_settings", phoneSettings))
+	if err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			diags = append(diags, apierr.EntitlementWarning("phone_settings", apierr.EntitlementReadConsequence, err))
+		} else {
+			return append(diags, diag.FromErr(err)...)
+		}
+	} else if err := data.Set("phone_settings", phoneSettings); err != nil {
+		return append(diags, diag.FromErr(err)...)
+	}
 
 	emailSettings, err := flattenEmailSettings(ctx, apiV3)
-	result = multierror.Append(result, err)
-	result = multierror.Append(result, data.Set("email_settings", emailSettings))
-
-	diags := diag.FromErr(result.ErrorOrNil())
+	if err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			diags = append(diags, apierr.EntitlementWarning("email_settings", apierr.EntitlementReadConsequence, err))
+		} else {
+			return append(diags, diag.FromErr(err)...)
+		}
+	} else if err := data.Set("email_settings", emailSettings); err != nil {
+		return append(diags, diag.FromErr(err)...)
+	}
 
 	settings, err := flattenSettings(ctx, apiV3)
 	if err != nil {
@@ -610,6 +624,7 @@ func updateGuardian(ctx context.Context, data *schema.ResourceData, meta interfa
 			diags = append(diags, apierr.EntitlementWarning(
 				"Guardian Adaptive MFA Policy (confidence-score)",
 				apierr.EntitlementUpdateConsequence,
+				err,
 			))
 		} else {
 			return diag.FromErr(err)
@@ -626,11 +641,25 @@ func updateGuardian(ctx context.Context, data *schema.ResourceData, meta interfa
 		updateDUO(ctx, data, api),
 		updatePush(ctx, data, api),
 		updateSettings(ctx, data, apiV3),
-		updatePhoneSettings(ctx, data, apiV3),
-		updateEmailSettings(ctx, data, apiV3),
 	)
 	if err := result.ErrorOrNil(); err != nil {
 		return append(diags, diag.FromErr(err)...)
+	}
+
+	if err := updatePhoneSettings(ctx, data, apiV3); err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			diags = append(diags, apierr.EntitlementWarning("phone_settings", apierr.EntitlementUpdateConsequence, err))
+		} else {
+			return append(diags, diag.FromErr(err)...)
+		}
+	}
+
+	if err := updateEmailSettings(ctx, data, apiV3); err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			diags = append(diags, apierr.EntitlementWarning("email_settings", apierr.EntitlementUpdateConsequence, err))
+		} else {
+			return append(diags, diag.FromErr(err)...)
+		}
 	}
 
 	return append(diags, readGuardian(ctx, data, meta)...)

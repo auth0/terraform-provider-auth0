@@ -65,9 +65,11 @@ func RemoveFromStateWithWarning(resourceType string, data *schema.ResourceData, 
 	}}
 }
 
-// IsInsufficientEntitlement reports whether err represents an Auth0 403
-// insufficient_entitlement response. It handles both the v1 and v3 SDK error
-// types. Use this in Read and Update functions for entitlement-gated resources.
+// IsInsufficientEntitlement reports whether err represents an Auth0 403 response
+// for either a subscription-entitlement gate (errorCode "insufficient_entitlement")
+// or a tenant feature-flag gate (errorCode "not_entitled", e.g. mfa_advanced_factor_config).
+// It handles both the v1 and v3 SDK error types. Use this in Read and Update functions
+// for entitlement-gated resources.
 func IsInsufficientEntitlement(err error) bool {
 	if err == nil {
 		return false
@@ -76,7 +78,7 @@ func IsInsufficientEntitlement(err error) bool {
 	// V1 SDK: management.Error exposes Status() and Code().
 	var mErr management.Error
 	if errors.As(err, &mErr) && mErr.Status() == http.StatusForbidden {
-		return mErr.Code() == "insufficient_entitlement"
+		return mErr.Code() == "insufficient_entitlement" || mErr.Code() == "not_entitled"
 	}
 
 	// V3 SDK: delegate to the existing v3-specific helper.
@@ -92,18 +94,46 @@ const EntitlementReadConsequence = "its current configuration could not be read"
 const EntitlementUpdateConsequence = "the configuration was not applied"
 
 // EntitlementWarning returns a non-fatal warning diagnostic for an entitlement-gated
-// feature. Pass the feature name and a phrase describing the consequence of the
-// missing entitlement (e.g. EntitlementUpdateConsequence).
-func EntitlementWarning(feature, consequence string) diag.Diagnostic {
+// feature. Pass the feature name, a consequence phrase (e.g. EntitlementUpdateConsequence),
+// and the original error. The Detail text is tailored to the specific error code:
+// "insufficient_entitlement" → subscription/add-on language; "not_entitled" → feature-flag
+// language. The raw API message is intentionally NOT echoed; only the machine-generated
+// errorCode is included to avoid surfacing known backend copy-paste bugs.
+func EntitlementWarning(feature, consequence string, err error) diag.Diagnostic {
+	code := forbiddenErrorCode(err)
+
+	var gateDescription string
+	if code == "not_entitled" {
+		gateDescription = "a tenant feature flag that is not enabled"
+	} else {
+		gateDescription = "an add-on entitlement not present"
+	}
+
+	detail := fmt.Sprintf(
+		"%s requires %s on this tenant, so %s (error code: %q). "+
+			"Contact Auth0 support to enable this feature.",
+		feature, gateDescription, consequence, code,
+	)
+
 	return diag.Diagnostic{
 		Severity: diag.Warning,
 		Summary:  fmt.Sprintf("%s entitlement not available", feature),
-		Detail: fmt.Sprintf(
-			"%s requires an add-on entitlement not present on this tenant, so %s. "+
-				"Contact Auth0 support to enable this feature.",
-			feature, consequence,
-		),
+		Detail:   detail,
 	}
+}
+
+// forbiddenErrorCode extracts the errorCode field from a 403 API error,
+// trying the v1 management.Error interface first, then the v3 ForbiddenError path.
+// Returns "" if the error is nil or does not carry an errorCode.
+func forbiddenErrorCode(err error) string {
+	if err == nil {
+		return ""
+	}
+	var mErr management.Error
+	if errors.As(err, &mErr) && mErr.Status() == http.StatusForbidden {
+		return mErr.Code()
+	}
+	return v3ForbiddenErrorCode(err)
 }
 
 // IsStatusNotFound checks to see if the error from the Auth0 Management API is a 404.

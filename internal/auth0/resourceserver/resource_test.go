@@ -778,3 +778,49 @@ func TestAccResourceServerAccessTokenCustomClaims(t *testing.T) {
 		},
 	})
 }
+
+const testAccResourceServerRequireConsentNonRepudiationCreate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                             = "Acceptance Test - {{.testName}}"
+	identifier                       = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	require_consent_non_repudiation  = true
+}
+`
+
+const testAccResourceServerRequireConsentNonRepudiationUpdate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                             = "Acceptance Test - {{.testName}}"
+	identifier                       = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	require_consent_non_repudiation  = false
+}
+`
+
+const testAccResourceServerRequireConsentNonRepudiationRemoved = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+`
+
+func TestAccResourceServerRequireConsentNonRepudiation(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccResourceServerRequireConsentNonRepudiationCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "require_consent_non_repudiation", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerRequireConsentNonRepudiationUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "require_consent_non_repudiation", "false"),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccResourceServerRequireConsentNonRepudiationRemoved, t.Name()),
+				PlanOnly: true,
+			},
+		},
+	})
+}

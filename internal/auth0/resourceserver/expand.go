@@ -53,6 +53,9 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		if data.IsNewResource() || data.HasChange("allow_online_access_with_ephemeral_sessions") {
 			resourceServer.AllowOnlineAccessWithEphemeralSessions = value.Bool(cfg.GetAttr("allow_online_access_with_ephemeral_sessions"))
 		}
+		if data.IsNewResource() || data.HasChange("require_consent_non_repudiation") {
+			resourceServer.RequireConsentNonRepudiation = value.Bool(cfg.GetAttr("require_consent_non_repudiation"))
+		}
 	}
 	return resourceServer
 }

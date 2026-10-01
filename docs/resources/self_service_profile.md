@@ -14,6 +14,7 @@ With this resource, you can create and manage Self-Service Profile for a tenant.
 
 ```terraform
 resource "auth0_self_service_profile" "my_self_service_profile" {
+  name = "my-self-service-profile"
   user_attributes {
     name        = "sample-name"
     description = "sample-description"

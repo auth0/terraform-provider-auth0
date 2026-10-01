@@ -119,13 +119,13 @@ resource "auth0_client_grant" "default_3p_grant" {
 - `allow_offline_access` (Boolean) Indicates whether refresh tokens can be issued for this resource server.
 - `allow_online_access` (Boolean) Indicates whether Online Refresh Tokens can be issued for this resource server. (EA Only)
 - `allow_online_access_with_ephemeral_sessions` (Boolean) Indicates whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral. (EA Only)
-- `require_consent_non_repudiation` (Boolean) When true, the authorization server will reject consent decisions that do not include a valid signature and kid. (EA Only)
 - `authorization_details` (Block List) Authorization details for this resource server. (see [below for nested schema](#nestedblock--authorization_details))
 - `authorization_policy` (Block List, Max: 1) Authorization policy for the resource server.(EA Only) (see [below for nested schema](#nestedblock--authorization_policy))
 - `consent_policy` (String) Consent policy for this resource server. Options include `transactional-authorization-with-mfa`, or `null` to disable.
 - `enforce_policies` (Boolean) If this setting is enabled, RBAC authorization policies will be enforced for this API. Role and permission assignments will be evaluated during the login transaction.
 - `name` (String) Friendly name for the resource server. Cannot include `<` or `>` characters.
 - `proof_of_possession` (Block List, Max: 1) Configuration settings for proof-of-possession for this resource server. (see [below for nested schema](#nestedblock--proof_of_possession))
+- `require_consent_non_repudiation` (Boolean) When true, the authorization server will reject consent decisions that do not include a valid signature and kid. (EA Only)
 - `signing_alg` (String) Algorithm used to sign JWTs. Options include `HS256`, `RS256`, and `PS256`.
 - `signing_secret` (String) Secret used to sign tokens when using symmetric algorithms (HS256).
 - `skip_consent_for_verifiable_first_party_clients` (Boolean) Indicates whether to skip user consent for applications flagged as first party.

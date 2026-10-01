@@ -573,8 +573,10 @@ func readGuardian(ctx context.Context, data *schema.ResourceData, meta interface
 	if err != nil {
 		if apierr.IsInsufficientEntitlement(err) {
 			diags = append(diags, apierr.EntitlementWarning("phone_settings", apierr.EntitlementReadConsequence, err))
-			// Explicitly clear so planned values don't leak into state when the API is not accessible.
-			if setErr := data.Set("phone_settings", []interface{}{}); setErr != nil {
+			// Restore prior state so planned values don't leak into state when the API is not accessible.
+			// GetChange returns (old_state, new_planned); taking old preserves the last known good value.
+			oldVal, _ := data.GetChange("phone_settings")
+			if setErr := data.Set("phone_settings", oldVal); setErr != nil {
 				return append(diags, diag.FromErr(setErr)...)
 			}
 		} else {
@@ -588,8 +590,9 @@ func readGuardian(ctx context.Context, data *schema.ResourceData, meta interface
 	if err != nil {
 		if apierr.IsInsufficientEntitlement(err) {
 			diags = append(diags, apierr.EntitlementWarning("email_settings", apierr.EntitlementReadConsequence, err))
-			// Explicitly clear so planned values don't leak into state when the API is not accessible.
-			if setErr := data.Set("email_settings", []interface{}{}); setErr != nil {
+			// Restore prior state so planned values don't leak into state when the API is not accessible.
+			oldVal, _ := data.GetChange("email_settings")
+			if setErr := data.Set("email_settings", oldVal); setErr != nil {
 				return append(diags, diag.FromErr(setErr)...)
 			}
 		} else {
@@ -611,6 +614,9 @@ func readGuardian(ctx context.Context, data *schema.ResourceData, meta interface
 		})
 	case apierr.IsInsufficientEntitlement(err):
 		diags = append(diags, apierr.EntitlementWarning("settings", apierr.EntitlementReadConsequence, err))
+		// Restore prior state so planned values don't leak into state when the API is not accessible.
+		oldVal, _ := data.GetChange("settings")
+		settings, _ = oldVal.([]interface{})
 	default:
 		return append(diags, diag.FromErr(err)...)
 	}

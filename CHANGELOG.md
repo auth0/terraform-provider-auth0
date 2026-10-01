@@ -1,5 +1,14 @@
 ## Unreleased
 
+## v1.58.1
+
+ENHANCEMENTS:
+- `resource/auth0_client` – Add plan-time validation enforcing that `refresh_token.idle_token_lifetime` is less than `refresh_token.token_lifetime` ([#1727](https://github.com/auth0/terraform-provider-auth0/pull/1727))
+
+BUG FIXES:
+- `resource/auth0_guardian` – Surface missing entitlement as a non-fatal warning for `phone_settings`, `email_settings`, and `settings` blocks, allowing `apply` to succeed on tenants without the required add-on (EA only) ([#1737](https://github.com/auth0/terraform-provider-auth0/pull/1737))
+- `resource/auth0_resource_server` – Remove client-side range validator from `token_lifetime_for_anonymous_access_tokens` that incorrectly rejected unset/zero values during config generation (EA only) ([#1739](https://github.com/auth0/terraform-provider-auth0/pull/1739))
+
 ## v1.58.0
 
 FEATURES:

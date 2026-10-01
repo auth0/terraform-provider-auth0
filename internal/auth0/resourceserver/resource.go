@@ -94,6 +94,13 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Indicates whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral. (EA Only)",
 			},
+			"require_consent_non_repudiation": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "When true, the authorization server will reject consent decisions " +
+					"that do not include a valid signature and kid. (EA Only)",
+			},
 			"token_lifetime": {
 				Type:     schema.TypeInt,
 				Optional: true,

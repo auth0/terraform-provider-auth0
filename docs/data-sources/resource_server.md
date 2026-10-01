@@ -45,6 +45,7 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 - `is_system` (Boolean) Indicates whether this resource server is a special resource server created by Auth0. It cannot be modified or deleted directly.
 - `name` (String) Friendly name for the resource server. Cannot include `<` or `>` characters.
 - `proof_of_possession` (List of Object) Configuration settings for proof-of-possession for this resource server. (see [below for nested schema](#nestedatt--proof_of_possession))
+- `require_consent_non_repudiation` (Boolean) When true, the authorization server will reject consent decisions that do not include a valid signature and kid. (EA Only)
 - `scopes` (Set of Object) List of permissions (scopes) used by this resource server. (see [below for nested schema](#nestedatt--scopes))
 - `signing_alg` (String) Algorithm used to sign JWTs. Options include `HS256`, `RS256`, and `PS256`.
 - `signing_secret` (String) Secret used to sign tokens when using symmetric algorithms (HS256).

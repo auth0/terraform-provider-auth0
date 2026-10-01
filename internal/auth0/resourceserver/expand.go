@@ -37,7 +37,6 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.SigningSecret = value.String(cfg.GetAttr("signing_secret"))
 		resourceServer.AllowOfflineAccess = value.Bool(cfg.GetAttr("allow_offline_access"))
 		resourceServer.TokenLifetimeForWeb = value.Int(cfg.GetAttr("token_lifetime_for_web"))
-		resourceServer.TokenLifetimeForAnonymousAccessTokens = value.Int(cfg.GetAttr("token_lifetime_for_anonymous_access_tokens"))
 		resourceServer.EnforcePolicies = value.Bool(cfg.GetAttr("enforce_policies"))
 		resourceServer.TokenDialect = value.String(cfg.GetAttr("token_dialect"))
 		resourceServer.VerificationLocation = value.String(cfg.GetAttr("verification_location"))
@@ -46,6 +45,10 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.ConsentPolicy = expandConsentPolicy(data)
 		resourceServer.ProofOfPossession = expandProofOfPossession(data)
 		resourceServer.AccessToken = expandResourceServerAccessToken(data)
+		// Conditionally set to avoid sending the generated config zero value.
+		if data.IsNewResource() || data.HasChange("token_lifetime_for_anonymous_access_tokens") {
+			resourceServer.TokenLifetimeForAnonymousAccessTokens = value.Int(cfg.GetAttr("token_lifetime_for_anonymous_access_tokens"))
+		}
 		// Skip sending EA params implicitly on all PATCH calls.
 		if data.IsNewResource() || data.HasChange("allow_online_access") {
 			resourceServer.AllowOnlineAccess = value.Bool(cfg.GetAttr("allow_online_access"))

@@ -109,11 +109,10 @@ func NewResource() *schema.Resource {
 					"implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.",
 			},
 			"token_lifetime_for_anonymous_access_tokens": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				ValidateFunc: validation.IntBetween(86400, 2592000),
+				Type:     schema.TypeInt,
+				Optional: true,
 				Description: "Number of seconds during which anonymous-session access tokens issued for this " +
-					"resource server remain valid. Minimum 86400 (1 day), maximum 2592000 (30 days). " +
+					"resource server remain valid. Must be between 86400 (1 day) and 2592000 (30 days) when present. " +
 					"Removing this attribute clears the value on the API. (EA only)",
 			},
 			"access_token": {

@@ -567,28 +567,58 @@ func readGuardian(ctx context.Context, data *schema.ResourceData, meta interface
 		}
 	}
 
-	phoneSettings, err := flattenPhoneSettings(ctx, apiV3)
-	result = multierror.Append(result, err)
-	result = multierror.Append(result, data.Set("phone_settings", phoneSettings))
-
-	emailSettings, err := flattenEmailSettings(ctx, apiV3)
-	result = multierror.Append(result, err)
-	result = multierror.Append(result, data.Set("email_settings", emailSettings))
-
 	diags := diag.FromErr(result.ErrorOrNil())
 
-	settings, err := flattenSettings(ctx, apiV3)
+	phoneSettings, err := flattenPhoneSettings(ctx, apiV3)
 	if err != nil {
-		if apierr.IsInsufficientScope(err) {
-			diags = append(diags, diag.Diagnostic{
-				Severity: diag.Warning,
-				Summary:  "settings could not be read",
-				Detail: "Denied `settings` access due to missing `read:tenant_settings` scope, " +
-					"rest of the resource was read normally.\n\n",
-			})
+		if apierr.IsInsufficientEntitlement(err) {
+			diags = append(diags, apierr.EntitlementWarning("phone_settings", apierr.EntitlementReadConsequence, err))
+			// Restore prior state so planned values don't leak into state when the API is not accessible.
+			// GetChange returns (old_state, new_planned); taking old preserves the last known good value.
+			oldVal, _ := data.GetChange("phone_settings")
+			if setErr := data.Set("phone_settings", oldVal); setErr != nil {
+				return append(diags, diag.FromErr(setErr)...)
+			}
 		} else {
 			return append(diags, diag.FromErr(err)...)
 		}
+	} else if err := data.Set("phone_settings", phoneSettings); err != nil {
+		return append(diags, diag.FromErr(err)...)
+	}
+
+	emailSettings, err := flattenEmailSettings(ctx, apiV3)
+	if err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			diags = append(diags, apierr.EntitlementWarning("email_settings", apierr.EntitlementReadConsequence, err))
+			// Restore prior state so planned values don't leak into state when the API is not accessible.
+			oldVal, _ := data.GetChange("email_settings")
+			if setErr := data.Set("email_settings", oldVal); setErr != nil {
+				return append(diags, diag.FromErr(setErr)...)
+			}
+		} else {
+			return append(diags, diag.FromErr(err)...)
+		}
+	} else if err := data.Set("email_settings", emailSettings); err != nil {
+		return append(diags, diag.FromErr(err)...)
+	}
+
+	settings, err := flattenSettings(ctx, apiV3)
+	switch {
+	case err == nil:
+	case apierr.IsInsufficientScope(err):
+		diags = append(diags, diag.Diagnostic{
+			Severity: diag.Warning,
+			Summary:  "settings could not be read",
+			Detail: "Denied `settings` access due to missing `read:tenant_settings` scope, " +
+				"rest of the resource was read normally.\n\n",
+		})
+	case apierr.IsInsufficientEntitlement(err):
+		diags = append(diags, apierr.EntitlementWarning("settings", apierr.EntitlementReadConsequence, err))
+		// Restore prior state so planned values don't leak into state when the API is not accessible.
+		oldVal, _ := data.GetChange("settings")
+		settings, _ = oldVal.([]interface{})
+	default:
+		return append(diags, diag.FromErr(err)...)
 	}
 	if err := data.Set("settings", settings); err != nil {
 		return append(diags, diag.FromErr(err)...)
@@ -610,6 +640,7 @@ func updateGuardian(ctx context.Context, data *schema.ResourceData, meta interfa
 			diags = append(diags, apierr.EntitlementWarning(
 				"Guardian Adaptive MFA Policy (confidence-score)",
 				apierr.EntitlementUpdateConsequence,
+				err,
 			))
 		} else {
 			return diag.FromErr(err)
@@ -625,12 +656,35 @@ func updateGuardian(ctx context.Context, data *schema.ResourceData, meta interfa
 		updateWebAuthnPlatform(ctx, data, api),
 		updateDUO(ctx, data, api),
 		updatePush(ctx, data, api),
-		updateSettings(ctx, data, apiV3),
-		updatePhoneSettings(ctx, data, apiV3),
-		updateEmailSettings(ctx, data, apiV3),
 	)
 	if err := result.ErrorOrNil(); err != nil {
 		return append(diags, diag.FromErr(err)...)
+	}
+
+	// Checked separately: go-multierror lacks Unwrap() []error, so errors.As
+	// cannot traverse into its wrapped errors and IsInsufficientEntitlement would never match.
+	if err := updateSettings(ctx, data, apiV3); err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			diags = append(diags, apierr.EntitlementWarning("settings", apierr.EntitlementUpdateConsequence, err))
+		} else {
+			return append(diags, diag.FromErr(err)...)
+		}
+	}
+
+	if err := updatePhoneSettings(ctx, data, apiV3); err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			diags = append(diags, apierr.EntitlementWarning("phone_settings", apierr.EntitlementUpdateConsequence, err))
+		} else {
+			return append(diags, diag.FromErr(err)...)
+		}
+	}
+
+	if err := updateEmailSettings(ctx, data, apiV3); err != nil {
+		if apierr.IsInsufficientEntitlement(err) {
+			diags = append(diags, apierr.EntitlementWarning("email_settings", apierr.EntitlementUpdateConsequence, err))
+		} else {
+			return append(diags, diag.FromErr(err)...)
+		}
 	}
 
 	return append(diags, readGuardian(ctx, data, meta)...)

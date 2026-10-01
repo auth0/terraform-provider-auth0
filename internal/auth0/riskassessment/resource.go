@@ -46,7 +46,7 @@ func readRiskAssessmentSettings(ctx context.Context, data *schema.ResourceData, 
 	settings, err := api.RiskAssessment.ReadSettings(ctx)
 	if err != nil {
 		if apierr.IsInsufficientEntitlement(err) {
-			return diag.Diagnostics{apierr.EntitlementWarning("Risk Assessment", apierr.EntitlementReadConsequence)}
+			return diag.Diagnostics{apierr.EntitlementWarning("Risk Assessment", apierr.EntitlementReadConsequence, err)}
 		}
 		return diag.FromErr(err)
 	}
@@ -70,7 +70,7 @@ func updateRiskAssessmentSettings(ctx context.Context, data *schema.ResourceData
 
 	if err := api.RiskAssessment.UpdateSettings(ctx, setting); err != nil {
 		if apierr.IsInsufficientEntitlement(err) {
-			diags = append(diags, apierr.EntitlementWarning("Risk Assessment", apierr.EntitlementUpdateConsequence))
+			diags = append(diags, apierr.EntitlementWarning("Risk Assessment", apierr.EntitlementUpdateConsequence, err))
 		} else {
 			return diag.FromErr(err)
 		}

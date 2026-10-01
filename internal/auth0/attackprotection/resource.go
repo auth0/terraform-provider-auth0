@@ -687,7 +687,7 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		case apierr.IsInsufficientScope(err):
 			log.Printf("[INFO] Insufficient scope for Bot Detection; skipping read.")
 		case apierr.IsInsufficientEntitlement(err):
-			diags = append(diags, apierr.EntitlementWarning("Bot Detection", apierr.EntitlementReadConsequence))
+			diags = append(diags, apierr.EntitlementWarning("Bot Detection", apierr.EntitlementReadConsequence, err))
 		default:
 			return append(diags, diag.FromErr(err)...)
 		}
@@ -699,7 +699,7 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		case apierr.IsInsufficientScope(err):
 			log.Printf("[INFO] Insufficient scope for Captcha; skipping read.")
 		case apierr.IsInsufficientEntitlement(err):
-			diags = append(diags, apierr.EntitlementWarning("Captcha", apierr.EntitlementReadConsequence))
+			diags = append(diags, apierr.EntitlementWarning("Captcha", apierr.EntitlementReadConsequence, err))
 		default:
 			return append(diags, diag.FromErr(err)...)
 		}
@@ -745,7 +745,7 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 			case apierr.IsInsufficientScope(err):
 				log.Printf("[INFO] Insufficient scope for Bot Detection; skipping update.")
 			case apierr.IsInsufficientEntitlement(err):
-				diags = append(diags, apierr.EntitlementWarning("Bot Detection", apierr.EntitlementUpdateConsequence))
+				diags = append(diags, apierr.EntitlementWarning("Bot Detection", apierr.EntitlementUpdateConsequence, err))
 			default:
 				result = multierror.Append(result, err)
 			}
@@ -758,7 +758,7 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 			case apierr.IsInsufficientScope(err):
 				log.Printf("[INFO] Insufficient scope for Captcha; skipping update.")
 			case apierr.IsInsufficientEntitlement(err):
-				diags = append(diags, apierr.EntitlementWarning("Captcha", apierr.EntitlementUpdateConsequence))
+				diags = append(diags, apierr.EntitlementWarning("Captcha", apierr.EntitlementUpdateConsequence, err))
 			default:
 				result = multierror.Append(result, err)
 			}

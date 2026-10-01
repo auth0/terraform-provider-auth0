@@ -678,3 +678,49 @@ func TestAccGuardianPolicyConfidenceScoreInsufficientEntitlement(t *testing.T) {
 		},
 	})
 }
+
+const testAccGuardianPhoneEmailSettingsNotEntitledConfig = `
+resource "auth0_guardian" "my_guardian" {
+  policy        = "never"
+  otp           = true
+  email         = true
+  recovery_code = true
+
+  phone_settings {
+    otp_length          = 6
+    otp_expiration_time = 300
+  }
+
+  email_settings {
+    otp_length          = 6
+    otp_expiration_time = 300
+  }
+}`
+
+// TestAccGuardianPhoneEmailSettingsNotEntitled asserts that when the tenant has
+// the mfa_advanced_factor_config feature flag disabled (errorCode "not_entitled"),
+// setting and reading phone_settings and email_settings emits non-fatal warnings and
+// leaves those blocks empty in state rather than failing the apply or persisting the
+// config values into state.
+func TestAccGuardianPhoneEmailSettingsNotEntitled(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccGuardianPhoneEmailSettingsNotEntitledConfig,
+				// The API rejected both phone_settings and email_settings, so state stays
+				// empty for those blocks while config still has values — non-empty plan expected.
+				ExpectNonEmptyPlan: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "policy", "never"),
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "otp", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "email", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "recovery_code", "true"),
+					// Phone_settings and email_settings are empty because the tenant
+					// returned not_entitled for both the update and read endpoints.
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "phone_settings.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "email_settings.#", "0"),
+				),
+			},
+		},
+	})
+}

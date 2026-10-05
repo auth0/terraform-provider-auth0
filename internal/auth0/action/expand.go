@@ -28,18 +28,19 @@ func expandAction(data *schema.ResourceData) *management.Action {
 		action.Dependencies = expandActionDependencies(config.GetAttr("dependencies"))
 	}
 
-	if data.HasChange("secrets") {
-		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
-	} else if data.HasChange("secrets_wo") || data.HasChange("secrets_wo_version") {
-		// The secrets_wo names are tracked in state, so HasChange("secrets_wo")
-		// catches adds/renames/removals; secrets_wo_version catches value-only rotations.
+	// Secrets and its write only blocks conflict, so only one has values.
+	// Expand non-empty block, not just what changed: Because during migration both change.
+	if data.HasChange("secrets") || data.HasChange("secrets_wo") || data.HasChange("secrets_wo_version") {
+		secrets := config.GetAttr("secrets")
 		secretsWO := config.GetAttr("secrets_wo")
 		switch {
 		case !secretsWO.IsNull() && secretsWO.LengthInt() > 0:
 			action.Secrets = expandActionSecrets(secretsWO)
-		case data.HasChange("secrets_wo"):
-			// All secrets_wo entries were removed; send an empty slice so the API
-			// clears them instead of silently retaining orphaned secrets.
+		case !secrets.IsNull() && secrets.LengthInt() > 0:
+			action.Secrets = expandActionSecrets(secrets)
+		default:
+			// Something changed, but both blocks are empty; send an empty slice so
+			// the API clears the secrets instead of retaining orphaned ones.
 			action.Secrets = &[]management.ActionSecret{}
 		}
 	}

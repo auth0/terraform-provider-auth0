@@ -340,7 +340,7 @@ func TestAccActionMigrateSecretsToSecretsWO(t *testing.T) {
 				),
 			},
 			{
-				// Migrating secrets -> secrets_wo in a single apply must carry the secret
+				// Migrating secrets -> secrets_wo in a single apply must carry the secret.
 				Config: acctest.ParseTestName(testAccActionConfigMigrateSecretsWO, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),

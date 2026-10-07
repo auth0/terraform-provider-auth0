@@ -300,8 +300,7 @@ func NewResource() *schema.Resource {
 								"default",
 							}, false),
 							Description: "The SMS backoff strategy used during MFA enrollment. " +
-								"Use `exponential` to activate exponential-backoff resend limiting " +
-								"(reduces SMS pumping risk), or `default` for the standard behaviour.",
+								"Use `exponential` to activate exponential-backoff resend limiting (EA only).",
 						},
 					},
 				},
@@ -854,7 +853,12 @@ func deleteAttackProtection(ctx context.Context, _ *schema.ResourceData, meta in
 	resetReq := &managementv3.PatchPhoneProviderProtectionRequestContent{}
 	resetReq.SetType(managementv3.PhoneProviderProtectionBackoffStrategyEnumDefault)
 	if _, err := apiv3.AttackProtection.PhoneProviderProtection.Patch(ctx, resetReq); err != nil {
-		if !apierr.IsInsufficientEntitlement(err) {
+		switch {
+		case apierr.IsInsufficientScope(err):
+			log.Printf("[INFO] Insufficient scope for Phone Provider Protection; skipping delete reset.")
+		case apierr.IsInsufficientEntitlement(err):
+			// Feature flag absent — nothing to reset.
+		default:
 			result = multierror.Append(result, err)
 		}
 	}

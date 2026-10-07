@@ -371,7 +371,7 @@ Optional:
 
 Optional:
 
-- `type` (String) The SMS backoff strategy used during MFA enrollment. Use `exponential` to activate exponential-backoff resend limiting (reduces SMS pumping risk), or `default` for the standard behaviour.
+- `type` (String) The SMS backoff strategy used during MFA enrollment. Use `exponential` to activate exponential-backoff resend limiting (EA only).
 
 
 <a id="nestedblock--suspicious_ip_throttling"></a>

@@ -46,6 +46,11 @@ resource "auth0_attack_protection" "my_protection" {
     allowlist                       = ["192.168.1.0", "10.0.0.0"]
     monitoring_mode_enabled         = true
   }
+
+  # SMS MFA enrollment backoff strategy (requires sms_exponential_backoff feature flag).
+  phone_provider_protection {
+    type = "exponential"
+  }
 }
 
 # ============================================================================

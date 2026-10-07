@@ -840,3 +840,77 @@ func TestAccAttackProtectionMultipleInsufficientEntitlements(t *testing.T) {
 		},
 	})
 }
+
+const testAccPhoneProviderProtectionExponential = `
+resource "auth0_attack_protection" "my_protection" {
+	phone_provider_protection {
+		type = "exponential"
+	}
+}
+`
+
+const testAccPhoneProviderProtectionDefault = `
+resource "auth0_attack_protection" "my_protection" {
+	phone_provider_protection {
+		type = "default"
+	}
+}
+`
+
+// TestAccAttackProtectionPhoneProviderProtection tests the happy path for the
+// phone_provider_protection block (requires sms_exponential_backoff feature flag).
+func TestAccAttackProtectionPhoneProviderProtection(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccPhoneProviderProtectionExponential,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "phone_provider_protection.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "phone_provider_protection.0.type", "exponential"),
+				),
+			},
+			{
+				Config: testAccPhoneProviderProtectionDefault,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "phone_provider_protection.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "phone_provider_protection.0.type", "default"),
+				),
+			},
+		},
+	})
+}
+
+const testAccEntitlementPhoneProviderProtection = `
+resource "auth0_attack_protection" "my_protection" {
+	phone_provider_protection {
+		type = "exponential"
+	}
+
+	brute_force_protection {
+		enabled      = true
+		max_attempts = 5
+		mode         = "count_per_identifier_and_ip"
+		allowlist    = ["127.0.0.1"]
+		shields      = ["block"]
+	}
+}
+`
+
+// TestAccAttackProtectionPhoneProviderProtectionInsufficientEntitlement asserts
+// that a 403 on the phone_provider_protection endpoint surfaces as a warning (not
+// an error) and leaves the ungated sub-feature applied correctly.
+func TestAccAttackProtectionPhoneProviderProtectionInsufficientEntitlement(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             testAccEntitlementPhoneProviderProtection,
+				ExpectNonEmptyPlan: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "phone_provider_protection.#", "0"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.enabled", "true"),
+				),
+			},
+		},
+	})
+}

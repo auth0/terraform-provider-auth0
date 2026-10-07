@@ -89,6 +89,17 @@ func flattenBotDetection(botDetection *managementv3.GetBotDetectionSettingsRespo
 	return []interface{}{m}
 }
 
+func flattenPhoneProviderProtection(cfg *managementv3.GetPhoneProviderProtectionResponseContent) []interface{} {
+	if cfg == nil {
+		return nil
+	}
+	return []interface{}{
+		map[string]interface{}{
+			"type": string(cfg.GetType()),
+		},
+	}
+}
+
 func flattenCaptcha(data *schema.ResourceData, captcha *managementv3.GetAttackProtectionCaptchaResponseContent) []interface{} {
 	if captcha == nil {
 		return nil

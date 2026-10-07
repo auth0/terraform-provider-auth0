@@ -1,7 +1,7 @@
 ## Unreleased
 
 FEATURES:
-- `resource/auth0_phone_provider_protection` – Add new singleton resource to manage the MFA enrollment backoff strategy (`type`: `exponential` | `default`) for phone-based multi-factor authentication (EA only)
+- `resource/auth0_attack_protection` – Add `phone_provider_protection` block with `type` attribute (`exponential` | `default`) to manage the SMS MFA enrollment backoff strategy (EA only, requires `sms_exponential_backoff` feature flag)
 
 ## v1.58.1
 

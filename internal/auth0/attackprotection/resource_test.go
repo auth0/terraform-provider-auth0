@@ -857,8 +857,7 @@ resource "auth0_attack_protection" "my_protection" {
 }
 `
 
-// TestAccAttackProtectionPhoneProviderProtection tests the happy path for the
-// phone_provider_protection block (requires sms_exponential_backoff feature flag).
+// TestAccAttackProtectionPhoneProviderProtection tests the happy path for the phone_provider_protection block.
 func TestAccAttackProtectionPhoneProviderProtection(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

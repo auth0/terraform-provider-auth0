@@ -47,7 +47,8 @@ resource "auth0_attack_protection" "my_protection" {
     monitoring_mode_enabled         = true
   }
 
-  # SMS MFA enrollment backoff strategy (requires sms_exponential_backoff feature flag).
+  # Configuration for the SMS MFA enrollment backoff strategy.
+  # Requires the `sms_exponential_backoff` feature flag to be enabled on the tenant.
   phone_provider_protection {
     type = "exponential"
   }

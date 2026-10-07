@@ -283,12 +283,11 @@ func NewResource() *schema.Resource {
 				},
 			},
 			"phone_provider_protection": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Computed: true,
-				MaxItems: 1,
-				Description: "Configuration for the SMS MFA enrollment backoff strategy. " +
-					"Requires the `sms_exponential_backoff` feature flag to be enabled on the tenant.",
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration for the SMS MFA enrollment backoff strategy (EA Only). ",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"type": {

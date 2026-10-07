@@ -60,7 +60,8 @@ resource "auth0_attack_protection" "my_protection" {
     monitoring_mode_enabled         = true
   }
 
-  # SMS MFA enrollment backoff strategy (requires sms_exponential_backoff feature flag).
+  # Configuration for the SMS MFA enrollment backoff strategy.
+  # Requires the `sms_exponential_backoff` feature flag to be enabled on the tenant.
   phone_provider_protection {
     type = "exponential"
   }
@@ -213,7 +214,7 @@ variable "arkose_secret" {
 - `breached_password_detection` (Block List, Max: 1) Breached password detection protects your applications from bad actors logging in with stolen credentials. (see [below for nested schema](#nestedblock--breached_password_detection))
 - `brute_force_protection` (Block List, Max: 1) Brute-force protection safeguards against a single IP address attacking a single user account. (see [below for nested schema](#nestedblock--brute_force_protection))
 - `captcha` (Block List, Max: 1) CAPTCHA configuration for attack protection. (see [below for nested schema](#nestedblock--captcha))
-- `phone_provider_protection` (Block List, Max: 1) Configuration for the SMS MFA enrollment backoff strategy. Requires the `sms_exponential_backoff` feature flag to be enabled on the tenant. (see [below for nested schema](#nestedblock--phone_provider_protection))
+- `phone_provider_protection` (Block List, Max: 1) Configuration for the SMS MFA enrollment backoff strategy (EA Only). (see [below for nested schema](#nestedblock--phone_provider_protection))
 - `suspicious_ip_throttling` (Block List, Max: 1) Suspicious IP throttling blocks traffic from any IP address that rapidly attempts too many logins or signups. (see [below for nested schema](#nestedblock--suspicious_ip_throttling))
 
 ### Read-Only

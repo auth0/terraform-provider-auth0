@@ -3224,6 +3224,51 @@ func TestAccClientAsyncApprovalNotificationChannels(t *testing.T) {
 	})
 }
 
+const testAccClientWithMyAccountAsyncApprovalChannel = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval My Account - {{.testName}}"
+	app_type = "non_interactive"
+
+	async_approval_notification_channels = [
+		"my-account"
+	]
+}
+`
+
+const testAccClientWithMyAccountAndGuardianAsyncApprovalChannels = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval My Account - {{.testName}}"
+	app_type = "non_interactive"
+
+	async_approval_notification_channels = [
+		"my-account",
+		"guardian-push"
+	]
+}
+`
+
+func TestAccClientMyAccountAsyncApprovalChannel(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientWithMyAccountAsyncApprovalChannel, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "my-account"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientWithMyAccountAndGuardianAsyncApprovalChannels, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "my-account"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.1", "guardian-push"),
+				),
+			},
+		},
+	})
+}
+
 const testAccClientWithOrganizationDiscoveryMethods = `
 resource "auth0_client" "my_client" {
 	name                          = "Acceptance Test - Org Discovery Methods - {{.testName}}"

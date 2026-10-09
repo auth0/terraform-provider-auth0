@@ -2447,6 +2447,56 @@ func TestAccClientCanSetDefaultAuthMethodOnCreate(t *testing.T) {
 	})
 }
 
+const testAccClientWithoutStoredTokenEndpointAuthMethod = `
+resource "auth0_client" "my_client_ip_header_update" {
+  name     = "Test IP Header Trusted Update - {{.testName}}"
+  app_type = "rms"
+}
+
+data "auth0_client" "my_client_ip_header_update" {
+  client_id          = auth0_client.my_client_ip_header_update.id
+  hide_client_secret = true
+  depends_on         = [auth0_client.my_client_ip_header_update]
+}
+`
+
+const testAccClientEnableTrustedIPHeaderWithoutStoredAuthMethod = `
+resource "auth0_client" "my_client_ip_header_update" {
+  name                                = "Test IP Header Trusted Update - {{.testName}}"
+  app_type                            = "rms"
+  is_token_endpoint_ip_header_trusted = true
+}
+
+data "auth0_client" "my_client_ip_header_update" {
+  client_id          = auth0_client.my_client_ip_header_update.id
+  hide_client_secret = true
+  depends_on         = [auth0_client.my_client_ip_header_update]
+}
+`
+
+func TestAccClientCanSetDefaultAuthMethodOnUpdate(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientWithoutStoredTokenEndpointAuthMethod, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header_update", "app_type", "rms"),
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header_update", "is_token_endpoint_ip_header_trusted", "false"),
+					resource.TestCheckResourceAttr("data.auth0_client.my_client_ip_header_update", "token_endpoint_auth_method", ""),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientEnableTrustedIPHeaderWithoutStoredAuthMethod, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header_update", "app_type", "rms"),
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header_update", "is_token_endpoint_ip_header_trusted", "true"),
+					resource.TestCheckResourceAttr("data.auth0_client.my_client_ip_header_update", "token_endpoint_auth_method", "client_secret_basic"),
+				),
+			},
+		},
+	})
+}
+
 const testAccCreateClientWithDefaultOrganization = `
 resource "auth0_organization" "my_org" {
 	name         = "temp-org"

@@ -1,5 +1,19 @@
 ## Unreleased
 
+## v1.59.0
+
+FEATURES:
+- `resource/auth0_attack_protection` – Add `phone_provider_protection` block with `type` attribute (`exponential` | `default`) to manage the SMS MFA enrollment backoff strategy (EA only) ([#1746](https://github.com/auth0/terraform-provider-auth0/pull/1746))
+- `data-source/auth0_attack_protection` – Expose `phone_provider_protection` block (EA only) ([#1746](https://github.com/auth0/terraform-provider-auth0/pull/1746))
+- `resource/auth0_resource_server` – Add `require_consent_non_repudiation` boolean attribute; when `true`, the authorization server rejects consent decisions not signed with the client's private key (EA only) ([#1738](https://github.com/auth0/terraform-provider-auth0/pull/1738))
+- `data-source/auth0_resource_server` – Expose `require_consent_non_repudiation` (EA only) ([#1738](https://github.com/auth0/terraform-provider-auth0/pull/1738))
+
+ENHANCEMENTS:
+- `resource/auth0_client` – Add `my-account` as an accepted value for `async_approval_notification_channels` ([#1738](https://github.com/auth0/terraform-provider-auth0/pull/1738))
+
+BUG FIXES:
+- `resource/auth0_action` – Preserve secrets when migrating from `secrets` to `secrets_wo` in a single `apply`; the previous branch expanded the now-empty `secrets` block and silently cleared all deployed Action secrets ([#1744](https://github.com/auth0/terraform-provider-auth0/pull/1744))
+
 ## v1.58.1
 
 ENHANCEMENTS:

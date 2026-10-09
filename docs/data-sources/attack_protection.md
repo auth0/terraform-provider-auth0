@@ -24,6 +24,7 @@ data "auth0_attack_protection" "my_protection" {}
 - `brute_force_protection` (List of Object) Brute-force protection safeguards against a single IP address attacking a single user account. (see [below for nested schema](#nestedatt--brute_force_protection))
 - `captcha` (List of Object) CAPTCHA configuration for attack protection. (see [below for nested schema](#nestedatt--captcha))
 - `id` (String) The ID of this resource.
+- `phone_provider_protection` (List of Object) Configuration for the SMS MFA enrollment backoff strategy (EA Only). (see [below for nested schema](#nestedatt--phone_provider_protection))
 - `suspicious_ip_throttling` (List of Object) Suspicious IP throttling blocks traffic from any IP address that rapidly attempts too many logins or signups. (see [below for nested schema](#nestedatt--suspicious_ip_throttling))
 
 <a id="nestedatt--bot_detection"></a>
@@ -149,6 +150,14 @@ Read-Only:
 - `secret` (String)
 - `site_key` (String)
 
+
+
+<a id="nestedatt--phone_provider_protection"></a>
+### Nested Schema for `phone_provider_protection`
+
+Read-Only:
+
+- `type` (String)
 
 
 <a id="nestedatt--suspicious_ip_throttling"></a>

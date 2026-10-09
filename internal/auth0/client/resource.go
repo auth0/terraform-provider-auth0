@@ -7,9 +7,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -1985,6 +1987,10 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 		return diag.FromErr(err)
 	}
 
+	if err := setTokenEndpointAuthMethodForTrustedHeader(ctx, api, data, client); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
 	nullFields := fetchNullableFields(data, client)
 	if len(nullFields) != 0 {
 		if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), nullFields); err != nil {
@@ -1999,6 +2005,39 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 	time.Sleep(200 * time.Millisecond)
 
 	return readClient(ctx, data, meta)
+}
+
+func setTokenEndpointAuthMethodForTrustedHeader(ctx context.Context, api *management.Management, data *schema.ResourceData, client *management.Client) error {
+	if !data.HasChange("is_token_endpoint_ip_header_trusted") || !client.GetIsTokenEndpointIPHeaderTrusted() {
+		return nil
+	}
+
+	existing, err := api.Client.Read(ctx, data.Id(), management.IncludeFields(
+		"app_type", "token_endpoint_auth_method", "client_authentication_methods",
+	))
+	if err != nil {
+		return err
+	}
+
+	authMethods := existing.GetClientAuthenticationMethods()
+	switch {
+	case existing.GetTokenEndpointAuthMethod() != "":
+		tflog.Debug(ctx, "Skipped setting token_endpoint_auth_method because it is already set", map[string]interface{}{
+			"token_endpoint_auth_method": existing.GetTokenEndpointAuthMethod(),
+		})
+	case authMethods != nil && (authMethods.GetPrivateKeyJWT() != nil ||
+		authMethods.GetTLSClientAuth() != nil || authMethods.GetSelfSignedTLSClientAuth() != nil):
+		tflog.Debug(ctx, "Skipped setting token_endpoint_auth_method because credential-based authentication is configured")
+	default:
+		appType := existing.GetAppType()
+		if data.HasChange("app_type") {
+			appType = client.GetAppType()
+		}
+		method := defaultTokenEndpointAuthMethod(appType)
+		client.TokenEndpointAuthMethod = &method
+	}
+
+	return nil
 }
 
 func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

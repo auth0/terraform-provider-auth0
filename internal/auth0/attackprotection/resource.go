@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/auth0/go-auth0/management"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -277,6 +278,28 @@ func NewResource() *schema.Resource {
 							Optional:    true,
 							Computed:    true,
 							Description: "Whether monitoring mode is enabled for bot detection.",
+						},
+					},
+				},
+			},
+			"phone_provider_protection": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration for the SMS MFA enrollment backoff strategy (EA Only). ",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"type": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"exponential",
+								"default",
+							}, false),
+							Description: "The SMS backoff strategy used during MFA enrollment. " +
+								"Use `exponential` to activate exponential-backoff resend limiting (EA only).",
 						},
 					},
 				},
@@ -705,12 +728,25 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		}
 	}
 
+	phoneProviderProtection, err := apiv3.AttackProtection.PhoneProviderProtection.Get(ctx)
+	if err != nil {
+		switch {
+		case apierr.IsInsufficientScope(err):
+			log.Printf("[INFO] Insufficient scope for Phone Provider Protection; skipping read.")
+		case apierr.IsInsufficientEntitlement(err):
+			diags = append(diags, apierr.EntitlementWarning("Phone Provider Protection", apierr.EntitlementReadConsequence, err))
+		default:
+			return append(diags, diag.FromErr(err)...)
+		}
+	}
+
 	result := multierror.Append(
 		data.Set("breached_password_detection", flattenBreachedPasswordProtection(breachedPasswords)),
 		data.Set("brute_force_protection", flattenBruteForceProtection(bruteForce)),
 		data.Set("suspicious_ip_throttling", flattenSuspiciousIPThrottling(ipThrottling)),
 		data.Set("bot_detection", flattenBotDetection(botDetection)),
 		data.Set("captcha", flattenCaptcha(data, captcha)),
+		data.Set("phone_provider_protection", flattenPhoneProviderProtection(phoneProviderProtection)),
 	)
 
 	if result.ErrorOrNil() != nil {
@@ -765,6 +801,19 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 		}
 	}
 
+	if ppp := expandPhoneProviderProtection(data); ppp != nil {
+		if _, err := apiv3.AttackProtection.PhoneProviderProtection.Patch(ctx, ppp); err != nil {
+			switch {
+			case apierr.IsInsufficientScope(err):
+				log.Printf("[INFO] Insufficient scope for Phone Provider Protection; skipping update.")
+			case apierr.IsInsufficientEntitlement(err):
+				diags = append(diags, apierr.EntitlementWarning("Phone Provider Protection", apierr.EntitlementUpdateConsequence, err))
+			default:
+				result = multierror.Append(result, err)
+			}
+		}
+	}
+
 	if result.ErrorOrNil() != nil {
 		return append(diags, diag.FromErr(result.ErrorOrNil())...)
 	}
@@ -774,6 +823,7 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 
 func deleteAttackProtection(ctx context.Context, _ *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	enabled := false
 
@@ -798,6 +848,19 @@ func deleteAttackProtection(ctx context.Context, _ *schema.ResourceData, meta in
 			},
 		),
 	)
+
+	resetReq := &managementv3.PatchPhoneProviderProtectionRequestContent{}
+	resetReq.SetType(managementv3.PhoneProviderProtectionBackoffStrategyEnumDefault)
+	if _, err := apiv3.AttackProtection.PhoneProviderProtection.Patch(ctx, resetReq); err != nil {
+		switch {
+		case apierr.IsInsufficientScope(err):
+			log.Printf("[INFO] Insufficient scope for Phone Provider Protection; skipping delete reset.")
+		case apierr.IsInsufficientEntitlement(err):
+			// Feature flag absent — nothing to reset.
+		default:
+			result = multierror.Append(result, err)
+		}
+	}
 
 	return diag.FromErr(result.ErrorOrNil())
 }

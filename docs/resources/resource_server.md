@@ -19,6 +19,7 @@ resource "auth0_resource_server" "my_resource_server" {
   allow_offline_access                            = true
   allow_online_access                             = true
   allow_online_access_with_ephemeral_sessions     = false
+  require_consent_non_repudiation                 = true
   token_lifetime                                  = 8600
   skip_consent_for_verifiable_first_party_clients = true
   consent_policy                                  = "transactional-authorization-with-mfa"
@@ -124,6 +125,7 @@ resource "auth0_client_grant" "default_3p_grant" {
 - `enforce_policies` (Boolean) If this setting is enabled, RBAC authorization policies will be enforced for this API. Role and permission assignments will be evaluated during the login transaction.
 - `name` (String) Friendly name for the resource server. Cannot include `<` or `>` characters.
 - `proof_of_possession` (Block List, Max: 1) Configuration settings for proof-of-possession for this resource server. (see [below for nested schema](#nestedblock--proof_of_possession))
+- `require_consent_non_repudiation` (Boolean) When true, the authorization server will reject consent decisions that do not include a valid signature and kid. (EA Only)
 - `signing_alg` (String) Algorithm used to sign JWTs. Options include `HS256`, `RS256`, and `PS256`.
 - `signing_secret` (String) Secret used to sign tokens when using symmetric algorithms (HS256).
 - `skip_consent_for_verifiable_first_party_clients` (Boolean) Indicates whether to skip user consent for applications flagged as first party.

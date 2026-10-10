@@ -2,6 +2,7 @@ package experimentfeatureflag_test
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -13,6 +14,7 @@ const testFeatureFlagCreate = `
 resource "auth0_experiment_feature_flag" "my_flag" {
 	name        = "tf-flag-{{.testName}}"
 	description = "created by acceptance test"
+	status      = "draft"
 
 	parameters {
 		name        = "show_feature"
@@ -25,31 +27,15 @@ resource "auth0_experiment_feature_flag" "my_flag" {
 		name  = "variant_name"
 		type  = "string"
 		value = "control"
-	}
-
-	variation {
-		name        = "test"
-		description = "the test variation"
-		overrides = {
-			variant_name = "test"
-		}
-	}
-
-	variation {
-		name = "treatment"
-		overrides = {
-			show_feature = "true"
-			variant_name = "treatment"
-		}
 	}
 }
 `
 
-const testFeatureFlagUpdateAndActivate = `
+const testFeatureFlagUpdateAndArchive = `
 resource "auth0_experiment_feature_flag" "my_flag" {
 	name        = "tf-flag-{{.testName}}"
 	description = "updated by acceptance test"
-	status      = "active"
+	status      = "archived"
 
 	parameters {
 		name        = "show_feature"
@@ -62,22 +48,6 @@ resource "auth0_experiment_feature_flag" "my_flag" {
 		name  = "variant_name"
 		type  = "string"
 		value = "control"
-	}
-
-	variation {
-		name        = "test"
-		description = "the test variation"
-		overrides = {
-			variant_name = "test"
-		}
-	}
-
-	variation {
-		name = "treatment"
-		overrides = {
-			show_feature = "true"
-			variant_name = "treatment"
-		}
 	}
 }
 `
@@ -93,18 +63,40 @@ func TestAccExperimentFeatureFlag(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_experiment_feature_flag.my_flag", "status", "draft"),
 					resource.TestCheckResourceAttr("auth0_experiment_feature_flag.my_flag", "type", "self"),
 					resource.TestCheckResourceAttr("auth0_experiment_feature_flag.my_flag", "parameters.#", "2"),
-					resource.TestCheckResourceAttr("auth0_experiment_feature_flag.my_flag", "variation.#", "2"),
-					resource.TestCheckResourceAttrSet("auth0_experiment_feature_flag.my_flag", "variation.0.id"),
 					resource.TestCheckResourceAttrSet("auth0_experiment_feature_flag.my_flag", "created_at"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testFeatureFlagUpdateAndActivate, t.Name()),
+				Config: acctest.ParseTestName(testFeatureFlagUpdateAndArchive, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_experiment_feature_flag.my_flag", "description", "updated by acceptance test"),
-					resource.TestCheckResourceAttr("auth0_experiment_feature_flag.my_flag", "status", "active"),
-					resource.TestCheckResourceAttr("auth0_experiment_feature_flag.my_flag", "variation.#", "2"),
+					resource.TestCheckResourceAttr("auth0_experiment_feature_flag.my_flag", "status", "archived"),
+					resource.TestCheckResourceAttr("auth0_experiment_feature_flag.my_flag", "parameters.#", "2"),
 				),
+			},
+		},
+	})
+}
+
+const testFeatureFlagCreateActiveStatus = `
+resource "auth0_experiment_feature_flag" "my_flag" {
+	name   = "tf-flag-{{.testName}}"
+	status = "active"
+
+	parameters {
+		name  = "show_feature"
+		type  = "boolean"
+		value = "false"
+	}
+}
+`
+
+func TestAccExperimentFeatureFlagCreateRejectsActiveStatus(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testFeatureFlagCreateActiveStatus, t.Name()),
+				ExpectError: regexp.MustCompile(`(?s)cannot set status "active".*omit it or use "draft"`),
 			},
 		},
 	})

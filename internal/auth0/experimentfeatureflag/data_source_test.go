@@ -19,14 +19,6 @@ resource "auth0_experiment_feature_flag" "my_flag" {
 		type  = "boolean"
 		value = "false"
 	}
-
-	variation {
-		name        = "test"
-		description = "the test variation"
-		overrides = {
-			show_feature = "true"
-		}
-	}
 }
 
 data "auth0_experiment_feature_flag" "test" {
@@ -46,9 +38,6 @@ func TestAccDataSourceExperimentFeatureFlag(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_experiment_feature_flag.test", "type", "self"),
 					resource.TestCheckResourceAttr("data.auth0_experiment_feature_flag.test", "status", "draft"),
 					resource.TestCheckResourceAttr("data.auth0_experiment_feature_flag.test", "parameters.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_experiment_feature_flag.test", "variation.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_experiment_feature_flag.test", "variation.0.name", "test"),
-					resource.TestCheckResourceAttrSet("data.auth0_experiment_feature_flag.test", "variation.0.id"),
 				),
 			},
 		},

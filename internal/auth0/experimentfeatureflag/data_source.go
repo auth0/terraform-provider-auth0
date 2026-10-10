@@ -42,12 +42,5 @@ func readFeatureFlagForDataSource(ctx context.Context, data *schema.ResourceData
 		return diag.FromErr(err)
 	}
 
-	// A data source reports every variation on the flag, so list them all rather than the
-	// state-tracked subset the resource read uses.
-	variations, err := api.Experimentation.FeatureFlags.Variations.List(ctx, id)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	return diag.FromErr(flattenFeatureFlag(data, flag, variations.GetVariations()))
+	return diag.FromErr(flattenFeatureFlag(data, flag))
 }

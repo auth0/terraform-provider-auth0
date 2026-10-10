@@ -30,10 +30,9 @@ data "auth0_experiment_feature_flag" "my_flag" {
 - `description` (String) Description of the feature flag. Min length 3 when present.
 - `name` (String) The name of the feature flag.
 - `parameters` (Set of Object) The parameters carried by the feature flag. (see [below for nested schema](#nestedatt--parameters))
-- `status` (String) The lifecycle status of the feature flag. One of draft, active, archived
+- `status` (String) The lifecycle status of the feature flag. One of draft, active, archived. On creation, omit this attribute or set it to `draft`. Can be updated to other value after creation.
 - `type` (String) The type of the feature flag: `self` for user-created flags or `auth0` for built-in flags.
 - `updated_at` (String) The ISO 8601 formatted date the feature flag was updated.
-- `variation` (List of Object) The variations of the feature flag. (see [below for nested schema](#nestedatt--variation))
 
 <a id="nestedatt--parameters"></a>
 ### Nested Schema for `parameters`
@@ -44,18 +43,5 @@ Read-Only:
 - `name` (String)
 - `type` (String)
 - `value` (String)
-
-
-<a id="nestedatt--variation"></a>
-### Nested Schema for `variation`
-
-Read-Only:
-
-- `created_at` (String)
-- `description` (String)
-- `id` (String)
-- `name` (String)
-- `overrides` (Map of String)
-- `updated_at` (String)
 
 

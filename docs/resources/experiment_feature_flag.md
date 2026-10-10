@@ -1,12 +1,12 @@
 ---
 page_title: "Resource: auth0_experiment_feature_flag"
 description: |-
-  Create and manage an Experiment Center feature flag together with its variations. (EA only)
+  Create and manage an Experiment Center feature flag (EA only).
 ---
 
 # Resource: auth0_experiment_feature_flag
 
-Create and manage an Experiment Center feature flag together with its variations. (EA only)
+Create and manage an Experiment Center feature flag (EA only).
 
 ## Example Usage
 
@@ -16,7 +16,7 @@ resource "auth0_experiment_feature_flag" "my_flag" {
   description = "Feature flag driving the passkey A/B test on the login screen."
 
   # At least one parameter is required. `value` is always a string;
-  # use a JSON-encoded string when `type = "object"`.
+  # use a JSON-encoded string when `type` is "object" or "array".
   parameters {
     name        = "show_passkey"
     type        = "boolean"
@@ -30,24 +30,22 @@ resource "auth0_experiment_feature_flag" "my_flag" {
     value = "Sign in"
   }
 
-  # Activating the flag (status = "active") requires at least two variations.
-  variation {
-    name        = "control"
-    description = "The current login screen."
-    overrides = {
-      cta_label = "Sign up"
-    }
+  parameters {
+    name = "obj1"
+    type = "object"
+    value = jsonencode({
+      label   = "A"
+      enabled = true
+    })
   }
 
-  variation {
-    name = "treatment"
-    overrides = {
-      show_passkey = "true"
-      cta_label    = "Continue with passkey"
-    }
+  parameters {
+    name  = "arr1"
+    type  = "array"
+    value = jsonencode(["a", "b"])
   }
-
-  status = "active"
+  # The flag starts in draft. After creating at least two variations separately,
+  # add status = "active" in a later apply to activate it.
 }
 ```
 
@@ -62,8 +60,7 @@ resource "auth0_experiment_feature_flag" "my_flag" {
 ### Optional
 
 - `description` (String) Description of the feature flag. Min length 3 when present.
-- `status` (String) The lifecycle status of the feature flag. One of draft, active, archived
-- `variation` (Block List) The variations of the feature flag. (see [below for nested schema](#nestedblock--variation))
+- `status` (String) The lifecycle status of the feature flag. One of draft, active, archived. On creation, omit this attribute or set it to `draft`. Can be updated to other value after creation.
 
 ### Read-Only
 
@@ -84,25 +81,6 @@ Required:
 Optional:
 
 - `description` (String) Description of the parameter.
-
-
-<a id="nestedblock--variation"></a>
-### Nested Schema for `variation`
-
-Required:
-
-- `name` (String) Unique name of the variation. Name is used to correlate variations. Hence changing it recreates the variation with a new ID.
-- `overrides` (Map of String) Parameter overrides for this variation, keyed by parameter name. Each value is a string (JSON-encoded for `object`/`array` parameters) and must differ from the flag's default. May override a subset of the parameters.
-
-Optional:
-
-- `description` (String) Description of the variation. Min length 3 when present.
-
-Read-Only:
-
-- `created_at` (String) The ISO 8601 formatted date the variation was created.
-- `id` (String) The ID of the variation.
-- `updated_at` (String) The ISO 8601 formatted date the variation was updated.
 
 ## Import
 

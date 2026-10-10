@@ -3,7 +3,7 @@ resource "auth0_experiment_feature_flag" "my_flag" {
   description = "Feature flag driving the passkey A/B test on the login screen."
 
   # At least one parameter is required. `value` is always a string;
-  # use a JSON-encoded string when `type = "object"`.
+  # use a JSON-encoded string when `type` is "object" or "array".
   parameters {
     name        = "show_passkey"
     type        = "boolean"
@@ -17,22 +17,20 @@ resource "auth0_experiment_feature_flag" "my_flag" {
     value = "Sign in"
   }
 
-  # Activating the flag (status = "active") requires at least two variations.
-  variation {
-    name        = "control"
-    description = "The current login screen."
-    overrides = {
-      cta_label = "Sign up"
-    }
+  parameters {
+    name = "obj1"
+    type = "object"
+    value = jsonencode({
+      label   = "A"
+      enabled = true
+    })
   }
 
-  variation {
-    name = "treatment"
-    overrides = {
-      show_passkey = "true"
-      cta_label    = "Continue with passkey"
-    }
+  parameters {
+    name  = "arr1"
+    type  = "array"
+    value = jsonencode(["a", "b"])
   }
-
-  status = "active"
+  # The flag starts in draft. After creating at least two variations separately,
+  # add status = "active" in a later apply to activate it.
 }

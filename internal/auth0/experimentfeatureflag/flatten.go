@@ -11,13 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func flattenFeatureFlag(data *schema.ResourceData, flag *management.GetFeatureFlagResponseContent, variations []*management.Variation) error {
+func flattenFeatureFlag(data *schema.ResourceData, flag *management.GetFeatureFlagResponseContent) error {
 	parameters, err := flattenParameters(flag.GetParameters())
-	if err != nil {
-		return err
-	}
-
-	flatVariations, err := flattenVariations(variations)
 	if err != nil {
 		return err
 	}
@@ -28,7 +23,6 @@ func flattenFeatureFlag(data *schema.ResourceData, flag *management.GetFeatureFl
 		data.Set("type", string(flag.GetType())),
 		data.Set("status", string(flag.GetStatus())),
 		data.Set("parameters", parameters),
-		data.Set("variation", flatVariations),
 		data.Set("created_at", flag.GetCreatedAt().Format(time.RFC3339)),
 		data.Set("updated_at", flag.GetUpdatedAt().Format(time.RFC3339)),
 	)
@@ -54,42 +48,6 @@ func flattenParameters(parameters map[string]*management.FeatureFlagConfigParam)
 	}
 
 	return result, nil
-}
-
-// flattenVariations emits the variations in the order they were fetched, which mirrors the
-// order Terraform tracks them in state (and therefore configuration).
-func flattenVariations(variations []*management.Variation) ([]interface{}, error) {
-	result := make([]interface{}, 0, len(variations))
-
-	for _, v := range variations {
-		flat, err := flattenVariation(v)
-		if err != nil {
-			return nil, err
-		}
-		result = append(result, flat)
-	}
-
-	return result, nil
-}
-
-func flattenVariation(v *management.Variation) (map[string]interface{}, error) {
-	overrides := make(map[string]interface{}, len(v.GetOverrides()))
-	for name, override := range v.GetOverrides() {
-		str, err := typedToString(override)
-		if err != nil {
-			return nil, err
-		}
-		overrides[name] = str
-	}
-
-	return map[string]interface{}{
-		"id":          v.GetID(),
-		"name":        v.GetName(),
-		"description": auth0.StringValue(v.Description),
-		"overrides":   overrides,
-		"created_at":  v.GetCreatedAt().Format(time.RFC3339),
-		"updated_at":  v.GetUpdatedAt().Format(time.RFC3339),
-	}, nil
 }
 
 // typedToString renders a raw typed API value (bool, number, string, or object) as the string

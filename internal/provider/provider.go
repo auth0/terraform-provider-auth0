@@ -188,6 +188,7 @@ func New() *schema.Provider {
 			"auth0_event_stream":                             eventstream.NewResource(),
 			"auth0_encryption_key_manager":                   encryptionkeymanager.NewEncryptionKeyManagerResource(),
 			"auth0_experiment_feature_flag":                  experimentfeatureflag.NewResource(),
+			"auth0_experiment_feature_flag_variation":        experimentfeatureflag.NewVariationResource(),
 			"auth0_flow":                                     flow.NewResource(),
 			"auth0_flow_vault_connection":                    flow.NewVaultConnectionResource(),
 			"auth0_form":                                     form.NewResource(),

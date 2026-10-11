@@ -59,6 +59,7 @@ func NewResource() *schema.Resource {
 				Required:    true,
 				MinItems:    1,
 				Description: "The parameters carried by the feature flag.",
+				Set:         hashFeatureFlagParameter,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -114,6 +115,24 @@ func NewResource() *schema.Resource {
 			},
 		},
 	}
+}
+
+// Hash typed values so equivalent JSON, number and boolean strings keep the same set identity.
+func hashFeatureFlagParameter(v interface{}) int {
+	parameter := v.(map[string]interface{})
+	name, _ := parameter["name"].(string)
+	paramType, _ := parameter["type"].(string)
+	value, _ := parameter["value"].(string)
+	description, _ := parameter["description"].(string)
+
+	if typed, err := stringToTyped(paramType, value); err == nil {
+		if canonical, err := typedToString(typed); err == nil {
+			value = canonical
+		}
+	}
+
+	// Description must participate so editing it still produces a change.
+	return schema.HashString(fmt.Sprintf("%q:%q:%q:%q", name, paramType, value, description))
 }
 
 func validateFeatureFlagStatusOnCreate(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {

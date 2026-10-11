@@ -2,6 +2,7 @@ package experimentfeatureflag
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -68,4 +69,60 @@ func typedToString(value interface{}) (string, error) {
 		}
 		return string(encoded), nil
 	}
+}
+
+func flattenVariation(data *schema.ResourceData, variation *management.GetVariationResponseContent) error {
+	overrides, err := flattenOverrides(variation.GetOverrides())
+	if err != nil {
+		return err
+	}
+
+	result := multierror.Append(
+		data.Set("feature_flag_id", variation.GetFeatureFlagID()),
+		data.Set("variation_id", variation.GetID()),
+		data.Set("name", variation.GetName()),
+		data.Set("description", auth0.StringValue(variation.Description)),
+		data.Set("overrides", overrides),
+		data.Set("created_at", variation.GetCreatedAt().Format(time.RFC3339)),
+		data.Set("updated_at", variation.GetUpdatedAt().Format(time.RFC3339)),
+	)
+
+	return result.ErrorOrNil()
+}
+
+// flattenOverrides derives each override type from its JSON value, because the
+// API returns only the value. Each JSON type maps to one parameter type.
+func flattenOverrides(overrides map[string]interface{}) ([]interface{}, error) {
+	result := make([]interface{}, 0, len(overrides))
+
+	for name, raw := range overrides {
+		var paramType management.FeatureFlagConfigParamTypeEnum
+		switch raw.(type) {
+		case bool:
+			paramType = management.FeatureFlagConfigParamTypeEnumBoolean
+		case float64:
+			paramType = management.FeatureFlagConfigParamTypeEnumNumber
+		case string:
+			paramType = management.FeatureFlagConfigParamTypeEnumString
+		case []interface{}:
+			paramType = management.FeatureFlagConfigParamTypeEnumArray
+		case map[string]interface{}:
+			paramType = management.FeatureFlagConfigParamTypeEnumObject
+		default:
+			return nil, fmt.Errorf("override %q has an unsupported value type %T", name, raw)
+		}
+
+		value, err := typedToString(raw)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, map[string]interface{}{
+			"name":  name,
+			"type":  string(paramType),
+			"value": value,
+		})
+	}
+
+	return result, nil
 }

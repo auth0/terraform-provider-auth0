@@ -152,7 +152,7 @@ func expandExpression(raw map[string]interface{}) *management.SegmentMatchExpres
 	}
 
 	// Only an expression with all four lists empty reaches this line. validateSegmentRules rejects
-	// that expression when `exists` is also "" (no operator set), so `exists` is "true" or "false".
+	// that expression when `exists` is also null (no operator set), so `exists` is "true" or "false".
 	exists, _ := strconv.ParseBool(raw["exists"].(string))
 
 	return &management.SegmentMatchExpression{

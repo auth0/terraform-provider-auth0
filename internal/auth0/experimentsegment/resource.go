@@ -170,39 +170,40 @@ func expressionSchema() map[string]*schema.Schema {
 		"one_of": {
 			Type:        schema.TypeList,
 			Optional:    true,
-			MinItems:    1,
 			MaxItems:    50,
 			Elem:        &schema.Schema{Type: schema.TypeString, ValidateFunc: validation.StringLenBetween(0, 1024)},
-			Description: "Values for the `one_of` operator. Between 1 and 50 values, each up to 1024 characters.",
+			Description: "Values for the `one_of` operator. Between 1 and 50 values, each up to 1024 characters. An empty list counts as not set.",
 		},
 		"contains": {
 			Type:        schema.TypeList,
 			Optional:    true,
-			MinItems:    1,
 			MaxItems:    50,
 			Elem:        &schema.Schema{Type: schema.TypeString, ValidateFunc: validation.StringLenBetween(0, 1024)},
-			Description: "Values for the `contains` operator. Between 1 and 50 values, each up to 1024 characters.",
+			Description: "Values for the `contains` operator. Between 1 and 50 values, each up to 1024 characters. An empty list counts as not set.",
 		},
 		"starts_with": {
 			Type:        schema.TypeList,
 			Optional:    true,
-			MinItems:    1,
 			MaxItems:    50,
 			Elem:        &schema.Schema{Type: schema.TypeString, ValidateFunc: validation.StringLenBetween(0, 1024)},
-			Description: "Values for the `starts_with` operator. Between 1 and 50 values, each up to 1024 characters.",
+			Description: "Values for the `starts_with` operator. Between 1 and 50 values, each up to 1024 characters. An empty list counts as not set.",
 		},
 		"ends_with": {
 			Type:        schema.TypeList,
 			Optional:    true,
-			MinItems:    1,
 			MaxItems:    50,
 			Elem:        &schema.Schema{Type: schema.TypeString, ValidateFunc: validation.StringLenBetween(0, 1024)},
-			Description: "Values for the `ends_with` operator. Between 1 and 50 values, each up to 1024 characters.",
+			Description: "Values for the `ends_with` operator. Between 1 and 50 values, each up to 1024 characters. An empty list counts as not set.",
 		},
+		// A string, not a bool: SDK v2 state stores an unset nested bool as false, so generated
+		// import config writes `exists = false` into every block and an unset value cannot be told
+		// apart from a real `exists = false` condition. An unset string is "", which counts as not set.
 		"exists": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "Value for the `exists` operator: `true` or `false`.",
+			Type:         schema.TypeString,
+			Optional:     true,
+			ValidateFunc: validation.StringInSlice([]string{"", "true", "false"}, false),
+			Description: "Value for the `exists` operator: `true` or `false`. Bare boolean values are " +
+				"accepted.",
 		},
 	}
 }
@@ -215,6 +216,7 @@ func expressionResource() *schema.Resource {
 // anonymousSessionMetadataResource is the expression schema plus the required namespaced key.
 func anonymousSessionMetadataResource() *schema.Resource {
 	schemaWithKey := expressionSchema()
+
 	schemaWithKey["key"] = &schema.Schema{
 		Type:         schema.TypeString,
 		Required:     true,
@@ -326,6 +328,8 @@ func validateConditions(conditions cty.Value) error {
 	return nil
 }
 
+// validateExpression counts an empty list and an empty `exists` string as not set. Generated import
+// config writes each unset operator with that zero value.
 func validateExpression(expression cty.Value) error {
 	if !expression.IsKnown() {
 		return nil
@@ -334,9 +338,11 @@ func validateExpression(expression cty.Value) error {
 	set := 0
 
 	for _, operator := range expressionOperators {
-		if !expression.GetAttr(operator).IsNull() {
-			set++
+		if isUnsetOperator(expression.GetAttr(operator)) {
+			continue
 		}
+
+		set++
 	}
 
 	if set != 1 {
@@ -344,6 +350,22 @@ func validateExpression(expression cty.Value) error {
 	}
 
 	return nil
+}
+
+func isUnsetOperator(value cty.Value) bool {
+	switch {
+	case value.IsNull():
+		return true
+	case !value.IsKnown():
+		return false
+	case value.Type().IsListType():
+		return value.LengthInt() == 0
+	case value.Type().Equals(cty.String):
+		// Only `exists` is a string; generated import config writes it as "" when it is not set.
+		return value.AsString() == ""
+	default:
+		return false
+	}
 }
 
 func validateSegmentStatusOnCreate(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {

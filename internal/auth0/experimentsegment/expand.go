@@ -3,6 +3,7 @@ package experimentsegment
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/auth0/go-auth0"
 	management "github.com/auth0/go-auth0/v3/management"
@@ -150,7 +151,9 @@ func expandExpression(raw map[string]interface{}) *management.SegmentMatchExpres
 		}
 	}
 
-	exists, _ := raw["exists"].(bool)
+	// Only an expression with all four lists empty reaches this line. validateSegmentRules rejects
+	// that expression when `exists` is also "" (no operator set), so `exists` is "true" or "false".
+	exists, _ := strconv.ParseBool(raw["exists"].(string))
 
 	return &management.SegmentMatchExpression{
 		SegmentExistsExpression: &management.SegmentExistsExpression{Exists: exists},

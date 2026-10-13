@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 
@@ -111,7 +112,7 @@ func flattenExpression(expression management.SegmentMatchExpression) map[string]
 	case expression.SegmentEndsWithExpression != nil:
 		return map[string]interface{}{"ends_with": expression.SegmentEndsWithExpression.EndsWith}
 	case expression.SegmentExistsExpression != nil:
-		return map[string]interface{}{"exists": expression.SegmentExistsExpression.Exists}
+		return map[string]interface{}{"exists": strconv.FormatBool(expression.SegmentExistsExpression.Exists)}
 	default:
 		return map[string]interface{}{}
 	}

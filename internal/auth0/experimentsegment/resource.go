@@ -197,11 +197,11 @@ func expressionSchema() map[string]*schema.Schema {
 		},
 		// A string, not a bool: SDK v2 state stores an unset nested bool as false, so generated
 		// import config writes `exists = false` into every block and an unset value cannot be told
-		// apart from a real `exists = false` condition. An unset string is "", which counts as not set.
+		// apart from a real `exists = false` condition. Generated config writes an unset string as null.
 		"exists": {
 			Type:         schema.TypeString,
 			Optional:     true,
-			ValidateFunc: validation.StringInSlice([]string{"", "true", "false"}, false),
+			ValidateFunc: validation.StringInSlice([]string{"true", "false"}, false),
 			Description: "Value for the `exists` operator: `true` or `false`. Bare boolean values are " +
 				"accepted.",
 		},
@@ -328,8 +328,8 @@ func validateConditions(conditions cty.Value) error {
 	return nil
 }
 
-// validateExpression counts an empty list and an empty `exists` string as not set. Generated import
-// config writes each unset operator with that zero value.
+// validateExpression counts an empty list as not set. Generated import config writes each unset
+// list operator as an empty list.
 func validateExpression(expression cty.Value) error {
 	if !expression.IsKnown() {
 		return nil
@@ -360,9 +360,6 @@ func isUnsetOperator(value cty.Value) bool {
 		return false
 	case value.Type().IsListType():
 		return value.LengthInt() == 0
-	case value.Type().Equals(cty.String):
-		// Only `exists` is a string; generated import config writes it as "" when it is not set.
-		return value.AsString() == ""
 	default:
 		return false
 	}

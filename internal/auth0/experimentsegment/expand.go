@@ -126,8 +126,8 @@ func expandConditions[T management.SegmentMatchConditions | management.SegmentNo
 	return &result, nil
 }
 
-// expandExpression maps the configured operator to its union branch. validateSegmentRules
-// guarantees exactly one operator is set, so a block with no list operator is the `exists` shape.
+// expandExpression maps the configured operator to its union branch. The validateSegmentRules
+// check guarantees exactly one operator is set, so a block with no list operator is the `exists` shape.
 func expandExpression(raw map[string]interface{}) *management.SegmentMatchExpression {
 	if values := stringList(raw["one_of"]); len(values) > 0 {
 		return &management.SegmentMatchExpression{StringList: values}
@@ -151,8 +151,8 @@ func expandExpression(raw map[string]interface{}) *management.SegmentMatchExpres
 		}
 	}
 
-	// Only an expression with all four lists empty reaches this line. validateSegmentRules rejects
-	// that expression when `exists` is also null (no operator set), so `exists` is "true" or "false".
+	// Only an expression with all four lists empty reaches this line. The validateSegmentRules check
+	// rejects that expression when `exists` is also null (no operator set), so `exists` is "true" or "false".
 	exists, _ := strconv.ParseBool(raw["exists"].(string))
 
 	return &management.SegmentMatchExpression{

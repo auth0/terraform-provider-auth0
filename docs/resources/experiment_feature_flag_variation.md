@@ -86,7 +86,7 @@ resource "auth0_experiment_feature_flag_variation" "treatment" {
 ### Optional
 
 - `description` (String) Description of the variation. Must contain 3 to 1024 characters when set.
-- `overrides` (Block Set) Parameter overrides for the variation. Omit for a control variation. Removing an override replaces the variation, because the API cannot remove an override key. (see [below for nested schema](#nestedblock--overrides))
+- `overrides` (Block Set) Parameter overrides for the variation. Omit for a control variation. (see [below for nested schema](#nestedblock--overrides))
 
 ### Read-Only
 

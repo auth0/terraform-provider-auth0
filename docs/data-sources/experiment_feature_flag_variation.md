@@ -32,7 +32,7 @@ data "auth0_experiment_feature_flag_variation" "treatment" {
 - `description` (String) Description of the variation. Must contain 3 to 1024 characters when set.
 - `id` (String) The ID of this resource.
 - `name` (String) The name of the variation. Must be unique within the feature flag and contain 3 to 255 characters without surrounding whitespace.
-- `overrides` (Set of Object) Parameter overrides for the variation. Omit for a control variation. Removing an override replaces the variation, because the API cannot remove an override key. (see [below for nested schema](#nestedatt--overrides))
+- `overrides` (Set of Object) Parameter overrides for the variation. Omit for a control variation. (see [below for nested schema](#nestedatt--overrides))
 - `updated_at` (String) The ISO 8601 formatted date the variation was updated.
 
 <a id="nestedatt--overrides"></a>

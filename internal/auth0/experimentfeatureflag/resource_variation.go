@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
@@ -26,10 +25,7 @@ func NewVariationResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: internalSchema.ImportResourceGroupID("feature_flag_id", "variation_id"),
 		},
-		CustomizeDiff: customdiff.All(
-			validateUniqueOverrideNames,
-			forceNewOnRemovedOverride,
-		),
+		CustomizeDiff: validateUniqueOverrideNames,
 		Schema: map[string]*schema.Schema{
 			"feature_flag_id": {
 				Type:        schema.TypeString,
@@ -53,11 +49,10 @@ func NewVariationResource() *schema.Resource {
 				Description: "Description of the variation. Must contain 3 to 1024 characters when set.",
 			},
 			"overrides": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Set:      hashOverride,
-				Description: "Parameter overrides for the variation. Omit for a control variation. " +
-					"Removing an override replaces the variation, because the API cannot remove an override key.",
+				Type:        schema.TypeSet,
+				Optional:    true,
+				Set:         hashOverride,
+				Description: "Parameter overrides for the variation. Omit for a control variation.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -192,27 +187,6 @@ func validateUniqueOverrideNames(_ context.Context, diff *schema.ResourceDiff, _
 			return fmt.Errorf("override parameter %q is configured more than once", name)
 		}
 		seen[name] = true
-	}
-
-	return nil
-}
-
-// forceNewOnRemovedOverride replaces the variation when an override name in
-// state is no longer in config, which includes a renamed override. PATCH
-// merges override keys, ignores an empty object, and rejects null and default
-// values, so an update cannot remove a key.
-func forceNewOnRemovedOverride(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
-	oldValue, newValue := diff.GetChange("overrides")
-
-	kept := make(map[string]bool)
-	for _, name := range overrideNames(newValue.(*schema.Set)) {
-		kept[name] = true
-	}
-
-	for _, name := range overrideNames(oldValue.(*schema.Set)) {
-		if !kept[name] {
-			return diff.ForceNew("overrides")
-		}
 	}
 
 	return nil

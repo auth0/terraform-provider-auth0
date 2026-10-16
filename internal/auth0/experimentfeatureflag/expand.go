@@ -115,3 +115,85 @@ func stringToTyped(paramType, rawValue string) (interface{}, error) {
 		return rawValue, nil
 	}
 }
+
+func expandVariation(data *schema.ResourceData) (*management.CreateVariationRequestContent, error) {
+	overrides, err := expandOverrides(data.Get("overrides").(*schema.Set))
+	if err != nil {
+		return nil, err
+	}
+
+	cfg := data.GetRawConfig()
+
+	request := &management.CreateVariationRequestContent{
+		Name:        auth0.StringValue(value.String(cfg.GetAttr("name"))),
+		Description: value.String(cfg.GetAttr("description")),
+		Overrides:   overrides,
+	}
+
+	return request, nil
+}
+
+func expandVariationUpdate(data *schema.ResourceData) (*management.UpdateVariationRequestContent, error) {
+	cfg := data.GetRawConfig()
+
+	request := &management.UpdateVariationRequestContent{}
+
+	if data.HasChange("name") {
+		request.SetName(value.String(cfg.GetAttr("name")))
+	}
+
+	if data.HasChange("description") {
+		request.SetDescription(value.String(cfg.GetAttr("description")))
+	}
+
+	if data.HasChange("overrides") {
+		oldValue, newValue := data.GetChange("overrides")
+
+		overrides, err := expandOverridesUpdate(oldValue.(*schema.Set), newValue.(*schema.Set))
+		if err != nil {
+			return nil, err
+		}
+
+		request.SetOverrides(&overrides)
+	}
+
+	return request, nil
+}
+
+// expandOverridesUpdate builds the PATCH overrides. PATCH merges override keys,
+// so the full new set is sent and each removed key is sent as null to delete it.
+// An empty object is never sent, so removing every override also uses null keys.
+func expandOverridesUpdate(oldSet, newSet *schema.Set) (map[string]interface{}, error) {
+	overrides, err := expandOverrides(newSet)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, name := range overrideNames(oldSet) {
+		if _, ok := overrides[name]; !ok {
+			overrides[name] = nil
+		}
+	}
+
+	return overrides, nil
+}
+
+// expandOverrides always returns a non-nil map, because POST requires
+// overrides and an empty map creates a control variation.
+func expandOverrides(set *schema.Set) (map[string]interface{}, error) {
+	overrides := make(map[string]interface{}, set.Len())
+
+	for _, raw := range set.List() {
+		entry := raw.(map[string]interface{})
+		name := entry["name"].(string)
+
+		value, err := stringToTyped(entry["type"].(string), entry["value"].(string))
+		if err != nil {
+			return nil, fmt.Errorf("override %q: %w", name, err)
+		}
+
+		overrides[name] = value
+	}
+
+	return overrides, nil
+}

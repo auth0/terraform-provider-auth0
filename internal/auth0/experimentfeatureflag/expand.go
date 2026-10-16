@@ -154,17 +154,36 @@ func expandVariationUpdate(data *schema.ResourceData) (*management.UpdateVariati
 		request.SetDescription(value.String(cfg.GetAttr("description")))
 	}
 
-	// PATCH merges override keys, so the full set is sent. A removed key never
-	// reaches this point, because forceNewOnRemovedOverride replaces the variation.
 	if data.HasChange("overrides") {
-		overrides, err := expandOverrides(data.Get("overrides").(*schema.Set))
+		oldValue, newValue := data.GetChange("overrides")
+
+		overrides, err := expandOverridesUpdate(oldValue.(*schema.Set), newValue.(*schema.Set))
 		if err != nil {
 			return nil, err
 		}
+
 		request.SetOverrides(&overrides)
 	}
 
 	return request, nil
+}
+
+// expandOverridesUpdate builds the PATCH overrides. PATCH merges override keys,
+// so the full new set is sent and each removed key is sent as null to delete it.
+// An empty object is never sent, so removing every override also uses null keys.
+func expandOverridesUpdate(oldSet, newSet *schema.Set) (map[string]interface{}, error) {
+	overrides, err := expandOverrides(newSet)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, name := range overrideNames(oldSet) {
+		if _, ok := overrides[name]; !ok {
+			overrides[name] = nil
+		}
+	}
+
+	return overrides, nil
 }
 
 // expandOverrides always returns a non-nil map, because POST requires

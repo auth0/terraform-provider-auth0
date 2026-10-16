@@ -51,3 +51,58 @@ func TestExpandOverrides(t *testing.T) {
 		assert.EqualError(t, err, `override "num": value "many" is not a valid number`)
 	})
 }
+
+func TestExpandOverridesUpdate(t *testing.T) {
+	str := map[string]interface{}{"name": "str", "type": "string", "value": "Continue"}
+	num := map[string]interface{}{"name": "num", "type": "number", "value": "5"}
+	boolean := map[string]interface{}{"name": "bool", "type": "boolean", "value": "true"}
+
+	t.Run("it sends the full set when no override is removed", func(t *testing.T) {
+		overrides, err := expandOverridesUpdate(
+			newOverrideSet(str),
+			newOverrideSet(str, num),
+		)
+
+		assert.NoError(t, err)
+		assert.Equal(t, map[string]interface{}{"str": "Continue", "num": float64(5)}, overrides)
+	})
+
+	t.Run("it sends a removed override as null", func(t *testing.T) {
+		overrides, err := expandOverridesUpdate(
+			newOverrideSet(str, num),
+			newOverrideSet(str),
+		)
+
+		assert.NoError(t, err)
+		assert.Equal(t, map[string]interface{}{"str": "Continue", "num": nil}, overrides)
+	})
+
+	t.Run("it sends the old name as null and the new name with its value on a rename", func(t *testing.T) {
+		overrides, err := expandOverridesUpdate(
+			newOverrideSet(str, num),
+			newOverrideSet(str, boolean),
+		)
+
+		assert.NoError(t, err)
+		assert.Equal(t, map[string]interface{}{"str": "Continue", "num": nil, "bool": true}, overrides)
+	})
+
+	t.Run("it sends every old override as null for a control variation", func(t *testing.T) {
+		overrides, err := expandOverridesUpdate(
+			newOverrideSet(str, num),
+			newOverrideSet(),
+		)
+
+		assert.NoError(t, err)
+		assert.Equal(t, map[string]interface{}{"str": nil, "num": nil}, overrides)
+	})
+
+	t.Run("it returns a conversion error", func(t *testing.T) {
+		_, err := expandOverridesUpdate(
+			newOverrideSet(str),
+			newOverrideSet(map[string]interface{}{"name": "num", "type": "number", "value": "many"}),
+		)
+
+		assert.EqualError(t, err, `override "num": value "many" is not a valid number`)
+	})
+}

@@ -131,6 +131,25 @@ resource "auth0_experiment_feature_flag_variation" "my_variation" {
 }
 `
 
+const testVariationRenameOverride = testVariationFeatureFlag + `
+resource "auth0_experiment_feature_flag_variation" "my_variation" {
+	feature_flag_id = auth0_experiment_feature_flag.my_flag.id
+	name            = "tf-variation-updated-{{.testName}}"
+
+	overrides {
+		name  = "show_feature"
+		type  = "boolean"
+		value = "true"
+	}
+
+	overrides {
+		name  = "max_items"
+		type  = "number"
+		value = "7"
+	}
+}
+`
+
 const testVariationControl = testVariationFeatureFlag + `
 resource "auth0_experiment_feature_flag_variation" "my_variation" {
 	feature_flag_id = auth0_experiment_feature_flag.my_flag.id
@@ -198,7 +217,7 @@ func TestAccExperimentFeatureFlagVariation(t *testing.T) {
 				Config: acctest.ParseTestName(testVariationRemoveOverride, t.Name()),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction("auth0_experiment_feature_flag_variation.my_variation", plancheck.ResourceActionDestroyBeforeCreate),
+						plancheck.ExpectResourceAction("auth0_experiment_feature_flag_variation.my_variation", plancheck.ResourceActionUpdate),
 					},
 				},
 				Check: resource.ComposeTestCheckFunc(
@@ -216,6 +235,27 @@ func TestAccExperimentFeatureFlagVariation(t *testing.T) {
 				),
 			},
 			{
+				Config: acctest.ParseTestName(testVariationRenameOverride, t.Name()),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("auth0_experiment_feature_flag_variation.my_variation", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_experiment_feature_flag_variation.my_variation", "overrides.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_experiment_feature_flag_variation.my_variation", "overrides.*", map[string]string{
+						"name":  "show_feature",
+						"type":  "boolean",
+						"value": "true",
+					}),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_experiment_feature_flag_variation.my_variation", "overrides.*", map[string]string{
+						"name":  "max_items",
+						"type":  "number",
+						"value": "7",
+					}),
+				),
+			},
+			{
 				ResourceName:      "auth0_experiment_feature_flag_variation.my_variation",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -224,7 +264,7 @@ func TestAccExperimentFeatureFlagVariation(t *testing.T) {
 				Config: acctest.ParseTestName(testVariationControl, t.Name()),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction("auth0_experiment_feature_flag_variation.my_variation", plancheck.ResourceActionDestroyBeforeCreate),
+						plancheck.ExpectResourceAction("auth0_experiment_feature_flag_variation.my_variation", plancheck.ResourceActionUpdate),
 					},
 				},
 				Check: resource.ComposeTestCheckFunc(

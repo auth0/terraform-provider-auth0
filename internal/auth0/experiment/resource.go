@@ -123,10 +123,9 @@ func NewResource() *schema.Resource {
 							Description: "The segment targeted by this allocation. Only for the segment strategy. Omit for the fallback allocation.",
 						},
 						"priority": {
-							Type:         schema.TypeInt,
-							Optional:     true,
-							ValidateFunc: validation.IntAtLeast(1),
-							Description:  "The evaluation priority of this allocation. Only for the segment strategy.",
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Description: "The evaluation priority of this allocation. Only for the segment strategy.",
 						},
 						"is_fallback": {
 							Type:        schema.TypeBool,

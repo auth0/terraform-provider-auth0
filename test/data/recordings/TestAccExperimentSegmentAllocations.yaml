@@ -1,0 +1,2313 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 109
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"tf-segment-TestAccExperimentSegmentAllocations","rules":[{"match":{"country":{"contains":["US"]}}}]}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 255
+        uncompressed: false
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 285.379041ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 119
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"tf-flag-TestAccExperimentSegmentAllocations","parameters":{"show_new_login":{"type":"boolean","value":false}}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 264
+        uncompressed: false
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"draft","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:33.784Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 307.259333ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 316.415083ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"draft","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:33.784Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.327292ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 72
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 233
+        uncompressed: false
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 280.950125ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 95
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 256
+        uncompressed: false
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 483.767791ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 307.423792ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 267.994417ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 396
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"tf-experiment-TestAccExperimentSegmentAllocations","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","segment_id":"seg_po29hToiCscto66QhBty5o","priority":1,"is_control":true},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","is_control":false,"is_fallback":true}]}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 667
+        uncompressed: false
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","allocation_strategy":"segment","status":"draft","is_valid":false,"allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","segment_id":"seg_po29hToiCscto66QhBty5o","priority":1,"is_control":true,"is_fallback":false},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","is_control":false,"is_fallback":true}],"editable_fields":["name","description","default_terraform-provider-auth0-dev","authentication_flow","allocations","levels"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:35.183Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 317.952334ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"draft","is_valid":false,"feature_flag_snapshot":null,"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description","default_terraform-provider-auth0-dev","authentication_flow","allocations","levels"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:35.183Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 297.062958ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"draft","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:33.784Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 293.931458ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 309.386083ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 300.837292ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 312.4405ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"draft","is_valid":false,"feature_flag_snapshot":null,"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description","default_terraform-provider-auth0-dev","authentication_flow","allocations","levels"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:35.183Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 304.062459ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 282.687916ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"draft","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:33.784Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 296.271709ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 298.37225ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.975042ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"draft","is_valid":false,"feature_flag_snapshot":null,"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description","default_terraform-provider-auth0-dev","authentication_flow","allocations","levels"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:35.183Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 270.9455ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 286.231166ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"draft","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:33.784Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 297.311416ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 274.782292ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 278.039042ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"draft","is_valid":false,"feature_flag_snapshot":null,"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description","default_terraform-provider-auth0-dev","authentication_flow","allocations","levels"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:35.183Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 295.267959ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"draft","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:33.784Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 269.914ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 308.458375ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 282.166458ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 304.543667ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"draft","is_valid":false,"feature_flag_snapshot":null,"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description","default_terraform-provider-auth0-dev","authentication_flow","allocations","levels"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:35.183Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 295.655ms
+    - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 19
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"status":"active"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"active","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:42.187Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 302.28775ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"active","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:42.187Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 279.461584ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"active","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:42.187Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.410959ms
+    - id: 33
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 317.084959ms
+    - id: 34
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.741375ms
+    - id: 35
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 317.809666ms
+    - id: 36
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"draft","is_valid":false,"feature_flag_snapshot":null,"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description","default_terraform-provider-auth0-dev","authentication_flow","allocations","levels"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:35.183Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 300.322542ms
+    - id: 37
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"active","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:42.187Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 270.712125ms
+    - id: 38
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 306.646416ms
+    - id: 39
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 283.807625ms
+    - id: 40
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 293.472833ms
+    - id: 41
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"draft","is_valid":false,"feature_flag_snapshot":null,"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description","default_terraform-provider-auth0-dev","authentication_flow","allocations","levels"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:35.183Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 282.448083ms
+    - id: 42
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 19
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"status":"active"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"active","is_valid":false,"feature_flag_snapshot":{"name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","parameters":{"show_new_login":{"type":"boolean","value":false}},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:46.210Z","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","segment_id":"seg_po29hToiCscto66QhBty5o","priority":1,"is_control":true,"is_fallback":false,"variation_snapshot":{"name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"segment_snapshot":{"name":"tf-segment-TestAccExperimentSegmentAllocations","rules":[{"match":{"country":{"contains":["US"]}}}],"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","is_control":false,"is_fallback":true,"variation_snapshot":{"name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}}],"started_at":"2026-10-19T15:40:46.210Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 309.508125ms
+    - id: 43
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"active","is_valid":false,"feature_flag_snapshot":{"name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","parameters":{"show_new_login":{"type":"boolean","value":false}},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:46.210Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false,"variation_snapshot":{"name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"segment_snapshot":{"name":"tf-segment-TestAccExperimentSegmentAllocations","rules":[{"match":{"country":{"contains":["US"]}}}],"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true,"variation_snapshot":{"name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}}],"started_at":"2026-10-19T15:40:46.210Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 297.455333ms
+    - id: 44
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"active","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:42.187Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 291.109959ms
+    - id: 45
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.3105ms
+    - id: 46
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 289.165167ms
+    - id: 47
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 309.404416ms
+    - id: 48
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"active","is_valid":false,"feature_flag_snapshot":{"name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","parameters":{"show_new_login":{"type":"boolean","value":false}},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:46.210Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false,"variation_snapshot":{"name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"segment_snapshot":{"name":"tf-segment-TestAccExperimentSegmentAllocations","rules":[{"match":{"country":{"contains":["US"]}}}],"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true,"variation_snapshot":{"name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}}],"started_at":"2026-10-19T15:40:46.210Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.237167ms
+    - id: 49
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"active","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:42.187Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 268.937875ms
+    - id: 50
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 281.746ms
+    - id: 51
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 276.596833ms
+    - id: 52
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 286.69775ms
+    - id: 53
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"active","is_valid":false,"feature_flag_snapshot":{"name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","parameters":{"show_new_login":{"type":"boolean","value":false}},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:46.210Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false,"variation_snapshot":{"name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"segment_snapshot":{"name":"tf-segment-TestAccExperimentSegmentAllocations","rules":[{"match":{"country":{"contains":["US"]}}}],"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true,"variation_snapshot":{"name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}}],"started_at":"2026-10-19T15:40:46.210Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 291.81925ms
+    - id: 54
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 19
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"status":"paused"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"paused","is_valid":false,"feature_flag_snapshot":{"name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","parameters":{"show_new_login":{"type":"boolean","value":false}},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:50.445Z","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false,"variation_snapshot":{"name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"segment_snapshot":{"name":"tf-segment-TestAccExperimentSegmentAllocations","rules":[{"match":{"country":{"contains":["US"]}}}],"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true,"variation_snapshot":{"name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}}],"started_at":"2026-10-19T15:40:46.210Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 371.881375ms
+    - id: 55
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"paused","is_valid":false,"feature_flag_snapshot":{"name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","parameters":{"show_new_login":{"type":"boolean","value":false}},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:50.445Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false,"variation_snapshot":{"name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"segment_snapshot":{"name":"tf-segment-TestAccExperimentSegmentAllocations","rules":[{"match":{"country":{"contains":["US"]}}}],"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true,"variation_snapshot":{"name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}}],"started_at":"2026-10-19T15:40:46.210Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 290.066958ms
+    - id: 56
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_po29hToiCscto66QhBty5o","name":"tf-segment-TestAccExperimentSegmentAllocations","type":"self","status":"active","rules":[{"match":{"country":{"contains":["US"]}}}],"created_at":"2026-10-19T15:40:33.785Z","updated_at":"2026-10-19T15:40:33.785Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 281.933334ms
+    - id: 57
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","status":"active","parameters":{"show_new_login":{"type":"boolean","value":false}},"created_at":"2026-10-19T15:40:33.784Z","updated_at":"2026-10-19T15:40:42.187Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 287.866667ms
+    - id: 58
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_si9C9avDEmskkYAXSsvWZi","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"created_at":"2026-10-19T15:40:34.604Z","updated_at":"2026-10-19T15:40:34.604Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 278.981625ms
+    - id: 59
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"var_95SNQCYVh7sBEukRNAn9B7","feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"created_at":"2026-10-19T15:40:34.403Z","updated_at":"2026-10-19T15:40:34.403Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 309.948375ms
+    - id: 60
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"exp_cuAH1daS8PPkBHh32Dn4ro","name":"tf-experiment-TestAccExperimentSegmentAllocations","status":"paused","is_valid":false,"feature_flag_snapshot":{"name":"tf-flag-TestAccExperimentSegmentAllocations","type":"self","parameters":{"show_new_login":{"type":"boolean","value":false}},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"feature_flag_id":"flg_euWVCjcKjHfbg6gAbnvNnV","authentication_flow":"mfa_challenge","editable_fields":["name","description"],"created_at":"2026-10-19T15:40:35.183Z","updated_at":"2026-10-19T15:40:50.445Z","feature_flag_name":"tf-flag-TestAccExperimentSegmentAllocations","allocation_strategy":"segment","allocations":[{"variation_id":"var_95SNQCYVh7sBEukRNAn9B7","variation_name":"tf-control-TestAccExperimentSegmentAllocations","segment_id":"seg_po29hToiCscto66QhBty5o","segment_name":"tf-segment-TestAccExperimentSegmentAllocations","priority":1,"is_control":true,"is_fallback":false,"variation_snapshot":{"name":"tf-control-TestAccExperimentSegmentAllocations","overrides":{},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"},"segment_snapshot":{"name":"tf-segment-TestAccExperimentSegmentAllocations","rules":[{"match":{"country":{"contains":["US"]}}}],"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}},{"variation_id":"var_si9C9avDEmskkYAXSsvWZi","variation_name":"tf-treatment-TestAccExperimentSegmentAllocations","is_control":false,"is_fallback":true,"variation_snapshot":{"name":"tf-treatment-TestAccExperimentSegmentAllocations","overrides":{"show_new_login":true},"description":null,"snapshotted_at":"2026-10-19T15:40:46.210Z"}}],"started_at":"2026-10-19T15:40:46.210Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 310.610167ms
+    - id: 61
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/experiments/exp_cuAH1daS8PPkBHh32Dn4ro
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 284.670041ms
+    - id: 62
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_po29hToiCscto66QhBty5o
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 289.244125ms
+    - id: 63
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_si9C9avDEmskkYAXSsvWZi
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 293.196083ms
+    - id: 64
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV/variations/var_95SNQCYVh7sBEukRNAn9B7
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 301.587ms
+    - id: 65
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/feature-flags/flg_euWVCjcKjHfbg6gAbnvNnV
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 375.741375ms

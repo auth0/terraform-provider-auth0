@@ -100,7 +100,7 @@ const EntitlementUpdateConsequence = "the configuration was not applied"
 // language. The raw API message is intentionally NOT echoed; only the machine-generated
 // errorCode is included to avoid surfacing known backend copy-paste bugs.
 func EntitlementWarning(feature, consequence string, err error) diag.Diagnostic {
-	code := forbiddenErrorCode(err)
+	code := ForbiddenErrorCode(err)
 
 	var gateDescription string
 	if code == "not_entitled" {
@@ -122,10 +122,10 @@ func EntitlementWarning(feature, consequence string, err error) diag.Diagnostic 
 	}
 }
 
-// forbiddenErrorCode extracts the errorCode field from a 403 API error,
+// ForbiddenErrorCode extracts the errorCode field from a 403 API error,
 // trying the v1 management.Error interface first, then the v3 ForbiddenError path.
 // Returns "" if the error is nil or does not carry an errorCode.
-func forbiddenErrorCode(err error) string {
+func ForbiddenErrorCode(err error) string {
 	if err == nil {
 		return ""
 	}

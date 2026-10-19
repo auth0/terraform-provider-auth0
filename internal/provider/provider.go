@@ -26,6 +26,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/attackprotection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/branding"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/clientprofile"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/email"
@@ -168,6 +169,7 @@ func New() *schema.Provider {
 			"auth0_client_credentials":                       client.NewCredentialsResource(),
 			"auth0_client_grant":                             client.NewGrantResource(),
 			"auth0_client_cimd":                              client.NewCIMDResource(),
+			"auth0_client_profile":                           clientprofile.NewResource(),
 			"auth0_connection":                               connection.NewResource(),
 			"auth0_connection_client":                        connection.NewClientResource(),
 			"auth0_connection_clients":                       connection.NewClientsResource(),

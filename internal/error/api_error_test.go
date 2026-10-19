@@ -305,3 +305,53 @@ func TestEntitlementWarningDoesNotEchoBackendMessage(t *testing.T) {
 	assert.Contains(t, d.Detail, `(error code: "insufficient_entitlement")`)
 	assert.Contains(t, d.Detail, "add-on entitlement")
 }
+
+func TestForbiddenErrorCode(t *testing.T) {
+	testCases := []struct {
+		name     string
+		givenErr error
+		expected string
+	}{
+		{
+			name:     "nil error",
+			givenErr: nil,
+			expected: "",
+		},
+		{
+			name:     "v1 SDK 403 with a code",
+			givenErr: testManagementError{StatusCode: http.StatusForbidden, ErrorCode: "too_many_entities"},
+			expected: "too_many_entities",
+		},
+		{
+			name:     "v1 SDK non-403 is ignored",
+			givenErr: testManagementError{StatusCode: http.StatusBadRequest, ErrorCode: "too_many_entities"},
+			expected: "",
+		},
+		{
+			name:     "v3 SDK 403 with a code",
+			givenErr: &managementv3.ForbiddenError{Body: map[string]interface{}{"errorCode": "too_many_entities"}},
+			expected: "too_many_entities",
+		},
+		{
+			name:     "v3 SDK 403 wrapped by fmt.Errorf",
+			givenErr: fmt.Errorf("creating: %w", &managementv3.ForbiddenError{Body: map[string]interface{}{"errorCode": "too_many_entities"}}),
+			expected: "too_many_entities",
+		},
+		{
+			name:     "v3 SDK 403 without a code",
+			givenErr: &managementv3.ForbiddenError{Body: map[string]interface{}{}},
+			expected: "",
+		},
+		{
+			name:     "plain error",
+			givenErr: errors.New("boom"),
+			expected: "",
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			assert.Equal(t, testCase.expected, ForbiddenErrorCode(testCase.givenErr))
+		})
+	}
+}

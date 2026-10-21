@@ -317,8 +317,8 @@ func validateClientProfile(_ context.Context, diff *schema.ResourceDiff, _ inter
 func checkClientProfileConfig(raw cty.Value) error {
 	configuration := value.FirstBlock(value.Attr(raw, "client_configuration"))
 	block := value.FirstBlock(value.Attr(configuration, "refresh_token"))
-	tokenLifetime := value.IntIfSet(envelopeValue(block, "token_lifetime"))
-	idleTokenLifetime := value.IntIfSet(envelopeValue(block, "idle_token_lifetime"))
+	tokenLifetime := value.Int(envelopeValue(block, "token_lifetime"))
+	idleTokenLifetime := value.Int(envelopeValue(block, "idle_token_lifetime"))
 	if tokenLifetime != nil && idleTokenLifetime != nil && *idleTokenLifetime > *tokenLifetime {
 		return fmt.Errorf(
 			"`client_configuration.refresh_token.idle_token_lifetime` (%d) must not exceed "+

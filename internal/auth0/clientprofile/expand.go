@@ -21,11 +21,11 @@ func expandClientProfileCreate(raw cty.Value) *management.CreateClientProfileReq
 		ApplyPolicy:         expandApplyPolicy(raw),
 	}
 
-	if name := value.StringIfSet(value.Attr(raw, "name")); name != nil {
+	if name := value.String(value.Attr(raw, "name")); name != nil {
 		request.Name = *name
 	}
 
-	if description := value.StringIfSet(value.Attr(raw, "description")); description != nil {
+	if description := value.String(value.Attr(raw, "description")); description != nil {
 		request.Description = &description
 	}
 
@@ -38,10 +38,10 @@ func expandClientProfileCreate(raw cty.Value) *management.CreateClientProfileReq
 func expandClientProfileUpdate(raw cty.Value) *management.UpdateClientProfileRequestContent {
 	request := &management.UpdateClientProfileRequestContent{}
 
-	request.SetName(value.StringIfSet(value.Attr(raw, "name")))
+	request.SetName(value.String(value.Attr(raw, "name")))
 
 	// A description removed from the configuration is sent as an explicit null, which clears it.
-	description := value.StringIfSet(value.Attr(raw, "description"))
+	description := value.String(value.Attr(raw, "description"))
 	request.SetDescription(&description)
 
 	request.SetClientConfiguration(expandClientConfiguration(raw, true))
@@ -57,10 +57,10 @@ func expandApplyPolicy(raw cty.Value) *management.ClientProfileApplyPolicy {
 	}
 
 	block := value.FirstBlock(value.Attr(raw, "apply_policy"))
-	if metadataType := value.StringIfSet(value.Attr(block, "external_metadata_type")); metadataType != nil {
+	if metadataType := value.String(value.Attr(block, "external_metadata_type")); metadataType != nil {
 		policy.ExternalMetadataType = management.ClientProfileApplyPolicyExternalMetadataTypeEnum(*metadataType)
 	}
-	if createdBy := value.StringIfSet(value.Attr(block, "external_metadata_created_by")); createdBy != nil {
+	if createdBy := value.String(value.Attr(block, "external_metadata_created_by")); createdBy != nil {
 		policy.ExternalMetadataCreatedBy = management.ClientProfileApplyPolicyExternalMetadataCreatedByEnum(*createdBy)
 	}
 
@@ -76,13 +76,13 @@ func expandClientConfiguration(raw cty.Value, update bool) *management.ClientPro
 
 	if block := value.FirstBlock(value.Attr(raw, "refresh_token")); value.IsSet(block) {
 		refreshToken := &management.ClientProfileClientConfigurationRefreshToken{}
-		if v := value.IntIfSet(envelopeValue(block, "token_lifetime")); v != nil {
+		if v := value.Int(envelopeValue(block, "token_lifetime")); v != nil {
 			refreshToken.TokenLifetime = &management.ClientProfileRefreshTokenTokenLifetime{DefaultValue: v}
 		}
-		if v := value.IntIfSet(envelopeValue(block, "idle_token_lifetime")); v != nil {
+		if v := value.Int(envelopeValue(block, "idle_token_lifetime")); v != nil {
 			refreshToken.IdleTokenLifetime = &management.ClientProfileRefreshTokenIdleTokenLifetime{DefaultValue: v}
 		}
-		if v := value.IntIfSet(envelopeValue(block, "leeway")); v != nil {
+		if v := value.Int(envelopeValue(block, "leeway")); v != nil {
 			refreshToken.Leeway = &management.ClientProfileRefreshTokenLeeway{DefaultValue: v}
 		}
 		configuration.RefreshToken = refreshToken
@@ -90,12 +90,12 @@ func expandClientConfiguration(raw cty.Value, update bool) *management.ClientPro
 		configuration.RefreshToken = &management.ClientProfileClientConfigurationRefreshToken{}
 	}
 
-	if v := value.StringIfSet(envelopeValue(raw, "organization_usage")); v != nil {
+	if v := value.String(envelopeValue(raw, "organization_usage")); v != nil {
 		usage := management.ClientProfileClientConfigurationOrganizationUsageEnum(*v)
 		configuration.OrganizationUsage = &management.ClientProfileClientConfigurationOrganizationUsage{DefaultValue: &usage}
 	}
 
-	if v := value.StringIfSet(envelopeValue(raw, "organization_require_behavior")); v != nil {
+	if v := value.String(envelopeValue(raw, "organization_require_behavior")); v != nil {
 		behavior := management.ClientProfileClientConfigurationOrganizationRequireBehaviorEnum(*v)
 		configuration.OrganizationRequireBehavior = &management.ClientProfileClientConfigurationOrganizationRequireBehavior{DefaultValue: &behavior}
 	}
@@ -108,7 +108,7 @@ func expandClientConfiguration(raw cty.Value, update bool) *management.ClientPro
 		configuration.OrganizationDiscoveryMethods = &management.ClientProfileClientConfigurationOrganizationDiscoveryMethods{DefaultValue: discovery}
 	}
 
-	if v := value.BoolIfSet(envelopeValue(raw, "require_proof_of_possession")); v != nil {
+	if v := value.Bool(envelopeValue(raw, "require_proof_of_possession")); v != nil {
 		configuration.RequireProofOfPossession = &management.ClientProfileClientConfigurationRequireProofOfPossession{DefaultValue: v}
 	}
 

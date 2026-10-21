@@ -392,23 +392,6 @@ func TestFirstBlock(t *testing.T) {
 	})
 }
 
-func TestIfSetHelpers(t *testing.T) {
-	t.Run("it returns nil for null and unknown values", func(t *testing.T) {
-		assert.Nil(t, StringIfSet(cty.NullVal(cty.String)))
-		assert.Nil(t, StringIfSet(cty.UnknownVal(cty.String)))
-		assert.Nil(t, IntIfSet(cty.NullVal(cty.Number)))
-		assert.Nil(t, IntIfSet(cty.UnknownVal(cty.Number)))
-		assert.Nil(t, BoolIfSet(cty.NullVal(cty.Bool)))
-		assert.Nil(t, BoolIfSet(cty.UnknownVal(cty.Bool)))
-	})
-
-	t.Run("it keeps zero values", func(t *testing.T) {
-		assert.Equal(t, "", *StringIfSet(cty.StringVal("")))
-		assert.Equal(t, 0, *IntIfSet(cty.NumberIntVal(0)))
-		assert.Equal(t, false, *BoolIfSet(cty.False))
-	})
-}
-
 func TestSortedStrings(t *testing.T) {
 	t.Run("it returns nil when not set", func(t *testing.T) {
 		assert.Nil(t, SortedStrings(cty.NullVal(cty.Set(cty.String))))
@@ -419,4 +402,10 @@ func TestSortedStrings(t *testing.T) {
 		list := cty.ListVal([]cty.Value{cty.StringVal("b"), cty.NullVal(cty.String), cty.StringVal("a")})
 		assert.Equal(t, []string{"a", "b"}, SortedStrings(list))
 	})
+}
+
+func TestUnknownValuesYieldNil(t *testing.T) {
+	assert.Nil(t, String(cty.UnknownVal(cty.String)))
+	assert.Nil(t, Int(cty.UnknownVal(cty.Number)))
+	assert.Nil(t, Bool(cty.UnknownVal(cty.Bool)))
 }

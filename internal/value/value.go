@@ -18,7 +18,7 @@ import (
 // Bool evaluates the typed value of the value
 // and coerces to a pointer of a boolean.
 func Bool(rawValue cty.Value) *bool {
-	if rawValue.IsNull() {
+	if !IsSet(rawValue) {
 		return nil
 	}
 
@@ -44,7 +44,7 @@ func BoolPtr(v interface{}) *bool {
 // String evaluates the typed value of the value
 // and coerces to a pointer of a string.
 func String(rawValue cty.Value) *string {
-	if rawValue.IsNull() {
+	if !IsSet(rawValue) {
 		return nil
 	}
 
@@ -68,7 +68,7 @@ func BoolPtrToString(v *bool) string {
 // Int evaluates the typed value of the value
 // and coerces to a pointer of an int.
 func Int(rawValue cty.Value) *int {
-	if rawValue.IsNull() {
+	if !IsSet(rawValue) {
 		return nil
 	}
 
@@ -220,33 +220,6 @@ func FirstBlock(list cty.Value) cty.Value {
 	}
 
 	return list.AsValueSlice()[0]
-}
-
-// StringIfSet is like String but returns nil for unknown values too.
-func StringIfSet(rawValue cty.Value) *string {
-	if !IsSet(rawValue) {
-		return nil
-	}
-
-	return String(rawValue)
-}
-
-// IntIfSet is like Int but returns nil for unknown values too.
-func IntIfSet(rawValue cty.Value) *int {
-	if !IsSet(rawValue) {
-		return nil
-	}
-
-	return Int(rawValue)
-}
-
-// BoolIfSet is like Bool but returns nil for unknown values too.
-func BoolIfSet(rawValue cty.Value) *bool {
-	if !IsSet(rawValue) {
-		return nil
-	}
-
-	return Bool(rawValue)
 }
 
 // SortedStrings returns the known, non-null string elements of a list or set value in sorted order,

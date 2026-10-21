@@ -14,6 +14,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 const (
@@ -65,10 +66,10 @@ func NewResource() *schema.Resource {
 			"registered through a Client ID Metadata Document (CIMD). A tenant can have only one client " +
 			"profile; if one already exists, import it instead of creating a new one. " +
 			"Destroying this resource deletes the tenant's client profile, which immediately removes the " +
-			"governance it applies to all matched clients, so consider `lifecycle { prevent_destroy = true }`. " +
-			"This feature is available in Early Access only and requires the " +
-			"`create:client_profiles`, `read:client_profiles`, `update:client_profiles` and " +
-			"`delete:client_profiles` scopes on the Management API client. (EA only)",
+			"governance it applies to all matched clients. The docs recommend `prevent_destroy`, and the " +
+			"resource requires the `create:client_profiles`, `read:client_profiles`, `update:client_profiles` " +
+			"and `delete:client_profiles` scopes. " +
+			"This feature is available in Early Access only. (EA only)",
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:         schema.TypeString,
@@ -314,10 +315,10 @@ func validateClientProfile(_ context.Context, diff *schema.ResourceDiff, _ inter
 // checkClientProfileConfig enforces the cross-field rules the API also enforces. Values that are
 // unknown at plan time are skipped, as they cannot be judged yet.
 func checkClientProfileConfig(raw cty.Value) error {
-	configuration := firstBlock(attr(raw, "client_configuration"))
-	block := firstBlock(attr(configuration, "refresh_token"))
-	tokenLifetime := intVal(envelopeValue(block, "token_lifetime"))
-	idleTokenLifetime := intVal(envelopeValue(block, "idle_token_lifetime"))
+	configuration := value.FirstBlock(value.Attr(raw, "client_configuration"))
+	block := value.FirstBlock(value.Attr(configuration, "refresh_token"))
+	tokenLifetime := value.IntIfSet(envelopeValue(block, "token_lifetime"))
+	idleTokenLifetime := value.IntIfSet(envelopeValue(block, "idle_token_lifetime"))
 	if tokenLifetime != nil && idleTokenLifetime != nil && *idleTokenLifetime > *tokenLifetime {
 		return fmt.Errorf(
 			"`client_configuration.refresh_token.idle_token_lifetime` (%d) must not exceed "+
@@ -328,7 +329,7 @@ func checkClientProfileConfig(raw cty.Value) error {
 
 	methods := envelopeValue(configuration, "organization_discovery_methods")
 	behavior := envelopeValue(configuration, "organization_require_behavior")
-	if isSet(methods) && methods.LengthInt() > 0 && behavior.IsKnown() {
+	if value.IsSet(methods) && methods.LengthInt() > 0 && behavior.IsKnown() {
 		if behavior.IsNull() || behavior.AsString() != preLoginPrompt {
 			return fmt.Errorf("`client_configuration.organization_discovery_methods` requires "+
 				"`client_configuration.organization_require_behavior` to be %q", preLoginPrompt)

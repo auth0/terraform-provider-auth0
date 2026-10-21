@@ -252,6 +252,7 @@ func New() *schema.Provider {
 			"auth0_clients":                                  client.NewClientsDataSource(),
 			"auth0_client_grants":                            client.NewClientGrantsDataSource(),
 			"auth0_client_grant_organizations":               client.NewClientGrantOrganizationsDataSource(),
+			"auth0_client_profile":                           clientprofile.NewDataSource(),
 			"auth0_connection":                               connection.NewDataSource(),
 			"auth0_connection_directory":                     connection.NewDirectoryDataSource(),
 			"auth0_connection_directory_default_mapping":     connection.NewDirectoryDefaultMappingDataSource(),

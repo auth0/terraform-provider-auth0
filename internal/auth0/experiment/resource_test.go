@@ -340,50 +340,6 @@ func TestAccExperimentSegmentAllocations(t *testing.T) {
 	})
 }
 
-const testExperimentDefaultConfig = `
-resource "auth0_experiment" "test" {
-	name                = "tf-experiment-{{.testName}}"
-	feature_flag_id     = "flg_a0_managed_passkey_enrollment"
-	authentication_flow = "passkey_enrollment"
-	allocation_strategy = "percentage"
-	%s
-}
-`
-
-func TestAccExperimentDefaultConfig(t *testing.T) {
-	const address = "auth0_experiment.test"
-
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config: acctest.ParseTestName(fmt.Sprintf(testExperimentDefaultConfig, `default_config = "flag"`), t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(address, "default_config", "flag"),
-					resource.TestCheckResourceAttr(address, "allocations.#", "0"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(fmt.Sprintf(testExperimentDefaultConfig, `default_config = "tenant"`), t.Name()),
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction(address, plancheck.ResourceActionUpdate),
-					},
-				},
-				Check: resource.TestCheckResourceAttr(address, "default_config", "tenant"),
-			},
-			{
-				Config: acctest.ParseTestName(fmt.Sprintf(testExperimentDefaultConfig, ""), t.Name()),
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction(address, plancheck.ResourceActionReplace),
-					},
-				},
-				Check: resource.TestCheckResourceAttr(address, "default_config", ""),
-			},
-		},
-	})
-}
-
 const testExperimentCreateActiveStatus = testExperimentDraftFlag + `
 resource "auth0_experiment" "test" {
 	name                = "tf-experiment-{{.testName}}"

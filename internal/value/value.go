@@ -7,6 +7,7 @@
 package value
 
 import (
+	"sort"
 	"time"
 
 	"github.com/hashicorp/go-cty/cty"
@@ -17,7 +18,7 @@ import (
 // Bool evaluates the typed value of the value
 // and coerces to a pointer of a boolean.
 func Bool(rawValue cty.Value) *bool {
-	if rawValue.IsNull() {
+	if !IsSet(rawValue) {
 		return nil
 	}
 
@@ -43,7 +44,7 @@ func BoolPtr(v interface{}) *bool {
 // String evaluates the typed value of the value
 // and coerces to a pointer of a string.
 func String(rawValue cty.Value) *string {
-	if rawValue.IsNull() {
+	if !IsSet(rawValue) {
 		return nil
 	}
 
@@ -67,7 +68,7 @@ func BoolPtrToString(v *bool) string {
 // Int evaluates the typed value of the value
 // and coerces to a pointer of an int.
 func Int(rawValue cty.Value) *int {
-	if rawValue.IsNull() {
+	if !IsSet(rawValue) {
 		return nil
 	}
 
@@ -188,4 +189,53 @@ func Difference(data *schema.ResourceData, key string) ([]interface{}, []interfa
 	}
 
 	return toAdd.List(), toRemove.List()
+}
+
+// IsSet reports whether a configuration value is both known and non-null.
+func IsSet(rawValue cty.Value) bool {
+	return rawValue.IsKnown() && !rawValue.IsNull()
+}
+
+// Attr returns the named attribute of an object value, a null value when it is absent,
+// or an unknown value when the object itself is not yet known.
+func Attr(object cty.Value, name string) cty.Value {
+	if !object.IsKnown() {
+		return cty.UnknownVal(cty.DynamicPseudoType)
+	}
+	if object.IsNull() || !object.Type().IsObjectType() || !object.Type().HasAttribute(name) {
+		return cty.NullVal(cty.DynamicPseudoType)
+	}
+
+	return object.GetAttr(name)
+}
+
+// FirstBlock returns the first element of a nested block list, a null value when the block is absent,
+// or an unknown value when the list is not yet known.
+func FirstBlock(list cty.Value) cty.Value {
+	if !list.IsKnown() {
+		return cty.UnknownVal(cty.DynamicPseudoType)
+	}
+	if list.IsNull() || list.LengthInt() == 0 {
+		return cty.NullVal(cty.DynamicPseudoType)
+	}
+
+	return list.AsValueSlice()[0]
+}
+
+// SortedStrings returns the known, non-null string elements of a list or set value in sorted order,
+// or nil when the value itself is not set.
+func SortedStrings(rawValues cty.Value) []string {
+	if !IsSet(rawValues) {
+		return nil
+	}
+
+	var result []string
+	for _, rawValue := range rawValues.AsValueSlice() {
+		if IsSet(rawValue) {
+			result = append(result, rawValue.AsString())
+		}
+	}
+	sort.Strings(result)
+
+	return result
 }

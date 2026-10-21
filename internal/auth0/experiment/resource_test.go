@@ -21,6 +21,9 @@ resource "auth0_experiment_feature_flag_variation" "treatment" {
 	feature_flag_id = auth0_experiment_feature_flag.test.id
 	name            = "tf-treatment-{{.testName}}"
 
+	# Both variations POST to the same URL; record and replay them in one order.
+	depends_on = [auth0_experiment_feature_flag_variation.control]
+
 	overrides {
 		name  = "show_new_login"
 		type  = "boolean"

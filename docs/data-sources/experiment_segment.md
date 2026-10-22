@@ -30,7 +30,7 @@ data "auth0_experiment_segment" "premium_traffic" {
 - `description` (String) Description of the segment. Between 3 and 1024 characters when present.
 - `name` (String) The name of the segment. Unique per tenant. Between 3 and 255 characters
 - `rules` (List of Object) The rules of the segment. Between 1 and 20 rules. (see [below for nested schema](#nestedatt--rules))
-- `status` (String) The lifecycle status of the segment. One of "active, archived". On creation, omit this attribute or set it to `active`. Archiving is terminal: an archived segment cannot return to `active`, and its `name`, `description` and `rules` can no longer change. An archived segment can still be deleted and keeps its name reserved until then.
+- `status` (String) The lifecycle status of the segment. One of "active, archived". A non-`active` status on creation is applied internally after the segment is created as `active`. If the status update fails, Terraform marks the entire resource tainted and plans to replace it on the next apply. Archiving is terminal: an archived segment cannot return to `active`, and its `name`, `description` and `rules` can no longer change. An archived segment can still be deleted and keeps its name reserved until then.
 - `type` (String) The type of the segment.
 - `updated_at` (String) The ISO 8601 formatted date the segment was updated.
 

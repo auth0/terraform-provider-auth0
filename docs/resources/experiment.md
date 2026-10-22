@@ -15,30 +15,28 @@ resource "auth0_experiment_feature_flag" "login_ui" {
   name        = "new-login-ui"
   description = "Controls whether the new login UI is shown."
 
+  # Activation needs at least two variations.
+  status = "active"
+
   parameters {
     name  = "show_new_login"
     type  = "boolean"
     value = "false"
   }
 
-  # Activate the flag in a later apply, after both variations exist.
-  # status = "active"
-}
+  # A control variation has no overrides, so it serves the flag defaults.
+  variations {
+    name = "control"
+  }
 
-# A control variation has no overrides, so it serves the flag defaults.
-resource "auth0_experiment_feature_flag_variation" "control" {
-  feature_flag_id = auth0_experiment_feature_flag.login_ui.id
-  name            = "control"
-}
+  variations {
+    name = "new-login"
 
-resource "auth0_experiment_feature_flag_variation" "new_login" {
-  feature_flag_id = auth0_experiment_feature_flag.login_ui.id
-  name            = "new-login"
-
-  overrides {
-    name  = "show_new_login"
-    type  = "boolean"
-    value = "true"
+    overrides {
+      name  = "show_new_login"
+      type  = "boolean"
+      value = "true"
+    }
   }
 }
 
@@ -50,19 +48,18 @@ resource "auth0_experiment" "percentage" {
   authentication_flow = "authentication"
   allocation_strategy = "percentage"
 
-  # Omit `status` or set it to "draft" on creation. Set it to "active" in a
-  # later apply, after the feature flag is active. An active experiment
-  # cannot be deleted: set it to "paused" or "completed" before destroying it.
+  # Activation needs an active feature flag. An active experiment cannot be
+  # deleted: set it to "paused" or "completed" before destroying it.
   status = "draft"
 
   allocations {
-    variation_id = auth0_experiment_feature_flag_variation.control.variation_id
+    variation_id = auth0_experiment_feature_flag.login_ui.variation_ids["control"]
     is_control   = true
     weight       = 50
   }
 
   allocations {
-    variation_id = auth0_experiment_feature_flag_variation.new_login.variation_id
+    variation_id = auth0_experiment_feature_flag.login_ui.variation_ids["new-login"]
     is_control   = false
     weight       = 50
   }
@@ -100,7 +97,7 @@ resource "auth0_experiment" "segment" {
   # Each targeted allocation sets a segment and a unique priority, where 1 is
   # the highest. Segment allocations do not use `weight` or `levels`.
   allocations {
-    variation_id = auth0_experiment_feature_flag_variation.control.variation_id
+    variation_id = auth0_experiment_feature_flag.login_ui.variation_ids["control"]
     is_control   = true
     segment_id   = auth0_experiment_segment.us_traffic.id
     priority     = 1
@@ -109,7 +106,7 @@ resource "auth0_experiment" "segment" {
   # The fallback allocation serves traffic that matches no segment. Omit
   # `segment_id` on the fallback.
   allocations {
-    variation_id = auth0_experiment_feature_flag_variation.new_login.variation_id
+    variation_id = auth0_experiment_feature_flag.login_ui.variation_ids["new-login"]
     is_control   = false
     is_fallback  = true
   }

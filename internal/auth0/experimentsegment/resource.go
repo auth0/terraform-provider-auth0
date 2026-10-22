@@ -58,7 +58,6 @@ func NewResource() *schema.Resource {
 		DeleteContext: deleteSegment,
 		CustomizeDiff: customdiff.All(
 			validateSegmentRules,
-			validateSegmentStatusOnCreate,
 		),
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -109,11 +108,13 @@ func NewResource() *schema.Resource {
 				Computed:     true,
 				ValidateFunc: validation.StringInSlice(statusValues, false),
 				Description: fmt.Sprintf(
-					"The lifecycle status of the segment. One of %q. On creation, omit this attribute or set it "+
-						"to `%s`. Archiving is terminal: an archived segment cannot return to `%s`, and its `name`, "+
-						"`description` and `rules` can no longer change. An archived segment can still be deleted "+
-						"and keeps its name reserved until then.",
+					"The lifecycle status of the segment. One of %q. A non-`%s` status on creation is applied "+
+						"internally after the segment is created as `%s`. If the status update fails, Terraform marks "+
+						"the entire resource tainted and plans to replace it on the next apply. Archiving is terminal: "+
+						"an archived segment cannot return to `%s`, and its `name`, `description` and `rules` can no "+
+						"longer change. An archived segment can still be deleted and keeps its name reserved until then.",
 					strings.Join(statusValues, ", "), management.SegmentStatusEnumActive, management.SegmentStatusEnumActive,
+					management.SegmentStatusEnumActive,
 				),
 			},
 			"type": {
@@ -365,26 +366,6 @@ func isUnsetOperator(value cty.Value) bool {
 	}
 }
 
-func validateSegmentStatusOnCreate(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
-	// ResourceDiff has no IsNewResource; an empty ID marks a create or replacement plan.
-	if diff.Id() != "" {
-		return nil
-	}
-	config := diff.GetRawConfig()
-	if config.IsNull() {
-		return nil
-	}
-
-	status := config.GetAttr("status")
-	if !status.IsKnown() || status.IsNull() || status.AsString() == string(management.SegmentStatusEnumActive) {
-		return nil
-	}
-
-	return fmt.Errorf("cannot set status %q when creating a segment; "+
-		"omit it or use %q. You can update the segment after creation",
-		status.AsString(), management.SegmentStatusEnumActive)
-}
-
 // isAbsentBlock reports whether a nested block is not configured. Unknown blocks count as present.
 func isAbsentBlock(block cty.Value) bool {
 	return block.IsNull() || (block.IsKnown() && block.LengthInt() == 0)
@@ -405,7 +386,30 @@ func createSegment(ctx context.Context, data *schema.ResourceData, meta interfac
 
 	data.SetId(created.GetID())
 
-	return readSegment(ctx, data, meta)
+	var diagnostics diag.Diagnostics
+	requestedStatus := data.Get("status").(string)
+	if err := updateSegmentStatusAfterCreate(ctx, meta, data.Id(), requestedStatus); err != nil {
+		diagnostics = append(diagnostics, diag.FromErr(fmt.Errorf(
+			"segment %q was created, but setting status to %q failed: %w",
+			data.Id(), requestedStatus, err,
+		))...)
+	}
+
+	return append(diagnostics, readSegment(ctx, data, meta)...)
+}
+
+func updateSegmentStatusAfterCreate(ctx context.Context, meta interface{}, id, status string) error {
+	if status == "" || status == string(management.SegmentStatusEnumActive) {
+		return nil
+	}
+
+	api := meta.(*config.Config).GetAPIV3()
+	segmentStatus := management.SegmentStatusEnum(status)
+	request := &management.UpdateSegmentRequestContent{}
+	request.SetStatus(&segmentStatus)
+
+	_, err := api.Experimentation.Segments.Update(ctx, id, request)
+	return err
 }
 
 func readSegment(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -413,6 +417,10 @@ func readSegment(ctx context.Context, data *schema.ResourceData, meta interface{
 
 	segment, err := api.Experimentation.Segments.Get(ctx, data.Id())
 	if err != nil {
+		// Keep the POST-created ID if an immediate read returns 404.
+		if data.IsNewResource() && internalError.IsStatusNotFound(err) {
+			return diag.FromErr(err)
+		}
 		return internalError.HandleReadAPIError("auth0_experiment_segment", data, err)
 	}
 

@@ -350,12 +350,27 @@ resource "auth0_experiment" "test" {
 }
 `
 
-func TestAccExperimentCreateRejectsActiveStatus(t *testing.T) {
+func TestAccExperimentCreateRejectsUnreadyActivation(t *testing.T) {
+	const address = "auth0_experiment.test"
+	config := acctest.ParseTestName(testExperimentCreateActiveStatus, t.Name())
+
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config:      acctest.ParseTestName(testExperimentCreateActiveStatus, t.Name()),
-				ExpectError: regexp.MustCompile(`(?s)cannot set status "active".*omit it or use "draft"`),
+				Config: config,
+				ExpectError: regexp.MustCompile(
+					`(?s)experiment "exp_[^"]+" was created, but setting status to "active" failed:.*experiment_validation_failed`,
+				),
+			},
+			{
+				Config:             config,
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: true,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PostApplyPostRefresh: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction(address, plancheck.ResourceActionReplace),
+					},
+				},
 			},
 		},
 	})

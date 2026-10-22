@@ -42,7 +42,7 @@ data "auth0_experiment" "login_ui_test" {
 - `levels` (List of Number) The ordered ramp levels. Only for the percentage strategy. Removing them replaces the experiment.
 - `name` (String) The name of the experiment.
 - `started_at` (String) The ISO 8601 formatted date the experiment was first activated.
-- `status` (String) The lifecycle status of the experiment. One of draft, active, paused, completed, archived. On creation, omit it or use draft. You can update the status after creation. An active experiment cannot be deleted.
+- `status` (String) The lifecycle status of the experiment. One of draft, active, paused, completed, archived. A non-draft status on creation is applied internally after the experiment is created as a draft. If the status update fails, Terraform marks the entire resource tainted and plans to replace it on the next apply. An active experiment cannot be deleted.
 - `updated_at` (String) The ISO 8601 formatted date the experiment was updated.
 
 <a id="nestedatt--allocations"></a>

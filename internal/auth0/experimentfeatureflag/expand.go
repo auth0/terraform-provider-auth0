@@ -53,12 +53,19 @@ func expandFeatureFlagUpdate(data *schema.ResourceData) (*management.UpdateFeatu
 		request.SetParameters(&parameters)
 	}
 
-	if data.HasChange("status") {
-		status := management.FeatureFlagStatusEnum(data.Get("status").(string))
-		request.SetStatus(&status)
+	return request, nil
+}
+
+// expandFeatureFlagStatusOnCreate returns nil when the status is omitted or draft,
+// because a new feature flag is created as a draft.
+func expandFeatureFlagStatusOnCreate(data *schema.ResourceData) *management.FeatureFlagStatusEnum {
+	status := value.String(data.GetRawConfig().GetAttr("status"))
+	if status == nil || *status == string(management.FeatureFlagStatusEnumDraft) {
+		return nil
 	}
 
-	return request, nil
+	typed := management.FeatureFlagStatusEnum(*status)
+	return &typed
 }
 
 func expandParameters(set *schema.Set) (map[string]*management.FeatureFlagConfigParam, error) {
@@ -129,48 +136,51 @@ func stringToTyped(paramType, rawValue string) (interface{}, error) {
 	}
 }
 
-func expandVariation(data *schema.ResourceData) (*management.CreateVariationRequestContent, error) {
-	overrides, err := expandOverrides(data.Get("overrides").(*schema.Set))
+// expandVariation reads an empty description as unset, because a set element
+// cannot tell an empty string from an omitted attribute.
+func expandVariation(variation map[string]interface{}) (*management.CreateVariationRequestContent, error) {
+	overrides, err := expandOverrides(variation["overrides"].(*schema.Set))
 	if err != nil {
 		return nil, err
 	}
 
-	cfg := data.GetRawConfig()
-
 	request := &management.CreateVariationRequestContent{
-		Name:        auth0.StringValue(value.String(cfg.GetAttr("name"))),
-		Description: value.String(cfg.GetAttr("description")),
-		Overrides:   overrides,
+		Name:      variation["name"].(string),
+		Overrides: overrides,
+	}
+	if description := variation["description"].(string); description != "" {
+		request.Description = auth0.String(description)
 	}
 
 	return request, nil
 }
 
-func expandVariationUpdate(data *schema.ResourceData) (*management.UpdateVariationRequestContent, error) {
-	cfg := data.GetRawConfig()
-
+// expandVariationUpdate compares two variations with the same name and returns
+// false when nothing changed. A removed description is sent as null to clear it.
+func expandVariationUpdate(oldVariation, newVariation map[string]interface{}) (*management.UpdateVariationRequestContent, bool, error) {
 	request := &management.UpdateVariationRequestContent{}
+	changed := false
 
-	if data.HasChange("name") {
-		request.SetName(value.String(cfg.GetAttr("name")))
-	}
-
-	if data.HasChange("description") {
-		request.SetDescription(value.String(cfg.GetAttr("description")))
-	}
-
-	if data.HasChange("overrides") {
-		oldValue, newValue := data.GetChange("overrides")
-
-		overrides, err := expandOverridesUpdate(oldValue.(*schema.Set), newValue.(*schema.Set))
-		if err != nil {
-			return nil, err
+	if oldDescription, newDescription := oldVariation["description"].(string), newVariation["description"].(string); oldDescription != newDescription {
+		var description *string
+		if newDescription != "" {
+			description = auth0.String(newDescription)
 		}
-
-		request.SetOverrides(&overrides)
+		request.SetDescription(description)
+		changed = true
 	}
 
-	return request, nil
+	oldOverrides, newOverrides := oldVariation["overrides"].(*schema.Set), newVariation["overrides"].(*schema.Set)
+	if !oldOverrides.HashEqual(newOverrides) {
+		overrides, err := expandOverridesUpdate(oldOverrides, newOverrides)
+		if err != nil {
+			return nil, false, err
+		}
+		request.SetOverrides(&overrides)
+		changed = true
+	}
+
+	return request, changed, nil
 }
 
 // expandOverridesUpdate builds the PATCH overrides. PATCH merges override keys,

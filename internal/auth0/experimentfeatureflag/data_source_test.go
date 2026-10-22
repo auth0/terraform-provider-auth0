@@ -19,6 +19,21 @@ resource "auth0_experiment_feature_flag" "my_flag" {
 		type  = "boolean"
 		value = "false"
 	}
+
+	variations {
+		name = "control"
+	}
+
+	variations {
+		name        = "treatment"
+		description = "created by acceptance test"
+
+		overrides {
+			name  = "show_feature"
+			type  = "boolean"
+			value = "true"
+		}
+	}
 }
 
 data "auth0_experiment_feature_flag" "test" {
@@ -38,6 +53,20 @@ func TestAccDataSourceExperimentFeatureFlag(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_experiment_feature_flag.test", "type", "self"),
 					resource.TestCheckResourceAttr("data.auth0_experiment_feature_flag.test", "status", "draft"),
 					resource.TestCheckResourceAttr("data.auth0_experiment_feature_flag.test", "parameters.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_experiment_feature_flag.test", "variations.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_experiment_feature_flag.test", "variations.*", map[string]string{
+						"name":        "treatment",
+						"description": "created by acceptance test",
+						"overrides.#": "1",
+					}),
+					resource.TestCheckResourceAttrPair(
+						"data.auth0_experiment_feature_flag.test", "variation_ids.control",
+						"auth0_experiment_feature_flag.my_flag", "variation_ids.control",
+					),
+					resource.TestCheckResourceAttrPair(
+						"data.auth0_experiment_feature_flag.test", "variation_ids.treatment",
+						"auth0_experiment_feature_flag.my_flag", "variation_ids.treatment",
+					),
 				),
 			},
 		},

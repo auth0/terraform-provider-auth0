@@ -8,7 +8,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccDataSourceExperimentByID = testExperimentDraftFlag + testExperimentPercentage + `
+const testAccDataSourceExperimentByID = testExperimentFlag + testExperimentPercentage + `
 data "auth0_experiment" "test" {
 	id = auth0_experiment.test.id
 }

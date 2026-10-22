@@ -11,40 +11,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testExperimentVariations = `
-resource "auth0_experiment_feature_flag_variation" "control" {
-	feature_flag_id = auth0_experiment_feature_flag.test.id
-	name            = "tf-control-{{.testName}}"
-}
-
-resource "auth0_experiment_feature_flag_variation" "treatment" {
-	feature_flag_id = auth0_experiment_feature_flag.test.id
-	name            = "tf-treatment-{{.testName}}"
-
-	# Both variations POST to the same URL; record and replay them in one order.
-	depends_on = [auth0_experiment_feature_flag_variation.control]
-
-	overrides {
-		name  = "show_new_login"
-		type  = "boolean"
-		value = "true"
-	}
-}
-`
-
-const testExperimentDraftFlag = `
-resource "auth0_experiment_feature_flag" "test" {
-	name = "tf-flag-{{.testName}}"
-
-	parameters {
-		name  = "show_new_login"
-		type  = "boolean"
-		value = "false"
-	}
-}
-` + testExperimentVariations
-
-const testExperimentActiveFlag = `
+const testExperimentFlag = `
 resource "auth0_experiment_feature_flag" "test" {
 	name   = "tf-flag-{{.testName}}"
 	status = "active"
@@ -54,8 +21,22 @@ resource "auth0_experiment_feature_flag" "test" {
 		type  = "boolean"
 		value = "false"
 	}
+
+	variations {
+		name = "tf-control-{{.testName}}"
+	}
+
+	variations {
+		name = "tf-treatment-{{.testName}}"
+
+		overrides {
+			name  = "show_new_login"
+			type  = "boolean"
+			value = "true"
+		}
+	}
 }
-` + testExperimentVariations
+`
 
 const testExperimentPercentage = `
 resource "auth0_experiment" "test" {
@@ -66,13 +47,13 @@ resource "auth0_experiment" "test" {
 	allocation_strategy = "percentage"
 
 	allocations {
-		variation_id = auth0_experiment_feature_flag_variation.control.variation_id
+		variation_id = auth0_experiment_feature_flag.test.variation_ids["tf-control-{{.testName}}"]
 		is_control   = true
 		weight       = 50
 	}
 
 	allocations {
-		variation_id = auth0_experiment_feature_flag_variation.treatment.variation_id
+		variation_id = auth0_experiment_feature_flag.test.variation_ids["tf-treatment-{{.testName}}"]
 		is_control   = false
 		weight       = 50
 	}
@@ -88,13 +69,13 @@ resource "auth0_experiment" "test" {
 	status              = "%s"
 
 	allocations {
-		variation_id = auth0_experiment_feature_flag_variation.control.variation_id
+		variation_id = auth0_experiment_feature_flag.test.variation_ids["tf-control-{{.testName}}"]
 		is_control   = true
 		weight       = 70
 	}
 
 	allocations {
-		variation_id = auth0_experiment_feature_flag_variation.treatment.variation_id
+		variation_id = auth0_experiment_feature_flag.test.variation_ids["tf-treatment-{{.testName}}"]
 		is_control   = false
 		weight       = 30
 	}
@@ -107,7 +88,7 @@ func TestAccExperiment(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testExperimentDraftFlag+testExperimentPercentage, t.Name()),
+				Config: acctest.ParseTestName(testExperimentFlag+testExperimentPercentage, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(address, "id"),
 					resource.TestCheckResourceAttr(address, "name", fmt.Sprintf("tf-experiment-%s", t.Name())),
@@ -128,13 +109,13 @@ func TestAccExperiment(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testExperimentDraftFlag+testExperimentPercentage, t.Name()),
+				Config: acctest.ParseTestName(testExperimentFlag+testExperimentPercentage, t.Name()),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
 				},
 			},
 			{
-				Config: acctest.ParseTestName(testExperimentDraftFlag+fmt.Sprintf(testExperimentPercentageUpdate, "draft"), t.Name()),
+				Config: acctest.ParseTestName(testExperimentFlag+fmt.Sprintf(testExperimentPercentageUpdate, "draft"), t.Name()),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction(address, plancheck.ResourceActionUpdate),
@@ -153,11 +134,7 @@ func TestAccExperiment(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: acctest.ParseTestName(testExperimentActiveFlag+fmt.Sprintf(testExperimentPercentageUpdate, "draft"), t.Name()),
-				Check:  resource.TestCheckResourceAttr("auth0_experiment_feature_flag.test", "status", "active"),
-			},
-			{
-				Config: acctest.ParseTestName(testExperimentActiveFlag+fmt.Sprintf(testExperimentPercentageUpdate, "active"), t.Name()),
+				Config: acctest.ParseTestName(testExperimentFlag+fmt.Sprintf(testExperimentPercentageUpdate, "active"), t.Name()),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction(address, plancheck.ResourceActionUpdate),
@@ -172,7 +149,7 @@ func TestAccExperiment(t *testing.T) {
 			},
 			{
 				// An active experiment cannot be deleted, so pause it before the test destroys it.
-				Config: acctest.ParseTestName(testExperimentActiveFlag+fmt.Sprintf(testExperimentPercentageUpdate, "paused"), t.Name()),
+				Config: acctest.ParseTestName(testExperimentFlag+fmt.Sprintf(testExperimentPercentageUpdate, "paused"), t.Name()),
 				Check:  resource.TestCheckResourceAttr(address, "status", "paused"),
 			},
 		},
@@ -188,12 +165,12 @@ resource "auth0_experiment" "test" {
 	levels              = [%s]
 
 	allocations {
-		variation_id = auth0_experiment_feature_flag_variation.control.variation_id
+		variation_id = auth0_experiment_feature_flag.test.variation_ids["tf-control-{{.testName}}"]
 		is_control   = true
 	}
 
 	allocations {
-		variation_id = auth0_experiment_feature_flag_variation.treatment.variation_id
+		variation_id = auth0_experiment_feature_flag.test.variation_ids["tf-treatment-{{.testName}}"]
 		is_control   = false
 	}
 }
@@ -207,13 +184,13 @@ resource "auth0_experiment" "test" {
 	allocation_strategy = "percentage"
 
 	allocations {
-		variation_id = auth0_experiment_feature_flag_variation.control.variation_id
+		variation_id = auth0_experiment_feature_flag.test.variation_ids["tf-control-{{.testName}}"]
 		is_control   = true
 		weight       = 50
 	}
 
 	allocations {
-		variation_id = auth0_experiment_feature_flag_variation.treatment.variation_id
+		variation_id = auth0_experiment_feature_flag.test.variation_ids["tf-treatment-{{.testName}}"]
 		is_control   = false
 		weight       = 50
 	}
@@ -226,7 +203,7 @@ func TestAccExperimentRampLevels(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testExperimentDraftFlag+fmt.Sprintf(testExperimentRamp, "10, 50, 100"), t.Name()),
+				Config: acctest.ParseTestName(testExperimentFlag+fmt.Sprintf(testExperimentRamp, "10, 50, 100"), t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(address, "levels.#", "3"),
 					resource.TestCheckResourceAttr(address, "levels.0", "10"),
@@ -234,7 +211,7 @@ func TestAccExperimentRampLevels(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testExperimentDraftFlag+fmt.Sprintf(testExperimentRamp, "25, 75, 100"), t.Name()),
+				Config: acctest.ParseTestName(testExperimentFlag+fmt.Sprintf(testExperimentRamp, "25, 75, 100"), t.Name()),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction(address, plancheck.ResourceActionUpdate),
@@ -246,7 +223,7 @@ func TestAccExperimentRampLevels(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testExperimentDraftFlag+testExperimentRampRemoved, t.Name()),
+				Config: acctest.ParseTestName(testExperimentFlag+testExperimentRampRemoved, t.Name()),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction(address, plancheck.ResourceActionReplace),
@@ -282,14 +259,14 @@ resource "auth0_experiment" "test" {
 	status              = "%s"
 
 	allocations {
-		variation_id = auth0_experiment_feature_flag_variation.control.variation_id
+		variation_id = auth0_experiment_feature_flag.test.variation_ids["tf-control-{{.testName}}"]
 		is_control   = true
 		segment_id   = auth0_experiment_segment.test.id
 		priority     = 1
 	}
 
 	allocations {
-		variation_id = auth0_experiment_feature_flag_variation.treatment.variation_id
+		variation_id = auth0_experiment_feature_flag.test.variation_ids["tf-treatment-{{.testName}}"]
 		is_control   = false
 		is_fallback  = true
 	}
@@ -302,45 +279,35 @@ func TestAccExperimentSegmentAllocations(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testExperimentDraftFlag+fmt.Sprintf(testExperimentSegment, "draft"), t.Name()),
+				Config: acctest.ParseTestName(testExperimentFlag+fmt.Sprintf(testExperimentSegment, "active"), t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(address, "allocation_strategy", "segment"),
+					resource.TestCheckResourceAttr(address, "status", "active"),
 					resource.TestCheckResourceAttrPair(address, "allocations.0.segment_id", "auth0_experiment_segment.test", "id"),
 					resource.TestCheckResourceAttr(address, "allocations.0.segment_name", fmt.Sprintf("tf-segment-%s", t.Name())),
 					resource.TestCheckResourceAttr(address, "allocations.0.priority", "1"),
 					resource.TestCheckResourceAttr(address, "allocations.1.is_fallback", "true"),
 					resource.TestCheckResourceAttr(address, "allocations.1.segment_id", ""),
-					resource.TestCheckResourceAttr(address, "allocations.0.segment_snapshot", ""),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testExperimentDraftFlag+fmt.Sprintf(testExperimentSegment, "draft"), t.Name()),
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
-				},
-			},
-			{
-				Config: acctest.ParseTestName(testExperimentActiveFlag+fmt.Sprintf(testExperimentSegment, "draft"), t.Name()),
-				Check:  resource.TestCheckResourceAttr("auth0_experiment_feature_flag.test", "status", "active"),
-			},
-			{
-				Config: acctest.ParseTestName(testExperimentActiveFlag+fmt.Sprintf(testExperimentSegment, "active"), t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(address, "status", "active"),
 					resource.TestCheckResourceAttrSet(address, "allocations.0.segment_snapshot"),
 					resource.TestCheckResourceAttr(address, "allocations.1.segment_snapshot", ""),
 				),
 			},
 			{
+				Config: acctest.ParseTestName(testExperimentFlag+fmt.Sprintf(testExperimentSegment, "active"), t.Name()),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
+				},
+			},
+			{
 				// An active experiment cannot be deleted, so pause it before the test destroys it.
-				Config: acctest.ParseTestName(testExperimentActiveFlag+fmt.Sprintf(testExperimentSegment, "paused"), t.Name()),
+				Config: acctest.ParseTestName(testExperimentFlag+fmt.Sprintf(testExperimentSegment, "paused"), t.Name()),
 				Check:  resource.TestCheckResourceAttr(address, "status", "paused"),
 			},
 		},
 	})
 }
 
-const testExperimentCreateActiveStatus = testExperimentDraftFlag + `
+const testExperimentCreateActiveStatus = testExperimentFlag + `
 resource "auth0_experiment" "test" {
 	name                = "tf-experiment-{{.testName}}"
 	feature_flag_id     = auth0_experiment_feature_flag.test.id

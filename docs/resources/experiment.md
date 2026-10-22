@@ -132,7 +132,7 @@ resource "auth0_experiment" "segment" {
 - `default_config` (String) The configuration source for an Auth0-managed feature flag. One of tenant, flag. Removing it replaces the experiment.
 - `description` (String) Description of the experiment.
 - `levels` (List of Number) The ordered ramp levels. Only for the percentage strategy. Removing them replaces the experiment.
-- `status` (String) The lifecycle status of the experiment. One of draft, active, paused, completed, archived. On creation, omit it or use draft. You can update the status after creation. An active experiment cannot be deleted.
+- `status` (String) The lifecycle status of the experiment. One of draft, active, paused, completed, archived. A non-draft status on creation is applied internally after the experiment is created as a draft. If the status update fails, Terraform marks the entire resource tainted and plans to replace it on the next apply. An active experiment cannot be deleted.
 
 ### Read-Only
 

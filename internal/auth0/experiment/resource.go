@@ -50,7 +50,6 @@ func NewResource() *schema.Resource {
 		DeleteContext: deleteExperiment,
 		Description:   "Create and manage an Experiment Center experiment. (EA only)",
 		CustomizeDiff: customdiff.All(
-			validateExperimentStatusOnCreate,
 			forceNewOnRemovedAllocations,
 			forceNewOnRemovedLevels,
 			forceNewOnRemovedDefaultConfig,
@@ -175,8 +174,8 @@ func NewResource() *schema.Resource {
 				Computed:     true,
 				ValidateFunc: validation.StringInSlice(statusValues, false),
 				Description: "The lifecycle status of the experiment. One of " + strings.Join(statusValues, ", ") +
-					". On creation, omit it or use " + string(management.ExperimentStatusEnumDraft) +
-					". You can update the status after creation. An active experiment cannot be deleted.",
+					". A non-draft status on creation is applied internally after the experiment is created as a draft. If the status update fails," +
+					" Terraform marks the entire resource tainted and plans to replace it on the next apply. An active experiment cannot be deleted.",
 			},
 			"is_valid": {
 				Type:        schema.TypeBool,
@@ -223,27 +222,6 @@ func NewResource() *schema.Resource {
 			},
 		},
 	}
-}
-
-func validateExperimentStatusOnCreate(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
-	// ResourceDiff has no IsNewResource; an empty ID marks a create or replacement plan.
-	if diff.Id() != "" {
-		return nil
-	}
-
-	config := diff.GetRawConfig()
-	if !config.IsKnown() || config.IsNull() {
-		return nil
-	}
-
-	status := config.GetAttr("status")
-	if !status.IsKnown() || status.IsNull() || status.AsString() == string(management.ExperimentStatusEnumDraft) {
-		return nil
-	}
-
-	return fmt.Errorf("cannot set status %q when creating an experiment; "+
-		"omit it or use %q. You can update the status after creation",
-		status.AsString(), management.ExperimentStatusEnumDraft)
 }
 
 // PATCH rejects both an empty and a null allocations value, so removal requires replacement.
@@ -310,7 +288,30 @@ func createExperiment(ctx context.Context, data *schema.ResourceData, meta inter
 
 	data.SetId(created.GetID())
 
-	return readExperiment(ctx, data, meta)
+	var diagnostics diag.Diagnostics
+	requestedStatus := data.Get("status").(string)
+	if err := updateExperimentStatusAfterCreate(ctx, meta, data.Id(), requestedStatus); err != nil {
+		diagnostics = append(diagnostics, diag.FromErr(fmt.Errorf(
+			"experiment %q was created, but setting status to %q failed: %w",
+			data.Id(), requestedStatus, err,
+		))...)
+	}
+
+	return append(diagnostics, readExperiment(ctx, data, meta)...)
+}
+
+func updateExperimentStatusAfterCreate(ctx context.Context, meta interface{}, id, status string) error {
+	if status == "" || status == string(management.ExperimentStatusEnumDraft) {
+		return nil
+	}
+
+	api := meta.(*config.Config).GetAPIV3()
+	transition := management.ExperimentTransitionStatusEnum(status)
+	request := &management.UpdateExperimentRequestParameters{}
+	request.SetStatus(&transition)
+
+	_, err := api.Experimentation.Experiments.Update(ctx, id, request)
+	return err
 }
 
 func readExperiment(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -318,6 +319,10 @@ func readExperiment(ctx context.Context, data *schema.ResourceData, meta interfa
 
 	experiment, err := api.Experimentation.Experiments.Get(ctx, data.Id())
 	if err != nil {
+		// Keep the POST-created ID if an immediate read returns 404.
+		if data.IsNewResource() && internalError.IsStatusNotFound(err) {
+			return diag.FromErr(err)
+		}
 		return internalError.HandleReadAPIError("auth0_experiment", data, err)
 	}
 

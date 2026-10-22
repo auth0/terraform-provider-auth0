@@ -12,8 +12,17 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func flattenFeatureFlag(data *schema.ResourceData, flag *management.GetFeatureFlagResponseContent) error {
+func flattenFeatureFlag(
+	data *schema.ResourceData,
+	flag *management.GetFeatureFlagResponseContent,
+	variations []*management.Variation,
+) error {
 	parameters, err := flattenParameters(flag.GetParameters())
+	if err != nil {
+		return err
+	}
+
+	flattenedVariations, variationIDs, err := flattenVariations(variations)
 	if err != nil {
 		return err
 	}
@@ -24,6 +33,8 @@ func flattenFeatureFlag(data *schema.ResourceData, flag *management.GetFeatureFl
 		data.Set("type", string(flag.GetType())),
 		data.Set("status", string(flag.GetStatus())),
 		data.Set("parameters", parameters),
+		data.Set("variations", flattenedVariations),
+		data.Set("variation_ids", variationIDs),
 		data.Set("created_at", flag.GetCreatedAt().Format(time.RFC3339)),
 		data.Set("updated_at", flag.GetUpdatedAt().Format(time.RFC3339)),
 	)
@@ -71,23 +82,25 @@ func typedToString(value interface{}) (string, error) {
 	}
 }
 
-func flattenVariation(data *schema.ResourceData, variation *management.GetVariationResponseContent) error {
-	overrides, err := flattenOverrides(variation.GetOverrides())
-	if err != nil {
-		return err
+func flattenVariations(variations []*management.Variation) ([]interface{}, map[string]interface{}, error) {
+	result := make([]interface{}, 0, len(variations))
+	ids := make(map[string]interface{}, len(variations))
+
+	for _, variation := range variations {
+		overrides, err := flattenOverrides(variation.GetOverrides())
+		if err != nil {
+			return nil, nil, fmt.Errorf("variation %q: %w", variation.GetName(), err)
+		}
+
+		result = append(result, map[string]interface{}{
+			"name":        variation.GetName(),
+			"description": variation.GetDescription(),
+			"overrides":   overrides,
+		})
+		ids[variation.GetName()] = variation.GetID()
 	}
 
-	result := multierror.Append(
-		data.Set("feature_flag_id", variation.GetFeatureFlagID()),
-		data.Set("variation_id", variation.GetID()),
-		data.Set("name", variation.GetName()),
-		data.Set("description", auth0.StringValue(variation.Description)),
-		data.Set("overrides", overrides),
-		data.Set("created_at", variation.GetCreatedAt().Format(time.RFC3339)),
-		data.Set("updated_at", variation.GetUpdatedAt().Format(time.RFC3339)),
-	)
-
-	return result.ErrorOrNil()
+	return result, ids, nil
 }
 
 // flattenOverrides derives each override type from its JSON value, because the

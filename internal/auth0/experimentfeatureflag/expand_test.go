@@ -1,10 +1,12 @@
 package experimentfeatureflag
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func newOverrideSet(overrides ...map[string]interface{}) *schema.Set {
@@ -13,6 +15,106 @@ func newOverrideSet(overrides ...map[string]interface{}) *schema.Set {
 		items = append(items, override)
 	}
 	return schema.NewSet(hashOverride, items)
+}
+
+func newVariation(name, description string, overrides ...map[string]interface{}) map[string]interface{} {
+	return map[string]interface{}{
+		"name":        name,
+		"description": description,
+		"overrides":   newOverrideSet(overrides...),
+	}
+}
+
+func TestExpandVariation(t *testing.T) {
+	t.Run("it sends an empty overrides map and no description for a control variation", func(t *testing.T) {
+		request, err := expandVariation(newVariation("control", ""))
+
+		require.NoError(t, err)
+		assert.Equal(t, "control", request.Name)
+		assert.Nil(t, request.Description)
+		assert.NotNil(t, request.Overrides)
+		assert.Empty(t, request.Overrides)
+	})
+
+	t.Run("it sends the description and the typed overrides", func(t *testing.T) {
+		request, err := expandVariation(newVariation("treatment", "Redesigned checkout",
+			map[string]interface{}{"name": "num", "type": "number", "value": "5"},
+		))
+
+		require.NoError(t, err)
+		assert.Equal(t, "Redesigned checkout", *request.Description)
+		assert.Equal(t, map[string]interface{}{"num": float64(5)}, request.Overrides)
+	})
+
+	t.Run("it returns a conversion error", func(t *testing.T) {
+		_, err := expandVariation(newVariation("treatment", "",
+			map[string]interface{}{"name": "num", "type": "number", "value": "many"},
+		))
+
+		assert.EqualError(t, err, `override "num": value "many" is not a valid number`)
+	})
+}
+
+func TestExpandVariationUpdate(t *testing.T) {
+	str := map[string]interface{}{"name": "str", "type": "string", "value": "Continue"}
+	num := map[string]interface{}{"name": "num", "type": "number", "value": "5"}
+
+	var testCases = []struct {
+		name         string
+		oldVariation map[string]interface{}
+		newVariation map[string]interface{}
+		expectedBody string
+	}{
+		{
+			name:         "it sends a changed description",
+			oldVariation: newVariation("treatment", "before", str),
+			newVariation: newVariation("treatment", "after", str),
+			expectedBody: `{"description":"after"}`,
+		},
+		{
+			name:         "it sends a removed description as null",
+			oldVariation: newVariation("treatment", "before", str),
+			newVariation: newVariation("treatment", "", str),
+			expectedBody: `{"description":null}`,
+		},
+		{
+			name:         "it sends the new overrides and a removed override as null",
+			oldVariation: newVariation("treatment", "", str, num),
+			newVariation: newVariation("treatment", "", str),
+			expectedBody: `{"overrides":{"str":"Continue","num":null}}`,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			request, changed, err := expandVariationUpdate(testCase.oldVariation, testCase.newVariation)
+			require.NoError(t, err)
+			assert.True(t, changed)
+
+			body, err := json.Marshal(request)
+			require.NoError(t, err)
+			assert.JSONEq(t, testCase.expectedBody, string(body))
+		})
+	}
+
+	t.Run("it reports no change for the same value in other text", func(t *testing.T) {
+		_, changed, err := expandVariationUpdate(
+			newVariation("treatment", "", num),
+			newVariation("treatment", "", map[string]interface{}{"name": "num", "type": "number", "value": "5.0"}),
+		)
+
+		require.NoError(t, err)
+		assert.False(t, changed)
+	})
+
+	t.Run("it returns a conversion error", func(t *testing.T) {
+		_, _, err := expandVariationUpdate(
+			newVariation("treatment", "", num),
+			newVariation("treatment", "", map[string]interface{}{"name": "num", "type": "number", "value": "many"}),
+		)
+
+		assert.EqualError(t, err, `override "num": value "many" is not a valid number`)
+	})
 }
 
 func TestExpandOverrides(t *testing.T) {

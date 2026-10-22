@@ -42,5 +42,10 @@ func readFeatureFlagForDataSource(ctx context.Context, data *schema.ResourceData
 		return diag.FromErr(err)
 	}
 
-	return diag.FromErr(flattenFeatureFlag(data, flag))
+	variations, err := api.Experimentation.FeatureFlags.Variations.List(ctx, id)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	return diag.FromErr(flattenFeatureFlag(data, flag, variations.GetVariations()))
 }

@@ -51,7 +51,7 @@ func TestExpandVariation(t *testing.T) {
 			map[string]interface{}{"name": "num", "type": "number", "value": "many"},
 		))
 
-		assert.EqualError(t, err, `override "num": value "many" is not a valid number`)
+		assert.EqualError(t, err, `override "num": value "many" is not a valid finite number`)
 	})
 }
 
@@ -113,7 +113,7 @@ func TestExpandVariationUpdate(t *testing.T) {
 			newVariation("treatment", "", map[string]interface{}{"name": "num", "type": "number", "value": "many"}),
 		)
 
-		assert.EqualError(t, err, `override "num": value "many" is not a valid number`)
+		assert.EqualError(t, err, `override "num": value "many" is not a valid finite number`)
 	})
 }
 
@@ -150,7 +150,7 @@ func TestExpandOverrides(t *testing.T) {
 			map[string]interface{}{"name": "num", "type": "number", "value": "many"},
 		))
 
-		assert.EqualError(t, err, `override "num": value "many" is not a valid number`)
+		assert.EqualError(t, err, `override "num": value "many" is not a valid finite number`)
 	})
 }
 
@@ -205,6 +205,6 @@ func TestExpandOverridesUpdate(t *testing.T) {
 			newOverrideSet(map[string]interface{}{"name": "num", "type": "number", "value": "many"}),
 		)
 
-		assert.EqualError(t, err, `override "num": value "many" is not a valid number`)
+		assert.EqualError(t, err, `override "num": value "many" is not a valid finite number`)
 	})
 }

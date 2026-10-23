@@ -6,7 +6,10 @@ import (
 	"strings"
 
 	management "github.com/auth0/go-auth0/v3/management"
+	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
@@ -38,7 +41,10 @@ func NewResource() *schema.Resource {
 		ReadContext:   readFeatureFlag,
 		UpdateContext: updateFeatureFlag,
 		DeleteContext: deleteFeatureFlag,
-		CustomizeDiff: validateFeatureFlagStatusOnCreate,
+		CustomizeDiff: customdiff.All(
+			validateFeatureFlagStatusOnCreate,
+			validateFeatureFlagParameters,
+		),
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -133,6 +139,47 @@ func hashFeatureFlagParameter(v interface{}) int {
 
 	// Description must participate so editing it still produces a change.
 	return schema.HashString(fmt.Sprintf("%q:%q:%q:%q", name, paramType, value, description))
+}
+
+// validateFeatureFlagParameters reports invalid parameter values at plan time instead of mid-apply.
+func validateFeatureFlagParameters(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	config := diff.GetRawConfig()
+	if !config.IsKnown() || config.IsNull() {
+		return nil
+	}
+
+	return validateParameterValues(config.GetAttr("parameters"))
+}
+
+func validateParameterValues(parameters cty.Value) error {
+	if !parameters.IsKnown() || parameters.IsNull() {
+		return nil
+	}
+
+	var result *multierror.Error
+	for it := parameters.ElementIterator(); it.Next(); {
+		_, parameter := it.Element()
+		if !parameter.IsKnown() || parameter.IsNull() {
+			continue
+		}
+
+		paramType := parameter.GetAttr("type")
+		rawValue := parameter.GetAttr("value")
+		// Values from unknown expressions are checked again at apply time.
+		if !paramType.IsKnown() || paramType.IsNull() || !rawValue.IsKnown() || rawValue.IsNull() {
+			continue
+		}
+
+		if _, err := stringToTyped(paramType.AsString(), rawValue.AsString()); err != nil {
+			name := parameter.GetAttr("name")
+			if name.IsKnown() && !name.IsNull() {
+				err = fmt.Errorf("parameter %q: %w", name.AsString(), err)
+			}
+			result = multierror.Append(result, err)
+		}
+	}
+
+	return result.ErrorOrNil()
 }
 
 func validateFeatureFlagStatusOnCreate(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {

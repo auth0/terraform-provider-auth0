@@ -51,15 +51,14 @@ func flattenParameters(parameters map[string]*management.FeatureFlagConfigParam)
 }
 
 // typedToString renders a raw typed API value (bool, number, string, or object) as the string
-// the Terraform schema stores. Objects are rendered as compact JSON.
+// the Terraform schema stores. Numbers, objects, and arrays are rendered as compact JSON, so
+// 1000000 stays "1000000" instead of the exponent form "1e+06".
 func typedToString(value interface{}) (string, error) {
 	switch v := value.(type) {
 	case nil:
 		return "", nil
 	case bool:
 		return strconv.FormatBool(v), nil
-	case float64:
-		return strconv.FormatFloat(v, 'g', -1, 64), nil
 	case string:
 		return v, nil
 	default:

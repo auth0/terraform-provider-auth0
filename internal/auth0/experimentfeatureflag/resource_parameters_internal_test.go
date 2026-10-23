@@ -3,8 +3,114 @@ package experimentfeatureflag
 import (
 	"testing"
 
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestStringToTyped(t *testing.T) {
+	testCases := []struct {
+		name      string
+		paramType string
+		value     string
+		wantErr   string
+	}{
+		{name: "boolean", paramType: "boolean", value: "true"},
+		{name: "invalid boolean", paramType: "boolean", value: "yes", wantErr: `value "yes" is not a valid boolean`},
+		{name: "number", paramType: "number", value: "12.5"},
+		{name: "invalid number", paramType: "number", value: "abc", wantErr: `value "abc" is not a valid finite number`},
+		{name: "NaN number", paramType: "number", value: "NaN", wantErr: `value "NaN" is not a valid finite number`},
+		{name: "infinite number", paramType: "number", value: "Inf", wantErr: `value "Inf" is not a valid finite number`},
+		{name: "object", paramType: "object", value: `{"a":1}`},
+		{name: "malformed object", paramType: "object", value: `{bad}`, wantErr: `value "{bad}" is not a JSON object`},
+		{name: "string JSON for object", paramType: "object", value: `"abc"`, wantErr: `value "\"abc\"" is not a JSON object`},
+		{name: "array JSON for object", paramType: "object", value: `[1]`, wantErr: `value "[1]" is not a JSON object`},
+		{name: "null for object", paramType: "object", value: `null`, wantErr: `value "null" is not a JSON object`},
+		{name: "array", paramType: "array", value: `["a","b"]`},
+		{name: "unquoted array items", paramType: "array", value: `[a,b]`, wantErr: `value "[a,b]" is not a JSON array`},
+		{name: "object JSON for array", paramType: "array", value: `{"a":1}`, wantErr: `value "{\"a\":1}" is not a JSON array`},
+		{name: "null for array", paramType: "array", value: `null`, wantErr: `value "null" is not a JSON array`},
+		{name: "string", paramType: "string", value: "anything"},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			_, err := stringToTyped(testCase.paramType, testCase.value)
+			if testCase.wantErr == "" {
+				assert.NoError(t, err)
+				return
+			}
+			assert.EqualError(t, err, testCase.wantErr)
+		})
+	}
+}
+
+func TestTypedToStringNumbers(t *testing.T) {
+	testCases := []struct {
+		value float64
+		want  string
+	}{
+		{value: 5, want: "5"},
+		{value: 12.34, want: "12.34"},
+		{value: 1000000, want: "1000000"},
+		{value: 0.000001, want: "0.000001"},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.want, func(t *testing.T) {
+			got, err := typedToString(testCase.value)
+			assert.NoError(t, err)
+			assert.Equal(t, testCase.want, got)
+		})
+	}
+}
+
+func TestValidateParameterValues(t *testing.T) {
+	parameterType := cty.Object(map[string]cty.Type{
+		"name":        cty.String,
+		"type":        cty.String,
+		"value":       cty.String,
+		"description": cty.String,
+	})
+	parameter := func(name, paramType, value cty.Value) cty.Value {
+		return cty.ObjectVal(map[string]cty.Value{
+			"name":        name,
+			"type":        paramType,
+			"value":       value,
+			"description": cty.NullVal(cty.String),
+		})
+	}
+
+	t.Run("valid values pass", func(t *testing.T) {
+		parameters := cty.SetVal([]cty.Value{
+			parameter(cty.StringVal("flag"), cty.StringVal("boolean"), cty.StringVal("true")),
+			parameter(cty.StringVal("obj"), cty.StringVal("object"), cty.StringVal(`{"a":1}`)),
+		})
+		assert.NoError(t, validateParameterValues(parameters))
+	})
+
+	t.Run("invalid values are all reported with their names", func(t *testing.T) {
+		parameters := cty.SetVal([]cty.Value{
+			parameter(cty.StringVal("flag"), cty.StringVal("boolean"), cty.StringVal("yes")),
+			parameter(cty.StringVal("obj"), cty.StringVal("object"), cty.StringVal(`[1]`)),
+		})
+		err := validateParameterValues(parameters)
+		assert.ErrorContains(t, err, `parameter "flag": value "yes" is not a valid boolean`)
+		assert.ErrorContains(t, err, `parameter "obj": value "[1]" is not a JSON object`)
+	})
+
+	t.Run("unknown values are skipped", func(t *testing.T) {
+		parameters := cty.SetVal([]cty.Value{
+			parameter(cty.StringVal("flag"), cty.StringVal("boolean"), cty.UnknownVal(cty.String)),
+			parameter(cty.StringVal("obj"), cty.UnknownVal(cty.String), cty.StringVal("yes")),
+		})
+		assert.NoError(t, validateParameterValues(parameters))
+	})
+
+	t.Run("unknown or null set is skipped", func(t *testing.T) {
+		assert.NoError(t, validateParameterValues(cty.UnknownVal(cty.Set(parameterType))))
+		assert.NoError(t, validateParameterValues(cty.NullVal(cty.Set(parameterType))))
+	})
+}
 
 func TestHashFeatureFlagParameter(t *testing.T) {
 	parameter := func(name, paramType, value, description string) map[string]interface{} {

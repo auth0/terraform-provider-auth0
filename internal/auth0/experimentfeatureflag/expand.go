@@ -3,6 +3,7 @@ package experimentfeatureflag
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"strconv"
 
 	"github.com/auth0/go-auth0"
@@ -100,17 +101,24 @@ func stringToTyped(paramType, rawValue string) (interface{}, error) {
 		}
 		return b, nil
 	case management.FeatureFlagConfigParamTypeEnumNumber:
+		// ParseFloat accepts NaN and Inf, which JSON cannot encode.
 		f, err := strconv.ParseFloat(rawValue, 64)
-		if err != nil {
-			return nil, fmt.Errorf("value %q is not a valid number", rawValue)
+		if err != nil || math.IsNaN(f) || math.IsInf(f, 0) {
+			return nil, fmt.Errorf("value %q is not a valid finite number", rawValue)
 		}
 		return f, nil
-	case management.FeatureFlagConfigParamTypeEnumObject, management.FeatureFlagConfigParamTypeEnumArray:
-		var obj interface{}
-		if err := json.Unmarshal([]byte(rawValue), &obj); err != nil {
-			return nil, fmt.Errorf("value %q is not valid JSON for %s", rawValue, paramType)
+	case management.FeatureFlagConfigParamTypeEnumObject:
+		var obj map[string]interface{}
+		if err := json.Unmarshal([]byte(rawValue), &obj); err != nil || obj == nil {
+			return nil, fmt.Errorf("value %q is not a JSON object", rawValue)
 		}
 		return obj, nil
+	case management.FeatureFlagConfigParamTypeEnumArray:
+		var arr []interface{}
+		if err := json.Unmarshal([]byte(rawValue), &arr); err != nil || arr == nil {
+			return nil, fmt.Errorf("value %q is not a JSON array", rawValue)
+		}
+		return arr, nil
 	default:
 		return rawValue, nil
 	}

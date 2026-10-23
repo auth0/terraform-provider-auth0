@@ -217,3 +217,16 @@ func TestUniversalLoginTemplateContainsCorrectTags(t *testing.T) {
 		})
 	}
 }
+
+func TestIsAgentID(t *testing.T) {
+	_, errs := IsAgentID("agt_123456789ABCDEFGHJKLMN", "agent_id")
+	assert.Empty(t, errs)
+
+	for _, invalid := range []string{"", "agt_short", "abc_1234567890abcdefghijkL", "agt_0234567890abcdefghijkL"} {
+		_, errs = IsAgentID(invalid, "agent_id")
+		assert.NotEmpty(t, errs, invalid)
+	}
+
+	_, errs = IsAgentID(1, "agent_id")
+	assert.NotEmpty(t, errs)
+}

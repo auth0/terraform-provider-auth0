@@ -124,3 +124,36 @@ func TestAccClientCIMD(t *testing.T) {
 		},
 	})
 }
+
+const testAccClientCIMDStatus = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://authflowsapp-prod.authzerotest.com/v1/cimd-metadata/static/valid"
+}
+
+data "auth0_client" "test" {
+  client_id          = auth0_client_cimd.test.client_id
+  hide_client_secret = true
+}
+
+data "auth0_clients" "test" {
+  external_client_id = auth0_client_cimd.test.external_client_id
+  hide_client_secret = true
+}
+`
+
+func TestAccClientCIMDExternalMetadataStatus(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccClientCIMDStatus,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_status", "available"),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "external_metadata_status", "available"),
+					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.external_metadata_status", "available"),
+					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.external_metadata_created_by", "admin"),
+				),
+			},
+		},
+	})
+}

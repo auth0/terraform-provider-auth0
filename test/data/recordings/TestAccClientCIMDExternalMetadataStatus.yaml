@@ -1,0 +1,38 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 57
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://tinywiki.xyz/client.json"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/register
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 238
+        uncompressed: false
+        body: '{"statusCode":400,"error":"Bad Request","message":"The Client Metadata at https://tinywiki.xyz/client.json could not be retrieved. See /api/v2/clients/cimd/preview output for additional details.","errorCode":"client_metadata_unavailable"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 400 Bad Request
+        code: 400
+        duration: 684.6025ms

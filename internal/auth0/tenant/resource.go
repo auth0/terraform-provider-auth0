@@ -501,6 +501,13 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Whether the tenant supports Client ID Metadata Document (CIMD) for client registration.",
 			},
+			"client_id_metadata_document_dynamic_registration_supported": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "Whether the authorization server supports registering clients dynamically from a " +
+					"`client_id` URL (EA only). Requires `client_id_metadata_document_supported` to be enabled.",
+			},
 			"resource_parameter_profile": {
 				Type:         schema.TypeString,
 				Optional:     true,
@@ -570,6 +577,15 @@ func readTenant(ctx context.Context, data *schema.ResourceData, meta interface{}
 
 func validateTenant(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
 	var result *multierror.Error
+
+	dynamicRegistration := value.Bool(diff.GetRawConfig().GetAttr("client_id_metadata_document_dynamic_registration_supported"))
+	cimdSupported := value.Bool(diff.GetRawConfig().GetAttr("client_id_metadata_document_supported"))
+	if dynamicRegistration != nil && *dynamicRegistration && cimdSupported != nil && !*cimdSupported {
+		result = multierror.Append(result,
+			fmt.Errorf("client_id_metadata_document_dynamic_registration_supported cannot be true when client_id_metadata_document_supported is false"),
+		)
+	}
+
 	disableACRValues := diff.GetRawConfig().GetAttr("disable_acr_values_supported")
 	if !disableACRValues.IsNull() && disableACRValues.True() {
 		acrValues := diff.GetRawConfig().GetAttr("acr_values_supported")

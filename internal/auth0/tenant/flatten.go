@@ -60,6 +60,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt", value.BoolPtrToString(tenant.SkipNonVerifiableCallbackURIConfirmationPrompt)),
 		data.Set("phone_consolidated_experience", tenant.GetPhoneConsolidatedExperience()),
 		data.Set("client_id_metadata_document_supported", tenant.GetClientIDMetadataDocumentSupported()),
+		data.Set("client_id_metadata_document_dynamic_registration_supported", tenant.GetClientIDMetadataDocumentDynamicRegistrationSupported()),
 		data.Set("resource_parameter_profile", tenant.GetResourceParameterProfile()),
 		data.Set("dynamic_client_registration_security_mode", tenant.GetDynamicClientRegistrationSecurityMode()),
 		data.Set("country_codes", flattenTenantCountryCodes(tenant.CountryCodes)),

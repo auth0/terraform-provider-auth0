@@ -64,12 +64,12 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 ### Optional
 
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
-- `app_type` (String) Type of application the client represents. CIMD clients only support `native`, `spa`, and `regular_web`.
+- `app_type` (String) Type of application the client represents. CIMD clients only support `native`, `spa`, and `regular_web`. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
 - `default_organization` (Block List, Max: 1) Configure and associate an organization with the Client (see [below for nested schema](#nestedblock--default_organization))
-- `description` (String) Description of the purpose of the client.
-- `external_client_id_version` (Number) Version number for external_client_id metadata document changes. Update this value to sync the client with the latest values of the json metadata document.
-- `grant_types` (List of String) Types of grants that this client is authorized to use. CIMD clients support `authorization_code` and `refresh_token`.
+- `description` (String) Description of the purpose of the client. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
+- `external_client_id_version` (Number) Version number for external_client_id metadata document changes. Update this value to sync the client with the latest values of the json metadata document. Only applies to clients with `external_metadata_created_by` set to `admin`.
+- `grant_types` (List of String) Types of grants that this client is authorized to use. CIMD clients support `authorization_code` and `refresh_token`. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
 - `oidc_conformant` (Boolean) Whether this client conforms to strict OIDC specifications. Must be `true` for CIMD clients.
 - `organization_discovery_methods` (List of String) Methods for discovering organizations during the pre_login_prompt. Can include `email` (allows users to find their organization by entering their email address) and/or `organization_name` (requires users to enter the organization name directly). These methods can be combined. Setting this property requires that `organization_require_behavior` is set to `pre_login_prompt`.
@@ -84,7 +84,8 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 
 - `callbacks` (List of String) URLs that Auth0 may call back after authentication. Derived from the CIMD metadata document.
 - `client_id` (String) The ID of the client.
-- `external_metadata_created_by` (String) Who created the external metadata client: `admin` (via Management API) or `client` (self-registered).
+- `external_metadata_created_by` (String) Who created the external metadata client: `admin` (via Management API) or `client` (dynamically self-registered). Read-only; available in Terraform state after import, not in generated configuration.
+- `external_metadata_status` (String) Whether the Client ID Metadata Document at `external_client_id` is currently reachable: `available` or `unavailable` (EA only).
 - `external_metadata_type` (String) Type of external metadata. Always `cimd` for CIMD-registered clients.
 - `id` (String) The ID of this resource.
 - `is_first_party` (Boolean) Whether this is a first-party client. Always `false` for CIMD clients.
@@ -163,9 +164,8 @@ Read-Only:
 Import is supported using the following syntax:
 
 ```shell
-# This resource can be imported by specifying the client ID.
-# Generally CIMD clients have a "tpc_" prefix in their client ID.
-#
-# Example:
+# Import an existing CIMD client by its client ID (usually prefixed with "tpc_").
+# For a dynamically registered client, import instead of creating a second
+# client for the same external_client_id URL.
 terraform import auth0_client_cimd.my_mcp_agent "tpc_5FPpaVyZGSNRCBzTb2zURZ"
 ```

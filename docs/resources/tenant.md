@@ -25,6 +25,10 @@ resource "auth0_tenant" "my_tenant" {
   enabled_locales         = ["en"]
   default_redirection_uri = "https://example.com/login"
 
+  # Enable both settings to allow dynamic CIMD registration (Early Access).
+  # client_id_metadata_document_supported                      = true
+  # client_id_metadata_document_dynamic_registration_supported = true
+
   flags {
     disable_clickjack_protection_headers   = true
     enable_public_signup_user_exists_error = true
@@ -71,6 +75,7 @@ resource "auth0_tenant" "my_tenant" {
 - `acr_values_supported` (Set of String) List of supported ACR values.
 - `allow_organization_name_in_authentication_api` (Boolean) Whether to accept an organization name instead of an ID on auth endpoints.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
+- `client_id_metadata_document_dynamic_registration_supported` (Boolean) Whether the authorization server supports registering clients dynamically from a `client_id` URL (EA only). Requires `client_id_metadata_document_supported` to be enabled.
 - `client_id_metadata_document_supported` (Boolean) Whether the tenant supports Client ID Metadata Document (CIMD) for client registration.
 - `country_codes` (Block List, Max: 1) Configuration for phone identifier country code filtering. Remove this block to disable filtering. Requires the country codes feature flag to be enabled on the tenant. (see [below for nested schema](#nestedblock--country_codes))
 - `customize_mfa_in_postlogin_action` (Boolean) Whether to enable flexible factors for MFA in the PostLogin action.

@@ -13,11 +13,22 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv3.UpdateClientRequestCont
 	config := data.GetRawConfig()
 	req := &mgmtv3.UpdateClientRequestContent{}
 
-	req.Description = value.String(config.GetAttr("description"))
+	// Sent conditionally because Dynamic CIMD clients reject description, app_type, and grant_types in PATCH.
+	if data.IsNewResource() || data.HasChange("description") {
+		req.Description = value.String(config.GetAttr("description"))
+	}
 
-	if appType := value.String(config.GetAttr("app_type")); appType != nil {
-		v := mgmtv3.ClientAppTypeEnum(*appType)
-		req.AppType = &v
+	if data.IsNewResource() || data.HasChange("app_type") {
+		if appType := value.String(config.GetAttr("app_type")); appType != nil {
+			v := mgmtv3.ClientAppTypeEnum(*appType)
+			req.AppType = &v
+		}
+	}
+
+	if data.IsNewResource() || data.HasChange("grant_types") {
+		if grantTypes := value.Strings(config.GetAttr("grant_types")); grantTypes != nil {
+			req.GrantTypes = *grantTypes
+		}
 	}
 
 	req.OidcConformant = value.Bool(config.GetAttr("oidc_conformant"))
@@ -30,9 +41,6 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv3.UpdateClientRequestCont
 	}
 	if webOrigins := value.Strings(config.GetAttr("web_origins")); webOrigins != nil {
 		req.WebOrigins = *webOrigins
-	}
-	if grantTypes := value.Strings(config.GetAttr("grant_types")); grantTypes != nil {
-		req.GrantTypes = *grantTypes
 	}
 
 	if orgDiscovery := config.GetAttr("organization_discovery_methods"); !orgDiscovery.IsNull() {

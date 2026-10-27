@@ -227,6 +227,7 @@ resource "auth0_client" "member_management" {
 
 - `external_client_id` (String) The URL of the Client ID Metadata Document. Only present for CIMD-registered clients.
 - `external_metadata_created_by` (String) Who created the external metadata client: `admin` (via Management API), `client` (self-registered), or `unknown`.
+- `external_metadata_status` (String) Whether the Client ID Metadata Document at `external_client_id` is currently reachable: `available` or `unavailable` (EA only). Only present for CIMD-registered clients.
 - `external_metadata_type` (String) Type of external metadata. Value is `cimd` for CIMD-registered clients.
 - `id` (String) The ID of this resource.
 - `jwks_uri` (String) URL for the JSON Web Key Set (JWKS) containing the public keys used for `private_key_jwt` authentication. Only present for CIMD clients using `private_key_jwt` authentication.

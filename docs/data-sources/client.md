@@ -57,6 +57,7 @@ data "auth0_client" "some-client-by-id" {
 - `express_configuration` (List of Object) Express Configuration settings for the client. Used with OIN Express Configuration. (see [below for nested schema](#nestedatt--express_configuration))
 - `external_client_id` (String) The URL of the Client ID Metadata Document. Only present for CIMD-registered clients.
 - `external_metadata_created_by` (String) Who created the external metadata client: `admin` (via Management API), `client` (self-registered), or `unknown`.
+- `external_metadata_status` (String) Whether the Client ID Metadata Document at `external_client_id` is currently reachable: `available` or `unavailable` (EA only). Only present for CIMD-registered clients.
 - `external_metadata_type` (String) Type of external metadata. Value is `cimd` for CIMD-registered clients.
 - `fedcm_login` (List of Object) Federated Credential Management (FedCM) configuration. (EA only) (see [below for nested schema](#nestedatt--fedcm_login))
 - `form_template` (String) HTML form template to be used for WS-Federation.

@@ -18,6 +18,7 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv3.GetClientRespon
 		data.Set("external_client_id", client.GetExternalClientID()),
 		data.Set("external_metadata_type", string(client.GetExternalMetadataType())),
 		data.Set("external_metadata_created_by", string(client.GetExternalMetadataCreatedBy())),
+		data.Set("external_metadata_status", string(client.GetExternalMetadataStatus())),
 		data.Set("jwks_uri", client.GetJwksURI()),
 		data.Set("signing_keys", flattenCIMDSigningKeys(client.SigningKeys)),
 		data.Set("description", client.GetDescription()),

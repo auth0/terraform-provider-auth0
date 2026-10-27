@@ -15,6 +15,8 @@ import (
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
+const dynamicCIMDImmutableFieldDescription = "Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update."
+
 // NewCIMDResource returns a new auth0_client_cimd resource.
 func NewCIMDResource() *schema.Resource {
 	return &schema.Resource{
@@ -95,7 +97,8 @@ func cimdClientSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "Who created the external metadata client: `admin` (via Management API) " +
-				"or `client` (self-registered).",
+				"or `client` (dynamically self-registered). Read-only; available in Terraform state " +
+				"after import, not in generated configuration.",
 		},
 		"external_metadata_status": {
 			Type:     schema.TypeString,
@@ -119,7 +122,7 @@ func cimdClientSchema() map[string]*schema.Schema {
 			Optional:     true,
 			ValidateFunc: validation.StringLenBetween(0, 140),
 			Description: "Description of the purpose of the client. " +
-				"Cannot be changed on clients with `external_metadata_created_by` set to `client`.",
+				dynamicCIMDImmutableFieldDescription,
 		},
 		"app_type": {
 			Type:     schema.TypeString,
@@ -130,7 +133,7 @@ func cimdClientSchema() map[string]*schema.Schema {
 			),
 			Description: "Type of application the client represents. " +
 				"CIMD clients only support `native`, `spa`, and `regular_web`. " +
-				"Cannot be changed on clients with `external_metadata_created_by` set to `client`.",
+				dynamicCIMDImmutableFieldDescription,
 		},
 		"allowed_origins": {
 			Type:     schema.TypeList,
@@ -157,7 +160,7 @@ func cimdClientSchema() map[string]*schema.Schema {
 			},
 			Description: "Types of grants that this client is authorized to use. " +
 				"CIMD clients support `authorization_code` and `refresh_token`. " +
-				"Cannot be changed on clients with `external_metadata_created_by` set to `client`.",
+				dynamicCIMDImmutableFieldDescription,
 		},
 		"oidc_conformant": {
 			Type:             schema.TypeBool,

@@ -63,6 +63,7 @@ Read-Only:
 - `express_configuration` (List of Object) (see [below for nested schema](#nestedobjatt--clients--express_configuration))
 - `external_client_id` (String)
 - `external_metadata_created_by` (String)
+- `external_metadata_status` (String)
 - `external_metadata_type` (String)
 - `fedcm_login` (List of Object) (see [below for nested schema](#nestedobjatt--clients--fedcm_login))
 - `grant_types` (List of String)

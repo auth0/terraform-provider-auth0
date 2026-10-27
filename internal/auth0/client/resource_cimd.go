@@ -48,7 +48,8 @@ func cimdClientSchema() map[string]*schema.Schema {
 			Type:     schema.TypeInt,
 			Optional: true,
 			Description: "Version number for external_client_id metadata document changes. " +
-				"Update this value to sync the client with the latest values of the json metadata document.",
+				"Update this value to sync the client with the latest values of the json metadata document. " +
+				"Only applies to clients with `external_metadata_created_by` set to `admin`.",
 		},
 		"client_id": {
 			Type:        schema.TypeString,
@@ -96,6 +97,12 @@ func cimdClientSchema() map[string]*schema.Schema {
 			Description: "Who created the external metadata client: `admin` (via Management API) " +
 				"or `client` (self-registered).",
 		},
+		"external_metadata_status": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Description: "Whether the Client ID Metadata Document at `external_client_id` is currently reachable: " +
+				"`available` or `unavailable` (EA only).",
+		},
 		"jwks_uri": {
 			Type:     schema.TypeString,
 			Computed: true,
@@ -111,7 +118,8 @@ func cimdClientSchema() map[string]*schema.Schema {
 			Type:         schema.TypeString,
 			Optional:     true,
 			ValidateFunc: validation.StringLenBetween(0, 140),
-			Description:  "Description of the purpose of the client.",
+			Description: "Description of the purpose of the client. " +
+				"Cannot be changed on clients with `external_metadata_created_by` set to `client`.",
 		},
 		"app_type": {
 			Type:     schema.TypeString,
@@ -121,7 +129,8 @@ func cimdClientSchema() map[string]*schema.Schema {
 				[]string{"native", "regular_web", "spa"}, false,
 			),
 			Description: "Type of application the client represents. " +
-				"CIMD clients only support `native`, `spa`, and `regular_web`.",
+				"CIMD clients only support `native`, `spa`, and `regular_web`. " +
+				"Cannot be changed on clients with `external_metadata_created_by` set to `client`.",
 		},
 		"allowed_origins": {
 			Type:     schema.TypeList,
@@ -147,7 +156,8 @@ func cimdClientSchema() map[string]*schema.Schema {
 				),
 			},
 			Description: "Types of grants that this client is authorized to use. " +
-				"CIMD clients support `authorization_code` and `refresh_token`.",
+				"CIMD clients support `authorization_code` and `refresh_token`. " +
+				"Cannot be changed on clients with `external_metadata_created_by` set to `client`.",
 		},
 		"oidc_conformant": {
 			Type:             schema.TypeBool,

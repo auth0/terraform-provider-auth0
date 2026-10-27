@@ -741,6 +741,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("external_client_id", client.GetExternalClientID()),
 		data.Set("external_metadata_type", client.GetExternalMetadataType()),
 		data.Set("external_metadata_created_by", client.GetExternalMetadataCreatedBy()),
+		data.Set("external_metadata_status", client.GetExternalMetadataStatus()),
 		data.Set("jwks_uri", client.GetJwksURI()),
 		data.Set("my_organization_configuration", flattenMyOrganizationConfiguration(client.GetMyOrganizationConfiguration())),
 		data.Set("b2b_integration_configuration", flattenB2BIntegrationConfiguration(client.GetB2BIntegrationConfiguration())),
@@ -1267,6 +1268,11 @@ func flattenClientList(data *schema.ResourceData, clients []*management.Client, 
 			"grant_types":                         client.GetGrantTypes(),
 			"web_origins":                         client.GetWebOrigins(),
 			"client_metadata":                     client.GetClientMetadata(),
+			"external_client_id":                  client.GetExternalClientID(),
+			"external_metadata_type":              client.GetExternalMetadataType(),
+			"external_metadata_created_by":        client.GetExternalMetadataCreatedBy(),
+			"external_metadata_status":            client.GetExternalMetadataStatus(),
+			"jwks_uri":                            client.GetJwksURI(),
 		}
 		clientList = append(clientList, clientMap)
 	}

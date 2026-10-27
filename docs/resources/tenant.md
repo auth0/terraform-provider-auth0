@@ -25,6 +25,10 @@ resource "auth0_tenant" "my_tenant" {
   enabled_locales         = ["en"]
   default_redirection_uri = "https://example.com/login"
 
+  # Enable both settings to allow dynamic CIMD registration (Early Access).
+  # client_id_metadata_document_supported                      = true
+  # client_id_metadata_document_dynamic_registration_supported = true
+
   flags {
     disable_clickjack_protection_headers   = true
     enable_public_signup_user_exists_error = true

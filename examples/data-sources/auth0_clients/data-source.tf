@@ -12,3 +12,8 @@ data "auth0_clients" "m2m_apps" {
 data "auth0_clients" "first_party_apps" {
   is_first_party = true
 }
+
+# Find CIMD clients by their metadata document URL.
+data "auth0_clients" "cimd_apps" {
+  external_client_id = "https://mcp-agent.example.com/oauth/metadata.json"
+}

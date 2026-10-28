@@ -26,6 +26,8 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv3.GetClientRespon
 		data.Set("web_origins", client.GetWebOrigins()),
 		data.Set("grant_types", client.GetGrantTypes()),
 		data.Set("oidc_conformant", client.GetOidcConformant()),
+		data.Set("organization_usage", string(client.GetOrganizationUsage())),
+		data.Set("organization_require_behavior", string(client.GetOrganizationRequireBehavior())),
 		data.Set("organization_discovery_methods", internalSchema.ToStrSlice(client.OrganizationDiscoveryMethods...)),
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
 		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt", client.GetSkipNonVerifiableCallbackURIConfirmationPrompt()),

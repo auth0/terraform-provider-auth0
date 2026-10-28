@@ -33,6 +33,9 @@ resource "auth0_client_cimd" "my_mcp_agent" {
     "refresh_token",
   ]
 
+  organization_usage            = "require"
+  organization_require_behavior = "post_login_prompt"
+
   client_metadata = {
     environment = "production"
   }
@@ -73,6 +76,8 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
 - `oidc_conformant` (Boolean) Whether this client conforms to strict OIDC specifications. Must be `true` for CIMD clients.
 - `organization_discovery_methods` (List of String) Methods for discovering organizations during the pre_login_prompt. Can include `email` (allows users to find their organization by entering their email address) and/or `organization_name` (requires users to enter the organization name directly). These methods can be combined. Setting this property requires that `organization_require_behavior` is set to `pre_login_prompt`.
+- `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or `post_login_prompt`.
+- `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
 - `redirection_policy` (String) Controls whether Auth0 redirects users to the application's callback URL on authentication errors or in email verification flows.
 - `refresh_token` (Block List, Max: 1) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedblock--refresh_token))
 - `require_proof_of_possession` (Boolean) Makes the use of Proof-of-Possession mandatory for this client.

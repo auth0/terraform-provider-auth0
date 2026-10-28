@@ -35,6 +35,15 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv3.UpdateClientRequestCont
 		req.GrantTypes = *grantTypes
 	}
 
+	if orgUsage := value.String(config.GetAttr("organization_usage")); orgUsage != nil {
+		v := mgmtv3.ClientOrganizationUsagePatchEnum(*orgUsage)
+		req.OrganizationUsage = &v
+	}
+	if orgRequireBehavior := value.String(config.GetAttr("organization_require_behavior")); orgRequireBehavior != nil {
+		v := mgmtv3.ClientOrganizationRequireBehaviorPatchEnum(*orgRequireBehavior)
+		req.OrganizationRequireBehavior = &v
+	}
+
 	if orgDiscovery := config.GetAttr("organization_discovery_methods"); !orgDiscovery.IsNull() {
 		if methods := value.Strings(orgDiscovery); methods != nil && len(*methods) > 0 {
 			enumMethods := make([]mgmtv3.ClientOrganizationDiscoveryEnum, len(*methods))

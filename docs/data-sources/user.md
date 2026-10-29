@@ -50,7 +50,7 @@ data "auth0_user" "my_user" {
 - `id` (String) The ID of this resource.
 - `name` (String) Name of the user. This value can only be updated if the connection is a database connection (using the Auth0 store), a passwordless connection (email or sms) or has disabled 'Sync user profile attributes at each login'. For more information, see: [Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).
 - `nickname` (String) Preferred nickname or alias of the user. This value can only be updated if the connection is a database connection (using the Auth0 store), a passwordless connection (email or sms) or has disabled 'Sync user profile attributes at each login'. For more information, see: [Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).
-- `password` (String) Initial password for this user. Required for non-passwordless connections (SMS and email).
+- `password` (String) Initial password for this user. Required for non-passwordless connections (SMS and email). Conflicts with `password_wo`.
 - `permissions` (Set of Object) List of API permissions granted to the user. Skips if `skip_permissions` is `true`. When `skip_permissions` is `true` (default), this will be an empty set to optimize performance and reduce rate limit consumption. (see [below for nested schema](#nestedatt--permissions))
 - `phone_number` (String) Phone number for the user; follows the E.164 recommendation. Used for SMS connections.
 - `phone_verified` (Boolean) Indicates whether the phone number has been verified.

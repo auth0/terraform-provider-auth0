@@ -84,10 +84,30 @@ func NewResource() *schema.Resource {
 					"[Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).",
 			},
 			"password": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Sensitive:   true,
-				Description: "Initial password for this user. Required for non-passwordless connections (SMS and email).",
+				Type:          schema.TypeString,
+				Optional:      true,
+				Sensitive:     true,
+				ConflictsWith: []string{"password_wo"},
+				Description: "Initial password for this user. Required for non-passwordless connections (SMS and email). " +
+					"Conflicts with `password_wo`.",
+			},
+			"password_wo": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				WriteOnly:     true,
+				Sensitive:     true,
+				ConflictsWith: []string{"password"},
+				RequiredWith:  []string{"password_wo_version"},
+				Description: "Password for this user (write-only). This value is **not** stored in Terraform state " +
+					"and can be sourced from an ephemeral value. It is sent when the user is created and whenever " +
+					"`password_wo_version` changes. Conflicts with `password`.",
+			},
+			"password_wo_version": {
+				Type:         schema.TypeInt,
+				Optional:     true,
+				RequiredWith: []string{"password_wo"},
+				Description: "Version counter for `password_wo`, required whenever the write-only password is set. " +
+					"Change it to send a new password.",
 			},
 			"email": {
 				Type:        schema.TypeString,

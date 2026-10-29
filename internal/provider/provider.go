@@ -23,6 +23,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/action"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/agent"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/attackprotection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/branding"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
@@ -158,6 +159,7 @@ func New() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"auth0_action":                                   action.NewResource(),
+			"auth0_agent":                                    agent.NewResource(),
 			"auth0_action_module":                            action.NewModuleResource(),
 			"auth0_trigger_actions":                          action.NewTriggerActionsResource(),
 			"auth0_trigger_action":                           action.NewTriggerActionResource(),
@@ -245,6 +247,7 @@ func New() *schema.Provider {
 			"auth0_action_module_version":                    action.NewModuleVersionDataSource(),
 			"auth0_action_module_actions":                    action.NewModuleActionsDataSource(),
 			"auth0_action":                                   action.NewDataSource(),
+			"auth0_agent":                                    agent.NewDataSource(),
 			"auth0_branding":                                 branding.NewDataSource(),
 			"auth0_branding_theme":                           branding.NewThemeDataSource(),
 			"auth0_branding_phone_notification_template":     branding.NewPhoneNotificationTemplateDataSource(),

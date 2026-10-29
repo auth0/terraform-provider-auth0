@@ -48,6 +48,7 @@ data "auth0_clients" "first_party_apps" {
 
 Read-Only:
 
+- `agent_id` (String)
 - `allowed_clients` (List of String)
 - `allowed_logout_urls` (List of String)
 - `allowed_origins` (List of String)

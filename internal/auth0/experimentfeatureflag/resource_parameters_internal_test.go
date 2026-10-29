@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -64,7 +65,7 @@ func TestTypedToStringNumbers(t *testing.T) {
 	}
 }
 
-func TestValidateParameterValues(t *testing.T) {
+func TestValidateParameters(t *testing.T) {
 	parameterType := cty.Object(map[string]cty.Type{
 		"name":        cty.String,
 		"type":        cty.String,
@@ -85,7 +86,7 @@ func TestValidateParameterValues(t *testing.T) {
 			parameter(cty.StringVal("flag"), cty.StringVal("boolean"), cty.StringVal("true")),
 			parameter(cty.StringVal("obj"), cty.StringVal("object"), cty.StringVal(`{"a":1}`)),
 		})
-		assert.NoError(t, validateParameterValues(parameters))
+		assert.NoError(t, validateParameters(parameters))
 	})
 
 	t.Run("invalid values are all reported with their names", func(t *testing.T) {
@@ -93,7 +94,7 @@ func TestValidateParameterValues(t *testing.T) {
 			parameter(cty.StringVal("flag"), cty.StringVal("boolean"), cty.StringVal("yes")),
 			parameter(cty.StringVal("obj"), cty.StringVal("object"), cty.StringVal(`[1]`)),
 		})
-		err := validateParameterValues(parameters)
+		err := validateParameters(parameters)
 		assert.ErrorContains(t, err, `parameter "flag": value "yes" is not a valid boolean`)
 		assert.ErrorContains(t, err, `parameter "obj": value "[1]" is not a JSON object`)
 	})
@@ -103,13 +104,42 @@ func TestValidateParameterValues(t *testing.T) {
 			parameter(cty.StringVal("flag"), cty.StringVal("boolean"), cty.UnknownVal(cty.String)),
 			parameter(cty.StringVal("obj"), cty.UnknownVal(cty.String), cty.StringVal("yes")),
 		})
-		assert.NoError(t, validateParameterValues(parameters))
+		assert.NoError(t, validateParameters(parameters))
 	})
 
 	t.Run("unknown or null set is skipped", func(t *testing.T) {
-		assert.NoError(t, validateParameterValues(cty.UnknownVal(cty.Set(parameterType))))
-		assert.NoError(t, validateParameterValues(cty.NullVal(cty.Set(parameterType))))
+		assert.NoError(t, validateParameters(cty.UnknownVal(cty.Set(parameterType))))
+		assert.NoError(t, validateParameters(cty.NullVal(cty.Set(parameterType))))
 	})
+
+	t.Run("duplicate name is reported", func(t *testing.T) {
+		parameters := cty.SetVal([]cty.Value{
+			parameter(cty.StringVal("show_new_login"), cty.StringVal("boolean"), cty.StringVal("false")),
+			parameter(cty.StringVal("show_new_login"), cty.StringVal("boolean"), cty.StringVal("true")),
+			parameter(cty.StringVal("label"), cty.StringVal("string"), cty.StringVal("a")),
+		})
+		assert.EqualError(t, validateParameters(parameters),
+			`parameter "show_new_login" is defined more than once; each parameter name must be unique`)
+	})
+
+	t.Run("unknown names are not treated as duplicates", func(t *testing.T) {
+		parameters := cty.SetVal([]cty.Value{
+			parameter(cty.UnknownVal(cty.String), cty.StringVal("boolean"), cty.StringVal("false")),
+			parameter(cty.UnknownVal(cty.String), cty.StringVal("boolean"), cty.StringVal("true")),
+		})
+		assert.NoError(t, validateParameters(parameters))
+	})
+}
+
+func TestExpandParametersRejectsDuplicateNames(t *testing.T) {
+	parameters := schema.NewSet(hashFeatureFlagParameter, []interface{}{
+		map[string]interface{}{"name": "show_new_login", "type": "boolean", "value": "false", "description": ""},
+		map[string]interface{}{"name": "show_new_login", "type": "boolean", "value": "true", "description": ""},
+	})
+
+	_, err := expandParameters(parameters)
+	assert.EqualError(t, err,
+		`parameter "show_new_login" is defined more than once; each parameter name must be unique`)
 }
 
 func TestHashFeatureFlagParameter(t *testing.T) {

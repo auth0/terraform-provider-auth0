@@ -69,6 +69,11 @@ func expandParameters(set *schema.Set) (map[string]*management.FeatureFlagConfig
 		name := entry["name"].(string)
 		paramType := entry["type"].(string)
 
+		// The API keys parameters by name, so a repeated name would silently drop a block.
+		if _, ok := parameters[name]; ok {
+			return nil, duplicateParameterError(name)
+		}
+
 		value, err := stringToTyped(paramType, entry["value"].(string))
 		if err != nil {
 			return nil, fmt.Errorf("parameter %q: %w", name, err)

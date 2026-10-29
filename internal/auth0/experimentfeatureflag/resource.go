@@ -141,45 +141,57 @@ func hashFeatureFlagParameter(v interface{}) int {
 	return schema.HashString(fmt.Sprintf("%q:%q:%q:%q", name, paramType, value, description))
 }
 
-// validateFeatureFlagParameters reports invalid parameter values at plan time instead of mid-apply.
+// validateFeatureFlagParameters reports invalid parameter values and duplicate names at plan time
+// instead of mid-apply or as drift on the next plan.
 func validateFeatureFlagParameters(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
 	config := diff.GetRawConfig()
 	if !config.IsKnown() || config.IsNull() {
 		return nil
 	}
 
-	return validateParameterValues(config.GetAttr("parameters"))
+	return validateParameters(config.GetAttr("parameters"))
 }
 
-func validateParameterValues(parameters cty.Value) error {
+func validateParameters(parameters cty.Value) error {
 	if !parameters.IsKnown() || parameters.IsNull() {
 		return nil
 	}
 
 	var result *multierror.Error
+	seen := make(map[string]bool)
+
 	for it := parameters.ElementIterator(); it.Next(); {
 		_, parameter := it.Element()
 		if !parameter.IsKnown() || parameter.IsNull() {
 			continue
 		}
 
+		label := "parameter"
+		// Unknown names and values are checked again at apply time.
+		if name := parameter.GetAttr("name"); name.IsKnown() && !name.IsNull() {
+			if seen[name.AsString()] {
+				return duplicateParameterError(name.AsString())
+			}
+			seen[name.AsString()] = true
+			label = fmt.Sprintf("parameter %q", name.AsString())
+		}
+
 		paramType := parameter.GetAttr("type")
 		rawValue := parameter.GetAttr("value")
-		// Values from unknown expressions are checked again at apply time.
 		if !paramType.IsKnown() || paramType.IsNull() || !rawValue.IsKnown() || rawValue.IsNull() {
 			continue
 		}
 
 		if _, err := stringToTyped(paramType.AsString(), rawValue.AsString()); err != nil {
-			name := parameter.GetAttr("name")
-			if name.IsKnown() && !name.IsNull() {
-				err = fmt.Errorf("parameter %q: %w", name.AsString(), err)
-			}
-			result = multierror.Append(result, err)
+			result = multierror.Append(result, fmt.Errorf("%s: %w", label, err))
 		}
 	}
 
 	return result.ErrorOrNil()
+}
+
+func duplicateParameterError(name string) error {
+	return fmt.Errorf("parameter %q is defined more than once; each parameter name must be unique", name)
 }
 
 func validateFeatureFlagStatusOnCreate(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {

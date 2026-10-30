@@ -17,6 +17,9 @@ resource "auth0_client_cimd" "my_mcp_agent" {
     "refresh_token",
   ]
 
+  organization_usage            = "require"
+  organization_require_behavior = "post_login_prompt"
+
   client_metadata = {
     environment = "production"
   }

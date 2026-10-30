@@ -15,6 +15,9 @@ resource "auth0_experiment_feature_flag" "my_flag" {
   name        = "checkout-passkey-rollout"
   description = "Feature flag driving the passkey A/B test on the login screen."
 
+  # Activation needs at least two variations. Omit status to keep the flag in draft.
+  status = "active"
+
   # At least one parameter is required. `value` is always a string;
   # use a JSON-encoded string when `type` is "object" or "array".
   parameters {
@@ -44,8 +47,44 @@ resource "auth0_experiment_feature_flag" "my_flag" {
     type  = "array"
     value = jsonencode(["a", "b"])
   }
-  # The flag starts in draft. After creating at least two variations separately,
-  # add status = "active" in a later apply to activate it.
+
+  # A control variation has no overrides, so it uses the parameter defaults.
+  variations {
+    name        = "control"
+    description = "Current login screen."
+  }
+
+  # Each override must use a parameter name and type, and a value different from the default.
+  variations {
+    name        = "treatment"
+    description = "Login screen with passkey enrollment."
+
+    overrides {
+      name  = "show_passkey"
+      type  = "boolean"
+      value = "true"
+    }
+
+    overrides {
+      name  = "cta_label"
+      type  = "string"
+      value = "Continue with passkey"
+    }
+
+    overrides {
+      name = "obj1"
+      type = "object"
+      value = jsonencode({
+        label   = "B"
+        enabled = true
+      })
+    }
+  }
+}
+
+# Use variation_ids to reference a variation by ID, for example in an experiment allocation.
+output "treatment_variation_id" {
+  value = auth0_experiment_feature_flag.my_flag.variation_ids["treatment"]
 }
 ```
 
@@ -60,7 +99,8 @@ resource "auth0_experiment_feature_flag" "my_flag" {
 ### Optional
 
 - `description` (String) Description of the feature flag. Min length 3 when present.
-- `status` (String) The lifecycle status of the feature flag. One of draft, active, archived. On creation, omit this attribute or set it to `draft`. Can be updated to other value after creation.
+- `status` (String) The lifecycle status of the feature flag. One of draft, active, archived. Defaults to `draft` when omitted on creation.
+- `variations` (Block Set) The variations of the feature flag. Each variation overrides parameter values of the feature flag. (see [below for nested schema](#nestedblock--variations))
 
 ### Read-Only
 
@@ -68,6 +108,7 @@ resource "auth0_experiment_feature_flag" "my_flag" {
 - `id` (String) The ID of this resource.
 - `type` (String) The type of the feature flag: `self` for user-created flags or `auth0` for built-in flags.
 - `updated_at` (String) The ISO 8601 formatted date the feature flag was updated.
+- `variation_ids` (Map of String) A map of variation names to variation IDs. Use it to reference a variation by ID, for example in an experiment allocation, because the `variations` blocks do not include IDs. An ID stays the same when you change the description or overrides of a variation. A variation gets a new ID when you rename it, remove and add it again, or when the feature flag is replaced.
 
 <a id="nestedblock--parameters"></a>
 ### Nested Schema for `parameters`
@@ -81,6 +122,28 @@ Required:
 Optional:
 
 - `description` (String) Description of the parameter.
+
+
+<a id="nestedblock--variations"></a>
+### Nested Schema for `variations`
+
+Required:
+
+- `name` (String) The name of the variation. Must be unique within the feature flag and contain 3 to 255 characters without surrounding whitespace. Changing the name deletes the variation and creates a new one with a new ID.
+
+Optional:
+
+- `description` (String) Description of the variation. Must contain 3 to 1024 characters when set.
+- `overrides` (Block Set) Parameter overrides for the variation. Omit for a control variation. (see [below for nested schema](#nestedblock--variations--overrides))
+
+<a id="nestedblock--variations--overrides"></a>
+### Nested Schema for `variations.overrides`
+
+Required:
+
+- `name` (String) The name of a parameter on the feature flag. Each name can appear once.
+- `type` (String) The type of the parameter value. One of boolean, string, number, array, object.
+- `value` (String) The override value as a string. For object and array values, provide JSON; for boolean and number values, provide their literal text.
 
 ## Import
 

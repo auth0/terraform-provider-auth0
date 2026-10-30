@@ -1,5 +1,25 @@
 ## Unreleased
 
+## v1.60.0
+
+FEATURES:
+- `resource/auth0_client_profile` – Add resource to manage client profiles (EA only) ([#1756](https://github.com/auth0/terraform-provider-auth0/pull/1756))
+- `data-source/auth0_client_profile` – Add data source to look up a client profile (EA only) ([#1756](https://github.com/auth0/terraform-provider-auth0/pull/1756))
+- `resource/auth0_experiment_feature_flag` – Add resource to manage Experiment Center feature flags, including `variations` blocks with parameter overrides (EA only) ([#1733](https://github.com/auth0/terraform-provider-auth0/pull/1733)) ([#1751](https://github.com/auth0/terraform-provider-auth0/pull/1751))
+- `data-source/auth0_experiment_feature_flag` – Add data source to look up an Experiment Center feature flag (EA only) ([#1733](https://github.com/auth0/terraform-provider-auth0/pull/1733)) ([#1751](https://github.com/auth0/terraform-provider-auth0/pull/1751))
+- `resource/auth0_experiment_segment` – Add resource to manage Experiment Center segments (EA only) ([#1752](https://github.com/auth0/terraform-provider-auth0/pull/1752))
+- `data-source/auth0_experiment_segment` – Add data source to look up an Experiment Center segment (EA only) ([#1752](https://github.com/auth0/terraform-provider-auth0/pull/1752))
+- `resource/auth0_experiment` – Add resource to manage Experiment Center experiments with percentage or segment allocation strategies (EA only) ([#1757](https://github.com/auth0/terraform-provider-auth0/pull/1757))
+- `data-source/auth0_experiment` – Add data source to look up an Experiment Center experiment (EA only) ([#1757](https://github.com/auth0/terraform-provider-auth0/pull/1757))
+- `resource/auth0_user` – Add write-only `password_wo` and `password_wo_version` attributes so the password is never stored in Terraform state ([#1769](https://github.com/auth0/terraform-provider-auth0/pull/1769))
+
+ENHANCEMENTS:
+- `resource/auth0_client_cimd` – Add `organization_usage` and `organization_require_behavior` attributes ([#1768](https://github.com/auth0/terraform-provider-auth0/pull/1768))
+
+BUG FIXES:
+- `resource/auth0_client` – Set a default `token_endpoint_auth_method` when enabling `is_token_endpoint_ip_header_trusted` on an existing client with no stored method, preventing an HTTP 400 from the Auth0 API ([#1749](https://github.com/auth0/terraform-provider-auth0/pull/1749))
+- `resource/auth0_prompt_screen_partial` / `resource/auth0_prompt_screen_renderer` – Validate that the import ID is formatted as `<prompt_type>:<screen_name>` ([#1761](https://github.com/auth0/terraform-provider-auth0/pull/1761))
+
 ## v1.59.0
 
 FEATURES:

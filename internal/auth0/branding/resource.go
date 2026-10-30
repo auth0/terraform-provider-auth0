@@ -121,7 +121,9 @@ func readBranding(ctx context.Context, data *schema.ResourceData, meta interface
 	var universalLoginTemplate *management.BrandingUniversalLogin
 	if err := checkForCustomDomains(ctx, api); err == nil {
 		universalLoginTemplate, err = api.Branding.UniversalLogin(ctx)
-		if err != nil && !internalError.IsStatusNotFound(err) {
+		// A tenant without a paid subscription answers 402 for the template even when it has a
+		// custom domain: it cannot have a template, so there is none to read.
+		if err != nil && !internalError.IsStatusNotFound(err) && !internalError.IsStatusPaymentRequired(err) {
 			return diag.FromErr(err)
 		}
 	}
@@ -176,7 +178,8 @@ func deleteBranding(ctx context.Context, _ *schema.ResourceData, meta interface{
 	api := meta.(*config.Config).GetAPI()
 
 	if err := checkForCustomDomains(ctx, api); err == nil {
-		if err := api.Branding.DeleteUniversalLogin(ctx); err != nil {
+		// A 402 means the tenant cannot have a template, so there is none to delete.
+		if err := api.Branding.DeleteUniversalLogin(ctx); err != nil && !internalError.IsStatusPaymentRequired(err) {
 			return diag.FromErr(err)
 		}
 	}

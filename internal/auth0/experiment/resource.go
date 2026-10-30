@@ -351,6 +351,10 @@ func updateExperiment(ctx context.Context, data *schema.ResourceData, meta inter
 }
 
 func deleteExperiment(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	if data.Get("status").(string) == string(management.ExperimentStatusEnumActive) {
+		return diag.Errorf("cannot delete active experiment %q: set status to \"paused\" or \"completed\" in a separate apply before destroying or replacing it", data.Id())
+	}
+
 	api := meta.(*config.Config).GetAPIV3()
 
 	err := api.Experimentation.Experiments.Delete(ctx, data.Id())

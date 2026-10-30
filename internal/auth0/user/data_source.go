@@ -24,6 +24,11 @@ func NewDataSource() *schema.Resource {
 func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 
+	// Write-only arguments are input-only and never read back, so they add no value on a data
+	// source. Drop them from the derived schema.
+	delete(dataSourceSchema, "password_wo")
+	delete(dataSourceSchema, "password_wo_version")
+
 	dataSourceSchema["user_id"] = &schema.Schema{
 		Type:         schema.TypeString,
 		Optional:     true,

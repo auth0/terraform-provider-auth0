@@ -20,3 +20,16 @@ resource "auth0_user" "auth0_user_with_custom_domain" {
   password             = "MyPass123$"
   custom_domain_header = "my-custom.domain.org"
 }
+
+# The password can be set as a write-only argument so it is never persisted to Terraform state.
+# It can be sourced from an ephemeral value (e.g. a secrets manager) and is mutually exclusive
+# with `password`. Bump `password_wo_version` to send a new password.
+#
+# NOTE: Write-only arguments require Terraform 1.11 or later.
+resource "auth0_user" "user_write_only_password" {
+  connection_name     = "Username-Password-Authentication"
+  username            = "write_only_user"
+  email               = "write.only@test.com"
+  password_wo         = var.user_password # can be an ephemeral value
+  password_wo_version = 1
+}

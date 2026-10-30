@@ -35,22 +35,26 @@ func expandExperiment(data *schema.ResourceData) (*management.CreateExperimentRe
 	return request, nil
 }
 
-// A nil result tells the caller there are no changed fields to patch.
+// A nil result tells the caller there are no changed fields to patch except `status`.
 func expandExperimentUpdate(data *schema.ResourceData) (*management.UpdateExperimentRequestParameters, error) {
 	config := data.GetRawConfig()
 	request := &management.UpdateExperimentRequestParameters{}
+	changed := false
 
 	if data.HasChange("name") {
 		request.SetName(value.String(config.GetAttr("name")))
+		changed = true
 	}
 
 	if data.HasChange("description") {
 		request.SetDescription(value.String(config.GetAttr("description")))
+		changed = true
 	}
 
 	if data.HasChange("authentication_flow") {
 		flow := management.AuthenticationFlowEnum(data.Get("authentication_flow").(string))
 		request.SetAuthenticationFlow(&flow)
+		changed = true
 	}
 
 	if data.HasChange("default_config") {
@@ -61,6 +65,7 @@ func expandExperimentUpdate(data *schema.ResourceData) (*management.UpdateExperi
 		}
 		defaultConfig := management.DefaultConfigEnum(*configured)
 		request.SetDefaultConfig(&defaultConfig)
+		changed = true
 	}
 
 	if data.HasChange("allocations") {
@@ -72,6 +77,7 @@ func expandExperimentUpdate(data *schema.ResourceData) (*management.UpdateExperi
 			return nil, fmt.Errorf("allocations cannot be cleared with PATCH; removing them requires replacing the experiment")
 		}
 		request.SetAllocations(allocations)
+		changed = true
 	}
 
 	if data.HasChange("levels") {
@@ -81,11 +87,11 @@ func expandExperimentUpdate(data *schema.ResourceData) (*management.UpdateExperi
 				"set other levels or replace the experiment")
 		}
 		request.SetLevels(levels)
+		changed = true
 	}
 
-	if data.HasChange("status") {
-		transition := management.ExperimentTransitionStatusEnum(data.Get("status").(string))
-		request.SetStatus(&transition)
+	if !changed {
+		return nil, nil
 	}
 
 	return request, nil

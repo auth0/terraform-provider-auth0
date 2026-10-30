@@ -290,21 +290,19 @@ func createExperiment(ctx context.Context, data *schema.ResourceData, meta inter
 
 	var diagnostics diag.Diagnostics
 	requestedStatus := data.Get("status").(string)
-	if err := updateExperimentStatusAfterCreate(ctx, meta, data.Id(), requestedStatus); err != nil {
-		diagnostics = append(diagnostics, diag.FromErr(fmt.Errorf(
-			"experiment %q was created, but setting status to %q failed: %w",
-			data.Id(), requestedStatus, err,
-		))...)
+	if requestedStatus != "" && requestedStatus != string(management.ExperimentStatusEnumDraft) {
+		if err := patchExperimentStatus(ctx, meta, data.Id(), requestedStatus); err != nil {
+			diagnostics = append(diagnostics, diag.FromErr(fmt.Errorf(
+				"experiment %q was created, but setting status to %q failed: %w",
+				data.Id(), requestedStatus, err,
+			))...)
+		}
 	}
 
 	return append(diagnostics, readExperiment(ctx, data, meta)...)
 }
 
-func updateExperimentStatusAfterCreate(ctx context.Context, meta interface{}, id, status string) error {
-	if status == "" || status == string(management.ExperimentStatusEnumDraft) {
-		return nil
-	}
-
+func patchExperimentStatus(ctx context.Context, meta interface{}, id, status string) error {
 	api := meta.(*config.Config).GetAPIV3()
 	transition := management.ExperimentTransitionStatusEnum(status)
 	request := &management.UpdateExperimentRequestParameters{}
@@ -336,9 +334,20 @@ func updateExperiment(ctx context.Context, data *schema.ResourceData, meta inter
 	if err != nil {
 		return append(diag.FromErr(err), readExperiment(ctx, data, meta)...)
 	}
+	if request != nil {
+		if _, err := api.Experimentation.Experiments.Update(ctx, data.Id(), request); err != nil {
+			return append(diag.FromErr(internalError.HandleAPIError(data, err)), readExperiment(ctx, data, meta)...)
+		}
+	}
 
-	_, err = api.Experimentation.Experiments.Update(ctx, data.Id(), request)
-	return append(diag.FromErr(internalError.HandleAPIError(data, err)), readExperiment(ctx, data, meta)...)
+	// A separate status PATCH avoids the API's frozen-snapshot error for metadata edits.
+	if data.HasChange("status") {
+		if err := patchExperimentStatus(ctx, meta, data.Id(), data.Get("status").(string)); err != nil {
+			return append(diag.FromErr(internalError.HandleAPIError(data, err)), readExperiment(ctx, data, meta)...)
+		}
+	}
+
+	return readExperiment(ctx, data, meta)
 }
 
 func deleteExperiment(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

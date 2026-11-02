@@ -91,3 +91,22 @@ resource "auth0_client_grant" "default_3p_grant" {
   audience    = auth0_resource_server.my_resource_server.identifier
   scopes      = ["read:foo"]
 }
+
+# Universal Commerce Protocol (UCP) resource server (EA only).
+# Only one typed resource server is allowed per tenant. To clear `type`, first remove the `dev.ucp` scopes,
+# then remove the `type` attribute.
+#
+# resource "auth0_resource_server" "ucp" {
+#   name       = "UCP Server"
+#   identifier = "https://ucp.example.com/api"
+#   type       = "universal_commerce_protocol_server"
+# }
+#
+# resource "auth0_resource_server_scopes" "ucp_scopes" {
+#   resource_server_identifier = auth0_resource_server.ucp.identifier
+#
+#   scopes {
+#     name        = "dev.ucp.shopping.checkout"
+#     description = "UCP checkout"
+#   }
+# }

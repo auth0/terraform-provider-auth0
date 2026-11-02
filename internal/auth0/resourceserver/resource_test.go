@@ -1,15 +1,19 @@
 package resourceserver_test
 
 import (
+	"errors"
 	"fmt"
+	"net/http"
 	"os"
 	"regexp"
 	"testing"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/stretchr/testify/require"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
 )
 
 const testAccResourceServerConfigEmpty = `
@@ -823,4 +827,162 @@ func TestAccResourceServerRequireConsentNonRepudiation(t *testing.T) {
 			},
 		},
 	})
+}
+
+func TestAccResourceServerTypeValidation(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		ProviderFactories: acctest.TestFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config: `
+resource "auth0_resource_server" "my_resource_server" {
+	identifier = "https://uat.api.terraform-provider-auth0.com/validation"
+	type       = "universal_commerce_protocol"
+}
+`,
+				ExpectError: regexp.MustCompile(`expected type to be one of \["universal_commerce_protocol_server"\]`),
+			},
+		},
+	})
+}
+
+const testAccResourceServerUCPTypeCreate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	type       = "universal_commerce_protocol_server"
+}
+`
+
+const testAccResourceServerUCPTypeUpdate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name           = "Acceptance Test - {{.testName}}"
+	identifier     = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	token_lifetime = 7200
+	type           = "universal_commerce_protocol_server"
+}
+`
+
+const testAccResourceServerUCPTypeRemoved = `
+resource "auth0_resource_server" "my_resource_server" {
+	name           = "Acceptance Test - {{.testName}}"
+	identifier     = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	token_lifetime = 7200
+}
+`
+
+func TestAccResourceServerUCPType(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccResourceServerUCPTypeCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "type", "universal_commerce_protocol_server"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerUCPTypeUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime", "7200"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "type", "universal_commerce_protocol_server"),
+				),
+			},
+			{
+				ResourceName:      "auth0_resource_server.my_resource_server",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerUCPTypeRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "type", ""),
+				),
+			},
+		},
+	})
+}
+
+const testAccResourceServerUCPTypeWithScopes = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	type       = "universal_commerce_protocol_server"
+}
+
+resource "auth0_resource_server_scopes" "my_scopes" {
+	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+
+	scopes {
+		name        = "dev.ucp.shopping.checkout"
+		description = "UCP checkout"
+	}
+}
+`
+
+const testAccResourceServerUCPTypeWithScopesRemoved = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+`
+
+func TestAccResourceServerUCPTypeWithScopes(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccResourceServerUCPTypeWithScopes, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "type", "universal_commerce_protocol_server"),
+					resource.TestCheckResourceAttr("auth0_resource_server_scopes.my_scopes", "scopes.#", "1"),
+				),
+			},
+			{
+				// Terraform does not order the scopes deletion against the type
+				// clear, so the first apply may warn and leave the type set.
+				Config: acctest.ParseTestName(testAccResourceServerUCPTypeWithScopesRemoved, t.Name()),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerUCPTypeWithScopesRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "type", ""),
+				),
+			},
+		},
+	})
+}
+
+type fakeManagementError struct {
+	status  int
+	message string
+}
+
+func (e fakeManagementError) Status() int  { return e.status }
+func (e fakeManagementError) Code() string { return "invalid_body" }
+func (e fakeManagementError) Error() string {
+	return fmt.Sprintf("%d: %s", e.status, e.message)
+}
+
+var _ management.Error = fakeManagementError{}
+
+func TestIsUCPScopesReservedError(t *testing.T) {
+	reserved := "Scopes with the 'dev.ucp' prefix are reserved for UCP servers"
+
+	testCases := []struct {
+		name     string
+		err      error
+		expected bool
+	}{
+		{"reserved scopes", fakeManagementError{http.StatusBadRequest, reserved}, true},
+		{"wrapped reserved scopes", fmt.Errorf("wrapped: %w", fakeManagementError{http.StatusBadRequest, reserved}), true},
+		{"other 400", fakeManagementError{http.StatusBadRequest, "Payload validation error"}, false},
+		{"reserved message with other status", fakeManagementError{http.StatusForbidden, reserved}, false},
+		{"non management error", errors.New(reserved), false},
+		{"nil", nil, false},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			require.Equal(t, testCase.expected, resourceserver.IsUCPScopesReservedError(testCase.err))
+		})
+	}
 }

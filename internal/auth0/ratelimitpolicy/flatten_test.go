@@ -18,8 +18,8 @@ func TestFlattenConfiguration(t *testing.T) {
 	})
 }
 
-// TestFlattenConfigurationFromAPIResponse goes through the real json.Unmarshal path, where the SDK
-// oneOf bug forces every variant into Zero, to prove limit/redirect_uri are recovered from extras.
+// TestFlattenConfigurationFromAPIResponse goes through the real json.Unmarshal path to prove every
+// oneOf variant (allow, block, log, redirect) is flattened correctly.
 func TestFlattenConfigurationFromAPIResponse(t *testing.T) {
 	unmarshal := func(t *testing.T, raw string) *management.RateLimitPolicyConfiguration {
 		t.Helper()

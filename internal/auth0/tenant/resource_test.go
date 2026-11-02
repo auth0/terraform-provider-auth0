@@ -695,6 +695,79 @@ func TestAccTenant_CountryCodes(t *testing.T) {
 	})
 }
 
+const testAccTenantAnonymousSessionsCreate = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "Anonymous Sessions Test"
+
+	sessions {
+		oidc_logout_prompt_enabled = false
+
+		anonymous {
+			lifetime_in_minutes = 43200
+			activate_cookie     = true
+		}
+	}
+}
+`
+
+const testAccTenantAnonymousSessionsUpdate = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "Anonymous Sessions Test"
+
+	sessions {
+		oidc_logout_prompt_enabled = false
+
+		anonymous {
+			lifetime_in_minutes = 60
+			activate_cookie     = false
+		}
+	}
+}
+`
+
+const testAccTenantAnonymousSessionsRemoved = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "Anonymous Sessions Test"
+
+	sessions {
+		oidc_logout_prompt_enabled = false
+	}
+}
+`
+
+func TestAccTenant_AnonymousSessions(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTenantAnonymousSessionsCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.anonymous.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.anonymous.0.lifetime_in_minutes", "43200"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.anonymous.0.activate_cookie", "true"),
+				),
+			},
+			{
+				Config: testAccTenantAnonymousSessionsUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.anonymous.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.anonymous.0.lifetime_in_minutes", "60"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.anonymous.0.activate_cookie", "false"),
+				),
+			},
+			{
+				Config: testAccTenantAnonymousSessionsRemoved,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.anonymous.#", "0"),
+				),
+			},
+			{
+				Config:   testAccTenantAnonymousSessionsRemoved,
+				PlanOnly: true,
+			},
+		},
+	})
+}
+
 func TestAccTenantDefaults(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
 		// Only run with recorded HTTP requests because  normal E2E tests will naturally configure the tenant

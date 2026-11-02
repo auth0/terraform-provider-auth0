@@ -164,6 +164,17 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	return readClientCredentials(ctx, data, meta)
 }
 
+func defaultTokenEndpointAuthMethod(appType string) string {
+	switch appType {
+	case "native", "spa":
+		return "none"
+	case "regular_web", "non_interactive":
+		return "client_secret_post"
+	default:
+		return "client_secret_basic"
+	}
+}
+
 func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
@@ -172,15 +183,7 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	tokenEndpointAuthMethod := ""
-	switch client.GetAppType() {
-	case "native", "spa":
-		tokenEndpointAuthMethod = "none"
-	case "regular_web", "non_interactive":
-		tokenEndpointAuthMethod = "client_secret_post"
-	default:
-		tokenEndpointAuthMethod = "client_secret_basic"
-	}
+	tokenEndpointAuthMethod := defaultTokenEndpointAuthMethod(client.GetAppType())
 
 	credentials, err := api.Client.ListCredentials(ctx, client.GetClientID())
 	if err != nil {

@@ -159,7 +159,7 @@ func NewPromptScreenRenderResource() *schema.Resource {
 		UpdateContext: updatePromptScreenRenderer,
 		DeleteContext: deletePromptScreenRenderer,
 		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
+			StateContext: importPromptScreen,
 		},
 		Description: "With this resource, you can Configure the render settings for a specific screen." +
 			"You can read more about this [here](https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens).",
@@ -259,6 +259,17 @@ func NewPromptScreenRenderResource() *schema.Resource {
 			},
 		},
 	}
+}
+
+// importPromptScreen validates that the import ID is formatted as
+// <prompt_type>:<screen_name>, as the read operation relies on both parts.
+func importPromptScreen(_ context.Context, data *schema.ResourceData, _ any) ([]*schema.ResourceData, error) {
+	idComponents := strings.Split(data.Id(), ":")
+	if len(idComponents) != 2 || idComponents[0] == "" || idComponents[1] == "" {
+		return nil, fmt.Errorf("ID must be formatted as <prompt_type>:<screen_name>, got %q", data.Id())
+	}
+
+	return []*schema.ResourceData{data}, nil
 }
 
 func createPromptScreenRenderer(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {

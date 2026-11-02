@@ -32,6 +32,7 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 
 ### Read-Only
 
+- `access_token` (List of Object) Configuration for the access tokens issued for this resource server. Remove the block to clear the configuration on the API. (EA only) (see [below for nested schema](#nestedatt--access_token))
 - `allow_offline_access` (Boolean) Indicates whether refresh tokens can be issued for this resource server.
 - `allow_online_access` (Boolean) Indicates whether Online Refresh Tokens can be issued for this resource server. (EA Only)
 - `allow_online_access_with_ephemeral_sessions` (Boolean) Indicates whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral. (EA Only)
@@ -44,6 +45,7 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 - `is_system` (Boolean) Indicates whether this resource server is a special resource server created by Auth0. It cannot be modified or deleted directly.
 - `name` (String) Friendly name for the resource server. Cannot include `<` or `>` characters.
 - `proof_of_possession` (List of Object) Configuration settings for proof-of-possession for this resource server. (see [below for nested schema](#nestedatt--proof_of_possession))
+- `require_consent_non_repudiation` (Boolean) When true, the authorization server will reject consent decisions that do not include a valid signature and kid. (EA Only)
 - `scopes` (Set of Object) List of permissions (scopes) used by this resource server. (see [below for nested schema](#nestedatt--scopes))
 - `signing_alg` (String) Algorithm used to sign JWTs. Options include `HS256`, `RS256`, and `PS256`.
 - `signing_secret` (String) Secret used to sign tokens when using symmetric algorithms (HS256).
@@ -52,8 +54,34 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 - `token_dialect` (String) Dialect of access tokens that should be issued for this resource server. Options include `access_token`, `rfc9068_profile`, `access_token_authz`, and `rfc9068_profile_authz`. `access_token` is a JWT containing standard Auth0 claims. `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` is a JWT containing standard Auth0 claims, including RBAC permissions claims. `rfc9068_profile_authz` is a JWT conforming to the IETF JWT Access Token Profile, including RBAC permissions claims. RBAC permissions claims are available if RBAC (`enforce_policies`) is enabled for this API. For more details, refer to [Access Token Profiles](https://auth0.com/docs/secure/tokens/access-tokens/access-token-profiles).
 - `token_encryption` (List of Object) Configuration for JSON Web Encryption(JWE) of tokens for this resource server. (see [below for nested schema](#nestedatt--token_encryption))
 - `token_lifetime` (Number) Number of seconds during which access tokens issued for this resource server from the token endpoint remain valid.
+- `token_lifetime_for_anonymous_access_tokens` (Number) Number of seconds during which anonymous-session access tokens issued for this resource server remain valid. Must be between 86400 (1 day) and 2592000 (30 days) when present. Removing this attribute clears the value on the API. (EA only)
 - `token_lifetime_for_web` (Number) Number of seconds during which access tokens issued for this resource server via implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.
 - `verification_location` (String) URL from which to retrieve JWKs for this resource server. Used for verifying the JWT sent to Auth0 for token introspection.
+
+<a id="nestedatt--access_token"></a>
+### Nested Schema for `access_token`
+
+Read-Only:
+
+- `claims_mapping` (List of Object) (see [below for nested schema](#nestedobjatt--access_token--claims_mapping))
+
+<a id="nestedobjatt--access_token--claims_mapping"></a>
+### Nested Schema for `access_token.claims_mapping`
+
+Read-Only:
+
+- `custom_claims` (List of Object) (see [below for nested schema](#nestedobjatt--access_token--claims_mapping--custom_claims))
+
+<a id="nestedobjatt--access_token--claims_mapping--custom_claims"></a>
+### Nested Schema for `access_token.claims_mapping.custom_claims`
+
+Read-Only:
+
+- `expression` (String)
+- `name` (String)
+
+
+
 
 <a id="nestedatt--authorization_details"></a>
 ### Nested Schema for `authorization_details`
@@ -97,8 +125,17 @@ Read-Only:
 
 Read-Only:
 
+- `anonymous_user` (List of Object) (see [below for nested schema](#nestedobjatt--subject_type_authorization--anonymous_user))
 - `client` (List of Object) (see [below for nested schema](#nestedobjatt--subject_type_authorization--client))
 - `user` (List of Object) (see [below for nested schema](#nestedobjatt--subject_type_authorization--user))
+
+<a id="nestedobjatt--subject_type_authorization--anonymous_user"></a>
+### Nested Schema for `subject_type_authorization.anonymous_user`
+
+Read-Only:
+
+- `policy` (String)
+
 
 <a id="nestedobjatt--subject_type_authorization--client"></a>
 ### Nested Schema for `subject_type_authorization.client`

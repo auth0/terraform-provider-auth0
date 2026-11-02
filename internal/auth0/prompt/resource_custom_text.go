@@ -94,6 +94,7 @@ var (
 		string(management.PromptPasskeys),
 		string(management.PromptCaptcha),
 		string(management.PromptBruteForceProtection),
+		string(management.PromptConfirmation),
 	}
 
 	availableLanguages = fetchLanguages()

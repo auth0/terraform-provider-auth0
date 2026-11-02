@@ -351,3 +351,61 @@ func TestDifference(t *testing.T) {
 	assert.Equal(t, []interface{}{"a", "b"}, oldValue)
 	assert.Equal(t, []interface{}{}, newValue)
 }
+
+func TestIsSet(t *testing.T) {
+	assert.True(t, IsSet(cty.StringVal("a")))
+	assert.False(t, IsSet(cty.NullVal(cty.String)))
+	assert.False(t, IsSet(cty.UnknownVal(cty.String)))
+}
+
+func TestAttr(t *testing.T) {
+	object := cty.ObjectVal(map[string]cty.Value{"name": cty.StringVal("a")})
+
+	t.Run("it returns the attribute", func(t *testing.T) {
+		assert.Equal(t, "a", Attr(object, "name").AsString())
+	})
+
+	t.Run("it returns null for a missing attribute or null object", func(t *testing.T) {
+		assert.True(t, Attr(object, "other").IsNull())
+		assert.True(t, Attr(cty.NullVal(object.Type()), "name").IsNull())
+	})
+
+	t.Run("it returns unknown for an unknown object", func(t *testing.T) {
+		assert.False(t, Attr(cty.UnknownVal(object.Type()), "name").IsKnown())
+	})
+}
+
+func TestFirstBlock(t *testing.T) {
+	block := cty.ObjectVal(map[string]cty.Value{"name": cty.StringVal("a")})
+
+	t.Run("it returns the first element", func(t *testing.T) {
+		assert.Equal(t, block, FirstBlock(cty.ListVal([]cty.Value{block})))
+	})
+
+	t.Run("it returns null for a null or empty list", func(t *testing.T) {
+		assert.True(t, FirstBlock(cty.NullVal(cty.List(block.Type()))).IsNull())
+		assert.True(t, FirstBlock(cty.ListValEmpty(block.Type())).IsNull())
+	})
+
+	t.Run("it returns unknown for an unknown list", func(t *testing.T) {
+		assert.False(t, FirstBlock(cty.UnknownVal(cty.List(block.Type()))).IsKnown())
+	})
+}
+
+func TestSortedStrings(t *testing.T) {
+	t.Run("it returns nil when not set", func(t *testing.T) {
+		assert.Nil(t, SortedStrings(cty.NullVal(cty.Set(cty.String))))
+		assert.Nil(t, SortedStrings(cty.UnknownVal(cty.Set(cty.String))))
+	})
+
+	t.Run("it skips unset elements and sorts the rest", func(t *testing.T) {
+		list := cty.ListVal([]cty.Value{cty.StringVal("b"), cty.NullVal(cty.String), cty.StringVal("a")})
+		assert.Equal(t, []string{"a", "b"}, SortedStrings(list))
+	})
+}
+
+func TestUnknownValuesYieldNil(t *testing.T) {
+	assert.Nil(t, String(cty.UnknownVal(cty.String)))
+	assert.Nil(t, Int(cty.UnknownVal(cty.Number)))
+	assert.Nil(t, Bool(cty.UnknownVal(cty.Bool)))
+}

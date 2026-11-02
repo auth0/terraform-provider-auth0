@@ -6,9 +6,26 @@ resource "auth0_resource_server" "my_resource_server" {
   allow_offline_access                            = true
   allow_online_access                             = true
   allow_online_access_with_ephemeral_sessions     = false
+  require_consent_non_repudiation                 = true
   token_lifetime                                  = 8600
   skip_consent_for_verifiable_first_party_clients = true
   consent_policy                                  = "transactional-authorization-with-mfa"
+
+  # Anonymous Sessions is an Early Access feature.
+  token_lifetime_for_anonymous_access_tokens = 86400
+  access_token {
+    claims_mapping {
+      custom_claims {
+        name       = "country"
+        expression = "anonymous_session.metadata.country"
+      }
+      custom_claims {
+        name       = "city"
+        expression = "anonymous_session.metadata.city"
+      }
+    }
+  }
+
   token_encryption {
     format = "compact-nested-jwe"
     encryption_key {
@@ -38,6 +55,10 @@ EOF
     client {
       policy = "require_client_grant"
     }
+    # Anonymous Sessions is an Early Access feature.
+    anonymous_user {
+      policy = "require_client_grant"
+    }
   }
 }
 
@@ -62,4 +83,11 @@ resource "auth0_resource_server" "okta_oin_express_configuration_api" {
     disable = true
     format  = null
   }
+}
+
+# Default permissions for third-party applications, set via a client grant.
+resource "auth0_client_grant" "default_3p_grant" {
+  default_for = "third_party_clients"
+  audience    = auth0_resource_server.my_resource_server.identifier
+  scopes      = ["read:foo"]
 }

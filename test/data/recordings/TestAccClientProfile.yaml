@@ -1,0 +1,806 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 198
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Acceptance Test Profile","description":"Created by the acceptance tests.","client_configuration":{},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 312
+        uncompressed: false
+        body: '{"name":"Acceptance Test Profile","client_configuration":{},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Created by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:25.041Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 370.018417ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile","client_configuration":{},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Created by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:25.041Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 338.091083ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile","client_configuration":{},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Created by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:25.041Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 310.732458ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile","client_configuration":{},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Created by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:25.041Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 341.267959ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 588
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Acceptance Test Profile","description":"Created by the acceptance tests.","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":2592000},"idle_token_lifetime":{"default_value":1296000},"leeway":{"default_value":0}},"organization_usage":{"default_value":"require"},"organization_require_behavior":{"default_value":"pre_login_prompt"},"organization_discovery_methods":{"default_value":["email","organization_name"]},"require_proof_of_possession":{"default_value":false}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":2592000},"idle_token_lifetime":{"default_value":1296000},"leeway":{"default_value":0}},"organization_usage":{"default_value":"require"},"organization_require_behavior":{"default_value":"pre_login_prompt"},"organization_discovery_methods":{"default_value":["email","organization_name"]},"require_proof_of_possession":{"default_value":false}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Created by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:30.372Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 334.385333ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":2592000},"idle_token_lifetime":{"default_value":1296000},"leeway":{"default_value":0}},"organization_usage":{"default_value":"require"},"organization_require_behavior":{"default_value":"pre_login_prompt"},"organization_discovery_methods":{"default_value":["email","organization_name"]},"require_proof_of_possession":{"default_value":false}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Created by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:30.372Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 493.494666ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":2592000},"idle_token_lifetime":{"default_value":1296000},"leeway":{"default_value":0}},"organization_usage":{"default_value":"require"},"organization_require_behavior":{"default_value":"pre_login_prompt"},"organization_discovery_methods":{"default_value":["email","organization_name"]},"require_proof_of_possession":{"default_value":false}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Created by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:30.372Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 325.217792ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":2592000},"idle_token_lifetime":{"default_value":1296000},"leeway":{"default_value":0}},"organization_usage":{"default_value":"require"},"organization_require_behavior":{"default_value":"pre_login_prompt"},"organization_discovery_methods":{"default_value":["email","organization_name"]},"require_proof_of_possession":{"default_value":false}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Created by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:30.372Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 304.919042ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 506
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Acceptance Test Profile Updated","description":"Updated by the acceptance tests.","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":5184000},"idle_token_lifetime":{"default_value":2592000},"leeway":{"default_value":10}},"organization_usage":{"default_value":"allow"},"organization_require_behavior":{"default_value":"no_prompt"},"require_proof_of_possession":{"default_value":true}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":5184000},"idle_token_lifetime":{"default_value":2592000},"leeway":{"default_value":10}},"organization_usage":{"default_value":"allow"},"organization_require_behavior":{"default_value":"no_prompt"},"require_proof_of_possession":{"default_value":true}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Updated by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:34.626Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 353.871042ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":5184000},"idle_token_lifetime":{"default_value":2592000},"leeway":{"default_value":10}},"organization_usage":{"default_value":"allow"},"organization_require_behavior":{"default_value":"no_prompt"},"require_proof_of_possession":{"default_value":true}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Updated by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:34.626Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 300.574042ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":5184000},"idle_token_lifetime":{"default_value":2592000},"leeway":{"default_value":10}},"organization_usage":{"default_value":"allow"},"organization_require_behavior":{"default_value":"no_prompt"},"require_proof_of_possession":{"default_value":true}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Updated by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:34.626Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 323.991ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":5184000},"idle_token_lifetime":{"default_value":2592000},"leeway":{"default_value":10}},"organization_usage":{"default_value":"allow"},"organization_require_behavior":{"default_value":"no_prompt"},"require_proof_of_possession":{"default_value":true}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Updated by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:34.626Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 322.429416ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 266
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Acceptance Test Profile Updated","description":"Updated by the acceptance tests.","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":5184000}}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":5184000},"idle_token_lifetime":{"default_value":1296000}}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Updated by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:37.867Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 327.625625ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":5184000},"idle_token_lifetime":{"default_value":1296000}}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Updated by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:37.867Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 298.79025ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":5184000},"idle_token_lifetime":{"default_value":1296000}}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Updated by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:37.867Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 320.33125ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{"token_lifetime":{"default_value":5184000},"idle_token_lifetime":{"default_value":1296000}}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":"Updated by the acceptance tests.","created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:37.867Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 332.701ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 194
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Acceptance Test Profile Updated","description":null,"client_configuration":{"refresh_token":{}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":null,"created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:41.268Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 316.328333ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":null,"created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:41.268Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 316.188958ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":null,"created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:41.268Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 351.085959ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":null,"created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:41.268Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 310.336959ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test Profile Updated","client_configuration":{"refresh_token":{}},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"},"id":"cpr_vWhJ1uqQAZ9LBpxYTpuzqY","description":null,"created_at":"2026-10-16T10:08:25.041Z","updated_at":"2026-10-16T10:08:41.268Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 297.8365ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 159
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Acceptance Test Duplicate Profile","client_configuration":{},"apply_policy":{"external_metadata_type":"cimd","external_metadata_created_by":"client"}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"statusCode":403,"error":"Forbidden","message":"You reached the limit of entities of this type for this tenant.","errorCode":"too_many_entities"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 403 Forbidden
+        code: 403
+        duration: 351.039625ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-profiles/cpr_vWhJ1uqQAZ9LBpxYTpuzqY
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 331.101ms

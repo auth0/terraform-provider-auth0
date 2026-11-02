@@ -22,7 +22,7 @@ func NewScreenPartialResource() *schema.Resource {
 		UpdateContext: updatePromptScreenPartial,
 		DeleteContext: deletePromptScreenPartial,
 		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
+			StateContext: importPromptScreen,
 		},
 		Description: "With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. " +
 			"You can read more about this [here](https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts).",

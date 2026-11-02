@@ -137,6 +137,46 @@ resource "auth0_action" "my_action" {
 }
 `
 
+const testAccActionConfigMigrateSecretsLegacy = `
+resource "auth0_action" "my_action" {
+	name    = "Test Action {{.testName}}"
+	runtime = "node22"
+	deploy  = true
+	code    = "exports.onExecutePostLogin = async (event, api) => {};"
+
+	supported_triggers {
+		id      = "post-login"
+		version = "v3"
+	}
+
+	secrets {
+		name  = "TEST_SECRET"
+		value = "dummy-value"
+	}
+}
+`
+
+const testAccActionConfigMigrateSecretsWO = `
+resource "auth0_action" "my_action" {
+	name    = "Test Action {{.testName}}"
+	runtime = "node22"
+	deploy  = true
+	code    = "exports.onExecutePostLogin = async (event, api) => {};"
+
+	supported_triggers {
+		id      = "post-login"
+		version = "v3"
+	}
+
+	secrets_wo {
+		name  = "TEST_SECRET"
+		value = "dummy-value"
+	}
+
+	secrets_wo_version = 1
+}
+`
+
 // This config makes use of a crypto dependency definition that causes the
 // action build to fail.  This is because the crypto package has been
 // deprecated https://www.npmjs.com/package/crypto.
@@ -277,6 +317,39 @@ func TestAccActionWithSecretsWO(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo.#", "1"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo.0.name", "foo"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo_version", "2"),
+					resource.TestCheckNoResourceAttr("auth0_action.my_action", "secrets_wo.0.value"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccActionMigrateSecretsToSecretsWO(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccActionConfigMigrateSecretsLegacy, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "deploy", "true"),
+					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.name", "TEST_SECRET"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.value", "dummy-value"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo.#", "0"),
+				),
+			},
+			{
+				// Migrating secrets -> secrets_wo in a single apply must carry the secret.
+				Config: acctest.ParseTestName(testAccActionConfigMigrateSecretsWO, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "deploy", "true"),
+					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo.0.name", "TEST_SECRET"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets_wo_version", "1"),
 					resource.TestCheckNoResourceAttr("auth0_action.my_action", "secrets_wo.0.value"),
 				),
 			},

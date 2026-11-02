@@ -50,6 +50,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		JWTConfiguration:                    expandClientJWTConfiguration(data),
 		Addons:                              expandClientAddons(data),
 		NativeSocialLogin:                   expandClientNativeSocialLogin(data),
+		AnonymousSessions:                   expandClientAnonymousSessions(data),
 		Mobile:                              expandClientMobile(data),
 		DefaultOrganization:                 expandDefaultOrganization(data),
 		TokenExchange:                       expandTokenExchange(data),
@@ -369,6 +370,22 @@ func expandClientNativeSocialLogin(data *schema.ResourceData) *management.Client
 	}
 
 	return &nativeSocialLogin
+}
+
+func expandClientAnonymousSessions(data *schema.ResourceData) *management.ClientAnonymousSessions {
+	anonymousSessionsConfig := data.GetRawConfig().GetAttr("anonymous_sessions")
+	if anonymousSessionsConfig.IsNull() || anonymousSessionsConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var anonymousSessions management.ClientAnonymousSessions
+
+	anonymousSessionsConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		anonymousSessions.Active = value.Bool(config.GetAttr("active"))
+		return stop
+	})
+
+	return &anonymousSessions
 }
 
 func expandClientNativeSocialLoginSupportEnabled(config cty.Value) *management.ClientNativeSocialLoginSupportEnabled {
@@ -1207,6 +1224,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
 		"fedcm_login":                                          isFedCMLoginNull,
 		"identity_assertion_authorization_grant":               isIdentityAssertionAuthorizationGrantNull,
+		"anonymous_sessions":                                   isAnonymousSessionsNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1354,6 +1372,15 @@ func isIdentityAssertionAuthorizationGrantNull(data *schema.ResourceData) bool {
 	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
 }
 
+func isAnonymousSessionsNull(data *schema.ResourceData) bool {
+	if !data.HasChange("anonymous_sessions") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("anonymous_sessions")
+	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
+}
+
 func isOIDCLogoutNull(data *schema.ResourceData) bool {
 	if !data.IsNewResource() && !data.HasChange("oidc_logout") {
 		return false
@@ -1479,11 +1506,13 @@ func expandMyOrganizationConfiguration(data *schema.ResourceData) *management.My
 
 	myOrgConfig.ForEachElement(func(_ cty.Value, elem cty.Value) (stop bool) {
 		result = &management.MyOrganizationConfiguration{
-			ConnectionProfileID:        value.String(elem.GetAttr("connection_profile_id")),
-			UserAttributeProfileID:     value.String(elem.GetAttr("user_attribute_profile_id")),
-			ConnectionDeletionBehavior: value.String(elem.GetAttr("connection_deletion_behavior")),
-			InvitationLandingClientID:  value.String(elem.GetAttr("invitation_landing_client_id")),
-			ThirdPartyClientAccess:     expandMyOrganizationConfigurationThirdPartyClientAccess(elem.GetAttr("third_party_client_access")),
+			ConnectionProfileID:              value.String(elem.GetAttr("connection_profile_id")),
+			UserAttributeProfileID:           value.String(elem.GetAttr("user_attribute_profile_id")),
+			ConnectionDeletionBehavior:       value.String(elem.GetAttr("connection_deletion_behavior")),
+			InvitationLandingClientID:        value.String(elem.GetAttr("invitation_landing_client_id")),
+			ThirdPartyClientAccess:           expandMyOrganizationConfigurationThirdPartyClientAccess(elem.GetAttr("third_party_client_access")),
+			EnforcePermissionCeiling:         value.Bool(elem.GetAttr("enforce_permission_ceiling")),
+			EnforceSelfAssignmentRestriction: value.Bool(elem.GetAttr("enforce_self_assignment_restriction")),
 		}
 
 		allowedStrategiesAttr := elem.GetAttr("allowed_strategies")

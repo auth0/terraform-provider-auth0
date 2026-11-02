@@ -124,7 +124,25 @@ resource "auth0_client" "mcp_server" {
   oidc_conformant            = true
   resource_server_identifier = auth0_resource_server.my_api.identifier
 
+  # Anonymous Sessions is an Early Access feature.
+  anonymous_sessions {
+    active = true
+  }
+
   token_exchange {
     allow_any_profile_of_type = ["on_behalf_of_token_exchange"]
+  }
+}
+
+resource "auth0_client" "member_management" {
+  name = "My Member Management Client"
+
+  # Available in Early Access (EA). Requires the my_org_member_management_ea feature flag.
+  my_organization_configuration {
+    allowed_strategies           = ["oidc", "samlp"]
+    connection_deletion_behavior = "allow"
+
+    enforce_permission_ceiling          = true
+    enforce_self_assignment_restriction = true
   }
 }

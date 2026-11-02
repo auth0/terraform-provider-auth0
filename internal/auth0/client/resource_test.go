@@ -54,6 +54,45 @@ func TestAccClientMobileValidationError(t *testing.T) {
 	})
 }
 
+const testAccClientValidationOnRefreshTokenLifetimeEqual = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Refresh Token Lifetime Validation"
+	refresh_token {
+		rotation_type       = "non-rotating"
+		expiration_type     = "non-expiring"
+		idle_token_lifetime = 42
+		token_lifetime      = 42
+	}
+}
+`
+
+const testAccClientValidationOnRefreshTokenLifetimeGreater = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Refresh Token Lifetime Validation"
+	refresh_token {
+		rotation_type       = "non-rotating"
+		expiration_type     = "non-expiring"
+		idle_token_lifetime = 100
+		token_lifetime      = 42
+	}
+}
+`
+
+func TestAccClientRefreshTokenLifetimeValidation(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccClientValidationOnRefreshTokenLifetimeEqual,
+				ExpectError: regexp.MustCompile("idle_token_lifetime.*must be less than token_lifetime"),
+			},
+			{
+				Config:      testAccClientValidationOnRefreshTokenLifetimeGreater,
+				ExpectError: regexp.MustCompile("idle_token_lifetime.*must be less than token_lifetime"),
+			},
+		},
+	})
+}
+
 const testAccCreateMobileClient = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
@@ -2408,6 +2447,56 @@ func TestAccClientCanSetDefaultAuthMethodOnCreate(t *testing.T) {
 	})
 }
 
+const testAccClientWithoutStoredTokenEndpointAuthMethod = `
+resource "auth0_client" "my_client_ip_header_update" {
+  name     = "Test IP Header Trusted Update - {{.testName}}"
+  app_type = "rms"
+}
+
+data "auth0_client" "my_client_ip_header_update" {
+  client_id          = auth0_client.my_client_ip_header_update.id
+  hide_client_secret = true
+  depends_on         = [auth0_client.my_client_ip_header_update]
+}
+`
+
+const testAccClientEnableTrustedIPHeaderWithoutStoredAuthMethod = `
+resource "auth0_client" "my_client_ip_header_update" {
+  name                                = "Test IP Header Trusted Update - {{.testName}}"
+  app_type                            = "rms"
+  is_token_endpoint_ip_header_trusted = true
+}
+
+data "auth0_client" "my_client_ip_header_update" {
+  client_id          = auth0_client.my_client_ip_header_update.id
+  hide_client_secret = true
+  depends_on         = [auth0_client.my_client_ip_header_update]
+}
+`
+
+func TestAccClientCanSetDefaultAuthMethodOnUpdate(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientWithoutStoredTokenEndpointAuthMethod, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header_update", "app_type", "rms"),
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header_update", "is_token_endpoint_ip_header_trusted", "false"),
+					resource.TestCheckResourceAttr("data.auth0_client.my_client_ip_header_update", "token_endpoint_auth_method", ""),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientEnableTrustedIPHeaderWithoutStoredAuthMethod, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header_update", "app_type", "rms"),
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header_update", "is_token_endpoint_ip_header_trusted", "true"),
+					resource.TestCheckResourceAttr("data.auth0_client.my_client_ip_header_update", "token_endpoint_auth_method", "client_secret_basic"),
+				),
+			},
+		},
+	})
+}
+
 const testAccCreateClientWithDefaultOrganization = `
 resource "auth0_organization" "my_org" {
 	name         = "temp-org"
@@ -3179,6 +3268,51 @@ func TestAccClientAsyncApprovalNotificationChannels(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientWithMyAccountAsyncApprovalChannel = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval My Account - {{.testName}}"
+	app_type = "non_interactive"
+
+	async_approval_notification_channels = [
+		"my-account"
+	]
+}
+`
+
+const testAccClientWithMyAccountAndGuardianAsyncApprovalChannels = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - CIBA Async Approval My Account - {{.testName}}"
+	app_type = "non_interactive"
+
+	async_approval_notification_channels = [
+		"my-account",
+		"guardian-push"
+	]
+}
+`
+
+func TestAccClientMyAccountAsyncApprovalChannel(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientWithMyAccountAsyncApprovalChannel, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "my-account"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientWithMyAccountAndGuardianAsyncApprovalChannels, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "my-account"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.1", "guardian-push"),
 				),
 			},
 		},
@@ -4121,6 +4255,165 @@ func TestAccClientB2BIntegrationConfigurationWithSSOProfiles(t *testing.T) {
 					resource.TestCheckResourceAttrPair(
 						"auth0_client.b2b_sso", "b2b_integration_configuration.0.sso_profiles.0",
 						"auth0_self_service_profile.sso_two", "id"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientAnonymousSessionsActive = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - Anonymous Sessions - {{.testName}}"
+	app_type        = "non_interactive"
+	oidc_conformant = true
+
+	anonymous_sessions {
+		active = true
+	}
+}
+`
+
+const testAccClientAnonymousSessionsInactive = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - Anonymous Sessions - {{.testName}}"
+	app_type        = "non_interactive"
+	oidc_conformant = true
+
+	anonymous_sessions {
+		active = false
+	}
+}
+`
+
+const testAccClientAnonymousSessionsRemoved = `
+resource "auth0_client" "my_client" {
+	name            = "Acceptance Test - Anonymous Sessions - {{.testName}}"
+	app_type        = "non_interactive"
+	oidc_conformant = true
+}
+`
+
+func TestAccClientAnonymousSessions(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientAnonymousSessionsActive, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.0.active", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientAnonymousSessionsInactive, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.0.active", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientAnonymousSessionsRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "anonymous_sessions.#", "0"),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccClientAnonymousSessionsRemoved, t.Name()),
+				PlanOnly: true,
+			},
+		},
+	})
+}
+
+// testAccClientMemberManagementCreate and related fixtures set enforce_permission_ceiling and
+// enforce_self_assignment_restriction. The API requires connection_deletion_behavior and
+// allowed_strategies on every write to my_organization_configuration — confirmed live.
+const testAccClientMemberManagementCreate = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MemberMgmt - {{.testName}}"
+	description = "Client for member management EA test."
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp"]
+		connection_deletion_behavior = "allow"
+
+		enforce_permission_ceiling          = false
+		enforce_self_assignment_restriction = false
+	}
+}
+`
+
+const testAccClientMemberManagementUpdate = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MemberMgmt - {{.testName}}"
+	description = "Client for member management EA test updated."
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp"]
+		connection_deletion_behavior = "allow"
+
+		enforce_permission_ceiling          = true
+		enforce_self_assignment_restriction = true
+	}
+}
+`
+
+const testAccClientMemberManagementReset = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MemberMgmt - {{.testName}}"
+	description = "Client for member management EA test reset."
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp"]
+		connection_deletion_behavior = "allow"
+
+		enforce_permission_ceiling          = false
+		enforce_self_assignment_restriction = false
+	}
+}
+`
+
+const testAccClientMemberManagementOmit = `
+resource "auth0_client" "my_client" {
+	name        = "Acceptance Test - MemberMgmt - {{.testName}}"
+	description = "Client for member management EA test omit."
+
+	my_organization_configuration {
+		allowed_strategies           = ["oidc", "samlp"]
+		connection_deletion_behavior = "allow"
+	}
+}
+`
+
+func TestAccClientMyOrganizationConfigurationMemberManagement(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientMemberManagementCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_permission_ceiling", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_self_assignment_restriction", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMemberManagementUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_permission_ceiling", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_self_assignment_restriction", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMemberManagementReset, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_permission_ceiling", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_self_assignment_restriction", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientMemberManagementOmit, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_permission_ceiling", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "my_organization_configuration.0.enforce_self_assignment_restriction", "false"),
 				),
 			},
 		},

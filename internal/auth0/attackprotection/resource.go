@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/auth0/go-auth0/management"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -277,6 +278,28 @@ func NewResource() *schema.Resource {
 							Optional:    true,
 							Computed:    true,
 							Description: "Whether monitoring mode is enabled for bot detection.",
+						},
+					},
+				},
+			},
+			"phone_provider_protection": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration for the SMS MFA enrollment backoff strategy (EA Only). ",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"type": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"exponential",
+								"default",
+							}, false),
+							Description: "The SMS backoff strategy used during MFA enrollment. " +
+								"Use `exponential` to activate exponential-backoff resend limiting (EA only).",
 						},
 					},
 				},
@@ -655,29 +678,6 @@ func validateCaptchaProviderSecrets() schema.CustomizeDiffFunc {
 	}
 }
 
-// Consequences of a missing entitlement, phrased per operation: a read only
-// failed to fetch the remote configuration, whereas an update failed to write
-// the configured values.
-const (
-	entitlementReadConsequence   = "its current configuration could not be read"
-	entitlementUpdateConsequence = "the configuration was not applied"
-)
-
-// entitlementWarning builds the non-fatal diagnostic surfaced when the tenant
-// lacks the add-on entitlement for an attack protection sub-feature. Pass the
-// consequence matching the operation that failed.
-func entitlementWarning(feature, consequence string) diag.Diagnostic {
-	return diag.Diagnostic{
-		Severity: diag.Warning,
-		Summary:  fmt.Sprintf("%s entitlement not available", feature),
-		Detail: fmt.Sprintf(
-			"%s requires an add-on entitlement not present on this tenant, so %s. "+
-				"Contact Auth0 support to enable this feature.",
-			feature, consequence,
-		),
-	}
-}
-
 func createAttackProtection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	data.SetId(id.UniqueId())
 	return updateAttackProtection(ctx, data, meta)
@@ -710,7 +710,7 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		case apierr.IsInsufficientScope(err):
 			log.Printf("[INFO] Insufficient scope for Bot Detection; skipping read.")
 		case apierr.IsInsufficientEntitlement(err):
-			diags = append(diags, entitlementWarning("Bot Detection", entitlementReadConsequence))
+			diags = append(diags, apierr.EntitlementWarning("Bot Detection", apierr.EntitlementReadConsequence, err))
 		default:
 			return append(diags, diag.FromErr(err)...)
 		}
@@ -722,7 +722,19 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		case apierr.IsInsufficientScope(err):
 			log.Printf("[INFO] Insufficient scope for Captcha; skipping read.")
 		case apierr.IsInsufficientEntitlement(err):
-			diags = append(diags, entitlementWarning("Captcha", entitlementReadConsequence))
+			diags = append(diags, apierr.EntitlementWarning("Captcha", apierr.EntitlementReadConsequence, err))
+		default:
+			return append(diags, diag.FromErr(err)...)
+		}
+	}
+
+	phoneProviderProtection, err := apiv3.AttackProtection.PhoneProviderProtection.Get(ctx)
+	if err != nil {
+		switch {
+		case apierr.IsInsufficientScope(err):
+			log.Printf("[INFO] Insufficient scope for Phone Provider Protection; skipping read.")
+		case apierr.IsInsufficientEntitlement(err):
+			diags = append(diags, apierr.EntitlementWarning("Phone Provider Protection", apierr.EntitlementReadConsequence, err))
 		default:
 			return append(diags, diag.FromErr(err)...)
 		}
@@ -734,6 +746,7 @@ func readAttackProtection(ctx context.Context, data *schema.ResourceData, meta i
 		data.Set("suspicious_ip_throttling", flattenSuspiciousIPThrottling(ipThrottling)),
 		data.Set("bot_detection", flattenBotDetection(botDetection)),
 		data.Set("captcha", flattenCaptcha(data, captcha)),
+		data.Set("phone_provider_protection", flattenPhoneProviderProtection(phoneProviderProtection)),
 	)
 
 	if result.ErrorOrNil() != nil {
@@ -768,7 +781,7 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 			case apierr.IsInsufficientScope(err):
 				log.Printf("[INFO] Insufficient scope for Bot Detection; skipping update.")
 			case apierr.IsInsufficientEntitlement(err):
-				diags = append(diags, entitlementWarning("Bot Detection", entitlementUpdateConsequence))
+				diags = append(diags, apierr.EntitlementWarning("Bot Detection", apierr.EntitlementUpdateConsequence, err))
 			default:
 				result = multierror.Append(result, err)
 			}
@@ -781,7 +794,20 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 			case apierr.IsInsufficientScope(err):
 				log.Printf("[INFO] Insufficient scope for Captcha; skipping update.")
 			case apierr.IsInsufficientEntitlement(err):
-				diags = append(diags, entitlementWarning("Captcha", entitlementUpdateConsequence))
+				diags = append(diags, apierr.EntitlementWarning("Captcha", apierr.EntitlementUpdateConsequence, err))
+			default:
+				result = multierror.Append(result, err)
+			}
+		}
+	}
+
+	if ppp := expandPhoneProviderProtection(data); ppp != nil {
+		if _, err := apiv3.AttackProtection.PhoneProviderProtection.Patch(ctx, ppp); err != nil {
+			switch {
+			case apierr.IsInsufficientScope(err):
+				log.Printf("[INFO] Insufficient scope for Phone Provider Protection; skipping update.")
+			case apierr.IsInsufficientEntitlement(err):
+				diags = append(diags, apierr.EntitlementWarning("Phone Provider Protection", apierr.EntitlementUpdateConsequence, err))
 			default:
 				result = multierror.Append(result, err)
 			}
@@ -797,6 +823,7 @@ func updateAttackProtection(ctx context.Context, data *schema.ResourceData, meta
 
 func deleteAttackProtection(ctx context.Context, _ *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	apiv3 := meta.(*config.Config).GetAPIV3()
 
 	enabled := false
 
@@ -821,6 +848,19 @@ func deleteAttackProtection(ctx context.Context, _ *schema.ResourceData, meta in
 			},
 		),
 	)
+
+	resetReq := &managementv3.PatchPhoneProviderProtectionRequestContent{}
+	resetReq.SetType(managementv3.PhoneProviderProtectionBackoffStrategyEnumDefault)
+	if _, err := apiv3.AttackProtection.PhoneProviderProtection.Patch(ctx, resetReq); err != nil {
+		switch {
+		case apierr.IsInsufficientScope(err):
+			log.Printf("[INFO] Insufficient scope for Phone Provider Protection; skipping delete reset.")
+		case apierr.IsInsufficientEntitlement(err):
+			// Feature flag absent — nothing to reset.
+		default:
+			result = multierror.Append(result, err)
+		}
+	}
 
 	return diag.FromErr(result.ErrorOrNil())
 }

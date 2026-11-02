@@ -94,6 +94,13 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Indicates whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral. (EA Only)",
 			},
+			"require_consent_non_repudiation": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "When true, the authorization server will reject consent decisions " +
+					"that do not include a valid signature and kid. (EA Only)",
+			},
 			"token_lifetime": {
 				Type:     schema.TypeInt,
 				Optional: true,
@@ -107,6 +114,62 @@ func NewResource() *schema.Resource {
 				Computed: true,
 				Description: "Number of seconds during which access tokens issued for this resource server via " +
 					"implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.",
+			},
+			"token_lifetime_for_anonymous_access_tokens": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Description: "Number of seconds during which anonymous-session access tokens issued for this " +
+					"resource server remain valid. Must be between 86400 (1 day) and 2592000 (30 days) when present. " +
+					"Removing this attribute clears the value on the API. (EA only)",
+			},
+			"access_token": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configuration for the access tokens issued for this resource server. Remove the block to clear the configuration on the API. (EA only)",
+				// An empty `access_token {}` block in config removes it from API.
+				// Hence supress it to avoid a constant "+ access_token {}" diff.
+				DiffSuppressFunc: func(k, oldValue, newValue string, data *schema.ResourceData) bool {
+					// Supress only if access_token is empty but block-count is 0 in state and 1 in config.
+					if k == "access_token.#" && oldValue == "0" && newValue == "1" {
+						return isEmptyAccessTokenBlock(data.GetRawConfig().GetAttr("access_token"))
+					}
+					return false
+				},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"claims_mapping": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Configuration for mapping claims into the access tokens issued for this resource server. (EA only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"custom_claims": {
+										Type:        schema.TypeList,
+										Optional:    true,
+										MaxItems:    20,
+										Description: "Custom claims to include in the access tokens issued for this resource server. Maximum of 20 claims. Setting an empty list clears the custom claims on the API. (EA only)",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"name": {
+													Type:        schema.TypeString,
+													Required:    true,
+													Description: "Name of the claim to emit in the access token. Reserved OIDC/JWT claim names are not allowed.",
+												},
+												"expression": {
+													Type:        schema.TypeString,
+													Required:    true,
+													Description: "Expression used to resolve the claim value, given as a dot-path read from the request context (for example `anonymous_session.metadata.country`).",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 			"skip_consent_for_verifiable_first_party_clients": {
 				Type:        schema.TypeBool,
@@ -339,6 +402,27 @@ func NewResource() *schema.Resource {
 											"require_client_grant",
 										}, false),
 										Description: "Client flows policy. One of `deny_all`, `require_client_grant`.",
+									},
+								},
+							},
+						},
+						"anonymous_user": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Anonymous user authorization policies for the resource server. (EA only)",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"policy": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Computed: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"deny_all",
+											"require_client_grant",
+										}, false),
+										Description: "Anonymous user flows policy. One of `deny_all`, `require_client_grant`. Defaults to `deny_all` (EA only)",
 									},
 								},
 							},

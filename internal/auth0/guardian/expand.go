@@ -5,6 +5,8 @@ import (
 	"errors"
 
 	"github.com/auth0/go-auth0/management"
+	managementv3 "github.com/auth0/go-auth0/v3/management"
+	managementv3client "github.com/auth0/go-auth0/v3/management/client"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -391,4 +393,119 @@ func updateDirectFCM(ctx context.Context, options cty.Value, api *management.Man
 	})
 
 	return err
+}
+
+func updateSettings(ctx context.Context, data *schema.ResourceData, api *managementv3client.Management) error {
+	settings := expandGuardianSettings(data)
+	if settings == nil {
+		return nil
+	}
+
+	_, err := api.Guardian.Set(ctx, settings)
+	return err
+}
+
+func expandGuardianSettings(data *schema.ResourceData) *managementv3.SetGuardianSettingsRequestContent {
+	if !data.HasChange("settings") {
+		return nil
+	}
+
+	var request *managementv3.SetGuardianSettingsRequestContent
+
+	data.GetRawConfig().GetAttr("settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		request = &managementv3.SetGuardianSettingsRequestContent{}
+
+		if v := value.Bool(config.GetAttr("display_remember_me_checkbox")); v != nil {
+			request.DisplayRememberMeCheckbox = *v
+		}
+
+		if v := value.Bool(config.GetAttr("remember_me_default_value")); v != nil {
+			request.RememberMeDefaultValue = *v
+		}
+
+		if v := value.Int(config.GetAttr("mfa_session_inactivity_timeout")); v != nil {
+			request.MfaSessionInactivityTimeout = *v
+		}
+
+		if v := value.Int(config.GetAttr("mfa_session_overall_timeout")); v != nil {
+			request.MfaSessionOverallTimeout = *v
+		}
+
+		return stop
+	})
+
+	return request
+}
+
+func updatePhoneSettings(ctx context.Context, data *schema.ResourceData, api *managementv3client.Management) error {
+	settings := expandPhoneFactorSettings(data)
+	if settings == nil {
+		return nil
+	}
+
+	_, err := api.Guardian.Factors.Phone.Set(ctx, settings)
+	return err
+}
+
+func expandPhoneFactorSettings(data *schema.ResourceData) *managementv3.SetPhoneFactorSettingsRequestContent {
+	otp := expandOTPSettings(data, "phone_settings")
+	if otp == nil {
+		return nil
+	}
+
+	return &managementv3.SetPhoneFactorSettingsRequestContent{
+		OtpLength:         otp.otpLength,
+		OtpExpirationTime: otp.otpExpirationTime,
+	}
+}
+
+func updateEmailSettings(ctx context.Context, data *schema.ResourceData, api *managementv3client.Management) error {
+	settings := expandEmailFactorSettings(data)
+	if settings == nil {
+		return nil
+	}
+
+	_, err := api.Guardian.Factors.Email.Set(ctx, settings)
+	return err
+}
+
+func expandEmailFactorSettings(data *schema.ResourceData) *managementv3.SetEmailFactorSettingsRequestContent {
+	otp := expandOTPSettings(data, "email_settings")
+	if otp == nil {
+		return nil
+	}
+
+	return &managementv3.SetEmailFactorSettingsRequestContent{
+		OtpLength:         otp.otpLength,
+		OtpExpirationTime: otp.otpExpirationTime,
+	}
+}
+
+type otpSettings struct {
+	otpLength         int
+	otpExpirationTime int
+}
+
+func expandOTPSettings(data *schema.ResourceData, key string) *otpSettings {
+	if !data.HasChange(key) {
+		return nil
+	}
+
+	var settings *otpSettings
+
+	data.GetRawConfig().GetAttr(key).ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		settings = &otpSettings{}
+
+		if v := value.Int(config.GetAttr("otp_length")); v != nil {
+			settings.otpLength = *v
+		}
+
+		if v := value.Int(config.GetAttr("otp_expiration_time")); v != nil {
+			settings.otpExpirationTime = *v
+		}
+
+		return stop
+	})
+
+	return settings
 }

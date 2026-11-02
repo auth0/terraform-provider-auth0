@@ -59,6 +59,11 @@ resource "auth0_attack_protection" "my_protection" {
     allowlist                       = ["192.168.1.0", "10.0.0.0"]
     monitoring_mode_enabled         = true
   }
+
+  # Configuration for the SMS MFA enrollment backoff strategy.
+  phone_provider_protection {
+    type = "exponential"
+  }
 }
 
 # ============================================================================
@@ -208,6 +213,7 @@ variable "arkose_secret" {
 - `breached_password_detection` (Block List, Max: 1) Breached password detection protects your applications from bad actors logging in with stolen credentials. (see [below for nested schema](#nestedblock--breached_password_detection))
 - `brute_force_protection` (Block List, Max: 1) Brute-force protection safeguards against a single IP address attacking a single user account. (see [below for nested schema](#nestedblock--brute_force_protection))
 - `captcha` (Block List, Max: 1) CAPTCHA configuration for attack protection. (see [below for nested schema](#nestedblock--captcha))
+- `phone_provider_protection` (Block List, Max: 1) Configuration for the SMS MFA enrollment backoff strategy (EA Only). (see [below for nested schema](#nestedblock--phone_provider_protection))
 - `suspicious_ip_throttling` (Block List, Max: 1) Suspicious IP throttling blocks traffic from any IP address that rapidly attempts too many logins or signups. (see [below for nested schema](#nestedblock--suspicious_ip_throttling))
 
 ### Read-Only
@@ -358,6 +364,14 @@ Optional:
 
 - `secret` (String, Sensitive) Secret for reCAPTCHA v2. Required when configuring reCAPTCHA v2.
 
+
+
+<a id="nestedblock--phone_provider_protection"></a>
+### Nested Schema for `phone_provider_protection`
+
+Optional:
+
+- `type` (String) The SMS backoff strategy used during MFA enrollment. Use `exponential` to activate exponential-backoff resend limiting (EA only).
 
 
 <a id="nestedblock--suspicious_ip_throttling"></a>

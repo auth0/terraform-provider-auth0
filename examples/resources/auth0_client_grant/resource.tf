@@ -55,3 +55,15 @@ resource "auth0_client_grant" "default_3p_grant" {
   audience    = auth0_resource_server.my_resource_server.identifier
   scopes      = ["read:foo"]
 }
+
+# The following example grants a client access to anonymous access tokens for an API whose
+# anonymous_user policy is set to "require_client_grant". The subject_type "anonymous_user" is
+# only accepted at creation time and cannot be combined with organization_usage,
+# allow_any_organization, authorization_details_types, or default_for.
+# Anonymous Sessions is an Early Access feature.
+resource "auth0_client_grant" "my_anonymous_grant" {
+  client_id    = auth0_client.my_client.id
+  audience     = auth0_resource_server.my_resource_server.identifier
+  scopes       = ["read:foo"]
+  subject_type = "anonymous_user"
+}

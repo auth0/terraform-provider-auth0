@@ -7,8 +7,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -18,6 +21,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
+	internalValue "github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // ValidAppTypes contains all valid values for client app_type.
@@ -71,6 +75,35 @@ var samlDefault = struct {
 	},
 }
 
+func validateRefreshTokenLifetimes(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	cfg := diff.GetRawConfig()
+	if cfg.IsNull() {
+		return nil
+	}
+
+	refreshTokenCfg := cfg.GetAttr("refresh_token")
+	if refreshTokenCfg.IsNull() || !refreshTokenCfg.IsKnown() || refreshTokenCfg.LengthInt() == 0 {
+		return nil
+	}
+
+	var idleTokenLifetime, tokenLifetime *int
+	refreshTokenCfg.ForEachElement(func(_ cty.Value, elem cty.Value) (stop bool) {
+		idleTokenLifetime = internalValue.Int(elem.GetAttr("idle_token_lifetime"))
+		tokenLifetime = internalValue.Int(elem.GetAttr("token_lifetime"))
+		return stop
+	})
+
+	if idleTokenLifetime != nil && tokenLifetime != nil && *idleTokenLifetime >= *tokenLifetime {
+		return fmt.Errorf(
+			"idle_token_lifetime (%d) must be less than token_lifetime (%d)",
+			*idleTokenLifetime,
+			*tokenLifetime,
+		)
+	}
+
+	return nil
+}
+
 // NewResource will return a new auth0_client resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -82,12 +115,15 @@ func NewResource() *schema.Resource {
 			StateContext: importClient,
 		},
 		// `b2b_integration_configuration` is immutable after client creation; the Management API rejects adding or clearing it later.
-		CustomizeDiff: customdiff.ForceNewIfChange("b2b_integration_configuration",
-			func(_ context.Context, oldValue, newValue, _ interface{}) bool {
-				oldList, _ := oldValue.([]interface{})
-				newList, _ := newValue.([]interface{})
-				return (len(oldList) == 0) != (len(newList) == 0)
-			},
+		CustomizeDiff: customdiff.All(
+			customdiff.ForceNewIfChange("b2b_integration_configuration",
+				func(_ context.Context, oldValue, newValue, _ interface{}) bool {
+					oldList, _ := oldValue.([]interface{})
+					newList, _ := newValue.([]interface{})
+					return (len(oldList) == 0) != (len(newList) == 0)
+				},
+			),
+			validateRefreshTokenLifetimes,
 		),
 		Description: "With this resource, you can set up applications that use Auth0 for authentication " +
 			"and configure allowed callback URLs and secrets for these applications.",
@@ -195,6 +231,22 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Indicates whether this client will conform to strict OIDC specifications.",
 			},
+			"anonymous_sessions": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Anonymous Sessions settings for the client. Removing this block clears the setting on the API. (EA only)",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"active": {
+							Type:     schema.TypeBool,
+							Required: true,
+							Description: "If set to true, this client is allowed to create anonymous sessions. Requires " +
+								"`oidc_conformant` to be set to `true`. Set to `false` to disable. (EA only)",
+						},
+					},
+				},
+			},
 			"callbacks": {
 				Type:     schema.TypeList,
 				Elem:     &schema.Schema{Type: schema.TypeString},
@@ -235,11 +287,13 @@ func NewResource() *schema.Resource {
 					ValidateFunc: validation.StringInSlice([]string{
 						"guardian-push",
 						"email",
+						"my-account",
 					}, false),
 				},
 				Optional: true,
-				Description: "List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. " +
-					"Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated. ",
+				Description: "List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests " +
+					"initiated by this client. Valid values are `guardian-push`, `email`, and `my-account`." +
+					"The order is significant as this is the order in which notification channels will be evaluated.",
 			},
 			"organization_usage": {
 				Type:     schema.TypeString,
@@ -1810,6 +1864,19 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"enforce_permission_ceiling": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Description: "When true, limits the permissions that organization admins can assign to " +
+								"members to only those held by the admin themselves. Requires the " +
+								"`my_org_member_management_ea` feature flag. Available in Early Access (EA).",
+						},
+						"enforce_self_assignment_restriction": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Description: "When true, prevents organization admins from assigning permissions to " +
+								"themselves. Requires the `my_org_member_management_ea` feature flag. Available in Early Access (EA).",
+						},
 					},
 				},
 			},
@@ -1922,6 +1989,10 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 		return diag.FromErr(err)
 	}
 
+	if err := setTokenEndpointAuthMethodForTrustedHeader(ctx, api, data, client); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
 	nullFields := fetchNullableFields(data, client)
 	if len(nullFields) != 0 {
 		if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), nullFields); err != nil {
@@ -1936,6 +2007,39 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 	time.Sleep(200 * time.Millisecond)
 
 	return readClient(ctx, data, meta)
+}
+
+func setTokenEndpointAuthMethodForTrustedHeader(ctx context.Context, api *management.Management, data *schema.ResourceData, client *management.Client) error {
+	if !data.HasChange("is_token_endpoint_ip_header_trusted") || !client.GetIsTokenEndpointIPHeaderTrusted() {
+		return nil
+	}
+
+	existing, err := api.Client.Read(ctx, data.Id(), management.IncludeFields(
+		"app_type", "token_endpoint_auth_method", "client_authentication_methods",
+	))
+	if err != nil {
+		return err
+	}
+
+	authMethods := existing.GetClientAuthenticationMethods()
+	switch {
+	case existing.GetTokenEndpointAuthMethod() != "":
+		tflog.Debug(ctx, "Skipped setting token_endpoint_auth_method because it is already set", map[string]interface{}{
+			"token_endpoint_auth_method": existing.GetTokenEndpointAuthMethod(),
+		})
+	case authMethods != nil && (authMethods.GetPrivateKeyJWT() != nil ||
+		authMethods.GetTLSClientAuth() != nil || authMethods.GetSelfSignedTLSClientAuth() != nil):
+		tflog.Debug(ctx, "Skipped setting token_endpoint_auth_method because credential-based authentication is configured")
+	default:
+		appType := existing.GetAppType()
+		if data.HasChange("app_type") {
+			appType = client.GetAppType()
+		}
+		method := defaultTokenEndpointAuthMethod(appType)
+		client.TokenEndpointAuthMethod = &method
+	}
+
+	return nil
 }
 
 func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

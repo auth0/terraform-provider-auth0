@@ -25,9 +25,24 @@ func flattenRateLimitPolicy(data *schema.ResourceData, policy *management.GetRat
 }
 
 func flattenRateLimitPolicyConfiguration(cfg *management.RateLimitPolicyConfiguration) []interface{} {
-	// The SDK's oneOf deserialization always matches the allow (Zero) variant,
-	// so block/log/redirect land in GetRateLimitPolicyConfigurationZero with their
-	// limit/redirect_uri in the variant's extra properties.
+	// The SDK decodes the oneOf into whichever variant matches the payload keys, so read
+	// whichever one is populated. Older SDK releases collapsed everything into the Zero
+	// (allow) variant with limit/redirect_uri in its extras, so that fallback is kept.
+	if action := cfg.GetRateLimitPolicyConfigurationAction(); action != nil {
+		return []interface{}{map[string]interface{}{
+			"action":       string(action.GetAction()),
+			"limit":        action.GetLimit(),
+			"redirect_uri": action.GetRedirectURI(),
+		}}
+	}
+
+	if one := cfg.GetRateLimitPolicyConfigurationOne(); one != nil {
+		return []interface{}{map[string]interface{}{
+			"action": string(one.GetAction()),
+			"limit":  one.GetLimit(),
+		}}
+	}
+
 	zero := cfg.GetRateLimitPolicyConfigurationZero()
 	if zero == nil {
 		return nil

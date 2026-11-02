@@ -1,0 +1,612 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 265
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","identifier":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","subject_type_authorization":{"anonymous_user":{"policy":"require_client_grant"}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 609
+        uncompressed: false
+        body: '{"id":"6aa9523f5bf258c527621a0d","name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","identifier":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"anonymous_user":{"policy":"require_client_grant"},"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 467.201125ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 130
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","is_first_party":true,"custom_login_page_on":true}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","client_id":"f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 627.451208ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aa9523f5bf258c527621a0d
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aa9523f5bf258c527621a0d","name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","identifier":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"anonymous_user":{"policy":"require_client_grant"},"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.021541ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fanon-grant%2FTestAccClientGrant_AnonymousUser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aa9523f5bf258c527621a0d","name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","identifier":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"anonymous_user":{"policy":"require_client_grant"},"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 303.105667ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 64
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"scopes":[{"value":"create:foo","description":"Create foos"}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fanon-grant%2FTestAccClientGrant_AnonymousUser
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aa9523f5bf258c527621a0d","name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","identifier":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"anonymous_user":{"policy":"require_client_grant"},"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Create foos"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 318.685667ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fanon-grant%2FTestAccClientGrant_AnonymousUser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aa9523f5bf258c527621a0d","name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","identifier":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"anonymous_user":{"policy":"require_client_grant"},"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Create foos"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 306.687ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","client_id":"f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 322.058917ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fuat.tf.terraform-provider-auth0.com%2Fanon-grant%2FTestAccClientGrant_AnonymousUser&client_id=f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb&include_totals=true&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"total":0,"start":0,"limit":50,"client_grants":[]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 329.977541ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 205
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"client_id":"f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb","audience":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","scope":["create:foo"],"subject_type":"anonymous_user"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 232
+        uncompressed: false
+        body: '{"id":"cgr_ZhvwreXGgnk2LjvD","client_id":"f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb","audience":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","scope":["create:foo"],"subject_type":"anonymous_user"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 355.135042ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_ZhvwreXGgnk2LjvD
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"cgr_ZhvwreXGgnk2LjvD","client_id":"f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb","audience":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","scope":["create:foo"],"subject_type":"anonymous_user"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 312.355542ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aa9523f5bf258c527621a0d
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aa9523f5bf258c527621a0d","name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","identifier":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"anonymous_user":{"policy":"require_client_grant"},"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Create foos"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 293.48875ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","client_id":"f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 304.736084ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fanon-grant%2FTestAccClientGrant_AnonymousUser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aa9523f5bf258c527621a0d","name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","identifier":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"anonymous_user":{"policy":"require_client_grant"},"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Create foos"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 290.676541ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_ZhvwreXGgnk2LjvD
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"cgr_ZhvwreXGgnk2LjvD","client_id":"f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb","audience":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","scope":["create:foo"],"subject_type":"anonymous_user"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 289.943709ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_ZhvwreXGgnk2LjvD
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 292.094459ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 14
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"scopes":[]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.tf.terraform-provider-auth0.com%2Fanon-grant%2FTestAccClientGrant_AnonymousUser
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"6aa9523f5bf258c527621a0d","name":"Acceptance Test - Anonymous Grant - TestAccClientGrant_AnonymousUser","identifier":"https://uat.tf.terraform-provider-auth0.com/anon-grant/TestAccClientGrant_AnonymousUser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"allow_online_access":false,"allow_online_access_with_ephemeral_sessions":false,"subject_type_authorization":{"anonymous_user":{"policy":"require_client_grant"},"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 338.967334ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/f5HEnOn4mnqOlfVe6eLns5wBDDR0EPPb
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 398.126ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.49.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aa9523f5bf258c527621a0d
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 319.298417ms

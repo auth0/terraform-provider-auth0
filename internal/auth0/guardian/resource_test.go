@@ -184,6 +184,149 @@ func TestAccGuardianPhone(t *testing.T) {
 	})
 }
 
+const testAccGuardianSettingsCreate = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+
+	settings {
+		display_remember_me_checkbox   = true
+		remember_me_default_value      = false
+		mfa_session_inactivity_timeout = 604800
+		mfa_session_overall_timeout    = 2592000
+	}
+
+	phone_settings {
+		otp_length          = 6
+		otp_expiration_time = 300
+	}
+
+	email_settings {
+		otp_length          = 6
+		otp_expiration_time = 300
+	}
+}
+`
+
+const testAccGuardianSettingsUpdate = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+
+	settings {
+		display_remember_me_checkbox   = false
+		remember_me_default_value      = true
+		mfa_session_inactivity_timeout = 7200
+		mfa_session_overall_timeout    = 86400
+	}
+
+	phone_settings {
+		otp_length          = 8
+		otp_expiration_time = 600
+	}
+
+	email_settings {
+		otp_length          = 10
+		otp_expiration_time = 3600
+	}
+}
+`
+
+// testAccGuardianSettingsBoundaries exercises the lower bound of every
+// ValidateFunc range: otp_length 4, otp_expiration_time 30, and the shared
+// 3600 second floor on both MFA session timeouts.
+const testAccGuardianSettingsBoundaries = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+
+	settings {
+		display_remember_me_checkbox   = true
+		remember_me_default_value      = true
+		mfa_session_inactivity_timeout = 3600
+		mfa_session_overall_timeout    = 3600
+	}
+
+	phone_settings {
+		otp_length          = 4
+		otp_expiration_time = 30
+	}
+
+	email_settings {
+		otp_length          = 4
+		otp_expiration_time = 30
+	}
+}
+`
+
+// testAccGuardianSettingsOmitted drops all three blocks from the config. They are
+// Optional+Computed, so the API values must be read back into state rather than
+// being blanked, and no write should be attempted for the removed blocks.
+const testAccGuardianSettingsOmitted = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+}
+`
+
+func TestAccGuardianSettings(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccGuardianSettingsCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.display_remember_me_checkbox", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.remember_me_default_value", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_inactivity_timeout", "604800"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_overall_timeout", "2592000"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_length", "6"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_expiration_time", "300"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_length", "6"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_expiration_time", "300"),
+				),
+			},
+			{
+				Config: testAccGuardianSettingsUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.display_remember_me_checkbox", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.remember_me_default_value", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_inactivity_timeout", "7200"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_overall_timeout", "86400"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_length", "8"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_expiration_time", "600"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_length", "10"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_expiration_time", "3600"),
+				),
+			},
+			{
+				Config: testAccGuardianSettingsBoundaries,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_inactivity_timeout", "3600"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_overall_timeout", "3600"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_length", "4"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_expiration_time", "30"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_length", "4"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_expiration_time", "30"),
+				),
+			},
+			{
+				// The blocks are Optional+Computed, so removing them from the config
+				// keeps the last applied values in state instead of clearing them.
+				Config: testAccGuardianSettingsOmitted,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "settings.0.mfa_session_inactivity_timeout", "3600"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone_settings.0.otp_length", "4"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email_settings.0.otp_length", "4"),
+				),
+			},
+		},
+	})
+}
+
 const testAccConfigureWebAuthnRoamingCreate = `
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
@@ -505,6 +648,77 @@ func TestAccGuardianPush(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.enabled", "false"),
+				),
+			},
+		},
+	})
+}
+
+const testAccGuardianConfidenceScorePolicy = `
+resource "auth0_guardian" "my_guardian" {
+  policy = "confidence-score"
+}`
+
+// TestAccGuardianPolicyConfidenceScoreInsufficientEntitlement asserts that
+// when the tenant lacks the Adaptive MFA entitlement, setting
+// policy = "confidence-score" emits a non-fatal warning instead of an error.
+// The policy is not applied and readGuardian writes the API's actual value
+// to state, producing a non-empty plan.
+func TestAccGuardianPolicyConfidenceScoreInsufficientEntitlement(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             testAccGuardianConfidenceScorePolicy,
+				ExpectNonEmptyPlan: true,
+				Check: resource.ComposeTestCheckFunc(
+					// The policy was not applied; state reflects the API's actual value.
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "policy", "never"),
+				),
+			},
+		},
+	})
+}
+
+const testAccGuardianPhoneEmailSettingsNotEntitledConfig = `
+resource "auth0_guardian" "my_guardian" {
+  policy        = "never"
+  otp           = true
+  email         = true
+  recovery_code = true
+
+  phone_settings {
+    otp_length          = 6
+    otp_expiration_time = 300
+  }
+
+  email_settings {
+    otp_length          = 6
+    otp_expiration_time = 300
+  }
+}`
+
+// TestAccGuardianPhoneEmailSettingsNotEntitled asserts that when the tenant has
+// the mfa_advanced_factor_config feature flag disabled (errorCode "not_entitled"),
+// setting and reading phone_settings and email_settings emits non-fatal warnings and
+// leaves those blocks empty in state rather than failing the apply or persisting the
+// config values into state.
+func TestAccGuardianPhoneEmailSettingsNotEntitled(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccGuardianPhoneEmailSettingsNotEntitledConfig,
+				// The API rejected both phone_settings and email_settings, so state stays
+				// empty for those blocks while config still has values — non-empty plan expected.
+				ExpectNonEmptyPlan: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "policy", "never"),
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "otp", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "email", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "recovery_code", "true"),
+					// Phone_settings and email_settings are empty because the tenant
+					// returned not_entitled for both the update and read endpoints.
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "phone_settings.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.my_guardian", "email_settings.#", "0"),
 				),
 			},
 		},

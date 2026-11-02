@@ -137,8 +137,26 @@ resource "auth0_client" "mcp_server" {
   oidc_conformant            = true
   resource_server_identifier = auth0_resource_server.my_api.identifier
 
+  # Anonymous Sessions is an Early Access feature.
+  anonymous_sessions {
+    active = true
+  }
+
   token_exchange {
     allow_any_profile_of_type = ["on_behalf_of_token_exchange"]
+  }
+}
+
+resource "auth0_client" "member_management" {
+  name = "My Member Management Client"
+
+  # Available in Early Access (EA). Requires the my_org_member_management_ea feature flag.
+  my_organization_configuration {
+    allowed_strategies           = ["oidc", "samlp"]
+    connection_deletion_behavior = "allow"
+
+    enforce_permission_ceiling          = true
+    enforce_self_assignment_restriction = true
   }
 }
 ```
@@ -156,8 +174,9 @@ resource "auth0_client" "mcp_server" {
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
+- `anonymous_sessions` (Block List, Max: 1) Anonymous Sessions settings for the client. Removing this block clears the setting on the API. (EA only) (see [below for nested schema](#nestedblock--anonymous_sessions))
 - `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`, `express_configuration`
-- `async_approval_notification_channels` (List of String) List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated.
+- `async_approval_notification_channels` (List of String) List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. Valid values are `guardian-push`, `email`, and `my-account`.The order is significant as this is the order in which notification channels will be evaluated.
 - `b2b_integration_configuration` (Block List, Max: 1) Configuration for B2B Integration (Enterprise Connect) clients. Contents can be updated in place, but adding or removing whole block forces client recreation. (EA only) (see [below for nested schema](#nestedblock--b2b_integration_configuration))
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
@@ -535,6 +554,14 @@ Optional:
 
 
 
+<a id="nestedblock--anonymous_sessions"></a>
+### Nested Schema for `anonymous_sessions`
+
+Required:
+
+- `active` (Boolean) If set to true, this client is allowed to create anonymous sessions. Requires `oidc_conformant` to be set to `true`. Set to `false` to disable. (EA only)
+
+
 <a id="nestedblock--b2b_integration_configuration"></a>
 ### Nested Schema for `b2b_integration_configuration`
 
@@ -651,6 +678,8 @@ Optional:
 - `allowed_strategies` (List of String) The list of connection strategies that are allowed when creating organizations for this client (e.g. "okta", "samlp").
 - `connection_deletion_behavior` (String) Controls the behavior when deleting connections associated with organizations for this client. Possible values: `allow`, `allow_if_empty`.
 - `connection_profile_id` (String) The ID of the connection profile to use when creating organizations for this client.
+- `enforce_permission_ceiling` (Boolean) When true, limits the permissions that organization admins can assign to members to only those held by the admin themselves. Requires the `my_org_member_management_ea` feature flag. Available in Early Access (EA).
+- `enforce_self_assignment_restriction` (Boolean) When true, prevents organization admins from assigning permissions to themselves. Requires the `my_org_member_management_ea` feature flag. Available in Early Access (EA).
 - `invitation_landing_client_id` (String) The client ID used as the invitation landing page when creating invitations through the My Organization API. Requires the tenant to have member management enabled, and the referenced client must allow organizations.
 - `third_party_client_access` (Block List, Max: 1) Configures third-party client access to organizations created for this client through the My Organization API. Requires the `my_orgs_third_party_client_support` 	 (EA Only) (see [below for nested schema](#nestedblock--my_organization_configuration--third_party_client_access))
 - `user_attribute_profile_id` (String) The ID of the user attribute profile to use when creating organizations for this client.

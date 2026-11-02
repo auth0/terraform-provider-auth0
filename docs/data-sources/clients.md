@@ -51,6 +51,7 @@ Read-Only:
 - `allowed_clients` (List of String)
 - `allowed_logout_urls` (List of String)
 - `allowed_origins` (List of String)
+- `anonymous_sessions` (List of Object) (see [below for nested schema](#nestedobjatt--clients--anonymous_sessions))
 - `app_type` (String)
 - `async_approval_notification_channels` (List of String)
 - `b2b_integration_configuration` (List of Object) (see [below for nested schema](#nestedobjatt--clients--b2b_integration_configuration))
@@ -81,6 +82,14 @@ Read-Only:
 - `token_exchange` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_exchange))
 - `token_quota` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_quota))
 - `web_origins` (List of String)
+
+<a id="nestedobjatt--clients--anonymous_sessions"></a>
+### Nested Schema for `clients.anonymous_sessions`
+
+Read-Only:
+
+- `active` (Boolean)
+
 
 <a id="nestedobjatt--clients--b2b_integration_configuration"></a>
 ### Nested Schema for `clients.b2b_integration_configuration`
@@ -147,6 +156,8 @@ Read-Only:
 - `allowed_strategies` (List of String)
 - `connection_deletion_behavior` (String)
 - `connection_profile_id` (String)
+- `enforce_permission_ceiling` (Boolean)
+- `enforce_self_assignment_restriction` (Boolean)
 - `invitation_landing_client_id` (String)
 - `third_party_client_access` (List of Object) (see [below for nested schema](#nestedobjatt--clients--my_organization_configuration--third_party_client_access))
 - `user_attribute_profile_id` (String)

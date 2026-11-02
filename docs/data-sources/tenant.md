@@ -181,6 +181,15 @@ Read-Only:
 
 Read-Only:
 
+- `anonymous` (List of Object) (see [below for nested schema](#nestedobjatt--sessions--anonymous))
 - `oidc_logout_prompt_enabled` (Boolean)
+
+<a id="nestedobjatt--sessions--anonymous"></a>
+### Nested Schema for `sessions.anonymous`
+
+Read-Only:
+
+- `activate_cookie` (Boolean)
+- `lifetime_in_minutes` (Number)
 
 

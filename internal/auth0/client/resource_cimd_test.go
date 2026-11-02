@@ -10,19 +10,22 @@ import (
 
 const testAccClientCIMDCreate = `
 resource "auth0_client_cimd" "test" {
-    external_client_id = "https://tinywiki.xyz/client.json"
+    external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
 }
 `
 
 const testAccClientCIMDWithEditableFields = `
 resource "auth0_client_cimd" "test" {
-    external_client_id = "https://tinywiki.xyz/client.json"
+    external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
     description        = "CIMD test client"
     app_type           = "native"
     allowed_origins    = ["https://example.com"]
     web_origins        = ["https://example.com"]
     grant_types        = ["authorization_code", "refresh_token"]
     oidc_conformant    = true
+
+    organization_usage            = "require"
+    organization_require_behavior = "pre_login_prompt"
 
     jwt_configuration {
         lifetime_in_seconds = 7200
@@ -43,13 +46,16 @@ resource "auth0_client_cimd" "test" {
 
 const testAccClientCIMDUpdate = `
 resource "auth0_client_cimd" "test" {
-    external_client_id = "https://tinywiki.xyz/client.json"
+    external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
     description        = "Updated CIMD test client"
     app_type           = "native"
     allowed_origins    = ["https://example.com", "https://other.com"]
     web_origins        = ["https://example.com"]
     grant_types        = ["authorization_code"]
     oidc_conformant    = true
+
+    organization_usage            = "allow"
+    organization_require_behavior = "no_prompt"
 
     jwt_configuration {
         lifetime_in_seconds = 3600
@@ -76,7 +82,7 @@ func TestAccClientCIMD(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("auth0_client_cimd.test", "client_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_cimd.test", "name"),
-					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_client_id", "https://tinywiki.xyz/client.json"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_client_id", "https://claude.ai/oauth/claude-code-client-metadata"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_type", "cimd"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_created_by", "admin"),
 				),
@@ -91,6 +97,8 @@ func TestAccClientCIMD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "web_origins.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "grant_types.#", "2"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "organization_usage", "require"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "organization_require_behavior", "pre_login_prompt"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "is_first_party", "false"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "jwt_configuration.0.lifetime_in_seconds", "7200"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "jwt_configuration.0.alg", "RS256"),
@@ -108,6 +116,8 @@ func TestAccClientCIMD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "app_type", "native"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "allowed_origins.#", "2"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "grant_types.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "organization_usage", "allow"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "organization_require_behavior", "no_prompt"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "jwt_configuration.0.lifetime_in_seconds", "3600"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "refresh_token.0.rotation_type", "non-rotating"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "refresh_token.0.leeway", "0"),

@@ -44,12 +44,20 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.TokenEncryption = expandTokenEncryption(data)
 		resourceServer.ConsentPolicy = expandConsentPolicy(data)
 		resourceServer.ProofOfPossession = expandProofOfPossession(data)
+		resourceServer.AccessToken = expandResourceServerAccessToken(data)
+		// Conditionally set to avoid sending the generated config zero value.
+		if data.IsNewResource() || data.HasChange("token_lifetime_for_anonymous_access_tokens") {
+			resourceServer.TokenLifetimeForAnonymousAccessTokens = value.Int(cfg.GetAttr("token_lifetime_for_anonymous_access_tokens"))
+		}
 		// Skip sending EA params implicitly on all PATCH calls.
 		if data.IsNewResource() || data.HasChange("allow_online_access") {
 			resourceServer.AllowOnlineAccess = value.Bool(cfg.GetAttr("allow_online_access"))
 		}
 		if data.IsNewResource() || data.HasChange("allow_online_access_with_ephemeral_sessions") {
 			resourceServer.AllowOnlineAccessWithEphemeralSessions = value.Bool(cfg.GetAttr("allow_online_access_with_ephemeral_sessions"))
+		}
+		if data.IsNewResource() || data.HasChange("require_consent_non_repudiation") {
+			resourceServer.RequireConsentNonRepudiation = value.Bool(cfg.GetAttr("require_consent_non_repudiation"))
 		}
 	}
 	return resourceServer
@@ -88,6 +96,107 @@ func isAuthorizationPolicyNull(data *schema.ResourceData) bool {
 		data.GetRawConfig().GetAttr("authorization_policy").LengthInt() == 0
 }
 
+func expandResourceServerAccessToken(data *schema.ResourceData) *management.ResourceServerAccessToken {
+	if !data.IsNewResource() && !data.HasChange("access_token") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("access_token")
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var accessToken management.ResourceServerAccessToken
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		accessToken.ClaimsMapping = expandResourceServerAccessTokenClaimsMapping(cfg.GetAttr("claims_mapping"))
+		return stop
+	})
+
+	if accessToken == (management.ResourceServerAccessToken{}) {
+		return nil
+	}
+
+	return &accessToken
+}
+
+func expandResourceServerAccessTokenClaimsMapping(config cty.Value) *management.ResourceServerAccessTokenClaimsMapping {
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var claimsMapping management.ResourceServerAccessTokenClaimsMapping
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		claimsMapping.CustomClaims = expandResourceServerAccessTokenCustomClaims(cfg.GetAttr("custom_claims"))
+		return stop
+	})
+
+	if claimsMapping.CustomClaims == nil {
+		return nil
+	}
+
+	return &claimsMapping
+}
+
+// expandResourceServerAccessTokenCustomClaims returns nil when the list is
+// omitted (leaves it untouched on PATCH) and a non-nil empty slice when the
+// list is present but empty (serialized as `[]` to clear it; the API rejects
+// `null`).
+func expandResourceServerAccessTokenCustomClaims(config cty.Value) *[]management.ResourceServerAccessTokenCustomClaimsMappingRule {
+	if config.IsNull() {
+		return nil
+	}
+
+	customClaims := make([]management.ResourceServerAccessTokenCustomClaimsMappingRule, 0)
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		customClaims = append(customClaims, management.ResourceServerAccessTokenCustomClaimsMappingRule{
+			Name:       value.String(cfg.GetAttr("name")),
+			Expression: value.String(cfg.GetAttr("expression")),
+		})
+		return stop
+	})
+
+	return &customClaims
+}
+
+// isEmptyAccessTokenBlock reports whether a configured `access_token` block is
+// present but carries no nested configuration (no `claims_mapping`). Such a
+// block maps to nothing on the API, so it must be treated as absent to avoid a
+// perpetual plan diff.
+func isEmptyAccessTokenBlock(config cty.Value) bool {
+	if config.IsNull() || config.LengthInt() == 0 {
+		return false
+	}
+
+	empty := true
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		claimsMapping := cfg.GetAttr("claims_mapping")
+		if !claimsMapping.IsNull() && claimsMapping.LengthInt() > 0 {
+			empty = false
+		}
+		return stop
+	})
+
+	return empty
+}
+
+func isAccessTokenNull(data *schema.ResourceData) bool {
+	if !data.HasChange("access_token") {
+		return false
+	}
+	accessToken := data.GetRawConfig().GetAttr("access_token")
+	return accessToken.IsNull() || accessToken.LengthInt() == 0 || isEmptyAccessTokenBlock(accessToken)
+}
+
+func isTokenLifetimeForAnonymousAccessTokensNull(data *schema.ResourceData) bool {
+	if !data.HasChange("token_lifetime_for_anonymous_access_tokens") {
+		return false
+	}
+	return data.GetRawConfig().GetAttr("token_lifetime_for_anonymous_access_tokens").IsNull()
+}
+
 // fetchNullableFields returns a map of fields that need to be explicitly set
 // to null on the resource server via a follow-up PATCH request, since the
 // regular Update call uses `omitempty` and cannot transmit nil values.
@@ -95,11 +204,13 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 	type nullCheckFunc func(*schema.ResourceData) bool
 
 	checks := map[string]nullCheckFunc{
-		"consent_policy":        isConsentPolicyNull,
-		"authorization_details": isAuthorizationDetailsNull,
-		"token_encryption":      isTokenEncryptionNull,
-		"proof_of_possession":   isProofOfPossessionNull,
-		"authorization_policy":  isAuthorizationPolicyNull,
+		"consent_policy":                             isConsentPolicyNull,
+		"authorization_details":                      isAuthorizationDetailsNull,
+		"token_encryption":                           isTokenEncryptionNull,
+		"proof_of_possession":                        isProofOfPossessionNull,
+		"authorization_policy":                       isAuthorizationPolicyNull,
+		"token_lifetime_for_anonymous_access_tokens": isTokenLifetimeForAnonymousAccessTokensNull,
+		"access_token":                               isAccessTokenNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -130,6 +241,14 @@ func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.Resou
 			// Changes to the client block in subject_type_authorization are not allowed for the management API.
 			// This check prevents silently ignoring such errors.
 			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
+		}
+
+		if !isManagementAPI {
+			sta.AnonymousUser = expandSubjectTypeAuthorizationAnonymousUser(cfg.GetAttr("anonymous_user"))
+		} else if data.HasChange("subject_type_authorization.0.anonymous_user") {
+			// For management API, updating anonymous_user is rejected with 400, so only send it when
+			// explicitly changed, matching the client guard above.
+			sta.AnonymousUser = expandSubjectTypeAuthorizationAnonymousUser(cfg.GetAttr("anonymous_user"))
 		}
 
 		return stop
@@ -178,6 +297,21 @@ func expandSubjectTypeAuthorizationClient(clientConfig cty.Value) *management.Re
 	}
 
 	return &client
+}
+
+func expandSubjectTypeAuthorizationAnonymousUser(anonymousUserConfig cty.Value) *management.ResourceServerSubjectTypeAuthorizationAnonymousUser {
+	if anonymousUserConfig.IsNull() || anonymousUserConfig.LengthInt() == 0 {
+		return nil
+	}
+
+	var anonymousUser management.ResourceServerSubjectTypeAuthorizationAnonymousUser
+
+	anonymousUserConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		anonymousUser.Policy = value.String(cfg.GetAttr("policy"))
+		return stop
+	})
+
+	return &anonymousUser
 }
 
 func expandResourceServerScopes(scopes cty.Value) *[]management.ResourceServerScope {

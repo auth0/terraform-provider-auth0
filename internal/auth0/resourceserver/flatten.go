@@ -14,7 +14,9 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 		data.Set("allow_offline_access", resourceServer.GetAllowOfflineAccess()),
 		data.Set("allow_online_access", resourceServer.GetAllowOnlineAccess()),
 		data.Set("allow_online_access_with_ephemeral_sessions", resourceServer.GetAllowOnlineAccessWithEphemeralSessions()),
+		data.Set("require_consent_non_repudiation", resourceServer.GetRequireConsentNonRepudiation()),
 		data.Set("token_lifetime_for_web", resourceServer.GetTokenLifetimeForWeb()),
+		data.Set("token_lifetime_for_anonymous_access_tokens", resourceServer.GetTokenLifetimeForAnonymousAccessTokens()),
 		data.Set("signing_alg", resourceServer.GetSigningAlgorithm()),
 		data.Set("signing_secret", resourceServer.GetSigningSecret()),
 		data.Set(
@@ -27,6 +29,7 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 		data.Set("proof_of_possession", flattenProofOfPossession(resourceServer.GetProofOfPossession())),
 		data.Set("subject_type_authorization", flattenSubjectTypeAuthorization(resourceServer.GetSubjectTypeAuthorization())),
 		data.Set("authorization_policy", flattenAuthorizationPolicy(resourceServer.GetAuthorizationPolicy())),
+		data.Set("access_token", flattenResourceServerAccessToken(resourceServer.GetAccessToken())),
 		data.Set("client_id", resourceServer.GetClientID()),
 		data.Set("is_system", resourceServer.GetIsSystem()),
 	)
@@ -171,7 +174,46 @@ func flattenSubjectTypeAuthorization(subjectType *management.ResourceServerSubje
 		}
 	}
 
+	if subjectType.GetAnonymousUser() != nil {
+		m["anonymous_user"] = []interface{}{
+			map[string]interface{}{
+				"policy": subjectType.GetAnonymousUser().GetPolicy(),
+			},
+		}
+	}
+
 	return []interface{}{m}
+}
+
+func flattenResourceServerAccessToken(accessToken *management.ResourceServerAccessToken) []interface{} {
+	if accessToken == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+
+	if claimsMapping := accessToken.GetClaimsMapping(); claimsMapping != nil {
+		m["claims_mapping"] = []interface{}{
+			map[string]interface{}{
+				"custom_claims": flattenResourceServerAccessTokenCustomClaims(claimsMapping.GetCustomClaims()),
+			},
+		}
+	}
+
+	return []interface{}{m}
+}
+
+func flattenResourceServerAccessTokenCustomClaims(customClaims []management.ResourceServerAccessTokenCustomClaimsMappingRule) []interface{} {
+	result := make([]interface{}, len(customClaims))
+
+	for index, claim := range customClaims {
+		result[index] = map[string]interface{}{
+			"name":       claim.GetName(),
+			"expression": claim.GetExpression(),
+		}
+	}
+
+	return result
 }
 
 func flattenAuthorizationPolicy(policy *management.ResourceServerAuthorizationPolicy) []interface{} {

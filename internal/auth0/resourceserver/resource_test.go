@@ -609,3 +609,218 @@ func TestAccResourceServerOnlineAccess(t *testing.T) {
 		},
 	})
 }
+
+const testAccResourceServerAnonymousUserCreate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	token_lifetime_for_anonymous_access_tokens = 86400
+
+	subject_type_authorization {
+		anonymous_user {
+			policy = "require_client_grant"
+		}
+	}
+}
+`
+
+const testAccResourceServerAnonymousUserUpdate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	token_lifetime_for_anonymous_access_tokens = 172800
+
+	subject_type_authorization {
+		anonymous_user {
+			policy = "deny_all"
+		}
+	}
+}
+`
+
+const testAccResourceServerAnonymousUserRemoved = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	subject_type_authorization {
+		anonymous_user {
+			policy = "deny_all"
+		}
+	}
+}
+`
+
+func TestAccResourceServerAnonymousUser(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAnonymousUserCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime_for_anonymous_access_tokens", "86400"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "subject_type_authorization.0.anonymous_user.0.policy", "require_client_grant"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAnonymousUserUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime_for_anonymous_access_tokens", "172800"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "subject_type_authorization.0.anonymous_user.0.policy", "deny_all"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAnonymousUserRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime_for_anonymous_access_tokens", "0"),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccResourceServerAnonymousUserRemoved, t.Name()),
+				PlanOnly: true,
+			},
+		},
+	})
+}
+
+const testAccResourceServerAccessTokenCustomClaimsCreate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	access_token {
+		claims_mapping {
+			custom_claims {
+				name       = "country"
+				expression = "anonymous_session.metadata.country"
+			}
+			custom_claims {
+				name       = "region"
+				expression = "anonymous_session.metadata.region"
+			}
+		}
+	}
+}
+`
+
+const testAccResourceServerAccessTokenCustomClaimsUpdate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	access_token {
+		claims_mapping {
+			custom_claims {
+				name       = "city"
+				expression = "anonymous_session.metadata.city"
+			}
+		}
+	}
+}
+`
+
+const testAccResourceServerAccessTokenCustomClaimsCleared = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	access_token {
+		claims_mapping {}
+	}
+}
+`
+
+const testAccResourceServerAccessTokenRemoved = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+`
+
+func TestAccResourceServerAccessTokenCustomClaims(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAccessTokenCustomClaimsCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "access_token.0.claims_mapping.0.custom_claims.#", "2"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "access_token.0.claims_mapping.0.custom_claims.0.name", "country"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "access_token.0.claims_mapping.0.custom_claims.0.expression", "anonymous_session.metadata.country"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "access_token.0.claims_mapping.0.custom_claims.1.name", "region"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "access_token.0.claims_mapping.0.custom_claims.1.expression", "anonymous_session.metadata.region"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAccessTokenCustomClaimsUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "access_token.0.claims_mapping.0.custom_claims.#", "1"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "access_token.0.claims_mapping.0.custom_claims.0.name", "city"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "access_token.0.claims_mapping.0.custom_claims.0.expression", "anonymous_session.metadata.city"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAccessTokenCustomClaimsCleared, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "access_token.0.claims_mapping.0.custom_claims.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerAccessTokenRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "access_token.#", "0"),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccResourceServerAccessTokenRemoved, t.Name()),
+				PlanOnly: true,
+			},
+		},
+	})
+}
+
+const testAccResourceServerRequireConsentNonRepudiationCreate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                             = "Acceptance Test - {{.testName}}"
+	identifier                       = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	require_consent_non_repudiation  = true
+}
+`
+
+const testAccResourceServerRequireConsentNonRepudiationUpdate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                             = "Acceptance Test - {{.testName}}"
+	identifier                       = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	require_consent_non_repudiation  = false
+}
+`
+
+const testAccResourceServerRequireConsentNonRepudiationRemoved = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+`
+
+func TestAccResourceServerRequireConsentNonRepudiation(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccResourceServerRequireConsentNonRepudiationCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "require_consent_non_repudiation", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccResourceServerRequireConsentNonRepudiationUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "require_consent_non_repudiation", "false"),
+				),
+			},
+			{
+				Config:   acctest.ParseTestName(testAccResourceServerRequireConsentNonRepudiationRemoved, t.Name()),
+				PlanOnly: true,
+			},
+		},
+	})
+}

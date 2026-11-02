@@ -141,7 +141,21 @@ func flattenTenantSessions(sessions *management.TenantSessions) []interface{} {
 	} else {
 		m["oidc_logout_prompt_enabled"] = oidcLogoutPromptEnabledDefault
 	}
+	// Only emit the anonymous block when the API actually returns it, so an unset
+	// block does not appear as phantom state on an Optional-only nested block.
+	if sessions != nil && sessions.Anonymous != nil {
+		m["anonymous"] = flattenTenantSessionsAnonymous(sessions.Anonymous)
+	}
 	return []interface{}{m}
+}
+
+func flattenTenantSessionsAnonymous(anonymous *management.TenantSessionsAnonymous) []interface{} {
+	return []interface{}{
+		map[string]interface{}{
+			"lifetime_in_minutes": anonymous.GetLifetimeInMinutes(),
+			"activate_cookie":     anonymous.GetActivateCookie(),
+		},
+	}
 }
 
 func flattenTenantOidcLogout(oidcLogout *management.TenantOIDCLogout) []interface{} {

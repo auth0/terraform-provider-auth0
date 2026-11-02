@@ -180,6 +180,27 @@ func expandBotDetection(data *schema.ResourceData) *managementv3.UpdateBotDetect
 	return request
 }
 
+func expandPhoneProviderProtection(data *schema.ResourceData) *managementv3.PatchPhoneProviderProtectionRequestContent {
+	if !data.HasChange("phone_provider_protection") {
+		return nil
+	}
+
+	var request *managementv3.PatchPhoneProviderProtectionRequestContent
+
+	data.GetRawConfig().GetAttr("phone_provider_protection").ForEachElement(
+		func(_ cty.Value, cfg cty.Value) (stop bool) {
+			request = &managementv3.PatchPhoneProviderProtectionRequestContent{}
+			if typeStr := value.String(cfg.GetAttr("type")); typeStr != nil && *typeStr != "" {
+				t := managementv3.PhoneProviderProtectionBackoffStrategyEnum(*typeStr)
+				request.SetType(t)
+			}
+			return stop
+		},
+	)
+
+	return request
+}
+
 func expandCaptcha(data *schema.ResourceData) *managementv3.UpdateAttackProtectionCaptchaRequestContent {
 	if !data.HasChange("captcha") {
 		return nil

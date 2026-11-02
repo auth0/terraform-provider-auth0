@@ -24,11 +24,13 @@ func v3ForbiddenErrorCode(err error) string {
 	return code
 }
 
-// IsInsufficientEntitlement checks if the error is a v3 SDK ForbiddenError
-// with errorCode "insufficient_entitlement", indicating the tenant lacks
-// the required entitlement for the requested feature.
-func IsInsufficientEntitlement(err error) bool {
-	return v3ForbiddenErrorCode(err) == "insufficient_entitlement"
+// isInsufficientEntitlementV3 checks if the error is a v3 SDK ForbiddenError
+// with errorCode "insufficient_entitlement" (subscription/add-on gate) or
+// "not_entitled" (tenant feature-flag gate, e.g. mfa_advanced_factor_config).
+// Called by the unified IsInsufficientEntitlement in api_error.go after the v1 check fails.
+func isInsufficientEntitlementV3(err error) bool {
+	code := v3ForbiddenErrorCode(err)
+	return code == "insufficient_entitlement" || code == "not_entitled"
 }
 
 // IsInsufficientScope checks if the error is a v3 SDK ForbiddenError

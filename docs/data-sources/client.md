@@ -37,8 +37,9 @@ data "auth0_client" "some-client-by-id" {
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
+- `anonymous_sessions` (List of Object) Anonymous Sessions settings for the client. Removing this block clears the setting on the API. (EA only) (see [below for nested schema](#nestedatt--anonymous_sessions))
 - `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`, `express_configuration`
-- `async_approval_notification_channels` (List of String) List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated.
+- `async_approval_notification_channels` (List of String) List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. Valid values are `guardian-push`, `email`, and `my-account`.The order is significant as this is the order in which notification channels will be evaluated.
 - `b2b_integration_configuration` (List of Object) Configuration for B2B Integration (Enterprise Connect) clients. Contents can be updated in place, but adding or removing whole block forces client recreation. (EA only) (see [below for nested schema](#nestedatt--b2b_integration_configuration))
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
@@ -428,6 +429,14 @@ Read-Only:
 
 
 
+<a id="nestedatt--anonymous_sessions"></a>
+### Nested Schema for `anonymous_sessions`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
 <a id="nestedatt--b2b_integration_configuration"></a>
 ### Nested Schema for `b2b_integration_configuration`
 
@@ -615,6 +624,8 @@ Read-Only:
 - `allowed_strategies` (List of String)
 - `connection_deletion_behavior` (String)
 - `connection_profile_id` (String)
+- `enforce_permission_ceiling` (Boolean)
+- `enforce_self_assignment_restriction` (Boolean)
 - `invitation_landing_client_id` (String)
 - `third_party_client_access` (List of Object) (see [below for nested schema](#nestedobjatt--my_organization_configuration--third_party_client_access))
 - `user_attribute_profile_id` (String)

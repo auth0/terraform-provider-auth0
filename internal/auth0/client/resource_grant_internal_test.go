@@ -17,6 +17,7 @@ func TestNormalizeSubjectType(t *testing.T) {
 		{name: "empty defaults to client", in: "", want: "client"},
 		{name: "client stays client", in: "client", want: "client"},
 		{name: "user stays user", in: "user", want: "user"},
+		{name: "anonymous_user stays anonymous_user", in: "anonymous_user", want: "anonymous_user"},
 	}
 
 	for _, tc := range cases {

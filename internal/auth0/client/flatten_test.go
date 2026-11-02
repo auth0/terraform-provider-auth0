@@ -238,3 +238,31 @@ func TestFlattenClientIdentityAssertionAuthorizationGrant(t *testing.T) {
 		assert.Equal(t, false, flat["active"])
 	})
 }
+
+func TestFlattenClientAnonymousSessions(t *testing.T) {
+	t.Run("returns nil when the API does not return anonymous_sessions", func(t *testing.T) {
+		assert.Nil(t, flattenClientAnonymousSessions(nil))
+	})
+
+	t.Run("flattens active=true", func(t *testing.T) {
+		result := flattenClientAnonymousSessions(&management.ClientAnonymousSessions{
+			Active: auth0.Bool(true),
+		})
+
+		assert.Len(t, result, 1)
+		flat, ok := result[0].(map[string]interface{})
+		assert.True(t, ok, "expected result[0] to be a map[string]interface{}")
+		assert.Equal(t, true, flat["active"])
+	})
+
+	t.Run("flattens active=false", func(t *testing.T) {
+		result := flattenClientAnonymousSessions(&management.ClientAnonymousSessions{
+			Active: auth0.Bool(false),
+		})
+
+		assert.Len(t, result, 1)
+		flat, ok := result[0].(map[string]interface{})
+		assert.True(t, ok, "expected result[0] to be a map[string]interface{}")
+		assert.Equal(t, false, flat["active"])
+	})
+}

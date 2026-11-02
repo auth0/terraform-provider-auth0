@@ -1,5 +1,74 @@
 ## Unreleased
 
+## v1.60.0
+
+FEATURES:
+- `resource/auth0_client_profile` – Add resource to manage client profiles (EA only) ([#1756](https://github.com/auth0/terraform-provider-auth0/pull/1756))
+- `data-source/auth0_client_profile` – Add data source to look up a client profile (EA only) ([#1756](https://github.com/auth0/terraform-provider-auth0/pull/1756))
+- `resource/auth0_experiment_feature_flag` – Add resource to manage Experiment Center feature flags, including `variations` blocks with parameter overrides (EA only) ([#1733](https://github.com/auth0/terraform-provider-auth0/pull/1733)) ([#1751](https://github.com/auth0/terraform-provider-auth0/pull/1751))
+- `data-source/auth0_experiment_feature_flag` – Add data source to look up an Experiment Center feature flag (EA only) ([#1733](https://github.com/auth0/terraform-provider-auth0/pull/1733)) ([#1751](https://github.com/auth0/terraform-provider-auth0/pull/1751))
+- `resource/auth0_experiment_segment` – Add resource to manage Experiment Center segments (EA only) ([#1752](https://github.com/auth0/terraform-provider-auth0/pull/1752))
+- `data-source/auth0_experiment_segment` – Add data source to look up an Experiment Center segment (EA only) ([#1752](https://github.com/auth0/terraform-provider-auth0/pull/1752))
+- `resource/auth0_experiment` – Add resource to manage Experiment Center experiments with percentage or segment allocation strategies (EA only) ([#1757](https://github.com/auth0/terraform-provider-auth0/pull/1757))
+- `data-source/auth0_experiment` – Add data source to look up an Experiment Center experiment (EA only) ([#1757](https://github.com/auth0/terraform-provider-auth0/pull/1757))
+- `resource/auth0_user` – Add write-only `password_wo` and `password_wo_version` attributes so the password is never stored in Terraform state ([#1769](https://github.com/auth0/terraform-provider-auth0/pull/1769))
+
+ENHANCEMENTS:
+- `resource/auth0_client_cimd` – Add `organization_usage` and `organization_require_behavior` attributes ([#1768](https://github.com/auth0/terraform-provider-auth0/pull/1768))
+
+BUG FIXES:
+- `resource/auth0_client` – Set a default `token_endpoint_auth_method` when enabling `is_token_endpoint_ip_header_trusted` on an existing client with no stored method, preventing an HTTP 400 from the Auth0 API ([#1749](https://github.com/auth0/terraform-provider-auth0/pull/1749))
+- `resource/auth0_prompt_screen_partial` / `resource/auth0_prompt_screen_renderer` – Validate that the import ID is formatted as `<prompt_type>:<screen_name>` ([#1761](https://github.com/auth0/terraform-provider-auth0/pull/1761))
+
+## v1.59.0
+
+FEATURES:
+- `resource/auth0_attack_protection` – Add `phone_provider_protection` block with `type` attribute (`exponential` | `default`) to manage the SMS MFA enrollment backoff strategy (EA only) ([#1746](https://github.com/auth0/terraform-provider-auth0/pull/1746))
+- `data-source/auth0_attack_protection` – Expose `phone_provider_protection` block (EA only) ([#1746](https://github.com/auth0/terraform-provider-auth0/pull/1746))
+- `resource/auth0_resource_server` – Add `require_consent_non_repudiation` boolean attribute; when `true`, the authorization server rejects consent decisions not signed with the client's private key (EA only) ([#1738](https://github.com/auth0/terraform-provider-auth0/pull/1738))
+- `data-source/auth0_resource_server` – Expose `require_consent_non_repudiation` (EA only) ([#1738](https://github.com/auth0/terraform-provider-auth0/pull/1738))
+
+ENHANCEMENTS:
+- `resource/auth0_client` – Add `my-account` as an accepted value for `async_approval_notification_channels` ([#1738](https://github.com/auth0/terraform-provider-auth0/pull/1738))
+
+BUG FIXES:
+- `resource/auth0_action` – Preserve secrets when migrating from `secrets` to `secrets_wo` in a single `apply`; the previous branch expanded the now-empty `secrets` block and silently cleared all deployed Action secrets ([#1744](https://github.com/auth0/terraform-provider-auth0/pull/1744))
+
+## v1.58.1
+
+ENHANCEMENTS:
+- `resource/auth0_client` – Add plan-time validation enforcing that `refresh_token.idle_token_lifetime` is less than `refresh_token.token_lifetime` ([#1727](https://github.com/auth0/terraform-provider-auth0/pull/1727))
+
+BUG FIXES:
+- `resource/auth0_guardian` – Surface missing entitlement as a non-fatal warning for `phone_settings`, `email_settings`, and `settings` blocks, allowing `apply` to succeed on tenants without the required add-on (EA only) ([#1737](https://github.com/auth0/terraform-provider-auth0/pull/1737))
+- `resource/auth0_resource_server` – Remove client-side range validator from `token_lifetime_for_anonymous_access_tokens` that incorrectly rejected unset/zero values during config generation (EA only) ([#1739](https://github.com/auth0/terraform-provider-auth0/pull/1739))
+
+## v1.58.0
+
+FEATURES:
+- `resource/auth0_tenant` – Add `sessions.anonymous` block with `lifetime_in_minutes` and `activate_cookie` attributes for managing anonymous session lifetime and activation (EA only) ([#1712](https://github.com/auth0/terraform-provider-auth0/pull/1712))
+- `resource/auth0_client` – Add `anonymous_sessions` block with `active` attribute to opt a client into anonymous session support; removing the block clears the setting on the API (EA only) ([#1712](https://github.com/auth0/terraform-provider-auth0/pull/1712))
+- `resource/auth0_resource_server` – Add `subject_type_authorization.anonymous_user.policy` and `token_lifetime_for_anonymous_access_tokens` for anonymous user authorization settings (EA only) ([#1712](https://github.com/auth0/terraform-provider-auth0/pull/1712))
+- `resource/auth0_client_grant` – Add `anonymous_user` as an accepted value for `subject_type` (EA only) ([#1712](https://github.com/auth0/terraform-provider-auth0/pull/1712))
+- `resource/auth0_resource_server` – Add `access_token` block with `claims_mapping.custom_claims` (a list of `{ name, expression }` rules, max 20) for custom claims mapping into resource server access tokens (EA only) ([#1721](https://github.com/auth0/terraform-provider-auth0/pull/1721))
+- `data-source/auth0_resource_server` – Expose `access_token` block with `claims_mapping.custom_claims` (EA only) ([#1721](https://github.com/auth0/terraform-provider-auth0/pull/1721))
+- `resource/auth0_client` – Add `enforce_permission_ceiling` and `enforce_self_assignment_restriction` boolean attributes to `my_organization_configuration` for member management controls (EA only) ([#1720](https://github.com/auth0/terraform-provider-auth0/pull/1720))
+
+ENHANCEMENTS:
+- `resource/auth0_guardian` – Add `settings` block with `display_remember_me_checkbox`, `remember_me_default_value`, `mfa_session_inactivity_timeout`, and `mfa_session_overall_timeout` for advanced MFA session configuration ([#1684](https://github.com/auth0/terraform-provider-auth0/pull/1684))
+- `resource/auth0_guardian` – Add `phone_settings` and `email_settings` blocks with `otp_length` and `otp_expiration_time` for per-factor OTP configuration ([#1684](https://github.com/auth0/terraform-provider-auth0/pull/1684))
+- `resource/auth0_guardian` – Surface missing Adaptive MFA entitlement as a non-fatal warning instead of a hard error, allowing `apply` to succeed on tenants without the add-on ([#1716](https://github.com/auth0/terraform-provider-auth0/pull/1716))
+- `resource/auth0_risk_assessments` – Surface missing Adaptive MFA entitlement as a non-fatal warning ([#1716](https://github.com/auth0/terraform-provider-auth0/pull/1716))
+- `resource/auth0_risk_assessments_new_device` – Surface missing Adaptive MFA entitlement as a non-fatal warning ([#1716](https://github.com/auth0/terraform-provider-auth0/pull/1716))
+- `resource/auth0_prompt_screen_partials` – Add `confirmation` as an accepted `prompt_type` value ([#1710](https://github.com/auth0/terraform-provider-auth0/pull/1710))
+- `resource/auth0_prompt_custom_text` – Add `confirmation` as an accepted prompt value ([#1710](https://github.com/auth0/terraform-provider-auth0/pull/1710))
+- `resource/auth0_action` – Add `post-credential-validation` as an accepted `trigger` value (limited release; enabled per tenant by Auth0) ([#1714](https://github.com/auth0/terraform-provider-auth0/pull/1714))
+
+BUG FIXES:
+- `resource/auth0_action` – Add `status` as a `Computed` attribute; a `deploy = true` action stuck in `failed` state now surfaces a replacement plan instead of silently reporting no changes ([#1705](https://github.com/auth0/terraform-provider-auth0/pull/1705))
+- `resource/auth0_user_attribute_profile` – Preserve the configured order of `user_attributes` to eliminate perpetual plan drift when the attribute order differs from alphabetical ([#1711](https://github.com/auth0/terraform-provider-auth0/pull/1711))
+- `resource/auth0_log_stream` – Preserve `pii_config` when updating other fields (e.g. `filters`), preventing silent resets of PII obfuscation settings ([#1713](https://github.com/auth0/terraform-provider-auth0/pull/1713))
+
 ## v1.57.0
 
 FEATURES:

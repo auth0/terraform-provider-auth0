@@ -277,3 +277,129 @@ func TestAccUserCustomDomains(t *testing.T) {
 		},
 	})
 }
+
+const testAccUserPasswordWOWithLegacyPassword = `
+resource "auth0_user" "user" {
+	connection_name = "Username-Password-Authentication"
+	username        = "user_pwwo"
+	email           = "{{.testName}}@acceptance.test.com"
+	password        = "Kq7#vR2-mW9!xT4a"
+}
+`
+
+const testAccUserPasswordWOVersion1 = `
+resource "auth0_user" "user" {
+	connection_name     = "Username-Password-Authentication"
+	username            = "user_pwwo"
+	email               = "{{.testName}}@acceptance.test.com"
+	password_wo         = "Hz3!pL8-dN6#cY1e"
+	password_wo_version = 1
+}
+`
+
+const testAccUserPasswordWOUnrelatedChange = `
+resource "auth0_user" "user" {
+	connection_name     = "Username-Password-Authentication"
+	username            = "user_pwwo"
+	email               = "{{.testName}}@acceptance.test.com"
+	nickname            = "pwwo_nickname"
+	password_wo         = "Hz3!pL8-dN6#cY1e"
+	password_wo_version = 1
+}
+`
+
+const testAccUserPasswordWOVersion2 = `
+resource "auth0_user" "user" {
+	connection_name     = "Username-Password-Authentication"
+	username            = "user_pwwo"
+	email               = "{{.testName}}@acceptance.test.com"
+	nickname            = "pwwo_nickname"
+	password_wo         = "Bw5@tG4-jS2%fU7k"
+	password_wo_version = 2
+}
+`
+
+const testAccUserPasswordWOVersionAndUsername = `
+resource "auth0_user" "user" {
+	connection_name     = "Username-Password-Authentication"
+	username            = "user_x_pwwo"
+	email               = "{{.testName}}@acceptance.test.com"
+	nickname            = "pwwo_nickname"
+	password_wo         = "Ym8^qE3-vC5&rH9n"
+	password_wo_version = 3
+}
+`
+
+func TestAccUserPasswordWO(t *testing.T) {
+	testName := strings.ToLower(t.Name())
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccUserPasswordWOWithLegacyPassword, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.user", "password", "Kq7#vR2-mW9!xT4a"),
+					resource.TestCheckNoResourceAttr("auth0_user.user", "password_wo_version"),
+				),
+			},
+			{
+				// Migrating password -> password_wo in a single apply must send the new password,
+				// not the now-empty legacy one.
+				Config: acctest.ParseTestName(testAccUserPasswordWOVersion1, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.user", "password", ""),
+					resource.TestCheckNoResourceAttr("auth0_user.user", "password_wo"),
+					resource.TestCheckResourceAttr("auth0_user.user", "password_wo_version", "1"),
+				),
+			},
+			{
+				// An unrelated change must not resend the password.
+				Config: acctest.ParseTestName(testAccUserPasswordWOUnrelatedChange, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.user", "nickname", "pwwo_nickname"),
+					resource.TestCheckNoResourceAttr("auth0_user.user", "password_wo"),
+					resource.TestCheckResourceAttr("auth0_user.user", "password_wo_version", "1"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUserPasswordWOVersion2, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckNoResourceAttr("auth0_user.user", "password_wo"),
+					resource.TestCheckResourceAttr("auth0_user.user", "password_wo_version", "2"),
+				),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccUserPasswordWOVersionAndUsername, testName),
+				ExpectError: regexp.MustCompile("cannot update username and password simultaneously"),
+			},
+		},
+	})
+}
+
+func TestAccUserPasswordWOValidation(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		ProviderFactories: acctest.TestFactories(),
+		Steps: []resource.TestStep{
+			{
+				Config: `
+resource "auth0_user" "user" {
+	connection_name     = "Username-Password-Authentication"
+	password            = "Kq7#vR2-mW9!xT4a"
+	password_wo         = "Kq7#vR2-mW9!xT4a"
+	password_wo_version = 1
+}
+`,
+				ExpectError: regexp.MustCompile(`"password_wo": conflicts with password`),
+			},
+			{
+				Config: `
+resource "auth0_user" "user" {
+	connection_name = "Username-Password-Authentication"
+	password_wo     = "Kq7#vR2-mW9!xT4a"
+}
+`,
+				ExpectError: regexp.MustCompile(`"password_wo": all of .password_wo,password_wo_version. must be specified`),
+			},
+		},
+	})
+}

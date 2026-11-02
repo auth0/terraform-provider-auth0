@@ -1,0 +1,528 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 376
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"tf-segment-TestAccExperimentSegment","description":"Segment from acceptance test","rules":[{"match":{"client_id":{"exists":false},"domain":{"starts_with":["www"]},"device_type":{"contains":["mobile"]},"country":["US","CA","US"],"anonymous_session_metadata.plan":["gold"]},"not_match":{"region":{"ends_with":["-west"]}}},{"match":{"organization_id":{"exists":true}}}]}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 522
+        uncompressed: false
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-TestAccExperimentSegment","description":"Segment from acceptance test","type":"self","status":"active","rules":[{"match":{"domain":{"starts_with":["www"]},"country":["US","CA","US"],"client_id":{"exists":false},"device_type":{"contains":["mobile"]},"anonymous_session_metadata.plan":["gold"]},"not_match":{"region":{"ends_with":["-west"]}}},{"match":{"organization_id":{"exists":true}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:32.947Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 398.893958ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-TestAccExperimentSegment","description":"Segment from acceptance test","type":"self","status":"active","rules":[{"match":{"domain":{"starts_with":["www"]},"country":["US","CA","US"],"client_id":{"exists":false},"device_type":{"contains":["mobile"]},"anonymous_session_metadata.plan":["gold"]},"not_match":{"region":{"ends_with":["-west"]}}},{"match":{"organization_id":{"exists":true}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:32.947Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 419.797ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-TestAccExperimentSegment","description":"Segment from acceptance test","type":"self","status":"active","rules":[{"match":{"domain":{"starts_with":["www"]},"country":["US","CA","US"],"client_id":{"exists":false},"device_type":{"contains":["mobile"]},"anonymous_session_metadata.plan":["gold"]},"not_match":{"region":{"ends_with":["-west"]}}},{"match":{"organization_id":{"exists":true}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:32.947Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 484.12625ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-TestAccExperimentSegment","description":"Segment from acceptance test","type":"self","status":"active","rules":[{"match":{"domain":{"starts_with":["www"]},"country":["US","CA","US"],"client_id":{"exists":false},"device_type":{"contains":["mobile"]},"anonymous_session_metadata.plan":["gold"]},"not_match":{"region":{"ends_with":["-west"]}}},{"match":{"organization_id":{"exists":true}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:32.947Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 423.498125ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-TestAccExperimentSegment","description":"Segment from acceptance test","type":"self","status":"active","rules":[{"match":{"domain":{"starts_with":["www"]},"country":["US","CA","US"],"client_id":{"exists":false},"device_type":{"contains":["mobile"]},"anonymous_session_metadata.plan":["gold"]},"not_match":{"region":{"ends_with":["-west"]}}},{"match":{"organization_id":{"exists":true}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:32.947Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 483.9235ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-TestAccExperimentSegment","description":"Segment from acceptance test","type":"self","status":"active","rules":[{"match":{"domain":{"starts_with":["www"]},"country":["US","CA","US"],"client_id":{"exists":false},"device_type":{"contains":["mobile"]},"anonymous_session_metadata.plan":["gold"]},"not_match":{"region":{"ends_with":["-west"]}}},{"match":{"organization_id":{"exists":true}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:32.947Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.451869958s
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 274
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"tf-segment-updated-TestAccExperimentSegment","description":null,"rules":[{"match":{"country":["US","CA"],"anonymous_session_metadata.internal":{"exists":false},"anonymous_session_metadata.plan":{"contains":["gold"]}},"not_match":{"browser":{"ends_with":["bot"]}}}]}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-updated-TestAccExperimentSegment","type":"self","status":"active","rules":[{"match":{"country":["US","CA"],"anonymous_session_metadata.plan":{"contains":["gold"]},"anonymous_session_metadata.internal":{"exists":false}},"not_match":{"browser":{"ends_with":["bot"]}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:41.252Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 548.490792ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-updated-TestAccExperimentSegment","type":"self","status":"active","rules":[{"match":{"country":["US","CA"],"anonymous_session_metadata.plan":{"contains":["gold"]},"anonymous_session_metadata.internal":{"exists":false}},"not_match":{"browser":{"ends_with":["bot"]}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:41.252Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 422.913708ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-updated-TestAccExperimentSegment","type":"self","status":"active","rules":[{"match":{"country":["US","CA"],"anonymous_session_metadata.plan":{"contains":["gold"]},"anonymous_session_metadata.internal":{"exists":false}},"not_match":{"browser":{"ends_with":["bot"]}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:41.252Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 470.54725ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-updated-TestAccExperimentSegment","type":"self","status":"active","rules":[{"match":{"country":["US","CA"],"anonymous_session_metadata.plan":{"contains":["gold"]},"anonymous_session_metadata.internal":{"exists":false}},"not_match":{"browser":{"ends_with":["bot"]}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:41.252Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 354.95675ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-updated-TestAccExperimentSegment","type":"self","status":"active","rules":[{"match":{"country":["US","CA"],"anonymous_session_metadata.plan":{"contains":["gold"]},"anonymous_session_metadata.internal":{"exists":false}},"not_match":{"browser":{"ends_with":["bot"]}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:41.252Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 355.18375ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 21
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"status":"archived"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-updated-TestAccExperimentSegment","type":"self","status":"archived","rules":[{"match":{"country":["US","CA"],"anonymous_session_metadata.plan":{"contains":["gold"]},"anonymous_session_metadata.internal":{"exists":false}},"not_match":{"browser":{"ends_with":["bot"]}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:46.870Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 382.842333ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-updated-TestAccExperimentSegment","type":"self","status":"archived","rules":[{"match":{"country":["US","CA"],"anonymous_session_metadata.plan":{"contains":["gold"]},"anonymous_session_metadata.internal":{"exists":false}},"not_match":{"browser":{"ends_with":["bot"]}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:46.870Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 357.50325ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"seg_cxRAxQzYCMviYUt8sxmjxa","name":"tf-segment-updated-TestAccExperimentSegment","type":"self","status":"archived","rules":[{"match":{"country":["US","CA"],"anonymous_session_metadata.plan":{"contains":["gold"]},"anonymous_session_metadata.internal":{"exists":false}},"not_match":{"browser":{"ends_with":["bot"]}}}],"created_at":"2026-10-13T11:56:32.947Z","updated_at":"2026-10-13T11:56:46.870Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 340.540084ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/experimentation/segments/seg_cxRAxQzYCMviYUt8sxmjxa
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 476.074625ms

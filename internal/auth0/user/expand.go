@@ -22,7 +22,11 @@ func expandUser(data *schema.ResourceData) (*management.User, error) {
 	if data.HasChange("username") {
 		user.Username = value.String(cfg.GetAttr("username"))
 	}
-	if data.HasChange("password") {
+	if passwordWO := cfg.GetAttr("password_wo"); !passwordWO.IsNull() {
+		if data.IsNewResource() || data.HasChange("password_wo_version") {
+			user.Password = value.String(passwordWO)
+		}
+	} else if data.HasChange("password") {
 		user.Password = value.String(cfg.GetAttr("password"))
 	}
 	if data.HasChange("phone_number") {

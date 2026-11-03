@@ -4249,6 +4249,416 @@ resource "auth0_connection" "oidc_wo_val" {
 }
 `
 
+// The API removes assertion_decryption_settings when a PATCH sends options without it.
+// These steps check that the value is kept when the block is not in the configuration.
+func TestAccConnectionSAMLAssertionDecryptionSettings(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLAssertionDecryptionSettingsOmitted("create"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "display_name", "Acceptance-Test-SAML-ADS-create"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_profile", "v2026-1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLAssertionDecryptionSettingsOmitted("update"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "display_name", "Acceptance-Test-SAML-ADS-update"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_profile", "v2026-1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLAssertionDecryptionSettingsWithExceptions, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_profile", "v2026-1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.0", "http://www.w3.org/2001/04/xmlenc#tripledes-cbc"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.1", "http://www.w3.org/2001/04/xmlenc#aes128-cbc"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLAssertionDecryptionSettingsOmitted("removed"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "display_name", "Acceptance-Test-SAML-ADS-removed"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.0", "http://www.w3.org/2001/04/xmlenc#tripledes-cbc"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.1", "http://www.w3.org/2001/04/xmlenc#aes128-cbc"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLAssertionDecryptionSettingsProfileOnly, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_profile", "v2026-1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccConnectionPingFederateAssertionDecryptionSettings(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionPingFederateAssertionDecryptionSettingsOmitted("create"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_profile", "v2026-1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionPingFederateAssertionDecryptionSettingsWithExceptions, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_exceptions.0", "http://www.w3.org/2001/04/xmlenc#tripledes-cbc"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionPingFederateAssertionDecryptionSettingsOmitted("removed"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "display_name", "Acceptance-Test-PingFederate-ADS-removed"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_exceptions.0", "http://www.w3.org/2001/04/xmlenc#tripledes-cbc"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionAssertionDecryptionSettingsSigningCert = `
+		signing_cert = <<EOF
+-----BEGIN CERTIFICATE-----
+MIID6TCCA1ICAQEwDQYJKoZIhvcNAQEFBQAwgYsxCzAJBgNVBAYTAlVTMRMwEQYD
+VQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2NvMRQwEgYDVQQK
+EwtHb29nbGUgSW5jLjEMMAoGA1UECxMDRW5nMQwwCgYDVQQDEwNhZ2wxHTAbBgkq
+hkiG9w0BCQEWDmFnbEBnb29nbGUuY29tMB4XDTA5MDkwOTIyMDU0M1oXDTEwMDkw
+OTIyMDU0M1owajELMAkGA1UEBhMCQVUxEzARBgNVBAgTClNvbWUtU3RhdGUxITAf
+BgNVBAoTGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDEjMCEGA1UEAxMaZXVyb3Bh
+LnNmby5jb3JwLmdvb2dsZS5jb20wggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+AoICAQC6pgYt7/EibBDumASF+S0qvqdL/f+nouJw2T1Qc8GmXF/iiUcrsgzh/Fd8
+pDhz/T96Qg9IyR4ztuc2MXrmPra+zAuSf5bevFReSqvpIt8Duv0HbDbcqs/XKPfB
+uMDe+of7a9GCywvAZ4ZUJcp0thqD9fKTTjUWOBzHY1uNE4RitrhmJCrbBGXbJ249
+bvgmb7jgdInH2PU7PT55hujvOoIsQW2osXBFRur4pF1wmVh4W4lTLD6pjfIMUcML
+ICHEXEN73PDic8KS3EtNYCwoIld+tpIBjE1QOb1KOyuJBNW6Esw9ALZn7stWdYcE
+qAwvv20egN2tEXqj7Q4/1ccyPZc3PQgC3FJ8Be2mtllM+80qf4dAaQ/fWvCtOrQ5
+pnfe9juQvCo8Y0VGlFcrSys/MzSg9LJ/24jZVgzQved/Qupsp89wVidwIzjt+WdS
+fyWfH0/v1aQLvu5cMYuW//C0W2nlYziL5blETntM8My2ybNARy3ICHxCBv2RNtPI
+WQVm+E9/W5rwh2IJR4DHn2LHwUVmT/hHNTdBLl5Uhwr4Wc7JhE7AVqb14pVNz1lr
+5jxsp//ncIwftb7mZQ3DF03Yna+jJhpzx8CQoeLT6aQCHyzmH68MrHHT4MALPyUs
+Pomjn71GNTtDeWAXibjCgdL6iHACCF6Htbl0zGlG0OAK+bdn0QIDAQABMA0GCSqG
+SIb3DQEBBQUAA4GBAOKnQDtqBV24vVqvesL5dnmyFpFPXBn3WdFfwD6DzEb21UVG
+5krmJiu+ViipORJPGMkgoL6BjU21XI95VQbun5P8vvg8Z+FnFsvRFY3e1CCzAVQY
+ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
+-----END CERTIFICATE-----
+EOF
+`
+
+func testAccConnectionSAMLAssertionDecryptionSettingsOmitted(displayNameSuffix string) string {
+	return `
+resource "auth0_connection" "saml" {
+	name         = "Acceptance-Test-SAML-ADS-{{.testName}}"
+	display_name = "Acceptance-Test-SAML-ADS-` + displayNameSuffix + `"
+	strategy     = "samlp"
+	options {
+` + testAccConnectionAssertionDecryptionSettingsSigningCert + `
+		sign_in_endpoint = "https://saml.provider/sign_in"
+	}
+}
+`
+}
+
+const testAccConnectionSAMLAssertionDecryptionSettingsWithExceptions = `
+resource "auth0_connection" "saml" {
+	name         = "Acceptance-Test-SAML-ADS-{{.testName}}"
+	display_name = "Acceptance-Test-SAML-ADS-update"
+	strategy     = "samlp"
+	options {
+` + testAccConnectionAssertionDecryptionSettingsSigningCert + `
+		sign_in_endpoint = "https://saml.provider/sign_in"
+		assertion_decryption_settings {
+			algorithm_profile    = "v2026-1"
+			algorithm_exceptions = [
+				"http://www.w3.org/2001/04/xmlenc#tripledes-cbc",
+				"http://www.w3.org/2001/04/xmlenc#aes128-cbc",
+			]
+		}
+	}
+}
+`
+
+const testAccConnectionSAMLAssertionDecryptionSettingsProfileOnly = `
+resource "auth0_connection" "saml" {
+	name         = "Acceptance-Test-SAML-ADS-{{.testName}}"
+	display_name = "Acceptance-Test-SAML-ADS-removed"
+	strategy     = "samlp"
+	options {
+` + testAccConnectionAssertionDecryptionSettingsSigningCert + `
+		sign_in_endpoint = "https://saml.provider/sign_in"
+		assertion_decryption_settings {
+			algorithm_profile = "v2026-1"
+		}
+	}
+}
+`
+
+func testAccConnectionPingFederateAssertionDecryptionSettingsOmitted(displayNameSuffix string) string {
+	return `
+resource "auth0_connection" "pingfederate" {
+	name         = "Acceptance-Test-PingFederate-ADS-{{.testName}}"
+	display_name = "Acceptance-Test-PingFederate-ADS-` + displayNameSuffix + `"
+	strategy     = "pingfederate"
+	options {
+` + testAccConnectionAssertionDecryptionSettingsSigningCert + `
+		ping_federate_base_url = "https://pingfederate.example.com"
+		idp_initiated {
+			enabled                = true
+			client_id              = "client_id"
+			client_protocol        = "samlp"
+			client_authorize_query = "type=code&timeout=30"
+		}
+	}
+}
+`
+}
+
+const testAccConnectionPingFederateAssertionDecryptionSettingsWithExceptions = `
+resource "auth0_connection" "pingfederate" {
+	name         = "Acceptance-Test-PingFederate-ADS-{{.testName}}"
+	display_name = "Acceptance-Test-PingFederate-ADS-create"
+	strategy     = "pingfederate"
+	options {
+` + testAccConnectionAssertionDecryptionSettingsSigningCert + `
+		ping_federate_base_url = "https://pingfederate.example.com"
+		idp_initiated {
+			enabled                = true
+			client_id              = "client_id"
+			client_protocol        = "samlp"
+			client_authorize_query = "type=code&timeout=30"
+		}
+		assertion_decryption_settings {
+			algorithm_profile    = "v2026-1"
+			algorithm_exceptions = ["http://www.w3.org/2001/04/xmlenc#tripledes-cbc"]
+		}
+	}
+}
+`
+
+// The API removes assertion_decryption_settings when a PATCH sends options without it.
+// These steps check that the value is kept when the block is not in the configuration.
+func TestAccConnectionSAMLAssertionDecryptionSettings(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLAssertionDecryptionSettingsOmitted("create"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "display_name", "Acceptance-Test-SAML-ADS-create"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_profile", "v2026-1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLAssertionDecryptionSettingsOmitted("update"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "display_name", "Acceptance-Test-SAML-ADS-update"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_profile", "v2026-1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLAssertionDecryptionSettingsWithExceptions, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_profile", "v2026-1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.0", "http://www.w3.org/2001/04/xmlenc#tripledes-cbc"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.1", "http://www.w3.org/2001/04/xmlenc#aes128-cbc"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLAssertionDecryptionSettingsOmitted("removed"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "display_name", "Acceptance-Test-SAML-ADS-removed"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.0", "http://www.w3.org/2001/04/xmlenc#tripledes-cbc"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.1", "http://www.w3.org/2001/04/xmlenc#aes128-cbc"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionSAMLAssertionDecryptionSettingsProfileOnly, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_profile", "v2026-1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccConnectionPingFederateAssertionDecryptionSettings(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccConnectionPingFederateAssertionDecryptionSettingsOmitted("create"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_profile", "v2026-1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionPingFederateAssertionDecryptionSettingsWithExceptions, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_exceptions.0", "http://www.w3.org/2001/04/xmlenc#tripledes-cbc"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionPingFederateAssertionDecryptionSettingsOmitted("removed"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "display_name", "Acceptance-Test-PingFederate-ADS-removed"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_exceptions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.pingfederate", "options.0.assertion_decryption_settings.0.algorithm_exceptions.0", "http://www.w3.org/2001/04/xmlenc#tripledes-cbc"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionAssertionDecryptionSettingsSigningCert = `
+		signing_cert = <<EOF
+-----BEGIN CERTIFICATE-----
+MIID6TCCA1ICAQEwDQYJKoZIhvcNAQEFBQAwgYsxCzAJBgNVBAYTAlVTMRMwEQYD
+VQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2NvMRQwEgYDVQQK
+EwtHb29nbGUgSW5jLjEMMAoGA1UECxMDRW5nMQwwCgYDVQQDEwNhZ2wxHTAbBgkq
+hkiG9w0BCQEWDmFnbEBnb29nbGUuY29tMB4XDTA5MDkwOTIyMDU0M1oXDTEwMDkw
+OTIyMDU0M1owajELMAkGA1UEBhMCQVUxEzARBgNVBAgTClNvbWUtU3RhdGUxITAf
+BgNVBAoTGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDEjMCEGA1UEAxMaZXVyb3Bh
+LnNmby5jb3JwLmdvb2dsZS5jb20wggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+AoICAQC6pgYt7/EibBDumASF+S0qvqdL/f+nouJw2T1Qc8GmXF/iiUcrsgzh/Fd8
+pDhz/T96Qg9IyR4ztuc2MXrmPra+zAuSf5bevFReSqvpIt8Duv0HbDbcqs/XKPfB
+uMDe+of7a9GCywvAZ4ZUJcp0thqD9fKTTjUWOBzHY1uNE4RitrhmJCrbBGXbJ249
+bvgmb7jgdInH2PU7PT55hujvOoIsQW2osXBFRur4pF1wmVh4W4lTLD6pjfIMUcML
+ICHEXEN73PDic8KS3EtNYCwoIld+tpIBjE1QOb1KOyuJBNW6Esw9ALZn7stWdYcE
+qAwvv20egN2tEXqj7Q4/1ccyPZc3PQgC3FJ8Be2mtllM+80qf4dAaQ/fWvCtOrQ5
+pnfe9juQvCo8Y0VGlFcrSys/MzSg9LJ/24jZVgzQved/Qupsp89wVidwIzjt+WdS
+fyWfH0/v1aQLvu5cMYuW//C0W2nlYziL5blETntM8My2ybNARy3ICHxCBv2RNtPI
+WQVm+E9/W5rwh2IJR4DHn2LHwUVmT/hHNTdBLl5Uhwr4Wc7JhE7AVqb14pVNz1lr
+5jxsp//ncIwftb7mZQ3DF03Yna+jJhpzx8CQoeLT6aQCHyzmH68MrHHT4MALPyUs
+Pomjn71GNTtDeWAXibjCgdL6iHACCF6Htbl0zGlG0OAK+bdn0QIDAQABMA0GCSqG
+SIb3DQEBBQUAA4GBAOKnQDtqBV24vVqvesL5dnmyFpFPXBn3WdFfwD6DzEb21UVG
+5krmJiu+ViipORJPGMkgoL6BjU21XI95VQbun5P8vvg8Z+FnFsvRFY3e1CCzAVQY
+ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
+-----END CERTIFICATE-----
+EOF
+`
+
+func testAccConnectionSAMLAssertionDecryptionSettingsOmitted(displayNameSuffix string) string {
+	return `
+resource "auth0_connection" "saml" {
+	name         = "Acceptance-Test-SAML-ADS-{{.testName}}"
+	display_name = "Acceptance-Test-SAML-ADS-` + displayNameSuffix + `"
+	strategy     = "samlp"
+	options {
+` + testAccConnectionAssertionDecryptionSettingsSigningCert + `
+		sign_in_endpoint = "https://saml.provider/sign_in"
+	}
+}
+`
+}
+
+const testAccConnectionSAMLAssertionDecryptionSettingsWithExceptions = `
+resource "auth0_connection" "saml" {
+	name         = "Acceptance-Test-SAML-ADS-{{.testName}}"
+	display_name = "Acceptance-Test-SAML-ADS-update"
+	strategy     = "samlp"
+	options {
+` + testAccConnectionAssertionDecryptionSettingsSigningCert + `
+		sign_in_endpoint = "https://saml.provider/sign_in"
+		assertion_decryption_settings {
+			algorithm_profile    = "v2026-1"
+			algorithm_exceptions = [
+				"http://www.w3.org/2001/04/xmlenc#tripledes-cbc",
+				"http://www.w3.org/2001/04/xmlenc#aes128-cbc",
+			]
+		}
+	}
+}
+`
+
+const testAccConnectionSAMLAssertionDecryptionSettingsProfileOnly = `
+resource "auth0_connection" "saml" {
+	name         = "Acceptance-Test-SAML-ADS-{{.testName}}"
+	display_name = "Acceptance-Test-SAML-ADS-removed"
+	strategy     = "samlp"
+	options {
+` + testAccConnectionAssertionDecryptionSettingsSigningCert + `
+		sign_in_endpoint = "https://saml.provider/sign_in"
+		assertion_decryption_settings {
+			algorithm_profile = "v2026-1"
+		}
+	}
+}
+`
+
+func testAccConnectionPingFederateAssertionDecryptionSettingsOmitted(displayNameSuffix string) string {
+	return `
+resource "auth0_connection" "pingfederate" {
+	name         = "Acceptance-Test-PingFederate-ADS-{{.testName}}"
+	display_name = "Acceptance-Test-PingFederate-ADS-` + displayNameSuffix + `"
+	strategy     = "pingfederate"
+	options {
+` + testAccConnectionAssertionDecryptionSettingsSigningCert + `
+		ping_federate_base_url = "https://pingfederate.example.com"
+		idp_initiated {
+			enabled                = true
+			client_id              = "client_id"
+			client_protocol        = "samlp"
+			client_authorize_query = "type=code&timeout=30"
+		}
+	}
+}
+`
+}
+
+const testAccConnectionPingFederateAssertionDecryptionSettingsWithExceptions = `
+resource "auth0_connection" "pingfederate" {
+	name         = "Acceptance-Test-PingFederate-ADS-{{.testName}}"
+	display_name = "Acceptance-Test-PingFederate-ADS-create"
+	strategy     = "pingfederate"
+	options {
+` + testAccConnectionAssertionDecryptionSettingsSigningCert + `
+		ping_federate_base_url = "https://pingfederate.example.com"
+		idp_initiated {
+			enabled                = true
+			client_id              = "client_id"
+			client_protocol        = "samlp"
+			client_authorize_query = "type=code&timeout=30"
+		}
+		assertion_decryption_settings {
+			algorithm_profile    = "v2026-1"
+			algorithm_exceptions = ["http://www.w3.org/2001/04/xmlenc#tripledes-cbc"]
+		}
+	}
+}
+`
+
 const testAccConnectionOTPSettingsBothChannels = `
 resource "auth0_connection" "my_connection" {
 	name     = "Acceptance-Test-Connection-{{.testName}}"

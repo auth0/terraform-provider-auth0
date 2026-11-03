@@ -91,6 +91,7 @@ Read-Only:
 - `api_enable_groups` (Boolean)
 - `api_enable_users` (Boolean)
 - `app_id` (String)
+- `assertion_decryption_settings` (List of Object) (see [below for nested schema](#nestedobjatt--options--assertion_decryption_settings))
 - `attribute_map` (List of Object) (see [below for nested schema](#nestedobjatt--options--attribute_map))
 - `attributes` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes))
 - `auth_params` (Map of String)
@@ -207,6 +208,15 @@ Read-Only:
 - `validation` (List of Object) (see [below for nested schema](#nestedobjatt--options--validation))
 - `waad_common_endpoint` (Boolean)
 - `waad_protocol` (String)
+
+<a id="nestedobjatt--options--assertion_decryption_settings"></a>
+### Nested Schema for `options.assertion_decryption_settings`
+
+Read-Only:
+
+- `algorithm_exceptions` (List of String)
+- `algorithm_profile` (String)
+
 
 <a id="nestedobjatt--options--attribute_map"></a>
 ### Nested Schema for `options.attribute_map`

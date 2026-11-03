@@ -54,6 +54,45 @@ func TestFlattenConnectionOptionsEmail(t *testing.T) {
 	}
 }
 
+func TestFlattenOTPSettings(t *testing.T) {
+	t.Run("returns nil when otp_settings is nil", func(t *testing.T) {
+		assert.Nil(t, flattenOTPSettings(nil))
+	})
+
+	t.Run("sets only the channels the API returned", func(t *testing.T) {
+		result := flattenOTPSettings(&management.ConnectionOptionsOTPSettings{
+			Email: &management.ConnectionOptionsOTPChannelSettings{
+				OTPLength: auth0.Int(8),
+				OTPExpiry: auth0.Int(600),
+			},
+		})
+
+		otpSettings, ok := result.(map[string]interface{})
+		assert.True(t, ok)
+		assert.Contains(t, otpSettings, "email")
+		assert.NotContains(t, otpSettings, "phone")
+
+		email := otpSettings["email"].([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, 8, email["otp_length"])
+		assert.Equal(t, 600, email["otp_expiry"])
+	})
+
+	t.Run("flattens both channels when present", func(t *testing.T) {
+		result := flattenOTPSettings(&management.ConnectionOptionsOTPSettings{
+			Email: &management.ConnectionOptionsOTPChannelSettings{OTPLength: auth0.Int(8), OTPExpiry: auth0.Int(600)},
+			Phone: &management.ConnectionOptionsOTPChannelSettings{OTPLength: auth0.Int(6), OTPExpiry: auth0.Int(900)},
+		})
+
+		otpSettings := result.(map[string]interface{})
+		assert.Contains(t, otpSettings, "email")
+		assert.Contains(t, otpSettings, "phone")
+
+		phone := otpSettings["phone"].([]interface{})[0].(map[string]interface{})
+		assert.Equal(t, 6, phone["otp_length"])
+		assert.Equal(t, 900, phone["otp_expiry"])
+	})
+}
+
 func TestFlattenAuthenticationMethodPassword(t *testing.T) {
 	t.Run("nil input returns nil", func(t *testing.T) {
 		result := flattenAuthenticationMethodPassword(nil)

@@ -151,6 +151,7 @@ Read-Only:
 - `name` (String)
 - `non_persistent_attrs` (Set of String)
 - `oidc_metadata` (String)
+- `otp_settings` (List of Object) (see [below for nested schema](#nestedobjatt--options--otp_settings))
 - `passkey_options` (List of Object) (see [below for nested schema](#nestedobjatt--options--passkey_options))
 - `password_complexity_options` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_complexity_options))
 - `password_dictionary` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_dictionary))
@@ -465,6 +466,33 @@ Read-Only:
 
 - `active` (Boolean)
 - `return_enroll_settings` (Boolean)
+
+
+<a id="nestedobjatt--options--otp_settings"></a>
+### Nested Schema for `options.otp_settings`
+
+Read-Only:
+
+- `email` (List of Object) (see [below for nested schema](#nestedobjatt--options--otp_settings--email))
+- `phone` (List of Object) (see [below for nested schema](#nestedobjatt--options--otp_settings--phone))
+
+<a id="nestedobjatt--options--otp_settings--email"></a>
+### Nested Schema for `options.otp_settings.email`
+
+Read-Only:
+
+- `otp_expiry` (Number)
+- `otp_length` (Number)
+
+
+<a id="nestedobjatt--options--otp_settings--phone"></a>
+### Nested Schema for `options.otp_settings.phone`
+
+Read-Only:
+
+- `otp_expiry` (Number)
+- `otp_length` (Number)
+
 
 
 <a id="nestedobjatt--options--passkey_options"></a>

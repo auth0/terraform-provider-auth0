@@ -62,6 +62,17 @@ resource "auth0_email_provider" "ms365_email_provider" {
   }
 }
 
+# This is an example on how to set up the email provider with Resend.
+resource "auth0_email_provider" "resend_email_provider" {
+  name                 = "resend"
+  enabled              = true
+  default_from_address = "accounts@example.com"
+
+  credentials {
+    api_key = "secretAPIKey"
+  }
+}
+
 # Below is an example of how to set up a custom email provider.
 # The action with custom-email-provider as supported_triggers is a prerequisite.
 resource "auth0_action" "custom_email_provider_action" {

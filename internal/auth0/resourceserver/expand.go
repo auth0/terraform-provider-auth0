@@ -204,9 +204,6 @@ func isTypeNull(data *schema.ResourceData) bool {
 	if data.IsNewResource() || !data.HasChange("type") {
 		return false
 	}
-	if resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
-		return false
-	}
 	return data.GetRawConfig().GetAttr("type").IsNull()
 }
 

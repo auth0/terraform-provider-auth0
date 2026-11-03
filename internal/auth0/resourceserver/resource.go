@@ -490,9 +490,22 @@ func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 	var warnings diag.Diagnostics
 
 	nullFields := fetchNullableFields(data)
+
+	// Clearing the type is sent on its own so a rejection of it cannot mask the
+	// outcome of the other nullable fields.
+	_, clearingType := nullFields["type"]
+	delete(nullFields, "type")
+
 	if len(nullFields) != 0 {
 		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), nullFields); err != nil {
-			if _, clearingType := nullFields["type"]; !clearingType || !IsUCPScopesReservedError(err) {
+			return diag.FromErr(err)
+		}
+	}
+
+	if clearingType {
+		typeField := map[string]interface{}{"type": nil}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), typeField); err != nil {
+			if !IsUCPScopesReservedError(err) {
 				return diag.FromErr(err)
 			}
 

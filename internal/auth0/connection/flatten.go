@@ -1357,6 +1357,7 @@ func flattenConnectionOptionsSAML(
 		"global_token_revocation_jwt_sub": options.GetGlobalTokenRevocationJWTSub(),
 		"destination_url":                 options.GetDestinationURL(),
 		"recipient_url":                   options.GetRecipientURL(),
+		"assertion_decryption_settings":   flattenConnectionOptionsSAMLAssertionDecryptionSettings(options.GetAssertionDecryptionSettings()),
 	}
 
 	if options.GetSetUserAttributes() == "" {
@@ -1430,6 +1431,7 @@ func flattenConnectionOptionsPingFederate(
 				"client_authorize_query": options.GetIdpInitiated().GetClientAuthorizeQuery(),
 			},
 		},
+		"assertion_decryption_settings": flattenConnectionOptionsSAMLAssertionDecryptionSettings(options.GetAssertionDecryptionSettings()),
 	}
 
 	if options.GetSigningCert() == "" {
@@ -1441,6 +1443,21 @@ func flattenConnectionOptionsPingFederate(
 	}
 
 	return optionsMap, nil
+}
+
+func flattenConnectionOptionsSAMLAssertionDecryptionSettings(
+	settings *management.ConnectionOptionsSAMLAssertionDecryptionSettings,
+) []interface{} {
+	if settings == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"algorithm_profile":    settings.GetAlgorithmProfile(),
+			"algorithm_exceptions": settings.GetAlgorithmExceptions(),
+		},
+	}
 }
 
 func flattenConnectionOptionsOAuth1(

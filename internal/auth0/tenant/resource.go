@@ -578,9 +578,10 @@ func readTenant(ctx context.Context, data *schema.ResourceData, meta interface{}
 func validateTenant(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
 	var result *multierror.Error
 
-	dynamicRegistration := value.Bool(diff.GetRawConfig().GetAttr("client_id_metadata_document_dynamic_registration_supported"))
-	cimdSupported := value.Bool(diff.GetRawConfig().GetAttr("client_id_metadata_document_supported"))
-	if dynamicRegistration != nil && *dynamicRegistration && cimdSupported != nil && !*cimdSupported {
+	if diff.NewValueKnown("client_id_metadata_document_dynamic_registration_supported") &&
+		diff.NewValueKnown("client_id_metadata_document_supported") &&
+		diff.Get("client_id_metadata_document_dynamic_registration_supported").(bool) &&
+		!diff.Get("client_id_metadata_document_supported").(bool) {
 		result = multierror.Append(result,
 			fmt.Errorf("client_id_metadata_document_dynamic_registration_supported cannot be true when client_id_metadata_document_supported is false"),
 		)

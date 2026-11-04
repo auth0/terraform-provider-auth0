@@ -15,7 +15,10 @@ import (
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
-const dynamicCIMDImmutableFieldDescription = "Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update."
+const (
+	dynamicCIMDImmutableFieldDescription  = "Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update."
+	cimdExternalMetadataStatusDescription = "Whether Auth0 can resolve the Client ID Metadata Document from its cache or the document URL: `available` or `unavailable` (EA only)."
+)
 
 // NewCIMDResource returns a new auth0_client_cimd resource.
 func NewCIMDResource() *schema.Resource {
@@ -24,6 +27,7 @@ func NewCIMDResource() *schema.Resource {
 		ReadContext:   readCIMDClient,
 		UpdateContext: updateCIMDClient,
 		DeleteContext: deleteCIMDClient,
+		CustomizeDiff: validateCIMDClient,
 		Importer: &schema.ResourceImporter{
 			StateContext: importCIMDClient,
 		},
@@ -101,10 +105,9 @@ func cimdClientSchema() map[string]*schema.Schema {
 				"after import, not in generated configuration.",
 		},
 		"external_metadata_status": {
-			Type:     schema.TypeString,
-			Computed: true,
-			Description: "Whether the Client ID Metadata Document at `external_client_id` is currently reachable: " +
-				"`available` or `unavailable` (EA only).",
+			Type:        schema.TypeString,
+			Computed:    true,
+			Description: cimdExternalMetadataStatusDescription,
 		},
 		"jwks_uri": {
 			Type:     schema.TypeString,
@@ -121,8 +124,9 @@ func cimdClientSchema() map[string]*schema.Schema {
 			Type:         schema.TypeString,
 			Optional:     true,
 			ValidateFunc: validation.StringLenBetween(0, 140),
-			Description: "Description of the purpose of the client. " +
-				dynamicCIMDImmutableFieldDescription,
+			Description: "Description of the purpose of the client. Once set, removing this argument from " +
+				"configuration does not clear it. For admin-registered clients, set `description = \"\"` " +
+				"to clear it. " + dynamicCIMDImmutableFieldDescription,
 		},
 		"app_type": {
 			Type:     schema.TypeString,
@@ -379,6 +383,26 @@ func cimdClientSchema() map[string]*schema.Schema {
 			},
 		},
 	}
+}
+
+func validateCIMDClient(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	if diff.Get("external_metadata_created_by") != "client" {
+		return nil
+	}
+
+	config := diff.GetRawConfig()
+	if !config.IsKnown() || config.IsNull() {
+		return nil
+	}
+
+	for _, field := range []string{"description", "app_type", "grant_types", "external_client_id_version"} {
+		value := config.GetAttr(field)
+		if value.IsKnown() && !value.IsNull() && diff.HasChange(field) {
+			return fmt.Errorf("%s cannot be updated for a dynamically registered CIMD client", field)
+		}
+	}
+
+	return nil
 }
 
 func validateBoolEquals(expected bool) schema.SchemaValidateDiagFunc {

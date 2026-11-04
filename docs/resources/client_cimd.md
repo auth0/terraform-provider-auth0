@@ -70,7 +70,7 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 - `app_type` (String) Type of application the client represents. CIMD clients only support `native`, `spa`, and `regular_web`. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
 - `default_organization` (Block List, Max: 1) Configure and associate an organization with the Client (see [below for nested schema](#nestedblock--default_organization))
-- `description` (String) Description of the purpose of the client. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
+- `description` (String) Description of the purpose of the client. Once set, removing this argument from configuration does not clear it. For admin-registered clients, set `description = ""` to clear it. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
 - `external_client_id_version` (Number) Version number for external_client_id metadata document changes. Update this value to sync the client with the latest values of the json metadata document. Only applies to clients with `external_metadata_created_by` set to `admin`.
 - `grant_types` (List of String) Types of grants that this client is authorized to use. CIMD clients support `authorization_code` and `refresh_token`. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
@@ -90,7 +90,7 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 - `callbacks` (List of String) URLs that Auth0 may call back after authentication. Derived from the CIMD metadata document.
 - `client_id` (String) The ID of the client.
 - `external_metadata_created_by` (String) Who created the external metadata client: `admin` (via Management API) or `client` (dynamically self-registered). Read-only; available in Terraform state after import, not in generated configuration.
-- `external_metadata_status` (String) Whether the Client ID Metadata Document at `external_client_id` is currently reachable: `available` or `unavailable` (EA only).
+- `external_metadata_status` (String) Whether Auth0 can resolve the Client ID Metadata Document from its cache or the document URL: `available` or `unavailable` (EA only).
 - `external_metadata_type` (String) Type of external metadata. Always `cimd` for CIMD-registered clients.
 - `id` (String) The ID of this resource.
 - `is_first_party` (Boolean) Whether this is a first-party client. Always `false` for CIMD clients.

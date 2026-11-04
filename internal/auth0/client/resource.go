@@ -165,10 +165,9 @@ func NewResource() *schema.Resource {
 					"`client` (self-registered), or `unknown`.",
 			},
 			"external_metadata_status": {
-				Type:     schema.TypeString,
-				Computed: true,
-				Description: "Whether the Client ID Metadata Document at `external_client_id` is currently reachable: " +
-					"`available` or `unavailable` (EA only). Only present for CIMD-registered clients.",
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: cimdExternalMetadataStatusDescription + " Only present for CIMD-registered clients.",
 			},
 			"jwks_uri": {
 				Type:     schema.TypeString,

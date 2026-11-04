@@ -56,6 +56,7 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 - `token_lifetime` (Number) Number of seconds during which access tokens issued for this resource server from the token endpoint remain valid.
 - `token_lifetime_for_anonymous_access_tokens` (Number) Number of seconds during which anonymous-session access tokens issued for this resource server remain valid. Must be between 86400 (1 day) and 2592000 (30 days) when present. Removing this attribute clears the value on the API. (EA only)
 - `token_lifetime_for_web` (Number) Number of seconds during which access tokens issued for this resource server via implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.
+- `type` (String) Type of the resource server. Only `universal_commerce_protocol_server` is supported, and only one typed resource server is allowed per tenant. Removing this attribute clears the type on the API, which requires that any `dev.ucp` scopes on the resource server are removed first. If they are still present, the apply warns and keeps the type; apply again once the scopes are gone. (EA only).
 - `verification_location` (String) URL from which to retrieve JWKs for this resource server. Used for verifying the JWT sent to Auth0 for token introspection.
 
 <a id="nestedatt--access_token"></a>

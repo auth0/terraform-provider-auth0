@@ -164,6 +164,11 @@ func NewResource() *schema.Resource {
 				Description: "Who created the external metadata client: `admin` (via Management API), " +
 					"`client` (self-registered), or `unknown`.",
 			},
+			"external_metadata_status": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: cimdExternalMetadataStatusDescription + " Only present for CIMD-registered clients.",
+			},
 			"jwks_uri": {
 				Type:     schema.TypeString,
 				Computed: true,

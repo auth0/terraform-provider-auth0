@@ -39,6 +39,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/logstream"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/page"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/portal"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/ratelimitpolicy"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
@@ -215,6 +216,7 @@ func New() *schema.Provider {
 			"auth0_pages":                                    page.NewResource(),
 			"auth0_phone_provider":                           branding.NewPhoneProviderResource(),
 			"auth0_phone_notification_template":              branding.NewPhoneNotificationTemplateResource(),
+			"auth0_portal":                                   portal.NewResource(),
 			"auth0_prompt":                                   prompt.NewResource(),
 			"auth0_prompt_custom_text":                       prompt.NewCustomTextResource(),
 			"auth0_prompt_partials":                          prompt.NewPartialsResource(),
@@ -287,6 +289,7 @@ func New() *schema.Provider {
 			"auth0_pages":                                    page.NewDataSource(),
 			"auth0_phone_provider":                           branding.NewPhoneProviderDataSource(),
 			"auth0_phone_notification_template":              branding.NewPhoneNotificationTemplateDataSource(),
+			"auth0_portal":                                   portal.NewDataSource(),
 			"auth0_prompt_screen_partials":                   prompt.NewPromptScreenPartialsDataSource(),
 			"auth0_prompt_screen_renderer":                   prompt.NewPromptScreenRenderDataSource(),
 			"auth0_rate_limit_policies":                      ratelimitpolicy.NewRateLimitPoliciesDataSource(),

@@ -38,7 +38,7 @@ func flattenPortal(data *schema.ResourceData, portal *management.Portal) diag.Di
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-// flattenClient keeps the secret attributes from the configuration, because the API never returns the secret.
+// flattenClient keeps existing secret attribute value, because the API never returns it.
 func flattenClient(data *schema.ResourceData, client *management.PortalClientSecretPost) []interface{} {
 	if client == nil {
 		return nil
@@ -84,7 +84,7 @@ func flattenNavigation(navigation *management.PortalNavigation) ([]interface{}, 
 
 	components := make([]interface{}, 0, len(navigation.Sidebar.GetComponents()))
 	for i, component := range navigation.Sidebar.GetComponents() {
-		path := fmt.Sprintf("navigation.sidebar.components[%d]", i)
+		path := fmt.Sprintf("navigation.sidebar.component[%d]", i)
 
 		switch {
 		case component.SidebarComponentAuth0ExternalLinkV2 != nil:
@@ -122,7 +122,7 @@ func flattenPages(pages *management.PortalPagesByType) ([]interface{}, error) {
 	for i, page := range pages.GetStandard() {
 		components := make([]interface{}, 0, len(page.GetComponents()))
 		for j, component := range page.GetComponents() {
-			flattened, err := flattenPageComponent(component, fmt.Sprintf("pages.standard[%d].components[%d]", i, j))
+			flattened, err := flattenPageComponent(component, fmt.Sprintf("pages.standard[%d].component[%d]", i, j))
 			if err != nil {
 				return nil, err
 			}
@@ -151,7 +151,7 @@ func flattenPageComponent(component *management.PageComponent, path string) (map
 
 		children := make([]interface{}, 0, len(config.GetChildren()))
 		for i, child := range config.GetChildren() {
-			flattened, err := flattenSectionChild(child, fmt.Sprintf("%s.config.children[%d]", path, i))
+			flattened, err := flattenSectionChild(child, fmt.Sprintf("%s.structure_section.child[%d]", path, i))
 			if err != nil {
 				return nil, err
 			}
@@ -238,5 +238,5 @@ func flattenComponentType(name string, fields map[string]interface{}) map[string
 
 // unsupportedComponentError is returned for a component type that the SDK or the schema does not know yet.
 func unsupportedComponentError(path, componentType string) error {
-	return fmt.Errorf("a component at `%s` of type `%s` that this provider version does not support", path, componentType)
+	return fmt.Errorf("unsupported component type %q at %s", componentType, path)
 }

@@ -179,8 +179,7 @@ func TestFlattenNavigation(t *testing.T) {
 			{"type": "sidebar:component:auth0:external_link", "config": {"label": "Help", "url": "https://help.example.com"}}
 		]}}`))
 
-		assert.EqualError(t, err, "a component at `navigation.sidebar.components[0]` of type "+
-			"`sidebar:component:auth0:external_link` that this provider version does not support")
+		assert.EqualError(t, err, `unsupported component type "sidebar:component:auth0:external_link" at navigation.sidebar.component[0]`)
 	})
 }
 
@@ -212,7 +211,6 @@ func TestFlattenPages(t *testing.T) {
 			]}
 		]}`))
 
-		assert.EqualError(t, err, "a component at `pages.standard[1].components[1].config.children[0]` of type "+
-			"`page:component:auth0:unknown` that this provider version does not support")
+		assert.EqualError(t, err, `unsupported component type "page:component:auth0:unknown" at pages.standard[1].component[1].structure_section.child[0]`)
 	})
 }

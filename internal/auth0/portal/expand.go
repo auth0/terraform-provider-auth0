@@ -8,9 +8,6 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-// The expand functions read the raw configuration, because the write-only client secret is only
-// available there, and because a block that is set but empty must be sent as `{}`, not omitted.
-
 func expandPortalCreate(data *schema.ResourceData) *management.CreatePortalRequestContent {
 	raw := data.GetRawConfig()
 

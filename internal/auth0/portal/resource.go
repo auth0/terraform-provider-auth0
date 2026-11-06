@@ -232,11 +232,11 @@ func optionalBlockWithEmptySchema(description string) *schema.Schema {
 	return optionalBlock(description, map[string]*schema.Schema{})
 }
 
-func requiredString(description string, min, max int) *schema.Schema {
+func requiredString(description string, minLen, maxLen int) *schema.Schema {
 	return &schema.Schema{
 		Type:         schema.TypeString,
 		Required:     true,
-		ValidateFunc: validation.StringLenBetween(min, max),
+		ValidateFunc: validation.StringLenBetween(minLen, maxLen),
 		Description:  description,
 	}
 }

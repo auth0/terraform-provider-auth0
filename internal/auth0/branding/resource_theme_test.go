@@ -53,6 +53,7 @@ resource "auth0_branding_theme" "my_theme" {
 		links_focused_components = "#FF00CC"
 		primary_button = "#FF00CC"
 		primary_button_label = "#FF00CC"
+		read_only_background = "#FF00CC"
 		secondary_button_border = "#FF00CC"
 		secondary_button_label = "#FF00CC"
 		success = "#FF00CC"
@@ -142,6 +143,7 @@ resource "auth0_branding_theme" "my_theme" {
 		links_focused_components = "#00FF00"
 		primary_button = "#00FF00"
 		primary_button_label = "#00FF00"
+		read_only_background = "#00FF00"
 		secondary_button_border = "#00FF00"
 		secondary_button_label = "#00FF00"
 		success = "#00FF00"
@@ -233,6 +235,7 @@ func TestAccBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.links_focused_components", "#635dff"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.primary_button", "#635dff"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.primary_button_label", "#ffffff"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.read_only_background", ""),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.secondary_button_border", "#c9cace"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.secondary_button_label", "#1e212a"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.success", "#13a688"),
@@ -298,6 +301,7 @@ func TestAccBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.links_focused_components", "#FF00CC"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.primary_button", "#FF00CC"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.primary_button_label", "#FF00CC"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.read_only_background", "#FF00CC"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.secondary_button_border", "#FF00CC"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.secondary_button_label", "#FF00CC"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.success", "#FF00CC"),
@@ -366,6 +370,7 @@ func TestAccBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.links_focused_components", "#00FF00"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.primary_button", "#00FF00"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.primary_button_label", "#00FF00"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.read_only_background", "#00FF00"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.secondary_button_border", "#00FF00"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.secondary_button_label", "#00FF00"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.success", "#00FF00"),
@@ -402,6 +407,14 @@ func TestAccBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.logo_position", "center"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.logo_url", "https://google.com/logo.png"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.social_buttons_layout", "top"),
+				),
+			},
+			{
+				Config: testAccBrandingThemeDefaults,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.primary_button_label", "#ffffff"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.read_only_background", ""),
 				),
 			},
 		},

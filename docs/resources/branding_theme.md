@@ -53,6 +53,7 @@ resource "auth0_branding_theme" "my_theme" {
     links_focused_components  = "#FF00CC"
     primary_button            = "#FF00CC"
     primary_button_label      = "#FF00CC"
+    read_only_background      = "#FF00CC"
     secondary_button_border   = "#FF00CC"
     secondary_button_label    = "#FF00CC"
     success                   = "#FF00CC"
@@ -178,6 +179,7 @@ Optional:
 - `links_focused_components` (String) Links & focused components. Defaults to `#635dff`.
 - `primary_button` (String) Primary button. Defaults to `#635dff`.
 - `primary_button_label` (String) Primary button label. Defaults to `#ffffff`.
+- `read_only_background` (String) Read only background.
 - `secondary_button_border` (String) Secondary button border. Defaults to `#c9cace`.
 - `secondary_button_label` (String) Secondary button label. Defaults to `#1e212a`.
 - `success` (String) Success. Defaults to `#13a688`.

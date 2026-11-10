@@ -1,5 +1,22 @@
 ## Unreleased
 
+## v1.61.0
+
+FEATURES:
+- `resource/auth0_connection` - Add `options.otp_settings` with email and phone `otp_length` and `otp_expiry` settings for database connections (EA only) ([#1696](https://github.com/auth0/terraform-provider-auth0/pull/1696))
+- `data-source/auth0_connection` - Expose database connection `options.otp_settings` for email and phone (EA only) ([#1696](https://github.com/auth0/terraform-provider-auth0/pull/1696))
+- `resource/auth0_tenant` - Add `client_id_metadata_document_dynamic_registration_supported` to enable dynamic CIMD client registration (EA only) ([#1766](https://github.com/auth0/terraform-provider-auth0/pull/1766))
+- `data-source/auth0_tenant` - Expose `client_id_metadata_document_dynamic_registration_supported` (EA only) ([#1766](https://github.com/auth0/terraform-provider-auth0/pull/1766))
+- `resource/auth0_client_cimd` - Support importing dynamically registered CIMD clients and expose their `external_metadata_status` (EA only) ([#1766](https://github.com/auth0/terraform-provider-auth0/pull/1766))
+- `resource/auth0_client` - Expose `external_metadata_status` for CIMD-registered clients (EA only) ([#1766](https://github.com/auth0/terraform-provider-auth0/pull/1766))
+- `data-source/auth0_client` - Expose `external_metadata_status` for CIMD-registered clients (EA only) ([#1766](https://github.com/auth0/terraform-provider-auth0/pull/1766))
+- `data-source/auth0_clients` - Expose CIMD metadata and signing key URL in client list results (EA only) ([#1766](https://github.com/auth0/terraform-provider-auth0/pull/1766))
+- `resource/auth0_resource_server` - Add `type` for Universal Commerce Protocol resource servers; only one typed resource server is allowed per tenant (EA only) ([#1772](https://github.com/auth0/terraform-provider-auth0/pull/1772))
+- `data-source/auth0_resource_server` - Expose Universal Commerce Protocol resource server `type` (EA only) ([#1772](https://github.com/auth0/terraform-provider-auth0/pull/1772))
+
+BUG FIXES:
+- `resource/auth0_user` - Replace the user when `connection_name` changes instead of attempting an API update that fails; this change plans a destroy and create ([#1774](https://github.com/auth0/terraform-provider-auth0/pull/1774))
+
 ## v1.60.0
 
 FEATURES:

@@ -174,3 +174,28 @@ func TestAccDataSourceResourceServer(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataResourceServerUCPType = `
+resource "auth0_resource_server" "my_api" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	type       = "universal_commerce_protocol_server"
+}
+
+data "auth0_resource_server" "test" {
+	identifier = auth0_resource_server.my_api.identifier
+}
+`
+
+func TestAccDataSourceResourceServerUCPType(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataResourceServerUCPType, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_resource_server.test", "type", "universal_commerce_protocol_server"),
+				),
+			},
+		},
+	})
+}

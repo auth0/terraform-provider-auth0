@@ -27,6 +27,14 @@ resource "auth0_agent" "my_agent" {
 }
 `
 
+const testAccAgentMetadataEmptyObject = `
+resource "auth0_agent" "my_agent" {
+	name              = "Agent updated {{.testName}}"
+	external_agent_id = "ext-{{.testName}}"
+	metadata          = jsonencode({})
+}
+`
+
 const testAccAgentMetadataRemoved = `
 resource "auth0_agent" "my_agent" {
 	name              = "Agent updated {{.testName}}"
@@ -59,6 +67,12 @@ func TestAccAgent(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_agent.my_agent", "name", "Agent updated TestAccAgent"),
 					resource.TestCheckResourceAttr("auth0_agent.my_agent", "metadata", `{"team":"security","tier":"gold"}`),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccAgentMetadataEmptyObject, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_agent.my_agent", "metadata", ""),
 				),
 			},
 			{

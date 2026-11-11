@@ -123,3 +123,22 @@ func TestPatchSerializesExplicitNullMetadata(t *testing.T) {
 	require.NoError(t, err)
 	assert.JSONEq(t, `{"name":"agent","metadata":null}`, string(b))
 }
+
+func TestSuppressMetadataDiff(t *testing.T) {
+	testCases := []struct {
+		name     string
+		old, new string
+		expected bool
+	}{
+		{name: "unset and empty object", old: "", new: "{}", expected: true},
+		{name: "empty object and unset", old: "{}", new: "", expected: true},
+		{name: "equivalent objects", old: `{"a":1,"b":2}`, new: `{"b":2, "a":1}`, expected: true},
+		{name: "different objects", old: "", new: `{"a":1}`, expected: false},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			assert.Equal(t, testCase.expected, suppressMetadataDiff("metadata", testCase.old, testCase.new, nil))
+		})
+	}
+}

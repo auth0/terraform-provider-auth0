@@ -57,7 +57,7 @@ func NewResource() *schema.Resource {
 				Type:             schema.TypeString,
 				Optional:         true,
 				ValidateFunc:     validateMetadata,
-				DiffSuppressFunc: structure.SuppressJsonDiff,
+				DiffSuppressFunc: suppressMetadataDiff,
 				Description: "Arbitrary key-value metadata for the agent, as a JSON object of at most 10240 bytes. " +
 					"Removing the attribute clears the metadata.",
 			},
@@ -107,6 +107,25 @@ func validateExternalAgentID(i interface{}, key string) ([]string, []error) {
 	}
 
 	return nil, nil
+}
+
+// suppressMetadataDiff treats an unset metadata and an empty JSON object as
+// equal, as the API always returns an empty object for unset metadata.
+func suppressMetadataDiff(key, oldValue, newValue string, data *schema.ResourceData) bool {
+	isEmpty := func(v string) bool {
+		if v == "" {
+			return true
+		}
+
+		var object map[string]interface{}
+		return json.Unmarshal([]byte(v), &object) == nil && len(object) == 0
+	}
+
+	if isEmpty(oldValue) && isEmpty(newValue) {
+		return true
+	}
+
+	return structure.SuppressJsonDiff(key, oldValue, newValue, data)
 }
 
 func validateMetadata(i interface{}, key string) ([]string, []error) {

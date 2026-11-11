@@ -17,6 +17,9 @@ resource "auth0_agent" "first" {
 resource "auth0_agent" "second" {
 	name              = "Second {{.testName}}"
 	external_agent_id = "second-{{.testName}}"
+
+	# Serialize creation so that the recorded cassette replays deterministically.
+	depends_on = [auth0_agent.first]
 }
 `
 
@@ -52,6 +55,9 @@ resource "auth0_agent" "first" {
 resource "auth0_agent" "second" {
 	name              = "Second {{.testName}}"
 	external_agent_id = "second-{{.testName}}"
+
+	# Serialize creation so that the recorded cassette replays deterministically.
+	depends_on = [auth0_agent.first]
 }
 
 resource "auth0_client" "my_client" {

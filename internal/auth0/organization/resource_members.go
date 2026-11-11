@@ -101,7 +101,7 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	if len(removeMembers) > 0 {
-		err := api.Organization.DeleteMembers(ctx, organizationID, removeMembers)
+		err := deleteMembersInBatches(ctx, api, organizationID, removeMembers)
 		if !internalError.IsStatusNotFound(err) {
 			return diag.FromErr(err)
 		}
@@ -131,8 +131,28 @@ func deleteOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 		return nil
 	}
 
-	if err := api.Organization.DeleteMembers(ctx, organizationID, membersToRemove); err != nil {
+	if err := deleteMembersInBatches(ctx, api, organizationID, membersToRemove); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	return nil
+}
+
+// maxMembersPerDeleteRequest is the most user IDs the Management API accepts
+// in a single DELETE /organizations/{id}/members request.
+const maxMembersPerDeleteRequest = 10
+
+func deleteMembersInBatches(
+	ctx context.Context,
+	api *management.Management,
+	organizationID string,
+	memberIDs []string,
+) error {
+	for start := 0; start < len(memberIDs); start += maxMembersPerDeleteRequest {
+		end := min(start+maxMembersPerDeleteRequest, len(memberIDs))
+		if err := api.Organization.DeleteMembers(ctx, organizationID, memberIDs[start:end]); err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -2,12 +2,16 @@ package resourceserver
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -19,6 +23,10 @@ import (
 const (
 	auth0ManagementAPIName = "Auth0 Management API"
 	auth0MyAccountAPIName  = "Auth0 My Account API"
+
+	typeNotClearedDetail = "The Auth0 API refused to clear the type because the resource server still has " +
+		"`dev.ucp` scopes. Remove those scopes (for example the `auth0_resource_server_scopes` resource) first, " +
+		"then apply again to clear the type. Until then, `type` remains set on the resource server."
 )
 
 // NewResource will return a new auth0_resource_server resource.
@@ -121,6 +129,17 @@ func NewResource() *schema.Resource {
 				Description: "Number of seconds during which anonymous-session access tokens issued for this " +
 					"resource server remain valid. Must be between 86400 (1 day) and 2592000 (30 days) when present. " +
 					"Removing this attribute clears the value on the API. (EA only)",
+			},
+			"type": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					management.ResourceServerTypeUniversalCommerceProtocolServer,
+				}, false),
+				Description: "Type of the resource server. Only `universal_commerce_protocol_server` is supported, and only one typed resource server is allowed per tenant. " +
+					"Removing this attribute clears the type on the API, which requires that any `dev.ucp` scopes on the " +
+					"resource server are removed first. If they are still present, the apply warns and keeps the type; " +
+					"apply again once the scopes are gone. (EA only).",
 			},
 			"access_token": {
 				Type:        schema.TypeList,
@@ -468,15 +487,53 @@ func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
+	var warnings diag.Diagnostics
+
 	nullFields := fetchNullableFields(data)
+
+	// Clearing the type is sent on its own so a rejection of it cannot mask the
+	// outcome of the other nullable fields.
+	_, clearingType := nullFields["type"]
+	delete(nullFields, "type")
+
 	if len(nullFields) != 0 {
 		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), nullFields); err != nil {
 			return diag.FromErr(err)
 		}
 	}
+
+	if clearingType {
+		typeField := map[string]interface{}{"type": nil}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), typeField); err != nil {
+			if !IsUCPScopesReservedError(err) {
+				return diag.FromErr(err)
+			}
+
+			tflog.Debug(ctx, "Clearing the resource server type was rejected by the API.", map[string]interface{}{
+				"error": err.Error(),
+			})
+			warnings = append(warnings, diag.Diagnostic{
+				Severity:      diag.Warning,
+				Summary:       "Resource server type was not cleared",
+				Detail:        typeNotClearedDetail,
+				AttributePath: cty.GetAttrPath("type"),
+			})
+		}
+	}
 	time.Sleep(200 * time.Millisecond)
 
-	return readResourceServer(ctx, data, meta)
+	return append(warnings, readResourceServer(ctx, data, meta)...)
+}
+
+// IsUCPScopesReservedError reports whether the error is the 400 returned when
+// clearing the type of a resource server that still has `dev.ucp` scopes.
+func IsUCPScopesReservedError(err error) bool {
+	var mErr management.Error
+	if !errors.As(err, &mErr) || mErr.Status() != http.StatusBadRequest {
+		return false
+	}
+
+	return strings.Contains(mErr.Error(), "dev.ucp") && strings.Contains(mErr.Error(), "reserved")
 }
 
 func validateResourceServer(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {

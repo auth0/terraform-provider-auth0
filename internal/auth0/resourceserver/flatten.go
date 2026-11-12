@@ -30,6 +30,7 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 		data.Set("subject_type_authorization", flattenSubjectTypeAuthorization(resourceServer.GetSubjectTypeAuthorization())),
 		data.Set("authorization_policy", flattenAuthorizationPolicy(resourceServer.GetAuthorizationPolicy())),
 		data.Set("access_token", flattenResourceServerAccessToken(resourceServer.GetAccessToken())),
+		data.Set("type", resourceServer.GetType()),
 		data.Set("client_id", resourceServer.GetClientID()),
 		data.Set("is_system", resourceServer.GetIsSystem()),
 	)

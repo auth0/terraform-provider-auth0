@@ -42,6 +42,7 @@ func NewResource() *schema.Resource {
 			"connection_name": {
 				Type:        schema.TypeString,
 				Required:    true,
+				ForceNew:    true,
 				Description: "Name of the connection from which the user information was sourced.",
 			},
 			"username": {

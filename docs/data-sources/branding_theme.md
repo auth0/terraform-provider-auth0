@@ -63,6 +63,7 @@ Read-Only:
 - `links_focused_components` (String)
 - `primary_button` (String)
 - `primary_button_label` (String)
+- `read_only_background` (String)
 - `secondary_button_border` (String)
 - `secondary_button_label` (String)
 - `success` (String)

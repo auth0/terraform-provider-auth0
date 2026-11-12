@@ -1,9 +1,12 @@
 package client_test
 
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
@@ -130,6 +133,101 @@ func TestAccClientCIMD(t *testing.T) {
 				ImportState:             true,
 				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"external_client_id_version"},
+			},
+		},
+	})
+}
+
+const testAccClientCIMDStatus = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://authflowsapp-prod.authzerotest.com/v1/cimd-metadata/static/valid"
+}
+
+data "auth0_client" "test" {
+  client_id          = auth0_client_cimd.test.client_id
+  hide_client_secret = true
+}
+
+data "auth0_clients" "test" {
+  external_client_id = auth0_client_cimd.test.external_client_id
+  hide_client_secret = true
+}
+`
+
+func TestAccClientCIMDExternalMetadataStatus(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccClientCIMDStatus,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_status", "available"),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "external_metadata_status", "available"),
+					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.external_metadata_status", "available"),
+					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.external_metadata_created_by", "admin"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccClientCIMDDynamicImportAndDataSources(t *testing.T) {
+	clientID := os.Getenv("AUTH0_CIMD_TEST_CLIENT_ID")
+	externalClientID := os.Getenv("AUTH0_CIMD_TEST_CLIENT_URL")
+	if clientID == "" || externalClientID == "" {
+		t.Skip("set AUTH0_CIMD_TEST_CLIENT_ID and AUTH0_CIMD_TEST_CLIENT_URL to test an existing dynamic client")
+	}
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: fmt.Sprintf(`
+resource "auth0_client_cimd" "dynamic" {
+  external_client_id = %q
+}
+`, externalClientID),
+				ResourceName:  "auth0_client_cimd.dynamic",
+				ImportState:   true,
+				ImportStateId: clientID,
+				ImportStateCheck: func(states []*terraform.InstanceState) error {
+					if len(states) != 1 {
+						return fmt.Errorf("expected one imported CIMD client, got %d", len(states))
+					}
+					if states[0].ID != clientID {
+						return fmt.Errorf("imported client ID does not match the requested ID")
+					}
+					if states[0].Attributes["external_client_id"] != externalClientID {
+						return fmt.Errorf("imported client does not match the requested metadata URL")
+					}
+					if states[0].Attributes["external_metadata_created_by"] != "client" {
+						return fmt.Errorf("imported CIMD client was not dynamically registered")
+					}
+					return nil
+				},
+			},
+			{
+				Config: fmt.Sprintf(`
+data "auth0_client" "dynamic" {
+  client_id          = %q
+  hide_client_secret = true
+}
+
+data "auth0_clients" "dynamic" {
+  external_client_id = %q
+  hide_client_secret = true
+}
+`, clientID, externalClientID),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_client.dynamic", "client_id", clientID),
+					resource.TestCheckResourceAttr("data.auth0_client.dynamic", "external_metadata_created_by", "client"),
+					resource.TestCheckResourceAttr("data.auth0_client.dynamic", "external_metadata_type", "cimd"),
+					resource.TestCheckResourceAttrSet("data.auth0_client.dynamic", "external_metadata_status"),
+					resource.TestCheckResourceAttr("data.auth0_clients.dynamic", "clients.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_clients.dynamic", "clients.0.client_id", clientID),
+					resource.TestCheckResourceAttr("data.auth0_clients.dynamic", "clients.0.external_metadata_created_by", "client"),
+					resource.TestCheckResourceAttr("data.auth0_clients.dynamic", "clients.0.external_metadata_type", "cimd"),
+					resource.TestCheckResourceAttrSet("data.auth0_clients.dynamic", "clients.0.external_metadata_status"),
+				),
 			},
 		},
 	})

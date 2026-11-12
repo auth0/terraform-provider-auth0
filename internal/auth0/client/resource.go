@@ -164,6 +164,11 @@ func NewResource() *schema.Resource {
 				Description: "Who created the external metadata client: `admin` (via Management API), " +
 					"`client` (self-registered), or `unknown`.",
 			},
+			"external_metadata_status": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: cimdExternalMetadataStatusDescription + " Only present for CIMD-registered clients.",
+			},
 			"jwks_uri": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -294,6 +299,14 @@ func NewResource() *schema.Resource {
 				Description: "List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests " +
 					"initiated by this client. Valid values are `guardian-push`, `email`, and `my-account`." +
 					"The order is significant as this is the order in which notification channels will be evaluated.",
+			},
+			"agent_id": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: internalValidation.IsAgentID,
+				Description: "The ID of the agent (`auth0_agent`) this client is linked to (EA Only). Reference it as " +
+					"`auth0_agent.<name>.id` so that the client is unlinked before the agent is deleted. Removing " +
+					"the attribute unlinks the client, including a link made outside Terraform. Requires the `update:clients` and `update:agents` scopes.",
 			},
 			"organization_usage": {
 				Type:     schema.TypeString,

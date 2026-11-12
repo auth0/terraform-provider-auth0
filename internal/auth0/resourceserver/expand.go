@@ -59,6 +59,9 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		if data.IsNewResource() || data.HasChange("require_consent_non_repudiation") {
 			resourceServer.RequireConsentNonRepudiation = value.Bool(cfg.GetAttr("require_consent_non_repudiation"))
 		}
+		if data.IsNewResource() || data.HasChange("type") {
+			resourceServer.Type = value.String(cfg.GetAttr("type"))
+		}
 	}
 	return resourceServer
 }
@@ -197,6 +200,13 @@ func isTokenLifetimeForAnonymousAccessTokensNull(data *schema.ResourceData) bool
 	return data.GetRawConfig().GetAttr("token_lifetime_for_anonymous_access_tokens").IsNull()
 }
 
+func isTypeNull(data *schema.ResourceData) bool {
+	if data.IsNewResource() || !data.HasChange("type") {
+		return false
+	}
+	return data.GetRawConfig().GetAttr("type").IsNull()
+}
+
 // fetchNullableFields returns a map of fields that need to be explicitly set
 // to null on the resource server via a follow-up PATCH request, since the
 // regular Update call uses `omitempty` and cannot transmit nil values.
@@ -211,6 +221,7 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 		"authorization_policy":                       isAuthorizationPolicyNull,
 		"token_lifetime_for_anonymous_access_tokens": isTokenLifetimeForAnonymousAccessTokensNull,
 		"access_token":                               isAccessTokenNull,
+		"type":                                       isTypeNull,
 	}
 
 	nullableMap := make(map[string]interface{})

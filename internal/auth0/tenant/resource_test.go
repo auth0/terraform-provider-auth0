@@ -558,6 +558,52 @@ func TestAccTenant_DynamicClientRegistrationSecurityMode(t *testing.T) {
 	})
 }
 
+const testAccTenantDynamicCIMDInvalid = `
+resource "auth0_tenant" "my_tenant" {
+  client_id_metadata_document_supported                      = false
+  client_id_metadata_document_dynamic_registration_supported = true
+}
+`
+
+const testAccTenantDynamicCIMDEnabled = `
+resource "auth0_tenant" "my_tenant" {
+  client_id_metadata_document_supported                      = true
+  client_id_metadata_document_dynamic_registration_supported = true
+}
+`
+
+const testAccTenantDynamicCIMDDisabled = `
+resource "auth0_tenant" "my_tenant" {
+  client_id_metadata_document_supported                      = true
+  client_id_metadata_document_dynamic_registration_supported = false
+}
+`
+
+func TestAccTenant_DynamicCIMD(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccTenantDynamicCIMDInvalid,
+				ExpectError: regexp.MustCompile(`client_id_metadata_document_dynamic_registration_supported cannot be true when client_id_metadata_document_supported is false`),
+			},
+			{
+				Config: testAccTenantDynamicCIMDEnabled,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "client_id_metadata_document_supported", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "client_id_metadata_document_dynamic_registration_supported", "true"),
+				),
+			},
+			{
+				Config: testAccTenantDynamicCIMDDisabled,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "client_id_metadata_document_supported", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "client_id_metadata_document_dynamic_registration_supported", "false"),
+				),
+			},
+		},
+	})
+}
+
 const testAccTenantDefaultRedirectionURISet = `
 resource "auth0_tenant" "my_tenant" {
 	friendly_name           = "TF Test — redirection_uri"

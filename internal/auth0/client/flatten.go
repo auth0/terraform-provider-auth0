@@ -701,6 +701,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("allowed_clients", client.GetAllowedClients()),
 		data.Set("grant_types", client.GetGrantTypes()),
 		data.Set("async_approval_notification_channels", client.GetAsyncApprovalNotificationChannels()),
+		data.Set("agent_id", client.GetAgentID()),
 		data.Set("organization_usage", client.GetOrganizationUsage()),
 		data.Set("organization_require_behavior", client.GetOrganizationRequireBehavior()),
 		data.Set("organization_discovery_methods", client.GetOrganizationDiscoveryMethods()),
@@ -741,6 +742,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("external_client_id", client.GetExternalClientID()),
 		data.Set("external_metadata_type", client.GetExternalMetadataType()),
 		data.Set("external_metadata_created_by", client.GetExternalMetadataCreatedBy()),
+		data.Set("external_metadata_status", client.GetExternalMetadataStatus()),
 		data.Set("jwks_uri", client.GetJwksURI()),
 		data.Set("my_organization_configuration", flattenMyOrganizationConfiguration(client.GetMyOrganizationConfiguration())),
 		data.Set("b2b_integration_configuration", flattenB2BIntegrationConfiguration(client.GetB2BIntegrationConfiguration())),
@@ -1267,6 +1269,11 @@ func flattenClientList(data *schema.ResourceData, clients []*management.Client, 
 			"grant_types":                         client.GetGrantTypes(),
 			"web_origins":                         client.GetWebOrigins(),
 			"client_metadata":                     client.GetClientMetadata(),
+			"external_client_id":                  client.GetExternalClientID(),
+			"external_metadata_type":              client.GetExternalMetadataType(),
+			"external_metadata_created_by":        client.GetExternalMetadataCreatedBy(),
+			"external_metadata_status":            client.GetExternalMetadataStatus(),
+			"jwks_uri":                            client.GetJwksURI(),
 		}
 		clientList = append(clientList, clientMap)
 	}

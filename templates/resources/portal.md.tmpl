@@ -1,0 +1,34 @@
+---
+page_title: "{{.Type}}: {{.Name}}"
+description: |-
+{{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{.Type}}: {{.Name}}
+
+{{ .Description | trimspace }}
+
+~> When the portal has a component type that this resource does not support, such as a V1 sidebar link added
+through the Management API, every refresh of the portal fails. So `terraform plan` and `terraform destroy` fail too.
+To overwrite the unsupported component, change the `navigation` or `pages` block that contains it, 
+and then run `terraform apply -refresh=false`. To destroy the portal, run `terraform destroy -refresh=false`.
+
+{{ if .HasExample -}}
+
+## Example Usage
+
+{{ tffile .ExampleFile }}
+
+{{- end }}
+
+{{ .SchemaMarkdown | trimspace }}
+
+{{ if .HasImport -}}
+
+## Import
+
+Import is supported using the following syntax:
+
+{{ codefile "shell" .ImportFile }}
+
+{{- end }}

@@ -270,9 +270,14 @@ func listAllOrganizationClientGrants(
 	organizationID string,
 ) ([]*management.ClientGrant, error) {
 	var clientGrants []*management.ClientGrant
-	var options []management.RequestOption
-	for page := 1; ; page++ {
-		clientGrantList, err := api.Organization.ClientGrants(ctx, organizationID, options...)
+	var page int
+	for {
+		clientGrantList, err := api.Organization.ClientGrants(
+			ctx,
+			organizationID,
+			management.Page(page),
+			management.PerPage(100),
+		)
 		if err != nil {
 			return nil, err
 		}
@@ -283,7 +288,7 @@ func listAllOrganizationClientGrants(
 			break
 		}
 
-		options = []management.RequestOption{management.Page(page)}
+		page++
 	}
 
 	return clientGrants, nil

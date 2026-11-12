@@ -146,3 +146,16 @@ resource "auth0_client" "member_management" {
     enforce_self_assignment_restriction = true
   }
 }
+
+resource "auth0_agent" "linked" {
+  name = "My Linked Agent"
+}
+
+resource "auth0_client" "agent_linked" {
+  name     = "My Agent Linked Client"
+  app_type = "non_interactive"
+
+  # Available in Early Access (EA). Reference the agent as `auth0_agent.<name>.id`
+  # so the client is unlinked before the agent is deleted.
+  agent_id = auth0_agent.linked.id
+}

@@ -1,0 +1,703 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 99
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Agent TestAccAgent","external_agent_id":"ext-TestAccAgent","metadata":{"team":"platform"}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 219
+        uncompressed: false
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent TestAccAgent","metadata":{"team":"platform"},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:34.970Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 286.986208ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent TestAccAgent","metadata":{"team":"platform"},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:34.970Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.102666ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent TestAccAgent","metadata":{"team":"platform"},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:34.970Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 306.691542ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent TestAccAgent","metadata":{"team":"platform"},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:34.970Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 287.802667ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 82
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Agent updated TestAccAgent","metadata":{"team":"security","tier":"gold"}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{"team":"security","tier":"gold"},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:37.981Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 283.789209ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{"team":"security","tier":"gold"},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:37.981Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 280.762834ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{"team":"security","tier":"gold"},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:37.981Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 284.181375ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{"team":"security","tier":"gold"},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:37.981Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 289.292042ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 51
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"Agent updated TestAccAgent","metadata":{}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 275.25525ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 292.473875ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 297.904541ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 281.798875ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 281.038916ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 284.340375ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 276.939291ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 269.444667ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 298.189584ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 277.633791ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"agent_id":"agt_391yUZCxUHgVtdwSjNG1T7","name":"Agent updated TestAccAgent","metadata":{},"created_at":"2026-11-11T15:07:34.970Z","updated_at":"2026-11-11T15:07:40.845Z","external_agent_id":"ext-TestAccAgent"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 282.380834ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/agents/agt_391yUZCxUHgVtdwSjNG1T7
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 280.655542ms

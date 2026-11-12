@@ -906,6 +906,37 @@ var optionsSchema = &schema.Schema{
 					},
 				},
 			},
+			"assertion_decryption_settings": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "Settings for SAML assertion decryption. " +
+					"Only applicable when strategy=samlp or pingfederate.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"algorithm_profile": {
+							Type:     schema.TypeString,
+							Required: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"v2026-1",
+							}, false),
+							Description: "The algorithm profile to use for decrypting SAML assertions. " +
+								"Options include: `v2026-1`.",
+						},
+						"algorithm_exceptions": {
+							Type:     schema.TypeList,
+							Optional: true,
+							MaxItems: 10,
+							Elem: &schema.Schema{
+								Type:         schema.TypeString,
+								ValidateFunc: validation.StringLenBetween(1, 100),
+							},
+							Description: "A list of insecure algorithms to allow for SAML assertion decryption.",
+						},
+					},
+				},
+			},
 			"protocol_binding": {
 				Type:        schema.TypeString,
 				Optional:    true,

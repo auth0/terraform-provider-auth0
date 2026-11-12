@@ -1291,6 +1291,7 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 		DestinationURL:              value.String(config.GetAttr("destination_url")),
 		RecipientURL:                value.String(config.GetAttr("recipient_url")),
 		DiscoveryURL:                value.String(config.GetAttr("discovery_url")),
+		AssertionDecryptionSettings: expandConnectionOptionsSAMLAssertionDecryptionSettings(config),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -1378,6 +1379,8 @@ func expandConnectionOptionsPingFederate(_ *schema.ResourceData, config cty.Valu
 		SignatureAlgorithm:  value.String(config.GetAttr("signature_algorithm")),
 		PingFederateBaseURL: value.String(config.GetAttr("ping_federate_base_url")),
 		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
+
+		AssertionDecryptionSettings: expandConnectionOptionsSAMLAssertionDecryptionSettings(config),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -1400,6 +1403,28 @@ func expandConnectionOptionsPingFederate(_ *schema.ResourceData, config cty.Valu
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsSAMLAssertionDecryptionSettings(
+	config cty.Value,
+) *management.ConnectionOptionsSAMLAssertionDecryptionSettings {
+	var settings *management.ConnectionOptionsSAMLAssertionDecryptionSettings
+
+	settingsConfig := config.GetAttr("assertion_decryption_settings")
+	if settingsConfig.IsNull() {
+		return nil
+	}
+
+	settingsConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		settings = &management.ConnectionOptionsSAMLAssertionDecryptionSettings{
+			AlgorithmProfile:    value.String(cfg.GetAttr("algorithm_profile")),
+			AlgorithmExceptions: value.Strings(cfg.GetAttr("algorithm_exceptions")),
+		}
+
+		return stop
+	})
+
+	return settings
 }
 
 func expandConnectionOptionsOAuth1(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
@@ -1590,6 +1615,11 @@ func passThroughUnconfigurableConnectionOptionsSAML(
 	expandedOptions.ExtGroups = existingOptions.ExtGroups
 	expandedOptions.ExtProfile = existingOptions.ExtProfile
 
+	// The API removes these settings when they are not in the PATCH body.
+	if expandedOptions.AssertionDecryptionSettings == nil {
+		expandedOptions.AssertionDecryptionSettings = existingOptions.AssertionDecryptionSettings
+	}
+
 	connection.Options = expandedOptions
 
 	return nil
@@ -1636,6 +1666,11 @@ func passThroughUnconfigurableConnectionOptionsPingFederate(
 	expandedOptions.AgentMode = existingOptions.AgentMode
 	expandedOptions.ExtGroups = existingOptions.ExtGroups
 	expandedOptions.ExtProfile = existingOptions.ExtProfile
+
+	// The API removes these settings when they are not in the PATCH body.
+	if expandedOptions.AssertionDecryptionSettings == nil {
+		expandedOptions.AssertionDecryptionSettings = existingOptions.AssertionDecryptionSettings
+	}
 
 	connection.Options = expandedOptions
 

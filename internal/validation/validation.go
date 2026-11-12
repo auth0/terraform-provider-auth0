@@ -109,3 +109,20 @@ func UniversalLoginTemplateContainsCorrectTags(rawBody interface{}, key string) 
 		fmt.Errorf("expected %q to contain a single auth0:head tag and at least one auth0:widget tag", key),
 	}
 }
+
+// agentIDRegex matches the format of an Auth0 agent ID.
+var agentIDRegex = regexp.MustCompile(`^agt_[1-9A-HJ-NP-Za-km-z]{22}$`)
+
+// IsAgentID is a validation func that checks that the given value is a well-formed agent ID.
+func IsAgentID(i interface{}, key string) ([]string, []error) {
+	v, ok := i.(string)
+	if !ok {
+		return nil, []error{fmt.Errorf("expected type of %q to be string", key)}
+	}
+
+	if !agentIDRegex.MatchString(v) {
+		return nil, []error{fmt.Errorf("expected %q to be an agent ID in the format agt_<22 characters>, got %q", key, v)}
+	}
+
+	return nil, nil
+}

@@ -223,6 +223,52 @@ func TestIsStatusNotFound(t *testing.T) {
 	}
 }
 
+func TestIsStatusPaymentRequired(t *testing.T) {
+	testCases := []struct {
+		name     string
+		givenErr error
+		expected bool
+	}{
+		{
+			name:     "nil error",
+			givenErr: nil,
+			expected: false,
+		},
+		{
+			name:     "v1 SDK 402",
+			givenErr: testManagementError{StatusCode: http.StatusPaymentRequired},
+			expected: true,
+		},
+		{
+			name:     "v1 SDK 404",
+			givenErr: testManagementError{StatusCode: http.StatusNotFound},
+			expected: false,
+		},
+		{
+			name:     "v3 SDK bare core.APIError with a 402",
+			givenErr: core.NewAPIError(http.StatusPaymentRequired, nil, errors.New("payment required")),
+			expected: true,
+		},
+		{
+			name: "v3 SDK 402 wrapped by fmt.Errorf",
+			givenErr: fmt.Errorf("reading template: %w",
+				core.NewAPIError(http.StatusPaymentRequired, nil, errors.New("payment required"))),
+			expected: true,
+		},
+		{
+			name:     "plain error",
+			givenErr: errors.New("402"),
+			expected: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			assert.Equal(t, testCase.expected, IsStatusPaymentRequired(testCase.givenErr))
+		})
+	}
+}
+
 func TestIsInsufficientEntitlementV1Path(t *testing.T) {
 	testCases := []struct {
 		name     string

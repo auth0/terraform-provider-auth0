@@ -40,6 +40,7 @@ resource "auth0_branding_theme" "my_theme" {
     links_focused_components  = "#FF00CC"
     primary_button            = "#FF00CC"
     primary_button_label      = "#FF00CC"
+    read_only_background      = "#FF00CC"
     secondary_button_border   = "#FF00CC"
     secondary_button_label    = "#FF00CC"
     success                   = "#FF00CC"

@@ -39,6 +39,12 @@ func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
 	baseFocusColor := data.Get("colors.0.base_focus_color").(string)
 	baseHoverColor := data.Get("colors.0.base_hover_color").(string)
 
+	// The API rejects an empty read_only_background, so an unset value is omitted instead.
+	var readOnlyBackground *string
+	if color := data.Get("colors.0.read_only_background").(string); color != "" {
+		readOnlyBackground = &color
+	}
+
 	brandingTheme.Colors = management.BrandingThemeColors{
 		BaseFocusColor:          &baseFocusColor,
 		BaseHoverColor:          &baseHoverColor,
@@ -54,6 +60,7 @@ func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
 		LinksFocusedComponents:  data.Get("colors.0.links_focused_components").(string),
 		PrimaryButton:           data.Get("colors.0.primary_button").(string),
 		PrimaryButtonLabel:      data.Get("colors.0.primary_button_label").(string),
+		ReadOnlyBackground:      readOnlyBackground,
 		SecondaryButtonBorder:   data.Get("colors.0.secondary_button_border").(string),
 		SecondaryButtonLabel:    data.Get("colors.0.secondary_button_label").(string),
 		Success:                 data.Get("colors.0.success").(string),

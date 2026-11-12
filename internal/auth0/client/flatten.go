@@ -701,6 +701,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("allowed_clients", client.GetAllowedClients()),
 		data.Set("grant_types", client.GetGrantTypes()),
 		data.Set("async_approval_notification_channels", client.GetAsyncApprovalNotificationChannels()),
+		data.Set("agent_id", client.GetAgentID()),
 		data.Set("organization_usage", client.GetOrganizationUsage()),
 		data.Set("organization_require_behavior", client.GetOrganizationRequireBehavior()),
 		data.Set("organization_discovery_methods", client.GetOrganizationDiscoveryMethods()),

@@ -482,3 +482,65 @@ func TestFlattenConnectionWriteOnlyClientSecret(t *testing.T) {
 		assert.Equal(t, "secret-echoed-by-api", options["client_secret"])
 	})
 }
+
+func TestFlattenConnectionOptionsAssertionDecryptionSettings(t *testing.T) {
+	settings := &management.ConnectionOptionsSAMLAssertionDecryptionSettings{
+		AlgorithmProfile:    auth0.String("v2026-1"),
+		AlgorithmExceptions: &[]string{"http://www.w3.org/2001/04/xmlenc#tripledes-cbc"},
+	}
+	expected := []interface{}{
+		map[string]interface{}{
+			"algorithm_profile":    "v2026-1",
+			"algorithm_exceptions": []string{"http://www.w3.org/2001/04/xmlenc#tripledes-cbc"},
+		},
+	}
+	data := schema.TestResourceDataRaw(t, NewResource().Schema, map[string]interface{}{})
+
+	t.Run("samlp flattens the settings", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsSAML(data, &management.ConnectionOptionsSAML{
+			AssertionDecryptionSettings: settings,
+		})
+
+		assert.Nil(t, diags)
+		assert.Equal(t, expected, result.(map[string]interface{})["assertion_decryption_settings"])
+	})
+
+	t.Run("pingfederate flattens the settings", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsPingFederate(nil, &management.ConnectionOptionsPingFederate{
+			AssertionDecryptionSettings: settings,
+		})
+
+		assert.Nil(t, diags)
+		assert.Equal(t, expected, result.(map[string]interface{})["assertion_decryption_settings"])
+	})
+
+	// The API returns [] when algorithm_exceptions was not sent.
+	t.Run("empty algorithm_exceptions flatten to an empty list", func(t *testing.T) {
+		result := flattenConnectionOptionsSAMLAssertionDecryptionSettings(&management.ConnectionOptionsSAMLAssertionDecryptionSettings{
+			AlgorithmProfile:    auth0.String("v2026-1"),
+			AlgorithmExceptions: &[]string{},
+		})
+
+		assert.Equal(t, []interface{}{
+			map[string]interface{}{
+				"algorithm_profile":    "v2026-1",
+				"algorithm_exceptions": []string{},
+			},
+		}, result)
+	})
+
+	// Connections created before the API added the field do not have it.
+	t.Run("samlp yields no block when the API omits the field", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsSAML(data, &management.ConnectionOptionsSAML{})
+
+		assert.Nil(t, diags)
+		assert.Nil(t, result.(map[string]interface{})["assertion_decryption_settings"])
+	})
+
+	t.Run("pingfederate yields no block when the API omits the field", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsPingFederate(nil, &management.ConnectionOptionsPingFederate{})
+
+		assert.Nil(t, diags)
+		assert.Nil(t, result.(map[string]interface{})["assertion_decryption_settings"])
+	})
+}

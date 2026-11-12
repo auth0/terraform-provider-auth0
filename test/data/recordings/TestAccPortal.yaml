@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 505.72125ms
+        duration: 539.316ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -53,7 +53,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: GET
       response:
         proto: HTTP/2.0
@@ -63,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 316.3705ms
+        duration: 321.942041ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -81,7 +81,7 @@ interactions:
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: '{"slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"acceptance-test-secret"}}'
+        body: '{"slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"acceptance-test-secret"}}'
         form: {}
         headers:
             Content-Type:
@@ -98,13 +98,13 @@ interactions:
         trailer: {}
         content_length: 286
         uncompressed: false
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:52:50.323Z"}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:11.875Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 744.917375ms
+        duration: 349.39775ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -123,7 +123,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -133,13 +133,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:52:50.323Z"}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:11.875Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 365.740958ms
+        duration: 338.038542ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -156,7 +156,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: GET
       response:
         proto: HTTP/2.0
@@ -166,13 +166,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 313.397666ms
+        duration: 324.032667ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -191,7 +191,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -201,13 +201,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:52:50.323Z"}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:11.875Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 312.133625ms
+        duration: 339.970042ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -224,7 +224,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: GET
       response:
         proto: HTTP/2.0
@@ -234,13 +234,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 317.573041ms
+        duration: 337.055125ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -259,7 +259,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -269,13 +269,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:52:50.323Z"}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:11.875Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 295.536708ms
+        duration: 306.182375ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -294,7 +294,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -304,13 +304,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:52:54.753Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:internal_link:v2","config":{"icon":"user","label":"Account","page_slug":"account"}},{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://help.example.com","icon":"circle-help","label":"Help"}}]}},"pages":{"default":"account","standard":[{"slug":"account","title":"Account","components":[{"type":"page:component:auth0:typography:heading","config":{"title":"Your account","description":"Manage how you sign in."}},{"type":"page:component:auth0:typography:rich_text","config":{"content":"<p>Keep your sign-in methods up to date.</p>"}},{"type":"page:component:auth0:media:image","config":{"src":"https://example.com/banner.png","height":120,"position":"center"}},{"type":"page:component:auth0:structure:separator","config":{"text":"Security","variant":"solid"}},{"type":"page:component:auth0:form","config":{"form_id":"ap_aaaaaaaaaaaaaaaaaaaaaa","completion_message":"Your profile is saved."}},{"type":"page:component:auth0:my_account:passkey_management"},{"type":"page:component:auth0:my_account:mfa_management"},{"type":"page:component:auth0:structure:section","config":{"title":"More","variant":"card","children":[{"type":"page:component:auth0:typography:heading","config":{"title":"Profile"}},{"type":"page:component:auth0:structure:separator"},{"type":"page:component:auth0:my_account:mfa_management"}],"description":"Other settings."}}]},{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:my_organization:details_edit"},{"type":"page:component:auth0:my_organization:domain_table"},{"type":"page:component:auth0:my_organization:member_management"}]}]},"custom_code":{"head":"<style>body { margin: 0; }</style>"}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:16.743Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:internal_link:v2","config":{"icon":"user","label":"Account","page_slug":"account"}},{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://help.example.com","icon":"circle-help","label":"Help"}}]}},"pages":{"default":"account","standard":[{"slug":"account","title":"Account","components":[{"type":"page:component:auth0:typography:heading","config":{"title":"Your account","description":"Manage how you sign in."}},{"type":"page:component:auth0:typography:rich_text","config":{"content":"<p>Keep your sign-in methods up to date.</p>"}},{"type":"page:component:auth0:media:image","config":{"src":"https://example.com/banner.png","height":120,"position":"center"}},{"type":"page:component:auth0:structure:separator","config":{"text":"Security","variant":"solid"}},{"type":"page:component:auth0:form","config":{"form_id":"ap_aaaaaaaaaaaaaaaaaaaaaa","completion_message":"Your profile is saved."}},{"type":"page:component:auth0:my_account:passkey_management"},{"type":"page:component:auth0:my_account:mfa_management"},{"type":"page:component:auth0:structure:section","config":{"title":"More","variant":"card","children":[{"type":"page:component:auth0:typography:heading","config":{"title":"Profile"}},{"type":"page:component:auth0:structure:separator"},{"type":"page:component:auth0:my_account:mfa_management"}],"description":"Other settings."}}]},{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:my_organization:details_edit"},{"type":"page:component:auth0:my_organization:domain_table"},{"type":"page:component:auth0:my_organization:member_management"}]}]},"custom_code":{"head":"<style>body { margin: 0; }</style>"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 364.427291ms
+        duration: 393.701917ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -329,7 +329,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -339,13 +339,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:52:54.753Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:internal_link:v2","config":{"icon":"user","label":"Account","page_slug":"account"}},{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://help.example.com","icon":"circle-help","label":"Help"}}]}},"pages":{"default":"account","standard":[{"slug":"account","title":"Account","components":[{"type":"page:component:auth0:typography:heading","config":{"title":"Your account","description":"Manage how you sign in."}},{"type":"page:component:auth0:typography:rich_text","config":{"content":"<p>Keep your sign-in methods up to date.</p>"}},{"type":"page:component:auth0:media:image","config":{"src":"https://example.com/banner.png","height":120,"position":"center"}},{"type":"page:component:auth0:structure:separator","config":{"text":"Security","variant":"solid"}},{"type":"page:component:auth0:form","config":{"form_id":"ap_aaaaaaaaaaaaaaaaaaaaaa","completion_message":"Your profile is saved."}},{"type":"page:component:auth0:my_account:passkey_management"},{"type":"page:component:auth0:my_account:mfa_management"},{"type":"page:component:auth0:structure:section","config":{"title":"More","variant":"card","children":[{"type":"page:component:auth0:typography:heading","config":{"title":"Profile"}},{"type":"page:component:auth0:structure:separator"},{"type":"page:component:auth0:my_account:mfa_management"}],"description":"Other settings."}}]},{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:my_organization:details_edit"},{"type":"page:component:auth0:my_organization:domain_table"},{"type":"page:component:auth0:my_organization:member_management"}]}]},"custom_code":{"head":"<style>body { margin: 0; }</style>"}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:16.743Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:internal_link:v2","config":{"icon":"user","label":"Account","page_slug":"account"}},{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://help.example.com","icon":"circle-help","label":"Help"}}]}},"pages":{"default":"account","standard":[{"slug":"account","title":"Account","components":[{"type":"page:component:auth0:typography:heading","config":{"title":"Your account","description":"Manage how you sign in."}},{"type":"page:component:auth0:typography:rich_text","config":{"content":"<p>Keep your sign-in methods up to date.</p>"}},{"type":"page:component:auth0:media:image","config":{"src":"https://example.com/banner.png","height":120,"position":"center"}},{"type":"page:component:auth0:structure:separator","config":{"text":"Security","variant":"solid"}},{"type":"page:component:auth0:form","config":{"form_id":"ap_aaaaaaaaaaaaaaaaaaaaaa","completion_message":"Your profile is saved."}},{"type":"page:component:auth0:my_account:passkey_management"},{"type":"page:component:auth0:my_account:mfa_management"},{"type":"page:component:auth0:structure:section","config":{"title":"More","variant":"card","children":[{"type":"page:component:auth0:typography:heading","config":{"title":"Profile"}},{"type":"page:component:auth0:structure:separator"},{"type":"page:component:auth0:my_account:mfa_management"}],"description":"Other settings."}}]},{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:my_organization:details_edit"},{"type":"page:component:auth0:my_organization:domain_table"},{"type":"page:component:auth0:my_organization:member_management"}]}]},"custom_code":{"head":"<style>body { margin: 0; }</style>"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 309.625541ms
+        duration: 310.905375ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -362,7 +362,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: GET
       response:
         proto: HTTP/2.0
@@ -372,13 +372,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 330.173625ms
+        duration: 320.064625ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -397,7 +397,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -407,13 +407,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:52:54.753Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:internal_link:v2","config":{"icon":"user","label":"Account","page_slug":"account"}},{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://help.example.com","icon":"circle-help","label":"Help"}}]}},"pages":{"default":"account","standard":[{"slug":"account","title":"Account","components":[{"type":"page:component:auth0:typography:heading","config":{"title":"Your account","description":"Manage how you sign in."}},{"type":"page:component:auth0:typography:rich_text","config":{"content":"<p>Keep your sign-in methods up to date.</p>"}},{"type":"page:component:auth0:media:image","config":{"src":"https://example.com/banner.png","height":120,"position":"center"}},{"type":"page:component:auth0:structure:separator","config":{"text":"Security","variant":"solid"}},{"type":"page:component:auth0:form","config":{"form_id":"ap_aaaaaaaaaaaaaaaaaaaaaa","completion_message":"Your profile is saved."}},{"type":"page:component:auth0:my_account:passkey_management"},{"type":"page:component:auth0:my_account:mfa_management"},{"type":"page:component:auth0:structure:section","config":{"title":"More","variant":"card","children":[{"type":"page:component:auth0:typography:heading","config":{"title":"Profile"}},{"type":"page:component:auth0:structure:separator"},{"type":"page:component:auth0:my_account:mfa_management"}],"description":"Other settings."}}]},{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:my_organization:details_edit"},{"type":"page:component:auth0:my_organization:domain_table"},{"type":"page:component:auth0:my_organization:member_management"}]}]},"custom_code":{"head":"<style>body { margin: 0; }</style>"}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:16.743Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:internal_link:v2","config":{"icon":"user","label":"Account","page_slug":"account"}},{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://help.example.com","icon":"circle-help","label":"Help"}}]}},"pages":{"default":"account","standard":[{"slug":"account","title":"Account","components":[{"type":"page:component:auth0:typography:heading","config":{"title":"Your account","description":"Manage how you sign in."}},{"type":"page:component:auth0:typography:rich_text","config":{"content":"<p>Keep your sign-in methods up to date.</p>"}},{"type":"page:component:auth0:media:image","config":{"src":"https://example.com/banner.png","height":120,"position":"center"}},{"type":"page:component:auth0:structure:separator","config":{"text":"Security","variant":"solid"}},{"type":"page:component:auth0:form","config":{"form_id":"ap_aaaaaaaaaaaaaaaaaaaaaa","completion_message":"Your profile is saved."}},{"type":"page:component:auth0:my_account:passkey_management"},{"type":"page:component:auth0:my_account:mfa_management"},{"type":"page:component:auth0:structure:section","config":{"title":"More","variant":"card","children":[{"type":"page:component:auth0:typography:heading","config":{"title":"Profile"}},{"type":"page:component:auth0:structure:separator"},{"type":"page:component:auth0:my_account:mfa_management"}],"description":"Other settings."}}]},{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:my_organization:details_edit"},{"type":"page:component:auth0:my_organization:domain_table"},{"type":"page:component:auth0:my_organization:member_management"}]}]},"custom_code":{"head":"<style>body { margin: 0; }</style>"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 307.11475ms
+        duration: 300.259583ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -432,7 +432,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -442,13 +442,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:52:54.753Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:internal_link:v2","config":{"icon":"user","label":"Account","page_slug":"account"}},{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://help.example.com","icon":"circle-help","label":"Help"}}]}},"pages":{"default":"account","standard":[{"slug":"account","title":"Account","components":[{"type":"page:component:auth0:typography:heading","config":{"title":"Your account","description":"Manage how you sign in."}},{"type":"page:component:auth0:typography:rich_text","config":{"content":"<p>Keep your sign-in methods up to date.</p>"}},{"type":"page:component:auth0:media:image","config":{"src":"https://example.com/banner.png","height":120,"position":"center"}},{"type":"page:component:auth0:structure:separator","config":{"text":"Security","variant":"solid"}},{"type":"page:component:auth0:form","config":{"form_id":"ap_aaaaaaaaaaaaaaaaaaaaaa","completion_message":"Your profile is saved."}},{"type":"page:component:auth0:my_account:passkey_management"},{"type":"page:component:auth0:my_account:mfa_management"},{"type":"page:component:auth0:structure:section","config":{"title":"More","variant":"card","children":[{"type":"page:component:auth0:typography:heading","config":{"title":"Profile"}},{"type":"page:component:auth0:structure:separator"},{"type":"page:component:auth0:my_account:mfa_management"}],"description":"Other settings."}}]},{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:my_organization:details_edit"},{"type":"page:component:auth0:my_organization:domain_table"},{"type":"page:component:auth0:my_organization:member_management"}]}]},"custom_code":{"head":"<style>body { margin: 0; }</style>"}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:16.743Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:internal_link:v2","config":{"icon":"user","label":"Account","page_slug":"account"}},{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://help.example.com","icon":"circle-help","label":"Help"}}]}},"pages":{"default":"account","standard":[{"slug":"account","title":"Account","components":[{"type":"page:component:auth0:typography:heading","config":{"title":"Your account","description":"Manage how you sign in."}},{"type":"page:component:auth0:typography:rich_text","config":{"content":"<p>Keep your sign-in methods up to date.</p>"}},{"type":"page:component:auth0:media:image","config":{"src":"https://example.com/banner.png","height":120,"position":"center"}},{"type":"page:component:auth0:structure:separator","config":{"text":"Security","variant":"solid"}},{"type":"page:component:auth0:form","config":{"form_id":"ap_aaaaaaaaaaaaaaaaaaaaaa","completion_message":"Your profile is saved."}},{"type":"page:component:auth0:my_account:passkey_management"},{"type":"page:component:auth0:my_account:mfa_management"},{"type":"page:component:auth0:structure:section","config":{"title":"More","variant":"card","children":[{"type":"page:component:auth0:typography:heading","config":{"title":"Profile"}},{"type":"page:component:auth0:structure:separator"},{"type":"page:component:auth0:my_account:mfa_management"}],"description":"Other settings."}}]},{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:my_organization:details_edit"},{"type":"page:component:auth0:my_organization:domain_table"},{"type":"page:component:auth0:my_organization:member_management"}]}]},"custom_code":{"head":"<style>body { margin: 0; }</style>"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 319.582916ms
+        duration: 325.001167ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -465,7 +465,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: GET
       response:
         proto: HTTP/2.0
@@ -475,13 +475,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 320.154833ms
+        duration: 411.370958ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -500,7 +500,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -510,13 +510,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:52:54.753Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:internal_link:v2","config":{"icon":"user","label":"Account","page_slug":"account"}},{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://help.example.com","icon":"circle-help","label":"Help"}}]}},"pages":{"default":"account","standard":[{"slug":"account","title":"Account","components":[{"type":"page:component:auth0:typography:heading","config":{"title":"Your account","description":"Manage how you sign in."}},{"type":"page:component:auth0:typography:rich_text","config":{"content":"<p>Keep your sign-in methods up to date.</p>"}},{"type":"page:component:auth0:media:image","config":{"src":"https://example.com/banner.png","height":120,"position":"center"}},{"type":"page:component:auth0:structure:separator","config":{"text":"Security","variant":"solid"}},{"type":"page:component:auth0:form","config":{"form_id":"ap_aaaaaaaaaaaaaaaaaaaaaa","completion_message":"Your profile is saved."}},{"type":"page:component:auth0:my_account:passkey_management"},{"type":"page:component:auth0:my_account:mfa_management"},{"type":"page:component:auth0:structure:section","config":{"title":"More","variant":"card","children":[{"type":"page:component:auth0:typography:heading","config":{"title":"Profile"}},{"type":"page:component:auth0:structure:separator"},{"type":"page:component:auth0:my_account:mfa_management"}],"description":"Other settings."}}]},{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:my_organization:details_edit"},{"type":"page:component:auth0:my_organization:domain_table"},{"type":"page:component:auth0:my_organization:member_management"}]}]},"custom_code":{"head":"<style>body { margin: 0; }</style>"}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:16.743Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:internal_link:v2","config":{"icon":"user","label":"Account","page_slug":"account"}},{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://help.example.com","icon":"circle-help","label":"Help"}}]}},"pages":{"default":"account","standard":[{"slug":"account","title":"Account","components":[{"type":"page:component:auth0:typography:heading","config":{"title":"Your account","description":"Manage how you sign in."}},{"type":"page:component:auth0:typography:rich_text","config":{"content":"<p>Keep your sign-in methods up to date.</p>"}},{"type":"page:component:auth0:media:image","config":{"src":"https://example.com/banner.png","height":120,"position":"center"}},{"type":"page:component:auth0:structure:separator","config":{"text":"Security","variant":"solid"}},{"type":"page:component:auth0:form","config":{"form_id":"ap_aaaaaaaaaaaaaaaaaaaaaa","completion_message":"Your profile is saved."}},{"type":"page:component:auth0:my_account:passkey_management"},{"type":"page:component:auth0:my_account:mfa_management"},{"type":"page:component:auth0:structure:section","config":{"title":"More","variant":"card","children":[{"type":"page:component:auth0:typography:heading","config":{"title":"Profile"}},{"type":"page:component:auth0:structure:separator"},{"type":"page:component:auth0:my_account:mfa_management"}],"description":"Other settings."}}]},{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:my_organization:details_edit"},{"type":"page:component:auth0:my_organization:domain_table"},{"type":"page:component:auth0:my_organization:member_management"}]}]},"custom_code":{"head":"<style>body { margin: 0; }</style>"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 350.070583ms
+        duration: 319.294041ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -535,7 +535,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -545,13 +545,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal - Updated","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:00.390Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://support.example.com","label":"Support"}}]}},"pages":{"default":"organization","standard":[{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:structure:section","config":{"variant":"none","children":[{"type":"page:component:auth0:my_organization:member_management"}]}}]}]},"custom_code":{"head":"<style>body { margin: 1px; }</style>"}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal - Updated","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:22.404Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://support.example.com","label":"Support"}}]}},"pages":{"default":"organization","standard":[{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:structure:section","config":{"variant":"none","children":[{"type":"page:component:auth0:my_organization:member_management"}]}}]}]},"custom_code":{"head":"<style>body { margin: 1px; }</style>"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 319.406959ms
+        duration: 352.37175ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -570,7 +570,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -580,13 +580,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal - Updated","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:00.390Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://support.example.com","label":"Support"}}]}},"pages":{"default":"organization","standard":[{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:structure:section","config":{"variant":"none","children":[{"type":"page:component:auth0:my_organization:member_management"}]}}]}]},"custom_code":{"head":"<style>body { margin: 1px; }</style>"}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal - Updated","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:22.404Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://support.example.com","label":"Support"}}]}},"pages":{"default":"organization","standard":[{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:structure:section","config":{"variant":"none","children":[{"type":"page:component:auth0:my_organization:member_management"}]}}]}]},"custom_code":{"head":"<style>body { margin: 1px; }</style>"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 408.490959ms
+        duration: 342.687417ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -603,7 +603,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: GET
       response:
         proto: HTTP/2.0
@@ -613,13 +613,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 368.425875ms
+        duration: 340.153375ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -638,7 +638,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -648,13 +648,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal - Updated","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:00.390Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://support.example.com","label":"Support"}}]}},"pages":{"default":"organization","standard":[{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:structure:section","config":{"variant":"none","children":[{"type":"page:component:auth0:my_organization:member_management"}]}}]}]},"custom_code":{"head":"<style>body { margin: 1px; }</style>"}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal - Updated","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:22.404Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://support.example.com","label":"Support"}}]}},"pages":{"default":"organization","standard":[{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:structure:section","config":{"variant":"none","children":[{"type":"page:component:auth0:my_organization:member_management"}]}}]}]},"custom_code":{"head":"<style>body { margin: 1px; }</style>"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 293.980458ms
+        duration: 686.0435ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -671,7 +671,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: GET
       response:
         proto: HTTP/2.0
@@ -681,13 +681,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 312.433042ms
+        duration: 322.546875ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -706,7 +706,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -716,13 +716,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal","name":"Acceptance Test - testaccportal - Updated","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:00.390Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://support.example.com","label":"Support"}}]}},"pages":{"default":"organization","standard":[{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:structure:section","config":{"variant":"none","children":[{"type":"page:component:auth0:my_organization:member_management"}]}}]}]},"custom_code":{"head":"<style>body { margin: 1px; }</style>"}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal","name":"Acceptance Test - testaccportal - Updated","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:22.404Z","navigation":{"sidebar":{"components":[{"type":"sidebar:component:auth0:external_link:v2","config":{"href":"https://support.example.com","label":"Support"}}]}},"pages":{"default":"organization","standard":[{"slug":"organization","title":"Organization","components":[{"type":"page:component:auth0:structure:section","config":{"variant":"none","children":[{"type":"page:component:auth0:my_organization:member_management"}]}}]}]},"custom_code":{"head":"<style>body { margin: 1px; }</style>"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 295.1325ms
+        duration: 487.134791ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -741,7 +741,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -751,13 +751,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:04.839Z","navigation":{},"pages":{},"custom_code":{}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:27.329Z","navigation":{},"pages":{},"custom_code":{}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 305.9115ms
+        duration: 328.739125ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -776,7 +776,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -786,13 +786,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:04.839Z","navigation":{},"pages":{},"custom_code":{}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:27.329Z","navigation":{},"pages":{},"custom_code":{}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 303.104208ms
+        duration: 308.263ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -809,7 +809,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: GET
       response:
         proto: HTTP/2.0
@@ -819,13 +819,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 305.445875ms
+        duration: 355.586917ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -844,7 +844,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -854,13 +854,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:04.839Z","navigation":{},"pages":{},"custom_code":{}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:27.329Z","navigation":{},"pages":{},"custom_code":{}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 317.374542ms
+        duration: 298.534875ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -877,7 +877,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: GET
       response:
         proto: HTTP/2.0
@@ -887,13 +887,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 307.014792ms
+        duration: 328.848375ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -912,7 +912,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -922,13 +922,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:04.839Z","navigation":{},"pages":{},"custom_code":{}}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:27.329Z","navigation":{},"pages":{},"custom_code":{}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 307.710333ms
+        duration: 482.7925ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -947,7 +947,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -957,13 +957,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:09.044Z"}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:31.808Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 310.99475ms
+        duration: 314.472166ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -982,7 +982,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -992,13 +992,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:09.044Z"}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:31.808Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 287.2205ms
+        duration: 297.44225ms
     - id: 29
       request:
         proto: HTTP/1.1
@@ -1015,7 +1015,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: GET
       response:
         proto: HTTP/2.0
@@ -1025,13 +1025,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
+        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 301.821291ms
+        duration: 332.533958ms
     - id: 30
       request:
         proto: HTTP/1.1
@@ -1050,7 +1050,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
         method: GET
       response:
         proto: HTTP/2.0
@@ -1060,13 +1060,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:09.044Z"}'
+        body: '{"id":"up_eCSFW6soMSVcKBkoM8Wcn4","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"fDCjVVRGm2hksN2D3osnvIzogmGcKZDO"},"created_at":"2026-11-12T06:37:11.875Z","updated_at":"2026-11-12T06:37:31.808Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 487.0595ms
+        duration: 364.492541ms
     - id: 31
       request:
         proto: HTTP/1.1
@@ -1081,25 +1081,25 @@ interactions:
         body: ""
         form: {}
         headers:
+            Content-Type:
+                - application/json
             User-Agent:
-                - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
-        method: GET
+                - Go-Auth0/v3.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_eCSFW6soMSVcKBkoM8Wcn4
+        method: DELETE
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 294.257042ms
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 351.092167ms
     - id: 32
       request:
         proto: HTTP/1.1
@@ -1114,421 +1114,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:09.044Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 302.020917ms
-    - id: 33
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 153
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: '{"client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"acceptance-test-secret-wo"}}'
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:13.448Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 323.729541ms
-    - id: 34
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:13.448Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 353.834375ms
-    - id: 35
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
             User-Agent:
                 - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 344.357542ms
-    - id: 36
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:13.448Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 300.663167ms
-    - id: 37
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 296.895125ms
-    - id: 38
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:13.448Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 306.286083ms
-    - id: 39
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 161
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: '{"client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"acceptance-test-secret-wo-rotated"}}'
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:17.762Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 332.048167ms
-    - id: 40
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:17.762Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 316.471625ms
-    - id: 41
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - Portal - testaccportal","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"callbacks":["https://example.com/portals/auth/callback"],"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 311.864375ms
-    - id: 42
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"up_g5aERJioPKxAiXxg1Y3F5Y","slug":"testaccportal-renamed","name":"Acceptance Test - testaccportal","client":{"token_endpoint_auth_method":"client_secret_post","client_id":"5Hvtgf8eczpommkU1n86JXH51TzIS77K"},"created_at":"2026-11-06T15:52:50.323Z","updated_at":"2026-11-06T15:53:17.762Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 321.879ms
-    - id: 43
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/v3.11.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/portals/up_g5aERJioPKxAiXxg1Y3F5Y
-        method: DELETE
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers: {}
-        status: 204 No Content
-        code: 204
-        duration: 304.268583ms
-    - id: 44
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.52.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/5Hvtgf8eczpommkU1n86JXH51TzIS77K
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/fDCjVVRGm2hksN2D3osnvIzogmGcKZDO
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1544,4 +1132,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 404.936084ms
+        duration: 521.489625ms

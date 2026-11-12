@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -52,12 +53,12 @@ func NewResource() *schema.Resource {
 				MaxItems:    1,
 				Description: "The client used by the portal.",
 				Elem: &schema.Resource{Schema: map[string]*schema.Schema{
+					// Change to Optional with ExactlyOneOf when the API supports more authentication methods.
 					"client_secret_post": {
-						Type:         schema.TypeList,
-						Optional:     true,
-						MaxItems:     1,
-						ExactlyOneOf: []string{"client.0.client_secret_post"},
-						Description:  "Client credentials using client_secret_post authentication.",
+						Type:        schema.TypeList,
+						Required:    true,
+						MaxItems:    1,
+						Description: "Client credentials using client_secret_post authentication.",
 						Elem: &schema.Resource{Schema: map[string]*schema.Schema{
 							"client_id": requiredString("The ID of the client.", 5, 64),
 							"client_secret": {
@@ -299,11 +300,34 @@ func deletePortal(ctx context.Context, data *schema.ResourceData, meta interface
 // each entry of a component list. Values that are unknown at plan time are skipped, as they cannot be judged yet.
 func validatePortal(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
 	raw := diff.GetRawConfig()
-	if err := validateSidebarComponents(raw); err != nil {
-		return err
+	result := multierror.Append(validateSidebarComponents(raw), validatePages(raw))
+
+	// The client is sent, with its secret, only on create and when it changes. A config without a secret
+	// is still valid after an import, so that it can be generated with `-generate-config-out`.
+	if diff.Id() == "" || diff.HasChange("client") {
+		result = multierror.Append(result, validateClientSecret(raw))
 	}
 
-	return validatePages(raw)
+	return result.ErrorOrNil()
+}
+
+// validateClientSecret ensures the client sets a secret, as the API rejects a client without one.
+// ExactlyOneOf is not used, because it would reject a config without a secret after an import.
+func validateClientSecret(raw cty.Value) error {
+	client := value.FirstBlock(value.Attr(raw, "client"))
+	secretPost := value.FirstBlock(value.Attr(client, "client_secret_post"))
+	if !value.IsSet(secretPost) {
+		return nil
+	}
+
+	// An unknown secret can still resolve to a value, so only a null secret counts as not set.
+	for _, name := range []string{"client_secret", "client_secret_wo"} {
+		if !value.Attr(secretPost, name).IsNull() {
+			return nil
+		}
+	}
+
+	return fmt.Errorf("`client.client_secret_post` must set one of `client_secret`, `client_secret_wo`, but sets none")
 }
 
 // validateSidebarComponents ensures each sidebar component sets exactly one link block,
@@ -320,31 +344,31 @@ func validateSidebarComponents(raw cty.Value) error {
 // validatePages ensures each page component and section child sets exactly one component type block,
 // as the API accepts one component type per entry.
 func validatePages(raw cty.Value) error {
+	var result *multierror.Error
+
 	pages := value.FirstBlock(value.Attr(raw, "pages"))
 	for i, page := range blocks(value.Attr(pages, "standard")) {
 		components := value.Attr(page, "component")
 		path := fmt.Sprintf("pages.standard[%d].component", i)
 		// Validate exactly one of component types is set.
-		if err := validateExactlyOneOf(components, path); err != nil {
-			return err
-		}
+		result = multierror.Append(result, validateExactlyOneOf(components, path))
 
 		// Validate structure_section.
 		for j, component := range blocks(components) {
 			section := value.FirstBlock(value.Attr(component, "structure_section"))
 			childPath := fmt.Sprintf("%s[%d].structure_section.child", path, j)
 			// Validate exactly one of child component types is set.
-			if err := validateExactlyOneOf(value.Attr(section, "child"), childPath); err != nil {
-				return err
-			}
+			result = multierror.Append(result, validateExactlyOneOf(value.Attr(section, "child"), childPath))
 		}
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
-// validateExactlyOneOf reports the first entry of a block list that sets zero or more than one types.
+// validateExactlyOneOf reports every entry of a block list that sets zero or more than one types.
 func validateExactlyOneOf(list cty.Value, path string) error {
+	var result *multierror.Error
+
 	for i, block := range blocks(list) {
 		if !value.IsSet(block) {
 			continue
@@ -374,11 +398,11 @@ func validateExactlyOneOf(list cty.Value, path string) error {
 			found = "`" + strings.Join(set, "`, `") + "`"
 		}
 
-		return fmt.Errorf("`%s[%d]` must set exactly one of `%s`, but sets %s",
-			path, i, strings.Join(names, "`, `"), found)
+		result = multierror.Append(result, fmt.Errorf("`%s[%d]` must set exactly one of `%s`, but sets %s",
+			path, i, strings.Join(names, "`, `"), found))
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 // blocks returns the elements of a nested block list, keeping unknown elements so that indexes match the config,

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
@@ -246,7 +247,7 @@ resource "auth0_portal" "my_portal" {
 const testAccPortalWriteOnlySecretVersion1 = testAccGivenAPortalClient + `
 resource "auth0_portal" "my_portal" {
   name = "Acceptance Test - {{.testName}}"
-  slug = "{{.testName}}-renamed"
+  slug = "{{.testName}}"
 
   client {
     client_secret_post {
@@ -261,13 +262,26 @@ resource "auth0_portal" "my_portal" {
 const testAccPortalWriteOnlySecretVersion2 = testAccGivenAPortalClient + `
 resource "auth0_portal" "my_portal" {
   name = "Acceptance Test - {{.testName}}"
-  slug = "{{.testName}}-renamed"
+  slug = "{{.testName}}"
 
   client {
     client_secret_post {
       client_id                = auth0_client.portal.client_id
       client_secret_wo         = "acceptance-test-secret-wo-rotated"
       client_secret_wo_version = 2
+    }
+  }
+}
+`
+
+const testAccPortalWithoutSecret = testAccGivenAPortalClient + `
+resource "auth0_portal" "my_portal" {
+  name = "Acceptance Test - {{.testName}}"
+  slug = "{{.testName}}"
+
+  client {
+    client_secret_post {
+      client_id = auth0_client.portal.client_id
     }
   }
 }
@@ -306,6 +320,10 @@ func TestAccPortal(t *testing.T) {
 
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccPortalWithoutSecret, testName),
+				ExpectError: regexp.MustCompile("`client.client_secret_post` must set one of `client_secret`, `client_secret_wo`"),
+			},
 			{
 				Config:      acctest.ParseTestName(testAccPortalTwoTypesInOneComponent, testName),
 				ExpectError: regexp.MustCompile("`pages.standard\\[0\\].component\\[0\\]` must set exactly one of"),
@@ -410,6 +428,27 @@ func TestAccPortal(t *testing.T) {
 					resource.TestCheckResourceAttr(name, "custom_code.#", "0"),
 					resource.TestCheckResourceAttr(name, "navigation.#", "0"),
 					resource.TestCheckResourceAttr(name, "pages.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccPortalWriteOnlySecret(t *testing.T) {
+	const name = "auth0_portal.my_portal"
+	const secretPost = "client.0.client_secret_post.0."
+	testName := strings.ToLower(t.Name())
+
+	acctest.Test(t, resource.TestCase{
+		// Write-only attributes need Terraform 1.11 or later.
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			tfversion.SkipBelow(tfversion.Version1_11_0),
+		},
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccPortalMinimal, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(name, secretPost+"client_secret", "acceptance-test-secret"),
 				),
 			},
 			{

@@ -31,6 +31,18 @@ func TestDataSourceSchema(t *testing.T) {
 	})
 }
 
+// TestAllComponentTypes ensures the test data has one entry of every component type in the schema. The expand
+// and flatten tests use this data both on a page and in a section, and the SDK models these two places with
+// separate types. So a new component type that is not mapped in both places makes those tests fail.
+func TestAllComponentTypes(t *testing.T) {
+	var names []string
+	for _, component := range allComponentTypes() {
+		names = append(names, slices.Collect(maps.Keys(component.(map[string]interface{})))...)
+	}
+
+	assert.ElementsMatch(t, slices.Collect(maps.Keys(componentTypes(false))), names)
+}
+
 func sidebarConfig(components ...interface{}) map[string]interface{} {
 	return withConfig(minimalConfig(), "navigation", block(map[string]interface{}{
 		"sidebar": block(map[string]interface{}{"component": components}),
@@ -72,7 +84,7 @@ func TestValidateSidebarComponents(t *testing.T) {
 	t.Run("it rejects a component that sets no link", func(t *testing.T) {
 		err := validateSidebarComponents(rawConfig(t, sidebarConfig(internalLink, map[string]interface{}{})))
 
-		assert.EqualError(t, err, "`navigation.sidebar.component[1]` must set exactly one of "+
+		assert.ErrorContains(t, err, "`navigation.sidebar.component[1]` must set exactly one of "+
 			"`external_link_v2`, `internal_link_v2`, but sets none")
 	})
 
@@ -84,7 +96,7 @@ func TestValidateSidebarComponents(t *testing.T) {
 
 		err := validateSidebarComponents(rawConfig(t, sidebarConfig(both)))
 
-		assert.EqualError(t, err, "`navigation.sidebar.component[0]` must set exactly one of "+
+		assert.ErrorContains(t, err, "`navigation.sidebar.component[0]` must set exactly one of "+
 			"`external_link_v2`, `internal_link_v2`, but sets `external_link_v2`, `internal_link_v2`")
 	})
 }
@@ -107,6 +119,23 @@ func TestValidatePages(t *testing.T) {
 		assert.Contains(t, err.Error(), "but sets `my_account_mfa_management`, `typography_heading`")
 	})
 
+	t.Run("it reports every invalid page component and section child", func(t *testing.T) {
+		err := validatePages(rawConfig(t, pagesConfig(
+			map[string]interface{}{},
+			map[string]interface{}{"structure_section": block(map[string]interface{}{
+				"variant": "card",
+				"child":   []interface{}{map[string]interface{}{}},
+			})},
+			map[string]interface{}{},
+		)))
+
+		require.Error(t, err)
+		assert.Contains(t, err.Error(), "3 errors occurred")
+		assert.Contains(t, err.Error(), "`pages.standard[1].component[0]` must set exactly one of ")
+		assert.Contains(t, err.Error(), "`pages.standard[1].component[1].structure_section.child[0]` must set exactly one of ")
+		assert.Contains(t, err.Error(), "`pages.standard[1].component[2]` must set exactly one of ")
+	})
+
 	t.Run("it rejects a section child that sets no component type", func(t *testing.T) {
 		err := validatePages(rawConfig(t, sectionConfig(mfa, map[string]interface{}{})))
 
@@ -114,6 +143,43 @@ func TestValidatePages(t *testing.T) {
 		assert.Contains(t, err.Error(), "`pages.standard[1].component[0].structure_section.child[1]` must set exactly one of ")
 		assert.Contains(t, err.Error(), "but sets none")
 		assert.NotContains(t, err.Error(), "structure_section`")
+	})
+}
+
+func TestValidateClientSecret(t *testing.T) {
+	t.Run("it accepts a client secret", func(t *testing.T) {
+		assert.NoError(t, validateClientSecret(rawConfig(t, minimalConfig())))
+	})
+
+	t.Run("it accepts a write-only client secret", func(t *testing.T) {
+		config := withConfig(minimalConfig(), "client", clientBlock(map[string]interface{}{
+			"client_id":                "portal-client",
+			"client_secret_wo":         "portal-secret",
+			"client_secret_wo_version": 1,
+		}))
+
+		assert.NoError(t, validateClientSecret(rawConfig(t, config)))
+	})
+
+	t.Run("it accepts an unknown client secret", func(t *testing.T) {
+		raw := cty.ObjectVal(map[string]cty.Value{
+			"client": cty.ListVal([]cty.Value{cty.ObjectVal(map[string]cty.Value{
+				"client_secret_post": cty.ListVal([]cty.Value{cty.ObjectVal(map[string]cty.Value{
+					"client_id":        cty.StringVal("portal-client"),
+					"client_secret":    cty.UnknownVal(cty.String),
+					"client_secret_wo": cty.NullVal(cty.String),
+				})}),
+			})}),
+		})
+
+		assert.NoError(t, validateClientSecret(raw))
+	})
+
+	t.Run("it rejects a client without a secret", func(t *testing.T) {
+		config := withConfig(minimalConfig(), "client", clientBlock(map[string]interface{}{"client_id": "portal-client"}))
+
+		assert.EqualError(t, validateClientSecret(rawConfig(t, config)),
+			"`client.client_secret_post` must set one of `client_secret`, `client_secret_wo`, but sets none")
 	})
 }
 
@@ -136,7 +202,7 @@ func TestValidateExactlyOneOf(t *testing.T) {
 			"first": setBlock, "second": setBlock, "third": unknownBlock,
 		})})
 
-		assert.EqualError(t, validateExactlyOneOf(list, "component"),
+		assert.ErrorContains(t, validateExactlyOneOf(list, "component"),
 			"`component[0]` must set exactly one of `first`, `second`, `third`, but sets `first`, `second`")
 	})
 
@@ -146,8 +212,19 @@ func TestValidateExactlyOneOf(t *testing.T) {
 			entry(nullBlock, nullBlock),
 		})
 
-		assert.EqualError(t, validateExactlyOneOf(list, "component"),
+		assert.ErrorContains(t, validateExactlyOneOf(list, "component"),
 			"`component[1]` must set exactly one of `first`, `second`, but sets none")
+	})
+
+	t.Run("it reports every invalid entry", func(t *testing.T) {
+		list := cty.ListVal([]cty.Value{entry(nullBlock, nullBlock), entry(setBlock, nullBlock), entry(setBlock, setBlock)})
+
+		err := validateExactlyOneOf(list, "component")
+
+		require.Error(t, err)
+		assert.Contains(t, err.Error(), "2 errors occurred")
+		assert.Contains(t, err.Error(), "`component[0]` must set exactly one of `first`, `second`, but sets none")
+		assert.Contains(t, err.Error(), "`component[2]` must set exactly one of `first`, `second`, but sets `first`, `second`")
 	})
 
 	t.Run("it skips an unknown list", func(t *testing.T) {

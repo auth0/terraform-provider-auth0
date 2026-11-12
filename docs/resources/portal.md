@@ -8,6 +8,11 @@ description: |-
 
 With this resource, you can manage a Universal Portal. (EA only)
 
+~> When the portal has a component type that this resource does not support, such as a V1 sidebar link added
+through the Management API, every refresh of the portal fails. So `terraform plan` and `terraform destroy` fail too.
+To overwrite the unsupported component, change the `navigation` or `pages` block that contains it, 
+and then run `terraform apply -refresh=false`. To destroy the portal, run `terraform destroy -refresh=false`.
+
 ## Example Usage
 
 ```terraform
@@ -144,11 +149,11 @@ resource "auth0_portal" "full" {
 <a id="nestedblock--client"></a>
 ### Nested Schema for `client`
 
-Optional:
+Required:
 
 > **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
-- `client_secret_post` (Block List, Max: 1) Client credentials using client_secret_post authentication. (see [below for nested schema](#nestedblock--client--client_secret_post))
+- `client_secret_post` (Block List, Min: 1, Max: 1) Client credentials using client_secret_post authentication. (see [below for nested schema](#nestedblock--client--client_secret_post))
 
 <a id="nestedblock--client--client_secret_post"></a>
 ### Nested Schema for `client.client_secret_post`

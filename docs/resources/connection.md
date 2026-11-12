@@ -569,6 +569,11 @@ resource "auth0_connection" "samlp" {
       cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
     }
 
+    assertion_decryption_settings {
+      algorithm_profile    = "v2026-1"
+      algorithm_exceptions = ["http://www.w3.org/2001/04/xmlenc#tripledes-cbc"]
+    }
+
     idp_initiated {
       client_id              = "client_id"
       client_protocol        = "samlp"
@@ -774,6 +779,7 @@ Optional:
 - `api_enable_groups` (Boolean) Enable API Access to groups.
 - `api_enable_users` (Boolean) Enable API Access to users.
 - `app_id` (String) App ID.
+- `assertion_decryption_settings` (Block List, Max: 1) Settings for SAML assertion decryption. Only applicable when strategy=samlp or pingfederate. (see [below for nested schema](#nestedblock--options--assertion_decryption_settings))
 - `attribute_map` (Block List, Max: 1) OpenID Connect and Okta Workforce connections can automatically map claims received from the identity provider (IdP). You can configure this mapping through a library template provided by Auth0 or by entering your own template directly. Click [here](https://auth0.com/docs/authenticate/identity-providers/enterprise-identity-providers/configure-pkce-claim-mapping-for-oidc#map-claims-for-oidc-connections) for more info. (see [below for nested schema](#nestedblock--options--attribute_map))
 - `attributes` (Block List) Order of attributes for precedence in identification.Valid values: email, phone_number, username. If Precedence is set, it must contain all values (email, phone_number, username) in specific order (see [below for nested schema](#nestedblock--options--attributes))
 - `auth_params` (Map of String) Query string parameters to be included as part of the generated passwordless email link.
@@ -890,6 +896,18 @@ Optional:
 - `validation` (Block List, Max: 1) Validation of the minimum and maximum values allowed for a user to have as username. (see [below for nested schema](#nestedblock--options--validation))
 - `waad_common_endpoint` (Boolean) Indicates whether to use the common endpoint rather than the default endpoint. Typically enabled if you're using this for a multi-tenant application in Azure AD.
 - `waad_protocol` (String) Protocol to use.
+
+<a id="nestedblock--options--assertion_decryption_settings"></a>
+### Nested Schema for `options.assertion_decryption_settings`
+
+Required:
+
+- `algorithm_profile` (String) The algorithm profile to use for decrypting SAML assertions. Options include: `v2026-1`.
+
+Optional:
+
+- `algorithm_exceptions` (List of String) A list of insecure algorithms to allow for SAML assertion decryption.
+
 
 <a id="nestedblock--options--attribute_map"></a>
 ### Nested Schema for `options.attribute_map`

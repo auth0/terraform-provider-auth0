@@ -306,6 +306,13 @@ func TestExpandConnectionOptionsSAMLAssertionDecryptionSettings(t *testing.T) {
 			expected: nil,
 		},
 		{
+			name: "null block gives nil",
+			config: cty.ObjectVal(map[string]cty.Value{
+				"assertion_decryption_settings": cty.NullVal(cty.List(settingsType)),
+			}),
+			expected: nil,
+		},
+		{
 			name: "algorithm_exceptions not in config is omitted",
 			config: givenConfig(cty.ObjectVal(map[string]cty.Value{
 				"algorithm_profile":    cty.StringVal("v2026-1"),

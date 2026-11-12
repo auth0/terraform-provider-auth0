@@ -1410,7 +1410,12 @@ func expandConnectionOptionsSAMLAssertionDecryptionSettings(
 ) *management.ConnectionOptionsSAMLAssertionDecryptionSettings {
 	var settings *management.ConnectionOptionsSAMLAssertionDecryptionSettings
 
-	config.GetAttr("assertion_decryption_settings").ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+	settingsConfig := config.GetAttr("assertion_decryption_settings")
+	if settingsConfig.IsNull() {
+		return nil
+	}
+
+	settingsConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		settings = &management.ConnectionOptionsSAMLAssertionDecryptionSettings{
 			AlgorithmProfile:    value.String(cfg.GetAttr("algorithm_profile")),
 			AlgorithmExceptions: value.Strings(cfg.GetAttr("algorithm_exceptions")),

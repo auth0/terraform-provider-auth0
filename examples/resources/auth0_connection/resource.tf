@@ -67,6 +67,8 @@ resource "auth0_connection" "my_connection" {
     authentication_methods {
       passkey {
         enabled = true
+        # Early Access: set signup_behavior only when the feature is enabled for your tenant.
+        signup_behavior = "allow"
       }
       password {
         enabled = true

@@ -143,6 +143,41 @@ func TestFlattenAuthenticationMethodPassword(t *testing.T) {
 	})
 }
 
+func TestFlattenAuthenticationMethodPasskey(t *testing.T) {
+	t.Run("nil input returns nil", func(t *testing.T) {
+		assert.Nil(t, flattenAuthenticationMethodPasskey(nil))
+	})
+
+	t.Run("fields explicitly set are echoed back unchanged", func(t *testing.T) {
+		result := flattenAuthenticationMethodPasskey(&management.PasskeyAuthenticationMethod{
+			Enabled:        auth0.Bool(true),
+			SignupBehavior: auth0.String("block"),
+		})
+
+		m := result.([]map[string]interface{})[0]
+		assert.Equal(t, true, m["enabled"])
+		assert.Equal(t, "block", m["signup_behavior"])
+	})
+
+	// With the feature flag off the API omits signup_behavior, so no default may be invented.
+	t.Run("signup_behavior stays empty when API omits the field", func(t *testing.T) {
+		result := flattenAuthenticationMethodPasskey(&management.PasskeyAuthenticationMethod{
+			Enabled: auth0.Bool(true),
+		})
+
+		m := result.([]map[string]interface{})[0]
+		assert.Equal(t, true, m["enabled"])
+		assert.Equal(t, "", m["signup_behavior"])
+	})
+
+	t.Run("enabled defaults to false when API omits the field", func(t *testing.T) {
+		result := flattenAuthenticationMethodPasskey(&management.PasskeyAuthenticationMethod{})
+
+		m := result.([]map[string]interface{})[0]
+		assert.Equal(t, false, m["enabled"])
+	})
+}
+
 func TestFlattenConnectionCrossAppAccessResourceApp(t *testing.T) {
 	t.Run("returns nil when resource app is nil", func(t *testing.T) {
 		assert.Nil(t, flattenConnectionCrossAppAccessResourceApp(nil))

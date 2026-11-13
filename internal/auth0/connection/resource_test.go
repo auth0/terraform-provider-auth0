@@ -924,6 +924,61 @@ func TestAccConnectionPasswordAuthenticationBehaviors(t *testing.T) {
 	})
 }
 
+const testAccConnectionPasskeySignupBehaviorTemplate = `
+resource "auth0_connection" "my_connection" {
+	name     = "Acceptance-Test-Connection-{{.testName}}"
+	strategy = "auth0"
+
+	options {
+		authentication_methods {
+			passkey {
+				enabled = {{.enabled}}
+				{{.signup_behavior}}
+			}
+		}
+	}
+}
+`
+
+// Requires the connection_passkey_auth_signup_behavior feature flag on the tenant when recording.
+func TestAccConnectionPasskeySignupBehavior(t *testing.T) {
+	config := func(enabled, signupBehavior string) string {
+		return acctest.ParseParametersInTemplate(testAccConnectionPasskeySignupBehaviorTemplate, map[string]interface{}{
+			"testName":        t.Name(),
+			"enabled":         enabled,
+			"signup_behavior": signupBehavior,
+		})
+	}
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: config("true", `signup_behavior = "block"`),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.signup_behavior", "block"),
+				),
+			},
+			{
+				Config: config("true", `signup_behavior = "allow"`),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.signup_behavior", "allow"),
+				),
+			},
+			{
+				// With signup_behavior unset, the API derives it from enabled and the value is read back without drift.
+				Config: config("false", ``),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.signup_behavior", "block"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccConnectionAD(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

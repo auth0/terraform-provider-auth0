@@ -493,9 +493,10 @@ func flattenAuthenticationMethodPasskey(passkeyAuthenticationMethod *management.
 		return nil
 	}
 
-	return []map[string]bool{
+	return []map[string]interface{}{
 		{
-			"enabled": *passkeyAuthenticationMethod.Enabled,
+			"enabled":         passkeyAuthenticationMethod.GetEnabled(),
+			"signup_behavior": passkeyAuthenticationMethod.GetSignupBehavior(),
 		},
 	}
 }

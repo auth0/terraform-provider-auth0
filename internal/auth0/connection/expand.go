@@ -337,7 +337,8 @@ func expandConnectionOptionsAuthenticationMethodsPasskey(config cty.Value) *mana
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
 			passkeyAuth = &management.PasskeyAuthenticationMethod{
-				Enabled: value.Bool(attributes.GetAttr("enabled")),
+				Enabled:        value.Bool(attributes.GetAttr("enabled")),
+				SignupBehavior: value.String(attributes.GetAttr("signup_behavior")),
 			}
 			return stop
 		})

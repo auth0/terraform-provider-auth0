@@ -159,3 +159,26 @@ func IsStatusNotFound(err error) bool {
 
 	return false
 }
+
+// IsStatusPaymentRequired checks to see if the error from the Auth0 Management API is a 402,
+// which the API returns when a feature needs a subscription the tenant does not have. It
+// understands both the v1 and the v3 SDK error types, like IsStatusNotFound.
+func IsStatusPaymentRequired(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	// V1 SDK: errors implement management.Error with a Status() method.
+	var mErr management.Error
+	if errors.As(err, &mErr) && mErr.Status() == http.StatusPaymentRequired {
+		return true
+	}
+
+	// V3 SDK: errors embed *core.APIError, which holds the status code in a field.
+	var apiErr *core.APIError
+	if errors.As(err, &apiErr) && apiErr.StatusCode == http.StatusPaymentRequired {
+		return true
+	}
+
+	return false
+}

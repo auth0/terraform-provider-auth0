@@ -1,6 +1,7 @@
 package organization_test
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 	"testing"
@@ -226,6 +227,124 @@ func TestAccOrganizationMembers(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_organization.my_org_data", "members.#", "2"),
 					resource.TestCheckResourceAttr("auth0_organization_members.my_members", "members.#", "2"),
+				),
+			},
+		},
+	})
+}
+
+// testAccGivenManyUsersAndAnOrganization declares userCount users, each depending on
+// the previous one so that they are always created in the same order, plus an organization.
+func testAccGivenManyUsersAndAnOrganization(userCount int) string {
+	var config strings.Builder
+
+	for i := 1; i <= userCount; i++ {
+		dependsOn := ""
+		if i > 1 {
+			dependsOn = fmt.Sprintf("\tdepends_on = [ auth0_user.user_%d ]\n\n", i-1)
+		}
+
+		fmt.Fprintf(&config, `
+resource "auth0_user" "user_%[1]d" {
+%[2]s	connection_name = "Username-Password-Authentication"
+	email           = "{{.testName}}%[1]d@auth0.com"
+	password        = "MyPass123$"
+	username        = "orgmembers%[1]d"
+}
+`, i, dependsOn)
+	}
+
+	fmt.Fprintf(&config, `
+resource "auth0_organization" "my_org" {
+	depends_on = [ auth0_user.user_%d ]
+
+	name         = "some-org-{{.testName}}"
+	display_name = "{{.testName}}"
+}
+`, userCount)
+
+	return config.String()
+}
+
+// testAccOrganizationMembersWithUsers assigns users user_<from> through user_<to> as members.
+func testAccOrganizationMembersWithUsers(userCount, from, to int) string {
+	members := make([]string, 0, to-from+1)
+	for i := from; i <= to; i++ {
+		members = append(members, fmt.Sprintf("auth0_user.user_%d.id", i))
+	}
+
+	return testAccGivenManyUsersAndAnOrganization(userCount) + fmt.Sprintf(`
+resource "auth0_organization_members" "my_members" {
+	depends_on = [ auth0_organization.my_org ]
+
+	organization_id = auth0_organization.my_org.id
+	members         = [ %s ]
+}
+
+data "auth0_organization" "my_org_data" {
+	depends_on = [ auth0_organization_members.my_members ]
+
+	organization_id = auth0_organization.my_org.id
+}
+`, strings.Join(members, ", "))
+}
+
+// testAccCheckOrganizationMembersAre checks that the resource and the organization data
+// source hold exactly users user_<from> through user_<to>.
+func testAccCheckOrganizationMembersAre(from, to int) resource.TestCheckFunc {
+	count := fmt.Sprint(to - from + 1)
+	checks := []resource.TestCheckFunc{
+		resource.TestCheckResourceAttr("auth0_organization_members.my_members", "members.#", count),
+		resource.TestCheckResourceAttr("data.auth0_organization.my_org_data", "members.#", count),
+	}
+
+	for i := from; i <= to; i++ {
+		user := fmt.Sprintf("auth0_user.user_%d", i)
+		checks = append(checks,
+			resource.TestCheckTypeSetElemAttrPair("auth0_organization_members.my_members", "members.*", user, "id"),
+			resource.TestCheckTypeSetElemAttrPair("data.auth0_organization.my_org_data", "members.*", user, "id"),
+		)
+	}
+
+	return resource.ComposeTestCheckFunc(checks...)
+}
+
+// TestAccOrganizationMembersBatch covers removing more than 10 members at
+// once, which the Management API only accepts in batches of at most 10 user IDs.
+func TestAccOrganizationMembersBatch(t *testing.T) {
+	testName := strings.ToLower(t.Name())
+
+	const userCount = 15
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccOrganizationMembersWithUsers(userCount, 1, 14), testName),
+				Check:  testAccCheckOrganizationMembersAre(1, 14),
+			},
+			{
+				// Removes 11 members and adds one in the same update.
+				Config: acctest.ParseTestName(testAccOrganizationMembersWithUsers(userCount, 12, 15), testName),
+				Check:  testAccCheckOrganizationMembersAre(12, 15),
+			},
+			{
+				Config: acctest.ParseTestName(testAccOrganizationMembersWithUsers(userCount, 1, 14), testName),
+				Check:  testAccCheckOrganizationMembersAre(1, 14),
+			},
+			{
+				// Destroys the resource while it holds 14 members.
+				Config: acctest.ParseTestName(testAccGivenManyUsersAndAnOrganization(userCount)+`
+data "auth0_organization" "my_org_data" {
+	depends_on = [ auth0_organization.my_org ]
+
+	organization_id = auth0_organization.my_org.id
+}
+`, testName),
+			},
+			{
+				RefreshState: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org_data", "members.#", "0"),
 				),
 			},
 		},

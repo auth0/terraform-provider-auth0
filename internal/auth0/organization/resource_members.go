@@ -69,7 +69,7 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	if len(membersToAdd) > len(alreadyMembers) {
-		if err := api.Organization.AddMembers(ctx, organizationID, membersToAdd); err != nil {
+		if err := addMembersInBatches(ctx, api, organizationID, membersToAdd); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -101,8 +101,8 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	if len(removeMembers) > 0 {
-		err := api.Organization.DeleteMembers(ctx, organizationID, removeMembers)
-		if !internalError.IsStatusNotFound(err) {
+		err := deleteMembersInBatches(ctx, api, organizationID, removeMembers)
+		if err != nil && !internalError.IsStatusNotFound(err) {
 			return diag.FromErr(err)
 		}
 	}
@@ -113,7 +113,7 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	if len(addMembers) > 0 {
-		if err := api.Organization.AddMembers(ctx, organizationID, addMembers); err != nil {
+		if err := addMembersInBatches(ctx, api, organizationID, addMembers); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -131,8 +131,47 @@ func deleteOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 		return nil
 	}
 
-	if err := api.Organization.DeleteMembers(ctx, organizationID, membersToRemove); err != nil {
+	if err := deleteMembersInBatches(ctx, api, organizationID, membersToRemove); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	return nil
+}
+
+// maxMembersPerRequest is the most user IDs the Management API accepts in a single
+// POST or DELETE /organizations/{id}/members request.
+const maxMembersPerRequest = 10
+
+func addMembersInBatches(
+	ctx context.Context,
+	api *management.Management,
+	organizationID string,
+	memberIDs []string,
+) error {
+	return inMemberBatches(memberIDs, func(batch []string) error {
+		return api.Organization.AddMembers(ctx, organizationID, batch)
+	})
+}
+
+func deleteMembersInBatches(
+	ctx context.Context,
+	api *management.Management,
+	organizationID string,
+	memberIDs []string,
+) error {
+	return inMemberBatches(memberIDs, func(batch []string) error {
+		return api.Organization.DeleteMembers(ctx, organizationID, batch)
+	})
+}
+
+// inMemberBatches calls send with consecutive slices of at most maxMembersPerRequest
+// member IDs, stopping at the first error.
+func inMemberBatches(memberIDs []string, send func(batch []string) error) error {
+	for start := 0; start < len(memberIDs); start += maxMembersPerRequest {
+		end := min(start+maxMembersPerRequest, len(memberIDs))
+		if err := send(memberIDs[start:end]); err != nil {
+			return err
+		}
 	}
 
 	return nil

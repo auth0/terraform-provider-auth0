@@ -29,6 +29,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		AllowedOrigins:                 value.Strings(config.GetAttr("allowed_origins")),
 		AllowedClients:                 value.Strings(config.GetAttr("allowed_clients")),
 		GrantTypes:                     value.Strings(config.GetAttr("grant_types")),
+		AgentID:                        value.String(config.GetAttr("agent_id")),
 		OrganizationUsage:              value.String(config.GetAttr("organization_usage")),
 		OrganizationRequireBehavior:    value.String(config.GetAttr("organization_require_behavior")),
 		WebOrigins:                     value.Strings(config.GetAttr("web_origins")),
@@ -1225,6 +1226,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"fedcm_login":                                          isFedCMLoginNull,
 		"identity_assertion_authorization_grant":               isIdentityAssertionAuthorizationGrantNull,
 		"anonymous_sessions":                                   isAnonymousSessionsNull,
+		"agent_id":                                             isAgentIDNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1370,6 +1372,14 @@ func isIdentityAssertionAuthorizationGrantNull(data *schema.ResourceData) bool {
 
 	rawConfig := data.GetRawConfig().GetAttr("identity_assertion_authorization_grant")
 	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
+}
+
+func isAgentIDNull(data *schema.ResourceData) bool {
+	if data.IsNewResource() || !data.HasChange("agent_id") {
+		return false
+	}
+
+	return data.GetRawConfig().GetAttr("agent_id").IsNull()
 }
 
 func isAnonymousSessionsNull(data *schema.ResourceData) bool {

@@ -3,6 +3,7 @@ package branding
 import (
 	"testing"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stretchr/testify/assert"
@@ -10,6 +11,32 @@ import (
 
 func TestFlattenBrandingTheme(t *testing.T) {
 	mockResourceData := schema.TestResourceDataRaw(t, NewThemeResource().Schema, map[string]interface{}{})
+
+	t.Run("it sets read_only_background to empty if remote theme does not have it set", func(t *testing.T) {
+		brandingTheme := management.BrandingTheme{
+			Colors: management.BrandingThemeColors{
+				ReadOnlyBackground: nil,
+			},
+		}
+
+		err := flattenBrandingTheme(mockResourceData, &brandingTheme)
+
+		assert.NoError(t, err)
+		assert.Equal(t, "", mockResourceData.Get("colors.0.read_only_background"))
+	})
+
+	t.Run("it sets read_only_background if remote theme has it set", func(t *testing.T) {
+		brandingTheme := management.BrandingTheme{
+			Colors: management.BrandingThemeColors{
+				ReadOnlyBackground: auth0.String("#ececee"),
+			},
+		}
+
+		err := flattenBrandingTheme(mockResourceData, &brandingTheme)
+
+		assert.NoError(t, err)
+		assert.Equal(t, "#ececee", mockResourceData.Get("colors.0.read_only_background"))
+	})
 
 	t.Run("it sets identifiers to nil if remote theme does not have them set", func(t *testing.T) {
 		brandingTheme := management.BrandingTheme{

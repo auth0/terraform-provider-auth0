@@ -191,6 +191,11 @@ func NewThemeResource() *schema.Resource {
 							Default:     "#ffffff",
 							Description: "Primary button label. Defaults to `#ffffff`.",
 						},
+						"read_only_background": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Read only background.",
+						},
 						"secondary_button_border": {
 							Type:        schema.TypeString,
 							Optional:    true,

@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.51.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
         method: POST
       response:
@@ -28,15 +28,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 111
+        content_length: 181
         uncompressed: false
-        body: '{"id":"org_FzP20BydheyOmmOF","display_name":"Test Org Acceptance Testing","name":"test-org-acceptance-testing"}'
+        body: '{"id":"org_Q9xy0hXe1eEWfStQ","display_name":"Test Org Acceptance Testing","name":"test-org-acceptance-testing","third_party_client_access":"block","is_app_entitlement_active":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 317.410916ms
+        duration: 325.638208ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -52,8 +52,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ
         method: GET
       response:
         proto: HTTP/2.0
@@ -63,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"org_FzP20BydheyOmmOF","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
+        body: '{"id":"org_Q9xy0hXe1eEWfStQ","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing","third_party_client_access":"block","is_app_entitlement_active":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 285.022042ms
+        duration: 308.235208ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -88,7 +88,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.51.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
         method: POST
       response:
@@ -99,13 +99,13 @@ interactions:
         trailer: {}
         content_length: 362
         uncompressed: false
-        body: '{"id":"69e9ce2f4f35108fc9e65e0d","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"6aec2d293945fa53d05fda9e","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 350.048125ms
+        duration: 329.166208ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -121,8 +121,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/69e9ce2f4f35108fc9e65e0d
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aec2d293945fa53d05fda9e
         method: GET
       response:
         proto: HTTP/2.0
@@ -132,13 +132,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"69e9ce2f4f35108fc9e65e0d","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"6aec2d293945fa53d05fda9e","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 288.318042ms
+        duration: 309.697791ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -151,13 +151,13 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"test_client","organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_FzP20BydheyOmmOF"}}
+            {"name":"test_client","organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_Q9xy0hXe1eEWfStQ"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.51.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
         method: POST
       response:
@@ -168,13 +168,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"test_client","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_FzP20BydheyOmmOF"}}'
+        body: '{"name":"test_client","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_Q9xy0hXe1eEWfStQ"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 600.839625ms
+        duration: 634.917458ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -190,8 +190,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP
         method: GET
       response:
         proto: HTTP/2.0
@@ -201,13 +201,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"test_client","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_FzP20BydheyOmmOF"}}'
+        body: '{"name":"test_client","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_Q9xy0hXe1eEWfStQ"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 286.460459ms
+        duration: 355.830375ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -223,8 +223,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fapi.travel00123.com%2F&client_id=oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt&include_totals=true&per_page=50
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fapi.travel00123.com%2F&client_id=aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP&include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -240,7 +240,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 309.086917ms
+        duration: 312.440542ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -253,13 +253,13 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"allow_any_organization":true,"organization_usage":"allow"}
+            {"client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"allow_any_organization":true,"organization_usage":"allow"}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.38.0
+                - Go-Auth0/1.51.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants
         method: POST
       response:
@@ -270,13 +270,13 @@ interactions:
         trailer: {}
         content_length: 265
         uncompressed: false
-        body: '{"id":"cgr_Pl14LRDFbzd8W494","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}'
+        body: '{"id":"cgr_Xzmfu2YwWjhzPRR9","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 346.486458ms
+        duration: 377.04675ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -292,8 +292,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_Pl14LRDFbzd8W494
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_Xzmfu2YwWjhzPRR9
         method: GET
       response:
         proto: HTTP/2.0
@@ -303,13 +303,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_Pl14LRDFbzd8W494","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}'
+        body: '{"id":"cgr_Xzmfu2YwWjhzPRR9","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 308.499375ms
+        duration: 309.253709ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -322,14 +322,14 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"grant_id":"cgr_Pl14LRDFbzd8W494"}
+            {"grant_id":"cgr_Xzmfu2YwWjhzPRR9"}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/client-grants
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/client-grants
         method: POST
       response:
         proto: HTTP/2.0
@@ -339,13 +339,13 @@ interactions:
         trailer: {}
         content_length: 247
         uncompressed: false
-        body: '{"grant_id":"cgr_Pl14LRDFbzd8W494","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true}'
+        body: '{"grant_id":"cgr_Xzmfu2YwWjhzPRR9","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 315.751334ms
+        duration: 369.911667ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -361,8 +361,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/client-grants?include_totals=true&per_page=50
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/client-grants?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -372,13 +372,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_grants":[{"id":"cgr_Pl14LRDFbzd8W494","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":50,"total":1}'
+        body: '{"client_grants":[{"id":"cgr_Xzmfu2YwWjhzPRR9","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":100,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 292.7095ms
+        duration: 316.533292ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -394,8 +394,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ
         method: GET
       response:
         proto: HTTP/2.0
@@ -405,13 +405,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"org_FzP20BydheyOmmOF","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
+        body: '{"id":"org_Q9xy0hXe1eEWfStQ","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing","third_party_client_access":"block","is_app_entitlement_active":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 288.638ms
+        duration: 307.69575ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -428,7 +428,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/connections?include_totals=true&is_enabled=true&page=0&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/connections?include_totals=true&is_enabled=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -444,7 +446,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 312.198ms
+        duration: 315.677084ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -461,7 +463,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/connections?include_totals=true&is_enabled=true&page=1&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/connections?include_totals=true&is_enabled=true&page=1&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -477,7 +481,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 303.534375ms
+        duration: 319.600125ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -493,8 +497,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -510,7 +514,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 327.978959ms
+        duration: 310.151417ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -526,8 +530,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/client-grants?include_totals=true&per_page=50
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/client-grants?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -537,13 +541,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_grants":[{"id":"cgr_Pl14LRDFbzd8W494","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":50,"total":1}'
+        body: '{"client_grants":[{"id":"cgr_Xzmfu2YwWjhzPRR9","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":100,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 308.946917ms
+        duration: 315.563375ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -559,8 +563,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ
         method: GET
       response:
         proto: HTTP/2.0
@@ -570,13 +574,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"org_FzP20BydheyOmmOF","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
+        body: '{"id":"org_Q9xy0hXe1eEWfStQ","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing","third_party_client_access":"block","is_app_entitlement_active":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 291.725416ms
+        duration: 313.646833ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -593,7 +597,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/connections?include_totals=true&is_enabled=true&page=0&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/connections?include_totals=true&is_enabled=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -609,7 +615,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 307.421667ms
+        duration: 314.095041ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -626,7 +632,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/connections?include_totals=true&is_enabled=true&page=1&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/connections?include_totals=true&is_enabled=true&page=1&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -642,7 +650,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 294.362625ms
+        duration: 318.047917ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -658,8 +666,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -675,7 +683,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 306.65775ms
+        duration: 317.4525ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -691,8 +699,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/client-grants?include_totals=true&per_page=50
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/client-grants?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -702,13 +710,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_grants":[{"id":"cgr_Pl14LRDFbzd8W494","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":50,"total":1}'
+        body: '{"client_grants":[{"id":"cgr_Xzmfu2YwWjhzPRR9","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":100,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 293.171417ms
+        duration: 319.934459ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -724,8 +732,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ
         method: GET
       response:
         proto: HTTP/2.0
@@ -735,13 +743,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"org_FzP20BydheyOmmOF","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
+        body: '{"id":"org_Q9xy0hXe1eEWfStQ","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing","third_party_client_access":"block","is_app_entitlement_active":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 313.025333ms
+        duration: 362.19625ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -757,8 +765,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/69e9ce2f4f35108fc9e65e0d
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aec2d293945fa53d05fda9e
         method: GET
       response:
         proto: HTTP/2.0
@@ -768,13 +776,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"69e9ce2f4f35108fc9e65e0d","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"6aec2d293945fa53d05fda9e","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 307.236375ms
+        duration: 318.818334ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -790,8 +798,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP
         method: GET
       response:
         proto: HTTP/2.0
@@ -801,13 +809,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"test_client","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_FzP20BydheyOmmOF"}}'
+        body: '{"name":"test_client","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_Q9xy0hXe1eEWfStQ"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 320.776042ms
+        duration: 319.134458ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -823,8 +831,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_Pl14LRDFbzd8W494
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_Xzmfu2YwWjhzPRR9
         method: GET
       response:
         proto: HTTP/2.0
@@ -834,13 +842,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"cgr_Pl14LRDFbzd8W494","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}'
+        body: '{"id":"cgr_Xzmfu2YwWjhzPRR9","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 292.326416ms
+        duration: 305.598125ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -856,8 +864,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/client-grants?include_totals=true&per_page=50
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/client-grants?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -867,13 +875,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_grants":[{"id":"cgr_Pl14LRDFbzd8W494","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":50,"total":1}'
+        body: '{"client_grants":[{"id":"cgr_Xzmfu2YwWjhzPRR9","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":100,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 313.89675ms
+        duration: 316.992667ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -889,8 +897,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ
         method: GET
       response:
         proto: HTTP/2.0
@@ -900,13 +908,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"org_FzP20BydheyOmmOF","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
+        body: '{"id":"org_Q9xy0hXe1eEWfStQ","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing","third_party_client_access":"block","is_app_entitlement_active":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 312.773042ms
+        duration: 323.179792ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -923,7 +931,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/connections?include_totals=true&is_enabled=true&page=0&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/connections?include_totals=true&is_enabled=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -939,7 +949,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 299.953417ms
+        duration: 315.3895ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -956,7 +966,9 @@ interactions:
         headers:
             Content-Type:
                 - application/json
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/connections?include_totals=true&is_enabled=true&page=1&per_page=50
+            User-Agent:
+                - Go-Auth0/v3.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/connections?include_totals=true&is_enabled=true&page=1&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -972,7 +984,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 321.484958ms
+        duration: 315.166917ms
     - id: 29
       request:
         proto: HTTP/1.1
@@ -988,8 +1000,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -1005,7 +1017,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 319.453667ms
+        duration: 316.3485ms
     - id: 30
       request:
         proto: HTTP/1.1
@@ -1021,8 +1033,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/client-grants?include_totals=true&per_page=50
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/client-grants?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -1032,13 +1044,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"client_grants":[{"id":"cgr_Pl14LRDFbzd8W494","client_id":"oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":50,"total":1}'
+        body: '{"client_grants":[{"id":"cgr_Xzmfu2YwWjhzPRR9","client_id":"aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":100,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 313.468583ms
+        duration: 318.46375ms
     - id: 31
       request:
         proto: HTTP/1.1
@@ -1054,8 +1066,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF/client-grants/cgr_Pl14LRDFbzd8W494
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ/client-grants/cgr_Xzmfu2YwWjhzPRR9
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1071,7 +1083,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 295.761208ms
+        duration: 311.526916ms
     - id: 32
       request:
         proto: HTTP/1.1
@@ -1087,8 +1099,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_Pl14LRDFbzd8W494
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_Xzmfu2YwWjhzPRR9
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1104,7 +1116,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 308.395ms
+        duration: 327.085375ms
     - id: 33
       request:
         proto: HTTP/1.1
@@ -1120,8 +1132,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/oFv3HgLVjF0fHC3c5swfcTlgIbN1BIHt
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/aBUpFBi6ZD4AKuWn1KwDjYHZ5yNQ6FJP
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1137,7 +1149,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 327.066ms
+        duration: 389.050542ms
     - id: 34
       request:
         proto: HTTP/1.1
@@ -1153,8 +1165,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/69e9ce2f4f35108fc9e65e0d
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/6aec2d293945fa53d05fda9e
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1170,7 +1182,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 360.05525ms
+        duration: 363.570541ms
     - id: 35
       request:
         proto: HTTP/1.1
@@ -1186,8 +1198,8 @@ interactions:
         form: {}
         headers:
             User-Agent:
-                - Go-Auth0/1.38.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_FzP20BydheyOmmOF
+                - Go-Auth0/1.51.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_Q9xy0hXe1eEWfStQ
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1203,4 +1215,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 304.050083ms
+        duration: 319.867542ms

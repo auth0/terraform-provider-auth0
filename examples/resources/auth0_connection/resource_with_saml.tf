@@ -51,6 +51,11 @@ resource "auth0_connection" "samlp" {
       cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
     }
 
+    assertion_decryption_settings {
+      algorithm_profile    = "v2026-1"
+      algorithm_exceptions = ["http://www.w3.org/2001/04/xmlenc#tripledes-cbc"]
+    }
+
     idp_initiated {
       client_id              = "client_id"
       client_protocol        = "samlp"

@@ -67,6 +67,10 @@ func flattenEmailProviderCredentials(data *schema.ResourceData, emailProvider *m
 			"ms365_client_id":     data.Get("credentials.0.ms365_client_id").(string),
 			"ms365_client_secret": data.Get("credentials.0.ms365_client_secret").(string),
 		}
+	case *management.EmailProviderCredentialsResend:
+		credentials = map[string]interface{}{
+			"api_key": data.Get("credentials.0.api_key").(string),
+		}
 	case *management.EmailProviderCredentialsCustom:
 		credentials = map[string]interface{}{}
 	}

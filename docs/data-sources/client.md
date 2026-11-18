@@ -34,6 +34,7 @@ data "auth0_client" "some-client-by-id" {
 ### Read-Only
 
 - `addons` (List of Object) Addons enabled for this client and their associated configurations. (see [below for nested schema](#nestedatt--addons))
+- `agent_id` (String) The ID of the agent (`auth0_agent`) this client is linked to (EA Only). Reference it as `auth0_agent.<name>.id` so that the client is unlinked before the agent is deleted. Removing the attribute unlinks the client, including a link made outside Terraform. Requires the `update:clients` and `update:agents` scopes.
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.

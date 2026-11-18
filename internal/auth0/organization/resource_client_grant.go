@@ -56,14 +56,14 @@ func readOrganizationClientGrant(ctx context.Context, data *schema.ResourceData,
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
-	clientGrantList, err := api.Organization.ClientGrants(ctx, organizationID)
+	clientGrants, err := listAllOrganizationClientGrants(ctx, api, organizationID)
 
 	if err != nil {
 		return internalError.HandleReadAPIError("auth0_organization_client_grant", data, err)
 	}
 
 	grantID := data.Get("grant_id").(string)
-	for _, grant := range clientGrantList.ClientGrants {
+	for _, grant := range clientGrants {
 		if grant.GetID() == grantID {
 			return nil
 		}

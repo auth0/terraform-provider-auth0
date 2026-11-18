@@ -253,7 +253,7 @@ func fetchAllOrganizationClientGrants(
 	api *management.Management,
 	organizationID string,
 ) ([]*management.ClientGrant, error) {
-	clientGrantList, err := api.Organization.ClientGrants(ctx, organizationID)
+	clientGrants, err := listAllOrganizationClientGrants(ctx, api, organizationID)
 	if err != nil {
 		if strings.Contains(err.Error(), "Insufficient scope") {
 			return []*management.ClientGrant{}, nil
@@ -261,5 +261,35 @@ func fetchAllOrganizationClientGrants(
 		return nil, err
 	}
 
-	return clientGrantList.ClientGrants, nil
+	return clientGrants, nil
+}
+
+func listAllOrganizationClientGrants(
+	ctx context.Context,
+	api *management.Management,
+	organizationID string,
+) ([]*management.ClientGrant, error) {
+	var clientGrants []*management.ClientGrant
+	var page int
+	for {
+		clientGrantList, err := api.Organization.ClientGrants(
+			ctx,
+			organizationID,
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		clientGrants = append(clientGrants, clientGrantList.ClientGrants...)
+
+		if !clientGrantList.HasNext() {
+			break
+		}
+
+		page++
+	}
+
+	return clientGrants, nil
 }

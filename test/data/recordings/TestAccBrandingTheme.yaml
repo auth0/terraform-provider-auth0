@@ -15,10 +15,8 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.52.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
         method: GET
       response:
@@ -29,13 +27,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"statusCode":404,"error":"Not Found","message":"There was an error retrieving branding settings: invalid theme ID","errorCode":"theme_not_found"}'
+        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 404 Not Found
-        code: 404
-        duration: 433.594292ms
+        status: 200 OK
+        code: 200
+        duration: 357.171916ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -54,9 +52,9 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes
-        method: POST
+                - Go-Auth0/1.52.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -65,13 +63,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 392.5295ms
+        duration: 349.21825ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -86,10 +84,8 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.52.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
         method: GET
       response:
@@ -100,13 +96,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 347.257084ms
+        duration: 731.327792ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -121,10 +117,8 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.52.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
         method: GET
       response:
@@ -135,13 +129,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 395.56575ms
+        duration: 515.101916ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -156,10 +150,8 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.52.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
         method: GET
       response:
@@ -170,33 +162,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 1.538058292s
+        duration: 301.776292ms
     - id: 5
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 1415
+        content_length: 1585
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"borders":{"button_border_radius":1.1,"button_border_weight":1.34,"buttons_style":"pill","input_border_radius":3.2,"input_border_weight":1.99,"inputs_style":"pill","show_widget_shadow":false,"widget_border_weight":1.11,"widget_corner_radius":3.57},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#FF00CC","captcha_widget_theme":"auto","error":"#FF00CC","header":"#FF00CC","icons":"#FF00CC","input_background":"#FF00CC","input_border":"#FF00CC","input_filled_text":"#FF00CC","input_labels_placeholders":"#FF00CC","links_focused_components":"#FF00CC","primary_button":"#FF00CC","primary_button_label":"#FF00CC","secondary_button_border":"#FF00CC","secondary_button_label":"#FF00CC","success":"#FF00CC","widget_background":"#FF00CC","widget_border":"#FF00CC"},"fonts":{"body_text":{"bold":false,"size":99.5},"buttons_text":{"bold":false,"size":99.5},"font_url":"https://google.com/font.woff","input_labels":{"bold":false,"size":99.5},"links":{"bold":false,"size":99.5},"links_style":"normal","reference_text_size":12.5,"subtitle":{"bold":false,"size":99.5},"title":{"bold":false,"size":99.5}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55.5,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"}}
+            {"borders":{"button_border_radius":1.1,"button_border_weight":1.34,"buttons_style":"pill","input_border_radius":3.2,"input_border_weight":1.99,"inputs_style":"pill","show_widget_shadow":false,"widget_border_weight":1.11,"widget_corner_radius":3.57},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#FF00CC","captcha_widget_theme":"auto","error":"#FF00CC","header":"#FF00CC","icons":"#FF00CC","input_background":"#FF00CC","input_border":"#FF00CC","input_filled_text":"#FF00CC","input_labels_placeholders":"#FF00CC","links_focused_components":"#FF00CC","primary_button":"#FF00CC","primary_button_label":"#FF00CC","read_only_background":"#FF00CC","secondary_button_border":"#FF00CC","secondary_button_label":"#FF00CC","success":"#FF00CC","widget_background":"#FF00CC","widget_border":"#FF00CC"},"fonts":{"body_text":{"bold":false,"size":99.5},"buttons_text":{"bold":false,"size":99.5},"font_url":"https://google.com/font.woff","input_labels":{"bold":false,"size":99.5},"links":{"bold":false,"size":99.5},"links_style":"normal","reference_text_size":12.5,"subtitle":{"bold":false,"size":99.5},"title":{"bold":false,"size":99.5}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55.5,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/A3UjU171RkRajpF7E5shTJPf7YYdy443
+                - Go-Auth0/1.52.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -206,13 +198,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"borders":{"button_border_radius":1.1,"button_border_weight":1.34,"buttons_style":"pill","input_border_radius":3.2,"input_border_weight":1.99,"inputs_style":"pill","show_widget_shadow":false,"widget_border_weight":1.11,"widget_corner_radius":3.57},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#FF00CC","captcha_widget_theme":"auto","error":"#FF00CC","header":"#FF00CC","icons":"#FF00CC","input_background":"#FF00CC","input_border":"#FF00CC","input_filled_text":"#FF00CC","input_labels_placeholders":"#FF00CC","links_focused_components":"#FF00CC","primary_button":"#FF00CC","primary_button_label":"#FF00CC","secondary_button_border":"#FF00CC","secondary_button_label":"#FF00CC","success":"#FF00CC","widget_background":"#FF00CC","widget_border":"#FF00CC"},"fonts":{"body_text":{"bold":false,"size":99.5},"buttons_text":{"bold":false,"size":99.5},"font_url":"https://google.com/font.woff","input_labels":{"bold":false,"size":99.5},"links":{"bold":false,"size":99.5},"links_style":"normal","reference_text_size":12.5,"subtitle":{"bold":false,"size":99.5},"title":{"bold":false,"size":99.5}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55.5,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"borders":{"button_border_radius":1.1,"button_border_weight":1.34,"buttons_style":"pill","input_border_radius":3.2,"input_border_weight":1.99,"inputs_style":"pill","show_widget_shadow":false,"widget_border_weight":1.11,"widget_corner_radius":3.57},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#FF00CC","captcha_widget_theme":"auto","error":"#FF00CC","header":"#FF00CC","icons":"#FF00CC","input_background":"#FF00CC","input_border":"#FF00CC","input_filled_text":"#FF00CC","input_labels_placeholders":"#FF00CC","links_focused_components":"#FF00CC","primary_button":"#FF00CC","primary_button_label":"#FF00CC","read_only_background":"#FF00CC","secondary_button_border":"#FF00CC","secondary_button_label":"#FF00CC","success":"#FF00CC","widget_background":"#FF00CC","widget_border":"#FF00CC"},"fonts":{"body_text":{"bold":false,"size":99.5},"buttons_text":{"bold":false,"size":99.5},"font_url":"https://google.com/font.woff","input_labels":{"bold":false,"size":99.5},"links":{"bold":false,"size":99.5},"links_style":"normal","reference_text_size":12.5,"subtitle":{"bold":false,"size":99.5},"title":{"bold":false,"size":99.5}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55.5,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 7.438197083s
+        duration: 317.013417ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -227,10 +219,8 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.52.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
         method: GET
       response:
@@ -241,13 +231,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"borders":{"button_border_radius":1.1,"button_border_weight":1.34,"buttons_style":"pill","input_border_radius":3.2,"input_border_weight":1.99,"inputs_style":"pill","show_widget_shadow":false,"widget_border_weight":1.11,"widget_corner_radius":3.57},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#FF00CC","captcha_widget_theme":"auto","error":"#FF00CC","header":"#FF00CC","icons":"#FF00CC","input_background":"#FF00CC","input_border":"#FF00CC","input_filled_text":"#FF00CC","input_labels_placeholders":"#FF00CC","links_focused_components":"#FF00CC","primary_button":"#FF00CC","primary_button_label":"#FF00CC","secondary_button_border":"#FF00CC","secondary_button_label":"#FF00CC","success":"#FF00CC","widget_background":"#FF00CC","widget_border":"#FF00CC"},"fonts":{"body_text":{"bold":false,"size":99.5},"buttons_text":{"bold":false,"size":99.5},"font_url":"https://google.com/font.woff","input_labels":{"bold":false,"size":99.5},"links":{"bold":false,"size":99.5},"links_style":"normal","reference_text_size":12.5,"subtitle":{"bold":false,"size":99.5},"title":{"bold":false,"size":99.5}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55.5,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"borders":{"button_border_radius":1.1,"button_border_weight":1.34,"buttons_style":"pill","input_border_radius":3.2,"input_border_weight":1.99,"inputs_style":"pill","show_widget_shadow":false,"widget_border_weight":1.11,"widget_corner_radius":3.57},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#FF00CC","captcha_widget_theme":"auto","error":"#FF00CC","header":"#FF00CC","icons":"#FF00CC","input_background":"#FF00CC","input_border":"#FF00CC","input_filled_text":"#FF00CC","input_labels_placeholders":"#FF00CC","links_focused_components":"#FF00CC","primary_button":"#FF00CC","primary_button_label":"#FF00CC","read_only_background":"#FF00CC","secondary_button_border":"#FF00CC","secondary_button_label":"#FF00CC","success":"#FF00CC","widget_background":"#FF00CC","widget_border":"#FF00CC"},"fonts":{"body_text":{"bold":false,"size":99.5},"buttons_text":{"bold":false,"size":99.5},"font_url":"https://google.com/font.woff","input_labels":{"bold":false,"size":99.5},"links":{"bold":false,"size":99.5},"links_style":"normal","reference_text_size":12.5,"subtitle":{"bold":false,"size":99.5},"title":{"bold":false,"size":99.5}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55.5,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 3.25419875s
+        duration: 291.653958ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -262,10 +252,8 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.52.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
         method: GET
       response:
@@ -276,13 +264,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"borders":{"button_border_radius":1.1,"button_border_weight":1.34,"buttons_style":"pill","input_border_radius":3.2,"input_border_weight":1.99,"inputs_style":"pill","show_widget_shadow":false,"widget_border_weight":1.11,"widget_corner_radius":3.57},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#FF00CC","captcha_widget_theme":"auto","error":"#FF00CC","header":"#FF00CC","icons":"#FF00CC","input_background":"#FF00CC","input_border":"#FF00CC","input_filled_text":"#FF00CC","input_labels_placeholders":"#FF00CC","links_focused_components":"#FF00CC","primary_button":"#FF00CC","primary_button_label":"#FF00CC","secondary_button_border":"#FF00CC","secondary_button_label":"#FF00CC","success":"#FF00CC","widget_background":"#FF00CC","widget_border":"#FF00CC"},"fonts":{"body_text":{"bold":false,"size":99.5},"buttons_text":{"bold":false,"size":99.5},"font_url":"https://google.com/font.woff","input_labels":{"bold":false,"size":99.5},"links":{"bold":false,"size":99.5},"links_style":"normal","reference_text_size":12.5,"subtitle":{"bold":false,"size":99.5},"title":{"bold":false,"size":99.5}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55.5,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"borders":{"button_border_radius":1.1,"button_border_weight":1.34,"buttons_style":"pill","input_border_radius":3.2,"input_border_weight":1.99,"inputs_style":"pill","show_widget_shadow":false,"widget_border_weight":1.11,"widget_corner_radius":3.57},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#FF00CC","captcha_widget_theme":"auto","error":"#FF00CC","header":"#FF00CC","icons":"#FF00CC","input_background":"#FF00CC","input_border":"#FF00CC","input_filled_text":"#FF00CC","input_labels_placeholders":"#FF00CC","links_focused_components":"#FF00CC","primary_button":"#FF00CC","primary_button_label":"#FF00CC","read_only_background":"#FF00CC","secondary_button_border":"#FF00CC","secondary_button_label":"#FF00CC","success":"#FF00CC","widget_background":"#FF00CC","widget_border":"#FF00CC"},"fonts":{"body_text":{"bold":false,"size":99.5},"buttons_text":{"bold":false,"size":99.5},"font_url":"https://google.com/font.woff","input_labels":{"bold":false,"size":99.5},"links":{"bold":false,"size":99.5},"links_style":"normal","reference_text_size":12.5,"subtitle":{"bold":false,"size":99.5},"title":{"bold":false,"size":99.5}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55.5,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 1.623652084s
+        duration: 282.417708ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -297,10 +285,8 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.52.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
         method: GET
       response:
@@ -311,33 +297,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"borders":{"button_border_radius":1.1,"button_border_weight":1.34,"buttons_style":"pill","input_border_radius":3.2,"input_border_weight":1.99,"inputs_style":"pill","show_widget_shadow":false,"widget_border_weight":1.11,"widget_corner_radius":3.57},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#FF00CC","captcha_widget_theme":"auto","error":"#FF00CC","header":"#FF00CC","icons":"#FF00CC","input_background":"#FF00CC","input_border":"#FF00CC","input_filled_text":"#FF00CC","input_labels_placeholders":"#FF00CC","links_focused_components":"#FF00CC","primary_button":"#FF00CC","primary_button_label":"#FF00CC","secondary_button_border":"#FF00CC","secondary_button_label":"#FF00CC","success":"#FF00CC","widget_background":"#FF00CC","widget_border":"#FF00CC"},"fonts":{"body_text":{"bold":false,"size":99.5},"buttons_text":{"bold":false,"size":99.5},"font_url":"https://google.com/font.woff","input_labels":{"bold":false,"size":99.5},"links":{"bold":false,"size":99.5},"links_style":"normal","reference_text_size":12.5,"subtitle":{"bold":false,"size":99.5},"title":{"bold":false,"size":99.5}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55.5,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"borders":{"button_border_radius":1.1,"button_border_weight":1.34,"buttons_style":"pill","input_border_radius":3.2,"input_border_weight":1.99,"inputs_style":"pill","show_widget_shadow":false,"widget_border_weight":1.11,"widget_corner_radius":3.57},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#FF00CC","captcha_widget_theme":"auto","error":"#FF00CC","header":"#FF00CC","icons":"#FF00CC","input_background":"#FF00CC","input_border":"#FF00CC","input_filled_text":"#FF00CC","input_labels_placeholders":"#FF00CC","links_focused_components":"#FF00CC","primary_button":"#FF00CC","primary_button_label":"#FF00CC","read_only_background":"#FF00CC","secondary_button_border":"#FF00CC","secondary_button_label":"#FF00CC","success":"#FF00CC","widget_background":"#FF00CC","widget_border":"#FF00CC"},"fonts":{"body_text":{"bold":false,"size":99.5},"buttons_text":{"bold":false,"size":99.5},"font_url":"https://google.com/font.woff","input_labels":{"bold":false,"size":99.5},"links":{"bold":false,"size":99.5},"links_style":"normal","reference_text_size":12.5,"subtitle":{"bold":false,"size":99.5},"title":{"bold":false,"size":99.5}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55.5,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 340.25525ms
+        duration: 285.433916ms
     - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 1414
+        content_length: 1584
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"displayName":"My branding","borders":{"button_border_radius":2,"button_border_weight":2,"buttons_style":"pill","input_border_radius":2,"input_border_weight":2,"inputs_style":"pill","show_widget_shadow":true,"widget_border_weight":2,"widget_corner_radius":2},"colors":{"base_focus_color":"#BBBBBB","base_hover_color":"#CCCCCC","body_text":"#00FF00","captcha_widget_theme":"dark","error":"#00FF00","header":"#00FF00","icons":"#00FF00","input_background":"#00FF00","input_border":"#00FF00","input_filled_text":"#00FF00","input_labels_placeholders":"#00FF00","links_focused_components":"#00FF00","primary_button":"#00FF00","primary_button_label":"#00FF00","secondary_button_border":"#00FF00","secondary_button_label":"#00FF00","success":"#00FF00","widget_background":"#00FF00","widget_border":"#00FF00"},"fonts":{"body_text":{"bold":true,"size":100},"buttons_text":{"bold":true,"size":100},"font_url":"https://google.com/font.woff","input_labels":{"bold":true,"size":100},"links":{"bold":true,"size":100},"links_style":"underlined","reference_text_size":12,"subtitle":{"bold":true,"size":100},"title":{"bold":true,"size":100}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"}}
+            {"displayName":"My branding","borders":{"button_border_radius":2,"button_border_weight":2,"buttons_style":"pill","input_border_radius":2,"input_border_weight":2,"inputs_style":"pill","show_widget_shadow":true,"widget_border_weight":2,"widget_corner_radius":2},"colors":{"base_focus_color":"#BBBBBB","base_hover_color":"#CCCCCC","body_text":"#00FF00","captcha_widget_theme":"dark","error":"#00FF00","header":"#00FF00","icons":"#00FF00","input_background":"#00FF00","input_border":"#00FF00","input_filled_text":"#00FF00","input_labels_placeholders":"#00FF00","links_focused_components":"#00FF00","primary_button":"#00FF00","primary_button_label":"#00FF00","read_only_background":"#00FF00","secondary_button_border":"#00FF00","secondary_button_label":"#00FF00","success":"#00FF00","widget_background":"#00FF00","widget_border":"#00FF00"},"fonts":{"body_text":{"bold":true,"size":100},"buttons_text":{"bold":true,"size":100},"font_url":"https://google.com/font.woff","input_labels":{"bold":true,"size":100},"links":{"bold":true,"size":100},"links_style":"underlined","reference_text_size":12,"subtitle":{"bold":true,"size":100},"title":{"bold":true,"size":100}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/A3UjU171RkRajpF7E5shTJPf7YYdy443
+                - Go-Auth0/1.52.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -347,13 +333,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"displayName":"My branding","borders":{"button_border_radius":2,"button_border_weight":2,"buttons_style":"pill","input_border_radius":2,"input_border_weight":2,"inputs_style":"pill","show_widget_shadow":true,"widget_border_weight":2,"widget_corner_radius":2},"colors":{"base_focus_color":"#BBBBBB","base_hover_color":"#CCCCCC","body_text":"#00FF00","captcha_widget_theme":"dark","error":"#00FF00","header":"#00FF00","icons":"#00FF00","input_background":"#00FF00","input_border":"#00FF00","input_filled_text":"#00FF00","input_labels_placeholders":"#00FF00","links_focused_components":"#00FF00","primary_button":"#00FF00","primary_button_label":"#00FF00","secondary_button_border":"#00FF00","secondary_button_label":"#00FF00","success":"#00FF00","widget_background":"#00FF00","widget_border":"#00FF00"},"fonts":{"body_text":{"bold":true,"size":100},"buttons_text":{"bold":true,"size":100},"font_url":"https://google.com/font.woff","input_labels":{"bold":true,"size":100},"links":{"bold":true,"size":100},"links_style":"underlined","reference_text_size":12,"subtitle":{"bold":true,"size":100},"title":{"bold":true,"size":100}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"displayName":"My branding","borders":{"button_border_radius":2,"button_border_weight":2,"buttons_style":"pill","input_border_radius":2,"input_border_weight":2,"inputs_style":"pill","show_widget_shadow":true,"widget_border_weight":2,"widget_corner_radius":2},"colors":{"base_focus_color":"#BBBBBB","base_hover_color":"#CCCCCC","body_text":"#00FF00","captcha_widget_theme":"dark","error":"#00FF00","header":"#00FF00","icons":"#00FF00","input_background":"#00FF00","input_border":"#00FF00","input_filled_text":"#00FF00","input_labels_placeholders":"#00FF00","links_focused_components":"#00FF00","primary_button":"#00FF00","primary_button_label":"#00FF00","read_only_background":"#00FF00","secondary_button_border":"#00FF00","secondary_button_label":"#00FF00","success":"#00FF00","widget_background":"#00FF00","widget_border":"#00FF00"},"fonts":{"body_text":{"bold":true,"size":100},"buttons_text":{"bold":true,"size":100},"font_url":"https://google.com/font.woff","input_labels":{"bold":true,"size":100},"links":{"bold":true,"size":100},"links_style":"underlined","reference_text_size":12,"subtitle":{"bold":true,"size":100},"title":{"bold":true,"size":100}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 328.91975ms
+        duration: 324.185167ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -368,10 +354,8 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.52.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
         method: GET
       response:
@@ -382,13 +366,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"displayName":"My branding","borders":{"button_border_radius":2,"button_border_weight":2,"buttons_style":"pill","input_border_radius":2,"input_border_weight":2,"inputs_style":"pill","show_widget_shadow":true,"widget_border_weight":2,"widget_corner_radius":2},"colors":{"base_focus_color":"#BBBBBB","base_hover_color":"#CCCCCC","body_text":"#00FF00","captcha_widget_theme":"dark","error":"#00FF00","header":"#00FF00","icons":"#00FF00","input_background":"#00FF00","input_border":"#00FF00","input_filled_text":"#00FF00","input_labels_placeholders":"#00FF00","links_focused_components":"#00FF00","primary_button":"#00FF00","primary_button_label":"#00FF00","secondary_button_border":"#00FF00","secondary_button_label":"#00FF00","success":"#00FF00","widget_background":"#00FF00","widget_border":"#00FF00"},"fonts":{"body_text":{"bold":true,"size":100},"buttons_text":{"bold":true,"size":100},"font_url":"https://google.com/font.woff","input_labels":{"bold":true,"size":100},"links":{"bold":true,"size":100},"links_style":"underlined","reference_text_size":12,"subtitle":{"bold":true,"size":100},"title":{"bold":true,"size":100}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"displayName":"My branding","borders":{"button_border_radius":2,"button_border_weight":2,"buttons_style":"pill","input_border_radius":2,"input_border_weight":2,"inputs_style":"pill","show_widget_shadow":true,"widget_border_weight":2,"widget_corner_radius":2},"colors":{"base_focus_color":"#BBBBBB","base_hover_color":"#CCCCCC","body_text":"#00FF00","captcha_widget_theme":"dark","error":"#00FF00","header":"#00FF00","icons":"#00FF00","input_background":"#00FF00","input_border":"#00FF00","input_filled_text":"#00FF00","input_labels_placeholders":"#00FF00","links_focused_components":"#00FF00","primary_button":"#00FF00","primary_button_label":"#00FF00","read_only_background":"#00FF00","secondary_button_border":"#00FF00","secondary_button_label":"#00FF00","success":"#00FF00","widget_background":"#00FF00","widget_border":"#00FF00"},"fonts":{"body_text":{"bold":true,"size":100},"buttons_text":{"bold":true,"size":100},"font_url":"https://google.com/font.woff","input_labels":{"bold":true,"size":100},"links":{"bold":true,"size":100},"links_style":"underlined","reference_text_size":12,"subtitle":{"bold":true,"size":100},"title":{"bold":true,"size":100}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 424.937875ms
+        duration: 276.400667ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -403,10 +387,8 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.52.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
         method: GET
       response:
@@ -417,13 +399,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"displayName":"My branding","borders":{"button_border_radius":2,"button_border_weight":2,"buttons_style":"pill","input_border_radius":2,"input_border_weight":2,"inputs_style":"pill","show_widget_shadow":true,"widget_border_weight":2,"widget_corner_radius":2},"colors":{"base_focus_color":"#BBBBBB","base_hover_color":"#CCCCCC","body_text":"#00FF00","captcha_widget_theme":"dark","error":"#00FF00","header":"#00FF00","icons":"#00FF00","input_background":"#00FF00","input_border":"#00FF00","input_filled_text":"#00FF00","input_labels_placeholders":"#00FF00","links_focused_components":"#00FF00","primary_button":"#00FF00","primary_button_label":"#00FF00","secondary_button_border":"#00FF00","secondary_button_label":"#00FF00","success":"#00FF00","widget_background":"#00FF00","widget_border":"#00FF00"},"fonts":{"body_text":{"bold":true,"size":100},"buttons_text":{"bold":true,"size":100},"font_url":"https://google.com/font.woff","input_labels":{"bold":true,"size":100},"links":{"bold":true,"size":100},"links_style":"underlined","reference_text_size":12,"subtitle":{"bold":true,"size":100},"title":{"bold":true,"size":100}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"themeId":"A3UjU171RkRajpF7E5shTJPf7YYdy443"}'
+        body: '{"displayName":"My branding","borders":{"button_border_radius":2,"button_border_weight":2,"buttons_style":"pill","input_border_radius":2,"input_border_weight":2,"inputs_style":"pill","show_widget_shadow":true,"widget_border_weight":2,"widget_corner_radius":2},"colors":{"base_focus_color":"#BBBBBB","base_hover_color":"#CCCCCC","body_text":"#00FF00","captcha_widget_theme":"dark","error":"#00FF00","header":"#00FF00","icons":"#00FF00","input_background":"#00FF00","input_border":"#00FF00","input_filled_text":"#00FF00","input_labels_placeholders":"#00FF00","links_focused_components":"#00FF00","primary_button":"#00FF00","primary_button_label":"#00FF00","read_only_background":"#00FF00","secondary_button_border":"#00FF00","secondary_button_label":"#00FF00","success":"#00FF00","widget_background":"#00FF00","widget_border":"#00FF00"},"fonts":{"body_text":{"bold":true,"size":100},"buttons_text":{"bold":true,"size":100},"font_url":"https://google.com/font.woff","input_labels":{"bold":true,"size":100},"links":{"bold":true,"size":100},"links_style":"underlined","reference_text_size":12,"subtitle":{"bold":true,"size":100},"title":{"bold":true,"size":100}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 333.80125ms
+        duration: 315.633167ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -438,11 +420,144 @@ interactions:
         body: ""
         form: {}
         headers:
+            User-Agent:
+                - Go-Auth0/1.52.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"displayName":"My branding","borders":{"button_border_radius":2,"button_border_weight":2,"buttons_style":"pill","input_border_radius":2,"input_border_weight":2,"inputs_style":"pill","show_widget_shadow":true,"widget_border_weight":2,"widget_corner_radius":2},"colors":{"base_focus_color":"#BBBBBB","base_hover_color":"#CCCCCC","body_text":"#00FF00","captcha_widget_theme":"dark","error":"#00FF00","header":"#00FF00","icons":"#00FF00","input_background":"#00FF00","input_border":"#00FF00","input_filled_text":"#00FF00","input_labels_placeholders":"#00FF00","links_focused_components":"#00FF00","primary_button":"#00FF00","primary_button_label":"#00FF00","read_only_background":"#00FF00","secondary_button_border":"#00FF00","secondary_button_label":"#00FF00","success":"#00FF00","widget_background":"#00FF00","widget_border":"#00FF00"},"fonts":{"body_text":{"bold":true,"size":100},"buttons_text":{"bold":true,"size":100},"font_url":"https://google.com/font.woff","input_labels":{"bold":true,"size":100},"links":{"bold":true,"size":100},"links_style":"underlined","reference_text_size":12,"subtitle":{"bold":true,"size":100},"title":{"bold":true,"size":100}},"page_background":{"background_color":"#000000","background_image_url":"https://google.com/background.png","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":55,"logo_position":"center","logo_url":"https://google.com/logo.png","social_buttons_layout":"top"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 278.667916ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 1448
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}}}
+        form: {}
+        headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/A3UjU171RkRajpF7E5shTJPf7YYdy443
+                - Go-Auth0/1.52.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 286.633125ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.52.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 294.678ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.52.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/default
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"borders":{"button_border_radius":3,"button_border_weight":1,"buttons_style":"rounded","input_border_radius":3,"input_border_weight":1,"inputs_style":"rounded","show_widget_shadow":true,"widget_border_weight":0,"widget_corner_radius":5},"colors":{"base_focus_color":"#635dff","base_hover_color":"#000000","body_text":"#1e212a","captcha_widget_theme":"auto","error":"#d03c38","header":"#1e212a","icons":"#65676e","input_background":"#ffffff","input_border":"#c9cace","input_filled_text":"#000000","input_labels_placeholders":"#65676e","links_focused_components":"#635dff","primary_button":"#635dff","primary_button_label":"#ffffff","secondary_button_border":"#c9cace","secondary_button_label":"#1e212a","success":"#13a688","widget_background":"#ffffff","widget_border":"#c9cace"},"fonts":{"body_text":{"bold":false,"size":87.5},"buttons_text":{"bold":false,"size":100},"font_url":"","input_labels":{"bold":false,"size":100},"links":{"bold":true,"size":87.5},"links_style":"normal","reference_text_size":16,"subtitle":{"bold":false,"size":87.5},"title":{"bold":false,"size":150}},"page_background":{"background_color":"#000000","background_image_url":"","page_layout":"center"},"widget":{"header_text_alignment":"center","logo_height":52,"logo_position":"center","logo_url":"","social_buttons_layout":"bottom"},"identifiers":{"login_display":"unified","otp_autocomplete":true,"phone_display":{"formatting":"international","masking":"mask_digits"}},"themeId":"lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 279.882666ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.52.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/themes/lnJFSlzRbKJsvb7uNzN07R4j8SvYUcF4
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -458,4 +573,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 350.754125ms
+        duration: 296.475292ms

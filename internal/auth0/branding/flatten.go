@@ -104,6 +104,7 @@ func flattenBrandingThemeColors(colors management.BrandingThemeColors) []interfa
 		"links_focused_components":  colors.LinksFocusedComponents,
 		"primary_button":            colors.PrimaryButton,
 		"primary_button_label":      colors.PrimaryButtonLabel,
+		"read_only_background":      colors.GetReadOnlyBackground(),
 		"secondary_button_border":   colors.SecondaryButtonBorder,
 		"secondary_button_label":    colors.SecondaryButtonLabel,
 		"success":                   colors.Success,

@@ -1,7 +1,10 @@
 package connection
 
 import (
+	"context"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/auth0/go-auth0"
@@ -9,6 +12,7 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestCheckForUnmanagedConfigurationSecrets(t *testing.T) {
@@ -155,6 +159,37 @@ func TestExpandConnectionOptionsEmailAttributeUnique(t *testing.T) {
 	})
 }
 
+// The API rejects any passkey signup_behavior when its feature flag is off, so an
+// unset value must be omitted from the request instead of sent with a default.
+func TestExpandConnectionOptionsAuthenticationMethodsPasskey(t *testing.T) {
+	passkeyConfig := func(enabled, signupBehavior cty.Value) cty.Value {
+		return cty.ListVal([]cty.Value{
+			cty.ObjectVal(map[string]cty.Value{
+				"enabled":         enabled,
+				"signup_behavior": signupBehavior,
+			}),
+		})
+	}
+
+	t.Run("expands a configured signup_behavior", func(t *testing.T) {
+		passkey := expandConnectionOptionsAuthenticationMethodsPasskey(passkeyConfig(cty.True, cty.StringVal("block")))
+
+		assert.Equal(t, auth0.Bool(true), passkey.Enabled)
+		assert.Equal(t, auth0.String("block"), passkey.SignupBehavior)
+	})
+
+	t.Run("omits signup_behavior when the configuration leaves it unset", func(t *testing.T) {
+		passkey := expandConnectionOptionsAuthenticationMethodsPasskey(passkeyConfig(cty.True, cty.NullVal(cty.String)))
+
+		assert.Equal(t, auth0.Bool(true), passkey.Enabled)
+		assert.Nil(t, passkey.SignupBehavior)
+
+		payload, err := json.Marshal(passkey)
+		assert.NoError(t, err)
+		assert.NotContains(t, string(payload), "signup_behavior")
+	})
+}
+
 func TestEmailAttributeUnique(t *testing.T) {
 	assert.True(t, emailAttributeUnique(nil))
 	assert.True(t, emailAttributeUnique(&management.ConnectionOptionsEmailAttribute{}))
@@ -275,4 +310,177 @@ func TestConnectionOptionsOIDCMetadataOmitsWhenNil(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Contains(t, string(payload), `"oidc_metadata":{"issuer":"https://idp.example.com"}`)
 	})
+}
+
+func TestExpandConnectionOptionsSAMLAssertionDecryptionSettings(t *testing.T) {
+	settingsType := cty.Object(map[string]cty.Type{
+		"algorithm_profile":    cty.String,
+		"algorithm_exceptions": cty.List(cty.String),
+	})
+	givenConfig := func(settings ...cty.Value) cty.Value {
+		list := cty.ListValEmpty(settingsType)
+		if len(settings) > 0 {
+			list = cty.ListVal(settings)
+		}
+
+		return cty.ObjectVal(map[string]cty.Value{"assertion_decryption_settings": list})
+	}
+
+	var testCases = []struct {
+		name     string
+		config   cty.Value
+		expected *management.ConnectionOptionsSAMLAssertionDecryptionSettings
+	}{
+		{
+			name:     "block not in config gives nil",
+			config:   givenConfig(),
+			expected: nil,
+		},
+		{
+			name: "null block gives nil",
+			config: cty.ObjectVal(map[string]cty.Value{
+				"assertion_decryption_settings": cty.NullVal(cty.List(settingsType)),
+			}),
+			expected: nil,
+		},
+		{
+			name: "algorithm_exceptions not in config is omitted",
+			config: givenConfig(cty.ObjectVal(map[string]cty.Value{
+				"algorithm_profile":    cty.StringVal("v2026-1"),
+				"algorithm_exceptions": cty.NullVal(cty.List(cty.String)),
+			})),
+			expected: &management.ConnectionOptionsSAMLAssertionDecryptionSettings{
+				AlgorithmProfile: auth0.String("v2026-1"),
+			},
+		},
+		{
+			name: "empty algorithm_exceptions is sent as empty",
+			config: givenConfig(cty.ObjectVal(map[string]cty.Value{
+				"algorithm_profile":    cty.StringVal("v2026-1"),
+				"algorithm_exceptions": cty.ListValEmpty(cty.String),
+			})),
+			expected: &management.ConnectionOptionsSAMLAssertionDecryptionSettings{
+				AlgorithmProfile:    auth0.String("v2026-1"),
+				AlgorithmExceptions: &[]string{},
+			},
+		},
+		{
+			name: "algorithm_exceptions keep their order",
+			config: givenConfig(cty.ObjectVal(map[string]cty.Value{
+				"algorithm_profile": cty.StringVal("v2026-1"),
+				"algorithm_exceptions": cty.ListVal([]cty.Value{
+					cty.StringVal("http://www.w3.org/2001/04/xmlenc#tripledes-cbc"),
+					cty.StringVal("http://www.w3.org/2001/04/xmlenc#aes128-cbc"),
+				}),
+			})),
+			expected: &management.ConnectionOptionsSAMLAssertionDecryptionSettings{
+				AlgorithmProfile: auth0.String("v2026-1"),
+				AlgorithmExceptions: &[]string{
+					"http://www.w3.org/2001/04/xmlenc#tripledes-cbc",
+					"http://www.w3.org/2001/04/xmlenc#aes128-cbc",
+				},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			actual := expandConnectionOptionsSAMLAssertionDecryptionSettings(testCase.config)
+			assert.Equal(t, testCase.expected, actual)
+		})
+	}
+}
+
+// The API removes assertion_decryption_settings when a PATCH sends options without it,
+// so the pass-through must keep the stored value when the configuration does not set it,
+// and must not add the field to a connection that never had it.
+func TestPassThroughConnectionOptionsAssertionDecryptionSettings(t *testing.T) {
+	stored := &management.ConnectionOptionsSAMLAssertionDecryptionSettings{
+		AlgorithmProfile:    auth0.String("v2026-1"),
+		AlgorithmExceptions: &[]string{"http://www.w3.org/2001/04/xmlenc#tripledes-cbc"},
+	}
+	configured := &management.ConnectionOptionsSAMLAssertionDecryptionSettings{
+		AlgorithmProfile:    auth0.String("v2026-1"),
+		AlgorithmExceptions: &[]string{},
+	}
+	storedJSON := `"assertion_decryption_settings":{"algorithm_profile":"v2026-1",` +
+		`"algorithm_exceptions":["http://www.w3.org/2001/04/xmlenc#tripledes-cbc"]}`
+
+	givenAPI := func(t *testing.T, strategy string, withSettings bool) *management.Management {
+		t.Helper()
+
+		options := `{}`
+		if withSettings {
+			options = `{` + storedJSON + `}`
+		}
+
+		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+			if request.URL.Path != "/api/v2/connections/con_123" {
+				http.NotFound(writer, request)
+				return
+			}
+
+			writer.Header().Set("Content-Type", "application/json")
+			_, _ = writer.Write([]byte(`{"id":"con_123","strategy":"` + strategy + `","options":` + options + `}`))
+		}))
+		t.Cleanup(server.Close)
+
+		api, err := management.New(server.URL, management.WithInsecure())
+		require.NoError(t, err)
+
+		return api
+	}
+
+	passThroughFuncs := map[string]func(*management.Connection) *management.ConnectionOptionsSAMLAssertionDecryptionSettings{
+		management.ConnectionStrategySAML: func(connection *management.Connection) *management.ConnectionOptionsSAMLAssertionDecryptionSettings {
+			return connection.Options.(*management.ConnectionOptionsSAML).AssertionDecryptionSettings
+		},
+		management.ConnectionStrategyPingFederate: func(connection *management.Connection) *management.ConnectionOptionsSAMLAssertionDecryptionSettings {
+			return connection.Options.(*management.ConnectionOptionsPingFederate).AssertionDecryptionSettings
+		},
+	}
+	givenConnection := func(strategy string, settings *management.ConnectionOptionsSAMLAssertionDecryptionSettings) *management.Connection {
+		if strategy == management.ConnectionStrategySAML {
+			return &management.Connection{Options: &management.ConnectionOptionsSAML{AssertionDecryptionSettings: settings}}
+		}
+
+		return &management.Connection{Options: &management.ConnectionOptionsPingFederate{AssertionDecryptionSettings: settings}}
+	}
+
+	for strategy, settingsOf := range passThroughFuncs {
+		t.Run(strategy+" keeps the stored value when the config does not set it", func(t *testing.T) {
+			connection := givenConnection(strategy, nil)
+
+			err := passThroughUnconfigurableConnectionOptions(context.Background(), givenAPI(t, strategy, true), "con_123", strategy, connection)
+			require.NoError(t, err)
+
+			assert.Equal(t, stored, settingsOf(connection))
+
+			payload, err := json.Marshal(connection.Options)
+			require.NoError(t, err)
+			assert.Contains(t, string(payload), storedJSON)
+		})
+
+		t.Run(strategy+" does not add the field when the connection does not have it", func(t *testing.T) {
+			connection := givenConnection(strategy, nil)
+
+			err := passThroughUnconfigurableConnectionOptions(context.Background(), givenAPI(t, strategy, false), "con_123", strategy, connection)
+			require.NoError(t, err)
+
+			assert.Nil(t, settingsOf(connection))
+
+			payload, err := json.Marshal(connection.Options)
+			require.NoError(t, err)
+			assert.NotContains(t, string(payload), "assertion_decryption_settings")
+		})
+
+		t.Run(strategy+" sends the configured value instead of the stored value", func(t *testing.T) {
+			connection := givenConnection(strategy, configured)
+
+			err := passThroughUnconfigurableConnectionOptions(context.Background(), givenAPI(t, strategy, true), "con_123", strategy, connection)
+			require.NoError(t, err)
+
+			assert.Equal(t, configured, settingsOf(connection))
+		})
+	}
 }

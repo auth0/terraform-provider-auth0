@@ -37,6 +37,7 @@ resource "auth0_branding_theme" "my_theme" {
 		links_focused_components = "#FF00CC"
 		primary_button = "#FF00CC"
 		primary_button_label = "#FF00CC"
+		read_only_background = "#FF00CC"
 		secondary_button_border = "#FF00CC"
 		secondary_button_label = "#FF00CC"
 		success = "#FF00CC"
@@ -131,6 +132,7 @@ func TestAccDataSourceBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.links_focused_components", "#FF00CC"),
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.primary_button", "#FF00CC"),
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.primary_button_label", "#FF00CC"),
+					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.read_only_background", "#FF00CC"),
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.secondary_button_border", "#FF00CC"),
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.secondary_button_label", "#FF00CC"),
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.success", "#FF00CC"),

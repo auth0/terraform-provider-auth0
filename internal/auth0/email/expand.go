@@ -32,6 +32,8 @@ func expandEmailProvider(data *schema.ResourceData, config cty.Value) *managemen
 		expandEmailProviderAzureCS(config, data, emailProvider)
 	case management.EmailProviderMS365:
 		expandEmailProviderMS365(config, data, emailProvider)
+	case management.EmailProviderResend:
+		expandEmailProviderResend(config, data, emailProvider)
 	case management.EmailProviderCustom:
 		emailProvider.Credentials = &management.EmailProviderCredentialsCustom{}
 	}
@@ -168,6 +170,17 @@ func expandEmailProviderMS365(config cty.Value, data *schema.ResourceData, email
 				TenantID:     value.String(credentials.GetAttr("ms365_tenant_id")),
 				ClientID:     value.String(credentials.GetAttr("ms365_client_id")),
 				ClientSecret: value.String(credentials.GetAttr("ms365_client_secret")),
+			}
+			return stop
+		})
+	}
+}
+
+func expandEmailProviderResend(config cty.Value, data *schema.ResourceData, emailProvider *management.EmailProvider) {
+	if data.HasChange("credentials") {
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+			emailProvider.Credentials = &management.EmailProviderCredentialsResend{
+				APIKey: value.String(credentials.GetAttr("api_key")),
 			}
 			return stop
 		})

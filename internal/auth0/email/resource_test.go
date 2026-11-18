@@ -174,6 +174,28 @@ resource "auth0_email_provider" "my_email_provider" {
 }
 `
 
+const testAccCreateResendEmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "resend"
+	enabled = true
+	default_from_address = "accounts@example.com"
+	credentials {
+		api_key = "resend_api_key"
+	}
+}
+`
+
+const testAccUpdateResendEmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "resend"
+	enabled = false
+	default_from_address = ""
+	credentials {
+		api_key = "resend_updated_api_key"
+	}
+}
+`
+
 const testAccCreateCustomEmailProvider = `
 resource "auth0_email_provider" "my_email_provider" {
 	name = "custom"
@@ -359,6 +381,24 @@ func TestAccEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_tenant_id", "ms365_updated_tenant_id"),
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_id", "ms365_updated_client_id"),
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_secret", "ms365_updated_client_secret"),
+				),
+			},
+			{
+				Config: testAccCreateResendEmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "resend"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.api_key", "resend_api_key"),
+				),
+			},
+			{
+				Config: testAccUpdateResendEmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "resend"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", ""),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.api_key", "resend_updated_api_key"),
 				),
 			},
 			{

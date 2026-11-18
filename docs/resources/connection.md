@@ -93,6 +93,8 @@ resource "auth0_connection" "my_connection" {
     authentication_methods {
       passkey {
         enabled = true
+        # Early Access: set signup_behavior only when the feature is enabled for your tenant.
+        signup_behavior = "allow"
       }
       password {
         enabled = true
@@ -1077,6 +1079,7 @@ Optional:
 Optional:
 
 - `enabled` (Boolean) Enables passkey authentication
+- `signup_behavior` (String) Specifies whether passkey is allowed or blocked during signup flows. Possible values: "allow", "block". This is an Early Access feature and must be enabled for your tenant before it can be set.
 
 
 <a id="nestedblock--options--authentication_methods--password"></a>

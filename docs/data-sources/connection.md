@@ -383,6 +383,7 @@ Read-Only:
 Read-Only:
 
 - `enabled` (Boolean)
+- `signup_behavior` (String)
 
 
 <a id="nestedobjatt--options--authentication_methods--password"></a>

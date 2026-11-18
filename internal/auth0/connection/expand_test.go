@@ -159,6 +159,37 @@ func TestExpandConnectionOptionsEmailAttributeUnique(t *testing.T) {
 	})
 }
 
+// The API rejects any passkey signup_behavior when its feature flag is off, so an
+// unset value must be omitted from the request instead of sent with a default.
+func TestExpandConnectionOptionsAuthenticationMethodsPasskey(t *testing.T) {
+	passkeyConfig := func(enabled, signupBehavior cty.Value) cty.Value {
+		return cty.ListVal([]cty.Value{
+			cty.ObjectVal(map[string]cty.Value{
+				"enabled":         enabled,
+				"signup_behavior": signupBehavior,
+			}),
+		})
+	}
+
+	t.Run("expands a configured signup_behavior", func(t *testing.T) {
+		passkey := expandConnectionOptionsAuthenticationMethodsPasskey(passkeyConfig(cty.True, cty.StringVal("block")))
+
+		assert.Equal(t, auth0.Bool(true), passkey.Enabled)
+		assert.Equal(t, auth0.String("block"), passkey.SignupBehavior)
+	})
+
+	t.Run("omits signup_behavior when the configuration leaves it unset", func(t *testing.T) {
+		passkey := expandConnectionOptionsAuthenticationMethodsPasskey(passkeyConfig(cty.True, cty.NullVal(cty.String)))
+
+		assert.Equal(t, auth0.Bool(true), passkey.Enabled)
+		assert.Nil(t, passkey.SignupBehavior)
+
+		payload, err := json.Marshal(passkey)
+		assert.NoError(t, err)
+		assert.NotContains(t, string(payload), "signup_behavior")
+	})
+}
+
 func TestEmailAttributeUnique(t *testing.T) {
 	assert.True(t, emailAttributeUnique(nil))
 	assert.True(t, emailAttributeUnique(&management.ConnectionOptionsEmailAttribute{}))

@@ -319,6 +319,15 @@ var optionsSchema = &schema.Schema{
 										Optional:    true,
 										Computed:    true,
 									},
+									"signup_behavior": {
+										Description: "Specifies whether passkey is allowed or blocked during signup flows. " +
+											"Possible values: \"allow\", \"block\". This is an Early Access feature and " +
+											"must be enabled for your tenant before it can be set.",
+										Type:         schema.TypeString,
+										Optional:     true,
+										Computed:     true,
+										ValidateFunc: validation.StringInSlice([]string{"allow", "block"}, false),
+									},
 								},
 							},
 							Optional: true,

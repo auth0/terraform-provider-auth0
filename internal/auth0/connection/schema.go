@@ -845,7 +845,7 @@ var optionsSchema = &schema.Schema{
 			"discovery_url": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.",
+				Description: "OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`. Also applicable to `samlp` connections.",
 			},
 			"token_endpoint": {
 				Type:        schema.TypeString,
@@ -1480,7 +1480,7 @@ var optionsSchema = &schema.Schema{
 			"token_endpoint_auth_method": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Specifies the authentication method for the token endpoint. (Okta/OIDC Connections)",
+				Description: "Specifies the authentication method for the token endpoint. (Okta/OIDC/SAML Connections)",
 			},
 			"token_endpoint_auth_signing_alg": {
 				Type:     schema.TypeString,
@@ -1490,7 +1490,7 @@ var optionsSchema = &schema.Schema{
 					"PS256", "PS384",
 					"ES256", "ES384",
 				}, false),
-				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)",
+				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC/SAML Connections)",
 			},
 			"id_token_signed_response_algs": {
 				Type: schema.TypeList,
@@ -1512,7 +1512,7 @@ var optionsSchema = &schema.Schema{
 					"issuer",
 					"token_endpoint",
 				}, false),
-				Description: "Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC Connections)",
+				Description: "Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC/SAML Connections)",
 			},
 			"id_token_session_expiry_supported": {
 				Type:     schema.TypeBool,
@@ -1805,7 +1805,8 @@ var crossAppAccessRequestingAppSchema = &schema.Schema{
 	Description: "Configure the purpose of a connection to be used as a requesting application " +
 		"authorization server for Cross-App Access (XAA). This is an Early Access feature and " +
 		"requires the `token_vault_xaa` flag to be enabled on your tenant. Only supported on " +
-		"`oidc` and `okta` strategy connections. " +
+		"`oidc`, `okta` and `samlp` strategy connections; `samlp` also requires the " +
+		"`token_vault_xaa_saml` flag. " +
 		"**Note:** Once configured, removing this block from your configuration is a no-op and will " +
 		"not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (EA Only)",
 	Elem: &schema.Resource{

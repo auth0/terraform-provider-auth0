@@ -1,6 +1,7 @@
 package attackprotection_test
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -142,6 +143,7 @@ resource "auth0_attack_protection" "my_protection" {
 		enabled = true
 		shields = ["block"]
 		mode = "count_per_identifier"
+		form_submission_mode = "manual"
 	}
 }
 `
@@ -154,6 +156,7 @@ resource "auth0_attack_protection" "my_protection" {
 		allowlist = ["127.0.0.1"]
 		max_attempts = 5
 		mode = "count_per_identifier"
+		form_submission_mode = "auto"
 	}
 }
 `
@@ -166,6 +169,38 @@ resource "auth0_attack_protection" "my_protection" {
 }
 `
 
+func TestAccAttackProtectionBruteForceProtectionInvalidFormSubmissionMode(t *testing.T) {
+	// The API rejects null and empty string for form_submission_mode, so the
+	// provider must reject invalid values at plan time and never send them.
+	invalidConfig := func(mode string) string {
+		return `
+resource "auth0_attack_protection" "my_protection" {
+	brute_force_protection {
+		enabled              = true
+		form_submission_mode = "` + mode + `"
+	}
+}
+`
+	}
+
+	expectedErr := regexp.MustCompile(`expected brute_force_protection\.0\.form_submission_mode to be one of`)
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      invalidConfig(""),
+				PlanOnly:    true,
+				ExpectError: expectedErr,
+			},
+			{
+				Config:      invalidConfig("invalid"),
+				PlanOnly:    true,
+				ExpectError: expectedErr,
+			},
+		},
+	})
+}
+
 func TestAccAttackProtectionBruteForceProtection(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -175,7 +210,7 @@ func TestAccAttackProtectionBruteForceProtection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
-					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.%", "5"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.%", "6"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.enabled", "true"),
 				),
 			},
@@ -185,10 +220,11 @@ func TestAccAttackProtectionBruteForceProtection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
-					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.%", "5"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.%", "6"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.enabled", "true"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.shields.*", "block"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.mode", "count_per_identifier"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.form_submission_mode", "manual"),
 				),
 			},
 			{
@@ -197,13 +233,14 @@ func TestAccAttackProtectionBruteForceProtection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
-					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.%", "5"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.%", "6"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.enabled", "true"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.shields.*", "block"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.shields.*", "user_notification"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.allowlist.*", "127.0.0.1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.mode", "count_per_identifier"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.max_attempts", "5"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.form_submission_mode", "auto"),
 				),
 			},
 			{
@@ -212,7 +249,7 @@ func TestAccAttackProtectionBruteForceProtection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
-					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.%", "5"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.%", "6"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.0.enabled", "false"),
 				),
 			},

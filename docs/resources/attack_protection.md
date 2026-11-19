@@ -29,11 +29,12 @@ resource "auth0_attack_protection" "my_protection" {
   }
 
   brute_force_protection {
-    allowlist    = ["127.0.0.1"]
-    enabled      = true
-    max_attempts = 5
-    mode         = "count_per_identifier_and_ip"
-    shields      = ["block", "user_notification"]
+    allowlist            = ["127.0.0.1"]
+    enabled              = true
+    form_submission_mode = "auto"
+    max_attempts         = 5
+    mode                 = "count_per_identifier_and_ip"
+    shields              = ["block", "user_notification"]
   }
 
   breached_password_detection {
@@ -275,6 +276,7 @@ Required:
 Optional:
 
 - `allowlist` (Set of String) List of trusted IP addresses that will not have attack protection enforced against them. This field allows you to specify multiple IP addresses, or ranges. You can use IPv4 or IPv6 addresses and CIDR notation.
+- `form_submission_mode` (String) Controls whether the brute-force protection unblock form is automatically submitted on load or requires manual interaction. Possible values: `auto` (submit the form automatically) or `manual` (require the user to submit the form). Once set, this value cannot be unset; removing it from the configuration leaves the current tenant value unchanged.
 - `max_attempts` (Number) Maximum number of consecutive failed login attempts from a single user before blocking is triggered. Only available on public tenants.
 - `mode` (String) Determines whether the IP address is used when counting failed attempts. Possible values: `count_per_identifier_and_ip` (lockout an account from a given IP Address) or `count_per_identifier` (lockout an account regardless of IP Address).
 - `shields` (Set of String) Action to take when a brute force protection threshold is violated. Possible values: `block` (block login attempts for a flagged user account), `user_notification` (send an email to user when their account has been blocked).

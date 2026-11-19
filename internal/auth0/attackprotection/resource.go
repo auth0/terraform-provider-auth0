@@ -209,6 +209,19 @@ func NewResource() *schema.Resource {
 							Description: "Maximum number of consecutive failed login attempts from a single user " +
 								"before blocking is triggered. Only available on public tenants.",
 						},
+						"form_submission_mode": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"auto", "manual",
+							}, false),
+							Description: "Controls whether the brute-force protection unblock form is automatically " +
+								"submitted on load or requires manual interaction. " +
+								"Possible values: `auto` (submit the form automatically) or `manual` (require the user " +
+								"to submit the form). Once set, this value cannot be unset; removing it from the " +
+								"configuration leaves the current tenant value unchanged.",
+						},
 					},
 				},
 			},

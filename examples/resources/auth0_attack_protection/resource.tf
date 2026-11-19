@@ -16,11 +16,12 @@ resource "auth0_attack_protection" "my_protection" {
   }
 
   brute_force_protection {
-    allowlist    = ["127.0.0.1"]
-    enabled      = true
-    max_attempts = 5
-    mode         = "count_per_identifier_and_ip"
-    shields      = ["block", "user_notification"]
+    allowlist            = ["127.0.0.1"]
+    enabled              = true
+    form_submission_mode = "auto"
+    max_attempts         = 5
+    mode                 = "count_per_identifier_and_ip"
+    shields              = ["block", "user_notification"]
   }
 
   breached_password_detection {

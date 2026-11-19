@@ -4,7 +4,7 @@ go 1.26.10
 
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
-	github.com/auth0/go-auth0 v1.53.1-0.20261118201214-aaaba3f7c7c6
+	github.com/auth0/go-auth0 v1.54.0
 	github.com/auth0/go-auth0/v3 v3.12.0
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/go-cty v1.5.0

@@ -849,7 +849,7 @@ Optional:
 - `disable_self_service_change_password` (Boolean) Indicates whether to remove the forgot password link within the New Universal Login.
 - `disable_sign_out` (Boolean) When enabled, will disable sign out.
 - `disable_signup` (Boolean) Indicates whether to allow user sign-ups to your application.
-- `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`. Also applicable to `samlp` connections.
+- `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`. Also applicable to `samlp` connections (EA only).
 - `domain` (String) Domain name.
 - `domain_aliases` (Set of String) List of the domains that can be authenticated using the identity provider. Only needed for Identifier First authentication flows.
 - `dpop_signing_alg` (String) The algorithm used to sign the DPoP proof. Allowed values: ES256, ES384, ES512, Ed25519.
@@ -923,9 +923,9 @@ Optional:
 - `template` (String) Body of the template.
 - `tenant_domain` (String) Tenant domain name.
 - `token_endpoint` (String) Token endpoint.
-- `token_endpoint_auth_method` (String) Specifies the authentication method for the token endpoint. (Okta/OIDC/SAML Connections)
-- `token_endpoint_auth_signing_alg` (String) Specifies the signing algorithm for the token endpoint. (Okta/OIDC/SAML Connections)
-- `token_endpoint_jwtca_aud_format` (String) Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC/SAML Connections)
+- `token_endpoint_auth_method` (String) Specifies the authentication method for the token endpoint. (Okta/OIDC Connections; SAML Connections (EA only))
+- `token_endpoint_auth_signing_alg` (String) Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections; SAML Connections (EA only))
+- `token_endpoint_jwtca_aud_format` (String) Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC Connections; SAML Connections (EA only))
 - `totp` (Block List, Max: 1) Configuration options for one-time passwords. (see [below for nested schema](#nestedblock--options--totp))
 - `twilio_sid` (String) SID for your Twilio account.
 - `twilio_token` (String, Sensitive) AuthToken for your Twilio account.

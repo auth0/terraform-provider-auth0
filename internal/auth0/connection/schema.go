@@ -845,7 +845,7 @@ var optionsSchema = &schema.Schema{
 			"discovery_url": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`. Also applicable to `samlp` connections.",
+				Description: "OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`. Also applicable to `samlp` connections (EA only).",
 			},
 			"token_endpoint": {
 				Type:        schema.TypeString,
@@ -1480,7 +1480,7 @@ var optionsSchema = &schema.Schema{
 			"token_endpoint_auth_method": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Specifies the authentication method for the token endpoint. (Okta/OIDC/SAML Connections)",
+				Description: "Specifies the authentication method for the token endpoint. (Okta/OIDC Connections; SAML Connections (EA only))",
 			},
 			"token_endpoint_auth_signing_alg": {
 				Type:     schema.TypeString,
@@ -1490,7 +1490,7 @@ var optionsSchema = &schema.Schema{
 					"PS256", "PS384",
 					"ES256", "ES384",
 				}, false),
-				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC/SAML Connections)",
+				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections; SAML Connections (EA only))",
 			},
 			"id_token_signed_response_algs": {
 				Type: schema.TypeList,
@@ -1512,7 +1512,7 @@ var optionsSchema = &schema.Schema{
 					"issuer",
 					"token_endpoint",
 				}, false),
-				Description: "Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC/SAML Connections)",
+				Description: "Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC Connections; SAML Connections (EA only))",
 			},
 			"id_token_session_expiry_supported": {
 				Type:     schema.TypeBool,

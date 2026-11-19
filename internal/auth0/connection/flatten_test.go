@@ -579,3 +579,45 @@ func TestFlattenConnectionOptionsAssertionDecryptionSettings(t *testing.T) {
 		assert.Nil(t, result.(map[string]interface{})["assertion_decryption_settings"])
 	})
 }
+
+func TestFlattenConnectionOptionsSAMLCrossAppAccessRequestingApp(t *testing.T) {
+	data := schema.TestResourceDataRaw(t, NewResource().Schema, map[string]interface{}{})
+
+	t.Run("flattens the requesting app token endpoint options", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsSAML(data, &management.ConnectionOptionsSAML{
+			ClientID:                    auth0.String("my-client-id"),
+			ClientSecret:                auth0.String("my-client-secret"),
+			DiscoveryURL:                auth0.String("https://idp.example.com/.well-known/openid-configuration"),
+			TokenEndpointAuthMethod:     auth0.String("private_key_jwt"),
+			TokenEndpointAuthSigningAlg: auth0.String("RS256"),
+			TokenEndpointJwtcaAudFormat: auth0.String("token_endpoint"),
+		})
+
+		assert.Nil(t, diags)
+
+		options := result.(map[string]interface{})
+		assert.Equal(t, "my-client-id", options["client_id"])
+		assert.Equal(t, "my-client-secret", options["client_secret"])
+		assert.Equal(t, "https://idp.example.com/.well-known/openid-configuration", options["discovery_url"])
+		assert.Equal(t, "private_key_jwt", options["token_endpoint_auth_method"])
+		assert.Equal(t, "RS256", options["token_endpoint_auth_signing_alg"])
+		assert.Equal(t, "token_endpoint", options["token_endpoint_jwtca_aud_format"])
+	})
+
+	t.Run("flattens unset options to empty values", func(t *testing.T) {
+		result, diags := flattenConnectionOptionsSAML(data, &management.ConnectionOptionsSAML{})
+
+		assert.Nil(t, diags)
+
+		options := result.(map[string]interface{})
+		for _, key := range []string{
+			"client_id",
+			"client_secret",
+			"token_endpoint_auth_method",
+			"token_endpoint_auth_signing_alg",
+			"token_endpoint_jwtca_aud_format",
+		} {
+			assert.Empty(t, options[key], key)
+		}
+	})
+}

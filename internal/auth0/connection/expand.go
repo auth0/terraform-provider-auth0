@@ -1266,7 +1266,7 @@ func nonEmptyStrings(v cty.Value) *[]string {
 	return value.Strings(v)
 }
 
-func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
+func expandConnectionOptionsSAML(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSAML{
 		Debug:                       value.Bool(config.GetAttr("debug")),
 		SigningCert:                 value.String(config.GetAttr("signing_cert")),
@@ -1293,6 +1293,11 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 		RecipientURL:                value.String(config.GetAttr("recipient_url")),
 		DiscoveryURL:                value.String(config.GetAttr("discovery_url")),
 		AssertionDecryptionSettings: expandConnectionOptionsSAMLAssertionDecryptionSettings(config),
+		ClientID:                    value.String(config.GetAttr("client_id")),
+		ClientSecret:                clientSecretForOptions(data, config),
+		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
+		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
+		TokenEndpointJwtcaAudFormat: value.String(config.GetAttr("token_endpoint_jwtca_aud_format")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))

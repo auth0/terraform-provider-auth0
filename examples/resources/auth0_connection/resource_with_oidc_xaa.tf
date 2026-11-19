@@ -1,9 +1,8 @@
 # This is an example of an OIDC connection configured as a Cross-App Access (XAA)
 # requesting application authorization server.
 #
-# The cross_app_access_requesting_app block is an Early Access feature and requires
-# the `token_vault_xaa` flag to be enabled on your tenant. It is only supported on
-# `oidc` and `okta` strategy connections.
+# The cross_app_access_requesting_app block is an Early Access (EA only) feature. It is
+# only supported on `oidc` and `okta` strategy connections.
 #
 # Note: Once configured, removing the block from your configuration is a no-op and will
 # not disable the purpose on the connection. Set `active = false` explicitly to deactivate it.

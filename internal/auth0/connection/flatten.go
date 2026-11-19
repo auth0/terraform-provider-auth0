@@ -1359,6 +1359,11 @@ func flattenConnectionOptionsSAML(
 		"destination_url":                 options.GetDestinationURL(),
 		"recipient_url":                   options.GetRecipientURL(),
 		"assertion_decryption_settings":   flattenConnectionOptionsSAMLAssertionDecryptionSettings(options.GetAssertionDecryptionSettings()),
+		"client_id":                       options.GetClientID(),
+		"client_secret":                   options.GetClientSecret(),
+		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
+		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
+		"token_endpoint_jwtca_aud_format": options.GetTokenEndpointJwtcaAudFormat(),
 	}
 
 	if options.GetSetUserAttributes() == "" {

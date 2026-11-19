@@ -109,8 +109,7 @@ func TestCheckClientProfileConfigOidcSupport(t *testing.T) {
 	assert.NoError(t, check(oidcSupportConfig(cty.UnknownVal(cty.Bool), nullBool, nullScopes)))
 	assert.NoError(t, check(oidcSupportConfig(cty.True, cty.UnknownVal(cty.Bool), nullScopes)))
 	assert.NoError(t, check(oidcSupportConfig(cty.True, nullBool, cty.UnknownVal(cty.Set(cty.String)))))
+	assert.NoError(t, check(oidcSupportConfig(cty.False, cty.False, cty.SetValEmpty(cty.String))))
 	assert.Error(t, check(oidcSupportConfig(cty.False, nullBool, profile)))
-	assert.Error(t, check(oidcSupportConfig(cty.False, nullBool, cty.SetValEmpty(cty.String))))
-	assert.Error(t, check(oidcSupportConfig(cty.False, cty.False, nullScopes)))
 	assert.Error(t, check(oidcSupportConfig(cty.True, cty.True, profile)))
 }

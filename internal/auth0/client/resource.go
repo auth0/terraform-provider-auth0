@@ -75,6 +75,27 @@ var samlDefault = struct {
 	},
 }
 
+// validateOIDCSupport rejects the `oidc_support` combinations the API rejects, before any write.
+// It reads the raw config, because the planned value of the Computed block holds server data.
+// Values that are unknown at plan time are checked during apply, once they are known.
+func validateOIDCSupport(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	cfg := diff.GetRawConfig()
+	if cfg.IsNull() {
+		return nil
+	}
+
+	block := internalValue.FirstBlock(internalValue.Attr(cfg, "oidc_support"))
+	if !internalValue.IsSet(block) {
+		return nil
+	}
+
+	if conformant := internalValue.Bool(internalValue.Attr(cfg, "oidc_conformant")); conformant != nil && !*conformant {
+		return fmt.Errorf("`oidc_support` can only be set when `oidc_conformant` is true")
+	}
+
+	return internalValidation.ValidateOIDCSupport("oidc_support", block)
+}
+
 func validateRefreshTokenLifetimes(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
 	cfg := diff.GetRawConfig()
 	if cfg.IsNull() {
@@ -124,6 +145,7 @@ func NewResource() *schema.Resource {
 				},
 			),
 			validateRefreshTokenLifetimes,
+			validateOIDCSupport,
 		),
 		Description: "With this resource, you can set up applications that use Auth0 for authentication " +
 			"and configure allowed callback URLs and secrets for these applications.",
@@ -248,6 +270,45 @@ func NewResource() *schema.Resource {
 							Required: true,
 							Description: "If set to true, this client is allowed to create anonymous sessions. Requires " +
 								"`oidc_conformant` to be set to `true`. Set to `false` to disable. (EA only)",
+						},
+					},
+				},
+			},
+			"oidc_support": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "Controls which optional OIDC scopes the client may request. Requires `oidc_conformant` " +
+					"to be `true`. " +
+					"Auth0 replaces the whole object on every write and cannot clear a stored value on an OIDC " +
+					"conformant client, so removing this block stops Terraform from managing it and does not reset " +
+					"the setting on the API. Setting `oidc_conformant` to `false` while this block is not configured " +
+					"clears it.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"is_allowed": {
+							Type:     schema.TypeBool,
+							Required: true,
+							Description: "Indicates whether the client may request optional OIDC scopes. When `false`, " +
+								"`allowed_scopes` and `allow_all_scopes` cannot be set.",
+						},
+						"allowed_scopes": {
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Schema{
+								Type:         schema.TypeString,
+								ValidateFunc: validation.StringInSlice(internalValidation.OIDCSupportOptionalScopes, false),
+							},
+							Description: fmt.Sprintf("Optional OIDC scopes the client may request. Possible values: %v. "+
+								"The `openid` scope is implied and must not be listed. Conflicts with `allow_all_scopes`.",
+								internalValidation.OIDCSupportOptionalScopes),
+						},
+						"allow_all_scopes": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Description: "Indicates whether the client may request all optional OIDC scopes. " +
+								"Conflicts with `allowed_scopes`.",
 						},
 					},
 				},

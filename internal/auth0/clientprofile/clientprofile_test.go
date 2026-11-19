@@ -17,7 +17,7 @@ var nullString = cty.NullVal(cty.String)
 
 var clientConfigurationKeys = []string{
 	"refresh_token", "organization_usage", "organization_require_behavior",
-	"organization_discovery_methods", "require_proof_of_possession",
+	"organization_discovery_methods", "require_proof_of_possession", "oidc_support",
 }
 
 // rawConfig builds a raw configuration object, defaulting every unspecified attribute to null. The

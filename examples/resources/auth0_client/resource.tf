@@ -159,3 +159,26 @@ resource "auth0_client" "agent_linked" {
   # so the client is unlinked before the agent is deleted.
   agent_id = auth0_agent.linked.id
 }
+
+# Requires an OIDC conformant client. Third-party clients are always OIDC conformant.
+resource "auth0_client" "third_party_scopes" {
+  name           = "My Third-Party Client"
+  app_type       = "regular_web"
+  is_first_party = false
+
+  oidc_support {
+    is_allowed     = true
+    allowed_scopes = ["profile", "email"]
+  }
+}
+
+resource "auth0_client" "third_party_all_scopes" {
+  name           = "My Third-Party Client With All Scopes"
+  app_type       = "regular_web"
+  is_first_party = false
+
+  oidc_support {
+    is_allowed       = true
+    allow_all_scopes = true
+  }
+}

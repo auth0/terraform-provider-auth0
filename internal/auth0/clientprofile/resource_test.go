@@ -234,3 +234,122 @@ func TestAccClientProfile(t *testing.T) {
 		},
 	})
 }
+
+const testAccClientProfileOIDCSupportScopes = `
+resource "auth0_client_profile" "my_profile" {
+  name        = "Acceptance Test Profile OIDC"
+  description = "Created by the acceptance tests."
+
+  client_configuration {
+    oidc_support {
+      default_value {
+        is_allowed     = true
+        allowed_scopes = ["profile", "email"]
+      }
+    }
+  }
+}
+`
+
+const testAccClientProfileOIDCSupportAllScopes = `
+resource "auth0_client_profile" "my_profile" {
+  name        = "Acceptance Test Profile OIDC"
+  description = "Created by the acceptance tests."
+
+  client_configuration {
+    oidc_support {
+      default_value {
+        is_allowed       = true
+        allow_all_scopes = true
+      }
+    }
+  }
+}
+`
+
+const testAccClientProfileOIDCSupportDisabled = `
+resource "auth0_client_profile" "my_profile" {
+  name        = "Acceptance Test Profile OIDC"
+  description = "Created by the acceptance tests."
+
+  client_configuration {
+    oidc_support {
+      default_value {
+        is_allowed = false
+      }
+    }
+  }
+}
+`
+
+const testAccClientProfileOIDCSupportInvalid = `
+resource "auth0_client_profile" "my_profile" {
+  name = "Acceptance Test Profile OIDC"
+
+  client_configuration {
+    oidc_support {
+      default_value {
+        is_allowed       = true
+        allowed_scopes   = ["profile"]
+        allow_all_scopes = true
+      }
+    }
+  }
+}
+`
+
+func TestAccClientProfileOIDCSupport(t *testing.T) {
+	const (
+		name       = "auth0_client_profile.my_profile"
+		defaultKey = "client_configuration.0.oidc_support.0.default_value.0."
+	)
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccClientProfileOIDCSupportInvalid,
+				ExpectError: regexp.MustCompile(`mutually\s+exclusive`),
+			},
+			{
+				Config: testAccClientProfileOIDCSupportScopes,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(name, defaultKey+"is_allowed", "true"),
+					resource.TestCheckResourceAttr(name, defaultKey+"allowed_scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr(name, defaultKey+"allowed_scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr(name, defaultKey+"allowed_scopes.*", "email"),
+				),
+			},
+			{
+				Config: testAccClientProfileOIDCSupportAllScopes,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(name, defaultKey+"is_allowed", "true"),
+					resource.TestCheckResourceAttr(name, defaultKey+"allow_all_scopes", "true"),
+					resource.TestCheckResourceAttr(name, defaultKey+"allowed_scopes.#", "0"),
+				),
+			},
+			{
+				Config: testAccClientProfileOIDCSupportDisabled,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(name, defaultKey+"is_allowed", "false"),
+					resource.TestCheckResourceAttr(name, defaultKey+"allowed_scopes.#", "0"),
+				),
+			},
+			{
+				ResourceName:      name,
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: testAccClientProfileOIDCSupportScopes + `
+data "auth0_client_profile" "my_profile" {
+  id = auth0_client_profile.my_profile.id
+}
+`,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_client_profile.my_profile", defaultKey+"is_allowed", "true"),
+					resource.TestCheckResourceAttr("data.auth0_client_profile.my_profile", defaultKey+"allowed_scopes.#", "2"),
+				),
+			},
+		},
+	})
+}

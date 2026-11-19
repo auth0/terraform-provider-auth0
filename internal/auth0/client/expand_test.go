@@ -36,3 +36,45 @@ func TestExpandMyOrganizationConfigurationThirdPartyClientAccess_NullConfigIsNil
 
 	assert.Nil(t, tpca)
 }
+
+func oidcSupportBlock(isAllowed cty.Value, allowAll cty.Value, scopes cty.Value) cty.Value {
+	return cty.ObjectVal(map[string]cty.Value{
+		"is_allowed":       isAllowed,
+		"allow_all_scopes": allowAll,
+		"allowed_scopes":   scopes,
+	})
+}
+
+func TestExpandOIDCSupportBlock(t *testing.T) {
+	nullBool := cty.NullVal(cty.Bool)
+	nullScopes := cty.NullVal(cty.Set(cty.String))
+
+	t.Run("absent block is omitted", func(t *testing.T) {
+		assert.Nil(t, expandOIDCSupportBlock(cty.NullVal(cty.DynamicPseudoType)))
+	})
+
+	t.Run("disabled sends is_allowed only", func(t *testing.T) {
+		result := expandOIDCSupportBlock(oidcSupportBlock(cty.False, nullBool, nullScopes))
+		require.NotNil(t, result)
+		assert.JSONEq(t, `{"is_allowed":false}`, result.String())
+	})
+
+	t.Run("scopes omit allow_all_scopes", func(t *testing.T) {
+		scopes := cty.SetVal([]cty.Value{cty.StringVal("profile"), cty.StringVal("email")})
+		result := expandOIDCSupportBlock(oidcSupportBlock(cty.True, cty.False, scopes))
+		require.NotNil(t, result)
+		assert.JSONEq(t, `{"is_allowed":true,"allowed_scopes":["email","profile"]}`, result.String())
+	})
+
+	t.Run("all scopes", func(t *testing.T) {
+		result := expandOIDCSupportBlock(oidcSupportBlock(cty.True, cty.True, nullScopes))
+		require.NotNil(t, result)
+		assert.JSONEq(t, `{"is_allowed":true,"allow_all_scopes":true}`, result.String())
+	})
+
+	t.Run("empty scopes set is omitted", func(t *testing.T) {
+		result := expandOIDCSupportBlock(oidcSupportBlock(cty.True, nullBool, cty.SetValEmpty(cty.String)))
+		require.NotNil(t, result)
+		assert.JSONEq(t, `{"is_allowed":true}`, result.String())
+	})
+}

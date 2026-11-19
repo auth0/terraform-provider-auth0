@@ -52,6 +52,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		Addons:                              expandClientAddons(data),
 		NativeSocialLogin:                   expandClientNativeSocialLogin(data),
 		AnonymousSessions:                   expandClientAnonymousSessions(data),
+		OIDCSupport:                         expandClientOIDCSupport(data),
 		Mobile:                              expandClientMobile(data),
 		DefaultOrganization:                 expandDefaultOrganization(data),
 		TokenExchange:                       expandTokenExchange(data),
@@ -387,6 +388,40 @@ func expandClientAnonymousSessions(data *schema.ResourceData) *management.Client
 	})
 
 	return &anonymousSessions
+}
+
+// expandClientOIDCSupport returns nil when the block is absent, so the key is omitted and the stored value is
+// untouched. When present, the complete object is sent, because the API replaces the whole value on write.
+func expandClientOIDCSupport(data *schema.ResourceData) *management.ClientOIDCSupport {
+	if !data.IsNewResource() && !data.HasChange("oidc_support") {
+		return nil
+	}
+
+	return expandOIDCSupportBlock(value.FirstBlock(value.Attr(data.GetRawConfig(), "oidc_support")))
+}
+
+func expandOIDCSupportBlock(block cty.Value) *management.ClientOIDCSupport {
+	if !value.IsSet(block) {
+		return nil
+	}
+
+	oidcSupport := &management.ClientOIDCSupport{
+		IsAllowed: value.Bool(block.GetAttr("is_allowed")),
+	}
+	if !oidcSupport.GetIsAllowed() {
+		return oidcSupport
+	}
+
+	if allowAll := value.Bool(block.GetAttr("allow_all_scopes")); allowAll != nil && *allowAll {
+		oidcSupport.AllowAllScopes = allowAll
+		return oidcSupport
+	}
+
+	if scopes := value.SortedStrings(block.GetAttr("allowed_scopes")); scopes != nil {
+		oidcSupport.AllowedScopes = &scopes
+	}
+
+	return oidcSupport
 }
 
 func expandClientNativeSocialLoginSupportEnabled(config cty.Value) *management.ClientNativeSocialLoginSupportEnabled {
@@ -1242,7 +1277,36 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		nullableMap["session_transfer"] = map[string]interface{}{"delegation": nil}
 	}
 
+	// When oidc_support is removed together with turning oidc_conformant off, both go in one request:
+	// the API rejects turning oidc_conformant off while oidc_support is stored, and rejects a null
+	// oidc_support on a conformant client.
+	if isOIDCConformantTurnedOff(data) {
+		nullableMap["oidc_conformant"] = false
+		nullableMap["oidc_support"] = nil
+	}
+
 	return nullableMap
+}
+
+// isOIDCConformantTurnedOff reports whether oidc_conformant changes to false while the oidc_support
+// block is absent from the config, on a client whose state holds an oidc_support value.
+func isOIDCConformantTurnedOff(data *schema.ResourceData) bool {
+	if data.IsNewResource() || !data.HasChange("oidc_conformant") {
+		return false
+	}
+
+	if conformant := value.Bool(data.GetRawConfig().GetAttr("oidc_conformant")); conformant == nil || *conformant {
+		return false
+	}
+
+	if value.IsSet(value.FirstBlock(data.GetRawConfig().GetAttr("oidc_support"))) {
+		return false
+	}
+
+	oldOIDCSupport, _ := data.GetChange("oidc_support")
+	oidcSupport, ok := oldOIDCSupport.([]interface{})
+
+	return ok && len(oidcSupport) > 0
 }
 
 // isSessionTransferDelegationNull reports whether the delegation sub-block was

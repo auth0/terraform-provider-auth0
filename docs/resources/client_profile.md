@@ -61,6 +61,13 @@ resource "auth0_client_profile" "full" {
     require_proof_of_possession {
       default_value = true
     }
+
+    oidc_support {
+      default_value {
+        is_allowed     = true
+        allowed_scopes = ["profile", "email"]
+      }
+    }
   }
 
   lifecycle {
@@ -110,11 +117,33 @@ Optional:
 
 Optional:
 
+- `oidc_support` (Block List, Max: 1) OIDC support defaults applied to matched clients. Auth0 replaces this block as a whole, so removing it clears all of its settings. (see [below for nested schema](#nestedblock--client_configuration--oidc_support))
 - `organization_discovery_methods` (Block List, Max: 1) Methods used to discover the organization during login. Requires the `organization_require_behavior` default value to be `pre_login_prompt`. (see [below for nested schema](#nestedblock--client_configuration--organization_discovery_methods))
 - `organization_require_behavior` (Block List, Max: 1) Defines how to proceed during an authentication transaction when the organization usage is `require`. (see [below for nested schema](#nestedblock--client_configuration--organization_require_behavior))
 - `organization_usage` (Block List, Max: 1) Whether matched clients can use organizations. (see [below for nested schema](#nestedblock--client_configuration--organization_usage))
 - `refresh_token` (Block List, Max: 1) Refresh token settings applied to matched clients. Auth0 replaces this block as a whole, so removing it clears all of its settings. (see [below for nested schema](#nestedblock--client_configuration--refresh_token))
 - `require_proof_of_possession` (Block List, Max: 1) Whether matched clients must use proof of possession (DPoP) for their tokens. (see [below for nested schema](#nestedblock--client_configuration--require_proof_of_possession))
+
+<a id="nestedblock--client_configuration--oidc_support"></a>
+### Nested Schema for `client_configuration.oidc_support`
+
+Required:
+
+- `default_value` (Block List, Min: 1, Max: 1) The default OIDC support settings for matched clients. (see [below for nested schema](#nestedblock--client_configuration--oidc_support--default_value))
+
+<a id="nestedblock--client_configuration--oidc_support--default_value"></a>
+### Nested Schema for `client_configuration.oidc_support.default_value`
+
+Required:
+
+- `is_allowed` (Boolean) Indicates whether matched clients may use OIDC. When `false`, `allowed_scopes` and `allow_all_scopes` cannot be set.
+
+Optional:
+
+- `allow_all_scopes` (Boolean) Indicates whether matched clients may request all optional OIDC scopes. Conflicts with `allowed_scopes`.
+- `allowed_scopes` (Set of String) Optional OIDC scopes matched clients may request. Possible values: [profile email address phone]. The `openid` scope is implied and must not be listed. Conflicts with `allow_all_scopes`.
+
+
 
 <a id="nestedblock--client_configuration--organization_discovery_methods"></a>
 ### Nested Schema for `client_configuration.organization_discovery_methods`

@@ -1277,7 +1277,36 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		nullableMap["session_transfer"] = map[string]interface{}{"delegation": nil}
 	}
 
+	// When oidc_support is removed together with turning oidc_conformant off, both go in one request:
+	// the API rejects turning oidc_conformant off while oidc_support is stored, and rejects a null
+	// oidc_support on a conformant client.
+	if isOIDCConformantTurnedOff(data) {
+		nullableMap["oidc_conformant"] = false
+		nullableMap["oidc_support"] = nil
+	}
+
 	return nullableMap
+}
+
+// isOIDCConformantTurnedOff reports whether oidc_conformant changes to false while the oidc_support
+// block is absent from the config, on a client whose state holds an oidc_support value.
+func isOIDCConformantTurnedOff(data *schema.ResourceData) bool {
+	if data.IsNewResource() || !data.HasChange("oidc_conformant") {
+		return false
+	}
+
+	if conformant := value.Bool(data.GetRawConfig().GetAttr("oidc_conformant")); conformant == nil || *conformant {
+		return false
+	}
+
+	if value.IsSet(value.FirstBlock(data.GetRawConfig().GetAttr("oidc_support"))) {
+		return false
+	}
+
+	oldOIDCSupport, _ := data.GetChange("oidc_support")
+	oidcSupport, ok := oldOIDCSupport.([]interface{})
+
+	return ok && len(oidcSupport) > 0
 }
 
 // isSessionTransferDelegationNull reports whether the delegation sub-block was

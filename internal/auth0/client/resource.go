@@ -281,8 +281,10 @@ func NewResource() *schema.Resource {
 				MaxItems: 1,
 				Description: "Controls which optional OIDC scopes the client may request. Requires `oidc_conformant` " +
 					"to be `true`. " +
-					"Auth0 replaces the whole object on every write and cannot clear a stored value, so removing " +
-					"this block stops Terraform from managing it and does not reset the setting on the API.",
+					"Auth0 replaces the whole object on every write and cannot clear a stored value on an OIDC " +
+					"conformant client, so removing this block stops Terraform from managing it and does not reset " +
+					"the setting on the API. Removing this block and setting `oidc_conformant` to `false` in the same " +
+					"apply clears it.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"is_allowed": {

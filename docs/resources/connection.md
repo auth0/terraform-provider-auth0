@@ -591,8 +591,7 @@ resource "auth0_connection" "samlp" {
 # This is an example of a SAML connection configured as a Cross-App Access (XAA)
 # requesting application authorization server.
 #
-# The cross_app_access_requesting_app block is an Early Access feature and requires
-# the `token_vault_xaa` and `token_vault_xaa_saml` flags to be enabled on your tenant.
+# The cross_app_access_requesting_app block is an Early Access (EA only) feature.
 #
 # Note: Once configured, removing the block from your configuration is a no-op and will
 # not disable the purpose on the connection. Set `active = false` explicitly to deactivate it.
@@ -766,7 +765,7 @@ resource "auth0_connection" "okta" {
 
 - `authentication` (Block List, Max: 1) Configure the purpose of a connection to be used for authentication during login.**Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (see [below for nested schema](#nestedblock--authentication))
 - `connected_accounts` (Block List, Max: 1) Configure the purpose of a connection to be used for connected accounts and Token Vault.**Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (see [below for nested schema](#nestedblock--connected_accounts))
-- `cross_app_access_requesting_app` (Block List, Max: 1) Configure the purpose of a connection to be used as a requesting application authorization server for Cross-App Access (XAA). This is an Early Access feature and requires the `token_vault_xaa` flag to be enabled on your tenant. Only supported on `oidc`, `okta` and `samlp` strategy connections; `samlp` also requires the `token_vault_xaa_saml` flag. **Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (EA Only) (see [below for nested schema](#nestedblock--cross_app_access_requesting_app))
+- `cross_app_access_requesting_app` (Block List, Max: 1) Configure the purpose of a connection to be used as a requesting application authorization server for Cross-App Access (XAA). This is an Early Access feature. Only supported on `oidc`, `okta` and `samlp` strategy connections. **Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (EA Only) (see [below for nested schema](#nestedblock--cross_app_access_requesting_app))
 - `cross_app_access_resource_app` (Block List, Max: 1) Resource App settings that apply to this connection. (EA only) (see [below for nested schema](#nestedblock--cross_app_access_resource_app))
 - `display_name` (String) Name used in login screen.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.

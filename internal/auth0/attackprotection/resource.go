@@ -220,7 +220,7 @@ func NewResource() *schema.Resource {
 								"submitted on load or requires manual interaction. " +
 								"Possible values: `auto` (submit the form automatically) or `manual` (require the user " +
 								"to submit the form). Once set, this value cannot be unset; removing it from the " +
-								"configuration leaves the current tenant value unchanged.",
+								"configuration leaves the current tenant value unchanged. (EA only)",
 						},
 					},
 				},

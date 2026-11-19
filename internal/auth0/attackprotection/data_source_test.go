@@ -31,6 +31,7 @@ resource "auth0_attack_protection" "my_protection" {
 		allowlist = ["127.0.0.1"]
 		max_attempts = 5
 		mode = "count_per_identifier"
+		form_submission_mode = "manual"
 	}
 
 	suspicious_ip_throttling {
@@ -70,13 +71,14 @@ func TestAccDataSourceAttackProtection(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("data.auth0_attack_protection.test", "breached_password_detection.0.pre_user_registration.0.shields.*", "block"),
 					resource.TestCheckTypeSetElemAttr("data.auth0_attack_protection.test", "breached_password_detection.0.pre_change_password.0.shields.*", "block"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "brute_force_protection.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "brute_force_protection.0.%", "5"),
+					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "brute_force_protection.0.%", "6"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "brute_force_protection.0.enabled", "true"),
 					resource.TestCheckTypeSetElemAttr("data.auth0_attack_protection.test", "brute_force_protection.0.shields.*", "block"),
 					resource.TestCheckTypeSetElemAttr("data.auth0_attack_protection.test", "brute_force_protection.0.shields.*", "user_notification"),
 					resource.TestCheckTypeSetElemAttr("data.auth0_attack_protection.test", "brute_force_protection.0.allowlist.*", "127.0.0.1"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "brute_force_protection.0.mode", "count_per_identifier"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "brute_force_protection.0.max_attempts", "5"),
+					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "brute_force_protection.0.form_submission_mode", "manual"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "suspicious_ip_throttling.#", "1"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "suspicious_ip_throttling.0.%", "5"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "suspicious_ip_throttling.0.enabled", "true"),

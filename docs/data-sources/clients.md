@@ -80,6 +80,7 @@ Read-Only:
 - `my_organization_configuration` (List of Object) (see [below for nested schema](#nestedobjatt--clients--my_organization_configuration))
 - `name` (String)
 - `oidc_logout` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout))
+- `oidc_support` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_support))
 - `organization_discovery_methods` (List of String)
 - `redirection_policy` (String)
 - `resource_server_identifier` (String)
@@ -204,6 +205,16 @@ Read-Only:
 
 - `include` (Boolean)
 
+
+
+<a id="nestedobjatt--clients--oidc_support"></a>
+### Nested Schema for `clients.oidc_support`
+
+Read-Only:
+
+- `allow_all_scopes` (Boolean)
+- `allowed_scopes` (Set of String)
+- `is_allowed` (Boolean)
 
 
 <a id="nestedobjatt--clients--session_transfer"></a>

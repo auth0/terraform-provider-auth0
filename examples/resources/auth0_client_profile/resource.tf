@@ -48,6 +48,14 @@ resource "auth0_client_profile" "full" {
     require_proof_of_possession {
       default_value = true
     }
+
+    # Requires the `enable_configurable_oidc_in_app_profiles` feature flag on the tenant.
+    oidc_support {
+      default_value {
+        is_allowed     = true
+        allowed_scopes = ["profile", "email"]
+      }
+    }
   }
 
   lifecycle {

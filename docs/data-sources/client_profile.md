@@ -47,11 +47,30 @@ Read-Only:
 
 Read-Only:
 
+- `oidc_support` (List of Object) (see [below for nested schema](#nestedobjatt--client_configuration--oidc_support))
 - `organization_discovery_methods` (List of Object) (see [below for nested schema](#nestedobjatt--client_configuration--organization_discovery_methods))
 - `organization_require_behavior` (List of Object) (see [below for nested schema](#nestedobjatt--client_configuration--organization_require_behavior))
 - `organization_usage` (List of Object) (see [below for nested schema](#nestedobjatt--client_configuration--organization_usage))
 - `refresh_token` (List of Object) (see [below for nested schema](#nestedobjatt--client_configuration--refresh_token))
 - `require_proof_of_possession` (List of Object) (see [below for nested schema](#nestedobjatt--client_configuration--require_proof_of_possession))
+
+<a id="nestedobjatt--client_configuration--oidc_support"></a>
+### Nested Schema for `client_configuration.oidc_support`
+
+Read-Only:
+
+- `default_value` (List of Object) (see [below for nested schema](#nestedobjatt--client_configuration--oidc_support--default_value))
+
+<a id="nestedobjatt--client_configuration--oidc_support--default_value"></a>
+### Nested Schema for `client_configuration.oidc_support.default_value`
+
+Read-Only:
+
+- `allow_all_scopes` (Boolean)
+- `allowed_scopes` (Set of String)
+- `is_allowed` (Boolean)
+
+
 
 <a id="nestedobjatt--client_configuration--organization_discovery_methods"></a>
 ### Nested Schema for `client_configuration.organization_discovery_methods`

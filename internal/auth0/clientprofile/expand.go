@@ -112,5 +112,35 @@ func expandClientConfiguration(raw cty.Value, update bool) *management.ClientPro
 		configuration.RequireProofOfPossession = &management.ClientProfileClientConfigurationRequireProofOfPossession{DefaultValue: v}
 	}
 
+	configuration.OidcSupport = expandOidcSupport(value.FirstBlock(envelopeValue(raw, "oidc_support")))
+
 	return configuration
+}
+
+// expandOidcSupport sends the complete default value whenever the block is configured, because the API
+// replaces it as a whole. The scope fields are only sent when they apply to the `is_allowed` setting.
+func expandOidcSupport(block cty.Value) *management.ClientProfileClientConfigurationOidcSupport {
+	if !value.IsSet(block) {
+		return nil
+	}
+
+	defaultValue := &management.ClientProfileClientConfigurationOidcSupportDefaultValue{}
+	if v := value.Bool(value.Attr(block, "is_allowed")); v != nil {
+		defaultValue.IsAllowed = *v
+	}
+
+	if defaultValue.IsAllowed {
+		if allowAll := value.Bool(value.Attr(block, "allow_all_scopes")); allowAll != nil && *allowAll {
+			defaultValue.AllowAllScopes = allowAll
+		} else if scopes := value.SortedStrings(value.Attr(block, "allowed_scopes")); len(scopes) > 0 {
+			for _, scope := range scopes {
+				defaultValue.AllowedScopes = append(
+					defaultValue.AllowedScopes,
+					management.ClientProfileClientConfigurationOidcSupportAllowedScopesEnum(scope),
+				)
+			}
+		}
+	}
+
+	return &management.ClientProfileClientConfigurationOidcSupport{DefaultValue: defaultValue}
 }

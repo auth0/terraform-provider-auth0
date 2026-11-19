@@ -1,6 +1,7 @@
 package client
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/auth0/go-auth0"
@@ -8,6 +9,7 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestFlattenClientAddonSAML2_ForDefaultValues(t *testing.T) {
@@ -265,4 +267,72 @@ func TestFlattenClientAnonymousSessions(t *testing.T) {
 		assert.True(t, ok, "expected result[0] to be a map[string]interface{}")
 		assert.Equal(t, false, flat["active"])
 	})
+}
+
+func TestFlattenClientOIDCSupport(t *testing.T) {
+	t.Run("returns an empty block when the API does not return oidc_support", func(t *testing.T) {
+		assert.Nil(t, flattenClientOIDCSupport(nil))
+	})
+
+	t.Run("flattens a disabled object", func(t *testing.T) {
+		result := flattenClientOIDCSupport(&management.ClientOIDCSupport{IsAllowed: auth0.Bool(false)})
+		assert.Equal(t, []interface{}{map[string]interface{}{"is_allowed": false}}, result)
+	})
+
+	t.Run("flattens scopes", func(t *testing.T) {
+		result := flattenClientOIDCSupport(&management.ClientOIDCSupport{
+			IsAllowed:      auth0.Bool(true),
+			AllowedScopes:  &[]string{"profile", "phone"},
+			AllowAllScopes: auth0.Bool(false),
+		})
+		assert.Equal(t, []interface{}{map[string]interface{}{
+			"is_allowed":     true,
+			"allowed_scopes": []interface{}{"profile", "phone"},
+		}}, result)
+	})
+
+	t.Run("flattens all scopes", func(t *testing.T) {
+		result := flattenClientOIDCSupport(&management.ClientOIDCSupport{
+			IsAllowed:      auth0.Bool(true),
+			AllowAllScopes: auth0.Bool(true),
+		})
+		assert.Equal(t, []interface{}{map[string]interface{}{
+			"is_allowed":       true,
+			"allow_all_scopes": true,
+		}}, result)
+	})
+
+	t.Run("ignores unknown extra keys", func(t *testing.T) {
+		var oidcSupport management.ClientOIDCSupport
+		require.NoError(t, json.Unmarshal([]byte(`{"is_allowed":true,"allowed_scopes":["email"],"future_key":1}`), &oidcSupport))
+		result := flattenClientOIDCSupport(&oidcSupport)
+		assert.Equal(t, []interface{}{map[string]interface{}{
+			"is_allowed":     true,
+			"allowed_scopes": []interface{}{"email"},
+		}}, result)
+	})
+}
+
+func TestFlattenClientListOIDCSupport(t *testing.T) {
+	clients := []*management.Client{
+		{
+			ClientID:    auth0.String("client_1"),
+			OIDCSupport: &management.ClientOIDCSupport{IsAllowed: auth0.Bool(true), AllowedScopes: &[]string{"profile"}},
+		},
+		{ClientID: auth0.String("client_2")},
+	}
+
+	listSchema := map[string]*schema.Schema{
+		"clients": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem:     &schema.Resource{Schema: coreClientDataSourceSchema()},
+		},
+	}
+	data := schema.TestResourceDataRaw(t, listSchema, map[string]interface{}{})
+	require.NoError(t, flattenClientList(data, clients, true))
+
+	assert.Equal(t, true, data.Get("clients.0.oidc_support.0.is_allowed"))
+	assert.Equal(t, 1, data.Get("clients.0.oidc_support.0.allowed_scopes.#"))
+	assert.Equal(t, 0, data.Get("clients.1.oidc_support.#"))
 }

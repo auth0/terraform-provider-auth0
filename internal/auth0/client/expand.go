@@ -52,6 +52,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		Addons:                              expandClientAddons(data),
 		NativeSocialLogin:                   expandClientNativeSocialLogin(data),
 		AnonymousSessions:                   expandClientAnonymousSessions(data),
+		OIDCSupport:                         expandClientOIDCSupport(data),
 		Mobile:                              expandClientMobile(data),
 		DefaultOrganization:                 expandDefaultOrganization(data),
 		TokenExchange:                       expandTokenExchange(data),
@@ -387,6 +388,40 @@ func expandClientAnonymousSessions(data *schema.ResourceData) *management.Client
 	})
 
 	return &anonymousSessions
+}
+
+// expandClientOIDCSupport returns nil when the block is absent, so the key is omitted and the stored value is
+// untouched. When present, the complete object is sent, because the API replaces the whole value on write.
+func expandClientOIDCSupport(data *schema.ResourceData) *management.ClientOIDCSupport {
+	if !data.IsNewResource() && !data.HasChange("oidc_support") {
+		return nil
+	}
+
+	return expandOIDCSupportBlock(value.FirstBlock(value.Attr(data.GetRawConfig(), "oidc_support")))
+}
+
+func expandOIDCSupportBlock(block cty.Value) *management.ClientOIDCSupport {
+	if !value.IsSet(block) {
+		return nil
+	}
+
+	oidcSupport := &management.ClientOIDCSupport{
+		IsAllowed: value.Bool(block.GetAttr("is_allowed")),
+	}
+	if !oidcSupport.GetIsAllowed() {
+		return oidcSupport
+	}
+
+	if allowAll := value.Bool(block.GetAttr("allow_all_scopes")); allowAll != nil && *allowAll {
+		oidcSupport.AllowAllScopes = allowAll
+		return oidcSupport
+	}
+
+	if scopes := value.SortedStrings(block.GetAttr("allowed_scopes")); scopes != nil {
+		oidcSupport.AllowedScopes = &scopes
+	}
+
+	return oidcSupport
 }
 
 func expandClientNativeSocialLoginSupportEnabled(config cty.Value) *management.ClientNativeSocialLoginSupportEnabled {

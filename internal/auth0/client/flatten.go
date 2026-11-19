@@ -29,6 +29,30 @@ func flattenClientAnonymousSessions(anonymousSessions *management.ClientAnonymou
 	}
 }
 
+// flattenClientOIDCSupport reads raw pointers instead of getters, because the API only returns the object
+// for OIDC conformant clients. A nil object is flattened to an empty block.
+func flattenClientOIDCSupport(oidcSupport *management.ClientOIDCSupport) []interface{} {
+	if oidcSupport == nil || oidcSupport.IsAllowed == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"is_allowed": *oidcSupport.IsAllowed,
+	}
+	if oidcSupport.AllowAllScopes != nil && *oidcSupport.AllowAllScopes {
+		flattened["allow_all_scopes"] = true
+	}
+	if oidcSupport.AllowedScopes != nil && len(*oidcSupport.AllowedScopes) > 0 {
+		scopes := make([]interface{}, 0, len(*oidcSupport.AllowedScopes))
+		for _, scope := range *oidcSupport.AllowedScopes {
+			scopes = append(scopes, scope)
+		}
+		flattened["allowed_scopes"] = scopes
+	}
+
+	return []interface{}{flattened}
+}
+
 func flattenCustomSocialConfiguration(customSocial *management.ClientNativeSocialLogin) []interface{} {
 	if customSocial == nil {
 		return nil
@@ -715,6 +739,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("form_template", client.GetFormTemplate()),
 		data.Set("native_social_login", flattenCustomSocialConfiguration(client.GetNativeSocialLogin())),
 		data.Set("anonymous_sessions", flattenClientAnonymousSessions(client.GetAnonymousSessions())),
+		data.Set("oidc_support", flattenClientOIDCSupport(client.GetOIDCSupport())),
 		data.Set("jwt_configuration", flattenClientJwtConfiguration(client.GetJWTConfiguration())),
 		data.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
 		data.Set("addons", flattenClientAddons(client.GetAddons())),
@@ -1274,6 +1299,7 @@ func flattenClientList(data *schema.ResourceData, clients []*management.Client, 
 			"external_metadata_created_by":        client.GetExternalMetadataCreatedBy(),
 			"external_metadata_status":            client.GetExternalMetadataStatus(),
 			"jwks_uri":                            client.GetJwksURI(),
+			"oidc_support":                        flattenClientOIDCSupport(client.GetOIDCSupport()),
 		}
 		clientList = append(clientList, clientMap)
 	}

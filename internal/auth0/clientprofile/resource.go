@@ -14,6 +14,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
+	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -198,6 +199,51 @@ func NewResource() *schema.Resource {
 								Description: fmt.Sprintf("Possible values: %v.", organizationDiscoveryMethods),
 							},
 						),
+						"oidc_support": {
+							Type:     schema.TypeList,
+							Optional: true,
+							MaxItems: 1,
+							Description: "OIDC support defaults applied to matched clients. Requires the " +
+								"`enable_configurable_oidc_in_app_profiles` feature flag on the tenant. Auth0 replaces " +
+								"this block as a whole, so removing it clears all of its settings.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"default_value": {
+										Type:        schema.TypeList,
+										Required:    true,
+										MaxItems:    1,
+										Description: "The default OIDC support settings for matched clients.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"is_allowed": {
+													Type:     schema.TypeBool,
+													Required: true,
+													Description: "Indicates whether matched clients may use OIDC. When `false`, " +
+														"`allowed_scopes` and `allow_all_scopes` cannot be set.",
+												},
+												"allowed_scopes": {
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Schema{
+														Type:         schema.TypeString,
+														ValidateFunc: validation.StringInSlice(internalValidation.OIDCSupportOptionalScopes, false),
+													},
+													Description: fmt.Sprintf("Optional OIDC scopes matched clients may request. "+
+														"Possible values: %v. The `openid` scope is implied and must not be listed. "+
+														"Conflicts with `allow_all_scopes`.", internalValidation.OIDCSupportOptionalScopes),
+												},
+												"allow_all_scopes": {
+													Type:     schema.TypeBool,
+													Optional: true,
+													Description: "Indicates whether matched clients may request all optional " +
+														"OIDC scopes. Conflicts with `allowed_scopes`.",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 						"require_proof_of_possession": envelope(
 							"Whether matched clients must use proof of possession (DPoP) for their tokens.",
 							false,
@@ -325,6 +371,18 @@ func checkClientProfileConfig(raw cty.Value) error {
 				"`client_configuration.refresh_token.token_lifetime` (%d)",
 			*idleTokenLifetime, *tokenLifetime,
 		)
+	}
+
+	oidcSupport := value.FirstBlock(envelopeValue(configuration, "oidc_support"))
+	if value.IsSet(oidcSupport) {
+		if err := internalValidation.ValidateOIDCSupport(
+			"client_configuration.oidc_support.default_value",
+			value.Bool(value.Attr(oidcSupport, "is_allowed")),
+			value.Bool(value.Attr(oidcSupport, "allow_all_scopes")),
+			value.SortedStrings(value.Attr(oidcSupport, "allowed_scopes")),
+		); err != nil {
+			return err
+		}
 	}
 
 	methods := envelopeValue(configuration, "organization_discovery_methods")

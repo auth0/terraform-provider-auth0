@@ -53,6 +53,7 @@ func flattenClientProfile(data *schema.ResourceData, profile *management.ClientP
 		"organization_usage":             usage,
 		"organization_require_behavior":  behavior,
 		"organization_discovery_methods": methods,
+		"oidc_support":                   flattenOidcSupport(configuration.OidcSupport),
 		"require_proof_of_possession":    proofOfPossession,
 	} {
 		if len(v) > 0 {
@@ -74,6 +75,28 @@ func flattenClientProfile(data *schema.ResourceData, profile *management.ClientP
 // flattenEnvelope wraps a value in the single-item block that mirrors the API's `default_value` wrapper.
 func flattenEnvelope(v interface{}) []interface{} {
 	return []interface{}{map[string]interface{}{"default_value": v}}
+}
+
+// flattenOidcSupport reads the raw pointers, so an absent default value is flattened to an empty block.
+func flattenOidcSupport(oidcSupport *management.ClientProfileClientConfigurationOidcSupport) []interface{} {
+	if oidcSupport == nil || oidcSupport.DefaultValue == nil {
+		return nil
+	}
+
+	defaultValue := oidcSupport.DefaultValue
+	flattened := map[string]interface{}{"is_allowed": defaultValue.IsAllowed}
+	if defaultValue.AllowAllScopes != nil && *defaultValue.AllowAllScopes {
+		flattened["allow_all_scopes"] = true
+	}
+	if len(defaultValue.AllowedScopes) > 0 {
+		scopes := make([]interface{}, 0, len(defaultValue.AllowedScopes))
+		for _, scope := range defaultValue.AllowedScopes {
+			scopes = append(scopes, string(scope))
+		}
+		flattened["allowed_scopes"] = scopes
+	}
+
+	return flattenEnvelope([]interface{}{flattened})
 }
 
 func flattenApplyPolicy(policy *management.ClientProfileApplyPolicy) []interface{} {

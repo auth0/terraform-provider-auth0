@@ -160,8 +160,7 @@ resource "auth0_client" "agent_linked" {
   agent_id = auth0_agent.linked.id
 }
 
-# Requires the `enable_configurable_oidc_support` feature flag on the tenant and an
-# OIDC conformant client. Third-party clients are always OIDC conformant.
+# Requires an OIDC conformant client. Third-party clients are always OIDC conformant.
 resource "auth0_client" "third_party_scopes" {
   name           = "My Third-Party Client"
   app_type       = "regular_web"

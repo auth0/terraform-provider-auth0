@@ -203,8 +203,7 @@ func NewResource() *schema.Resource {
 							Type:     schema.TypeList,
 							Optional: true,
 							MaxItems: 1,
-							Description: "OIDC support defaults applied to matched clients. Requires the " +
-								"`enable_configurable_oidc_in_app_profiles` feature flag on the tenant. Auth0 replaces " +
+							Description: "OIDC support defaults applied to matched clients. Auth0 replaces " +
 								"this block as a whole, so removing it clears all of its settings.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{

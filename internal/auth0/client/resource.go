@@ -285,7 +285,7 @@ func NewResource() *schema.Resource {
 				Computed: true,
 				MaxItems: 1,
 				Description: "Controls which optional OIDC scopes the client may request. Requires `oidc_conformant` " +
-					"to be `true` and the `enable_configurable_oidc_support` feature flag on the tenant. " +
+					"to be `true`. " +
 					"Auth0 replaces the whole object on every write and cannot clear a stored value, so removing " +
 					"this block stops Terraform from managing it and does not reset the setting on the API.",
 				Elem: &schema.Resource{

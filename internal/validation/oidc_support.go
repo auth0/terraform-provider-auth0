@@ -3,6 +3,7 @@ package validation
 import (
 	"errors"
 	"fmt"
+	"slices"
 )
 
 // OIDCSupportOptionalScopes are the optional OIDC scopes that can be listed in `allowed_scopes`.
@@ -48,10 +49,5 @@ func ValidateOIDCSupport(path string, isAllowed, allowAllScopes *bool, scopes []
 }
 
 func isOptionalOIDCScope(scope string) bool {
-	for _, s := range OIDCSupportOptionalScopes {
-		if s == scope {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(OIDCSupportOptionalScopes, scope)
 }

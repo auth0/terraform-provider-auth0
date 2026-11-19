@@ -49,7 +49,6 @@ resource "auth0_client_profile" "full" {
       default_value = true
     }
 
-    # Requires the `enable_configurable_oidc_in_app_profiles` feature flag on the tenant.
     oidc_support {
       default_value {
         is_allowed     = true

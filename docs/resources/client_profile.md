@@ -62,7 +62,6 @@ resource "auth0_client_profile" "full" {
       default_value = true
     }
 
-    # Requires the `enable_configurable_oidc_in_app_profiles` feature flag on the tenant.
     oidc_support {
       default_value {
         is_allowed     = true
@@ -118,7 +117,7 @@ Optional:
 
 Optional:
 
-- `oidc_support` (Block List, Max: 1) OIDC support defaults applied to matched clients. Requires the `enable_configurable_oidc_in_app_profiles` feature flag on the tenant. Auth0 replaces this block as a whole, so removing it clears all of its settings. (see [below for nested schema](#nestedblock--client_configuration--oidc_support))
+- `oidc_support` (Block List, Max: 1) OIDC support defaults applied to matched clients. Auth0 replaces this block as a whole, so removing it clears all of its settings. (see [below for nested schema](#nestedblock--client_configuration--oidc_support))
 - `organization_discovery_methods` (Block List, Max: 1) Methods used to discover the organization during login. Requires the `organization_require_behavior` default value to be `pre_login_prompt`. (see [below for nested schema](#nestedblock--client_configuration--organization_discovery_methods))
 - `organization_require_behavior` (Block List, Max: 1) Defines how to proceed during an authentication transaction when the organization usage is `require`. (see [below for nested schema](#nestedblock--client_configuration--organization_require_behavior))
 - `organization_usage` (Block List, Max: 1) Whether matched clients can use organizations. (see [below for nested schema](#nestedblock--client_configuration--organization_usage))

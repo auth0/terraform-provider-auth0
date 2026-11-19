@@ -75,9 +75,9 @@ var samlDefault = struct {
 	},
 }
 
-// validateOIDCSupport mirrors the 400s the API returns for invalid `oidc_support` combinations.
+// validateOIDCSupport rejects the `oidc_support` combinations the API rejects, before any write.
 // It reads the raw config, because the planned value of the Computed block holds server data.
-// Values that are unknown at plan time are skipped, as they cannot be judged yet.
+// Values that are unknown at plan time are checked during apply, once they are known.
 func validateOIDCSupport(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
 	cfg := diff.GetRawConfig()
 	if cfg.IsNull() {
@@ -93,12 +93,7 @@ func validateOIDCSupport(_ context.Context, diff *schema.ResourceDiff, _ interfa
 		return fmt.Errorf("`oidc_support` can only be set when `oidc_conformant` is true")
 	}
 
-	return internalValidation.ValidateOIDCSupport(
-		"oidc_support",
-		internalValue.Bool(internalValue.Attr(block, "is_allowed")),
-		internalValue.Bool(internalValue.Attr(block, "allow_all_scopes")),
-		internalValue.SortedStrings(internalValue.Attr(block, "allowed_scopes")),
-	)
+	return internalValidation.ValidateOIDCSupport("oidc_support", block)
 }
 
 func validateRefreshTokenLifetimes(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {

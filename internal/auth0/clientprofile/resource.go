@@ -373,15 +373,8 @@ func checkClientProfileConfig(raw cty.Value) error {
 	}
 
 	oidcSupport := value.FirstBlock(envelopeValue(configuration, "oidc_support"))
-	if value.IsSet(oidcSupport) {
-		if err := internalValidation.ValidateOIDCSupport(
-			"client_configuration.oidc_support.default_value",
-			value.Bool(value.Attr(oidcSupport, "is_allowed")),
-			value.Bool(value.Attr(oidcSupport, "allow_all_scopes")),
-			value.SortedStrings(value.Attr(oidcSupport, "allowed_scopes")),
-		); err != nil {
-			return err
-		}
+	if err := internalValidation.ValidateOIDCSupport("client_configuration.oidc_support.default_value", oidcSupport); err != nil {
+		return err
 	}
 
 	methods := envelopeValue(configuration, "organization_discovery_methods")

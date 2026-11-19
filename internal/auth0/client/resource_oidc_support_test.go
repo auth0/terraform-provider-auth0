@@ -90,10 +90,6 @@ func TestAccClientOIDCSupport(t *testing.T) {
 				ExpectError: regexp.MustCompile(`mutually\s+exclusive`),
 			},
 			{
-				Config:      acctest.ParseTestName(testAccClientOIDCSupportInvalidNeitherScopeField, t.Name()),
-				ExpectError: regexp.MustCompile(`requires\s+either`),
-			},
-			{
 				Config:      acctest.ParseTestName(testAccClientOIDCSupportInvalidOpenID, t.Name()),
 				ExpectError: regexp.MustCompile(`to\s+be\s+one\s+of`),
 			},
@@ -178,16 +174,6 @@ resource "auth0_client" "my_client" {
 		is_allowed       = true
 		allowed_scopes   = ["profile"]
 		allow_all_scopes = true
-	}
-}
-`
-
-const testAccClientOIDCSupportInvalidNeitherScopeField = `
-resource "auth0_client" "my_client" {
-	name = "Acceptance Test - OIDC Support - {{.testName}}"
-
-	oidc_support {
-		is_allowed = true
 	}
 }
 `

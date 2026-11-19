@@ -53,6 +53,13 @@ func TestExpandOidcSupport(t *testing.T) {
 			expand(oidcSupportConfig(cty.True, cty.True, nullScopes)),
 		)
 	})
+
+	t.Run("zero values are dropped", func(t *testing.T) {
+		assert.JSONEq(t,
+			`{"default_value":{"is_allowed":true}}`,
+			expand(oidcSupportConfig(cty.True, cty.False, cty.SetValEmpty(cty.String))),
+		)
+	})
 }
 
 func TestFlattenOidcSupport(t *testing.T) {
@@ -98,8 +105,12 @@ func TestCheckClientProfileConfigOidcSupport(t *testing.T) {
 	assert.NoError(t, check(oidcSupportConfig(cty.False, nullBool, nullScopes)))
 	assert.NoError(t, check(oidcSupportConfig(cty.True, nullBool, profile)))
 	assert.NoError(t, check(oidcSupportConfig(cty.True, cty.True, nullScopes)))
+	assert.NoError(t, check(oidcSupportConfig(cty.True, nullBool, nullScopes)))
 	assert.NoError(t, check(oidcSupportConfig(cty.UnknownVal(cty.Bool), nullBool, nullScopes)))
+	assert.NoError(t, check(oidcSupportConfig(cty.True, cty.UnknownVal(cty.Bool), nullScopes)))
+	assert.NoError(t, check(oidcSupportConfig(cty.True, nullBool, cty.UnknownVal(cty.Set(cty.String)))))
 	assert.Error(t, check(oidcSupportConfig(cty.False, nullBool, profile)))
+	assert.Error(t, check(oidcSupportConfig(cty.False, nullBool, cty.SetValEmpty(cty.String))))
+	assert.Error(t, check(oidcSupportConfig(cty.False, cty.False, nullScopes)))
 	assert.Error(t, check(oidcSupportConfig(cty.True, cty.True, profile)))
-	assert.Error(t, check(oidcSupportConfig(cty.True, nullBool, nullScopes)))
 }

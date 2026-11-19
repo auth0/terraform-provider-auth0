@@ -1,5 +1,24 @@
 ## Unreleased
 
+## v1.63.0
+
+FEATURES:
+- `resource/auth0_client` - Add `oidc_support` to configure allowed OIDC scopes ([#1798](https://github.com/auth0/terraform-provider-auth0/pull/1798))
+- `data-source/auth0_client` - Expose `oidc_support` ([#1798](https://github.com/auth0/terraform-provider-auth0/pull/1798))
+- `data-source/auth0_clients` - Expose `oidc_support` in client list results ([#1798](https://github.com/auth0/terraform-provider-auth0/pull/1798))
+- `resource/auth0_client_profile` - Add `client_configuration.oidc_support.default_value` for matched clients ([#1798](https://github.com/auth0/terraform-provider-auth0/pull/1798))
+- `data-source/auth0_client_profile` - Expose `client_configuration.oidc_support.default_value` ([#1798](https://github.com/auth0/terraform-provider-auth0/pull/1798))
+- `resource/auth0_connection` - Add Cross-App Access requesting-app support for `samlp` connections (EA only) ([#1796](https://github.com/auth0/terraform-provider-auth0/pull/1796))
+- `resource/auth0_connection` - Add `options.authentication_methods.passkey.signup_behavior` to allow or block passkeys during signup (EA only) ([#1793](https://github.com/auth0/terraform-provider-auth0/pull/1793))
+- `data-source/auth0_connection` - Expose `options.authentication_methods.passkey.signup_behavior` (EA only) ([#1793](https://github.com/auth0/terraform-provider-auth0/pull/1793))
+- `resource/auth0_attack_protection` - Add `brute_force_protection.form_submission_mode` to control automatic or manual unblock form submission (EA only) ([#1797](https://github.com/auth0/terraform-provider-auth0/pull/1797))
+- `data-source/auth0_attack_protection` - Expose `brute_force_protection.form_submission_mode` (EA only) ([#1797](https://github.com/auth0/terraform-provider-auth0/pull/1797))
+
+BUG FIXES:
+- `resource/auth0_organization_client_grant` / `data-source/auth0_organization` - Read every page of organization client grants instead of only the first page ([#1777](https://github.com/auth0/terraform-provider-auth0/pull/1777))
+- `resource/auth0_organization_members` - Add and remove members in batches of 10 to respect the Management API limit ([#1788](https://github.com/auth0/terraform-provider-auth0/pull/1788))
+- `resource/auth0_branding` - Read and delete branding on tenants without Universal Login template support by treating template 402 responses as no template ([#1742](https://github.com/auth0/terraform-provider-auth0/pull/1742))
+
 ## v1.62.0
 
 FEATURES:

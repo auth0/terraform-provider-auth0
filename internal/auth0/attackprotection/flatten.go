@@ -31,11 +31,12 @@ func flattenSuspiciousIPThrottling(ipt *management.SuspiciousIPThrottling) []int
 func flattenBruteForceProtection(bfp *management.BruteForceProtection) []interface{} {
 	return []interface{}{
 		map[string]interface{}{
-			"enabled":      bfp.GetEnabled(),
-			"mode":         bfp.GetMode(),
-			"max_attempts": bfp.GetMaxAttempts(),
-			"shields":      bfp.GetShields(),
-			"allowlist":    bfp.GetAllowList(),
+			"enabled":              bfp.GetEnabled(),
+			"mode":                 bfp.GetMode(),
+			"max_attempts":         bfp.GetMaxAttempts(),
+			"shields":              bfp.GetShields(),
+			"allowlist":            bfp.GetAllowList(),
+			"form_submission_mode": bfp.GetFormSubmissionMode(),
 		},
 	}
 }

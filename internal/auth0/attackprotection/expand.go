@@ -74,6 +74,8 @@ func expandBruteForceProtection(data *schema.ResourceData) *management.BruteForc
 			MaxAttempts: value.Int(cfg.GetAttr("max_attempts")),
 			Shields:     value.Strings(cfg.GetAttr("shields")),
 			AllowList:   value.Strings(cfg.GetAttr("allowlist")),
+
+			FormSubmissionMode: value.String(cfg.GetAttr("form_submission_mode")),
 		}
 
 		return stop

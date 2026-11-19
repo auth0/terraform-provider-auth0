@@ -76,6 +76,7 @@ Read-Only:
 
 - `allowlist` (Set of String)
 - `enabled` (Boolean)
+- `form_submission_mode` (String)
 - `max_attempts` (Number)
 - `mode` (String)
 - `shields` (Set of String)

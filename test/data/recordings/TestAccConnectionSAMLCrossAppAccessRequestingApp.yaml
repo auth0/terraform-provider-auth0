@@ -1,0 +1,306 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 1384
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","display_name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","strategy":"samlp","cross_app_access_requesting_app":{"active":true},"options":{"signingCert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","signInEndpoint":"https://idp.example.com/saml","oidc_metadata":{"authorization_endpoint":"https://idp.example.com/authorize","id_token_signing_alg_values_supported":["RS256"],"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks","token_endpoint":"https://idp.example.com/token"},"client_id":"xaa-client-id","client_secret":"xaa-client-secret","token_endpoint_auth_method":"client_secret_post","token_endpoint_auth_signing_alg":"RS256","token_endpoint_jwtca_aud_format":"token_endpoint"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.53.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"id":"con_v0hQkUvuYpBypkmK","options":{"signingCert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","signInEndpoint":"https://idp.example.com/saml","oidc_metadata":{"authorization_endpoint":"https://idp.example.com/authorize","id_token_signing_alg_values_supported":["RS256"],"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks","token_endpoint":"https://idp.example.com/token"},"client_id":"xaa-client-id","client_secret":"xaa-client-secret","token_endpoint_auth_method":"client_secret_post","token_endpoint_auth_signing_alg":"RS256","token_endpoint_jwtca_aud_format":"token_endpoint","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]},"expires":"2036-11-15T20:23:50.000Z","subject":{"commonName":"idp.example.com"},"thumbprints":["43d8c42b8f66091b0f5cb293d54a973d9d14558f"],"thumbprints_sha384":["df46d8f0bb3a8b989af72829c502b968d937c535262fea2efeb1843fd76deed9ff51e1157316e4290d46eed9715ace72"],"cert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----"},"strategy":"samlp","name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/HS8s8QMkIEZSF58rFcAnFWXfCrr78y3t","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"cross_app_access_requesting_app":{"active":true},"display_name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","enabled_clients":[],"realms":["Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 729.837292ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.53.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v0hQkUvuYpBypkmK
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_v0hQkUvuYpBypkmK","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","expires":"2036-11-15T20:23:50.000Z","subject":{"commonName":"idp.example.com"},"client_id":"xaa-client-id","signingCert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","thumbprints":["43d8c42b8f66091b0f5cb293d54a973d9d14558f"],"client_secret":"xaa-client-secret","oidc_metadata":{"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks","token_endpoint":"https://idp.example.com/token","authorization_endpoint":"https://idp.example.com/authorize","id_token_signing_alg_values_supported":["RS256"]},"signInEndpoint":"https://idp.example.com/saml","thumbprints_sha384":["df46d8f0bb3a8b989af72829c502b968d937c535262fea2efeb1843fd76deed9ff51e1157316e4290d46eed9715ace72"],"token_endpoint_auth_method":"client_secret_post","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]},"token_endpoint_auth_signing_alg":"RS256","token_endpoint_jwtca_aud_format":"token_endpoint"},"strategy":"samlp","name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/HS8s8QMkIEZSF58rFcAnFWXfCrr78y3t","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"cross_app_access_requesting_app":{"active":true},"display_name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","realms":["Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 332.284292ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.53.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v0hQkUvuYpBypkmK
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_v0hQkUvuYpBypkmK","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","expires":"2036-11-15T20:23:50.000Z","subject":{"commonName":"idp.example.com"},"client_id":"xaa-client-id","signingCert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","thumbprints":["43d8c42b8f66091b0f5cb293d54a973d9d14558f"],"client_secret":"xaa-client-secret","oidc_metadata":{"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks","token_endpoint":"https://idp.example.com/token","authorization_endpoint":"https://idp.example.com/authorize","id_token_signing_alg_values_supported":["RS256"]},"signInEndpoint":"https://idp.example.com/saml","thumbprints_sha384":["df46d8f0bb3a8b989af72829c502b968d937c535262fea2efeb1843fd76deed9ff51e1157316e4290d46eed9715ace72"],"token_endpoint_auth_method":"client_secret_post","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]},"token_endpoint_auth_signing_alg":"RS256","token_endpoint_jwtca_aud_format":"token_endpoint"},"strategy":"samlp","name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/HS8s8QMkIEZSF58rFcAnFWXfCrr78y3t","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"cross_app_access_requesting_app":{"active":true},"display_name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","realms":["Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 334.639417ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.53.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v0hQkUvuYpBypkmK
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_v0hQkUvuYpBypkmK","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","expires":"2036-11-15T20:23:50.000Z","subject":{"commonName":"idp.example.com"},"client_id":"xaa-client-id","signingCert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","thumbprints":["43d8c42b8f66091b0f5cb293d54a973d9d14558f"],"client_secret":"xaa-client-secret","oidc_metadata":{"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks","token_endpoint":"https://idp.example.com/token","authorization_endpoint":"https://idp.example.com/authorize","id_token_signing_alg_values_supported":["RS256"]},"signInEndpoint":"https://idp.example.com/saml","thumbprints_sha384":["df46d8f0bb3a8b989af72829c502b968d937c535262fea2efeb1843fd76deed9ff51e1157316e4290d46eed9715ace72"],"token_endpoint_auth_method":"client_secret_post","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]},"token_endpoint_auth_signing_alg":"RS256","token_endpoint_jwtca_aud_format":"token_endpoint"},"strategy":"samlp","name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/HS8s8QMkIEZSF58rFcAnFWXfCrr78y3t","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"cross_app_access_requesting_app":{"active":true},"display_name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","realms":["Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 355.755042ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.53.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v0hQkUvuYpBypkmK
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_v0hQkUvuYpBypkmK","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","expires":"2036-11-15T20:23:50.000Z","subject":{"commonName":"idp.example.com"},"client_id":"xaa-client-id","signingCert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","thumbprints":["43d8c42b8f66091b0f5cb293d54a973d9d14558f"],"client_secret":"xaa-client-secret","oidc_metadata":{"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks","token_endpoint":"https://idp.example.com/token","authorization_endpoint":"https://idp.example.com/authorize","id_token_signing_alg_values_supported":["RS256"]},"signInEndpoint":"https://idp.example.com/saml","thumbprints_sha384":["df46d8f0bb3a8b989af72829c502b968d937c535262fea2efeb1843fd76deed9ff51e1157316e4290d46eed9715ace72"],"token_endpoint_auth_method":"client_secret_post","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]},"token_endpoint_auth_signing_alg":"RS256","token_endpoint_jwtca_aud_format":"token_endpoint"},"strategy":"samlp","name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/HS8s8QMkIEZSF58rFcAnFWXfCrr78y3t","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"cross_app_access_requesting_app":{"active":true},"display_name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","realms":["Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 345.70175ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 1440
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"display_name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","cross_app_access_requesting_app":{"active":false},"options":{"signingCert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","thumbprints":["43d8c42b8f66091b0f5cb293d54a973d9d14558f"],"signInEndpoint":"https://idp.example.com/saml","oidc_metadata":{"authorization_endpoint":"https://idp.example.com/authorize","id_token_signing_alg_values_supported":["RS256"],"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks","token_endpoint":"https://idp.example.com/token"},"client_id":"xaa-client-id-updated","client_secret":"xaa-client-secret-updated","token_endpoint_auth_method":"client_secret_post","token_endpoint_auth_signing_alg":"ES256","token_endpoint_jwtca_aud_format":"issuer","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.53.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v0hQkUvuYpBypkmK
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_v0hQkUvuYpBypkmK","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","expires":"2036-11-15T20:23:50.000Z","subject":{"commonName":"idp.example.com"},"client_id":"xaa-client-id-updated","signingCert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","thumbprints":["43d8c42b8f66091b0f5cb293d54a973d9d14558f"],"client_secret":"xaa-client-secret-updated","oidc_metadata":{"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks","token_endpoint":"https://idp.example.com/token","authorization_endpoint":"https://idp.example.com/authorize","id_token_signing_alg_values_supported":["RS256"]},"signInEndpoint":"https://idp.example.com/saml","thumbprints_sha384":["df46d8f0bb3a8b989af72829c502b968d937c535262fea2efeb1843fd76deed9ff51e1157316e4290d46eed9715ace72"],"token_endpoint_auth_method":"client_secret_post","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]},"token_endpoint_auth_signing_alg":"ES256","token_endpoint_jwtca_aud_format":"issuer"},"strategy":"samlp","name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/HS8s8QMkIEZSF58rFcAnFWXfCrr78y3t","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"cross_app_access_requesting_app":{"active":false},"display_name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","realms":["Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 516.68125ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.53.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v0hQkUvuYpBypkmK
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_v0hQkUvuYpBypkmK","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","expires":"2036-11-15T20:23:50.000Z","subject":{"commonName":"idp.example.com"},"client_id":"xaa-client-id-updated","signingCert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","thumbprints":["43d8c42b8f66091b0f5cb293d54a973d9d14558f"],"client_secret":"xaa-client-secret-updated","oidc_metadata":{"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks","token_endpoint":"https://idp.example.com/token","authorization_endpoint":"https://idp.example.com/authorize","id_token_signing_alg_values_supported":["RS256"]},"signInEndpoint":"https://idp.example.com/saml","thumbprints_sha384":["df46d8f0bb3a8b989af72829c502b968d937c535262fea2efeb1843fd76deed9ff51e1157316e4290d46eed9715ace72"],"token_endpoint_auth_method":"client_secret_post","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]},"token_endpoint_auth_signing_alg":"ES256","token_endpoint_jwtca_aud_format":"issuer"},"strategy":"samlp","name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/HS8s8QMkIEZSF58rFcAnFWXfCrr78y3t","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"cross_app_access_requesting_app":{"active":false},"display_name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","realms":["Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 325.6895ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.53.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v0hQkUvuYpBypkmK
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_v0hQkUvuYpBypkmK","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","expires":"2036-11-15T20:23:50.000Z","subject":{"commonName":"idp.example.com"},"client_id":"xaa-client-id-updated","signingCert":"-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----","thumbprints":["43d8c42b8f66091b0f5cb293d54a973d9d14558f"],"client_secret":"xaa-client-secret-updated","oidc_metadata":{"issuer":"https://idp.example.com","jwks_uri":"https://idp.example.com/jwks","token_endpoint":"https://idp.example.com/token","authorization_endpoint":"https://idp.example.com/authorize","id_token_signing_alg_values_supported":["RS256"]},"signInEndpoint":"https://idp.example.com/saml","thumbprints_sha384":["df46d8f0bb3a8b989af72829c502b968d937c535262fea2efeb1843fd76deed9ff51e1157316e4290d46eed9715ace72"],"token_endpoint_auth_method":"client_secret_post","assertion_decryption_settings":{"algorithm_profile":"v2026-1","algorithm_exceptions":[]},"token_endpoint_auth_signing_alg":"ES256","token_endpoint_jwtca_aud_format":"issuer"},"strategy":"samlp","name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","provisioning_ticket_url":"https://terraform-provider-auth0-dev.us.auth0.com/p/samlp/HS8s8QMkIEZSF58rFcAnFWXfCrr78y3t","is_domain_connection":false,"show_as_button":false,"authentication":{"active":true},"connected_accounts":{"active":false},"cross_app_access_requesting_app":{"active":false},"display_name":"Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp","realms":["Acceptance-Test-SAML-XAA-TestAccConnectionSAMLCrossAppAccessRequestingApp"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 354.839375ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.53.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_v0hQkUvuYpBypkmK
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2026-11-18T20:34:23.312Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 459.102583ms

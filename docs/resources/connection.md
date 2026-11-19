@@ -585,6 +585,48 @@ resource "auth0_connection" "samlp" {
 }
 ```
 
+### SAML Connection as a Cross-App Access Requesting App
+
+```terraform
+# This is an example of a SAML connection configured as a Cross-App Access (XAA)
+# requesting application authorization server.
+#
+# The cross_app_access_requesting_app block is an Early Access (EA only) feature.
+#
+# Note: Once configured, removing the block from your configuration is a no-op and will
+# not disable the purpose on the connection. Set `active = false` explicitly to deactivate it.
+
+resource "auth0_connection" "saml_xaa" {
+  name     = "saml-xaa-connection"
+  strategy = "samlp"
+
+  options {
+    signing_cert     = "<signing-certificate>"
+    sign_in_endpoint = "https://saml.provider/sign_in"
+
+    # Credentials Auth0 uses to authenticate to the identity provider's token endpoint.
+    client_id                       = "1234567"
+    client_secret                   = "1234567"
+    token_endpoint_auth_method      = "client_secret_post"
+    token_endpoint_auth_signing_alg = "RS256"
+    token_endpoint_jwtca_aud_format = "token_endpoint"
+
+    # The metadata must contain a token_endpoint for the requesting app to be activated.
+    oidc_metadata = jsonencode({
+      issuer                                = "https://idp.example.com"
+      authorization_endpoint                = "https://idp.example.com/authorize"
+      token_endpoint                        = "https://idp.example.com/token"
+      jwks_uri                              = "https://idp.example.com/jwks"
+      id_token_signing_alg_values_supported = ["RS256"]
+    })
+  }
+
+  cross_app_access_requesting_app {
+    active = true
+  }
+}
+```
+
 ### WindowsLive Connection
 
 ```terraform
@@ -723,7 +765,7 @@ resource "auth0_connection" "okta" {
 
 - `authentication` (Block List, Max: 1) Configure the purpose of a connection to be used for authentication during login.**Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (see [below for nested schema](#nestedblock--authentication))
 - `connected_accounts` (Block List, Max: 1) Configure the purpose of a connection to be used for connected accounts and Token Vault.**Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (see [below for nested schema](#nestedblock--connected_accounts))
-- `cross_app_access_requesting_app` (Block List, Max: 1) Configure the purpose of a connection to be used as a requesting application authorization server for Cross-App Access (XAA). This is an Early Access feature and requires the `token_vault_xaa` flag to be enabled on your tenant. Only supported on `oidc` and `okta` strategy connections. **Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (EA Only) (see [below for nested schema](#nestedblock--cross_app_access_requesting_app))
+- `cross_app_access_requesting_app` (Block List, Max: 1) Configure the purpose of a connection to be used as a requesting application authorization server for Cross-App Access (XAA). This is an Early Access feature. Only supported on `oidc`, `okta` and `samlp` strategy connections. **Note:** Once configured, removing this block from your configuration is a no-op and will not disable the purpose on the connection; set `active` to `false` explicitly to deactivate it. (EA Only) (see [below for nested schema](#nestedblock--cross_app_access_requesting_app))
 - `cross_app_access_resource_app` (Block List, Max: 1) Resource App settings that apply to this connection. (EA only) (see [below for nested schema](#nestedblock--cross_app_access_resource_app))
 - `display_name` (String) Name used in login screen.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
@@ -806,7 +848,7 @@ Optional:
 - `disable_self_service_change_password` (Boolean) Indicates whether to remove the forgot password link within the New Universal Login.
 - `disable_sign_out` (Boolean) When enabled, will disable sign out.
 - `disable_signup` (Boolean) Indicates whether to allow user sign-ups to your application.
-- `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.
+- `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`. Also applicable to `samlp` connections (EA only).
 - `domain` (String) Domain name.
 - `domain_aliases` (Set of String) List of the domains that can be authenticated using the identity provider. Only needed for Identifier First authentication flows.
 - `dpop_signing_alg` (String) The algorithm used to sign the DPoP proof. Allowed values: ES256, ES384, ES512, Ed25519.
@@ -880,9 +922,9 @@ Optional:
 - `template` (String) Body of the template.
 - `tenant_domain` (String) Tenant domain name.
 - `token_endpoint` (String) Token endpoint.
-- `token_endpoint_auth_method` (String) Specifies the authentication method for the token endpoint. (Okta/OIDC Connections)
-- `token_endpoint_auth_signing_alg` (String) Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)
-- `token_endpoint_jwtca_aud_format` (String) Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC Connections)
+- `token_endpoint_auth_method` (String) Specifies the authentication method for the token endpoint. (Okta/OIDC Connections; SAML Connections (EA only))
+- `token_endpoint_auth_signing_alg` (String) Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections; SAML Connections (EA only))
+- `token_endpoint_jwtca_aud_format` (String) Specifies the format of the aud (audience) claim in the JWT for client authentication. Accepted values: 'issuer' or 'token_endpoint'. (Okta/OIDC Connections; SAML Connections (EA only))
 - `totp` (Block List, Max: 1) Configuration options for one-time passwords. (see [below for nested schema](#nestedblock--options--totp))
 - `twilio_sid` (String) SID for your Twilio account.
 - `twilio_token` (String, Sensitive) AuthToken for your Twilio account.

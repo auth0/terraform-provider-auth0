@@ -1849,6 +1849,93 @@ resource "auth0_connection" "auth0" {
 }
 `
 
+func TestAccConnectionSAMLCrossAppAccessRequestingApp(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				// Create with the requesting app active.
+				Config: acctest.ParseTestName(testAccConnectionSAMLXAAConfigCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "strategy", "samlp"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "cross_app_access_requesting_app.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "cross_app_access_requesting_app.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.client_id", "xaa-client-id"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.client_secret", "xaa-client-secret"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.token_endpoint_auth_method", "client_secret_post"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.token_endpoint_auth_signing_alg", "RS256"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.token_endpoint_jwtca_aud_format", "token_endpoint"),
+					resource.TestCheckResourceAttrSet("auth0_connection.saml", "options.0.oidc_metadata"),
+				),
+			},
+			{
+				// Update the token endpoint options and deactivate the requesting app.
+				Config: acctest.ParseTestName(testAccConnectionSAMLXAAConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.saml", "cross_app_access_requesting_app.0.active", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.client_id", "xaa-client-id-updated"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.client_secret", "xaa-client-secret-updated"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.token_endpoint_auth_signing_alg", "ES256"),
+					resource.TestCheckResourceAttr("auth0_connection.saml", "options.0.token_endpoint_jwtca_aud_format", "issuer"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionSAMLXAAConfigCreate = `
+resource "auth0_connection" "saml" {
+	name         = "Acceptance-Test-SAML-XAA-{{.testName}}"
+	display_name = "Acceptance-Test-SAML-XAA-{{.testName}}"
+	strategy     = "samlp"
+	options {
+		sign_in_endpoint                = "https://idp.example.com/saml"
+		signing_cert                    = "-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----"
+		client_id                       = "xaa-client-id"
+		client_secret                   = "xaa-client-secret"
+		token_endpoint_auth_method      = "client_secret_post"
+		token_endpoint_auth_signing_alg = "RS256"
+		token_endpoint_jwtca_aud_format = "token_endpoint"
+		oidc_metadata = jsonencode({
+			issuer                                = "https://idp.example.com"
+			authorization_endpoint                = "https://idp.example.com/authorize"
+			token_endpoint                        = "https://idp.example.com/token"
+			jwks_uri                              = "https://idp.example.com/jwks"
+			id_token_signing_alg_values_supported = ["RS256"]
+		})
+	}
+	cross_app_access_requesting_app {
+		active = true
+	}
+}
+`
+
+const testAccConnectionSAMLXAAConfigUpdate = `
+resource "auth0_connection" "saml" {
+	name         = "Acceptance-Test-SAML-XAA-{{.testName}}"
+	display_name = "Acceptance-Test-SAML-XAA-{{.testName}}"
+	strategy     = "samlp"
+	options {
+		sign_in_endpoint                = "https://idp.example.com/saml"
+		signing_cert                    = "-----BEGIN CERTIFICATE-----\nMIIBiDCCAS+gAwIBAgIUHMzSMJdsccDo1jTxniPSsx6ZCW4wCgYIKoZIzj0EAwIw\nGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMB4XDTI2MTExODIwMjM1MFoXDTM2\nMTExNTIwMjM1MFowGjEYMBYGA1UEAwwPaWRwLmV4YW1wbGUuY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAETwFq4qSg0UFEsvI/k9IcGBtDkuw0JL8V7REmh9j2\nR6y1Yotr7vuIo893RC6G/hcL0dbQxB66wayM9G+bEQkJIKNTMFEwHQYDVR0OBBYE\nFAijYq3dBKd6W4URt51+dpsM23FsMB8GA1UdIwQYMBaAFAijYq3dBKd6W4URt51+\ndpsM23FsMA8GA1UdEwEB/wQFMAMBAf8wCgYIKoZIzj0EAwIDRwAwRAIgJKJBISwi\nZGqQjPduvmSFuHVKwnkRJfTJ71SqkK7O5CQCIFRpyK7aOd1IEZl/QbObLlqywYYe\n/9j5CWCCswU8Js9q\n-----END CERTIFICATE-----"
+		client_id                       = "xaa-client-id-updated"
+		client_secret                   = "xaa-client-secret-updated"
+		token_endpoint_auth_method      = "client_secret_post"
+		token_endpoint_auth_signing_alg = "ES256"
+		token_endpoint_jwtca_aud_format = "issuer"
+		oidc_metadata = jsonencode({
+			issuer                                = "https://idp.example.com"
+			authorization_endpoint                = "https://idp.example.com/authorize"
+			token_endpoint                        = "https://idp.example.com/token"
+			jwks_uri                              = "https://idp.example.com/jwks"
+			id_token_signing_alg_values_supported = ["RS256"]
+		})
+	}
+	cross_app_access_requesting_app {
+		active = false
+	}
+}
+`
+
 func TestAccConnectionConnectedAccounts(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

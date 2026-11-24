@@ -182,3 +182,14 @@ resource "auth0_client" "third_party_all_scopes" {
     allow_all_scopes = true
   }
 }
+
+resource "auth0_client" "google_streamlined_linking" {
+  name            = "Google Streamlined Linking Client"
+  app_type        = "regular_web"
+  is_first_party  = true
+  oidc_conformant = true
+
+  google_account_linking {
+    allow_streamlined_linking = true
+  }
+}

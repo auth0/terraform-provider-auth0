@@ -59,6 +59,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		RequireProofOfPossession:            value.Bool(config.GetAttr("require_proof_of_possession")),
 		SessionTransfer:                     expandSessionTransfer(data),
 		FedCMLogin:                          expandClientFedCMLogin(data),
+		GoogleAccountLinking:                expandClientGoogleAccountLinking(data),
 		IdentityAssertionAuthorizationGrant: expandClientIdentityAssertionAuthorizationGrant(data),
 		ComplianceLevel:                     value.String(config.GetAttr("compliance_level")),
 		ThirdPartySecurityMode:              value.String(config.GetAttr("third_party_security_mode")),
@@ -473,6 +474,26 @@ func expandClientFedCMLoginGoogle(config cty.Value) *management.FedCMLoginGoogle
 	})
 
 	return &google
+}
+
+func expandClientGoogleAccountLinking(data *schema.ResourceData) *management.ClientGoogleAccountLinking {
+	if !data.IsNewResource() && !data.HasChange("google_account_linking") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("google_account_linking")
+	if config.IsNull() || config.LengthInt() == 0 {
+		// fetchNullableFields sends null when the block is removed.
+		return nil
+	}
+
+	var linking management.ClientGoogleAccountLinking
+	config.ForEachElement(func(_ cty.Value, block cty.Value) (stop bool) {
+		linking.AllowStreamlinedLinking = value.Bool(block.GetAttr("allow_streamlined_linking"))
+		return stop
+	})
+
+	return &linking
 }
 
 func expandClientIdentityAssertionAuthorizationGrant(data *schema.ResourceData) *management.IdentityAssertionAuthorizationGrant {
@@ -1259,6 +1280,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"token_exchange":                                       isTokenExchangeNull,
 		"async_approval_notification_channels":                 isAsyncApprovalNotificationChannelsNull,
 		"fedcm_login":                                          isFedCMLoginNull,
+		"google_account_linking":                               isGoogleAccountLinkingNull,
 		"identity_assertion_authorization_grant":               isIdentityAssertionAuthorizationGrantNull,
 		"anonymous_sessions":                                   isAnonymousSessionsNull,
 		"agent_id":                                             isAgentIDNull,
@@ -1426,6 +1448,15 @@ func isFedCMLoginNull(data *schema.ResourceData) bool {
 	}
 
 	rawConfig := data.GetRawConfig().GetAttr("fedcm_login")
+	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
+}
+
+func isGoogleAccountLinkingNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("google_account_linking") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("google_account_linking")
 	return rawConfig.IsNull() || rawConfig.LengthInt() == 0
 }
 

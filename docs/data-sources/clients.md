@@ -72,6 +72,7 @@ Read-Only:
 - `external_metadata_status` (String)
 - `external_metadata_type` (String)
 - `fedcm_login` (List of Object) (see [below for nested schema](#nestedobjatt--clients--fedcm_login))
+- `google_account_linking` (List of Object) (see [below for nested schema](#nestedobjatt--clients--google_account_linking))
 - `grant_types` (List of String)
 - `identity_assertion_authorization_grant` (List of Object) (see [below for nested schema](#nestedobjatt--clients--identity_assertion_authorization_grant))
 - `is_first_party` (Boolean)
@@ -146,6 +147,14 @@ Read-Only:
 
 - `is_enabled` (Boolean)
 
+
+
+<a id="nestedobjatt--clients--google_account_linking"></a>
+### Nested Schema for `clients.google_account_linking`
+
+Read-Only:
+
+- `allow_streamlined_linking` (Boolean)
 
 
 <a id="nestedobjatt--clients--identity_assertion_authorization_grant"></a>

@@ -1837,6 +1837,21 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"google_account_linking": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configures Google account linking for this client (EA only).",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"allow_streamlined_linking": {
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: "Allow Google streamlined account linking for this client (EA only).",
+						},
+					},
+				},
+			},
 			"identity_assertion_authorization_grant": {
 				Type:        schema.TypeList,
 				Optional:    true,

@@ -483,7 +483,7 @@ func expandClientGoogleAccountLinking(data *schema.ResourceData) *management.Cli
 
 	config := data.GetRawConfig().GetAttr("google_account_linking")
 	if config.IsNull() || config.LengthInt() == 0 {
-		// fetchNullableFields sends null when the block is removed.
+		// The nullable-fields request sends null when the block is removed.
 		return nil
 	}
 

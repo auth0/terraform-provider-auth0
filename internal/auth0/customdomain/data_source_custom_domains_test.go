@@ -84,3 +84,30 @@ func TestAccDataSourceCustomDomains(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataSourceCustomDomainsIsDefault = `
+resource "auth0_custom_domain_default" "default" {
+  domain = "aranusrii.acmetest.org"
+}
+
+data "auth0_custom_domains" "default" {
+  depends_on = [auth0_custom_domain_default.default]
+
+  query = "domain:aranusrii.acmetest.org"
+}
+`
+
+func TestAccDataSourceCustomDomainsIsDefault(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataSourceCustomDomainsIsDefault, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_custom_domains.default", "custom_domains.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_custom_domains.default", "custom_domains.0.domain", "aranusrii.acmetest.org"),
+					resource.TestCheckResourceAttr("data.auth0_custom_domains.default", "custom_domains.0.is_default", "true"),
+				),
+			},
+		},
+	})
+}

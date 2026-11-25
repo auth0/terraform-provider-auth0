@@ -1,0 +1,1220 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 47
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"name":"OIN COP - TestAccClientOINListingURL"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 434
+        uncompressed: false
+        body: '{"id":"cop_1cGomZedyaAD7sFPDbxRTp","name":"OIN COP - TestAccClientOINListingURL","organization":{"show_as_button":"none","assign_membership_on_login":"none"},"connection_name_prefix_template":"con-{org_id}-","enabled_features":["scim","universal_logout","directory_sync"],"provisioning":{"scim":{"tokens":{"scopes":["get:users","post:users","patch:users","delete:users","put:users"],"default_expiry":null,"max_allowed_expiry":null}}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 351.946ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cGomZedyaAD7sFPDbxRTp
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 434
+        uncompressed: false
+        body: '{"id":"cop_1cGomZedyaAD7sFPDbxRTp","name":"OIN COP - TestAccClientOINListingURL","organization":{"show_as_button":"none","assign_membership_on_login":"none"},"connection_name_prefix_template":"con-{org_id}-","enabled_features":["scim","universal_logout","directory_sync"],"provisioning":{"scim":{"tokens":{"scopes":["get:users","post:users","patch:users","delete:users","put:users"],"default_expiry":null,"max_allowed_expiry":null}}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 349.59025ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 179
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"OIN UAP - TestAccClientOINListingURL","user_attributes":{"email":{"description":"User's email address","label":"Email","profile_required":true,"auth0_mapping":"email"}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 482
+        uncompressed: false
+        body: '{"id":"uap_1cGomZgbBYbxQqkUAyiuUZ","name":"OIN UAP - TestAccClientOINListingURL","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 811.509667ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 98
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"OIN Listing URL Client - TestAccClientOINListingURL","app_type":"express_terraform-provider-auth0-devuration"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"OIN Listing URL Client - TestAccClientOINListingURL","client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","app_type":"express_terraform-provider-auth0-devuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":true,"allow_all_scopes":true},"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 885.213041ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cGomZgbBYbxQqkUAyiuUZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 482
+        uncompressed: false
+        body: '{"id":"uap_1cGomZgbBYbxQqkUAyiuUZ","name":"OIN UAP - TestAccClientOINListingURL","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 318.448208ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"OIN Listing URL Client - TestAccClientOINListingURL","client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","app_type":"express_terraform-provider-auth0-devuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":true,"allow_all_scopes":true},"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 307.6735ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 645
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","app_type":"regular_web","token_endpoint_auth_method":"client_secret_post","express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","okta_oin_listing_url":"https://www.okta.com/integrations/example-app","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","okta_oin_listing_url":"https://www.okta.com/integrations/example-app","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 527.8095ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","okta_oin_listing_url":"https://www.okta.com/integrations/example-app","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 287.002333ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cGomZgbBYbxQqkUAyiuUZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 482
+        uncompressed: false
+        body: '{"id":"uap_1cGomZgbBYbxQqkUAyiuUZ","name":"OIN UAP - TestAccClientOINListingURL","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.221208ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"OIN Listing URL Client - TestAccClientOINListingURL","client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","app_type":"express_terraform-provider-auth0-devuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":true,"allow_all_scopes":true},"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.565ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cGomZedyaAD7sFPDbxRTp
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 434
+        uncompressed: false
+        body: '{"id":"cop_1cGomZedyaAD7sFPDbxRTp","name":"OIN COP - TestAccClientOINListingURL","organization":{"show_as_button":"none","assign_membership_on_login":"none"},"connection_name_prefix_template":"con-{org_id}-","enabled_features":["scim","universal_logout","directory_sync"],"provisioning":{"scim":{"tokens":{"scopes":["get:users","post:users","patch:users","delete:users","put:users"],"default_expiry":null,"max_allowed_expiry":null}}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 343.185792ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","okta_oin_listing_url":"https://www.okta.com/integrations/example-app","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 302.404833ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cGomZgbBYbxQqkUAyiuUZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 482
+        uncompressed: false
+        body: '{"id":"uap_1cGomZgbBYbxQqkUAyiuUZ","name":"OIN UAP - TestAccClientOINListingURL","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 285.9835ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cGomZedyaAD7sFPDbxRTp
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 434
+        uncompressed: false
+        body: '{"id":"cop_1cGomZedyaAD7sFPDbxRTp","name":"OIN COP - TestAccClientOINListingURL","organization":{"show_as_button":"none","assign_membership_on_login":"none"},"connection_name_prefix_template":"con-{org_id}-","enabled_features":["scim","universal_logout","directory_sync"],"provisioning":{"scim":{"tokens":{"scopes":["get:users","post:users","patch:users","delete:users","put:users"],"default_expiry":null,"max_allowed_expiry":null}}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 297.284833ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"OIN Listing URL Client - TestAccClientOINListingURL","client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","app_type":"express_terraform-provider-auth0-devuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":true,"allow_all_scopes":true},"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 317.359959ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","okta_oin_listing_url":"https://www.okta.com/integrations/example-app","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 289.1375ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 603
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","app_type":"regular_web","express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","okta_oin_listing_url":"https://www.okta.com/integrations/example-app-updated","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","okta_oin_listing_url":"https://www.okta.com/integrations/example-app-updated","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 333.748625ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","okta_oin_listing_url":"https://www.okta.com/integrations/example-app-updated","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 290.584375ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cGomZgbBYbxQqkUAyiuUZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 482
+        uncompressed: false
+        body: '{"id":"uap_1cGomZgbBYbxQqkUAyiuUZ","name":"OIN UAP - TestAccClientOINListingURL","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 292.446291ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"OIN Listing URL Client - TestAccClientOINListingURL","client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","app_type":"express_terraform-provider-auth0-devuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":true,"allow_all_scopes":true},"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 295.892417ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cGomZedyaAD7sFPDbxRTp
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 434
+        uncompressed: false
+        body: '{"id":"cop_1cGomZedyaAD7sFPDbxRTp","name":"OIN COP - TestAccClientOINListingURL","organization":{"show_as_button":"none","assign_membership_on_login":"none"},"connection_name_prefix_template":"con-{org_id}-","enabled_features":["scim","universal_logout","directory_sync"],"provisioning":{"scim":{"tokens":{"scopes":["get:users","post:users","patch:users","delete:users","put:users"],"default_expiry":null,"max_allowed_expiry":null}}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 282.777333ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","okta_oin_listing_url":"https://www.okta.com/integrations/example-app-updated","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 298.346083ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cGomZgbBYbxQqkUAyiuUZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 482
+        uncompressed: false
+        body: '{"id":"uap_1cGomZgbBYbxQqkUAyiuUZ","name":"OIN UAP - TestAccClientOINListingURL","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 294.477166ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"OIN Listing URL Client - TestAccClientOINListingURL","client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","app_type":"express_terraform-provider-auth0-devuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":true,"allow_all_scopes":true},"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 308.474375ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cGomZedyaAD7sFPDbxRTp
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 434
+        uncompressed: false
+        body: '{"id":"cop_1cGomZedyaAD7sFPDbxRTp","name":"OIN COP - TestAccClientOINListingURL","organization":{"show_as_button":"none","assign_membership_on_login":"none"},"connection_name_prefix_template":"con-{org_id}-","enabled_features":["scim","universal_logout","directory_sync"],"provisioning":{"scim":{"tokens":{"scopes":["get:users","post:users","patch:users","delete:users","put:users"],"default_expiry":null,"max_allowed_expiry":null}}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 288.684292ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","okta_oin_listing_url":"https://www.okta.com/integrations/example-app-updated","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 295.855333ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 524
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","app_type":"regular_web","express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 385.499292ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 291.092125ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cGomZgbBYbxQqkUAyiuUZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 482
+        uncompressed: false
+        body: '{"id":"uap_1cGomZgbBYbxQqkUAyiuUZ","name":"OIN UAP - TestAccClientOINListingURL","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 293.5185ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cGomZedyaAD7sFPDbxRTp
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 434
+        uncompressed: false
+        body: '{"id":"cop_1cGomZedyaAD7sFPDbxRTp","name":"OIN COP - TestAccClientOINListingURL","organization":{"show_as_button":"none","assign_membership_on_login":"none"},"connection_name_prefix_template":"con-{org_id}-","enabled_features":["scim","universal_logout","directory_sync"],"provisioning":{"scim":{"tokens":{"scopes":["get:users","post:users","patch:users","delete:users","put:users"],"default_expiry":null,"max_allowed_expiry":null}}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 310.170542ms
+    - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"OIN Listing URL Client - TestAccClientOINListingURL","client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","app_type":"express_terraform-provider-auth0-devuration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":true,"allow_all_scopes":true},"callbacks":["https://system-admin.okta.com/admin/app/generic/oauth20redirect"],"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"alg":"RS256"},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"require","organization_require_behavior":"pre_login_prompt","client_authentication_methods":{"private_key_jwt":{"credentials":[]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 321.298ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - OIN Listing URL Client - TestAccClientOINListingURL","client_id":"v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_terraform-provider-auth0-devuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"express_terraform-provider-auth0-devuration":{"initiate_login_uri_template":"https://example.com/login?org={organization_name}","user_attribute_profile_id":"uap_1cGomZgbBYbxQqkUAyiuUZ","connection_profile_id":"cop_1cGomZedyaAD7sFPDbxRTp","enable_client":true,"enable_organization":true,"okta_oin_client_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG","admin_login_domain":"admin.example.com","oin_submission_id":"bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 300.73625ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/v22IZGlwdhAdY6bII5AJdE4OQFwlY9hF
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 346.326583ms
+    - id: 33
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cGomZgbBYbxQqkUAyiuUZ
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 295.028292ms
+    - id: 34
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.54.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/bbZLXa2xUT33ieSZqPYORfi6jDYdyKPG
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 346.09125ms
+    - id: 35
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connection-profiles/cop_1cGomZedyaAD7sFPDbxRTp
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 280.832459ms

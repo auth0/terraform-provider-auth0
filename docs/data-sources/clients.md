@@ -121,6 +121,7 @@ Read-Only:
 - `linked_clients` (List of Object) (see [below for nested schema](#nestedobjatt--clients--express_configuration--linked_clients))
 - `oin_submission_id` (String)
 - `okta_oin_client_id` (String)
+- `okta_oin_listing_url` (String)
 - `user_attribute_profile_id` (String)
 
 <a id="nestedobjatt--clients--express_configuration--linked_clients"></a>

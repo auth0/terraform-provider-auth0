@@ -1547,6 +1547,7 @@ func expandExpressConfiguration(data *schema.ResourceData) *management.ExpressCo
 			EnableOrganization:       value.Bool(elem.GetAttr("enable_organization")),
 			AdminLoginDomain:         value.String(elem.GetAttr("admin_login_domain")),
 			OktaOINClientID:          value.String(elem.GetAttr("okta_oin_client_id")),
+			OktaOINListingURL:        value.String(elem.GetAttr("okta_oin_listing_url")),
 			OINSubmissionID:          value.String(elem.GetAttr("okta_oin_client_id")),
 		}
 

@@ -1320,6 +1320,7 @@ func flattenExpressConfiguration(ec *management.ExpressConfiguration) []interfac
 		"enable_organization":         ec.GetEnableOrganization(),
 		"okta_oin_client_id":          ec.GetOktaOINClientID(),
 		"admin_login_domain":          ec.GetAdminLoginDomain(),
+		"okta_oin_listing_url":        ec.GetOktaOINListingURL(),
 		"oin_submission_id":           ec.GetOINSubmissionID(),
 	}
 

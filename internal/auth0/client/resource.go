@@ -1998,6 +1998,11 @@ func NewResource() *schema.Resource {
 							Optional:    true,
 							Description: "The domain that admins are expected to log in via for authenticating for express configuration.",
 						},
+						"okta_oin_listing_url": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "HTTPS URL of the application's listing in the Okta Integration Network (OIN) catalog.",
+						},
 						"oin_submission_id": {
 							Type:        schema.TypeString,
 							Computed:    true,

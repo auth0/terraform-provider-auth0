@@ -632,6 +632,7 @@ Optional:
 - `initiate_login_uri_template` (String) The URI users should bookmark to log in to this application. Variable substitution is permitted for: organization_name, organization_id, and connection_name.
 - `linked_clients` (Block List) List of client IDs that are linked to this express configuration (e.g. web or mobile clients). (see [below for nested schema](#nestedblock--express_configuration--linked_clients))
 - `okta_oin_client_id` (String) The unique identifier for the Okta OIN Express Configuration Client.
+- `okta_oin_listing_url` (String) HTTPS URL of the application's listing in the Okta Integration Network (OIN) catalog.
 - `user_attribute_profile_id` (String) The ID of the user attribute profile to use for this application.
 
 Read-Only:

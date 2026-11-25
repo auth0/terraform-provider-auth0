@@ -11,6 +11,9 @@ With this resource, you can manage Auth0 tenants, including setting logos and su
 ~> Creating tenants through the Management API is not currently supported. Therefore, this resource can only
 manage an existing tenant created through the Auth0 dashboard.
 
+!> The `error_page` block in this resource and the `error` block in the `auth0_pages` resource manage the same
+tenant error page setting. To avoid conflicts, configure the error page in only one of the two resources, never in both.
+
 ## Example Usage
 
 ```terraform

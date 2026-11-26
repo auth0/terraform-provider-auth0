@@ -91,6 +91,7 @@ func flattenCustomDomainList(data *schema.ResourceData, customDomains []*managem
 			"domain_metadata":          domain.GetDomainMetadata(),
 			"certificate":              flattenCustomDomainCertificates(domain.GetCertificate()),
 			"relying_party_identifier": domain.GetRelyingPartyIdentifier(),
+			"is_default":               domain.GetIsDefault(),
 		}
 
 		list = append(list, entry)

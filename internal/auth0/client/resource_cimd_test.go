@@ -138,6 +138,79 @@ func TestAccClientCIMD(t *testing.T) {
 	})
 }
 
+const testAccClientCIMDWithAgentTwoAgents = `
+resource "auth0_agent" "first" {
+  name              = "First {{.testName}}"
+  external_agent_id = "first-{{.testName}}"
+}
+
+resource "auth0_agent" "second" {
+  name              = "Second {{.testName}}"
+  external_agent_id = "second-{{.testName}}"
+
+  # Serialize creation so that the recorded cassette replays deterministically.
+  depends_on = [auth0_agent.first]
+}
+`
+
+const testAccClientCIMDWithAgentUnlinked = testAccClientCIMDWithAgentTwoAgents + `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+}
+`
+
+const testAccClientCIMDWithAgentLinkedToFirst = testAccClientCIMDWithAgentTwoAgents + `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+  agent_id           = auth0_agent.first.id
+}
+`
+
+const testAccClientCIMDWithAgentLinkedToSecond = testAccClientCIMDWithAgentTwoAgents + `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+  agent_id           = auth0_agent.second.id
+}
+`
+
+func TestAccClientCIMDWithAgent(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientCIMDWithAgentLinkedToFirst, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_created_by", "admin"),
+					resource.TestCheckResourceAttrPair("auth0_client_cimd.test", "agent_id", "auth0_agent.first", "id"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientCIMDWithAgentLinkedToSecond, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrPair("auth0_client_cimd.test", "agent_id", "auth0_agent.second", "id"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientCIMDWithAgentUnlinked, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "agent_id", ""),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientCIMDWithAgentLinkedToFirst, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrPair("auth0_client_cimd.test", "agent_id", "auth0_agent.first", "id"),
+				),
+			},
+			{
+				ResourceName:            "auth0_client_cimd.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"external_client_id_version"},
+			},
+		},
+	})
+}
+
 const testAccClientCIMDStatus = `
 resource "auth0_client_cimd" "test" {
   external_client_id = "https://authflowsapp-prod.authzerotest.com/v1/cimd-metadata/static/valid"

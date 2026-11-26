@@ -66,6 +66,7 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 
 ### Optional
 
+- `agent_id` (String) The ID of the agent (`auth0_agent`) this client is linked to (EA Only). Reference it as `auth0_agent.<name>.id` so that the client is unlinked before the agent is deleted. Removing the attribute unlinks the client, including a link made outside Terraform. Requires the `update:clients` and `update:agents` scopes.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
 - `app_type` (String) Type of application the client represents. CIMD clients only support `native`, `spa`, and `regular_web`. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.

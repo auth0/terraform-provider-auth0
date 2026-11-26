@@ -31,6 +31,7 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv3.UpdateClientRequestCont
 		}
 	}
 
+	req.AgentID = value.String(config.GetAttr("agent_id"))
 	req.OidcConformant = value.Bool(config.GetAttr("oidc_conformant"))
 	req.RequireProofOfPossession = value.Bool(config.GetAttr("require_proof_of_possession"))
 
@@ -228,6 +229,10 @@ func isEmptyRequest(req *mgmtv3.UpdateClientRequestContent) (bool, error) {
 
 func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv3.UpdateClientRequestContent) {
 	config := data.GetRawConfig()
+
+	if data.HasChange("agent_id") && config.GetAttr("agent_id").IsNull() {
+		req.SetAgentID(nil)
+	}
 
 	if data.HasChange("allowed_origins") && config.GetAttr("allowed_origins").IsNull() {
 		req.SetAllowedOrigins([]string{})

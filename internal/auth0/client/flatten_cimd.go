@@ -22,6 +22,7 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv3.GetClientRespon
 		data.Set("jwks_uri", client.GetJwksURI()),
 		data.Set("signing_keys", flattenCIMDSigningKeys(client.SigningKeys)),
 		data.Set("description", client.GetDescription()),
+		data.Set("agent_id", client.GetAgentID()),
 		data.Set("app_type", string(client.GetAppType())),
 		data.Set("allowed_origins", client.GetAllowedOrigins()),
 		data.Set("web_origins", client.GetWebOrigins()),

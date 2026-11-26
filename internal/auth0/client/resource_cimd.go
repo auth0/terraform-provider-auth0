@@ -13,6 +13,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
 const (
@@ -173,6 +174,14 @@ func cimdClientSchema() map[string]*schema.Schema {
 			ValidateDiagFunc: validateBoolEquals(true),
 			Description: "Whether this client conforms to strict OIDC specifications. " +
 				"Must be `true` for CIMD clients.",
+		},
+		"agent_id": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			ValidateFunc: internalValidation.IsAgentID,
+			Description: "The ID of the agent (`auth0_agent`) this client is linked to (EA Only). Reference it as " +
+				"`auth0_agent.<name>.id` so that the client is unlinked before the agent is deleted. Removing " +
+				"the attribute unlinks the client, including a link made outside Terraform. Requires the `update:clients` and `update:agents` scopes.",
 		},
 		"organization_usage": {
 			Type:     schema.TypeString,

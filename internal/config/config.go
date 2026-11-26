@@ -222,20 +222,27 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			return nil, diag.FromErr(err)
 		}
 
-		apiClientV3, err := managementv3.New(config.Domain,
-			authenticationOptionV3(config),
-			option.WithUserAgent(userAgent(terraformVersion)),
-			option.WithAuth0ClientEnvEntry(providerName, version),
-			option.WithHTTPClient(customClientWithRetries()),
-			option.WithCustomDomainHeader(config.CustomDomainHeader),
-			option.WithDebug(config.Debug))
-
+		apiClientV3, err := newManagementV3(config, terraformVersion, customClientWithRetries())
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
 
 		return NewWithV3(apiClient, apiClientV3), nil
 	}
+}
+
+// newManagementV3 builds the v3 management client. The SDK's own retries are
+// disabled, as they are for the v1 client, because httpClient already handles
+// retries; leaving both enabled would retry every failed request at two levels.
+func newManagementV3(config ProviderConfig, terraformVersion *string, httpClient *http.Client) (*managementv3.Management, error) {
+	return managementv3.New(config.Domain,
+		authenticationOptionV3(config),
+		option.WithUserAgent(userAgent(terraformVersion)),
+		option.WithAuth0ClientEnvEntry(providerName, version),
+		option.WithoutRetries(),
+		option.WithHTTPClient(httpClient),
+		option.WithCustomDomainHeader(config.CustomDomainHeader),
+		option.WithDebug(config.Debug))
 }
 
 func fetchAndValidateCLIToken(domain string) (string, diag.Diagnostics) {

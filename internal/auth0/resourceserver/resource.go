@@ -67,9 +67,10 @@ func NewResource() *schema.Resource {
 				Description: "Algorithm used to sign JWTs. Options include `HS256`, `RS256`, and `PS256`.",
 			},
 			"signing_secret": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:      schema.TypeString,
+				Optional:  true,
+				Computed:  true,
+				Sensitive: true,
 				ValidateFunc: func(i interface{}, k string) (s []string, es []error) {
 					v, ok := i.(string)
 					if !ok {

@@ -836,7 +836,7 @@ Optional:
 - `configuration` (Map of String, Sensitive) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
 - `connection_settings` (Block List, Max: 1) Proof Key for Code Exchange (PKCE) configuration settings for an OIDC or Okta Workforce connection. (see [below for nested schema](#nestedblock--options--connection_settings))
 - `consumer_key` (String) Identifies the client to the service provider
-- `consumer_secret` (String) Secret used to establish ownership of the consumer key.
+- `consumer_secret` (String, Sensitive) Secret used to establish ownership of the consumer key.
 - `custom_headers` (Block Set) Configure extra headers to the Token endpoint of an OAuth 2.0 provider (see [below for nested schema](#nestedblock--options--custom_headers))
 - `custom_password_hash` (Block List, Max: 1) Configure custom password hashing within a connection. (EA only) (see [below for nested schema](#nestedblock--options--custom_password_hash))
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
@@ -905,7 +905,7 @@ Optional:
 - `scopes` (Set of String) Permissions to grant to the connection. Within the Auth0 dashboard these appear under the "Attributes" and "Extended Attributes" sections. Some examples: `basic_profile`, `ext_profile`, `ext_nested_groups`, etc.
 - `scripts` (Map of String) A map of scripts used for an OAuth connection. Only accepts a `fetchUserProfile` script.
 - `send_back_channel_nonce` (Boolean) When true and `type` is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. The identity provider must include this nonce in the ID token for validation.
-- `session_key` (String) Session Key for storing the request token.
+- `session_key` (String, Sensitive) Session Key for storing the request token.
 - `set_user_root_attributes` (String) Determines whether to sync user profile attributes (`name`, `given_name`, `family_name`, `nickname`, `picture`) at each login or only on the first login. Options include: `on_each_login`, `on_first_login`, `never_on_login`. Default value: `on_each_login`.
 - `should_trust_email_verified_connection` (String) Choose how Auth0 sets the email_verified field in the user profile.
 - `sign_in_endpoint` (String) SAML single login URL for the connection.
@@ -1174,7 +1174,7 @@ Required:
 Required:
 
 - `cert` (String)
-- `key` (String)
+- `key` (String, Sensitive)
 
 
 <a id="nestedblock--options--federated_connections_access_tokens"></a>
@@ -1346,7 +1346,7 @@ Optional:
 Required:
 
 - `cert` (String)
-- `key` (String)
+- `key` (String, Sensitive)
 
 
 <a id="nestedblock--options--totp"></a>

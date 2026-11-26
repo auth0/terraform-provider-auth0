@@ -886,8 +886,9 @@ var optionsSchema = &schema.Schema{
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"key": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:      schema.TypeString,
+							Sensitive: true,
+							Required:  true,
 						},
 						"cert": {
 							Type:     schema.TypeString,
@@ -905,8 +906,9 @@ var optionsSchema = &schema.Schema{
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"key": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:      schema.TypeString,
+							Sensitive: true,
+							Required:  true,
 						},
 						"cert": {
 							Type:     schema.TypeString,
@@ -1529,6 +1531,7 @@ var optionsSchema = &schema.Schema{
 			},
 			"consumer_secret": {
 				Type:        schema.TypeString,
+				Sensitive:   true,
 				Optional:    true,
 				Description: "Secret used to establish ownership of the consumer key.",
 			},
@@ -1549,6 +1552,7 @@ var optionsSchema = &schema.Schema{
 			},
 			"session_key": {
 				Type:        schema.TypeString,
+				Sensitive:   true,
 				Optional:    true,
 				Description: "Session Key for storing the request token.",
 			},

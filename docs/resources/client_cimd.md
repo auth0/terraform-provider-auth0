@@ -75,6 +75,7 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 - `external_client_id_version` (Number) Version number for external_client_id metadata document changes. Update this value to sync the client with the latest values of the json metadata document. Only applies to clients with `external_metadata_created_by` set to `admin`.
 - `fedcm_login` (Block List, Max: 1) Federated Credential Management (FedCM) configuration. (EA only) (see [below for nested schema](#nestedblock--fedcm_login))
 - `grant_types` (List of String) Types of grants that this client is authorized to use. CIMD clients support `authorization_code` and `refresh_token`. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
+- `identity_assertion_authorization_grant` (Block List, Max: 1) Configures the client to participate in the Identity Assertion Authorization Grant (ID-JAG) exchange, used for Cross App Access (XAA). (EA only) (see [below for nested schema](#nestedblock--identity_assertion_authorization_grant))
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
 - `oidc_conformant` (Boolean) Whether this client conforms to strict OIDC specifications. Must be `true` for CIMD clients.
 - `organization_discovery_methods` (List of String) Methods for discovering organizations during the pre_login_prompt. Can include `email` (allows users to find their organization by entering their email address) and/or `organization_name` (requires users to enter the organization name directly). These methods can be combined. Setting this property requires that `organization_require_behavior` is set to `pre_login_prompt`.
@@ -126,6 +127,14 @@ Required:
 
 - `is_enabled` (Boolean) Whether to show the Google FedCM prompt on Login. (EA only)
 
+
+
+<a id="nestedblock--identity_assertion_authorization_grant"></a>
+### Nested Schema for `identity_assertion_authorization_grant`
+
+Required:
+
+- `active` (Boolean) Whether the client can exchange ID-JAGs for access tokens. (EA only)
 
 
 <a id="nestedblock--jwt_configuration"></a>

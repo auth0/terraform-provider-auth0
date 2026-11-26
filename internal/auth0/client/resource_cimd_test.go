@@ -276,6 +276,66 @@ func TestAccClientCIMDWithFedCMLogin(t *testing.T) {
 	})
 }
 
+const testAccClientCIMDWithIdentityAssertionAuthorizationGrantActive = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  identity_assertion_authorization_grant {
+    active = true
+  }
+}
+`
+
+const testAccClientCIMDWithIdentityAssertionAuthorizationGrantInactive = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  identity_assertion_authorization_grant {
+    active = false
+  }
+}
+`
+
+func TestAccClientCIMDWithIdentityAssertionAuthorizationGrant(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccClientCIMDWithIdentityAssertionAuthorizationGrantActive,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_created_by", "admin"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.0.active", "true"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithIdentityAssertionAuthorizationGrantInactive,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.0.active", "false"),
+				),
+			},
+			{
+				Config: testAccClientCIMDCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.#", "0"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithIdentityAssertionAuthorizationGrantActive,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.0.active", "true"),
+				),
+			},
+			{
+				ResourceName:            "auth0_client_cimd.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"external_client_id_version"},
+			},
+		},
+	})
+}
+
 const testAccClientCIMDStatus = `
 resource "auth0_client_cimd" "test" {
   external_client_id = "https://authflowsapp-prod.authzerotest.com/v1/cimd-metadata/static/valid"

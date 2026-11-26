@@ -74,6 +74,7 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv3.UpdateClientRequestCont
 	req.ClientMetadata = expandCIMDClientMetadata(data)
 	req.TokenQuota = expandCIMDTokenQuota(data)
 	req.FedcmLogin = expandCIMDFedCMLogin(data)
+	req.IdentityAssertionAuthorizationGrant = expandCIMDIdentityAssertionAuthorizationGrant(data)
 
 	return req
 }
@@ -252,6 +253,28 @@ func expandCIMDFedCMLoginGoogle(config cty.Value) *mgmtv3.FedCmLoginGooglePatch 
 	return &google
 }
 
+func expandCIMDIdentityAssertionAuthorizationGrant(data *schema.ResourceData) *mgmtv3.UpdateIdentityAssertionAuthorizationGrant {
+	if !data.IsNewResource() && !data.HasChange("identity_assertion_authorization_grant") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("identity_assertion_authorization_grant")
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var grant mgmtv3.UpdateIdentityAssertionAuthorizationGrant
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		if active := value.Bool(cfg.GetAttr("active")); active != nil {
+			grant.Active = *active
+		}
+		return stop
+	})
+
+	return &grant
+}
+
 func isEmptyRequest(req *mgmtv3.UpdateClientRequestContent) (bool, error) {
 	reqBytes, err := req.MarshalJSON()
 	if err != nil {
@@ -291,6 +314,12 @@ func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv3.UpdateClientRequ
 	if data.HasChange("fedcm_login") &&
 		(config.GetAttr("fedcm_login").IsNull() || config.GetAttr("fedcm_login").LengthInt() == 0) {
 		req.SetFedcmLogin(nil)
+	}
+
+	if data.HasChange("identity_assertion_authorization_grant") &&
+		(config.GetAttr("identity_assertion_authorization_grant").IsNull() ||
+			config.GetAttr("identity_assertion_authorization_grant").LengthInt() == 0) {
+		req.SetIdentityAssertionAuthorizationGrant(nil)
 	}
 
 	if data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") && config.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull() {

@@ -1,0 +1,1088 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/register
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 631
+        uncompressed: false
+        body: '{"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 431.624292ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 58
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"identity_assertion_authorization_grant":{"active":true}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 357.184667ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 318.924375ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 349.883666ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 322.128875ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 374.974459ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 303.200083ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 368.914541ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 59
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"identity_assertion_authorization_grant":{"active":false}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":false}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 491.184334ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":false}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.479208ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 388.550625ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":false}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.66625ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 357.354625ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":false}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 402.356125ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 373.133583ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 47
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"identity_assertion_authorization_grant":null}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 341.951792ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 535.114792ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 354.481875ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 326.670083ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 395.544792ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 292.20275ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 378.351667ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 58
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"identity_assertion_authorization_grant":{"active":true}}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.788166ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 317.124583ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 348.715333ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.046214833s
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 377.436625ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.345125ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Claude Code","client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","client_secret":"[REDACTED]","app_type":"native","is_first_party":false,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"oidc_support":{"is_allowed":false},"callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":3600},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"rotating","expiration_type":"expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":false,"infinite_idle_token_lifetime":false,"idle_token_lifetime":1296000},"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","external_metadata_type":"cimd","external_metadata_created_by":"admin","external_metadata_status":"available","third_party_security_mode":"strict","redirection_policy":"open_redirect_protection","identity_assertion_authorization_grant":{"active":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 307.781083ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 76
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: '{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata"}'
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/cimd/preview
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"mapped_fields":{"external_client_id":"https://claude.ai/oauth/claude-code-client-metadata","name":"Claude Code","callbacks":["http://localhost/callback","http://127.0.0.1/callback"],"grant_types":["authorization_code","refresh_token"],"app_type":"native","token_endpoint_auth_method":"none"},"validation":{"valid":true,"violations":[],"warnings":["response_types is validated for format but is not persisted. This field is used for internal validation only.","Ignoring unsupported properties: client_uri. These properties are not validated or mapped to the Auth0 client configuration."]},"client_id":"tpc_6rZixvCwrKuHMJvbDZcDLZ","external_metadata_created_by":"admin"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 609.871042ms
+    - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/v3.12.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/tpc_6rZixvCwrKuHMJvbDZcDLZ
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 339.39125ms

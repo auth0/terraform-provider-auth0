@@ -195,3 +195,74 @@ func TestExpandCIMDClientFedCMLogin(t *testing.T) {
 		assert.JSONEq(t, `{"fedcm_login":null}`, expandedCIMDRequest(t, data))
 	})
 }
+
+func cimdIdentityAssertionAuthorizationGrantConfig(active bool) cty.Value {
+	return cty.ListVal([]cty.Value{
+		cty.ObjectVal(map[string]cty.Value{"active": cty.BoolVal(active)}),
+	})
+}
+
+func TestExpandCIMDClientIdentityAssertionAuthorizationGrant(t *testing.T) {
+	activeState := func() *terraform.InstanceState {
+		return &terraform.InstanceState{
+			ID: "tpc_test",
+			Attributes: map[string]string{
+				"identity_assertion_authorization_grant.#":        "1",
+				"identity_assertion_authorization_grant.0.active": "true",
+			},
+		}
+	}
+
+	t.Run("it sends identity_assertion_authorization_grant on create", func(t *testing.T) {
+		config := map[string]cty.Value{
+			"identity_assertion_authorization_grant": cimdIdentityAssertionAuthorizationGrantConfig(true),
+		}
+		data := cimdData(t, config, nil, nil)
+
+		assert.JSONEq(t, `{"identity_assertion_authorization_grant":{"active":true}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends active false on create", func(t *testing.T) {
+		config := map[string]cty.Value{
+			"identity_assertion_authorization_grant": cimdIdentityAssertionAuthorizationGrantConfig(false),
+		}
+		data := cimdData(t, config, nil, nil)
+
+		assert.JSONEq(t, `{"identity_assertion_authorization_grant":{"active":false}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it omits identity_assertion_authorization_grant on create when not configured", func(t *testing.T) {
+		data := cimdData(t, nil, nil, nil)
+
+		assert.JSONEq(t, `{}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it omits identity_assertion_authorization_grant on update when it did not change", func(t *testing.T) {
+		config := map[string]cty.Value{
+			"identity_assertion_authorization_grant": cimdIdentityAssertionAuthorizationGrantConfig(true),
+		}
+		data := cimdData(t, config, activeState(), nil)
+
+		assert.JSONEq(t, `{}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends the new value on update when it changes", func(t *testing.T) {
+		config := map[string]cty.Value{
+			"identity_assertion_authorization_grant": cimdIdentityAssertionAuthorizationGrantConfig(false),
+		}
+		data := cimdData(t, config, activeState(), map[string]*terraform.ResourceAttrDiff{
+			"identity_assertion_authorization_grant.0.active": {Old: "true", New: "false"},
+		})
+
+		assert.JSONEq(t, `{"identity_assertion_authorization_grant":{"active":false}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends a null identity_assertion_authorization_grant on update when the block is removed", func(t *testing.T) {
+		data := cimdData(t, nil, activeState(), map[string]*terraform.ResourceAttrDiff{
+			"identity_assertion_authorization_grant.#":        {Old: "1", New: "0"},
+			"identity_assertion_authorization_grant.0.active": {Old: "true", New: "", NewRemoved: true},
+		})
+
+		assert.JSONEq(t, `{"identity_assertion_authorization_grant":null}`, expandedCIMDRequest(t, data))
+	})
+}

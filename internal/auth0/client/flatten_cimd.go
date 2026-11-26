@@ -41,6 +41,7 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv3.GetClientRespon
 		data.Set("default_organization", flattenCIMDDefaultOrganization(client.DefaultOrganization)),
 		data.Set("token_quota", flattenCIMDTokenQuota(client.TokenQuota)),
 		data.Set("fedcm_login", flattenCIMDFedCMLogin(client.FedcmLogin)),
+		data.Set("identity_assertion_authorization_grant", flattenCIMDIdentityAssertionAuthorizationGrant(client.IdentityAssertionAuthorizationGrant)),
 		data.Set("validation", flattenCIMDValidation(validation)),
 		data.Set("external_client_id_version", data.Get("external_client_id_version")),
 	)
@@ -129,6 +130,18 @@ func flattenCIMDFedCMLogin(fedcmLogin *mgmtv3.FedCmLogin) []interface{} {
 	return []interface{}{
 		map[string]interface{}{
 			"google": google,
+		},
+	}
+}
+
+func flattenCIMDIdentityAssertionAuthorizationGrant(grant *mgmtv3.IdentityAssertionAuthorizationGrant) []interface{} {
+	if grant == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"active": grant.GetActive(),
 		},
 	}
 }

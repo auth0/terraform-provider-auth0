@@ -73,6 +73,7 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 - `default_organization` (Block List, Max: 1) Configure and associate an organization with the Client (see [below for nested schema](#nestedblock--default_organization))
 - `description` (String) Description of the purpose of the client. Once set, removing this argument from configuration does not clear it. For admin-registered clients, set `description = ""` to clear it. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
 - `external_client_id_version` (Number) Version number for external_client_id metadata document changes. Update this value to sync the client with the latest values of the json metadata document. Only applies to clients with `external_metadata_created_by` set to `admin`.
+- `fedcm_login` (Block List, Max: 1) Federated Credential Management (FedCM) configuration. (EA only) (see [below for nested schema](#nestedblock--fedcm_login))
 - `grant_types` (List of String) Types of grants that this client is authorized to use. CIMD clients support `authorization_code` and `refresh_token`. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
 - `oidc_conformant` (Boolean) Whether this client conforms to strict OIDC specifications. Must be `true` for CIMD clients.
@@ -109,6 +110,22 @@ Required:
 
 - `flows` (List of String) Definition of the flow that needs to be configured. Eg. client_credentials
 - `organization_id` (String) The unique identifier of the organization
+
+
+<a id="nestedblock--fedcm_login"></a>
+### Nested Schema for `fedcm_login`
+
+Required:
+
+- `google` (Block List, Min: 1, Max: 1) Google FedCM configuration. (EA only) (see [below for nested schema](#nestedblock--fedcm_login--google))
+
+<a id="nestedblock--fedcm_login--google"></a>
+### Nested Schema for `fedcm_login.google`
+
+Required:
+
+- `is_enabled` (Boolean) Whether to show the Google FedCM prompt on Login. (EA only)
+
 
 
 <a id="nestedblock--jwt_configuration"></a>

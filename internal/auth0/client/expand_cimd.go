@@ -73,6 +73,7 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv3.UpdateClientRequestCont
 	req.DefaultOrganization = expandCIMDDefaultOrganization(data)
 	req.ClientMetadata = expandCIMDClientMetadata(data)
 	req.TokenQuota = expandCIMDTokenQuota(data)
+	req.FedcmLogin = expandCIMDFedCMLogin(data)
 
 	return req
 }
@@ -219,6 +220,38 @@ func expandCIMDTokenQuota(data *schema.ResourceData) *mgmtv3.UpdateTokenQuota {
 	return quota
 }
 
+func expandCIMDFedCMLogin(data *schema.ResourceData) *mgmtv3.FedCmLoginPatch {
+	config := data.GetRawConfig().GetAttr("fedcm_login")
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var fedcmLogin mgmtv3.FedCmLoginPatch
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		fedcmLogin.Google = expandCIMDFedCMLoginGoogle(cfg.GetAttr("google"))
+		return stop
+	})
+
+	return &fedcmLogin
+}
+
+func expandCIMDFedCMLoginGoogle(config cty.Value) *mgmtv3.FedCmLoginGooglePatch {
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var google mgmtv3.FedCmLoginGooglePatch
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		google.IsEnabled = value.Bool(cfg.GetAttr("is_enabled"))
+
+		return stop
+	})
+
+	return &google
+}
+
 func isEmptyRequest(req *mgmtv3.UpdateClientRequestContent) (bool, error) {
 	reqBytes, err := req.MarshalJSON()
 	if err != nil {
@@ -253,6 +286,11 @@ func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv3.UpdateClientRequ
 	if data.HasChange("default_organization") &&
 		(config.GetAttr("default_organization").IsNull() || config.GetAttr("default_organization").LengthInt() == 0) {
 		req.SetDefaultOrganization(nil)
+	}
+
+	if data.HasChange("fedcm_login") &&
+		(config.GetAttr("fedcm_login").IsNull() || config.GetAttr("fedcm_login").LengthInt() == 0) {
+		req.SetFedcmLogin(nil)
 	}
 
 	if data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") && config.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull() {

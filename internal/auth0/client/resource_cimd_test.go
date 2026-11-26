@@ -211,6 +211,71 @@ func TestAccClientCIMDWithAgent(t *testing.T) {
 	})
 }
 
+const testAccClientCIMDWithFedCMLoginEnabled = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  fedcm_login {
+    google {
+      is_enabled = true
+    }
+  }
+}
+`
+
+const testAccClientCIMDWithFedCMLoginDisabled = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  fedcm_login {
+    google {
+      is_enabled = false
+    }
+  }
+}
+`
+
+func TestAccClientCIMDWithFedCMLogin(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccClientCIMDWithFedCMLoginEnabled,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_created_by", "admin"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.0.google.0.is_enabled", "true"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithFedCMLoginDisabled,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.0.google.0.is_enabled", "false"),
+				),
+			},
+			{
+				Config: testAccClientCIMDCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.#", "0"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithFedCMLoginEnabled,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.0.google.0.is_enabled", "true"),
+				),
+			},
+			{
+				ResourceName:            "auth0_client_cimd.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"external_client_id_version"},
+			},
+		},
+	})
+}
+
 const testAccClientCIMDStatus = `
 resource "auth0_client_cimd" "test" {
   external_client_id = "https://authflowsapp-prod.authzerotest.com/v1/cimd-metadata/static/valid"

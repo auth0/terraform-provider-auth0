@@ -1,6 +1,7 @@
 package client
 
 import (
+	"maps"
 	"testing"
 
 	"github.com/hashicorp/go-cty/cty"
@@ -10,13 +11,14 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// cimdDataWithAgentID builds a *schema.ResourceData whose GetRawConfig() holds the given agent_id,
-// mirroring how Terraform populates RawConfig on a real plan/apply. A nil state marks a new resource.
-func cimdDataWithAgentID(
+// cimdData builds a *schema.ResourceData whose GetRawConfig() holds the given attribute values and
+// null for every other attribute, mirroring how Terraform populates RawConfig on a real plan/apply.
+// A nil state marks a new resource.
+func cimdData(
 	t *testing.T,
-	configAgentID cty.Value,
+	config map[string]cty.Value,
 	state *terraform.InstanceState,
-	agentIDDiff *terraform.ResourceAttrDiff,
+	attrDiffs map[string]*terraform.ResourceAttrDiff,
 ) *schema.ResourceData {
 	t.Helper()
 
@@ -27,12 +29,9 @@ func cimdDataWithAgentID(
 	for name, ty := range attrTypes {
 		vals[name] = cty.NullVal(ty)
 	}
-	vals["agent_id"] = configAgentID
+	maps.Copy(vals, config)
 
-	diff := &terraform.InstanceDiff{RawConfig: cty.ObjectVal(vals)}
-	if agentIDDiff != nil {
-		diff.Attributes = map[string]*terraform.ResourceAttrDiff{"agent_id": agentIDDiff}
-	}
+	diff := &terraform.InstanceDiff{RawConfig: cty.ObjectVal(vals), Attributes: attrDiffs}
 
 	data, err := sm.Data(state, diff)
 	require.NoError(t, err)
@@ -42,6 +41,37 @@ func cimdDataWithAgentID(
 	}
 
 	return data
+}
+
+func cimdDataWithAgentID(
+	t *testing.T,
+	configAgentID cty.Value,
+	state *terraform.InstanceState,
+	agentIDDiff *terraform.ResourceAttrDiff,
+) *schema.ResourceData {
+	t.Helper()
+
+	var attrDiffs map[string]*terraform.ResourceAttrDiff
+	if agentIDDiff != nil {
+		attrDiffs = map[string]*terraform.ResourceAttrDiff{"agent_id": agentIDDiff}
+	}
+
+	return cimdData(t, map[string]cty.Value{"agent_id": configAgentID}, state, attrDiffs)
+}
+
+// expandedCIMDRequest returns the JSON body that createCIMDClient and updateCIMDClient would send.
+func expandedCIMDRequest(t *testing.T, data *schema.ResourceData) string {
+	t.Helper()
+
+	req := expandCIMDClient(data)
+	if !data.IsNewResource() {
+		applyCIMDNullFields(data, req)
+	}
+
+	body, err := req.MarshalJSON()
+	require.NoError(t, err)
+
+	return string(body)
 }
 
 func TestExpandCIMDClientAgentID(t *testing.T) {
@@ -57,19 +87,7 @@ func TestExpandCIMDClientAgentID(t *testing.T) {
 		}
 	}
 
-	expand := func(t *testing.T, data *schema.ResourceData) string {
-		t.Helper()
-
-		req := expandCIMDClient(data)
-		if !data.IsNewResource() {
-			applyCIMDNullFields(data, req)
-		}
-
-		body, err := req.MarshalJSON()
-		require.NoError(t, err)
-
-		return string(body)
-	}
+	expand := expandedCIMDRequest
 
 	t.Run("it sends agent_id on create", func(t *testing.T) {
 		data := cimdDataWithAgentID(t, cty.StringVal(agentA), nil, nil)
@@ -112,5 +130,68 @@ func TestExpandCIMDClientAgentID(t *testing.T) {
 		})
 
 		assert.JSONEq(t, `{"agent_id":null}`, expand(t, data))
+	})
+}
+
+func cimdFedCMLoginConfig(isEnabled bool) cty.Value {
+	return cty.ListVal([]cty.Value{
+		cty.ObjectVal(map[string]cty.Value{
+			"google": cty.ListVal([]cty.Value{
+				cty.ObjectVal(map[string]cty.Value{"is_enabled": cty.BoolVal(isEnabled)}),
+			}),
+		}),
+	})
+}
+
+func TestExpandCIMDClientFedCMLogin(t *testing.T) {
+	enabledState := func() *terraform.InstanceState {
+		return &terraform.InstanceState{
+			ID: "tpc_test",
+			Attributes: map[string]string{
+				"fedcm_login.#":                     "1",
+				"fedcm_login.0.google.#":            "1",
+				"fedcm_login.0.google.0.is_enabled": "true",
+			},
+		}
+	}
+
+	t.Run("it sends fedcm_login on create", func(t *testing.T) {
+		data := cimdData(t, map[string]cty.Value{"fedcm_login": cimdFedCMLoginConfig(true)}, nil, nil)
+
+		assert.JSONEq(t, `{"fedcm_login":{"google":{"is_enabled":true}}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends is_enabled false on create", func(t *testing.T) {
+		data := cimdData(t, map[string]cty.Value{"fedcm_login": cimdFedCMLoginConfig(false)}, nil, nil)
+
+		assert.JSONEq(t, `{"fedcm_login":{"google":{"is_enabled":false}}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it omits fedcm_login on create when not configured", func(t *testing.T) {
+		data := cimdData(t, nil, nil, nil)
+
+		assert.JSONEq(t, `{}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends fedcm_login on update when it did not change", func(t *testing.T) {
+		data := cimdData(t, map[string]cty.Value{"fedcm_login": cimdFedCMLoginConfig(true)}, enabledState(), nil)
+
+		assert.JSONEq(t, `{"fedcm_login":{"google":{"is_enabled":true}}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it omits fedcm_login on update when it is not configured and did not change", func(t *testing.T) {
+		data := cimdData(t, nil, &terraform.InstanceState{ID: "tpc_test"}, nil)
+
+		assert.JSONEq(t, `{}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends a null fedcm_login on update when the block is removed", func(t *testing.T) {
+		data := cimdData(t, nil, enabledState(), map[string]*terraform.ResourceAttrDiff{
+			"fedcm_login.#":                     {Old: "1", New: "0"},
+			"fedcm_login.0.google.#":            {Old: "1", New: "0"},
+			"fedcm_login.0.google.0.is_enabled": {Old: "true", New: "", NewRemoved: true},
+		})
+
+		assert.JSONEq(t, `{"fedcm_login":null}`, expandedCIMDRequest(t, data))
 	})
 }

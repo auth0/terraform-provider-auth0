@@ -7,6 +7,7 @@ import (
 	mgmtv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
@@ -28,7 +29,10 @@ func NewCIMDResource() *schema.Resource {
 		ReadContext:   readCIMDClient,
 		UpdateContext: updateCIMDClient,
 		DeleteContext: deleteCIMDClient,
-		CustomizeDiff: validateCIMDClient,
+		CustomizeDiff: customdiff.All(
+			validateCIMDClient,
+			validateOIDCSupport,
+		),
 		Importer: &schema.ResourceImporter{
 			StateContext: importCIMDClient,
 		},
@@ -294,6 +298,43 @@ func cimdClientSchema() map[string]*schema.Schema {
 						Type:        schema.TypeBool,
 						Required:    true,
 						Description: "Whether the client can exchange ID-JAGs for access tokens. (EA only)",
+					},
+				},
+			},
+		},
+		"oidc_support": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Computed: true,
+			MaxItems: 1,
+			Description: "Controls which optional OIDC scopes the client may request. " +
+				"Auth0 replaces the whole object on every write and cannot clear a stored value on an OIDC " +
+				"conformant client, so removing this block stops Terraform from managing it and does not reset " +
+				"the setting on the API.",
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"is_allowed": {
+						Type:     schema.TypeBool,
+						Required: true,
+						Description: "Indicates whether the client may request optional OIDC scopes. When `false`, " +
+							"`allowed_scopes` and `allow_all_scopes` cannot be set.",
+					},
+					"allowed_scopes": {
+						Type:     schema.TypeSet,
+						Optional: true,
+						Elem: &schema.Schema{
+							Type:         schema.TypeString,
+							ValidateFunc: validation.StringInSlice(internalValidation.OIDCSupportOptionalScopes, false),
+						},
+						Description: fmt.Sprintf("Optional OIDC scopes the client may request. Possible values: %v. "+
+							"The `openid` scope is implied and must not be listed. Conflicts with `allow_all_scopes`.",
+							internalValidation.OIDCSupportOptionalScopes),
+					},
+					"allow_all_scopes": {
+						Type:     schema.TypeBool,
+						Optional: true,
+						Description: "Indicates whether the client may request all optional OIDC scopes. " +
+							"Conflicts with `allowed_scopes`.",
 					},
 				},
 			},

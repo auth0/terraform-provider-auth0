@@ -18,12 +18,21 @@ resource "auth0_client_cimd" "minimal_client" {
   external_client_id = "https://mcp-agent1.example.com/oauth/metadata.json"
 }
 
+# Available in Early Access (EA). Referenced by `agent_id` below.
+resource "auth0_agent" "my_agent" {
+  name              = "My Agent"
+  external_agent_id = "my-agent-001"
+}
+
 resource "auth0_client_cimd" "my_mcp_agent" {
   external_client_id         = "https://mcp-agent2.example.com/.well-known/client.json"
   external_client_id_version = 1
   description                = "MCP Agent - Production"
   app_type                   = "spa"
   oidc_conformant            = true
+
+  # Reference the agent as `auth0_agent.<name>.id` so the client is unlinked before the agent is deleted.
+  agent_id = auth0_agent.my_agent.id
 
   allowed_origins = ["https://mcp-agent2.example.com"]
   web_origins     = ["https://mcp-agent2.example.com"]
@@ -54,6 +63,24 @@ resource "auth0_client_cimd" "my_mcp_agent" {
     infinite_idle_token_lifetime = false
     leeway                       = 0
   }
+
+  # Show the Google FedCM prompt on login (EA only).
+  fedcm_login {
+    google {
+      is_enabled = true
+    }
+  }
+
+  # Allow the client to exchange ID-JAGs for access tokens, used for Cross App Access (EA only).
+  identity_assertion_authorization_grant {
+    active = true
+  }
+
+  # Limit the optional OIDC scopes the client may request.
+  oidc_support {
+    is_allowed     = true
+    allowed_scopes = ["profile", "email"]
+  }
 }
 ```
 
@@ -78,6 +105,7 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 - `identity_assertion_authorization_grant` (Block List, Max: 1) Configures the client to participate in the Identity Assertion Authorization Grant (ID-JAG) exchange, used for Cross App Access (XAA). (EA only) (see [below for nested schema](#nestedblock--identity_assertion_authorization_grant))
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
 - `oidc_conformant` (Boolean) Whether this client conforms to strict OIDC specifications. Must be `true` for CIMD clients.
+- `oidc_support` (Block List, Max: 1) Controls which optional OIDC scopes the client may request. Auth0 replaces the whole object on every write and cannot clear a stored value on an OIDC conformant client, so removing this block stops Terraform from managing it and does not reset the setting on the API. (see [below for nested schema](#nestedblock--oidc_support))
 - `organization_discovery_methods` (List of String) Methods for discovering organizations during the pre_login_prompt. Can include `email` (allows users to find their organization by entering their email address) and/or `organization_name` (requires users to enter the organization name directly). These methods can be combined. Setting this property requires that `organization_require_behavior` is set to `pre_login_prompt`.
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
@@ -148,6 +176,19 @@ Optional:
 Read-Only:
 
 - `secret_encoded` (Boolean) Indicates whether the client secret is Base64-encoded.
+
+
+<a id="nestedblock--oidc_support"></a>
+### Nested Schema for `oidc_support`
+
+Required:
+
+- `is_allowed` (Boolean) Indicates whether the client may request optional OIDC scopes. When `false`, `allowed_scopes` and `allow_all_scopes` cannot be set.
+
+Optional:
+
+- `allow_all_scopes` (Boolean) Indicates whether the client may request all optional OIDC scopes. Conflicts with `allowed_scopes`.
+- `allowed_scopes` (Set of String) Optional OIDC scopes the client may request. Possible values: [profile email address phone]. The `openid` scope is implied and must not be listed. Conflicts with `allow_all_scopes`.
 
 
 <a id="nestedblock--refresh_token"></a>

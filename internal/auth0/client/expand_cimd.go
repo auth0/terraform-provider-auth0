@@ -75,6 +75,7 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv3.UpdateClientRequestCont
 	req.TokenQuota = expandCIMDTokenQuota(data)
 	req.FedcmLogin = expandCIMDFedCMLogin(data)
 	req.IdentityAssertionAuthorizationGrant = expandCIMDIdentityAssertionAuthorizationGrant(data)
+	req.OidcSupport = expandCIMDOIDCSupport(data)
 
 	return req
 }
@@ -273,6 +274,39 @@ func expandCIMDIdentityAssertionAuthorizationGrant(data *schema.ResourceData) *m
 	})
 
 	return &grant
+}
+
+// expandCIMDOIDCSupport returns nil when the block is absent, so the key is omitted and the stored value is
+// untouched. When present, the complete object is sent, because the API replaces the whole value on write.
+func expandCIMDOIDCSupport(data *schema.ResourceData) *mgmtv3.ClientOidcSupportPatch {
+	if !data.IsNewResource() && !data.HasChange("oidc_support") {
+		return nil
+	}
+
+	block := value.FirstBlock(value.Attr(data.GetRawConfig(), "oidc_support"))
+	if !value.IsSet(block) {
+		return nil
+	}
+
+	var oidcSupport mgmtv3.ClientOidcSupportPatch
+
+	if isAllowed := value.Bool(block.GetAttr("is_allowed")); isAllowed != nil {
+		oidcSupport.IsAllowed = *isAllowed
+	}
+	if !oidcSupport.IsAllowed {
+		return &oidcSupport
+	}
+
+	if allowAll := value.Bool(block.GetAttr("allow_all_scopes")); allowAll != nil && *allowAll {
+		oidcSupport.AllowAllScopes = allowAll
+		return &oidcSupport
+	}
+
+	for _, scope := range value.SortedStrings(block.GetAttr("allowed_scopes")) {
+		oidcSupport.AllowedScopes = append(oidcSupport.AllowedScopes, mgmtv3.ClientOidcSupportAllowedScopesEnum(scope))
+	}
+
+	return &oidcSupport
 }
 
 func isEmptyRequest(req *mgmtv3.UpdateClientRequestContent) (bool, error) {

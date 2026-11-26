@@ -3,6 +3,7 @@ package client_test
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -324,6 +325,117 @@ func TestAccClientCIMDWithIdentityAssertionAuthorizationGrant(t *testing.T) {
 				Config: testAccClientCIMDWithIdentityAssertionAuthorizationGrantActive,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.0.active", "true"),
+				),
+			},
+			{
+				ResourceName:            "auth0_client_cimd.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"external_client_id_version"},
+			},
+		},
+	})
+}
+
+const testAccClientCIMDWithOIDCSupportScopes = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  oidc_support {
+    is_allowed     = true
+    allowed_scopes = ["profile", "email"]
+  }
+}
+`
+
+const testAccClientCIMDWithOIDCSupportAllScopes = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  oidc_support {
+    is_allowed       = true
+    allow_all_scopes = true
+  }
+}
+`
+
+const testAccClientCIMDWithOIDCSupportAllowedOnly = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  oidc_support {
+    is_allowed = true
+  }
+}
+`
+
+const testAccClientCIMDWithOIDCSupportConflict = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  oidc_support {
+    is_allowed       = true
+    allowed_scopes   = ["profile"]
+    allow_all_scopes = true
+  }
+}
+`
+
+const testAccClientCIMDWithOIDCSupportDisallowed = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  oidc_support {
+    is_allowed = false
+  }
+}
+`
+
+func TestAccClientCIMDWithOIDCSupport(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccClientCIMDWithOIDCSupportScopes,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_created_by", "admin"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.is_allowed", "true"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.allowed_scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_client_cimd.test", "oidc_support.0.allowed_scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_client_cimd.test", "oidc_support.0.allowed_scopes.*", "email"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithOIDCSupportAllScopes,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.is_allowed", "true"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.allow_all_scopes", "true"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.allowed_scopes.#", "0"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithOIDCSupportAllowedOnly,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.is_allowed", "true"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.allow_all_scopes", "false"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.allowed_scopes.#", "0"),
+				),
+			},
+			{
+				Config:      testAccClientCIMDWithOIDCSupportConflict,
+				ExpectError: regexp.MustCompile("mutually exclusive"),
+			},
+			{
+				Config: testAccClientCIMDWithOIDCSupportDisallowed,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.is_allowed", "false"),
+				),
+			},
+			{
+				// The API cannot clear the value, so removing the block keeps the stored value.
+				Config: testAccClientCIMDCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.is_allowed", "false"),
 				),
 			},
 			{

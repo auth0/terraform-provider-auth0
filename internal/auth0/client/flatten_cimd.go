@@ -42,6 +42,7 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv3.GetClientRespon
 		data.Set("token_quota", flattenCIMDTokenQuota(client.TokenQuota)),
 		data.Set("fedcm_login", flattenCIMDFedCMLogin(client.FedcmLogin)),
 		data.Set("identity_assertion_authorization_grant", flattenCIMDIdentityAssertionAuthorizationGrant(client.IdentityAssertionAuthorizationGrant)),
+		data.Set("oidc_support", flattenCIMDOIDCSupport(client.OidcSupport)),
 		data.Set("validation", flattenCIMDValidation(validation)),
 		data.Set("external_client_id_version", data.Get("external_client_id_version")),
 	)
@@ -144,6 +145,30 @@ func flattenCIMDIdentityAssertionAuthorizationGrant(grant *mgmtv3.IdentityAssert
 			"active": grant.GetActive(),
 		},
 	}
+}
+
+// flattenCIMDOIDCSupport reads raw pointers instead of getters, because the API only returns the object
+// for OIDC conformant clients. A nil object is flattened to an empty block.
+func flattenCIMDOIDCSupport(oidcSupport *mgmtv3.ClientOidcSupport) []interface{} {
+	if oidcSupport == nil || oidcSupport.IsAllowed == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"is_allowed": *oidcSupport.IsAllowed,
+	}
+	if oidcSupport.AllowAllScopes != nil && *oidcSupport.AllowAllScopes {
+		flattened["allow_all_scopes"] = true
+	}
+	if len(oidcSupport.AllowedScopes) > 0 {
+		scopes := make([]interface{}, 0, len(oidcSupport.AllowedScopes))
+		for _, scope := range oidcSupport.AllowedScopes {
+			scopes = append(scopes, string(scope))
+		}
+		flattened["allowed_scopes"] = scopes
+	}
+
+	return []interface{}{flattened}
 }
 
 func flattenCIMDClientMetadata(cm *mgmtv3.ClientMetadata) map[string]interface{} {

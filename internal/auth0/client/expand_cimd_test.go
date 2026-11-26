@@ -266,3 +266,90 @@ func TestExpandCIMDClientIdentityAssertionAuthorizationGrant(t *testing.T) {
 		assert.JSONEq(t, `{"identity_assertion_authorization_grant":null}`, expandedCIMDRequest(t, data))
 	})
 }
+
+func cimdOIDCSupportConfig(isAllowed bool, allowAllScopes cty.Value, allowedScopes cty.Value) cty.Value {
+	return cty.ListVal([]cty.Value{
+		cty.ObjectVal(map[string]cty.Value{
+			"is_allowed":       cty.BoolVal(isAllowed),
+			"allow_all_scopes": allowAllScopes,
+			"allowed_scopes":   allowedScopes,
+		}),
+	})
+}
+
+func TestExpandCIMDClientOIDCSupport(t *testing.T) {
+	var (
+		noAllowAll = cty.NullVal(cty.Bool)
+		noScopes   = cty.NullVal(cty.Set(cty.String))
+		someScopes = cty.SetVal([]cty.Value{cty.StringVal("profile"), cty.StringVal("email")})
+	)
+
+	allowAllState := func() *terraform.InstanceState {
+		return &terraform.InstanceState{
+			ID: "tpc_test",
+			Attributes: map[string]string{
+				"oidc_support.#":                  "1",
+				"oidc_support.0.is_allowed":       "true",
+				"oidc_support.0.allow_all_scopes": "true",
+			},
+		}
+	}
+
+	t.Run("it sends allow_all_scopes on create", func(t *testing.T) {
+		config := map[string]cty.Value{"oidc_support": cimdOIDCSupportConfig(true, cty.True, noScopes)}
+		data := cimdData(t, config, nil, nil)
+
+		assert.JSONEq(t, `{"oidc_support":{"is_allowed":true,"allow_all_scopes":true}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends sorted allowed_scopes on create", func(t *testing.T) {
+		config := map[string]cty.Value{"oidc_support": cimdOIDCSupportConfig(true, noAllowAll, someScopes)}
+		data := cimdData(t, config, nil, nil)
+
+		assert.JSONEq(t, `{"oidc_support":{"is_allowed":true,"allowed_scopes":["email","profile"]}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends only is_allowed when it is true and no scopes are set", func(t *testing.T) {
+		config := map[string]cty.Value{"oidc_support": cimdOIDCSupportConfig(true, cty.False, noScopes)}
+		data := cimdData(t, config, nil, nil)
+
+		assert.JSONEq(t, `{"oidc_support":{"is_allowed":true}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends only is_allowed when it is false", func(t *testing.T) {
+		config := map[string]cty.Value{"oidc_support": cimdOIDCSupportConfig(false, cty.False, noScopes)}
+		data := cimdData(t, config, nil, nil)
+
+		assert.JSONEq(t, `{"oidc_support":{"is_allowed":false}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it omits oidc_support on create when not configured", func(t *testing.T) {
+		data := cimdData(t, nil, nil, nil)
+
+		assert.JSONEq(t, `{}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it omits oidc_support on update when it did not change", func(t *testing.T) {
+		config := map[string]cty.Value{"oidc_support": cimdOIDCSupportConfig(true, cty.True, noScopes)}
+		data := cimdData(t, config, allowAllState(), nil)
+
+		assert.JSONEq(t, `{}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends the whole object on update when it changes", func(t *testing.T) {
+		config := map[string]cty.Value{"oidc_support": cimdOIDCSupportConfig(true, noAllowAll, someScopes)}
+		data := cimdData(t, config, allowAllState(), map[string]*terraform.ResourceAttrDiff{
+			"oidc_support.0.allow_all_scopes": {Old: "true", New: "false"},
+		})
+
+		assert.JSONEq(t, `{"oidc_support":{"is_allowed":true,"allowed_scopes":["email","profile"]}}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it never sends null when the block is removed", func(t *testing.T) {
+		data := cimdData(t, nil, allowAllState(), map[string]*terraform.ResourceAttrDiff{
+			"oidc_support.#": {Old: "1", New: "0"},
+		})
+
+		assert.JSONEq(t, `{}`, expandedCIMDRequest(t, data))
+	})
+}

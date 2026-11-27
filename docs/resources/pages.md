@@ -8,8 +8,8 @@ description: |-
 
 With this resource you can manage custom HTML for the Login, Reset Password, Multi-Factor Authentication and Error pages.
 
-!> The error block in auth0_pages is not recommended when you're managing tenant settings via the auth0_tenant resource.
-To avoid conflicts, configure the error_page directly in auth0_tenant instead.
+!> The `error` block in this resource and the `error_page` block in the `auth0_tenant` resource manage the same
+tenant error page setting. To avoid conflicts, configure the error page in only one of the two resources, never in both.
 
 ## Example Usage
 

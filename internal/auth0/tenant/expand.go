@@ -216,53 +216,27 @@ func expandMTLSConfiguration(data *schema.ResourceData) *management.TenantMTLSCo
 	return &mtls
 }
 
-func isErrorPageConfigurationNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("error_page") {
-		return false
-	}
-	empty := true
-
-	config := data.GetRawConfig().GetAttr("error_page")
-	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-		html := cfg.GetAttr("html")
-		showLogLink := cfg.GetAttr("show_log_link")
-		url := cfg.GetAttr("url")
-
-		// If any of the attributes are set, the error_page is NOT null/empty.
-		if (!html.IsNull() && html.AsString() != "") ||
-			(!showLogLink.IsNull() && showLogLink.True() ||
-				(!url.IsNull() && url.AsString() != "")) {
-			empty = false
-		}
-		return stop
-	}) {
-		// Early return if the block is explicitly set to `null`.
-		return true
-	}
-
-	return empty
-}
-
+// expandErrorPageConfiguration omits the error page when the block is not
+// configured, because it can be managed by another resource such as auth0_pages.
+// A configured block, even an empty one, is sent as is.
 func expandErrorPageConfiguration(data *schema.ResourceData) *management.TenantErrorPage {
 	if !data.IsNewResource() && !data.HasChange("error_page") {
 		return nil
-	} else if isErrorPageConfigurationNull(data) {
+	}
+
+	config := data.GetRawConfig().GetAttr("error_page")
+	if config.IsNull() || config.LengthInt() == 0 {
 		return nil
 	}
 
 	var errorPage management.TenantErrorPage
 
-	config := data.GetRawConfig().GetAttr("error_page")
 	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		errorPage.HTML = value.String(cfg.GetAttr("html"))
 		errorPage.ShowLogLink = value.Bool(cfg.GetAttr("show_log_link"))
 		errorPage.URL = value.String(cfg.GetAttr("url"))
 		return stop
 	})
-
-	if errorPage == (management.TenantErrorPage{}) {
-		return nil
-	}
 
 	return &errorPage
 }
@@ -323,7 +297,6 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 		"default_token_quota":  isDefaultTokenQuotaNull,
 		"acr_values_supported": isACRValuesSupportedNull,
 		"mtls":                 isMTLSConfigurationNull,
-		"error_page":           isErrorPageConfigurationNull,
 		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
 		"country_codes": isCountryCodesNull,
 	}

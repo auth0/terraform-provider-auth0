@@ -158,3 +158,73 @@ func TestAccPages(t *testing.T) {
 		},
 	})
 }
+
+const testAccPagesWithTenantCreate = `
+resource "auth0_pages" "my_pages" {
+	error {
+		show_log_link = false
+		html          = "<html><body>My Custom Error Page</body></html>"
+	}
+}
+
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "Tenant Error Page Test"
+
+	depends_on = [auth0_pages.my_pages]
+}
+`
+
+const testAccPagesWithTenantUpdate = `
+resource "auth0_pages" "my_pages" {
+	error {
+		show_log_link = false
+		html          = "<html><body>My Custom Error Page</body></html>"
+	}
+}
+
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "Tenant Error Page Test Updated"
+
+	depends_on = [auth0_pages.my_pages]
+}
+`
+
+// TestAccPages_ErrorPageUnaffectedByTenantUpdate verifies that updating an auth0_tenant
+// without an error_page block leaves the error page managed by auth0_pages in place.
+func TestAccPages_ErrorPageUnaffectedByTenantUpdate(t *testing.T) {
+	const errorPageHTML = "<html><body>My Custom Error Page</body></html>"
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccPagesWithTenantCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "friendly_name", "Tenant Error Page Test"),
+					resource.TestCheckResourceAttr("auth0_pages.my_pages", "error.0.html", errorPageHTML),
+				),
+			},
+			{
+				// Updating the tenant must not clear the error page.
+				Config: testAccPagesWithTenantUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "friendly_name", "Tenant Error Page Test Updated"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.html", errorPageHTML),
+				),
+			},
+			{
+				// Refresh: the page is still on the API and the plan has no changes.
+				Config: testAccPagesWithTenantUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_pages.my_pages", "error.0.html", errorPageHTML),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.html", errorPageHTML),
+				),
+			},
+			{
+				Config:             testAccPagesWithTenantUpdate,
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: false,
+			},
+		},
+	})
+}

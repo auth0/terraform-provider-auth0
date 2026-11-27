@@ -56,6 +56,7 @@ terraform-provider-auth0/
 - Running live acceptance tests (`make test-acc-e2e`) — they hit a real Auth0 tenant, are slow, and mutate real resources.
 - Re-recording HTTP cassettes (`make test-acc-record FILTER=...`) — delete the old cassette file first, and confirm which tenant to use.
 - Modifying credential-handling code in `internal/config/config.go`.
+- Changes that manage a setting another resource already manages.
 
 ### 🚫 Never Do
 

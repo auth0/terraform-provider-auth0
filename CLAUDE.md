@@ -45,6 +45,7 @@ terraform-provider-auth0/
 - Use `internalError.HandleReadAPIError(resourceType, data, err)` in `Read` functions — not the legacy `HandleAPIError`.
 - Run `make docs` after changing resource schemas, adding resources, or editing `templates/`; never edit `docs/` manually.
 - Update `examples/` in the same PR when adding or changing a resource or data source.
+- When adding or changing an `auth0_client` param, do the same in `auth0_client_cimd` if the Management API accepts it on CIMD clients.
 - When adding a new request path to the Auth0 Management API, route it through `internal/config/config.go` (`Config.GetAPI()` / `Config.GetAPIv3()`) so it inherits the correct User-Agent string — do not instantiate a separate management client directly.
 
 ### ⚠️ Ask First

@@ -3506,6 +3506,108 @@ func TestAccClientExpressAppConfiguration(t *testing.T) {
 	})
 }
 
+const testAccClientOINListingURLConfigTemplate = `
+resource "auth0_client" "oin_source" {
+  name     = "OIN Listing URL Client - {{.testName}}"
+  app_type = "express_configuration"
+}
+
+resource "auth0_user_attribute_profile" "profile" {
+  name = "OIN UAP - {{.testName}}"
+
+  user_attributes {
+    name             = "email"
+    description      = "User's email address"
+    label            = "Email"
+    profile_required = true
+    auth0_mapping    = "email"
+  }
+}
+
+resource "auth0_connection_profile" "profile" {
+  name = "OIN COP - {{.testName}}"
+}
+
+resource "auth0_client" "my_client" {
+  name     = "Acceptance Test - OIN Listing URL Client - {{.testName}}"
+  app_type = "regular_web"
+
+  express_configuration {
+    okta_oin_client_id          = auth0_client.oin_source.id
+    connection_profile_id       = auth0_connection_profile.profile.id
+    initiate_login_uri_template = "https://example.com/login?org={organization_name}"
+    admin_login_domain          = "admin.example.com"
+    enable_client               = true
+    enable_organization         = true
+    user_attribute_profile_id   = auth0_user_attribute_profile.profile.id
+%s
+  }
+}
+`
+
+func testAccClientOINListingURLConfig(listingURL string) string {
+	listingURLLine := ""
+	if listingURL != "" {
+		listingURLLine = fmt.Sprintf("    okta_oin_listing_url        = %q", listingURL)
+	}
+
+	return fmt.Sprintf(testAccClientOINListingURLConfigTemplate, listingURLLine)
+}
+
+func testAccClientOINListingURLDependencyChecks() resource.TestCheckFunc {
+	return resource.ComposeTestCheckFunc(
+		resource.TestCheckResourceAttrSet("auth0_client.oin_source", "client_id"),
+		resource.TestCheckResourceAttrSet("auth0_user_attribute_profile.profile", "id"),
+		resource.TestCheckResourceAttrSet("auth0_connection_profile.profile", "id"),
+		resource.TestCheckResourceAttrPair(
+			"auth0_client.my_client",
+			"express_configuration.0.okta_oin_client_id",
+			"auth0_client.oin_source",
+			"client_id",
+		),
+		resource.TestCheckResourceAttrPair(
+			"auth0_client.my_client",
+			"express_configuration.0.user_attribute_profile_id",
+			"auth0_user_attribute_profile.profile",
+			"id",
+		),
+		resource.TestCheckResourceAttrPair(
+			"auth0_client.my_client",
+			"express_configuration.0.connection_profile_id",
+			"auth0_connection_profile.profile",
+			"id",
+		),
+	)
+}
+
+func TestAccClientOINListingURL(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientOINListingURLConfig("https://www.okta.com/integrations/example-app"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					testAccClientOINListingURLDependencyChecks(),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.okta_oin_listing_url", "https://www.okta.com/integrations/example-app"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientOINListingURLConfig("https://www.okta.com/integrations/example-app-updated"), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					testAccClientOINListingURLDependencyChecks(),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.okta_oin_listing_url", "https://www.okta.com/integrations/example-app-updated"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientOINListingURLConfig(""), t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					testAccClientOINListingURLDependencyChecks(),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "express_configuration.0.okta_oin_listing_url", ""),
+				),
+			},
+		},
+	})
+}
+
 const testAccClientMyOrganizationConfigurationCreate = `
 
 resource "auth0_connection_profile" "my_profile" {

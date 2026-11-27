@@ -173,10 +173,18 @@ func TestExpandCIMDClientFedCMLogin(t *testing.T) {
 		assert.JSONEq(t, `{}`, expandedCIMDRequest(t, data))
 	})
 
-	t.Run("it sends fedcm_login on update when it did not change", func(t *testing.T) {
+	t.Run("it omits fedcm_login on update when it did not change", func(t *testing.T) {
 		data := cimdData(t, map[string]cty.Value{"fedcm_login": cimdFedCMLoginConfig(true)}, enabledState(), nil)
 
-		assert.JSONEq(t, `{"fedcm_login":{"google":{"is_enabled":true}}}`, expandedCIMDRequest(t, data))
+		assert.JSONEq(t, `{}`, expandedCIMDRequest(t, data))
+	})
+
+	t.Run("it sends the new fedcm_login on update when it changes", func(t *testing.T) {
+		data := cimdData(t, map[string]cty.Value{"fedcm_login": cimdFedCMLoginConfig(false)}, enabledState(), map[string]*terraform.ResourceAttrDiff{
+			"fedcm_login.0.google.0.is_enabled": {Old: "true", New: "false"},
+		})
+
+		assert.JSONEq(t, `{"fedcm_login":{"google":{"is_enabled":false}}}`, expandedCIMDRequest(t, data))
 	})
 
 	t.Run("it omits fedcm_login on update when it is not configured and did not change", func(t *testing.T) {

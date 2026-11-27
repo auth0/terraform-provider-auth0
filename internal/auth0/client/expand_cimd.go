@@ -223,6 +223,10 @@ func expandCIMDTokenQuota(data *schema.ResourceData) *mgmtv3.UpdateTokenQuota {
 }
 
 func expandCIMDFedCMLogin(data *schema.ResourceData) *mgmtv3.FedCmLoginPatch {
+	if !data.IsNewResource() && !data.HasChange("fedcm_login") {
+		return nil
+	}
+
 	config := data.GetRawConfig().GetAttr("fedcm_login")
 	if config.IsNull() || config.LengthInt() == 0 {
 		return nil

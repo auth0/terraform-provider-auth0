@@ -148,7 +148,7 @@ func flattenCIMDIdentityAssertionAuthorizationGrant(grant *mgmtv3.IdentityAssert
 }
 
 // flattenCIMDOIDCSupport reads raw pointers instead of getters, because the API only returns the object
-// for OIDC conformant clients. A nil object is flattened to an empty block.
+// for OIDC conformant clients.
 func flattenCIMDOIDCSupport(oidcSupport *mgmtv3.ClientOidcSupport) []interface{} {
 	if oidcSupport == nil || oidcSupport.IsAllowed == nil {
 		return nil

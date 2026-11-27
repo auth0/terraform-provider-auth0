@@ -22,6 +22,7 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv3.GetClientRespon
 		data.Set("jwks_uri", client.GetJwksURI()),
 		data.Set("signing_keys", flattenCIMDSigningKeys(client.SigningKeys)),
 		data.Set("description", client.GetDescription()),
+		data.Set("agent_id", client.GetAgentID()),
 		data.Set("app_type", string(client.GetAppType())),
 		data.Set("allowed_origins", client.GetAllowedOrigins()),
 		data.Set("web_origins", client.GetWebOrigins()),
@@ -39,6 +40,9 @@ func flattenCIMDClient(data *schema.ResourceData, client *mgmtv3.GetClientRespon
 		data.Set("refresh_token", flattenCIMDRefreshToken(client.RefreshToken)),
 		data.Set("default_organization", flattenCIMDDefaultOrganization(client.DefaultOrganization)),
 		data.Set("token_quota", flattenCIMDTokenQuota(client.TokenQuota)),
+		data.Set("fedcm_login", flattenCIMDFedCMLogin(client.FedcmLogin)),
+		data.Set("identity_assertion_authorization_grant", flattenCIMDIdentityAssertionAuthorizationGrant(client.IdentityAssertionAuthorizationGrant)),
+		data.Set("oidc_support", flattenCIMDOIDCSupport(client.OidcSupport)),
 		data.Set("validation", flattenCIMDValidation(validation)),
 		data.Set("external_client_id_version", data.Get("external_client_id_version")),
 	)
@@ -108,6 +112,63 @@ func flattenCIMDTokenQuota(tq *mgmtv3.TokenQuota) []interface{} {
 			"client_credentials": []interface{}{clientCreds},
 		},
 	}
+}
+
+func flattenCIMDFedCMLogin(fedcmLogin *mgmtv3.FedCmLogin) []interface{} {
+	if fedcmLogin == nil {
+		return nil
+	}
+
+	var google []interface{}
+	if fedcmLogin.Google != nil {
+		google = []interface{}{
+			map[string]interface{}{
+				"is_enabled": fedcmLogin.Google.GetIsEnabled(),
+			},
+		}
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"google": google,
+		},
+	}
+}
+
+func flattenCIMDIdentityAssertionAuthorizationGrant(grant *mgmtv3.IdentityAssertionAuthorizationGrant) []interface{} {
+	if grant == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"active": grant.GetActive(),
+		},
+	}
+}
+
+// flattenCIMDOIDCSupport reads raw pointers instead of getters, because the API only returns the object
+// for OIDC conformant clients.
+func flattenCIMDOIDCSupport(oidcSupport *mgmtv3.ClientOidcSupport) []interface{} {
+	if oidcSupport == nil || oidcSupport.IsAllowed == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"is_allowed": *oidcSupport.IsAllowed,
+	}
+	if oidcSupport.AllowAllScopes != nil && *oidcSupport.AllowAllScopes {
+		flattened["allow_all_scopes"] = true
+	}
+	if len(oidcSupport.AllowedScopes) > 0 {
+		scopes := make([]interface{}, 0, len(oidcSupport.AllowedScopes))
+		for _, scope := range oidcSupport.AllowedScopes {
+			scopes = append(scopes, string(scope))
+		}
+		flattened["allowed_scopes"] = scopes
+	}
+
+	return []interface{}{flattened}
 }
 
 func flattenCIMDClientMetadata(cm *mgmtv3.ClientMetadata) map[string]interface{} {

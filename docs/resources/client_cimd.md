@@ -18,12 +18,21 @@ resource "auth0_client_cimd" "minimal_client" {
   external_client_id = "https://mcp-agent1.example.com/oauth/metadata.json"
 }
 
+# Available in Early Access (EA). Referenced by `agent_id` below.
+resource "auth0_agent" "my_agent" {
+  name              = "My Agent"
+  external_agent_id = "my-agent-001"
+}
+
 resource "auth0_client_cimd" "my_mcp_agent" {
   external_client_id         = "https://mcp-agent2.example.com/.well-known/client.json"
   external_client_id_version = 1
   description                = "MCP Agent - Production"
   app_type                   = "spa"
   oidc_conformant            = true
+
+  # Reference the agent as `auth0_agent.<name>.id` so the client is unlinked before the agent is deleted.
+  agent_id = auth0_agent.my_agent.id
 
   allowed_origins = ["https://mcp-agent2.example.com"]
   web_origins     = ["https://mcp-agent2.example.com"]
@@ -54,6 +63,24 @@ resource "auth0_client_cimd" "my_mcp_agent" {
     infinite_idle_token_lifetime = false
     leeway                       = 0
   }
+
+  # Show the Google FedCM prompt on login (EA only).
+  fedcm_login {
+    google {
+      is_enabled = true
+    }
+  }
+
+  # Allow the client to exchange ID-JAGs for access tokens, used for Cross App Access (EA only).
+  identity_assertion_authorization_grant {
+    active = true
+  }
+
+  # Limit the optional OIDC scopes the client may request.
+  oidc_support {
+    is_allowed     = true
+    allowed_scopes = ["profile", "email"]
+  }
 }
 ```
 
@@ -66,15 +93,19 @@ resource "auth0_client_cimd" "my_mcp_agent" {
 
 ### Optional
 
+- `agent_id` (String) The ID of the agent (`auth0_agent`) this client is linked to (EA Only). Reference it as `auth0_agent.<name>.id` so that the client is unlinked before the agent is deleted. Removing the attribute unlinks the client, including a link made outside Terraform. Requires the `update:clients` and `update:agents` scopes.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
 - `app_type` (String) Type of application the client represents. CIMD clients only support `native`, `spa`, and `regular_web`. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
 - `default_organization` (Block List, Max: 1) Configure and associate an organization with the Client (see [below for nested schema](#nestedblock--default_organization))
 - `description` (String) Description of the purpose of the client. Once set, removing this argument from configuration does not clear it. For admin-registered clients, set `description = ""` to clear it. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
 - `external_client_id_version` (Number) Version number for external_client_id metadata document changes. Update this value to sync the client with the latest values of the json metadata document. Only applies to clients with `external_metadata_created_by` set to `admin`.
+- `fedcm_login` (Block List, Max: 1) Federated Credential Management (FedCM) configuration. (EA only) (see [below for nested schema](#nestedblock--fedcm_login))
 - `grant_types` (List of String) Types of grants that this client is authorized to use. CIMD clients support `authorization_code` and `refresh_token`. Do not update this field for dynamically registered clients where `external_metadata_created_by` is set to `client`. Auth0 rejects the update.
+- `identity_assertion_authorization_grant` (Block List, Max: 1) Configures the client to participate in the Identity Assertion Authorization Grant (ID-JAG) exchange, used for Cross App Access (XAA). (EA only) (see [below for nested schema](#nestedblock--identity_assertion_authorization_grant))
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
 - `oidc_conformant` (Boolean) Whether this client conforms to strict OIDC specifications. Must be `true` for CIMD clients.
+- `oidc_support` (Block List, Max: 1) Controls which optional OIDC scopes the client may request. Auth0 replaces the whole object on every write and cannot clear a stored value on an OIDC conformant client, so removing this block stops Terraform from managing it and does not reset the setting on the API. (see [below for nested schema](#nestedblock--oidc_support))
 - `organization_discovery_methods` (List of String) Methods for discovering organizations during the pre_login_prompt. Can include `email` (allows users to find their organization by entering their email address) and/or `organization_name` (requires users to enter the organization name directly). These methods can be combined. Setting this property requires that `organization_require_behavior` is set to `pre_login_prompt`.
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
@@ -110,6 +141,30 @@ Required:
 - `organization_id` (String) The unique identifier of the organization
 
 
+<a id="nestedblock--fedcm_login"></a>
+### Nested Schema for `fedcm_login`
+
+Required:
+
+- `google` (Block List, Min: 1, Max: 1) Google FedCM configuration. (EA only) (see [below for nested schema](#nestedblock--fedcm_login--google))
+
+<a id="nestedblock--fedcm_login--google"></a>
+### Nested Schema for `fedcm_login.google`
+
+Required:
+
+- `is_enabled` (Boolean) Whether to show the Google FedCM prompt on Login. (EA only)
+
+
+
+<a id="nestedblock--identity_assertion_authorization_grant"></a>
+### Nested Schema for `identity_assertion_authorization_grant`
+
+Required:
+
+- `active` (Boolean) Whether the client can exchange ID-JAGs for access tokens. (EA only)
+
+
 <a id="nestedblock--jwt_configuration"></a>
 ### Nested Schema for `jwt_configuration`
 
@@ -121,6 +176,19 @@ Optional:
 Read-Only:
 
 - `secret_encoded` (Boolean) Indicates whether the client secret is Base64-encoded.
+
+
+<a id="nestedblock--oidc_support"></a>
+### Nested Schema for `oidc_support`
+
+Required:
+
+- `is_allowed` (Boolean) Indicates whether the client may request optional OIDC scopes. When `false`, `allowed_scopes` and `allow_all_scopes` cannot be set.
+
+Optional:
+
+- `allow_all_scopes` (Boolean) Indicates whether the client may request all optional OIDC scopes. Conflicts with `allowed_scopes`.
+- `allowed_scopes` (Set of String) Optional OIDC scopes the client may request. Possible values: [profile email address phone]. The `openid` scope is implied and must not be listed. Conflicts with `allow_all_scopes`.
 
 
 <a id="nestedblock--refresh_token"></a>

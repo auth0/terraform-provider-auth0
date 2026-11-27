@@ -3,6 +3,7 @@ package client_test
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -126,6 +127,315 @@ func TestAccClientCIMD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "refresh_token.0.leeway", "0"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_type", "cimd"),
 					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_created_by", "admin"),
+				),
+			},
+			{
+				ResourceName:            "auth0_client_cimd.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"external_client_id_version"},
+			},
+		},
+	})
+}
+
+const testAccClientCIMDWithAgentTwoAgents = `
+resource "auth0_agent" "first" {
+  name              = "First {{.testName}}"
+  external_agent_id = "first-{{.testName}}"
+}
+
+resource "auth0_agent" "second" {
+  name              = "Second {{.testName}}"
+  external_agent_id = "second-{{.testName}}"
+
+  # Serialize creation so that the recorded cassette replays deterministically.
+  depends_on = [auth0_agent.first]
+}
+`
+
+const testAccClientCIMDWithAgentUnlinked = testAccClientCIMDWithAgentTwoAgents + `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+}
+`
+
+const testAccClientCIMDWithAgentLinkedToFirst = testAccClientCIMDWithAgentTwoAgents + `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+  agent_id           = auth0_agent.first.id
+}
+`
+
+const testAccClientCIMDWithAgentLinkedToSecond = testAccClientCIMDWithAgentTwoAgents + `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+  agent_id           = auth0_agent.second.id
+}
+`
+
+func TestAccClientCIMDWithAgent(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientCIMDWithAgentLinkedToFirst, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_created_by", "admin"),
+					resource.TestCheckResourceAttrPair("auth0_client_cimd.test", "agent_id", "auth0_agent.first", "id"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientCIMDWithAgentLinkedToSecond, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrPair("auth0_client_cimd.test", "agent_id", "auth0_agent.second", "id"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientCIMDWithAgentUnlinked, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "agent_id", ""),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientCIMDWithAgentLinkedToFirst, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrPair("auth0_client_cimd.test", "agent_id", "auth0_agent.first", "id"),
+				),
+			},
+			{
+				ResourceName:            "auth0_client_cimd.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"external_client_id_version"},
+			},
+		},
+	})
+}
+
+const testAccClientCIMDWithFedCMLoginEnabled = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  fedcm_login {
+    google {
+      is_enabled = true
+    }
+  }
+}
+`
+
+const testAccClientCIMDWithFedCMLoginDisabled = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  fedcm_login {
+    google {
+      is_enabled = false
+    }
+  }
+}
+`
+
+func TestAccClientCIMDWithFedCMLogin(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccClientCIMDWithFedCMLoginEnabled,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_created_by", "admin"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.0.google.0.is_enabled", "true"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithFedCMLoginDisabled,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.0.google.0.is_enabled", "false"),
+				),
+			},
+			{
+				Config: testAccClientCIMDCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.#", "0"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithFedCMLoginEnabled,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "fedcm_login.0.google.0.is_enabled", "true"),
+				),
+			},
+			{
+				ResourceName:            "auth0_client_cimd.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"external_client_id_version"},
+			},
+		},
+	})
+}
+
+const testAccClientCIMDWithIdentityAssertionAuthorizationGrantActive = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  identity_assertion_authorization_grant {
+    active = true
+  }
+}
+`
+
+const testAccClientCIMDWithIdentityAssertionAuthorizationGrantInactive = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  identity_assertion_authorization_grant {
+    active = false
+  }
+}
+`
+
+func TestAccClientCIMDWithIdentityAssertionAuthorizationGrant(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccClientCIMDWithIdentityAssertionAuthorizationGrantActive,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_created_by", "admin"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.0.active", "true"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithIdentityAssertionAuthorizationGrantInactive,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.0.active", "false"),
+				),
+			},
+			{
+				Config: testAccClientCIMDCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.#", "0"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithIdentityAssertionAuthorizationGrantActive,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "identity_assertion_authorization_grant.0.active", "true"),
+				),
+			},
+			{
+				ResourceName:            "auth0_client_cimd.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"external_client_id_version"},
+			},
+		},
+	})
+}
+
+const testAccClientCIMDWithOIDCSupportScopes = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  oidc_support {
+    is_allowed     = true
+    allowed_scopes = ["profile", "email"]
+  }
+}
+`
+
+const testAccClientCIMDWithOIDCSupportAllScopes = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  oidc_support {
+    is_allowed       = true
+    allow_all_scopes = true
+  }
+}
+`
+
+const testAccClientCIMDWithOIDCSupportAllowedOnly = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  oidc_support {
+    is_allowed = true
+  }
+}
+`
+
+const testAccClientCIMDWithOIDCSupportConflict = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  oidc_support {
+    is_allowed       = true
+    allowed_scopes   = ["profile"]
+    allow_all_scopes = true
+  }
+}
+`
+
+const testAccClientCIMDWithOIDCSupportDisallowed = `
+resource "auth0_client_cimd" "test" {
+  external_client_id = "https://claude.ai/oauth/claude-code-client-metadata"
+
+  oidc_support {
+    is_allowed = false
+  }
+}
+`
+
+func TestAccClientCIMDWithOIDCSupport(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccClientCIMDWithOIDCSupportScopes,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "external_metadata_created_by", "admin"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.is_allowed", "true"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.allowed_scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_client_cimd.test", "oidc_support.0.allowed_scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_client_cimd.test", "oidc_support.0.allowed_scopes.*", "email"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithOIDCSupportAllScopes,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.is_allowed", "true"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.allow_all_scopes", "true"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.allowed_scopes.#", "0"),
+				),
+			},
+			{
+				Config: testAccClientCIMDWithOIDCSupportAllowedOnly,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.is_allowed", "true"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.allow_all_scopes", "false"),
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.allowed_scopes.#", "0"),
+				),
+			},
+			{
+				Config:      testAccClientCIMDWithOIDCSupportConflict,
+				ExpectError: regexp.MustCompile("mutually exclusive"),
+			},
+			{
+				Config: testAccClientCIMDWithOIDCSupportDisallowed,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.is_allowed", "false"),
+				),
+			},
+			{
+				// The API cannot clear the value, so removing the block keeps the stored value.
+				Config: testAccClientCIMDCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_cimd.test", "oidc_support.0.is_allowed", "false"),
 				),
 			},
 			{

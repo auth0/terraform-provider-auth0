@@ -7,12 +7,14 @@ import (
 	mgmtv3 "github.com/auth0/go-auth0/v3/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
 const (
@@ -27,7 +29,10 @@ func NewCIMDResource() *schema.Resource {
 		ReadContext:   readCIMDClient,
 		UpdateContext: updateCIMDClient,
 		DeleteContext: deleteCIMDClient,
-		CustomizeDiff: validateCIMDClient,
+		CustomizeDiff: customdiff.All(
+			validateCIMDClient,
+			validateOIDCSupport,
+		),
 		Importer: &schema.ResourceImporter{
 			StateContext: importCIMDClient,
 		},
@@ -174,6 +179,14 @@ func cimdClientSchema() map[string]*schema.Schema {
 			Description: "Whether this client conforms to strict OIDC specifications. " +
 				"Must be `true` for CIMD clients.",
 		},
+		"agent_id": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			ValidateFunc: internalValidation.IsAgentID,
+			Description: "The ID of the agent (`auth0_agent`) this client is linked to (EA Only). Reference it as " +
+				"`auth0_agent.<name>.id` so that the client is unlinked before the agent is deleted. Removing " +
+				"the attribute unlinks the client, including a link made outside Terraform. Requires the `update:clients` and `update:agents` scopes.",
+		},
 		"organization_usage": {
 			Type:     schema.TypeString,
 			Optional: true,
@@ -245,6 +258,83 @@ func cimdClientSchema() map[string]*schema.Schema {
 						Type:        schema.TypeString,
 						Required:    true,
 						Description: "The unique identifier of the organization",
+					},
+				},
+			},
+		},
+		"fedcm_login": {
+			Type:        schema.TypeList,
+			Optional:    true,
+			MaxItems:    1,
+			Description: "Federated Credential Management (FedCM) configuration. (EA only)",
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"google": {
+						Type:        schema.TypeList,
+						Required:    true,
+						MaxItems:    1,
+						Description: "Google FedCM configuration. (EA only)",
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"is_enabled": {
+									Type:        schema.TypeBool,
+									Required:    true,
+									Description: "Whether to show the Google FedCM prompt on Login. (EA only)",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"identity_assertion_authorization_grant": {
+			Type:        schema.TypeList,
+			Optional:    true,
+			MaxItems:    1,
+			Description: "Configures the client to participate in the Identity Assertion Authorization Grant (ID-JAG) exchange, used for Cross App Access (XAA). (EA only)",
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"active": {
+						Type:        schema.TypeBool,
+						Required:    true,
+						Description: "Whether the client can exchange ID-JAGs for access tokens. (EA only)",
+					},
+				},
+			},
+		},
+		"oidc_support": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Computed: true,
+			MaxItems: 1,
+			Description: "Controls which optional OIDC scopes the client may request. " +
+				"Auth0 replaces the whole object on every write and cannot clear a stored value on an OIDC " +
+				"conformant client, so removing this block stops Terraform from managing it and does not reset " +
+				"the setting on the API.",
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"is_allowed": {
+						Type:     schema.TypeBool,
+						Required: true,
+						Description: "Indicates whether the client may request optional OIDC scopes. When `false`, " +
+							"`allowed_scopes` and `allow_all_scopes` cannot be set.",
+					},
+					"allowed_scopes": {
+						Type:     schema.TypeSet,
+						Optional: true,
+						Elem: &schema.Schema{
+							Type:         schema.TypeString,
+							ValidateFunc: validation.StringInSlice(internalValidation.OIDCSupportOptionalScopes, false),
+						},
+						Description: fmt.Sprintf("Optional OIDC scopes the client may request. Possible values: %v. "+
+							"The `openid` scope is implied and must not be listed. Conflicts with `allow_all_scopes`.",
+							internalValidation.OIDCSupportOptionalScopes),
+					},
+					"allow_all_scopes": {
+						Type:     schema.TypeBool,
+						Optional: true,
+						Description: "Indicates whether the client may request all optional OIDC scopes. " +
+							"Conflicts with `allowed_scopes`.",
 					},
 				},
 			},

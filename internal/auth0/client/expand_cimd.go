@@ -31,6 +31,7 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv3.UpdateClientRequestCont
 		}
 	}
 
+	req.AgentID = value.String(config.GetAttr("agent_id"))
 	req.OidcConformant = value.Bool(config.GetAttr("oidc_conformant"))
 	req.RequireProofOfPossession = value.Bool(config.GetAttr("require_proof_of_possession"))
 
@@ -72,6 +73,9 @@ func expandCIMDClient(data *schema.ResourceData) *mgmtv3.UpdateClientRequestCont
 	req.DefaultOrganization = expandCIMDDefaultOrganization(data)
 	req.ClientMetadata = expandCIMDClientMetadata(data)
 	req.TokenQuota = expandCIMDTokenQuota(data)
+	req.FedcmLogin = expandCIMDFedCMLogin(data)
+	req.IdentityAssertionAuthorizationGrant = expandCIMDIdentityAssertionAuthorizationGrant(data)
+	req.OidcSupport = expandCIMDOIDCSupport(data)
 
 	return req
 }
@@ -218,6 +222,97 @@ func expandCIMDTokenQuota(data *schema.ResourceData) *mgmtv3.UpdateTokenQuota {
 	return quota
 }
 
+func expandCIMDFedCMLogin(data *schema.ResourceData) *mgmtv3.FedCmLoginPatch {
+	if !data.IsNewResource() && !data.HasChange("fedcm_login") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("fedcm_login")
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var fedcmLogin mgmtv3.FedCmLoginPatch
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		fedcmLogin.Google = expandCIMDFedCMLoginGoogle(cfg.GetAttr("google"))
+		return stop
+	})
+
+	return &fedcmLogin
+}
+
+func expandCIMDFedCMLoginGoogle(config cty.Value) *mgmtv3.FedCmLoginGooglePatch {
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var google mgmtv3.FedCmLoginGooglePatch
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		google.IsEnabled = value.Bool(cfg.GetAttr("is_enabled"))
+
+		return stop
+	})
+
+	return &google
+}
+
+func expandCIMDIdentityAssertionAuthorizationGrant(data *schema.ResourceData) *mgmtv3.UpdateIdentityAssertionAuthorizationGrant {
+	if !data.IsNewResource() && !data.HasChange("identity_assertion_authorization_grant") {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("identity_assertion_authorization_grant")
+	if config.IsNull() || config.LengthInt() == 0 {
+		return nil
+	}
+
+	var grant mgmtv3.UpdateIdentityAssertionAuthorizationGrant
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		if active := value.Bool(cfg.GetAttr("active")); active != nil {
+			grant.Active = *active
+		}
+		return stop
+	})
+
+	return &grant
+}
+
+// expandCIMDOIDCSupport returns nil when the block is absent, so the key is omitted and the stored value is
+// untouched. When present, the complete object is sent, because the API replaces the whole value on write.
+func expandCIMDOIDCSupport(data *schema.ResourceData) *mgmtv3.ClientOidcSupportPatch {
+	if !data.IsNewResource() && !data.HasChange("oidc_support") {
+		return nil
+	}
+
+	block := value.FirstBlock(value.Attr(data.GetRawConfig(), "oidc_support"))
+	if !value.IsSet(block) {
+		return nil
+	}
+
+	var oidcSupport mgmtv3.ClientOidcSupportPatch
+
+	if isAllowed := value.Bool(block.GetAttr("is_allowed")); isAllowed != nil {
+		oidcSupport.IsAllowed = *isAllowed
+	}
+	if !oidcSupport.IsAllowed {
+		return &oidcSupport
+	}
+
+	if allowAll := value.Bool(block.GetAttr("allow_all_scopes")); allowAll != nil && *allowAll {
+		oidcSupport.AllowAllScopes = allowAll
+		return &oidcSupport
+	}
+
+	for _, scope := range value.SortedStrings(block.GetAttr("allowed_scopes")) {
+		oidcSupport.AllowedScopes = append(oidcSupport.AllowedScopes, mgmtv3.ClientOidcSupportAllowedScopesEnum(scope))
+	}
+
+	return &oidcSupport
+}
+
 func isEmptyRequest(req *mgmtv3.UpdateClientRequestContent) (bool, error) {
 	reqBytes, err := req.MarshalJSON()
 	if err != nil {
@@ -228,6 +323,10 @@ func isEmptyRequest(req *mgmtv3.UpdateClientRequestContent) (bool, error) {
 
 func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv3.UpdateClientRequestContent) {
 	config := data.GetRawConfig()
+
+	if data.HasChange("agent_id") && config.GetAttr("agent_id").IsNull() {
+		req.SetAgentID(nil)
+	}
 
 	if data.HasChange("allowed_origins") && config.GetAttr("allowed_origins").IsNull() {
 		req.SetAllowedOrigins([]string{})
@@ -248,6 +347,17 @@ func applyCIMDNullFields(data *schema.ResourceData, req *mgmtv3.UpdateClientRequ
 	if data.HasChange("default_organization") &&
 		(config.GetAttr("default_organization").IsNull() || config.GetAttr("default_organization").LengthInt() == 0) {
 		req.SetDefaultOrganization(nil)
+	}
+
+	if data.HasChange("fedcm_login") &&
+		(config.GetAttr("fedcm_login").IsNull() || config.GetAttr("fedcm_login").LengthInt() == 0) {
+		req.SetFedcmLogin(nil)
+	}
+
+	if data.HasChange("identity_assertion_authorization_grant") &&
+		(config.GetAttr("identity_assertion_authorization_grant").IsNull() ||
+			config.GetAttr("identity_assertion_authorization_grant").LengthInt() == 0) {
+		req.SetIdentityAssertionAuthorizationGrant(nil)
 	}
 
 	if data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") && config.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull() {

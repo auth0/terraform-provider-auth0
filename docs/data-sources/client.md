@@ -62,6 +62,7 @@ data "auth0_client" "some-client-by-id" {
 - `external_metadata_type` (String) Type of external metadata. Value is `cimd` for CIMD-registered clients.
 - `fedcm_login` (List of Object) Federated Credential Management (FedCM) configuration. (EA only) (see [below for nested schema](#nestedatt--fedcm_login))
 - `form_template` (String) HTML form template to be used for WS-Federation.
+- `google_account_linking` (List of Object) Configures Google account linking for this client (EA only). (see [below for nested schema](#nestedatt--google_account_linking))
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `id` (String) The ID of this resource.
 - `identity_assertion_authorization_grant` (List of Object) Configures the client to participate in the Identity Assertion Authorization Grant (ID-JAG) exchange, used for Cross App Access (XAA). (EA only) (see [below for nested schema](#nestedatt--identity_assertion_authorization_grant))
@@ -571,6 +572,14 @@ Read-Only:
 
 - `is_enabled` (Boolean)
 
+
+
+<a id="nestedatt--google_account_linking"></a>
+### Nested Schema for `google_account_linking`
+
+Read-Only:
+
+- `allow_streamlined_linking` (Boolean)
 
 
 <a id="nestedatt--identity_assertion_authorization_grant"></a>

@@ -758,6 +758,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("redirection_policy", client.GetRedirectionPolicy()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 		data.Set("fedcm_login", flattenFedCMLogin(client.GetFedCMLogin())),
+		data.Set("google_account_linking", flattenClientGoogleAccountLinking(client.GetGoogleAccountLinking())),
 		data.Set("identity_assertion_authorization_grant", flattenClientIdentityAssertionAuthorizationGrant(client.GetIdentityAssertionAuthorizationGrant())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
@@ -833,6 +834,18 @@ func flattenFedCMLoginGoogle(google *management.FedCMLoginGoogle) []interface{} 
 	return []interface{}{
 		map[string]interface{}{
 			"is_enabled": google.GetIsEnabled(),
+		},
+	}
+}
+
+func flattenClientGoogleAccountLinking(linking *management.ClientGoogleAccountLinking) []interface{} {
+	if linking == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"allow_streamlined_linking": linking.GetAllowStreamlinedLinking(),
 		},
 	}
 }

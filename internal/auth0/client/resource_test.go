@@ -4046,6 +4046,114 @@ func TestAccClientFedCMLogin(t *testing.T) {
 	})
 }
 
+const testAccCreateClientWithGoogleAccountLinking = `
+resource "auth0_client" "my_client" {
+  name            = "Acceptance Test - Google Account Linking - {{.testName}}"
+  app_type        = "regular_web"
+  is_first_party  = true
+  oidc_conformant = true
+
+  google_account_linking {
+    allow_streamlined_linking = true
+  }
+}
+`
+
+const testAccUpdateClientWithGoogleAccountLinkingFalse = `
+resource "auth0_client" "my_client" {
+  name            = "Acceptance Test - Google Account Linking - {{.testName}}"
+  app_type        = "regular_web"
+  is_first_party  = true
+  oidc_conformant = true
+
+  google_account_linking {
+    allow_streamlined_linking = false
+  }
+}
+`
+
+const testAccUpdateClientWithGoogleAccountLinkingUnrelated = `
+resource "auth0_client" "my_client" {
+  name            = "Acceptance Test - Google Account Linking - {{.testName}}"
+  description     = "Unrelated update"
+  app_type        = "regular_web"
+  is_first_party  = true
+  oidc_conformant = true
+
+  google_account_linking {
+    allow_streamlined_linking = true
+  }
+}
+`
+
+const testAccUpdateClientRemoveGoogleAccountLinking = `
+resource "auth0_client" "my_client" {
+  name            = "Acceptance Test - Google Account Linking - {{.testName}}"
+  description     = "Unrelated update"
+  app_type        = "regular_web"
+  is_first_party  = true
+  oidc_conformant = true
+}
+`
+
+const testAccClientGoogleAccountLinkingDataSource = `
+data "auth0_client" "test" {
+  depends_on = [auth0_client.my_client]
+
+  client_id          = auth0_client.my_client.client_id
+  hide_client_secret = true
+}
+`
+
+func TestAccClientGoogleAccountLinking(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithGoogleAccountLinking+testAccClientGoogleAccountLinkingDataSource, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "google_account_linking.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "google_account_linking.0.allow_streamlined_linking", "true"),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "google_account_linking.0.allow_streamlined_linking", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithGoogleAccountLinkingFalse+testAccClientGoogleAccountLinkingDataSource, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "google_account_linking.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "google_account_linking.0.allow_streamlined_linking", "false"),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "google_account_linking.0.allow_streamlined_linking", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithGoogleAccountLinking+testAccClientGoogleAccountLinkingDataSource, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "google_account_linking.0.allow_streamlined_linking", "true"),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "google_account_linking.0.allow_streamlined_linking", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithGoogleAccountLinkingUnrelated+testAccClientGoogleAccountLinkingDataSource, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "description", "Unrelated update"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "google_account_linking.0.allow_streamlined_linking", "true"),
+				),
+			},
+			{
+				ResourceName:      "auth0_client.my_client",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientRemoveGoogleAccountLinking+testAccClientGoogleAccountLinkingDataSource, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "google_account_linking.#", "0"),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "google_account_linking.#", "0"),
+				),
+			},
+		},
+	})
+}
+
 const testAccCreateClientWithIdentityAssertionAuthorizationGrant = `
 resource "auth0_client" "my_client" {
 	name            = "Acceptance Test - ID JAG - {{.testName}}"
